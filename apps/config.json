@@ -1,0 +1,39 @@
+{
+    "ID" : {
+        "App_Id" : "1",
+        "Name": "Starlight",
+        "Payload_HW_Id": "10"
+    },
+    "VM_Info" : {
+        "VM_Name": "Starlight",
+        "OS_Type": "Linux",
+        "OS_Variant": "Ubuntu 18.04",
+        "vcpu": "1",
+        "RAM": "1024 MB"
+    },
+    "IO_Access" : {
+        "GPIO_Interrupt": "0",
+        "GPIO_output": "1",
+        "GPIO_Access_Path" : "/opt/antaris/gpio/gpio3",
+        "UART_Access_Path": "/dev/ttyUSB1",
+        "Ethernet_Access_Path": "/dev/nic1"
+    },
+    "Network" : {
+        "Bridge_Name": "br21",
+        "MAC": "52:54:00:59:ce:01",
+        "VM_IP_Address": "192.168.40.101",
+	"Payload_Hardware_IP_Address": "192.168.40.102",
+        "Payload_Controller_IP_Address": "192.168.40.1",
+        "NTP_Server_IP_Address" : "192.168.40.1"
+    },
+    "Storage" : {
+        "Download_Folder_Size" : "10 GB",
+        "Upload_Folder_Size" : "5 GB",
+        "Download_Path" : "/opt/antaris/outbound",
+        "Upload_Path" : "/opt/antaris/inbound",
+        "Mode_File" : "/opt/antaris/app/mode",
+        "Entrypoint_File" : "/opt/antaris/app/entrypoint.sh",
+        "This_Config_Path" : "/opt/antaris/app/config.json",
+        "SDK_Path" : "/opt/antaris/app/sdk"
+    }
+}

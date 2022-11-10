@@ -1,0 +1,19 @@
+{
+    "conops_tasks_schedule": [
+        {
+            "sequence_id": "Sequence_A",
+            "sequence_params": "abc",
+            "duration": "25"
+        },
+        {
+            "sequence_id": "Sequence_A",
+            "sequence_params": "xyz",
+            "duration": "10"
+        },
+        {
+            "sequence_id": "Sequence_A",
+            "sequence_params": "mno",
+            "duration": "18"
+        }
+    ]
+}
