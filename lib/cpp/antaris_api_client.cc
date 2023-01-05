@@ -26,9 +26,11 @@
 
 #include "antaris_api.h"
 #include "antaris_api_internal.h"
+#include "antaris_sdk_environment.h"
 
 #include "antaris_api.grpc.pb.h"
 #include "antaris_api.pb.h"
+#include "antaris_sdk_version.h"
 
 using grpc::Channel;
 using grpc::ClientContext;
@@ -37,6 +39,8 @@ using grpc::ServerBuilder;
 using grpc::Status;
 
 unsigned int api_debug = 0;
+
+#define ANTARIS_CALLBACK_GRACE_DELAY    10
 
 
 class PCServiceClient {
@@ -50,6 +54,7 @@ class PCServiceClient {
   AntarisReturnCode Invoke_PC_register(ReqRegisterParams *req_params) {
         antaris_api_peer_to_peer::ReqRegisterParams pc_req;
         antaris_api_peer_to_peer::AntarisReturnType pc_response;
+        antaris_api_peer_to_peer::AntarisSdkVersion *p_version;
         Status pc_status;
         // Context for the client. It could be used to convey extra information to
         // the server and/or tweak certain RPC behaviors.
@@ -57,7 +62,16 @@ class PCServiceClient {
 
         app_to_peer_ReqRegisterParams(req_params, &pc_req);
 
-        printf("%s: Invoking PC_register api towards PC\n", __FUNCTION__);
+        p_version = pc_req.mutable_sdk_version();
+    
+        p_version->set_major(ANTARIS_PA_PC_SDK_MAJOR_VERSION);
+        p_version->set_minor(ANTARIS_PA_PC_SDK_MINOR_VERSION);
+        p_version->set_patch(ANTARIS_PA_PC_SDK_PATCH_VERSION);
+
+        printf("%s: Invoking PC_register api towards PC, sdk version %d.%d.%d\n",
+                __FUNCTION__, ANTARIS_PA_PC_SDK_MAJOR_VERSION, ANTARIS_PA_PC_SDK_MINOR_VERSION,
+                ANTARIS_PA_PC_SDK_PATCH_VERSION);
+
         pc_status = stub_->PC_register(&context, pc_req, &pc_response);
 
         printf("%s: Got return code %s\n", __FUNCTION__, pc_status.ok() ? "OK" : "NOT-OK");
@@ -84,7 +98,7 @@ class PCServiceClient {
 
         app_to_peer_ReqGetCurrentLocationParams(req_params, &pc_req);
 
-        printf("%s: Invoking PC_register api towards PC\n", __FUNCTION__);
+        printf("%s: Invoking PC_get_current_location api towards PC\n", __FUNCTION__);
         pc_status = stub_->PC_get_current_location(&context, pc_req, &pc_response);
 
         AntarisReturnCode tmp_return;
@@ -261,6 +275,7 @@ public:
     AntarisApiCallbackFuncList      callbacks;
     unsigned short int              cb_correlation_id;
     pthread_t                       callback_thread_id;
+    unsigned short int              callback_server_ready;
 };
 
 Status AppCallbackServiceImpl::PA_ProcessHealthCheck(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::HealthCheckParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
@@ -368,7 +383,7 @@ Status AppCallbackServiceImpl::PA_ProcessResponseStageFileDownload(::grpc::Serve
 void *start_callback_server(void *thread_param)
 {
     AntarisInternalClientChannelContext_t *ctx = (AntarisInternalClientChannelContext_t *)thread_param;
-    std::string callback_address(APP_CALLBACK_GRPC_LISTEN_ENDPOINT);
+    std::string callback_address(g_APP_GRPC_LISTEN_ENDPOINT);
 
     grpc::EnableDefaultHealthCheckService(true);
     grpc::reflection::InitProtoReflectionServerBuilderPlugin();
@@ -386,6 +401,8 @@ void *start_callback_server(void *thread_param)
     ctx->server_ptr = server;
 
     std::cout << "PC -> App callback server listening on " << callback_address << std::endl;
+
+    ctx->callback_server_ready = 1;
 
     // Wait for the server to shutdown. Note that some other thread must be
     // responsible for shutting down the server for this call to ever return.
@@ -408,10 +425,18 @@ void displayAntarisChannel(AntarisChannel obj)
 
 AntarisChannel api_pa_pc_create_channel(AntarisApiCallbackFuncList *callback_func_list)
 {
+    sdk_environment_read_config();
+
+    if (!is_server_endpoint_available(&g_LISTEN_IP[0], g_PA_GRPC_SERVER_PORT)) {
+        printf("App endpoint %s not available\n", g_APP_GRPC_LISTEN_ENDPOINT);
+        return NULL;
+    }
+
     AntarisInternalClientChannelContext_t *channel = new AntarisInternalClientChannelContext_t;
-    std::string target_str(SERVER_GRPC_CONNECT_ENDPOINT);
+    std::string target_str(g_PC_GRPC_CONNECT_ENDPOINT);
 
     printf("api_pa_pc_create_channel\n");
+
     // TODO :
     // Create GRPC channel and connect with PC. Currently passing
     // grpc handle as None while creating AntarisChannel
@@ -430,6 +455,10 @@ AntarisChannel api_pa_pc_create_channel(AntarisApiCallbackFuncList *callback_fun
 
     memcpy(&channel->callbacks, callback_func_list, sizeof(AntarisApiCallbackFuncList));
 
+    // let the server start before we allow the client to start using the handle
+    channel->server_ptr.reset();
+    channel->callback_server_ready = 0;
+
     // start a callback service
     pthread_attr_t attr;
 
@@ -437,12 +466,11 @@ AntarisChannel api_pa_pc_create_channel(AntarisApiCallbackFuncList *callback_fun
     pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM);
     pthread_create(&channel->callback_thread_id, &attr, start_callback_server, channel);
 
-    // let the server start before we allow the client to start using the handle
-    channel->server_ptr.reset();
+    do {
+        sleep(ANTARIS_CALLBACK_GRACE_DELAY);
+    } while (0 == channel->callback_server_ready);
 
-    while (NULL == channel->server_ptr) {
-        sleep(1);
-    }
+    sleep(ANTARIS_CALLBACK_GRACE_DELAY);
 
 done:
     return (AntarisChannel)channel;

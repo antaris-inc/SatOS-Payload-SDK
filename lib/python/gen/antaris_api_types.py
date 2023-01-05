@@ -36,8 +36,6 @@
 
 #  Generated-From: antaris_api.xml
 
-#  Version: 0.0.1
-
 #
 ###########################################################################
 
@@ -55,9 +53,10 @@ class AntarisReturnCode:
     An_OUT_OF_RESOURCES = -3 # Not enough resources
     An_NOT_PERMITTED = -4 # Operation not allowed
     An_INVALID_PARAMS = -5 # Invalid parameter
+    An_INCOMPATIBLE_VERSION = -6 # Incompatible version of SDK invocation
 
 
-    reverse_dict = {0 : "An_SUCCESS", -1 : "An_GENERIC_FAILURE", -2 : "An_NOT_IMPLEMENTED", -3 : "An_OUT_OF_RESOURCES", -4 : "An_NOT_PERMITTED", -5 : "An_INVALID_PARAMS"}
+    reverse_dict = {0 : "An_SUCCESS", -1 : "An_GENERIC_FAILURE", -2 : "An_NOT_IMPLEMENTED", -3 : "An_OUT_OF_RESOURCES", -4 : "An_NOT_PERMITTED", -5 : "An_INVALID_PARAMS", -6 : "An_INCOMPATIBLE_VERSION"}
 
 
 

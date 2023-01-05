@@ -24,6 +24,7 @@
 #include "antaris_api.h"
 #include "antaris_api_internal.h"
 #include "antaris_pc_to_app_api.h"
+#include "antaris_sdk_environment.h"
 
 #include "antaris_api.grpc.pb.h"
 #include "antaris_api.pb.h"
@@ -257,16 +258,28 @@ private:
     }
 
     Status PC_register(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::ReqRegisterParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
-        AppToPCCallbackParams_t api_request = {0};
+        AppToPCCallbackParams_t api_request_register = {0};
+        AppToPCCallbackParams_t api_request_sdk_version = {0};
         AntarisReturnType api_response = {return_code: An_SUCCESS};
         INT8 peer[ANTARIS_MAX_PEER_STRING_LEN] = {0};
 
         getPeerEndpoint(context, &peer[0]);
 
-        peer_to_app_ReqRegisterParams(request, &api_request);
+        api_request_sdk_version.sdk_version.major = request->sdk_version().major();
+        api_request_sdk_version.sdk_version.minor = request->sdk_version().minor();
+        api_request_sdk_version.sdk_version.patch = request->sdk_version().patch();
 
-        user_callbacks_(user_cb_ctx_, &peer[0], e_app2PC_register, &api_request, &api_response.return_code);
+        user_callbacks_(user_cb_ctx_, &peer[0], e_app2PC_sdkVersionInfo, &api_request_sdk_version, &api_response.return_code);
 
+        if (An_SUCCESS != api_response.return_code) {
+            goto done; /* user has indicated version incompatibility */
+        }
+
+        peer_to_app_ReqRegisterParams(request, &api_request_register);
+
+        user_callbacks_(user_cb_ctx_, &peer[0], e_app2PC_register, &api_request_register, &api_response.return_code);
+
+done:
         app_to_peer_AntarisReturnType(&api_response, response);
 
         return Status::OK;
@@ -412,9 +425,11 @@ PCApiServerContext an_pc_pa_create_server(UINT16 port, PCAppCallbackFn_t callbac
         return NULL;
     }
 
-    if (An_SUCCESS != prepare_endpoint_string(server_listen_endpoint, (INT8 *)LISTEN_IP, port)) {
+    if (An_SUCCESS != prepare_endpoint_string(server_listen_endpoint, (INT8 *)g_LISTEN_IP, port)) {
         return NULL;
     }
+
+    printf("%s: Creating server with ip %s, port %u\n", __FUNCTION__, (INT8 *)g_LISTEN_IP, port);
 
     AppToPCApiService *ctx = new AppToPCApiService(server_listen_endpoint, callback_fn);
 
@@ -469,6 +484,8 @@ PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port)
     if (!internal_ctx) {
         goto done;
     }
+
+    printf("%s: creating client-channel with ip %s, port %u\n", __FUNCTION__, peer_ip_str, port);
 
     if (An_SUCCESS != prepare_endpoint_string(internal_ctx->client_cb_endpoint, peer_ip_str, port)) {
         goto fail_cleanup_ctx;

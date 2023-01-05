@@ -35,7 +35,14 @@ typedef enum {
     e_app2PC_payloadPowerControl,
     e_app2PC_healthCheckResponse,
     e_app2PC_shutdownResponse,
+    e_app2PC_sdkVersionInfo,
 } AppToPCCallbackId_e;
+
+typedef struct {
+    UINT16 major;
+    UINT16 minor;
+    UINT16 patch;
+} AntarisAppSdkVersion_t;
 
 typedef union {
     ReqRegisterParams               register_request;
@@ -45,6 +52,7 @@ typedef union {
     ReqPayloadPowerControlParams    payload_power_ctrl;
     RespHealthCheckParams           health_check_response;
     RespShutdownParams              shutdown_response;
+    AntarisAppSdkVersion_t          sdk_version;
 } AppToPCCallbackParams_t;
 
 typedef void (*PCAppCallbackFn_t)(PCApiServerContext, const INT8 * /* peer-ip string */, AppToPCCallbackId_e, AppToPCCallbackParams_t *, AntarisReturnCode *);

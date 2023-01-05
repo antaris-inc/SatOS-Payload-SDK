@@ -1,0 +1,47 @@
+{
+ "api_list": [
+  {
+   "api": "Register",
+   "args": {
+     "correlation_id": 1,
+     "health_check_fail_action": 0
+   },
+   "expected_response": {
+   }
+  },
+  {
+   "api": "GetCurrentLocation",
+   "args": {
+     "correlation_id": 2
+   },
+   "expected_response": {
+   }
+  },
+  {
+   "api": "StageFileDownload",
+   "args": {
+     "correlation_id": 3,
+     "file_path": "/opt/antaris/outbound/my_teledata.txt"
+   },
+   "expected_response": {
+   }
+  },
+  {
+   "api": "PayloadPowerControl",
+   "args": {
+     "correlation_id": 4,
+     "power_operation": 0
+   },
+   "expected_response": {
+   }
+  },
+  {
+   "api": "SequenceDone",
+   "args": {
+     "sequence_id": "Sequence_A"
+   },
+   "expected_response": {
+   }
+  }
+ ]
+}

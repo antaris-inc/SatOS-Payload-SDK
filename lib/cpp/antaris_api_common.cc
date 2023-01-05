@@ -19,6 +19,10 @@
 #include <string.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <grpcpp/grpcpp.h>
@@ -84,4 +88,40 @@ void app_to_peer_FLOAT(void *ptr_src_app, void *ptr_dst_peer)
 void peer_to_app_FLOAT(void *ptr_src_peer, void *ptr_dst_app)
 {
     *(FLOAT *)ptr_dst_app = *(FLOAT *)ptr_src_peer;
+}
+
+
+INT32 is_server_endpoint_available(INT8 *ipv4, UINT16 port)
+{
+    struct sockaddr_in ep = {0};
+    INT32 is_good = 1;
+    int s;
+
+    ep.sin_family = AF_INET;
+    ep.sin_port = htons(port);
+
+    if (0 == inet_aton(ipv4, (struct in_addr *)(&ep.sin_addr))) {
+        is_good = 0;
+        goto done;
+    }
+
+    s = socket(AF_INET, SOCK_STREAM, 0);
+
+    if (s < 0) {
+        is_good = 0;
+        perror("SOCKET: ");
+        goto done;
+    }
+
+    if (0 != bind(s, (struct sockaddr *)&ep, sizeof(ep))) {
+        is_good = 0;
+        perror("BIND: ");
+        goto clean_socket;
+    }
+
+clean_socket:
+    close(s);
+
+done:
+    return is_good;
 }

@@ -13,9 +13,45 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-LISTEN_IP                  ="0.0.0.0"
-PEER_IP                    ="127.0.0.1"
-SERVER_GRPC_PORT           =50051
-SERVER_GRPC_PORT_STR       ="{}".format(SERVER_GRPC_PORT)
-APP_GRPC_CALLBACK_PORT     =50053
-APP_GRPC_CALLBACK_PORT_STR ="{}".format(APP_GRPC_CALLBACK_PORT)
+import antaris_sdk_environment as environment
+import pdb
+import socket
+
+g_LISTEN_IP=None
+g_PAYLOAD_CONTROLLER_IP=None
+g_PAYLOAD_APP_IP=None
+g_PC_GRPC_SERVER_PORT=None
+g_PC_GRPC_SERVER_PORT_STR=None
+g_PA_GRPC_SERVER_PORT=None
+g_PA_GRPC_SERVER_PORT_STR =None
+
+def init_vars():
+    global g_LISTEN_IP
+    global g_PAYLOAD_CONTROLLER_IP
+    global g_PC_GRPC_SERVER_PORT
+    global g_PC_GRPC_SERVER_PORT_STR
+    global g_PA_GRPC_SERVER_PORT
+    global g_PA_GRPC_SERVER_PORT_STR
+
+    g_LISTEN_IP=environment.get_conf(environment.g_LISTEN_IP_CONF_KEY)
+    g_PAYLOAD_CONTROLLER_IP=environment.get_conf(environment.g_PC_IP_CONF_KEY)
+    g_PAYLOAD_APP_IP=environment.get_conf(environment.g_APP_IP_CONF_KEY)
+    g_PC_GRPC_SERVER_PORT=environment.get_conf(environment.g_PC_API_PORT_CONF_KEY)
+    g_PA_GRPC_SERVER_PORT=environment.get_conf(environment.g_APP_API_PORT_CONF_KEY)
+    g_PC_GRPC_SERVER_PORT_STR="{}".format(g_PC_GRPC_SERVER_PORT)
+    g_PA_GRPC_SERVER_PORT_STR ="{}".format(g_PA_GRPC_SERVER_PORT)
+
+#pdb.set_trace()
+init_vars()
+
+def is_server_endpoint_available(ip, port):
+    temp_socket = socket.socket()
+
+    try:
+        temp_socket.bind((ip, port))
+    except socket.error as e:
+        print(e)
+        return False
+
+    temp_socket.close()
+    return True

@@ -16,6 +16,7 @@
 from concurrent import futures
 import logging
 import time
+import pdb
 
 import grpc
 import antaris_api_pb2
@@ -23,10 +24,12 @@ import antaris_api_pb2_grpc
 import antaris_api_common as api_common
 
 import antaris_api_types as api_types
+import antaris_sdk_version as sdk_version
 
 api_debug = 0
 g_shutdown_grace_seconds=5
 g_shutdown_grace_for_grace=2
+g_ANTARIS_CALLBACK_GRACE_DELAY=10
 
 class AntarisChannel:
     def __init__(self, grpc_client_handle, grpc_server_handle, pc_to_app_server, is_secure, callback_func_list):
@@ -103,16 +106,28 @@ class PCToAppService(antaris_api_pb2_grpc.AntarisapiApplicationCallbackServicer)
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
 
 def api_pa_pc_create_channel_common(secure, callback_func_list):
+    global g_ANTARIS_CALLBACK_GRACE_DELAY
+    pc_endpoint = "{}:{}".format(api_common.g_PAYLOAD_CONTROLLER_IP, api_common.g_PC_GRPC_SERVER_PORT)
+    app_endpoint = "{}:{}".format(api_common.g_LISTEN_IP, api_common.g_PA_GRPC_SERVER_PORT)
+
     print("api_pa_pc_create_channel_common")
 
-    client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(grpc.insecure_channel("{}:{}".format(api_common.LISTEN_IP, api_common.SERVER_GRPC_PORT)))
+    is_endpoint_free = api_common.is_server_endpoint_available(api_common.g_LISTEN_IP, int(api_common.g_PA_GRPC_SERVER_PORT))
+
+    if not is_endpoint_free:
+        print("Callback endpoint {} is not free".format(app_endpoint))
+        return None
+
+    client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(grpc.insecure_channel(pc_endpoint))
+
     server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    server_handle.add_insecure_port("{}:{}".format(api_common.LISTEN_IP, api_common.APP_GRPC_CALLBACK_PORT))
+    server_handle.add_insecure_port(app_endpoint)
     pc_to_app_server = PCToAppService()
     antaris_api_pb2_grpc.add_AntarisapiApplicationCallbackServicer_to_server(pc_to_app_server, server_handle)
     channel = AntarisChannel(client_handle, server_handle, pc_to_app_server, secure, callback_func_list)
     pc_to_app_server.set_channel(channel)
     server_handle.start()
+    time.sleep(g_ANTARIS_CALLBACK_GRACE_DELAY)
 
     print("started callback server and created channel")
 
@@ -139,10 +154,19 @@ def api_pa_pc_delete_channel(channel):
     return 0
 
 def api_pa_pc_register(channel, register_params):
-    print("api_pa_pc_register")
+    print("api_pa_pc_registering with SDK version {}.{}.{}".
+                format(
+                    sdk_version.ANTARIS_PA_PC_SDK_MAJOR_VERSION,
+                    sdk_version.ANTARIS_PA_PC_SDK_MINOR_VERSION,
+                    sdk_version.ANTARIS_PA_PC_SDK_PATCH_VERSION))
+
     if (api_debug):
         register_params.display()
     peer_params = api_types.app_to_peer_ReqRegisterParams(register_params)
+
+    peer_params.sdk_version.major = sdk_version.ANTARIS_PA_PC_SDK_MAJOR_VERSION
+    peer_params.sdk_version.minor = sdk_version.ANTARIS_PA_PC_SDK_MINOR_VERSION
+    peer_params.sdk_version.patch = sdk_version.ANTARIS_PA_PC_SDK_PATCH_VERSION
 
     peer_ret = channel.grpc_client_handle.PC_register(peer_params)
 

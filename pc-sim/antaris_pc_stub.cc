@@ -24,6 +24,8 @@
 #include "antaris_api.h"
 #include "antaris_api_internal.h"
 #include "antaris_pc_to_app_api.h"
+#include "antaris_sdk_environment.h"
+#include "antaris_sdk_version.h"
 #include "config_db.h"
 
 #define PC_SEQUENCE_ID_A   "Sequence_A"
@@ -71,11 +73,11 @@ public:
         pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM);
         pthread_create(&server_context->simulated_pc_thread_id, &attr, simulated_pc, server_context);
 
-        std::string target_str(APP_CALLBACK_GRPC_CONNECT_ENDPOINT);
+        std::string target_str(g_APP_GRPC_CONNECT_ENDPOINT);
 
         *response = An_SUCCESS;
 
-        server_context->app_callback_client = an_pc_pa_create_client((INT8 *)PEER_IP, APP_GRPC_CALLBACK_PORT);
+        server_context->app_callback_client = an_pc_pa_create_client((INT8 *)g_PAYLOAD_APP_IP, g_PA_GRPC_SERVER_PORT);
 
         printf("PC_register: Created callback channel using %s\n", target_str.c_str());
 
@@ -205,6 +207,21 @@ void app_to_pc_api_handler(PCApiServerContext ctx, const INT8 *peer_string, AppT
 
     case e_app2PC_shutdownResponse:
         g_pc_service.PC_response_shutdown(&cb_params->shutdown_response, out_return_code);
+        break;
+
+    case e_app2PC_sdkVersionInfo:
+        if (ANTARIS_PA_PC_SDK_MAJOR_VERSION != cb_params->sdk_version.major ||
+            ANTARIS_PA_PC_SDK_MINOR_VERSION != cb_params->sdk_version.minor ||
+            ANTARIS_PA_PC_SDK_PATCH_VERSION != cb_params->sdk_version.patch) {
+            printf("%s: Incompatible version of client %s's SDK. Our %d.%d.%d, theirs %d.%d.%d.\n", __FUNCTION__, peer_string,
+                        ANTARIS_PA_PC_SDK_MAJOR_VERSION, ANTARIS_PA_PC_SDK_MINOR_VERSION, ANTARIS_PA_PC_SDK_PATCH_VERSION,
+                        cb_params->sdk_version.major, cb_params->sdk_version.minor, cb_params->sdk_version.patch);
+            *out_return_code = An_INCOMPATIBLE_VERSION;
+        } else {
+            printf("%s: Received communication from %s, SDK version %d.%d.%d, which is compatible with us\n",
+                __FUNCTION__, peer_string, cb_params->sdk_version.major, cb_params->sdk_version.minor, cb_params->sdk_version.patch);
+            *out_return_code = An_SUCCESS;
+        }
         break;
 
     } // switch cb_id
@@ -368,11 +385,15 @@ void wakeup_pc(AntarisInternalServerContext_t *channel, PCToAppApiId_e cb_id, un
 
 int main(int argc, char *argv[])
 {
-    PCApiServerContext server_ctx = an_pc_pa_create_server(SERVER_GRPC_PORT, app_to_pc_api_handler);
+    sdk_environment_read_config();
+
+    PCApiServerContext server_ctx = an_pc_pa_create_server(g_PC_GRPC_SERVER_PORT, app_to_pc_api_handler);
 
     scenario_register_conf(argc, argv);
 
-    printf("Server has started at %s\n", SERVER_GRPC_LISTEN_ENDPOINT);
+    printf("Server has started at %s, our SDK version is %d.%d.%d\n",
+                g_PC_GRPC_LISTEN_ENDPOINT, ANTARIS_PA_PC_SDK_MAJOR_VERSION,
+                ANTARIS_PA_PC_SDK_MINOR_VERSION, ANTARIS_PA_PC_SDK_PATCH_VERSION);
 
     while (1) {
         sleep (10);

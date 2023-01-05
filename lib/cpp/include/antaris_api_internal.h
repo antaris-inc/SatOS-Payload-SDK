@@ -18,23 +18,20 @@
 #define __ANTARIS_API_INTERNAL_H__
 
 #include "antaris_api.h"
+#include "antaris_sdk_environment.h"
 
-#define STRINGIFY(_X) __INTERNAL_STRINGIFY(_X)
-#define __INTERNAL_STRINGIFY(_X) #_X
+extern char g_LISTEN_IP[];
+extern char g_PAYLOAD_CONTROLLER_IP[];
+extern char g_PAYLOAD_APP_IP[];
+extern unsigned short g_PC_GRPC_SERVER_PORT;
+extern char g_PC_GRPC_SERVER_PORT_STR[];
+extern unsigned short g_PA_GRPC_SERVER_PORT;
+extern char g_PA_GRPC_SERVER_PORT_STR[];
 
-#define LISTEN_IP                               "0.0.0.0"
-#define PEER_IP                                 "127.0.0.1"
-#define SERVER_GRPC_PORT                        50051
-#define SERVER_GRPC_PORT_STR                    STRINGIFY(SERVER_GRPC_PORT)
-#define APP_GRPC_CALLBACK_PORT                  50053
-#define APP_GRPC_CALLBACK_PORT_STR              STRINGIFY(APP_GRPC_CALLBACK_PORT)
-
-#define MAKE_ENDPOINT(_ip_, _port_) _ip_ ":" _port_
-
-#define SERVER_GRPC_LISTEN_ENDPOINT            MAKE_ENDPOINT(LISTEN_IP, SERVER_GRPC_PORT_STR)
-#define SERVER_GRPC_CONNECT_ENDPOINT           MAKE_ENDPOINT(PEER_IP, SERVER_GRPC_PORT_STR)
-#define APP_CALLBACK_GRPC_LISTEN_ENDPOINT      MAKE_ENDPOINT(LISTEN_IP, APP_GRPC_CALLBACK_PORT_STR)
-#define APP_CALLBACK_GRPC_CONNECT_ENDPOINT     MAKE_ENDPOINT(PEER_IP, APP_GRPC_CALLBACK_PORT_STR)
+extern char g_PC_GRPC_LISTEN_ENDPOINT[];
+extern char g_PC_GRPC_CONNECT_ENDPOINT[];
+extern char g_APP_GRPC_LISTEN_ENDPOINT[];
+extern char g_APP_GRPC_CONNECT_ENDPOINT[];
 
 #define REGISTRATION_AUTH_TOKEN         "good-token"
 

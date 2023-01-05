@@ -103,4 +103,6 @@ void peer_to_app_INT32(void *ptr_src_peer, void *ptr_dst_app);
 void app_to_peer_FLOAT(void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_FLOAT(void *ptr_src_peer, void *ptr_dst_app);
 
+INT32 is_server_endpoint_available(INT8 *ipv4, UINT16 port);
+
 #endif

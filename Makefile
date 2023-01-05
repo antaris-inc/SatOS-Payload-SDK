@@ -14,7 +14,7 @@
 #   limitations under the License.
 #
 
-.phony: no_default tools build_shell gen old_gen api_lib api_lib_clean gen_clean pc_sim pc_sim_clean sample_app sample_app_clean clean release_pkg
+.PHONY: no_default tools build_shell gen old_gen api_lib api_lib_clean gen_clean pc_sim pc_sim_clean sample_app sample_app_clean clean release_pkg sdk_pkg payload_app_pkg
 
 ARCH=x86_64
 SHELL := /bin/bash
@@ -47,6 +47,7 @@ PROTO_FILES := ${OUTPUT_GEN_PROTO_DIR}/antaris_api.proto
 DEFS_DIR=${OUTPUT_GEN_PROTO_DIR}
 CPP_LIB_DIR=lib/cpp
 API_SPEC_GEN_TOOL=python3 ${BUILD_TOOLS_DIR}/scripts/types-generator/main.py
+VERSION_GEN=${BUILD_TOOLS_DIR}/scripts/generate_build_info.sh
 API_SPEC=./defs/api/antaris_api.xml
 API_SPEC_SCHEMA=./defs/api/schema/antaris_api_schema.xsd
 API_SPEC_GEN_BASE_OPTIONS=-i ${API_SPEC} -o ${LIB_DIR}/gen -s ${API_SPEC_SCHEMA}
@@ -62,7 +63,8 @@ GRPC_CPP_PLUGIN=/usr/local/antaris/grpc/bin/grpc_cpp_plugin
 GOLANG_GEN=${BUILD_TOOLS_DIR}/scripts/gen_go.sh
 RELEASE_PKG_CMD=${BUILD_TOOLS_DIR}/scripts/release.sh
 RELEASE_FILES=${BUILD_TOOLS_DIR}/scripts/release_files.txt
-
+SDK_PKG_CMD=${BUILD_TOOLS_DIR}/scripts/sdk_pkg.sh
+SAMPLE_APP_PKG_CMD=${BUILD_TOOLS_DIR}/scripts/build_app_pkg.sh
 DOCKER_RUN_CMD=docker run --platform=linux/amd64
 DOCKER_EXEC_CMD=docker exec
 DOCKER_RM_CMD=docker rm -f
@@ -94,6 +96,8 @@ gen:
 	${CPP_GEN} --cpp_out=${OUTPUT_GEN_CPP_DIR} --grpc_out=${OUTPUT_GEN_CPP_DIR} --plugin=protoc-gen-grpc=${GRPC_CPP_PLUGIN} ${PROTO_FILES}
 
 api_lib:
+	@echo Generating version info
+	@${VERSION_GEN}
 	@if [ "${LANGUAGE}" == "python" ]; then																													\
 		echo nothing to build;								\
 		#tree ${OUTPUT_LIB_DIR};							\
@@ -105,9 +109,10 @@ api_lib:
 		g++ -g -c ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.o ;								\
 		g++ -g -c ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.o ;											\
 		g++ -g -c ${CPP_LIB_DIR}/antaris_api_common.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${CPP_LIB_DIR}/antaris_api_common.o ;						\
+		g++ -g -c ${CPP_LIB_DIR}/antaris_sdk_environment.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${CPP_LIB_DIR}/antaris_sdk_environment.o ;				\
 		g++ -g -c ${CPP_LIB_DIR}/antaris_api_client.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -o ${CPP_LIB_DIR}/antaris_api_client.o ;							\
 		g++ -g -c ${CPP_LIB_DIR}/antaris_api_server.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -o ${CPP_LIB_DIR}/antaris_api_server.o ;							\
-		ar cr ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB} ${OUTPUT_GEN_DIR}/antaris_api_autogen.o ${CPP_LIB_DIR}/antaris_api_client.o ${CPP_LIB_DIR}/antaris_api_server.o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.o ${CPP_LIB_DIR}/antaris_api_common.o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.o ; \
+		ar cr ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB} ${OUTPUT_GEN_DIR}/antaris_api_autogen.o ${CPP_LIB_DIR}/antaris_api_client.o ${CPP_LIB_DIR}/antaris_api_server.o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.o ${CPP_LIB_DIR}/antaris_api_common.o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.o ${CPP_LIB_DIR}/antaris_sdk_environment.o ; \
 		tree ${OUTPUT_LIB_DIR};							\
 		echo "content of api-lib ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB} ===>";	\
 		ar -t ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB};				\
@@ -165,9 +170,16 @@ clean:
 	rm -rf ${CPP_LIB_DIR}/*.o
 	rm -rf ${CPP_LIB_DIR}/*.a
 	rm -rf ${OUTPUT_RELEASE_DIR}
+	rm -rf output
 
 release_pkg:
 	@${RELEASE_PKG_CMD} ${RELEASE_FILES}
 	@tree ${OUTPUT_RELEASE_DIR}
+
+sdk_pkg:
+	${SDK_PKG_CMD} `pwd`
+
+payload_app_pkg:
+	${SAMPLE_APP_PKG_CMD} `pwd`
 
 release: clean gen all release_pkg

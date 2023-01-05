@@ -12,11 +12,11 @@
         "RAM": "1024 MB"
     },
     "IO_Access" : {
-        "GPIO_Interrupt": "0",
-        "GPIO_output": "1",
-        "GPIO_Access_Path" : "/opt/antaris/gpio/gpio3",
-        "UART_Access_Path": "/dev/ttyUSB1",
-        "Ethernet_Access_Path": "/dev/nic1"
+	"GPIO_PIN_COUNT": "2",
+	"GPIO_PIN_0": "5",
+	"GPIO_PIN_1": "6",
+	"GPIO_Interrupt": "0",
+	"UART_Access_Path": "/dev/ttyUSB1"
     },
     "Network" : {
         "Bridge_Name": "br21",

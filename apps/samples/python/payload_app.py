@@ -27,6 +27,7 @@ import antaris_api_types as api_types
 debug = 0
 channel = 0
 shutdown_requested = 0
+wait_time_wakeup_fsm = 5
 
 #
 # Following counters should be incremented whenever
@@ -138,12 +139,61 @@ def sequence_b_fsm(mythread):
 def sequence_c_fsm(mythread):
     print("sequence_c_fsm")
 
+def file_transfer(mythread):
+    print("file_transfer")
+
+    print("file_transfer : state : " + mythread.state + " scheduled_deadline : ", mythread.scheduled_deadline)
+
+    mythread.correlation_id = 0
+
+    download_file_params = api_types.ReqStageFileDownloadParams(mythread.correlation_id, "samplefile.txt")
+    # samplefile.txt should be present in the "/opt/antaris/outbound/" directory
+    ret = api_client.api_pa_pc_stage_file_download(channel, download_file_params)
+
+    print("Invoked api_pa_pc_stage_file_download, got return-code {} => {}".format(ret, api_types.AntarisReturnCode.reverse_dict[ret]))
+
+    if ret != api_types.AntarisReturnCode.An_SUCCESS:
+        print("Error : Download-file call failed")
+        mythread.state = "FSM_ERROR"
+        print("file_transfer : state : ", mythread.state)
+        return
+
+    mythread.correlation_id += 1
+    mythread.state = "WAITING_FOR_STAGE_FILE_DOWNLOAD_COMPLETION"
+    print("file_transfer : state : ", mythread.state)
+    mythread.condition.acquire()
+    mythread.condition.wait()
+    if shutdown_requested:
+        return
+
+    sequence_done_params = api_types.CmdSequenceDoneParams("Download_File")
+    ret = api_client.api_pa_pc_sequence_done(channel, sequence_done_params)
+
+    print("Invoked api_pa_pc_sequence_done, got return-code {} => {}".format(ret, api_types.AntarisReturnCode.reverse_dict[ret]))
+
+    if ret != api_types.AntarisReturnCode.An_SUCCESS:
+        print("Error : Sequence_done call failed")
+        mythread.state = "FSM_ERROR"
+        print("file_transfer : state : ", mythread.state)
+        returnseq_fsm
+
+    current_time_in_ms = time.time()*1000
+    if (mythread.scheduled_deadline > current_time_in_ms) :
+        print("CONGRATULATIONS! :  File staged for download at ", current_time_in_ms, "earlier than the deadline", mythread.scheduled_deadline)
+    else :
+        print("WARNING : File staged for download at ", current_time_in_ms, " after the deadline", mythread.scheduled_deadline)
+
+    mythread.state = "EXITING"
+    print("file_transfer : state : ", mythread.state)
+    mythread.condition.release()
+    return
+
 # Table of Sequence_id : FsmThread
 payload_sequences_fsms = dict()
 
 current_sequence_id = "Sequence_A"
 
-g_sequence_id_to_idx_mapping = {"Sequence_A": 0, "Sequence_B": 1, "Sequence_C": 2}
+g_sequence_id_to_idx_mapping = {"Sequence_A": 0, "Sequence_B": 1, "Sequence_C": 2, "Download_File": 3}
 
 class FsmThread(threading.Thread):
     def __init__(self, threadID, counter, seq_id, seq_params, scheduled_deadline, func):
@@ -184,15 +234,18 @@ def start_sequence(start_seq_param):
         fsm_thread = payload_sequences_fsms['Sequence_B'] = FsmThread(1, 1, 'Sequence_B', seq_params, scheduled_deadline, sequence_a_fsm)
     elif start_seq_param.sequence_id == "Sequence_C":
         fsm_thread = payload_sequences_fsms['Sequence_C'] = FsmThread(1, 1, 'Sequence_C', seq_params, scheduled_deadline, sequence_a_fsm)
+    elif start_seq_param.sequence_id == "Download_File":
+        fsm_thread = payload_sequences_fsms['Download_File'] = FsmThread(1, 1, 'Download_File', seq_params, scheduled_deadline, file_transfer)
     else:
         print("ERROR: Sequence " + start_seq_param.sequence_id + " does not exist.")
-        return api_types.AntarisReturnCode.An_ERROR
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
     fsm_thread.start()
 
     return api_types.AntarisReturnCode.An_SUCCESS
 
 def wakeup_seq_fsm(seq_fsm):
+    time.sleep(wait_time_wakeup_fsm)
     seq_fsm.condition.acquire()
     seq_fsm.condition.notify()
     seq_fsm.condition.release()
@@ -282,6 +335,8 @@ if __name__ == '__main__':
             'RespStageFileDownload' : process_response_stage_file_download,
             'RespPayloadPowerControl' : process_response_payload_power_control,
     }
+
+#   pdb.set_trace()
 
     # Create Channel to talk to Payload Controller (PC)
     channel = api_client.api_pa_pc_create_channel(callback_func_list)

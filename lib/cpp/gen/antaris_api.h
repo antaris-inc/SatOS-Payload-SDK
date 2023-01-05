@@ -36,8 +36,6 @@
 
 ///  Generated-From: antaris_api.xml
 
-///  Version: 0.0.1
-
 ///
 ///////////////////////////////////////////////////////////////////////////
 
@@ -65,6 +63,7 @@ typedef enum AntarisReturnCode {
     An_OUT_OF_RESOURCES              = -3,                              ///< Not enough resources
     An_NOT_PERMITTED                 = -4,                              ///< Operation not allowed
     An_INVALID_PARAMS                = -5,                              ///< Invalid parameter
+    An_INCOMPATIBLE_VERSION          = -6,                              ///< Incompatible version of SDK invocation
 } AntarisReturnCode;
 
 void displayAntarisReturnCode(void *obj);
