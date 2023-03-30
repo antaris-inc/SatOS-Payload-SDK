@@ -1,0 +1,15 @@
+name: python
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install test dependencies
+      run: pip install tox
+    - name: Run tests
+      run: tox
+      working-directory: lib/python
