@@ -17,7 +17,7 @@ import threading
 import time
 
 import satos_payload.antaris_api_client as api_client
-import satos_payload.antaris_api_types as api_types
+import satos_payload.gen.antaris_api_types as api_types
 
 
 DO_NOTHING_ON_HEALTH_CHECK_FAILURE = 0
