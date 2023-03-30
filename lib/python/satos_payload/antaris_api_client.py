@@ -19,12 +19,11 @@ import time
 import pdb
 
 import grpc
-import antaris_api_pb2
-import antaris_api_pb2_grpc
-import antaris_api_common as api_common
 
-import antaris_api_types as api_types
-import antaris_sdk_version as sdk_version
+import satos_payload.antaris_api_common as api_common
+import satos_payload.gen.antaris_api_types as api_types
+from  satos_payload.gen import antaris_api_pb2, antaris_api_pb2_grpc
+import satos_payload.gen.antaris_sdk_version as sdk_version
 
 api_debug = 0
 g_shutdown_grace_seconds=5

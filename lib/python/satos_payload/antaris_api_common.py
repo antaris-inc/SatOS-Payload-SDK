@@ -13,9 +13,10 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-import antaris_sdk_environment as environment
 import pdb
 import socket
+
+import satos_payload.antaris_sdk_environment as environment
 
 g_LISTEN_IP=None
 g_PAYLOAD_CONTROLLER_IP=None

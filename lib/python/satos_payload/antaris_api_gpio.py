@@ -16,15 +16,16 @@
 # This file assumes that, env.json file is present at /opt/antaris/app
 # location. The sample file is checked-in in conf directory
 
-from pylibftdi import BitBangDevice
 import time, sys, json
 
+from pylibftdi import BitBangDevice
+
 # Define error code
-g_GPIO_ERROR = -1 
+g_GPIO_ERROR = -1
 g_GPIO_AVAILABLE = 1
 g_SLEEP_TIME_IN_SEC = 1
 g_MASK_BIT_0 = 1
-g_MASK_BYTE = 0xFF 
+g_MASK_BYTE = 0xFF
 
 # Read config info
 jsonfile = open('/opt/antaris/app/config.json', 'r')

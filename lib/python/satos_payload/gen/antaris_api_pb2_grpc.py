@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import antaris_api_pb2 as antaris__api__pb2
+import satos_payload.gen.antaris_api_pb2 as antaris__api__pb2
 
 
 class AntarisapiApplicationCallbackStub(object):
