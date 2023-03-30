@@ -28,42 +28,50 @@ class Stoppable:
     def __init__(self):
         super().__init__()
 
+        self._stop_requested_cond = threading.Condition()
+        self._stop_requested = False
         self._stopped_cond = threading.Condition()
         self._stopped = False
-        self._stopping_cond = threading.Condition()
-        self._stopping = False
 
-    # Request a stop and block until stopped
+    # Request that the Stoppable begins stopping.
     #TODO(bcwaldon): pass through a timeout
-    def stop(self):
-        with self._stopping_cond:
-            self._stopping = True
-            self._stopping_cond.notify_all()
+    def request_stop(self):
+        with self._stop_requested_cond:
+            self._stop_requested = True
+            self._stop_requested_cond.notify_all()
 
-    # Returns true if stop() has been called
-    def is_stopping(self):
-        with self._stopping_cond:
-            return self._stopping
+    # Returns true if request_stop() has been called.
+    def stop_requested(self):
+        with self._stop_requested_cond:
+            return self._stop_requested
 
-    def wait_until_stopping(self):
-        with self._stopping_cond:
-            if self._stopping:
-                return
-            self._stopping_cond.wait()
+    # Blocks until request_stop() has been called.
+    # If a timeout is provided, it must be a number of seconds (partial
+    # values OK) to wait for the condition before returning False.
+    def wait_until_stop_requested(self, timeout=None):
+        with self._stop_requested_cond:
+            if self._stop_requested:
+                return True
+            return self._stop_requested_cond.wait(timeout=timeout)
 
-    # Indicate that stopping is complete.
-    # A caller waiting for stop() to return will be unblocked
+    # Indicate that the Stoppable stopping process has completed.
+    # This is used by the class inheriting Stoppable itself
+    # to coordinate a clean shutdown.
+    # A caller waiting for stopped() to return will be unblocked
     # after this is called.
     def stopped(self):
         with self._stopped_cond:
+            self._stopped = True
             self._stopped_cond.notify_all()
 
-    # Blocks until stopping has completed.
-    def wait_until_stopped(self):
+    # Blocks until stopped() has been called.
+    # If a timeout is provided, it must be a number of seconds (partial
+    # values OK) to wait for the condition before returning False.
+    def wait_until_stopped(self, timeout=None):
         with self._stopped_cond:
             if self._stopped:
-                return
-            self._stopped_cond.wait()
+                return True
+            return self._stopped_cond.wait(timeout=timeout)
 
 
 class SequenceContext:
@@ -106,8 +114,8 @@ class SequenceHandler(Stoppable, threading.Thread):
         self._handler_func(SequenceContext(self))
         self.logger.info("sequence execution completed: id=%s" % self._seq_id)
 
-        self.stopped()
         self._callback()
+        self.stopped()
 
     def deadline_reached(self):
         now_ms = time.time() * 1000
@@ -243,7 +251,7 @@ class PayloadApplication(Stoppable):
 
         self.logger.info("payload app running")
 
-        self.wait_until_stopping()
+        self.wait_until_stop_requested()
 
         self.logger.info("payload app shutdown triggered")
 
@@ -253,7 +261,7 @@ class PayloadApplication(Stoppable):
 
             if self.seq_handler:
                 self.logger.info("stopping active sequence")
-                self.seq_handler.stop()
+                self.seq_handler.request_stop()
 
         # might hit a race conditions here on shutdown without
         # relying on a lock, so we simply log and move on
@@ -269,7 +277,7 @@ class PayloadApplication(Stoppable):
         api_client.api_pa_pc_response_shutdown(self.pi_chan, params)
         api_client.api_pa_pc_delete_channel(self.pi_chan)
 
-        self.stopped()
+        self.wait_until_stopped()
 
         self.logger.info("payload app shutdown complete")
         return
@@ -316,7 +324,7 @@ class PayloadApplication(Stoppable):
 
         # non-blocking, as we just want to accept the request and proceed
         # in the background with full shutdown
-        self.stop()
+        self.request_stop()
 
         return api_types.AntarisReturnCode.An_SUCCESS
 
