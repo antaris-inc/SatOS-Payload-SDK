@@ -79,6 +79,10 @@ class SequenceContext:
         self._handler = handler
 
     @property
+    def id(self):
+        return self._handler._seq_id
+
+    @property
     def params(self):
         return self._handler._seq_params
 
@@ -249,6 +253,14 @@ class PayloadApplication(Stoppable):
         if resp != api_types.AntarisReturnCode.An_SUCCESS:
             raise Exception("failed registering payload app with controller: code=%d" % resp)
 
+        return self._run()
+
+    def run_local(self, channel_client):
+        self.channel_client = channel_client
+        self.logger.info("payload app configured for local operation")
+        return self._run()
+
+    def _run(self):
         self.logger.info("payload app running")
 
         self.wait_until_stop_requested()
@@ -272,12 +284,15 @@ class PayloadApplication(Stoppable):
             self.logger.exception("failed waiting for seq_handler to stop")
 
 
-        # inform the controller the shutdown has completed, then tear down the channel
-        params = api_types.RespShutdownParams(cid, api_types.AntarisReturnCode.An_SUCCESS)
-        api_client.api_pa_pc_response_shutdown(self.pi_chan, params)
-        api_client.api_pa_pc_delete_channel(self.pi_chan)
+        if cid != None:
+            # inform the controller the shutdown has completed, then tear down the channel
+            params = api_types.RespShutdownParams(cid, api_types.AntarisReturnCode.An_SUCCESS)
+            api_client.api_pa_pc_response_shutdown(self.pi_chan, params)
 
-        self.wait_until_stopped()
+        if self.pi_chan:
+            api_client.api_pa_pc_delete_channel(self.pi_chan)
+
+        self.stopped()
 
         self.logger.info("payload app shutdown complete")
         return
@@ -320,7 +335,7 @@ class PayloadApplication(Stoppable):
         self.logger.info("handling shutdown request")
 
         with self.lock:
-            self._shutdown_correlation_id = params.correlation_id
+            self.shutdown_correlation_id = params.correlation_id
 
         # non-blocking, as we just want to accept the request and proceed
         # in the background with full shutdown
