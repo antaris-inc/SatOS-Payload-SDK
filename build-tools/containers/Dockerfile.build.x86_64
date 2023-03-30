@@ -98,7 +98,7 @@ WORKDIR /home/${CONTAINER_USER}
 RUN echo "PS1='🐳  \[\033[1;34m\]\u @ \[\033[1;36m\]\h \[\033[1;34m\]\W\[\033[0;35m\] \[\033[1;36m\] $ \[\033[0m\]'" >> .bashrc
 RUN echo "export PATH=$PATH:${ANTARIS_GOPATH}/bin:${ANTARIS_INSTALLATIONS_PATH}/protoc" >> .bashrc
 RUN echo "export GOPATH=$GOPATH:$ANTARIS_GOPATH" >> .bashrc
-RUN echo "export PYTHONPATH=/workspace/lib/python:/workspace/lib/python/gen" >> .bashrc
+RUN echo "export PYTHONPATH=/workspace/lib/python/src:/workspace/lib/python/src/gen" >> .bashrc
 RUN echo "cat /etc/motd" >> .bashrc
 
 SHELL ["/bin/bash", "-c"]

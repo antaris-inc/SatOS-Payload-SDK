@@ -39,7 +39,7 @@ The simulated Payload Controller must be running to provide applications an upst
 Start it with the following command:
 
 ```bash
-$ PYTHONPATH=/workspace/lib/python:/workspace/lib/python/gen python3 pc-sim/invoke_pc_sim.py
+$ PYTHONPATH=/workspace/lib/python/src:/workspace/lib/python/src/gen python3 pc-sim/invoke_pc_sim.py
 ```
 
 ### Start Sample Application

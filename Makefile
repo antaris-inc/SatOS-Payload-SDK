@@ -30,7 +30,7 @@ LANGUAGE_HELP='Please specify a language for code generation [python/cpp].'
 
 LIB_DIR=./lib
 OUTPUT_GEN_DIR := ${LIB_DIR}/${LANGUAGE}/gen
-OUTPUT_GEN_PYTHON_DIR := ${LIB_DIR}/python/gen
+OUTPUT_GEN_PYTHON_DIR := ${LIB_DIR}/python/src/gen
 OUTPUT_GEN_CPP_DIR := ${LIB_DIR}/cpp/gen
 OUTPUT_GEN_PROTO_DIR := defs/gen/proto
 OUTPUT_GRPC_CPP_DIR = ${LIB_DIR}/cpp/gen/defs/gen/proto/
@@ -160,7 +160,7 @@ sample_app_clean:
 	rm -rf ${CPP_LIB_DIR}/*.a
 
 gen_clean:
-	rm -rf lib/python/gen
+	rm -rf lib/python/src/gen
 	rm -rf lib/cpp/gen
 	rm -rf defs/gen
 

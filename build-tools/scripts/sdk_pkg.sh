@@ -26,8 +26,8 @@ MESSAGE_END
 read -r -d '' POST_INSTALL_SCRIPT <<  MESSAGE_END
 #!/bin/bash
 pip3 install grpcio grpcio-tools 
-echo "export PYTHONPATH=\"$PYTHONPATH:$SDK_TGT_DIR/lib/python:$SDK_TGT_DIR/lib/python/gen\" " >> ~/.bashrc
-export PYTHONPATH="$PYTHONPATH:$SDK_TGT_DIR/lib/python:$SDK_TGT_DIR/lib/python/gen"
+echo "export PYTHONPATH=\"$PYTHONPATH:$SDK_TGT_DIR/lib/python/src:$SDK_TGT_DIR/lib/python/src/gen\" " >> ~/.bashrc
+export PYTHONPATH="$PYTHONPATH:$SDK_TGT_DIR/lib/python/src:$SDK_TGT_DIR/lib/python/src/gen"
 MESSAGE_END
 
 echo  Control contents : "$PKG_CONTROL_CONTENTS"
