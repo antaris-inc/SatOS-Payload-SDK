@@ -12,12 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import logging
 import os
 import threading
 import time
 
 import satos_payload.antaris_api_client as api_client
 import satos_payload.gen.antaris_api_types as api_types
+
+
+logger = logging.getLogger()
 
 
 DO_NOTHING_ON_HEALTH_CHECK_FAILURE = 0
@@ -87,19 +91,21 @@ class SequenceContext:
         return self._handler._seq_params
 
     @property
-    def client(self):
-        return self._handler._channel_client
-
     def deadline_reached(self):
         return self._handler.deadline_reached()
 
-    def is_stopping(self):
-        return self._handler.is_stopping()
+    @property
+    def stop_requested(self):
+        return self._handler.stop_requested()
+
+    @property
+    def client(self):
+        return self._handler._channel_client
 
 
 class SequenceHandler(Stoppable, threading.Thread):
 
-    def __init__(self, seq_id, seq_params, seq_deadline_ms, channel_client, handler_func, callback, logger):
+    def __init__(self, seq_id, seq_params, seq_deadline_ms, channel_client, handler_func, callback):
         super().__init__()
 
         self._seq_id = seq_id
@@ -110,15 +116,18 @@ class SequenceHandler(Stoppable, threading.Thread):
         self._handler_func = handler_func
         self._callback = callback
 
-        self.logger = logger
-
     def run(self):
-        self.logger.info("sequence execution started: id=%s" % self._seq_id)
+        logger.info("sequence execution started: id=%s" % self._seq_id)
 
-        self._handler_func(SequenceContext(self))
-        self.logger.info("sequence execution completed: id=%s" % self._seq_id)
+        try:
+            self._handler_func(SequenceContext(self))
+            logger.info("sequence execution completed: id=%s" % self._seq_id)
+        except:
+            logger.exception("sequence execution failed: id=%s" % self._seq_id)
 
+        #TODO(bcwaldon): need a way to bubble up failures
         self._callback()
+
         self.stopped()
 
     def deadline_reached(self):
@@ -127,12 +136,46 @@ class SequenceHandler(Stoppable, threading.Thread):
 
 
 class ChannelClient:
-    def __init__(self, channel):
-        self.channel = channel
-
+    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb):
+        self._channel = None
         self._cond = threading.Condition()
         self._next_cid = 0
         self._responses = {}
+
+        self._start_sequence_cb = start_sequence_cb
+
+        # used to facilitate communications with payload interface
+        self._callback_map = {
+            'StartSequence': self._handle_start_sequence,
+            'Shutdown': shutdown_cb,
+            'HealthCheck': health_check_cb,
+            'RespRegister': lambda x: api_types.AntarisReturnCode.An_SUCCESS,
+            'RespGetCurrentLocation': self._handle_response,
+            'RespStageFileDownload': self._handle_response,
+            'RespPayloadPowerControl': self._handle_response,
+        }
+
+    def _get_next_cid(self):
+        self._next_cid += 1
+        return self._next_cid
+
+    def _connect(self, callback_map):
+        with self._cond:
+            self._channel = api_client.api_pa_pc_create_channel(self._callback_map)
+            if self._channel == None:
+                raise Exception("failed establishing payload interface channel")
+
+            params = api_types.ReqRegisterParams(0, DO_NOTHING_ON_HEALTH_CHECK_FAILURE)
+            resp = api_client.api_pa_pc_register(self._channel, params)
+            if resp != api_types.AntarisReturnCode.An_SUCCESS:
+                raise Exception("failed registering payload app with controller: code=%d" % resp)
+
+    def _disconnect(self, cid):
+        with self._cond:
+            # inform the controller the shutdown has completed, then tear down the channel
+            params = api_types.RespShutdownParams(cid, api_types.AntarisReturnCode.An_SUCCESS)
+            api_client.api_pa_pc_response_shutdown(self._channel, params)
+            api_client.api_pa_pc_delete_channel(self._channel)
 
     def get_current_location(self):
         #NOTE(bcwaldon): pc-sim currently not able to respond, so we provide a dummy response
@@ -141,11 +184,10 @@ class ChannelClient:
                 correlation_id=0, req_status=0, determined_at=None)
 
         with self._cond:
-            self._next_cid += 1
-            params = api_types.ReqGetCurrentLocationParams(self._next_cid)
-            resp = api_client.api_pa_pc_get_current_location(self.channel, params)
+            params = api_types.ReqGetCurrentLocationParams(self._get_next_cid())
+            resp = api_client.api_pa_pc_get_current_location(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
-                self.logger.error("get_current_location request failed")
+                logger.error("get_current_location request failed")
                 return None
 
             resp_cond = threading.Condition()
@@ -162,14 +204,12 @@ class ChannelClient:
 
         return resp
 
-
     def stage_file_download(self, loc):
         with self._cond:
-            self._next_cid += 1
-            params = api_types.ReqStageFileDownloadParams(self._next_cid, loc)
-            resp = api_client.api_pa_pc_stage_file_download(self.channel, params)
+            params = api_types.ReqStageFileDownloadParams(self._get_next_cid(), loc)
+            resp = api_client.api_pa_pc_stage_file_download(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
-                self.logger.error("stage_file_download request failed")
+                logger.error("stage_file_download request failed")
                 return None
 
             resp_cond = threading.Condition()
@@ -189,7 +229,13 @@ class ChannelClient:
     def payload_power_control(self):
         raise NotImplementedError()
 
-    def _handle_resp(self, params):
+    def _sequence_done(self, sequence_id):
+        params = api_types.CmdSequenceDoneParams(sequence_id)
+        resp = api_client.api_pa_pc_sequence_done(self._channel, params)
+        if resp != api_types.AntarisReturnCode.An_SUCCESS:
+            logger.error("sequence_done request failed: resp=%d" % resp)
+
+    def _handle_response(self, params):
         with self._cond:
             if not params.correlation_id in self._responses:
                 return
@@ -199,13 +245,14 @@ class ChannelClient:
                 self._responses[params.correlation_id][1] = params
                 resp_cond.notify_all()
 
+    def _handle_start_sequence(self, params):
+        return self._start_sequence_cb(params.sequence_id, params.sequence_params, params.scheduled_deadline)
+
 
 class PayloadApplication(Stoppable):
 
-    def __init__(self, logger):
+    def __init__(self):
         super().__init__()
-
-        self.logger = logger
 
         # used to coordinate local state modifications
         self.lock = threading.Lock()
@@ -216,63 +263,58 @@ class PayloadApplication(Stoppable):
         # index of registered sequence handler funcs
         self.sequence_handler_func_idx = dict()
 
+        # default health check; can be overridden
+        self.health_check_handler_func = lambda x: True
+
         # abstracts access to channel APIs for sequences
-        self.channel_client = ChannelClient(channel=None)
-
-        # used to facilitate communications with payload interface
-        self.pi_chan = None
-        self.pi_cid = 0
-        self.pi_callback_map = {
-            'StartSequence': self.handle_start_sequence,
-            'Shutdown': self.handle_shutdown,
-            'HealthCheck': lambda x: api_types.AntarisReturnCode.An_SUCCESS,
-            'RespRegister': lambda x: api_types.AntarisReturnCode.An_SUCCESS,
-
-            'RespGetCurrentLocation': self.channel_client._handle_resp,
-            'RespStageFileDownload': self.channel_client._handle_resp,
-            'RespPayloadPowerControl': self.channel_client._handle_resp,
-        }
+        self.channel_client = None
 
         # used to help coordinate shutdown
         self.shutdown_correlation_id = None
 
-    def mount(self, sequence_id, sequence_handler_func):
+    def mount_sequence(self, sequence_id, sequence_handler_func):
         self.sequence_handler_func_idx[sequence_id] = sequence_handler_func
 
+    def set_health_check(self, health_check_handler_func):
+        self.health_check_handler_func = health_check_handler_func
+
+    def health_check(self):
+        try:
+            hv = self.health_check_handler_func()
+        except:
+            logger.exception("health check failed")
+            hv = False
+
+        if hv:
+            return api_types.AntarisReturnCode.An_SUCCESS
+        else:
+            return api_types.AntarisReturnCode.An_GENERIC_FAILURE
+
     def run(self):
-        self.logger.info("payload app starting")
+        logger.info("payload app starting")
 
-        self.pi_chan = api_client.api_pa_pc_create_channel(self.pi_callback_map)
-        if self.pi_chan == None:
-            raise Exception("failed establishing payload interface channel")
+        if not self.channel_client:
+            self.channel_client = ChannelClient(self.start_sequence, self.health_check, self._handle_shutdown)
 
-        self.channel_client.channel = self.pi_chan
+        self.channel_client._connect()
 
-        params = api_types.ReqRegisterParams(self.pi_cid, DO_NOTHING_ON_HEALTH_CHECK_FAILURE)
-        resp = api_client.api_pa_pc_register(self.pi_chan, params)
-        if resp != api_types.AntarisReturnCode.An_SUCCESS:
-            raise Exception("failed registering payload app with controller: code=%d" % resp)
-
-        return self._run()
-
-    def run_local(self, channel_client):
-        self.channel_client = channel_client
-        self.logger.info("payload app configured for local operation")
-        return self._run()
-
-    def _run(self):
-        self.logger.info("payload app running")
+        logger.info("payload app running")
 
         self.wait_until_stop_requested()
 
-        self.logger.info("payload app shutdown triggered")
+        logger.info("payload app shutdown triggered")
 
+        self._shutdown()
+
+        logger.info("payload app shutdown complete")
+
+    def _shutdown(self):
         cid = None
         with self.lock:
             cid = self.shutdown_correlation_id
 
             if self.seq_handler:
-                self.logger.info("stopping active sequence")
+                logger.info("stopping active sequence")
                 self.seq_handler.request_stop()
 
         # might hit a race conditions here on shutdown without
@@ -281,35 +323,22 @@ class PayloadApplication(Stoppable):
             if self.seq_handler:
                 self.seq_handler.wait_until_stopped()
         except Exception as exc:
-            self.logger.exception("failed waiting for seq_handler to stop")
+            logger.exception("failed waiting for seq_handler to stop")
 
-
-        if cid != None:
-            # inform the controller the shutdown has completed, then tear down the channel
-            params = api_types.RespShutdownParams(cid, api_types.AntarisReturnCode.An_SUCCESS)
-            api_client.api_pa_pc_response_shutdown(self.pi_chan, params)
-
-        if self.pi_chan:
-            api_client.api_pa_pc_delete_channel(self.pi_chan)
+        self.channel_client._disconnect(cid)
 
         self.stopped()
 
-        self.logger.info("payload app shutdown complete")
-        return
-
-
-    def handle_start_sequence(self, params):
-        self.logger.info("handling start_sequence request")
-
+    def start_sequence(self, seq_id, seq_params, seq_deadline):
         try:
-            handler_func = self.sequence_handler_func_idx[params.sequence_id]
+            handler_func = self.sequence_handler_func_idx[seq_id]
         except KeyError:
-            self.logger.info("sequence_id not recognized")
+            logger.info("sequence_id not recognized")
             return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
         with self.lock:
             if self.seq_handler:
-                self.logger.error("sequence already active, unable to start another")
+                logger.error("sequence already active, unable to start another")
                 return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
             # spawn a thread to handle the sequence, provding a callback that coordinates
@@ -317,29 +346,21 @@ class PayloadApplication(Stoppable):
             def callback():
                 with self.lock:
                     self.seq_handler = None
-                    self._sequence_done(params.sequence_id)
+                    self.channel_client._sequence_done(seq_id)
 
-            self.seq_handler = SequenceHandler(params.sequence_id, params.sequence_params, params.scheduled_deadline, self.channel_client, handler_func, callback, self.logger)
+            self.seq_handler = SequenceHandler(seq_id, seq_params, seq_deadline, self.channel_client, handler_func, callback)
             self.seq_handler.start()
 
             return api_types.AntarisReturnCode.An_SUCCESS
 
-    # communicate to the payload channel a sequence has completed
-    def _sequence_done(self, sequence_id):
-        params = api_types.CmdSequenceDoneParams(sequence_id)
-        resp = api_client.api_pa_pc_sequence_done(self.pi_chan, params)
-        if resp != api_types.AntarisReturnCode.An_SUCCESS:
-            self.logger.error("sequence_done request failed: resp=%d" % resp)
-
-    def handle_shutdown(self, params):
-        self.logger.info("handling shutdown request")
+    def _handle_shutdown(self, params):
+        logger.info("handling shutdown request")
 
         with self.lock:
             self.shutdown_correlation_id = params.correlation_id
 
         # non-blocking, as we just want to accept the request and proceed
-        # in the background with full shutdown
+        # in the background with full shutdown. Response will be sent later.
         self.request_stop()
 
         return api_types.AntarisReturnCode.An_SUCCESS
-

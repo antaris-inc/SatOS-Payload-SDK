@@ -1,5 +1,20 @@
+# Copyright 2023 Antaris, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import datetime
 import logging
+import time
 import threading
 import unittest
 
@@ -12,6 +27,13 @@ class LocalChannelClient:
     def __init__(self):
         self.lock = threading.Lock()
         self.staged_files = []
+        self.sequences_done = []
+
+    def _connect(self):
+        pass
+
+    def _disconnect(self, cid):
+        pass
 
     def get_current_location(self):
         return api_types.RespGetCurrentLocationParams(
@@ -28,24 +50,52 @@ class LocalChannelClient:
     def payload_power_control(self):
         raise NotImplementedError()
 
+    def _sequence_done(self, sequence_id):
+        with self.lock:
+            self.sequences_done.append(sequence_id)
+
 
 class TestHelloWorld(unittest.TestCase):
 
     def test_app(self):
-        cl = LocalChannelClient()
-        ctl = hello_world.HelloController()
-        app = hello_world.make_app(ctl)
+        sequences = [
+            ["HelloWorld", ""],
+            ["HelloFriend", "Jake"],
+            ["HelloFriend", "Finn"],
+        ]
 
-        th = threading.Thread(target=app.run_local, args=(cl,))
+        deadline = datetime.datetime.now() + datetime.timedelta(seconds=3)
+
+        app = hello_world.new()
+        app.channel_client = LocalChannelClient()
+
+        th = threading.Thread(target=app.run)
         th.start()
 
-        deadline = datetime.datetime.utcnow() + datetime.timedelta(seconds=10)
-        params = api_types.StartSequenceParams(0, "HelloWorld", "", deadline)
-        app.handle_start_sequence(params)
+        def waitForSequences(n):
+            while True:
+                if len(app.channel_client.sequences_done) == n:
+                    return
+                if datetime.datetime.now() > deadline:
+                    raise Exception("timed out")
+                time.sleep(0.1)
+
+        for (i, seq) in enumerate(sequences):
+            try:
+                got = app.start_sequence(seq[0], seq[1], deadline)
+                self.assertEqual(got, api_types.AntarisReturnCode.An_SUCCESS)
+                waitForSequences(i+1)
+            except:
+                # go ahead and stop if we encounter an issue
+                app.request_stop()
+                raise
+
+        hc = app.health_check()
 
         app.request_stop()
 
         th.join(timeout=5)
         self.assertFalse(th.is_alive())
 
-        self.assertEqual(ctl.sequence_count, 1)
+        self.assertEqual(hc, api_types.AntarisReturnCode.An_SUCCESS)
+        self.assertEqual(app.channel_client.sequences_done, ["HelloWorld", "HelloFriend", "HelloFriend"])

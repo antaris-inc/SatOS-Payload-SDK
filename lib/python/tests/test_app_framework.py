@@ -105,7 +105,6 @@ class TestSequenceHandler(unittest.TestCase):
         client = None
         params = "abc"
         deadline_ms = 60 * 1000  # 60sec timeout, will not be hit
-        logger = logging.getLogger()
 
         class testSequenceHandler:
             def __init__(self):
@@ -122,7 +121,7 @@ class TestSequenceHandler(unittest.TestCase):
 
         tsh = testSequenceHandler()
 
-        sh = app_framework.SequenceHandler("", params, deadline_ms, client, tsh.handler_func, tsh.callback_func, logger)
+        sh = app_framework.SequenceHandler("", params, deadline_ms, client, tsh.handler_func, tsh.callback_func)
         sh.start()
 
         self.assertTrue(sh.wait_until_stopped(timeout=5))
@@ -134,7 +133,6 @@ class TestSequenceHandler(unittest.TestCase):
     def test_deadline(self):
         client = None
         params = "abc"
-        logger = logging.getLogger()
 
         class testSequenceHandler:
             def __init__(self):
@@ -143,7 +141,7 @@ class TestSequenceHandler(unittest.TestCase):
 
             def handler_func(self, ctx):
                 time.sleep(0.2) # sleep 200ms
-                self.handler_func_deadline_reached = ctx.deadline_reached()
+                self.handler_func_deadline_reached = ctx.deadline_reached
 
             def callback_func(self):
                 pass
@@ -151,13 +149,13 @@ class TestSequenceHandler(unittest.TestCase):
         tsh = testSequenceHandler()
 
         # confirm a short deadline is triggered
-        sh = app_framework.SequenceHandler("", params, 100, client, tsh.handler_func, tsh.callback_func, logger)
+        sh = app_framework.SequenceHandler("", params, 100, client, tsh.handler_func, tsh.callback_func)
         sh.start()
         self.assertTrue(sh.wait_until_stopped(timeout=5))
         self.assertTrue(tsh.handler_func_deadline_reached)
 
         # confirm a long deadline is not triggered
-        sh = app_framework.SequenceHandler("", params, 300, client, tsh.handler_func, tsh.callback_func, logger)
+        sh = app_framework.SequenceHandler("", params, 300, client, tsh.handler_func, tsh.callback_func)
         sh.start()
         self.assertTrue(sh.wait_until_stopped(timeout=5))
         self.assertTrue(tsh.handler_func_deadline_reached)

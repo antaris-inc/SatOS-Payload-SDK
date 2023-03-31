@@ -27,17 +27,27 @@ logger = logging.getLogger()
 
 
 class HelloController:
-    def __init__(self):
-        self.sequence_count = 0
+
+    def is_healthy(self):
+        logger.info("Ran health check")
+        return True
 
     def handle_hello_world(self, ctx):
-        self.sequence_count += 1
-        logger.info(f"received sequence: id={ctx.id} params={ctx.params}")
+        logger.info("Hello, world!")
+
+    def handle_hello_friend(self, ctx):
+        name = ctx.params
+        logger.info(f"Hello, {name}!")
 
 
-def make_app(ctl):
-    app = app_framework.PayloadApplication(logger)
-    app.mount("HelloWorld", ctl.handle_hello_world)
+def new():
+    ctl = HelloController()
+
+    app = app_framework.PayloadApplication()
+    app.set_health_check(ctl.is_healthy)
+    app.mount_sequence("HelloWorld", ctl.handle_hello_world)
+    app.mount_sequence("HelloFriend", ctl.handle_hello_friend)
+
     return app
 
 
