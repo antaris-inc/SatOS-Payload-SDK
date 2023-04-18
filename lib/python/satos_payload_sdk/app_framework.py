@@ -159,7 +159,7 @@ class ChannelClient:
         self._next_cid += 1
         return self._next_cid
 
-    def _connect(self, callback_map):
+    def _connect(self):
         with self._cond:
             self._channel = api_client.api_pa_pc_create_channel(self._callback_map)
             if self._channel == None:
