@@ -18,7 +18,7 @@ import logging
 import threading
 import unittest
 
-from satos_payload import app_framework
+from satos_payload_sdk import app_framework
 
 
 class assertThread(threading.Thread):

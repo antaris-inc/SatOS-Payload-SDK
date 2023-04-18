@@ -19,11 +19,30 @@
 
 #include <stdio.h>
 
+/*
+    Cookie = "<AuthKey><ShortAppId>"
+    Cookie will be part of config.json and end user will not know the details of the cookie.
+    Cookie , auth key and short app Id will all be of the fixed length strings.
+*/
+#define AUTH_KEY_LEN            (20)
+#define COOKIE_LEN              (23)
+#define COOKIE_STR              ("cookie")
 #define ANTARIS_DEFAULT_STRING_MAX_LEN  (256)
 #define ANTARIS_MAX_FILE_NAME_LENGTH    (ANTARIS_DEFAULT_STRING_MAX_LEN)
 #define ANTARIS_MAX_CMD_LENGTH          (1024)
-#define ANTARIS_MAX_TOKEN_LEN           (ANTARIS_DEFAULT_STRING_MAX_LEN)
+#define ANTARIS_MAX_AUTH_KEY_LEN        (ANTARIS_DEFAULT_STRING_MAX_LEN)
 #define ANTARIS_MAX_PEER_STRING_LEN     (ANTARIS_DEFAULT_STRING_MAX_LEN)
+
+// Used by Payload controller side code
+#define PC_SSL_CERTFICATE_FILE             "/opt/antaris/config/ssl/server.crt"
+#define PC_SSL_KEY_FILE                 "/opt/antaris/config/ssl/server.key"
+
+// Used by Payload application side code
+#define SERVER_SSL_CERT_FILE            "/opt/antaris/sdk/server.crt"
+#define CLIENT_SSL_CERTIFICATE_FILE     "/opt/antaris/app/client.crt"
+#define CLIENT_SSL_KEY_FILE             "/opt/antaris/app/client.key"
+
+#define ENABLED                         '1'   // 0 => no-ssl certificate, 1=> ssl certificate needed
 
 // common types needed by API
 typedef void * AntarisChannel;

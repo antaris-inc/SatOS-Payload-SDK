@@ -1,4 +1,14 @@
 #!/bin/bash
+### BEGIN INIT INFO
+# Provides:          entrypoint.sh
+# Required-Start:    $network $remote_fs $syslog
+# Required-Stop:	 $network $remote_fs $syslog
+# Default-Start:     2 3 4 5 6
+# Default-Stop:
+# Short-Description: Starts payload applictaion
+### END INIT INFO
+
+# Copyright 2022 Antaris Inc
 #
 #   Copyright 2022 Antaris, Inc.
 #

@@ -13,9 +13,12 @@
 #ifndef __ANTARIS_SDK_ENVINRONMENT__
 #define __ANTARIS_SDK_ENVINRONMENT__
 
+#include "cJSON.h"
 #define MAX_FILE_OR_PROP_LEN_NAME       256
+
 
 /* refresh config by considering environment and config file */
 void sdk_environment_read_config(void);
+void read_config_json( cJSON ** pp_cJson);
 
 #endif

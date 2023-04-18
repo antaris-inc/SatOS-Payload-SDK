@@ -28,6 +28,7 @@ debug = 0
 channel = 0
 shutdown_requested = 0
 wait_time_wakeup_fsm = 5
+INITIAL_CORRELATION_ID = 0x88
 
 #
 # Following counters should be incremented whenever
@@ -36,7 +37,7 @@ reqs_to_pc_in_err_cnt = 0
 resps_to_pc_in_err_cnt = 0
 
 # Global variable to record application state
-application_state = 0
+application_state = 1     # 1 Indicates, app is running
 
 # This sequence should complete within its scheduled_deadline
 def sequence_a_fsm(mythread):
@@ -45,10 +46,15 @@ def sequence_a_fsm(mythread):
 
     print("sequence_a_fsm : state : " + mythread.state + " scheduled_deadline : ", mythread.scheduled_deadline)
 
-    mythread.correlation_id = 0
+    mythread.correlation_id = INITIAL_CORRELATION_ID
 
     # Request PC to get current location
     get_location_params = api_types.ReqGetCurrentLocationParams(mythread.correlation_id)
+
+    if debug:
+        print("Prepared get-location request")
+        get_location_params.display()
+
     ret = api_client.api_pa_pc_get_current_location(channel, get_location_params)
 
     print("Invoked api_pa_pc_get_current_location, got return-code {} => {}".format(ret, api_types.AntarisReturnCode.reverse_dict[ret]))
@@ -92,6 +98,11 @@ def sequence_a_fsm(mythread):
  
     # Request PC to power-off my payload hardware
     payload_power_control_params = api_types.ReqPayloadPowerControlParams(mythread.correlation_id, 0)
+
+    if debug:
+        print("Prepared power-control request")
+        payload_power_control_params.display()
+
     ret = api_client.api_pa_pc_payload_power_control(channel, payload_power_control_params)
 
     print("Invoked api_pa_pc_payload_power_control, got return-code {} => {}".format(ret, api_types.AntarisReturnCode.reverse_dict[ret]))
@@ -324,6 +335,8 @@ if __name__ == '__main__':
     correlation_id = 0
 
     logging.basicConfig()
+
+    print("Note = Make sure that client.crt and client.key is copied in /opt/antaris/app/ folder")
 
     # Callback functions (PC => PA)
     callback_func_list = {

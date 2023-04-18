@@ -17,14 +17,18 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "cJSON.h"
 
 #include "antaris_sdk_environment.h"
 
 #define ENV_FILENAME_VARIABLE       "ANTARIS_ENV_CONF_FILE"
 
-static char g_CONF_FILE[MAX_FILE_OR_PROP_LEN_NAME]="/opt/antaris/sdk/lib/conf/sdk_env.conf";
+
+static char g_CONF_FILE[MAX_FILE_OR_PROP_LEN_NAME]="/opt/antaris/app/conf/sdk_env.conf";
+static char g_CONF_JSON[MAX_FILE_OR_PROP_LEN_NAME]="/opt/antaris/app/config.json" ;
 
 #define PC_IP_CONF_KEY                      "PAYLOAD_CONTROLLER_IP"
+#define SSL_ENABLE_KEY                      "SSL_FLAG"
 #define APP_IP_CONF_KEY                     "PAYLOAD_APP_IP"
 #define LISTEN_IP_CONF_KEY                  "LISTEN_IP"
 #define PC_API_PORT_CONF_KEY                "PC_API_PORT"
@@ -37,6 +41,7 @@ unsigned short g_PC_GRPC_SERVER_PORT = 50051;
 char g_PC_GRPC_SERVER_PORT_STR[MAX_FILE_OR_PROP_LEN_NAME] = "50051";
 unsigned short g_PA_GRPC_SERVER_PORT = 50053;
 char g_PA_GRPC_SERVER_PORT_STR[MAX_FILE_OR_PROP_LEN_NAME] = "50053";
+char g_SSL_ENABLE = '1';       
 
 char g_PC_GRPC_LISTEN_ENDPOINT[MAX_FILE_OR_PROP_LEN_NAME] = "0.0.0.0:50051";
 char g_PC_GRPC_CONNECT_ENDPOINT[MAX_FILE_OR_PROP_LEN_NAME] = "127.0.0.1:50051";
@@ -114,6 +119,8 @@ static void update_a_conf(char *conf_line)
         strcpy(g_PC_GRPC_SERVER_PORT_STR, a_conf.value);
     } else if (strcmp(a_conf.prop, APP_API_PORT_CONF_KEY) == 0) {
         strcpy(g_PA_GRPC_SERVER_PORT_STR, a_conf.value);
+    } else if (strcmp(a_conf.prop, SSL_ENABLE_KEY) == 0) {
+        strcpy(&g_SSL_ENABLE, a_conf.value);
     }
 
     return;
@@ -153,3 +160,29 @@ void sdk_environment_read_config(void)
 
     return;
 }
+
+
+#define BUFF_SIZE       (2048)
+void read_config_json( cJSON ** pp_cJson)
+{
+    FILE *conf_file;
+    long size = 0 , size_read = 0;
+    char buffer[BUFF_SIZE] = {0};
+    *pp_cJson = NULL;       /* Original value discarded. */
+    if ((conf_file = fopen(g_CONF_JSON, "r")) != NULL) {
+        fseek(conf_file , 0 , SEEK_END);
+        long size = ftell(conf_file);
+        fseek(conf_file , 0 , SEEK_SET);
+        if ( size > (BUFF_SIZE-1) ){
+            return;
+        }
+        size_read = fread(buffer , sizeof(char) , size , conf_file);
+        fclose(conf_file);
+        if (size_read != size ){
+            /* All data was not read.*/
+            return;
+        }
+    };
+    *pp_cJson = cJSON_Parse(buffer);
+};
+

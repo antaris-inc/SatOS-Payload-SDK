@@ -19,6 +19,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <fstream>
 
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <grpcpp/grpcpp.h>
@@ -40,8 +41,9 @@ using grpc::Status;
 
 unsigned int api_debug = 0;
 
-#define ANTARIS_CALLBACK_GRACE_DELAY    10
+extern char g_SSL_ENABLE;
 
+#define ANTARIS_CALLBACK_GRACE_DELAY    10
 
 class PCServiceClient {
  public:
@@ -50,6 +52,17 @@ class PCServiceClient {
 
   // Assembles the client's payload, sends it and presents the response back
   // from the server.
+
+  AntarisReturnCode SetCookie(char *str){
+    if (NULL == str ){
+        return An_INVALID_PARAMS;
+    }
+    if (strlen(str) > COOKIE_LEN){
+        return An_INVALID_PARAMS;
+    }
+    strcpy(this->cookie_str , str);
+    return An_SUCCESS;
+  }
 
   AntarisReturnCode Invoke_PC_register(ReqRegisterParams *req_params) {
         antaris_api_peer_to_peer::ReqRegisterParams pc_req;
@@ -61,6 +74,9 @@ class PCServiceClient {
         ClientContext context;
 
         app_to_peer_ReqRegisterParams(req_params, &pc_req);
+
+
+        context.AddMetadata( COOKIE_STR, this->cookie_str);
 
         p_version = pc_req.mutable_sdk_version();
     
@@ -97,6 +113,7 @@ class PCServiceClient {
         ClientContext context;
 
         app_to_peer_ReqGetCurrentLocationParams(req_params, &pc_req);
+        context.AddMetadata(COOKIE_STR, this->cookie_str);
 
         printf("%s: Invoking PC_get_current_location api towards PC\n", __FUNCTION__);
         pc_status = stub_->PC_get_current_location(&context, pc_req, &pc_response);
@@ -122,6 +139,7 @@ class PCServiceClient {
         ClientContext context;
 
         app_to_peer_ReqStageFileDownloadParams(req_params, &pc_req);
+        context.AddMetadata(COOKIE_STR, this->cookie_str);
 
         pc_status = stub_->PC_stage_file_download(&context, pc_req, &pc_response);
 
@@ -146,6 +164,7 @@ class PCServiceClient {
         ClientContext context;
 
         app_to_peer_CmdSequenceDoneParams(req_params, &pc_req);
+        context.AddMetadata(COOKIE_STR, this->cookie_str);
 
         pc_status = stub_->PC_sequence_done(&context, pc_req, &pc_response);
 
@@ -170,6 +189,7 @@ class PCServiceClient {
         ClientContext context;
 
         app_to_peer_ReqPayloadPowerControlParams(req_params, &pc_req);
+        context.AddMetadata(COOKIE_STR, this->cookie_str);
 
         pc_status = stub_->PC_payload_power_control(&context, pc_req, &pc_response);
 
@@ -194,6 +214,7 @@ class PCServiceClient {
         ClientContext context;
 
         app_to_peer_RespHealthCheckParams(req_params, &pc_req);
+        context.AddMetadata(COOKIE_STR, this->cookie_str);
 
         pc_status = stub_->PC_response_health_check(&context, pc_req, &pc_response);
 
@@ -218,6 +239,9 @@ class PCServiceClient {
         ClientContext context;
 
         app_to_peer_RespShutdownParams(req_params, &pc_req);
+        // Please note key needs to be lower case. This was not mentioned in the documentation, 
+        // but there seems to be such constraint.
+        context.AddMetadata(COOKIE_STR, this->cookie_str);
 
         pc_status = stub_->PC_response_shutdown(&context, pc_req, &pc_response);
 
@@ -235,6 +259,7 @@ class PCServiceClient {
 
  private:
   std::unique_ptr<antaris_api_peer_to_peer::AntarisapiPayloadController::Stub> stub_;
+  char cookie_str[COOKIE_LEN+1];
 };
 
 typedef class AntarisInternalClientChannelContext_s AntarisInternalClientChannelContext_t;
@@ -388,8 +413,52 @@ void *start_callback_server(void *thread_param)
     grpc::EnableDefaultHealthCheckService(true);
     grpc::reflection::InitProtoReflectionServerBuilderPlugin();
     ServerBuilder builder;
+
+    if (g_SSL_ENABLE == ENABLED) {
+        printf("SSL is enabled \n");
+        std::ifstream ssl_cert_file(CLIENT_SSL_CERTIFICATE_FILE);
+        std::string cert;
+        std::ifstream ssl_key_file(CLIENT_SSL_KEY_FILE);
+        std::string key;
+
+        if (ssl_cert_file.fail()) {
+            printf("Error in opening %s file \n", CLIENT_SSL_CERTIFICATE_FILE);
+            return NULL;
+        }
+
+        if (ssl_key_file.fail()) {
+            printf("Error in opening %s file \n", CLIENT_SSL_KEY_FILE);
+            return NULL;
+        }
+
+        ssl_cert_file.seekg(0, std::ios::end);   
+        cert.reserve(ssl_cert_file.tellg());
+        ssl_cert_file.seekg(0, std::ios::beg);
+
+        cert.assign((std::istreambuf_iterator<char>(ssl_cert_file)),
+        std::istreambuf_iterator<char>());
+
+        ssl_key_file.seekg(0, std::ios::end);   
+        key.reserve(ssl_key_file.tellg());
+        ssl_key_file.seekg(0, std::ios::beg);
+
+        key.assign((std::istreambuf_iterator<char>(ssl_key_file)),
+        std::istreambuf_iterator<char>());
+
+        grpc::SslServerCredentialsOptions::PemKeyCertPair pkcp {key, cert};
+ 
+        grpc::SslServerCredentialsOptions ssl_opts;
+        ssl_opts.pem_root_certs="";
+        ssl_opts.pem_key_cert_pairs.push_back(pkcp);
+
+        builder.AddListeningPort(callback_address, grpc::SslServerCredentials(ssl_opts));
+    } else {
+        // Listen on the given address without any authentication mechanism.
+        builder.AddListeningPort(callback_address, grpc::InsecureServerCredentials());
+    }
+
     // Listen on the given address without any authentication mechanism.
-    builder.AddListeningPort(callback_address, grpc::InsecureServerCredentials());
+    // builder.AddListeningPort(callback_address, grpc::InsecureServerCredentials());
     // Register "service" as the instance through which we'll communicate with
     // clients. In this case it corresponds to an *synchronous* service.
     builder.RegisterService(&ctx->callback_service_handle);
@@ -426,7 +495,26 @@ void displayAntarisChannel(AntarisChannel obj)
 AntarisChannel api_pa_pc_create_channel(AntarisApiCallbackFuncList *callback_func_list)
 {
     sdk_environment_read_config();
-
+    cJSON* p_cJson = NULL;
+    char cookie[COOKIE_LEN + 1];
+    read_config_json(&p_cJson);
+    if (p_cJson == NULL){
+        std::cout << "Failed to read the config.json\n" ;
+    } else {
+        cJSON *pJsonStr = cJSON_GetObjectItem(p_cJson , COOKIE_STR);
+        if (cJSON_IsString(pJsonStr) ){
+            std::cout << "JSON Cookie is string. \n";
+            char* str = cJSON_GetStringValue(pJsonStr);
+            if ( (str != NULL) && (strlen(str) <= COOKIE_LEN) ){
+                memcpy(cookie, str , COOKIE_LEN);
+                cookie[COOKIE_LEN] = '\0';
+            } else {
+                std::cout << "Failed to read cookie from the json";
+            }
+            std::cout << "JSON Cookie value : " << cookie << " \n";
+        }
+        cJSON_Delete(p_cJson);
+    }
     if (!is_server_endpoint_available(&g_LISTEN_IP[0], g_PA_GRPC_SERVER_PORT)) {
         printf("App endpoint %s not available\n", g_APP_GRPC_LISTEN_ENDPOINT);
         return NULL;
@@ -445,8 +533,34 @@ AntarisChannel api_pa_pc_create_channel(AntarisApiCallbackFuncList *callback_fun
         fprintf(stderr, "%s: channel alloc fail\n", __FUNCTION__);
         goto done;
     }
+    
+    if (g_SSL_ENABLE == ENABLED) {
+        printf("SSL is enabled \n");
+        std::ifstream ssl_server_cert(SERVER_SSL_CERT_FILE);
+        std::string cacert;
+        grpc::SslCredentialsOptions ssl_opts;
+  
+        if (ssl_server_cert.fail()) {
+            printf("Error in opening %s file \n", SERVER_SSL_CERT_FILE);
+            return NULL;
+        }
 
-    channel->pc_service_handle = new PCServiceClient(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials()));
+        ssl_server_cert.seekg(0, std::ios::end);   
+        cacert.reserve(ssl_server_cert.tellg());
+        ssl_server_cert.seekg(0, std::ios::beg);
+        
+        cacert.assign((std::istreambuf_iterator<char>(ssl_server_cert)),
+                std::istreambuf_iterator<char>());
+
+        ssl_opts.pem_root_certs=cacert;
+
+        auto ssl_creds = grpc::SslCredentials(ssl_opts);
+        channel->pc_service_handle  = new PCServiceClient(grpc::CreateChannel(target_str, ssl_creds));
+    } else {
+        channel->pc_service_handle  = new PCServiceClient(grpc::CreateChannel(target_str, grpc::InsecureChannelCredentials()));
+    }
+    channel->pc_service_handle->SetCookie(cookie);
+
 
     if (!channel->pc_service_handle) {
         fprintf(stderr, "%s: pc_service_handle alloc fail\n", __FUNCTION__);

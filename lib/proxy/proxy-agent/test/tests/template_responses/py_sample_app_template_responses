@@ -1,0 +1,34 @@
+api_pa_pc_create_channel_common
+started callback server and created channel
+api_pa_pc_registering with SDK version 1.0.1
+Invoked register, got return-code 0 => An_SUCCESS
+process_response_register
+start_sequence for sequence-id Sequence_A
+Starting Sequence_A
+sequence_a_fsm
+sequence_a_fsm : state : NOT_STARTED scheduled_deadline :  1675689738000
+api_pa_pc_get_curent_location
+Invoked api_pa_pc_get_current_location, got return-code 0 => An_SUCCESS
+sequence_a_fsm : state :  WAITING_FOR_GET_LOCATION
+process_response_get_current_location
+api_pa_pc_stage_file_download
+Invoked api_pa_pc_stage_file_download, got return-code 0 => An_SUCCESS
+sequence_a_fsm : state :  WAITING_FOR_STAGE_FILE_DOWNLOAD_COMPLETION
+process_response_stage_file_download
+api_pa_pc_payload_power_control
+Invoked api_pa_pc_payload_power_control, got return-code 0 => An_SUCCESS
+sequence_a_fsm : state :  WAITING_FOR_PAYLOAD_POWER_OFF
+process_response_payload_power_control
+api_pa_pc_sequence_done
+Invoked api_pa_pc_sequence_done, got return-code 0 => An_SUCCESS
+CONGRATULATIONS! :  Sequence A completed at  1675689733206.5088 earlier than the deadline 1675689738000
+sequence_a_fsm : state :  EXITING
+Exiting Sequence_A
+shutdown_app : Got shutdown request from PC
+Completed shutdown, responding back to PC
+api_pa_pc_response_shutdown
+Main thread detected shutdown
+api_pa_pc_delete_channel, stopping callback server
+callback server successfully stopped, sleeping for quiesce time (s) = 7
+Exiting Main Thread
+

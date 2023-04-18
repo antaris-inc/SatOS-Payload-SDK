@@ -3,7 +3,7 @@ requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "satos_payload"
+name = "satos_payload_sdk"
 authors = [
   {name = "Antaris, Inc", email = "opensource@antaris.space"},
 ]
@@ -22,4 +22,4 @@ dynamic = [
 ]
 
 [tool.setuptools.dynamic]
-version = { attr = "satos_payload.gen.antaris_sdk_version.VERSION" }
+version = { attr = "satos_payload_sdk.gen.antaris_sdk_version.ANTARIS_PA_PC_SDK_VERSION" }

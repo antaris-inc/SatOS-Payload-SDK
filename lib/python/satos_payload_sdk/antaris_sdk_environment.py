@@ -18,15 +18,17 @@ import re
 import pdb
 
 g_ENV_FILENAME_VARIABLE="ANTARIS_ENV_CONF_FILE"
-g_CONF_FILE="/opt/antaris/sdk/lib/conf/sdk_env.conf"
+g_CONF_FILE="/opt/antaris/app/conf/sdk_env.conf"
 
 g_PC_IP_CONF_KEY="PAYLOAD_CONTROLLER_IP"
+g_SSL_ENABLE_KEY="SSL_FLAG"
 g_APP_IP_CONF_KEY="PAYLOAD_APP_IP"
 g_LISTEN_IP_CONF_KEY="LISTEN_IP"
 g_PC_API_PORT_CONF_KEY="PC_API_PORT"
 g_APP_API_PORT_CONF_KEY="APP_API_PORT"
 
 g_default_values = {    g_PC_IP_CONF_KEY: "127.0.0.1",
+                        g_SSL_ENABLE_KEY: "1",                 # SSL is enabled by default
                         g_APP_IP_CONF_KEY: "127.0.0.1",
                         g_LISTEN_IP_CONF_KEY: "0.0.0.0",
                         g_PC_API_PORT_CONF_KEY: "50051",

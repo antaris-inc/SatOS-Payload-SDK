@@ -18,8 +18,8 @@ import time
 import threading
 import unittest
 
-from satos_payload.examples import hello_world
-import satos_payload.gen.antaris_api_types as api_types
+from satos_payload_sdk.examples import hello_world
+import satos_payload_sdk.gen.antaris_api_types as api_types
 
 
 

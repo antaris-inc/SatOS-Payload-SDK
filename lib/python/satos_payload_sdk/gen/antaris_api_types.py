@@ -40,7 +40,8 @@
 ###########################################################################
 
 
-from satos_payload.gen import antaris_api_pb2, antaris_api_pb2_grpc
+from satos_payload.gen import antaris_api_pb2
+from satos_payload.gen import antaris_api_pb2_grpc
 
 # >>>> Data Types <<<<<
 
@@ -450,14 +451,26 @@ def app_to_peer_ShutdownParams(app_struct):
 ## @class: HealthCheckParams
 ## @brief: HealthCheck message
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: application_state                               :    Application State : Good (0), Error (non-Zero)  
+## @param: reqs_to_pc_in_err_cnt                           :    Number of requests to PC that faced error       
+## @param: resps_to_pc_in_err_cnt                          :    Number of responses to PC that faced error      
 class HealthCheckParams:
-    def __init__(self, correlation_id):
+    def __init__(self, correlation_id, application_state, reqs_to_pc_in_err_cnt, resps_to_pc_in_err_cnt):
         self.correlation_id = correlation_id
+        self.application_state = application_state
+        self.reqs_to_pc_in_err_cnt = reqs_to_pc_in_err_cnt
+        self.resps_to_pc_in_err_cnt = resps_to_pc_in_err_cnt
 
     def __str__(self):
         ret_str = ""
         ret_str += "correlation_id:\n"
         ret_str += str(self.correlation_id) + "\n"
+        ret_str += "application_state:\n"
+        ret_str += str(self.application_state) + "\n"
+        ret_str += "reqs_to_pc_in_err_cnt:\n"
+        ret_str += str(self.reqs_to_pc_in_err_cnt) + "\n"
+        ret_str += "resps_to_pc_in_err_cnt:\n"
+        ret_str += str(self.resps_to_pc_in_err_cnt) + "\n"
 
         return ret_str
 
@@ -466,10 +479,13 @@ class HealthCheckParams:
 
 def peer_to_app_HealthCheckParams(peer_struct):
     correlation_id = peer_struct.correlation_id
-    return HealthCheckParams(correlation_id)
+    application_state = peer_struct.application_state
+    reqs_to_pc_in_err_cnt = peer_struct.reqs_to_pc_in_err_cnt
+    resps_to_pc_in_err_cnt = peer_struct.resps_to_pc_in_err_cnt
+    return HealthCheckParams(correlation_id, application_state, reqs_to_pc_in_err_cnt, resps_to_pc_in_err_cnt)
 
 def app_to_peer_HealthCheckParams(app_struct):
-    return antaris_api_pb2.HealthCheckParams(correlation_id = app_struct.correlation_id)
+    return antaris_api_pb2.HealthCheckParams(correlation_id = app_struct.correlation_id, application_state = app_struct.application_state, reqs_to_pc_in_err_cnt = app_struct.reqs_to_pc_in_err_cnt, resps_to_pc_in_err_cnt = app_struct.resps_to_pc_in_err_cnt)
 
 ## @class: CmdSequenceDoneParams
 ## @brief: Parameters for Command Sequence Done notification to Payload Controller

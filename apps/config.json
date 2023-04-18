@@ -35,5 +35,11 @@
         "Entrypoint_File" : "/opt/antaris/app/entrypoint.sh",
         "This_Config_Path" : "/opt/antaris/app/config.json",
         "SDK_Path" : "/opt/antaris/app/sdk"
+    },
+    "cookie" : "xxxx|xxxx|xxxx|xxxx|",
+    "Proxy" : {
+	"Run_Proxy" : "1",
+	"Proxy_IP" : "127.0.0.1",
+	"Proxy_Port" : "1051"
     }
 }

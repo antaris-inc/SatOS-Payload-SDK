@@ -17,18 +17,26 @@ from concurrent import futures
 import logging
 import time
 import pdb
+import json
 
 import grpc
 
-import satos_payload.antaris_api_common as api_common
-import satos_payload.gen.antaris_api_types as api_types
-from  satos_payload.gen import antaris_api_pb2, antaris_api_pb2_grpc
-import satos_payload.gen.antaris_sdk_version as sdk_version
+from satos_payload_sdk import antaris_api_common as api_common
+from satos_payload_sdk.gen import antaris_api_pb2
+from satos_payload_sdk.gen import antaris_api_pb2_grpc
+from satos_payload_sdk.gen import antaris_api_types as api_types
+from satos_payload_sdk.gen import antaris_sdk_version as sdk_version
 
 api_debug = 0
 g_shutdown_grace_seconds=5
 g_shutdown_grace_for_grace=2
 g_ANTARIS_CALLBACK_GRACE_DELAY=10
+
+g_SERVER_CERT_FILE="/opt/antaris/sdk/server.crt"
+g_CLIENT_CERT_FILE="/opt/antaris/app/client.crt"
+g_CLIENT_KEY_FILE="/opt/antaris/app/client.key"
+g_CONFIG_JSON_FILE="/opt/antaris/app/config.json"
+g_COOKIE_STR="cookie"
 
 class AntarisChannel:
     def __init__(self, grpc_client_handle, grpc_server_handle, pc_to_app_server, is_secure, callback_func_list):
@@ -43,6 +51,12 @@ class AntarisChannel:
         self.process_resp_get_curr_location = callback_func_list['RespGetCurrentLocation']
         self.process_resp_stage_file_download = callback_func_list['RespStageFileDownload']
         self.process_resp_payload_power_control = callback_func_list['RespPayloadPowerControl']
+        try :
+            # Read config info
+            jsonfile = open(g_CONFIG_JSON_FILE, 'r')
+            self.jsfile_data = json.load(jsonfile)
+        except Exception as e :
+            print("Got exception while reading json. Exception : {}".format(e) )
 
 class PCToAppService(antaris_api_pb2_grpc.AntarisapiApplicationCallbackServicer):
     def set_channel(self, channel):
@@ -105,7 +119,11 @@ class PCToAppService(antaris_api_pb2_grpc.AntarisapiApplicationCallbackServicer)
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
 
 def api_pa_pc_create_channel_common(secure, callback_func_list):
+    global g_SERVER_CERT_FILE
+    global g_CLIENT_CERT_FILE
+    global g_CLIENT_KEY_FILE
     global g_ANTARIS_CALLBACK_GRACE_DELAY
+
     pc_endpoint = "{}:{}".format(api_common.g_PAYLOAD_CONTROLLER_IP, api_common.g_PC_GRPC_SERVER_PORT)
     app_endpoint = "{}:{}".format(api_common.g_LISTEN_IP, api_common.g_PA_GRPC_SERVER_PORT)
 
@@ -117,10 +135,45 @@ def api_pa_pc_create_channel_common(secure, callback_func_list):
         print("Callback endpoint {} is not free".format(app_endpoint))
         return None
 
-    client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(grpc.insecure_channel(pc_endpoint))
+    print("Starting server")
 
-    server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    server_handle.add_insecure_port(app_endpoint)
+    if api_common.g_SSL_ENABLE == '0':
+        print("Creating insecure channel")
+        client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(grpc.insecure_channel(pc_endpoint))
+        server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        server_handle.add_insecure_port(app_endpoint)
+    else:
+        print("SSL is enabled in sdk_env.conf file, creating secure channel")
+        try :
+            root_certs = open(g_SERVER_CERT_FILE, 'rb').read()
+        except Exception as e :
+            print("Can not read file :", g_SERVER_CERT_FILE)
+            quit()
+
+        credentials = grpc.ssl_channel_credentials(root_certs)
+        channel = grpc.secure_channel( pc_endpoint , credentials)
+        client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(channel)
+
+        server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+
+        print("Creating secure channel")
+        try :
+            private_key = open( g_CLIENT_KEY_FILE, 'rb').read()
+        except Exception as e :
+            print("Can not open file :", g_CLIENT_KEY_FILE)
+            quit()
+
+        try :
+            certificate_chain = open( g_CLIENT_CERT_FILE, 'rb').read()
+        except Exception as e :
+            print("Can not open file :", g_CLIENT_CERT_FILE)
+            quit()
+
+        credentials = grpc.ssl_server_credentials(
+            [(private_key, certificate_chain)]
+        )
+        server_handle.add_secure_port(app_endpoint, credentials)
+
     pc_to_app_server = PCToAppService()
     antaris_api_pb2_grpc.add_AntarisapiApplicationCallbackServicer_to_server(pc_to_app_server, server_handle)
     channel = AntarisChannel(client_handle, server_handle, pc_to_app_server, secure, callback_func_list)
@@ -166,8 +219,8 @@ def api_pa_pc_register(channel, register_params):
     peer_params.sdk_version.major = sdk_version.ANTARIS_PA_PC_SDK_MAJOR_VERSION
     peer_params.sdk_version.minor = sdk_version.ANTARIS_PA_PC_SDK_MINOR_VERSION
     peer_params.sdk_version.patch = sdk_version.ANTARIS_PA_PC_SDK_PATCH_VERSION
-
-    peer_ret = channel.grpc_client_handle.PC_register(peer_params)
+    metadata = ((g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = channel.grpc_client_handle.PC_register(peer_params , metadata=metadata)
 
     if (api_debug):
         print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
@@ -180,8 +233,8 @@ def api_pa_pc_get_current_location(channel, get_location_params):
         get_location_params.display()
 
     peer_params = api_types.app_to_peer_ReqGetCurrentLocationParams(get_location_params)
-
-    peer_ret = channel.grpc_client_handle.PC_get_current_location(peer_params)
+    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = channel.grpc_client_handle.PC_get_current_location(peer_params , metadata=metadata)
 
     if (api_debug):
         print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
@@ -193,8 +246,8 @@ def api_pa_pc_stage_file_download(channel, download_file_params):
     if (api_debug):
         download_file_params.display()
     peer_params = api_types.app_to_peer_ReqStageFileDownloadParams(download_file_params)
-
-    peer_ret = channel.grpc_client_handle.PC_stage_file_download(peer_params)
+    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = channel.grpc_client_handle.PC_stage_file_download(peer_params , metadata = metadata)
 
     if (api_debug):
         print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
@@ -206,8 +259,8 @@ def api_pa_pc_sequence_done(channel, sequence_done_params):
     if (api_debug):
         sequence_done_params.display()
     peer_params = api_types.app_to_peer_CmdSequenceDoneParams(sequence_done_params)
-
-    peer_ret = channel.grpc_client_handle.PC_sequence_done(peer_params)
+    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = channel.grpc_client_handle.PC_sequence_done(peer_params , metadata=metadata)
 
     if (api_debug):
         print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
@@ -219,8 +272,8 @@ def api_pa_pc_payload_power_control(channel, payload_power_control_params):
     if (api_debug):
         payload_power_control_params.display()
     peer_params = api_types.app_to_peer_ReqPayloadPowerControlParams(payload_power_control_params)
-
-    peer_ret = channel.grpc_client_handle.PC_payload_power_control(peer_params)
+    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = channel.grpc_client_handle.PC_payload_power_control(peer_params , metadata=metadata)
 
     if (api_debug):
         print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
@@ -232,8 +285,8 @@ def api_pa_pc_response_health_check(channel, response_health_check_params):
     if (api_debug):
         response_health_check_params.display()
     peer_params = api_types.app_to_peer_RespHealthCheckParams(response_health_check_params)
-
-    peer_ret = channel.grpc_client_handle.PC_response_health_check(peer_params)
+    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = channel.grpc_client_handle.PC_response_health_check(peer_params , metadata=metadata)
 
     if (api_debug):
         print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
@@ -245,8 +298,8 @@ def api_pa_pc_response_shutdown(channel, response_shutdown_params):
     if (api_debug):
         response_shutdown_params.display()
     peer_params = api_types.app_to_peer_RespShutdownParams(response_shutdown_params)
-
-    peer_ret = channel.grpc_client_handle.PC_response_shutdown(peer_params)
+    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = channel.grpc_client_handle.PC_response_shutdown(peer_params , metadata=metadata)
 
     if (api_debug):
         print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))

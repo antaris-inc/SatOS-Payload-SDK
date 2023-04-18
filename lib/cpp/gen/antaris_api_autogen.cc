@@ -661,6 +661,12 @@ displayHealthCheckParams(const void *obj)
 
     printf("correlation_id ==>\n");
     displayUINT16((void *)&p->correlation_id);
+    printf("application_state ==>\n");
+    displayUINT16((void *)&p->application_state);
+    printf("reqs_to_pc_in_err_cnt ==>\n");
+    displayUINT16((void *)&p->reqs_to_pc_in_err_cnt);
+    printf("resps_to_pc_in_err_cnt ==>\n");
+    displayUINT16((void *)&p->resps_to_pc_in_err_cnt);
 
 }
 
@@ -671,10 +677,25 @@ app_to_peer_HealthCheckParams(const void *ptr_src_app, void *ptr_dst_peer)
     ::antaris_api_peer_to_peer::HealthCheckParams *dst = (::antaris_api_peer_to_peer::HealthCheckParams *)ptr_dst_peer;
 
     UINT32 __tmp_correlation_id;
+    UINT32 __tmp_application_state;
+    UINT32 __tmp_reqs_to_pc_in_err_cnt;
+    UINT32 __tmp_resps_to_pc_in_err_cnt;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
     dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT16(&src->application_state, &__tmp_application_state); // application_state
+
+    dst->set_application_state(__tmp_application_state);
+
+    app_to_peer_UINT16(&src->reqs_to_pc_in_err_cnt, &__tmp_reqs_to_pc_in_err_cnt); // reqs_to_pc_in_err_cnt
+
+    dst->set_reqs_to_pc_in_err_cnt(__tmp_reqs_to_pc_in_err_cnt);
+
+    app_to_peer_UINT16(&src->resps_to_pc_in_err_cnt, &__tmp_resps_to_pc_in_err_cnt); // resps_to_pc_in_err_cnt
+
+    dst->set_resps_to_pc_in_err_cnt(__tmp_resps_to_pc_in_err_cnt);
 
 
 }
@@ -686,6 +707,9 @@ peer_to_app_HealthCheckParams(const void *ptr_src_peer, void *ptr_dst_app)
     ::antaris_api_peer_to_peer::HealthCheckParams *src = (::antaris_api_peer_to_peer::HealthCheckParams *)ptr_src_peer;
 
     dst->correlation_id = src->correlation_id();
+    dst->application_state = src->application_state();
+    dst->reqs_to_pc_in_err_cnt = src->reqs_to_pc_in_err_cnt();
+    dst->resps_to_pc_in_err_cnt = src->resps_to_pc_in_err_cnt();
 
 }
 

@@ -34,6 +34,8 @@
 #define SEQUENCE_C_IDX                  2
 #define SEQUENCE_ID_MAX                 3
 
+#define APP_STATE_ACTIVE                1  // 1 => Indicates application is running
+
 /*
  * Following counters should be incremented whenever
  * a reqeust/response (to PC) API hits error
@@ -41,7 +43,7 @@
 unsigned short reqs_to_pc_in_err_cnt = 0;
 unsigned short resps_to_pc_in_err_cnt = 0;
 // Global variable to record application state
-unsigned short application_state = 0;	// 0 => Good
+unsigned short application_state = APP_STATE_ACTIVE;	
 static unsigned int debug = 0;
 static int shutdown_requested = 0;
 // Global variable channel
@@ -419,7 +421,7 @@ int main(int argc, char *argv[])
     unsigned short int correlation_id = 0;
     AntarisReturnCode ret;
     void *exit_status;
-
+    
     // Callback functions (PC => PA)
     AntarisApiCallbackFuncList callback_func_list = {
             start_sequence: start_sequence,

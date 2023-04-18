@@ -2463,6 +2463,9 @@ class HealthCheckParams final :
 
   enum : int {
     kCorrelationIdFieldNumber = 1,
+    kApplicationStateFieldNumber = 2,
+    kReqsToPcInErrCntFieldNumber = 3,
+    kRespsToPcInErrCntFieldNumber = 4,
   };
   // int32 correlation_id = 1;
   void clear_correlation_id();
@@ -2473,6 +2476,33 @@ class HealthCheckParams final :
   void _internal_set_correlation_id(int32_t value);
   public:
 
+  // int32 application_state = 2;
+  void clear_application_state();
+  int32_t application_state() const;
+  void set_application_state(int32_t value);
+  private:
+  int32_t _internal_application_state() const;
+  void _internal_set_application_state(int32_t value);
+  public:
+
+  // int32 reqs_to_pc_in_err_cnt = 3;
+  void clear_reqs_to_pc_in_err_cnt();
+  int32_t reqs_to_pc_in_err_cnt() const;
+  void set_reqs_to_pc_in_err_cnt(int32_t value);
+  private:
+  int32_t _internal_reqs_to_pc_in_err_cnt() const;
+  void _internal_set_reqs_to_pc_in_err_cnt(int32_t value);
+  public:
+
+  // int32 resps_to_pc_in_err_cnt = 4;
+  void clear_resps_to_pc_in_err_cnt();
+  int32_t resps_to_pc_in_err_cnt() const;
+  void set_resps_to_pc_in_err_cnt(int32_t value);
+  private:
+  int32_t _internal_resps_to_pc_in_err_cnt() const;
+  void _internal_set_resps_to_pc_in_err_cnt(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.HealthCheckParams)
  private:
   class _Internal;
@@ -2481,6 +2511,9 @@ class HealthCheckParams final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   int32_t correlation_id_;
+  int32_t application_state_;
+  int32_t reqs_to_pc_in_err_cnt_;
+  int32_t resps_to_pc_in_err_cnt_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
 };
@@ -3922,6 +3955,66 @@ inline void HealthCheckParams::_internal_set_correlation_id(int32_t value) {
 inline void HealthCheckParams::set_correlation_id(int32_t value) {
   _internal_set_correlation_id(value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.HealthCheckParams.correlation_id)
+}
+
+// int32 application_state = 2;
+inline void HealthCheckParams::clear_application_state() {
+  application_state_ = 0;
+}
+inline int32_t HealthCheckParams::_internal_application_state() const {
+  return application_state_;
+}
+inline int32_t HealthCheckParams::application_state() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.HealthCheckParams.application_state)
+  return _internal_application_state();
+}
+inline void HealthCheckParams::_internal_set_application_state(int32_t value) {
+  
+  application_state_ = value;
+}
+inline void HealthCheckParams::set_application_state(int32_t value) {
+  _internal_set_application_state(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.HealthCheckParams.application_state)
+}
+
+// int32 reqs_to_pc_in_err_cnt = 3;
+inline void HealthCheckParams::clear_reqs_to_pc_in_err_cnt() {
+  reqs_to_pc_in_err_cnt_ = 0;
+}
+inline int32_t HealthCheckParams::_internal_reqs_to_pc_in_err_cnt() const {
+  return reqs_to_pc_in_err_cnt_;
+}
+inline int32_t HealthCheckParams::reqs_to_pc_in_err_cnt() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.HealthCheckParams.reqs_to_pc_in_err_cnt)
+  return _internal_reqs_to_pc_in_err_cnt();
+}
+inline void HealthCheckParams::_internal_set_reqs_to_pc_in_err_cnt(int32_t value) {
+  
+  reqs_to_pc_in_err_cnt_ = value;
+}
+inline void HealthCheckParams::set_reqs_to_pc_in_err_cnt(int32_t value) {
+  _internal_set_reqs_to_pc_in_err_cnt(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.HealthCheckParams.reqs_to_pc_in_err_cnt)
+}
+
+// int32 resps_to_pc_in_err_cnt = 4;
+inline void HealthCheckParams::clear_resps_to_pc_in_err_cnt() {
+  resps_to_pc_in_err_cnt_ = 0;
+}
+inline int32_t HealthCheckParams::_internal_resps_to_pc_in_err_cnt() const {
+  return resps_to_pc_in_err_cnt_;
+}
+inline int32_t HealthCheckParams::resps_to_pc_in_err_cnt() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.HealthCheckParams.resps_to_pc_in_err_cnt)
+  return _internal_resps_to_pc_in_err_cnt();
+}
+inline void HealthCheckParams::_internal_set_resps_to_pc_in_err_cnt(int32_t value) {
+  
+  resps_to_pc_in_err_cnt_ = value;
+}
+inline void HealthCheckParams::set_resps_to_pc_in_err_cnt(int32_t value) {
+  _internal_set_resps_to_pc_in_err_cnt(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.HealthCheckParams.resps_to_pc_in_err_cnt)
 }
 
 // -------------------------------------------------------------------

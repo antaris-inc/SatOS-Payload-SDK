@@ -20,7 +20,7 @@ import os
 import sys
 import time
 
-from satos_payload import app_framework
+from satos_payload_sdk import app_framework
 
 
 logger = logging.getLogger()

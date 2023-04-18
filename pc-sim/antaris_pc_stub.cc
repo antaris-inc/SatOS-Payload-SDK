@@ -44,7 +44,7 @@ typedef struct AntarisInternalServerContext_s {
 } AntarisInternalServerContext_t;
 
 void *simulated_pc(void *thread_param);
-void app_to_pc_api_handler(PCApiServerContext ctx, const INT8 *peer_string, AppToPCCallbackId_e cb_id, AppToPCCallbackParams_t *cb_params, AntarisReturnCode *out_return_code);
+void app_to_pc_api_handler(PCApiServerContext ctx , cookie_t cookie , AppToPCCallbackId_e cb_id, AppToPCCallbackParams_t *cb_params, AntarisReturnCode *out_return_code);
 void wakeup_pc(AntarisInternalServerContext_t *channel, PCToAppApiId_e cb_id, unsigned short int correlation_id);
 
 // Logic and data behind the server's behavior.
@@ -77,7 +77,7 @@ public:
 
         *response = An_SUCCESS;
 
-        server_context->app_callback_client = an_pc_pa_create_client((INT8 *)g_PAYLOAD_APP_IP, g_PA_GRPC_SERVER_PORT);
+        server_context->app_callback_client = an_pc_pa_create_client((INT8 *)g_PAYLOAD_APP_IP, g_PA_GRPC_SERVER_PORT, NULL, 0);
 
         printf("PC_register: Created callback channel using %s\n", target_str.c_str());
 
@@ -174,9 +174,9 @@ public:
 
 PayloadControllerServiceImpl g_pc_service;
 
-void app_to_pc_api_handler(PCApiServerContext ctx, const INT8 *peer_string, AppToPCCallbackId_e cb_id, AppToPCCallbackParams_t *cb_params, AntarisReturnCode *out_return_code)
+void app_to_pc_api_handler(PCApiServerContext ctx , cookie_t cookie, AppToPCCallbackId_e cb_id, AppToPCCallbackParams_t *cb_params, AntarisReturnCode *out_return_code)
 {
-    printf("app_to_pc_api_handler: Received server-api request on ctx %p, from %s, cb-id %u\n", ctx, peer_string, cb_id);
+    printf("app_to_pc_api_handler: Received server-api request on ctx %p , cb-id %u\n", ctx, cb_id);
     *out_return_code = An_NOT_IMPLEMENTED;
 
     switch (cb_id) {
@@ -213,13 +213,13 @@ void app_to_pc_api_handler(PCApiServerContext ctx, const INT8 *peer_string, AppT
         if (ANTARIS_PA_PC_SDK_MAJOR_VERSION != cb_params->sdk_version.major ||
             ANTARIS_PA_PC_SDK_MINOR_VERSION != cb_params->sdk_version.minor ||
             ANTARIS_PA_PC_SDK_PATCH_VERSION != cb_params->sdk_version.patch) {
-            printf("%s: Incompatible version of client %s's SDK. Our %d.%d.%d, theirs %d.%d.%d.\n", __FUNCTION__, peer_string,
+            printf("%s: Incompatible version of client's SDK. Our %d.%d.%d, theirs %d.%d.%d.\n", __FUNCTION__, 
                         ANTARIS_PA_PC_SDK_MAJOR_VERSION, ANTARIS_PA_PC_SDK_MINOR_VERSION, ANTARIS_PA_PC_SDK_PATCH_VERSION,
                         cb_params->sdk_version.major, cb_params->sdk_version.minor, cb_params->sdk_version.patch);
             *out_return_code = An_INCOMPATIBLE_VERSION;
         } else {
-            printf("%s: Received communication from %s, SDK version %d.%d.%d, which is compatible with us\n",
-                __FUNCTION__, peer_string, cb_params->sdk_version.major, cb_params->sdk_version.minor, cb_params->sdk_version.patch);
+            printf("%s: Received communication from app [%d], SDK version %d.%d.%d, which is compatible with us\n",
+                __FUNCTION__, cookie.appId , cb_params->sdk_version.major, cb_params->sdk_version.minor, cb_params->sdk_version.patch);
             *out_return_code = An_SUCCESS;
         }
         break;
@@ -387,7 +387,7 @@ int main(int argc, char *argv[])
 {
     sdk_environment_read_config();
 
-    PCApiServerContext server_ctx = an_pc_pa_create_server(g_PC_GRPC_SERVER_PORT, app_to_pc_api_handler);
+    PCApiServerContext server_ctx = an_pc_pa_create_server(g_PC_GRPC_SERVER_PORT, app_to_pc_api_handler, 0);
 
     scenario_register_conf(argc, argv);
 

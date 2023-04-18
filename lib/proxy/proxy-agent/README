@@ -1,0 +1,143 @@
+Illustrations for the test below can be found at https://docs.google.com/presentation/d/1_yMxRDjxH1AtF1ChmBtKVncYdI4-FdHwmXElPZeCr9k/edit?usp=sharing (slide 6).
+
+(a) ATMOS-AGENT
+python3 agent.py -m atmos -i 127.0.0.1 -p 19051 -s 127.0.0.1 -t 30053 -l 127.0.0.1 -o 50051
+
+(b) USER-AGENT
+python3 agent.py -m user -i 127.0.0.1 -p 19051 -s 127.0.0.1 -t 30051 -l 127.0.0.1 -o 50053
+
+(c) Start PC api-listener (50051)
+nc -l 50051
+
+(d) Start App api-listener (50053)
+nc -l 50053
+
+(e) Start APP api-invoker (towards PC 50051)
+nc 127.0.0.1 30051
+
+(f) Start the PC callback-invoker (towards APP 50053)
+nc 127.0.0.1 30053
+
+Now test by sending data.
+
+(i) On terminal (e) if I type data, it should appear in terminal (c). Any 'immediate response' I type in terminal (c) should show up in terminal (e).
+
+(ii) On terminal (f) if I type 'callback data', it would show up in (d). Any 'immediate response' I type in terminal (d) should show up in terminal (f).
+
+=========
+
+To build a test-container:
+
+Payload-Controller $ tools/proxy-agent/test/containers/build_container.sh
+
+======
+
+Container-based Test Architecture:
+
+
+    Atmos Container
+     ______________________________________________________________________
+     |                                                                     |
+     |    _________________________________________________________        |
+     |    |                                                        |       |
+     |    |        PC, PC-SIM or a pair of nc and nc -l.           |       |
+     |    |                                                        |       |
+     |    |  CB client                              API Server     |       |
+     |    |  (C 127.0.0.1:50053)               (S 127.0.0.1:50051) |       |
+     |    |_________X___________________________________X__________|       |
+     |                                                                     |
+     |                                                                     |
+     |    __________X___________________________________X__________        |
+     |    |  (S 127.0.0.1:50053)              (C 127.0.0.1:50051)  |       |
+     |    |    Internal Server                 Internal Client     |       |
+     |    |                                                        |       |
+     |    |                      Atmos Agent                       |       |
+     |    |                                                        |       |
+     |    |  Public Endpoint                                       |       |
+     |    |  (L 172.155.155.2:19051)                               |       |
+     |    |__________X_____________________________________________|       |
+     |_____________________________________________________________________|
+
+                PermaSock
+                (on bridge
+                network)
+     ______________________________________________________________________
+     |                                                                     |
+     |    __________X______________________________________________        |
+     |    |  (C 172.155.155.2:19051)                               |       |
+     |    |   Public Endpoint Client                               |       |
+     |    |                                                        |       |
+     |    |                      User Agent                        |       |
+     |    |                                                        |       |
+     |    |   Internal Client                     Internal Server  |       |
+     |    |  (C 127.0.0.1:50053)               (S 127.0.0.1:50051) |       |
+     |    |___________X________________________________X___________|       |
+     |                                                                     |
+     |    ____________X________________________________X___________|       |
+     |    |                                                        |       |
+     |    |  CB Server                              API Client     |       |
+     |    |  (S 127.0.0.1:50053)               (C 127.0.0.1:50051) |       |
+     |    |                                                        |       |
+     |    |        App, Sample-APP or a pair of nc and nc -l.      |       |
+     |    |                                                        |       |
+     |    |________________________________________________________|       |
+     |                                                                     |
+     |_____________________________________________________________________|
+
+     User Container
+
+====================================
+
+A sample test can be launched as follows:
+
+Payload-Controller $ cd tools/proxy-agent/test/tests
+tests $ ./netcat_basic_test.sh
+
+Below are the test cases to test payload-py-sample app against pc-sim
+
+Directories :
+
+Test directory      : "/Payload-Controller/tools/proxy-agent/test/tests"
+Teamplate responses : "/Payload-Controller/tools/proxy-agent/test/tests/template_responses"
+Test utils          : "Payload-Controller/tools/proxy-agent/test/tests/utils"
+
+
+1. test $ ./execute_all_test_wrapper.sh
+
+---> This wrapper script will execute all above test cases one after another and at the end you will get total test run, pass and fail count.
+If new test case added, need to be place here "/Payload-Controller/tools/proxy-agent/test/tests".
+
+Test Duration : ~15 Mins
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2. tests $ ./000_app_reg_basic_test.sh
+
+---> Above test case is a basic test to run and verify payload sample app against pc-sim. Verify actual and expected sample app responses and bases on result will make it pass or fail the test.
+
+Test Duration : ~2 Mins
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+3. tests $ ./001_app_kill_restart_test.sh
+
+---> In this test case, will run sample payload app against pc-sim. Kill the sample app and restart again interatively, verify actual and expected sample app responses and based on result will make it pass or fail the test.
+
+Test Duration : ~4 Mins
+Loop Count    :  3
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+4. test $ ./002_app_agent_kill_restart_test.sh
+
+---> In this test case, will kill user agent from the client conatiner where sample app is running. Expected behaviour is once user agent killed w.r.t that client container will also stop along with sample app. After that will again restart container, expected user agent will also running. 
+
+Test Duration : ~4 Mins
+Loop Count    :  3
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+5. test $ ./003_app_pc_testcase.sh
+
+---> In this test case, will start payload sample app without running pc-sim, expcted behaviour is sample app process will get terminate automatically, because pc-sim is not running. Will start pc-sim and sample app, verify actual and expected sample app responses and bases on result will make it pass or fail the test.
+
+Test Duration : ~4 Mins
+Loop Count    :  3
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------

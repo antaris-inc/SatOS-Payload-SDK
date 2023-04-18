@@ -39,7 +39,7 @@ The simulated Payload Controller must be running to provide applications an upst
 Start it with the following command:
 
 ```bash
-$ PYTHONPATH=/workspace/lib/python/satos_payload:/workspace/lib/python/satos_payload/gen python3 pc-sim/invoke_pc_sim.py
+$ PYTHONPATH=/workspace/lib/python/satos_payload_sdk python3 pc-sim/invoke_pc_sim.py
 ```
 
 ### Start Sample Application
@@ -97,21 +97,7 @@ Upon completion, a debian package containing your payload application will be av
 
 ### Verify Packaged Application
 
-To verify your application was packaged appropriately, you can test installation into a payload app VM environment like
-
-that which will be available in the production satellite.
-
-Assuming you have already packaged your application, the only additional step needed is to package the SDK itself.
-Run the following command in the build container to produce another debian package in `/workspace/output`:
-
-```bash
-$ make sdk_pkg
-```
-
-Now, take the following steps to confirm proper packaging:
-1. Provision a VM using Ubuntu 22.04 on your choice of virtualization platforms
-2. Copy the debian packages from the build container's workspace to the VM
-2. Install the debian packages using `apt install`
+**TODO: need to update these instructions**
 
 ## Reference
 

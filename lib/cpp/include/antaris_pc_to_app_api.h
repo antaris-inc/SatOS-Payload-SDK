@@ -55,9 +55,17 @@ typedef union {
     AntarisAppSdkVersion_t          sdk_version;
 } AppToPCCallbackParams_t;
 
-typedef void (*PCAppCallbackFn_t)(PCApiServerContext, const INT8 * /* peer-ip string */, AppToPCCallbackId_e, AppToPCCallbackParams_t *, AntarisReturnCode *);
+typedef    UINT8 SHORT_APP_ID_t;
+#define AN_PS_APP_ID_INVALID       (SHORT_APP_ID_t)(-1)
 
-PCApiServerContext an_pc_pa_create_server(UINT16 port, PCAppCallbackFn_t callback_fn);
+typedef struct {
+    SHORT_APP_ID_t      appId;
+    char                auth_key[AUTH_KEY_LEN + 1];
+}cookie_t;
+
+typedef void (*PCAppCallbackFn_t)(PCApiServerContext, cookie_t cookie ,  AppToPCCallbackId_e, AppToPCCallbackParams_t *, AntarisReturnCode *);
+
+PCApiServerContext an_pc_pa_create_server(UINT16 port, PCAppCallbackFn_t callback_fn, UINT32 ssl_flag);
 void an_pc_pa_delete_server(PCApiServerContext ctx);
 
 typedef enum {
@@ -81,7 +89,7 @@ typedef union {
     HealthCheckParams                   health_check;
 } PCToAppApiParams_t;
 
-PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port);
+PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port, INT8 *client_ssl_addr, UINT32 ssl_flag);
 void an_pc_pa_delete_client(PCToAppClientContext ctx);
 AntarisReturnCode an_pc_pa_invoke_api(PCToAppClientContext ctx, PCToAppApiId_e api_id, PCToAppApiParams_t *api_params);
 

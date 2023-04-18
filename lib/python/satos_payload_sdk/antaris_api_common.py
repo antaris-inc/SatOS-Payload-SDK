@@ -16,7 +16,7 @@
 import pdb
 import socket
 
-import satos_payload.antaris_sdk_environment as environment
+from satos_payload import antaris_sdk_environment as environment
 
 g_LISTEN_IP=None
 g_PAYLOAD_CONTROLLER_IP=None
@@ -25,6 +25,7 @@ g_PC_GRPC_SERVER_PORT=None
 g_PC_GRPC_SERVER_PORT_STR=None
 g_PA_GRPC_SERVER_PORT=None
 g_PA_GRPC_SERVER_PORT_STR =None
+g_SSL_ENABLE=None
 
 def init_vars():
     global g_LISTEN_IP
@@ -33,10 +34,12 @@ def init_vars():
     global g_PC_GRPC_SERVER_PORT_STR
     global g_PA_GRPC_SERVER_PORT
     global g_PA_GRPC_SERVER_PORT_STR
+    global g_SSL_ENABLE
 
     g_LISTEN_IP=environment.get_conf(environment.g_LISTEN_IP_CONF_KEY)
     g_PAYLOAD_CONTROLLER_IP=environment.get_conf(environment.g_PC_IP_CONF_KEY)
     g_PAYLOAD_APP_IP=environment.get_conf(environment.g_APP_IP_CONF_KEY)
+    g_SSL_ENABLE=environment.get_conf(environment.g_SSL_ENABLE_KEY)
     g_PC_GRPC_SERVER_PORT=environment.get_conf(environment.g_PC_API_PORT_CONF_KEY)
     g_PA_GRPC_SERVER_PORT=environment.get_conf(environment.g_APP_API_PORT_CONF_KEY)
     g_PC_GRPC_SERVER_PORT_STR="{}".format(g_PC_GRPC_SERVER_PORT)

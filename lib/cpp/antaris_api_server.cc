@@ -17,6 +17,9 @@
 #include <cstdio>
 #include <thread>
 
+#include <fstream>
+#include <string>
+
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/health_check_service_interface.h>
@@ -31,12 +34,18 @@
 
 #define MAX_IP_ADDR_STRLEN          24
 #define MAX_GRPC_ENDPOINT_STRLEN    64
+#define AUTH_KEY_START_OFFSET       (0)
+#define AUTH_KEY_END_OFFSET         (AUTH_KEY_START_OFFSET + AUTH_KEY_LEN - 1 )        
+#define APP_ID_OFFSET               (AUTH_KEY_END_OFFSET + 1)
+#define APP_ID_LEN                  (3)
+
 
 using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::Status;
+
 
 static AntarisReturnCode
 prepare_endpoint_string(std::string &out_string, INT8 *peer_ip_str, UINT16 port);
@@ -191,6 +200,7 @@ class AppToPCClient {
 
  private:
   std::unique_ptr<antaris_api_peer_to_peer::AntarisapiApplicationCallback::Stub> app_grpc_handle_;
+  std::uint32_t appId;
 };
 
 class PC2AppInternalContext {
@@ -215,8 +225,8 @@ public:
         }
     }
 
-    void startServer(void) {
-        server_thread_ = new std::thread(LaunchGrpcServer, this);
+    void startServer(UINT32 ssl_flag) {
+        server_thread_ = new std::thread(LaunchGrpcServer, this, ssl_flag);
 
         while (!b_server_thread_started_) {
             sleep(1);
@@ -257,19 +267,41 @@ private:
         return;
     }
 
+    static cookie_t decodeCookie(::grpc::ServerContext* context){
+        cookie_t cookie; 
+        std::memset(&cookie , 0 , sizeof(cookie) );
+        try {
+            cookie.appId = -1;
+            std::multimap< grpc::string_ref, grpc::string_ref > md = context->client_metadata();
+
+            // Please note key needs to be lower case. 
+            std::string s((md.find(COOKIE_STR)->second).data(),  (md.find(COOKIE_STR)->second).length());
+            std::string sub_s = s.substr(APP_ID_OFFSET , APP_ID_LEN);
+            cookie.appId = std::stoi( sub_s ) ;
+            std::size_t len = s.substr(AUTH_KEY_START_OFFSET , AUTH_KEY_LEN).copy(cookie.auth_key , (AUTH_KEY_LEN) , 0);
+            if (len != AUTH_KEY_LEN)
+            {
+                std::cout<< "Incorrect length of Authentication key. : " << len << std::endl;
+            }
+            cookie.auth_key[AUTH_KEY_LEN] = '\0';
+        } catch(...) {
+            std::cout << "Exception decoding cokie. \n";
+        }
+        return cookie;
+    }
+
     Status PC_register(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::ReqRegisterParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
         AppToPCCallbackParams_t api_request_register = {0};
         AppToPCCallbackParams_t api_request_sdk_version = {0};
         AntarisReturnType api_response = {return_code: An_SUCCESS};
-        INT8 peer[ANTARIS_MAX_PEER_STRING_LEN] = {0};
-
-        getPeerEndpoint(context, &peer[0]);
+        cookie_t cookie;
+        cookie = decodeCookie(context);
 
         api_request_sdk_version.sdk_version.major = request->sdk_version().major();
         api_request_sdk_version.sdk_version.minor = request->sdk_version().minor();
         api_request_sdk_version.sdk_version.patch = request->sdk_version().patch();
 
-        user_callbacks_(user_cb_ctx_, &peer[0], e_app2PC_sdkVersionInfo, &api_request_sdk_version, &api_response.return_code);
+        user_callbacks_(user_cb_ctx_, cookie , e_app2PC_sdkVersionInfo, &api_request_sdk_version, &api_response.return_code);
 
         if (An_SUCCESS != api_response.return_code) {
             goto done; /* user has indicated version incompatibility */
@@ -277,7 +309,7 @@ private:
 
         peer_to_app_ReqRegisterParams(request, &api_request_register);
 
-        user_callbacks_(user_cb_ctx_, &peer[0], e_app2PC_register, &api_request_register, &api_response.return_code);
+        user_callbacks_(user_cb_ctx_, cookie , e_app2PC_register, &api_request_register, &api_response.return_code);
 
 done:
         app_to_peer_AntarisReturnType(&api_response, response);
@@ -288,13 +320,11 @@ done:
     Status PC_get_current_location(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::ReqGetCurrentLocationParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
         AppToPCCallbackParams_t api_request = {0};
         AntarisReturnType api_response = {return_code: An_SUCCESS};
-        INT8 peer[ANTARIS_MAX_PEER_STRING_LEN] = {0};
+        cookie_t cookie;
+        cookie = decodeCookie(context);
+        peer_to_app_ReqGetCurrentLocationParams(request, &api_request);
 
-        getPeerEndpoint(context, &peer[0]);
-
-        peer_to_app_ReqRegisterParams(request, &api_request);
-
-        user_callbacks_(user_cb_ctx_, &peer[0], e_app2PC_getCurrentLocation, &api_request, &api_response.return_code);
+        user_callbacks_(user_cb_ctx_ , cookie ,  e_app2PC_getCurrentLocation, &api_request, &api_response.return_code);
 
         app_to_peer_AntarisReturnType(&api_response, response);
 
@@ -304,13 +334,12 @@ done:
     Status PC_stage_file_download(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::ReqStageFileDownloadParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
         AppToPCCallbackParams_t api_request = {0};
         AntarisReturnType api_response = {return_code: An_SUCCESS};
-        INT8 peer[ANTARIS_MAX_PEER_STRING_LEN] = {0};
-
-        getPeerEndpoint(context, &peer[0]);
+        cookie_t cookie;
+        cookie = decodeCookie(context);
 
         peer_to_app_ReqStageFileDownloadParams(request, &api_request);
 
-        user_callbacks_(user_cb_ctx_, &peer[0], e_app2PC_stageFileDownload, &api_request, &api_response.return_code);
+        user_callbacks_(user_cb_ctx_ , cookie , e_app2PC_stageFileDownload, &api_request, &api_response.return_code);
 
         app_to_peer_AntarisReturnType(&api_response, response);
 
@@ -320,13 +349,12 @@ done:
     Status PC_sequence_done(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::CmdSequenceDoneParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
         AppToPCCallbackParams_t api_request = {0};
         AntarisReturnType api_response = {return_code: An_SUCCESS};
-        INT8 peer[ANTARIS_MAX_PEER_STRING_LEN] = {0};
-
-        getPeerEndpoint(context, &peer[0]);
+        cookie_t cookie;
+        cookie = decodeCookie(context);
 
         peer_to_app_CmdSequenceDoneParams(request, &api_request);
 
-        user_callbacks_(user_cb_ctx_, &peer[0], e_app2PC_sequenceDone, &api_request, &api_response.return_code);
+        user_callbacks_(user_cb_ctx_ , cookie , e_app2PC_sequenceDone, &api_request, &api_response.return_code);
 
         app_to_peer_AntarisReturnType(&api_response, response);
 
@@ -336,13 +364,12 @@ done:
     Status PC_payload_power_control(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::ReqPayloadPowerControlParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
         AppToPCCallbackParams_t api_request = {0};
         AntarisReturnType api_response = {return_code: An_SUCCESS};
-        INT8 peer[ANTARIS_MAX_PEER_STRING_LEN] = {0};
-
-        getPeerEndpoint(context, &peer[0]);
+        cookie_t cookie;
+        cookie = decodeCookie(context);
 
         peer_to_app_ReqPayloadPowerControlParams(request, &api_request);
 
-        user_callbacks_(user_cb_ctx_, &peer[0], e_app2PC_payloadPowerControl, &api_request, &api_response.return_code);
+        user_callbacks_(user_cb_ctx_ , cookie , e_app2PC_payloadPowerControl, &api_request, &api_response.return_code);
 
         app_to_peer_AntarisReturnType(&api_response, response);
 
@@ -352,13 +379,12 @@ done:
     Status PC_response_health_check(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespHealthCheckParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
         AppToPCCallbackParams_t api_request = {0};
         AntarisReturnType api_response = {return_code: An_SUCCESS};
-        INT8 peer[ANTARIS_MAX_PEER_STRING_LEN] = {0};
-
-        getPeerEndpoint(context, &peer[0]);
+        cookie_t cookie;
+        cookie = decodeCookie(context);
 
         peer_to_app_RespHealthCheckParams(request, &api_request);
 
-        user_callbacks_(user_cb_ctx_, &peer[0], e_app2PC_healthCheckResponse, &api_request, &api_response.return_code);
+        user_callbacks_(user_cb_ctx_ , cookie , e_app2PC_healthCheckResponse, &api_request, &api_response.return_code);
 
         app_to_peer_AntarisReturnType(&api_response, response);
 
@@ -368,13 +394,12 @@ done:
     Status PC_response_shutdown(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespShutdownParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
         AppToPCCallbackParams_t api_request = {0};
         AntarisReturnType api_response = {return_code: An_SUCCESS};
-        INT8 peer[ANTARIS_MAX_PEER_STRING_LEN] = {0};
-
-        getPeerEndpoint(context, &peer[0]);
+        cookie_t cookie;
+        cookie = decodeCookie(context);
 
         peer_to_app_RespShutdownParams(request, &api_request);
 
-        user_callbacks_(user_cb_ctx_, &peer[0], e_app2PC_shutdownResponse, &api_request, &api_response.return_code);
+        user_callbacks_(user_cb_ctx_ , cookie , e_app2PC_shutdownResponse, &api_request, &api_response.return_code);
 
         app_to_peer_AntarisReturnType(&api_response, response);
 
@@ -382,14 +407,52 @@ done:
     }
 
 private:
-    static void LaunchGrpcServer(AppToPCApiService *ctx) {
+    static void LaunchGrpcServer(AppToPCApiService *ctx, UINT32 ssl_flag) {
         grpc::EnableDefaultHealthCheckService(true);
         grpc::reflection::InitProtoReflectionServerBuilderPlugin();
         ServerBuilder builder;
         
-        // Listen on the given address without any authentication mechanism.
-        builder.AddListeningPort(ctx->server_endpoint_, grpc::InsecureServerCredentials());
-        
+        if(ssl_flag)  {
+            std::ifstream ssl_cert_file(PC_SSL_CERTFICATE_FILE);
+            std::string str;
+            std::ifstream ssl_key(PC_SSL_KEY_FILE);
+            std::string key;
+
+            if ( ssl_cert_file.fail() ) {
+                printf("Server certificate file not found \n");
+                return ;
+            }
+
+            if ( ssl_key.fail() ) {
+                printf("Error in ssl key file \n");
+                return;
+            }
+
+            ssl_cert_file.seekg(0, std::ios::end);   
+            str.reserve(ssl_cert_file.tellg());
+            ssl_cert_file.seekg(0, std::ios::beg);
+
+            str.assign((std::istreambuf_iterator<char>(ssl_cert_file)),
+            std::istreambuf_iterator<char>());
+
+            ssl_key.seekg(0, std::ios::end);   
+            key.reserve(ssl_key.tellg());
+            ssl_key.seekg(0, std::ios::beg);
+
+            key.assign((std::istreambuf_iterator<char>(ssl_key)),
+            std::istreambuf_iterator<char>());
+
+            grpc::SslServerCredentialsOptions::PemKeyCertPair pkcp {key, str};
+ 
+            grpc::SslServerCredentialsOptions ssl_opts;
+            ssl_opts.pem_root_certs="";
+            ssl_opts.pem_key_cert_pairs.push_back(pkcp);
+
+            builder.AddListeningPort(ctx->server_endpoint_, grpc::SslServerCredentials(ssl_opts));
+        } else {
+            // Listen on the given address without any authentication mechanism.
+            builder.AddListeningPort(ctx->server_endpoint_, grpc::InsecureServerCredentials());
+        }
         // Register "service" as the instance through which we'll communicate with
         // clients. In this case it corresponds to an *synchronous* service.
         builder.RegisterService(ctx);
@@ -417,7 +480,7 @@ private:
     std::shared_ptr<Server>     grpc_server_ptr_;
 };
 
-PCApiServerContext an_pc_pa_create_server(UINT16 port, PCAppCallbackFn_t callback_fn)
+PCApiServerContext an_pc_pa_create_server(UINT16 port, PCAppCallbackFn_t callback_fn, UINT32 ssl_flag)
 {
     std::string server_listen_endpoint;
 
@@ -438,7 +501,7 @@ PCApiServerContext an_pc_pa_create_server(UINT16 port, PCAppCallbackFn_t callbac
     }
 
     // start the server before letting this routine return
-    ctx->startServer();
+    ctx->startServer(ssl_flag);
 
     return (PCApiServerContext)ctx;
 }
@@ -476,7 +539,7 @@ prepare_endpoint_string(std::string &out_string, INT8 *peer_ip_str, UINT16 port)
 //////////////////////////////////////// API implementation //////////////////////
 
 extern "C" {
-PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port)
+PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port, INT8 *client_ssl_addr, UINT32 ssl_flag)
 {
     PC2AppInternalContext   *internal_ctx = new PC2AppInternalContext();
     AntarisReturnCode       tmp_ret;
@@ -490,9 +553,26 @@ PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port)
     if (An_SUCCESS != prepare_endpoint_string(internal_ctx->client_cb_endpoint, peer_ip_str, port)) {
         goto fail_cleanup_ctx;
     }
-    
-    internal_ctx->client_api_handle = new AppToPCClient(grpc::CreateChannel(internal_ctx->client_cb_endpoint, grpc::InsecureChannelCredentials()));
+   
+    if (ssl_flag) {
+        std::ifstream t(client_ssl_addr);
+        std::string cacert;
+        grpc::SslCredentialsOptions ssl_opts;
 
+        t.seekg(0, std::ios::end);   
+        cacert.reserve(t.tellg());
+        t.seekg(0, std::ios::beg);
+
+        cacert.assign((std::istreambuf_iterator<char>(t)),
+                std::istreambuf_iterator<char>());
+
+        ssl_opts.pem_root_certs=cacert;
+
+        auto ssl_creds = grpc::SslCredentials(ssl_opts);
+        internal_ctx->client_api_handle = new AppToPCClient(grpc::CreateChannel(internal_ctx->client_cb_endpoint, ssl_creds));
+    } else {
+        internal_ctx->client_api_handle = new AppToPCClient(grpc::CreateChannel(internal_ctx->client_cb_endpoint, grpc::InsecureChannelCredentials()));
+    }
     if (!internal_ctx->client_api_handle) {
         goto fail_cleanup_ctx;
     }

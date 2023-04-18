@@ -1,7 +1,7 @@
 #!/bin/bash
 
 OUTPUT_C_HEADER=./lib/cpp/gen/antaris_sdk_version.h
-OUTPUT_PYTHON_FILE=./lib/python/gen/antaris_sdk_version.py
+OUTPUT_PYTHON_FILE=./lib/python/satos_payload/gen/antaris_sdk_version.py
 VERSION_FILE=./VERSION
 
 echo "
@@ -60,10 +60,10 @@ echo "
 " >> ${OUTPUT_C_HEADER}
 
 echo "
+ANTARIS_PA_PC_SDK_VERSION='${PA_PC_SDK_VERSION}'
 ANTARIS_PA_PC_SDK_MAJOR_VERSION=${MAJOR_VERSION}
 ANTARIS_PA_PC_SDK_MINOR_VERSION=${MINOR_VERSION}
 ANTARIS_PA_PC_SDK_PATCH_VERSION=${PATCH_VERSION}
-VERSION='${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}'
 " >> ${OUTPUT_PYTHON_FILE}
 
 # file closing

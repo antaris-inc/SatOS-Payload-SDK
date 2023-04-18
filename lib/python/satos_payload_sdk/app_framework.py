@@ -17,8 +17,8 @@ import os
 import threading
 import time
 
-import satos_payload.antaris_api_client as api_client
-import satos_payload.gen.antaris_api_types as api_types
+import satos_payload_sdk.antaris_api_client as api_client
+import satos_payload_sdk.gen.antaris_api_types as api_types
 
 
 logger = logging.getLogger()

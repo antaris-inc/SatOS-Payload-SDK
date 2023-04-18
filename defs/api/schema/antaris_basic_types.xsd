@@ -1,0 +1,168 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:attribute name="include_in">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="All"/>
+                <xs:enumeration value="Lib"/>
+                <xs:enumeration value="Interface"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+
+    <xs:attribute name="language">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="All"/>
+                <xs:enumeration value="Cpp"/>
+                <xs:enumeration value="Python"/>
+                <xs:enumeration value="Golang"/>
+                <xs:enumeration value="Proto"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+
+    <xs:attribute name="consumed_by">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="All"/>
+                <xs:enumeration value="Application"/>
+                <xs:enumeration value="Peer"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+
+    <xs:element name="Import">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute ref="include_in" default="Interface" use="optional" />
+            <xs:attribute ref="language" default="Cpp" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="VarName">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z]([a-zA-Z0-9_])*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TypeNameWithPointer">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z]([a-zA-Z0-9_])*[ ]*[*]?"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="PositiveAndZeroInteger">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="PositiveInteger">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="PositiveAndZeroU16">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="65535"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="PositiveAndZeroU8">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="255"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="Field">
+        <xs:complexType>
+            <xs:attribute name="name" type="VarName" use="required"/>
+            <xs:attribute name="type" type="TypeNameWithPointer" use="required"/>
+            <xs:attribute name="sequence" type="PositiveInteger" use="required" />
+            <xs:attribute name="description" type="xs:string" use="required" />
+            <xs:attribute name="array" type="PositiveAndZeroInteger" use="optional" default="0"/>
+            <xs:attribute ref="consumed_by" default="All" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Struct">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Field" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="VarName" use="required"/>
+            <xs:attribute name="description" type="xs:string" use="required"/>
+            <xs:attribute ref="consumed_by" default="All" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="EnumValue">
+        <xs:complexType>
+            <xs:attribute name="name" type="VarName" use="required"/>
+            <xs:attribute name="description" type="xs:string" use="required"/>
+            <xs:attribute name="value" type="xs:integer" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Enum">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="EnumValue" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="VarName" use="required"/>
+            <xs:attribute name="description" type="xs:string" use="required"/>
+            <xs:attribute ref="consumed_by" default="All" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="MetaField">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="value" type="xs:string" use="required"/>
+            <xs:attribute name="suppress_key" type="xs:boolean" use="optional" default="false"/>
+            <xs:attribute name="description" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Parameter">
+        <xs:complexType>
+            <xs:attribute name="type" type="TypeNameWithPointer" use="required"/>
+            <xs:attribute name="variable_name" type="VarName" use="required"/>
+            <xs:attribute name="description" type="xs:string" use="required"/>
+            <xs:attribute ref="consumed_by" default="All" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Function">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Parameter" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="VarName" use="required"/>
+            <xs:attribute name="description" type="xs:string" use="required"/>
+            <xs:attribute name="return_type" type="VarName" use="optional"/>
+            <xs:attribute name="return_type_app" type="VarName" use="optional"/>
+            <xs:attribute name="return_type_peer" type="VarName" use="optional"/>
+            <xs:attribute name="success_return" type="xs:string" use="optional"/>
+            <xs:attribute name="failure_return" type="xs:string" use="optional"/>
+            <xs:attribute ref="consumed_by" default="All" use="optional" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="FunctionPtr">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Parameter" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="VarName" use="required"/>
+            <xs:attribute name="description" type="xs:string" use="required"/>
+            <xs:attribute name="return_type" type="VarName" use="optional"/>
+            <xs:attribute name="return_type_app" type="VarName" use="optional"/>
+            <xs:attribute name="return_type_peer" type="VarName" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

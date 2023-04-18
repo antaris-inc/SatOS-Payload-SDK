@@ -341,6 +341,9 @@ void peer_to_app_ShutdownParams(const void *ptr_src_peer, void *ptr_dst_app);
 /// @brief HealthCheck message
 struct HealthCheckParams {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT16                                          application_state;                               ///< @var Application State : Good (0), Error (non-Zero)
+    UINT16                                          reqs_to_pc_in_err_cnt;                           ///< @var Number of requests to PC that faced error
+    UINT16                                          resps_to_pc_in_err_cnt;                          ///< @var Number of responses to PC that faced error
 };
 
 void displayHealthCheckParams(const void *obj);
