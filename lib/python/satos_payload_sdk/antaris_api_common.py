@@ -16,7 +16,7 @@
 import pdb
 import socket
 
-from satos_payload import antaris_sdk_environment as environment
+from satos_payload_sdk import antaris_sdk_environment as environment
 
 g_LISTEN_IP=None
 g_PAYLOAD_CONTROLLER_IP=None

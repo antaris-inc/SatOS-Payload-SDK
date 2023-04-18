@@ -40,8 +40,8 @@
 ###########################################################################
 
 
-from satos_payload.gen import antaris_api_pb2
-from satos_payload.gen import antaris_api_pb2_grpc
+from satos_payload_sdk.gen import antaris_api_pb2
+from satos_payload_sdk.gen import antaris_api_pb2_grpc
 
 # >>>> Data Types <<<<<
 

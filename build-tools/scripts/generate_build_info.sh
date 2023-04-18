@@ -1,7 +1,7 @@
 #!/bin/bash
 
 OUTPUT_C_HEADER=./lib/cpp/gen/antaris_sdk_version.h
-OUTPUT_PYTHON_FILE=./lib/python/satos_payload/gen/antaris_sdk_version.py
+OUTPUT_PYTHON_FILE=./lib/python/satos_payload_sdk/gen/antaris_sdk_version.py
 VERSION_FILE=./VERSION
 
 echo "

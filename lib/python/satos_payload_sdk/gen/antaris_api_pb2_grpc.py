@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from satos_payload.gen import antaris_api_pb2 as satos__payload_dot_gen_dot_antaris__api__pb2
+from satos_payload_sdk.gen import antaris_api_pb2 as satos__payload__sdk_dot_gen_dot_antaris__api__pb2
 
 
 class AntarisapiApplicationCallbackStub(object):
@@ -16,38 +16,38 @@ class AntarisapiApplicationCallbackStub(object):
         """
         self.PA_StartSequence = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_StartSequence',
-                request_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.StartSequenceParams.SerializeToString,
-                response_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.StartSequenceParams.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 )
         self.PA_ShutdownApp = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ShutdownApp',
-                request_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.ShutdownParams.SerializeToString,
-                response_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ShutdownParams.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 )
         self.PA_ProcessHealthCheck = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessHealthCheck',
-                request_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.HealthCheckParams.SerializeToString,
-                response_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.HealthCheckParams.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 )
         self.PA_ProcessResponseRegister = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessResponseRegister',
-                request_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.RespRegisterParams.SerializeToString,
-                response_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespRegisterParams.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 )
         self.PA_ProcessResponseGetCurrentLocation = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessResponseGetCurrentLocation',
-                request_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.RespGetCurrentLocationParams.SerializeToString,
-                response_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespGetCurrentLocationParams.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 )
         self.PA_ProcessResponseStageFileDownload = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessResponseStageFileDownload',
-                request_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.RespStageFileDownloadParams.SerializeToString,
-                response_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespStageFileDownloadParams.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 )
         self.PA_ProcessResponsePayloadPowerControl = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessResponsePayloadPowerControl',
-                request_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.RespPayloadPowerControlParams.SerializeToString,
-                response_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespPayloadPowerControlParams.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 )
 
 
@@ -101,38 +101,38 @@ def add_AntarisapiApplicationCallbackServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'PA_StartSequence': grpc.unary_unary_rpc_method_handler(
                     servicer.PA_StartSequence,
-                    request_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.StartSequenceParams.FromString,
-                    response_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.StartSequenceParams.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
             'PA_ShutdownApp': grpc.unary_unary_rpc_method_handler(
                     servicer.PA_ShutdownApp,
-                    request_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.ShutdownParams.FromString,
-                    response_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ShutdownParams.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
             'PA_ProcessHealthCheck': grpc.unary_unary_rpc_method_handler(
                     servicer.PA_ProcessHealthCheck,
-                    request_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.HealthCheckParams.FromString,
-                    response_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.HealthCheckParams.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
             'PA_ProcessResponseRegister': grpc.unary_unary_rpc_method_handler(
                     servicer.PA_ProcessResponseRegister,
-                    request_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.RespRegisterParams.FromString,
-                    response_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespRegisterParams.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
             'PA_ProcessResponseGetCurrentLocation': grpc.unary_unary_rpc_method_handler(
                     servicer.PA_ProcessResponseGetCurrentLocation,
-                    request_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.RespGetCurrentLocationParams.FromString,
-                    response_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespGetCurrentLocationParams.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
             'PA_ProcessResponseStageFileDownload': grpc.unary_unary_rpc_method_handler(
                     servicer.PA_ProcessResponseStageFileDownload,
-                    request_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.RespStageFileDownloadParams.FromString,
-                    response_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespStageFileDownloadParams.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
             'PA_ProcessResponsePayloadPowerControl': grpc.unary_unary_rpc_method_handler(
                     servicer.PA_ProcessResponsePayloadPowerControl,
-                    request_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.RespPayloadPowerControlParams.FromString,
-                    response_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespPayloadPowerControlParams.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -156,8 +156,8 @@ class AntarisapiApplicationCallback(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_StartSequence',
-            satos__payload_dot_gen_dot_antaris__api__pb2.StartSequenceParams.SerializeToString,
-            satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.StartSequenceParams.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -173,8 +173,8 @@ class AntarisapiApplicationCallback(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ShutdownApp',
-            satos__payload_dot_gen_dot_antaris__api__pb2.ShutdownParams.SerializeToString,
-            satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ShutdownParams.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -190,8 +190,8 @@ class AntarisapiApplicationCallback(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessHealthCheck',
-            satos__payload_dot_gen_dot_antaris__api__pb2.HealthCheckParams.SerializeToString,
-            satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.HealthCheckParams.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -207,8 +207,8 @@ class AntarisapiApplicationCallback(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessResponseRegister',
-            satos__payload_dot_gen_dot_antaris__api__pb2.RespRegisterParams.SerializeToString,
-            satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespRegisterParams.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -224,8 +224,8 @@ class AntarisapiApplicationCallback(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessResponseGetCurrentLocation',
-            satos__payload_dot_gen_dot_antaris__api__pb2.RespGetCurrentLocationParams.SerializeToString,
-            satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespGetCurrentLocationParams.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -241,8 +241,8 @@ class AntarisapiApplicationCallback(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessResponseStageFileDownload',
-            satos__payload_dot_gen_dot_antaris__api__pb2.RespStageFileDownloadParams.SerializeToString,
-            satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespStageFileDownloadParams.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -258,8 +258,8 @@ class AntarisapiApplicationCallback(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessResponsePayloadPowerControl',
-            satos__payload_dot_gen_dot_antaris__api__pb2.RespPayloadPowerControlParams.SerializeToString,
-            satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespPayloadPowerControlParams.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -275,38 +275,38 @@ class AntarisapiPayloadControllerStub(object):
         """
         self.PC_register = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_register',
-                request_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.ReqRegisterParams.SerializeToString,
-                response_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqRegisterParams.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 )
         self.PC_get_current_location = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_get_current_location',
-                request_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.ReqGetCurrentLocationParams.SerializeToString,
-                response_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGetCurrentLocationParams.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 )
         self.PC_stage_file_download = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_stage_file_download',
-                request_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.ReqStageFileDownloadParams.SerializeToString,
-                response_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqStageFileDownloadParams.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 )
         self.PC_sequence_done = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_sequence_done',
-                request_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.CmdSequenceDoneParams.SerializeToString,
-                response_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.CmdSequenceDoneParams.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 )
         self.PC_payload_power_control = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_payload_power_control',
-                request_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.ReqPayloadPowerControlParams.SerializeToString,
-                response_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqPayloadPowerControlParams.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 )
         self.PC_response_health_check = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_response_health_check',
-                request_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.RespHealthCheckParams.SerializeToString,
-                response_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespHealthCheckParams.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 )
         self.PC_response_shutdown = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_response_shutdown',
-                request_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.RespShutdownParams.SerializeToString,
-                response_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespShutdownParams.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 )
 
 
@@ -360,38 +360,38 @@ def add_AntarisapiPayloadControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'PC_register': grpc.unary_unary_rpc_method_handler(
                     servicer.PC_register,
-                    request_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.ReqRegisterParams.FromString,
-                    response_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqRegisterParams.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
             'PC_get_current_location': grpc.unary_unary_rpc_method_handler(
                     servicer.PC_get_current_location,
-                    request_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.ReqGetCurrentLocationParams.FromString,
-                    response_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGetCurrentLocationParams.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
             'PC_stage_file_download': grpc.unary_unary_rpc_method_handler(
                     servicer.PC_stage_file_download,
-                    request_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.ReqStageFileDownloadParams.FromString,
-                    response_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqStageFileDownloadParams.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
             'PC_sequence_done': grpc.unary_unary_rpc_method_handler(
                     servicer.PC_sequence_done,
-                    request_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.CmdSequenceDoneParams.FromString,
-                    response_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.CmdSequenceDoneParams.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
             'PC_payload_power_control': grpc.unary_unary_rpc_method_handler(
                     servicer.PC_payload_power_control,
-                    request_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.ReqPayloadPowerControlParams.FromString,
-                    response_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqPayloadPowerControlParams.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
             'PC_response_health_check': grpc.unary_unary_rpc_method_handler(
                     servicer.PC_response_health_check,
-                    request_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.RespHealthCheckParams.FromString,
-                    response_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespHealthCheckParams.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
             'PC_response_shutdown': grpc.unary_unary_rpc_method_handler(
                     servicer.PC_response_shutdown,
-                    request_deserializer=satos__payload_dot_gen_dot_antaris__api__pb2.RespShutdownParams.FromString,
-                    response_serializer=satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespShutdownParams.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -415,8 +415,8 @@ class AntarisapiPayloadController(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_register',
-            satos__payload_dot_gen_dot_antaris__api__pb2.ReqRegisterParams.SerializeToString,
-            satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqRegisterParams.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -432,8 +432,8 @@ class AntarisapiPayloadController(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_get_current_location',
-            satos__payload_dot_gen_dot_antaris__api__pb2.ReqGetCurrentLocationParams.SerializeToString,
-            satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGetCurrentLocationParams.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -449,8 +449,8 @@ class AntarisapiPayloadController(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_stage_file_download',
-            satos__payload_dot_gen_dot_antaris__api__pb2.ReqStageFileDownloadParams.SerializeToString,
-            satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqStageFileDownloadParams.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -466,8 +466,8 @@ class AntarisapiPayloadController(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_sequence_done',
-            satos__payload_dot_gen_dot_antaris__api__pb2.CmdSequenceDoneParams.SerializeToString,
-            satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.CmdSequenceDoneParams.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -483,8 +483,8 @@ class AntarisapiPayloadController(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_payload_power_control',
-            satos__payload_dot_gen_dot_antaris__api__pb2.ReqPayloadPowerControlParams.SerializeToString,
-            satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqPayloadPowerControlParams.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -500,8 +500,8 @@ class AntarisapiPayloadController(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_response_health_check',
-            satos__payload_dot_gen_dot_antaris__api__pb2.RespHealthCheckParams.SerializeToString,
-            satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespHealthCheckParams.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -517,7 +517,7 @@ class AntarisapiPayloadController(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_response_shutdown',
-            satos__payload_dot_gen_dot_antaris__api__pb2.RespShutdownParams.SerializeToString,
-            satos__payload_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespShutdownParams.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
