@@ -14,7 +14,7 @@
 #   limitations under the License.
 #
 
-.PHONY: no_default pc_submodule_tools build_shell gen old_gen api_lib api_lib_clean gen_clean pc_sim pc_sim_clean sample_app sample_app_clean clean payload_app_pkg
+.PHONY: no_default pc_submodule_tools build_shell gen old_gen api_lib api_lib_clean gen_clean pc_sim pc_sim_clean sample_app sample_app_clean clean sdk_pkg payload_app_pkg
 
 ARCH=x86_64
 SHELL := /bin/bash
@@ -61,6 +61,7 @@ PYTHON_GEN=python3 -m grpc_tools.protoc
 CPP_GEN=/usr/local/antaris/grpc/bin/protoc
 GRPC_CPP_PLUGIN=/usr/local/antaris/grpc/bin/grpc_cpp_plugin
 GOLANG_GEN=${BUILD_TOOLS_DIR}/scripts/gen_go.sh
+SDK_PKG_CMD=${BUILD_TOOLS_DIR}/scripts/sdk_pkg.sh
 SAMPLE_APP_PKG_CMD=${BUILD_TOOLS_DIR}/scripts/build_app_pkg.sh
 DOCKER_RUN_CMD=docker run --platform=linux/amd64
 DOCKER_EXEC_CMD=docker exec
@@ -174,6 +175,9 @@ clean:
 	rm -rf ${CPP_LIB_DIR}/*.o
 	rm -rf ${CPP_LIB_DIR}/*.a
 	rm -rf output
+
+sdk_pkg:
+	${SDK_PKG_CMD} `pwd`
 
 payload_app_pkg:
 	${SAMPLE_APP_PKG_CMD} `pwd`
