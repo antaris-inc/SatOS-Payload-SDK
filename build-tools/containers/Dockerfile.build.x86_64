@@ -28,7 +28,7 @@ RUN yum repolist
 RUN dnf makecache --refresh
 
 # heavy tools as a bottom layer for docker image-caching
-RUN dnf -y install wget gcc gcc-c++ gdb cmake golang protobuf-compiler autoconf automake libtool pkg-config git openssl-devel bzip2-devel libffi-devel
+RUN dnf -y install wget gcc gcc-c++ gdb cmake protobuf-compiler autoconf automake libtool pkg-config git openssl-devel bzip2-devel libffi-devel
 
 # install gtest
 RUN wget https://github.com/google/googletest/archive/release-1.12.1.tar.gz

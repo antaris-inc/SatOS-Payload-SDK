@@ -60,7 +60,6 @@ DOCKER_BUILD=docker build --platform=linux/amd64
 PYTHON_GEN=python3 -m grpc_tools.protoc
 CPP_GEN=/usr/local/antaris/grpc/bin/protoc
 GRPC_CPP_PLUGIN=/usr/local/antaris/grpc/bin/grpc_cpp_plugin
-GOLANG_GEN=${BUILD_TOOLS_DIR}/scripts/gen_go.sh
 SDK_PKG_CMD=${BUILD_TOOLS_DIR}/scripts/sdk_pkg.sh
 SAMPLE_APP_PKG_CMD=${BUILD_TOOLS_DIR}/scripts/build_app_pkg.sh
 DOCKER_RUN_CMD=docker run --platform=linux/amd64
@@ -121,9 +120,6 @@ api_lib:
 		tree ${OUTPUT_LIB_DIR};							\
 		echo "content of api-lib ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB} ===>";	\
 		ar -t ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB};				\
-	elif [ "${LANGUAGE}" == "golang" ]; then																												\
-		echo not implemented;																																\
-		exit -1;																																			\
 	else																																					\
 		echo "Unknown LANGUAGE=${LANGUAGE}. ${LANGUAGE_HELP}";																								\
 		exit -1;																																			\
