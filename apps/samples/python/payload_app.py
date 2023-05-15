@@ -21,8 +21,8 @@ import threading
 import pdb
 import sys
 
-import antaris_api_client as api_client
-import antaris_api_types as api_types
+from satos_payload_sdk import antaris_api_client as api_client
+from satos_payload_sdk.gen import antaris_api_types as api_types
 
 debug = 0
 channel = 0
