@@ -1,5 +1,4 @@
 lib/proxy/start_proxy.sh start_proxy.sh
-lib/proxy/build_atmos_proxy_deb.sh build_atmos_proxy_deb.sh
 lib/proxy/README.md README.md
 lib/proxy/proxy-agent/agent.py  proxy-agent/agent.py
 lib/proxy/proxy-agent/hexdump.py proxy-agent/hexdump.py

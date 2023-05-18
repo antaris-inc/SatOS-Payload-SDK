@@ -1,0 +1,26 @@
+FROM ubuntu:latest
+
+RUN apt-get update
+
+# install dependencies required to run pc-sim, PC, other servers, clients and proxy
+ RUN apt-get update \
+  && apt-get install -y zip \
+  && apt-get install -y python3-pip python3-dev \
+  && cd /usr/local/bin \
+  && ln -s /usr/bin/python3 python \
+  && pip3 --no-cache-dir install --upgrade pip \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get -y update
+RUN apt-get -y install jq
+# RUN apt-get install -y python3-jinja2
+
+COPY antaris-payload-sdk.deb /root/
+
+COPY python /root/
+
+RUN dpkg -i /root/antaris-payload-sdk.deb
+
+SHELL [ "/bin/bash", "-c" ]
+
+CMD ["sleep", "infinity"]
