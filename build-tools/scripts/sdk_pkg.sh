@@ -7,8 +7,11 @@ echo "BUILD_ROOT for [$SDK_PACKAGE_NAME] is [$BUILD_ROOT] ."
 OUTPUT_DIR="$BUILD_ROOT/output"
 SDK_PACKAGE_ROOT_DIR="$OUTPUT_DIR/$SDK_PACKAGE_NAME/"
 SDK_TGT_DIR="/opt/antaris/sdk/"
+PROXY_DIR="/opt/antaris/proxy"
+SDK_LIB_PATH="${SDK_TGT_DIR}/lib/python"
 SDK_DEBIAN_DIR="$SDK_PACKAGE_ROOT_DIR/DEBIAN/"
 SDK_LIST_FILE="$BUILD_ROOT/build-tools/scripts/sdk_pkg_files.txt"
+PROXY_LIST_FILE="$BUILD_ROOT/build-tools/scripts/proxy_pkg_files.txt"
 FILE_LIST=`cat $SDK_LIST_FILE`
 read -r -d '' PKG_CONTROL_CONTENTS <<  MESSAGE_END
 Package: $SDK_PACKAGE_NAME  
@@ -26,8 +29,8 @@ MESSAGE_END
 read -r -d '' POST_INSTALL_SCRIPT <<  MESSAGE_END
 #!/bin/bash
 pip3 install grpcio grpcio-tools 
-echo "export PYTHONPATH=\"$PYTHONPATH:$SDK_TGT_DIR/lib/python/satos_payload:$SDK_TGT_DIR/lib/python/satos_payload/gen\" " >> ~/.bashrc
-export PYTHONPATH="$PYTHONPATH:$SDK_TGT_DIR/lib/python/satos_payload:$SDK_TGT_DIR/lib/python/satos_payload/gen"
+echo "export PYTHONPATH=\"$PYTHONPATH:${SDK_LIB_PATH}:${SDK_LIB_PATH}/satos_payload_sdk:${SDK_LIB_PATH}/satos_payload_sdk/gen/\" " >> ~/.bashrc
+export PYTHONPATH="$PYTHONPATH:${SDK_LIB_PATH}:${SDK_LIB_PATH}/satos_payload_sdk:${SDK_LIB_PATH}/satos_payload_sdk/gen/"
 MESSAGE_END
 
 echo  Control contents : "$PKG_CONTROL_CONTENTS"
@@ -35,8 +38,10 @@ rm -rf $SDK_PACKAGE_ROOT_DIR/*
 rm -rf "$OUTPUT_DIR/$SDK_PACKAGE_NAME.deb"
 mkdir -p "$SDK_PACKAGE_ROOT_DIR/$SDK_TGT_DIR"
 mkdir -p "$SDK_DEBIAN_DIR"
+mkdir -p ${PROXY_DIR}
 echo "filelist : $FILE_LIST"
 build-tools/scripts/place_files.sh "$SDK_LIST_FILE" "$SDK_PACKAGE_ROOT_DIR/$SDK_TGT_DIR"
+build-tools/scripts/place_files.sh "$PROXY_LIST_FILE" "$SDK_PACKAGE_ROOT_DIR/$PROXY_DIR"
 touch $SDK_DEBIAN_DIR/control
 echo  "$PKG_CONTROL_CONTENTS" > $SDK_DEBIAN_DIR/control
 echo "$PRE_INSTALL_SCRIPT" > $SDK_DEBIAN_DIR/preinst

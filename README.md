@@ -95,6 +95,13 @@ $ make payload_app_pkg
 
 Upon completion, a debian package containing your payload application will be available in `/workspace/output`.
 
+## HOWTO: Create docker image
+```bash
+$ make docker_img
+```
+Note : This should be run outside container
+It will create docker image 'antaris_payload'
+
 ### Verify Packaged Application
 
 **TODO: need to update these instructions**

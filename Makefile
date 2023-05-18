@@ -14,7 +14,7 @@
 #   limitations under the License.
 #
 
-.PHONY: no_default pc_submodule_tools build_shell gen old_gen api_lib api_lib_clean gen_clean pc_sim pc_sim_clean sample_app sample_app_clean clean sdk_pkg payload_app_pkg
+.PHONY: no_default pc_submodule_tools build_shell gen old_gen api_lib api_lib_clean gen_clean pc_sim pc_sim_clean sample_app sample_app_clean clean sdk_pkg payload_app_pkg docker_img
 
 ARCH=x86_64
 SHELL := /bin/bash
@@ -67,6 +67,9 @@ DOCKER_EXEC_CMD=docker exec
 DOCKER_RM_CMD=docker rm -f
 WORKSPACE_MAPPING_DIR=/workspace
 BUILD_CONTAINER_NAME=payload_sdk_build_env
+
+CREATE_DOCKER_IMG=${BUILD_TOOLS_DIR}/scripts/docker.sh
+DOCKERFILE_PATH=${BUILD_TOOLS_DIR}/scripts/
 
 no_default:
 	@echo No default make target configured. Please proceed as per acommpanying documentation.
@@ -177,3 +180,8 @@ sdk_pkg:
 
 payload_app_pkg:
 	${SAMPLE_APP_PKG_CMD} `pwd`
+
+docker_img:
+	${SDK_PKG_CMD} `pwd`
+	${CREATE_DOCKER_IMG} "`pwd`/${BUILD_TOOLS_DIR}/scripts/Dockerfile.ubuntu" "`pwd`/apps/samples/python/" "`pwd`/output/" "antaris_payload" 
+
