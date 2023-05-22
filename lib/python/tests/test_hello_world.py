@@ -90,7 +90,7 @@ class TestHelloWorld(unittest.TestCase):
                 app.request_stop()
                 raise
 
-        hc = app.health_check()
+        hc = app._handle_health_check(None)
 
         app.request_stop()
 
