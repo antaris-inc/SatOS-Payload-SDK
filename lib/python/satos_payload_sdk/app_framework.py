@@ -264,7 +264,7 @@ class PayloadApplication(Stoppable):
         self.sequence_handler_func_idx = dict()
 
         # default health check; can be overridden
-        self.health_check_handler_func = lambda x: True
+        self.health_check_handler_func = lambda: True
 
         # abstracts access to channel APIs for sequences
         self.channel_client = None
@@ -275,9 +275,12 @@ class PayloadApplication(Stoppable):
     def mount_sequence(self, sequence_id, sequence_handler_func):
         self.sequence_handler_func_idx[sequence_id] = sequence_handler_func
 
+    # Provided function should expect no arguments and return True or False
+    # to represent health check success or failure, respectively
     def set_health_check(self, health_check_handler_func):
         self.health_check_handler_func = health_check_handler_func
 
+    #TODO(bcwaldon): actually do something with the provided params
     def _handle_health_check(self, params):
         try:
             hv = self.health_check_handler_func()
