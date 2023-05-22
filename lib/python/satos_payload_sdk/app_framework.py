@@ -278,7 +278,7 @@ class PayloadApplication(Stoppable):
     def set_health_check(self, health_check_handler_func):
         self.health_check_handler_func = health_check_handler_func
 
-    def health_check(self):
+    def _handle_health_check(self, params):
         try:
             hv = self.health_check_handler_func()
         except:
@@ -294,7 +294,7 @@ class PayloadApplication(Stoppable):
         logger.info("payload app starting")
 
         if not self.channel_client:
-            self.channel_client = ChannelClient(self.start_sequence, self.health_check, self._handle_shutdown)
+            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown)
 
         self.channel_client._connect()
 
