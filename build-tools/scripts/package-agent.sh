@@ -25,6 +25,7 @@ mkdir -p $DEB_OUTPUT_DIR $DEB_OUTPUT_DIR/DEBIAN
 # Copy files from into appropriate locations
 
 mkdir -p $DEB_OUTPUT_DIR/opt/antaris/sdk-agent
+cp $BUILD_ROOT/sdk-agent/run-agent.sh $DEB_OUTPUT_DIR/opt/antaris/sdk-agent/
 cp $BUILD_ROOT/lib/proxy/proxy-agent/agent.py $DEB_OUTPUT_DIR/opt/antaris/sdk-agent/
 cp $BUILD_ROOT/lib/proxy/proxy-agent/hexdump.py $DEB_OUTPUT_DIR/opt/antaris/sdk-agent/
 cp $BUILD_ROOT/lib/proxy/proxy-agent/socket_proxy.py $DEB_OUTPUT_DIR/opt/antaris/sdk-agent/
