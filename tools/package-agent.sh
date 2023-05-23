@@ -39,7 +39,7 @@ Version: $VERSION
 Maintainer: antaris
 Architecture: amd64
 Description: SatOS Payload SDK agent
-Depends: unzip, jq
+Depends: python3, unzip, jq
 EOM
 
 cd "$OUTPUT_DIR"
