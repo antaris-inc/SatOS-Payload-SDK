@@ -48,4 +48,6 @@ dpkg-deb --build "$DEB_NAME"
 if [ $? -eq 0 ]
 then
 	echo "Packaged $DEB_NAME.deb successfully"
+	rm -fr $DEB_NAME
 fi
+

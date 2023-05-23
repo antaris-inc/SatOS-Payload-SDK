@@ -19,4 +19,4 @@ mkdir -p $BUILD_ROOT/dist
 
 cd lib/python
 python3 -m build
-cp dist/*.whl $BUILD_ROOT/dist
+mv dist/*.whl $BUILD_ROOT/dist
