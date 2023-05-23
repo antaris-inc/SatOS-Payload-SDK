@@ -14,7 +14,7 @@
 #   limitations under the License.
 #
 
-.PHONY: no_default pc_submodule_tools build_shell gen old_gen api_lib api_lib_clean gen_clean pc_sim pc_sim_clean sample_app sample_app_clean clean sdk_pkg payload_app_pkg docker_img
+.PHONY: no_default pc_submodule_tools build_shell gen old_gen api_lib api_lib_clean gen_clean pc_sim pc_sim_clean sample_app sample_app_clean clean sdk_pkg payload_app_pkg docker_img python_package cpp_package agent_package
 
 ARCH=x86_64
 SHELL := /bin/bash
@@ -136,6 +136,16 @@ pc_sim:
 	g++ -g ${PC_SIM_DIR}/antaris_pc_stub.cc ${PC_SIM_DIR}/config_db.cc  ${THIRD_PARTY_INCLUDES} -I ${OUTPUT_GEN_DIR} -I ${CPP_LIB_DIR}/include -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS} -o ${PC_SIM_DIR}/pc-sim ; 	\
 
 	@tree ${PC_SIM_DIR}
+
+
+agent_package:
+	./build-tools/scripts/package-agent.sh
+
+python_package:
+	./build-tools/scripts/package-python-lib.sh
+
+cpp_package:
+	./build-tools/scripts/package-cpp-lib.sh
 
 sample_app:
 	@if [ "${LANGUAGE}" == "python" ]; then																		\

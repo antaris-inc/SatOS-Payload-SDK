@@ -57,7 +57,7 @@ RUN cd /tmp/;\
 # install grpc components, see https://grpc.io/docs/languages/
 # python grpc
 RUN python3 -m pip install --upgrade pip
-RUN python3 -m pip install grpcio grpcio-tools
+RUN python3 -m pip install build grpcio grpcio-tools
 
 ARG ANTARIS_INSTALLATIONS_PATH=/usr/local/antaris
 
