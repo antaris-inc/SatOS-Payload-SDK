@@ -19,7 +19,7 @@
 ARCH=x86_64
 SHELL := /bin/bash
 
-BUILD_TOOLS_DIR=build-tools
+BUILD_TOOLS_DIR=tools
 BUILD_CONTAINER_DIR=${BUILD_TOOLS_DIR}/containers
 DOCKER_FILE_BASE=${BUILD_CONTAINER_DIR}/Dockerfile.build.
 DOCKERFILE := ${DOCKER_FILE_BASE}${ARCH}
@@ -45,8 +45,8 @@ PC_SIM_DIR := pc-sim
 PROTO_FILES := ${OUTPUT_GEN_PROTO_DIR}/antaris_api.proto
 DEFS_DIR=${OUTPUT_GEN_PROTO_DIR}
 CPP_LIB_DIR=lib/cpp
-API_SPEC_GEN_TOOL=python3 ${BUILD_TOOLS_DIR}/scripts/types-generator/main.py
-VERSION_GEN=${BUILD_TOOLS_DIR}/scripts/generate_build_info.sh
+API_SPEC_GEN_TOOL=python3 ${BUILD_TOOLS_DIR}/types-generator/main.py
+VERSION_GEN=${BUILD_TOOLS_DIR}/generate_build_info.sh
 API_SPEC=./defs/api/antaris_api.xml
 API_SPEC_SCHEMA=./defs/api/schema/antaris_api_schema.xsd
 API_SPEC_GEN_BASE_OPTIONS=-i ${API_SPEC} -o ${LIB_DIR}/gen -s ${API_SPEC_SCHEMA}
@@ -60,16 +60,16 @@ DOCKER_BUILD=docker build --platform=linux/amd64
 PYTHON_GEN=python3 -m grpc_tools.protoc
 CPP_GEN=/usr/local/antaris/grpc/bin/protoc
 GRPC_CPP_PLUGIN=/usr/local/antaris/grpc/bin/grpc_cpp_plugin
-SDK_PKG_CMD=${BUILD_TOOLS_DIR}/scripts/sdk_pkg.sh
-SAMPLE_APP_PKG_CMD=${BUILD_TOOLS_DIR}/scripts/build_app_pkg.sh
+SDK_PKG_CMD=${BUILD_TOOLS_DIR}/sdk_pkg.sh
+SAMPLE_APP_PKG_CMD=${BUILD_TOOLS_DIR}/build_app_pkg.sh
 DOCKER_RUN_CMD=docker run --platform=linux/amd64
 DOCKER_EXEC_CMD=docker exec
 DOCKER_RM_CMD=docker rm -f
 WORKSPACE_MAPPING_DIR=/workspace
 BUILD_CONTAINER_NAME=payload_sdk_build_env
 
-CREATE_DOCKER_IMG=${BUILD_TOOLS_DIR}/scripts/docker.sh
-DOCKERFILE_PATH=${BUILD_TOOLS_DIR}/scripts/
+CREATE_DOCKER_IMG=${BUILD_TOOLS_DIR}/docker.sh
+DOCKERFILE_PATH=${BUILD_TOOLS_DIR}/
 
 no_default:
 	@echo No default make target configured. Please proceed as per acommpanying documentation.
@@ -139,13 +139,13 @@ pc_sim:
 
 
 agent_package:
-	./build-tools/scripts/package-agent.sh
+	./tools/package-agent.sh
 
 python_package:
-	./build-tools/scripts/package-python-lib.sh
+	./tools/package-python-lib.sh
 
 cpp_package:
-	./build-tools/scripts/package-cpp-lib.sh
+	./tools/package-cpp-lib.sh
 
 sample_app:
 	@if [ "${LANGUAGE}" == "python" ]; then																		\
@@ -193,5 +193,5 @@ payload_app_pkg:
 
 docker_img:
 	${SDK_PKG_CMD} `pwd`
-	${CREATE_DOCKER_IMG} "`pwd`/${BUILD_TOOLS_DIR}/scripts/Dockerfile.ubuntu" "`pwd`/apps/samples/python/" "`pwd`/output/" "antaris_payload" 
+	${CREATE_DOCKER_IMG} "`pwd`/${BUILD_TOOLS_DIR}/Dockerfile.ubuntu" "`pwd`/apps/samples/python/" "`pwd`/output/" "antaris_payload" 
 
