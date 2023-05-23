@@ -58,8 +58,6 @@ DOCKER_BUILD=docker build --platform=linux/amd64
 PYTHON_GEN=python3 -m grpc_tools.protoc
 CPP_GEN=/usr/local/antaris/grpc/bin/protoc
 GRPC_CPP_PLUGIN=/usr/local/antaris/grpc/bin/grpc_cpp_plugin
-SDK_PKG_CMD=${BUILD_TOOLS_DIR}/sdk_pkg.sh
-SAMPLE_APP_PKG_CMD=${BUILD_TOOLS_DIR}/build_app_pkg.sh
 DOCKER_RUN_CMD=docker run --platform=linux/amd64
 DOCKER_EXEC_CMD=docker exec
 DOCKER_RM_CMD=docker rm -f
@@ -74,14 +72,6 @@ no_default:
 
 pc_submodule_tools:
 	@${DOCKER_BUILD} --build-arg CONTAINER_USER=$(USER) --build-arg CONTAINER_UID=`id -u` --build-arg CONTAINER_GID=`id -g` -f ${DOCKERFILE} -t ${CONTAINER_IMAGE_NAME} .
-
-build_env:
-	@${DOCKER_BUILD} --build-arg CONTAINER_USER=$(USER) --build-arg CONTAINER_UID=`id -u` --build-arg CONTAINER_GID=`id -g` -f ${DOCKERFILE} -t ${CONTAINER_IMAGE_NAME} .
-	@${DOCKER_RM_CMD} ${BUILD_CONTAINER_NAME} 2>/dev/null
-	@${DOCKER_RUN_CMD} -v `pwd`:${WORKSPACE_MAPPING_DIR} --rm --name ${BUILD_CONTAINER_NAME} -it ${CONTAINER_IMAGE_NAME} /bin/bash
-
-build_env_shell:
-	@${DOCKER_EXEC_CMD} -it ${BUILD_CONTAINER_NAME} /bin/bash
 
 gen:
 	@echo ">>>>>>> Translating API-spec to user-facing python interfaces >>>>>>>"
@@ -152,14 +142,3 @@ clean:
 	rm -rf ${CPP_LIB_DIR}/*.o
 	rm -rf ${CPP_LIB_DIR}/*.a
 	rm -rf output
-
-sdk_pkg:
-	${SDK_PKG_CMD} `pwd`
-
-payload_app_pkg:
-	${SAMPLE_APP_PKG_CMD} `pwd`
-
-docker_img:
-	${SDK_PKG_CMD} `pwd`
-	${CREATE_DOCKER_IMG} "`pwd`/${BUILD_TOOLS_DIR}/Dockerfile.ubuntu" "`pwd`/apps/samples/python/" "`pwd`/output/" "antaris_payload" 
-
