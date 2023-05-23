@@ -39,7 +39,6 @@ ANTARIS_CPP_LIB := libantaris_api.a
 #OUTPUT_CPP_LIB := ${OUTPUT_BASE_DIR}/lib/${LANGUAGE}/${ANTARIS_CPP_LIB}
 CPP_APPS_DIR=apps/samples/cpp
 SAMPLE_SRC_DIR := apps/samples/${LANGUAGE}/payload
-PC_SIM_DIR := pc-sim
 
 #PROTO_FILES := $(wildcard ${DEFS_DIR}/samples/*.proto ${OUTPUT_BASE_DIR}/gen/proto/*.proto)
 PROTO_FILES := ${OUTPUT_GEN_PROTO_DIR}/antaris_api.proto
@@ -131,13 +130,6 @@ api_lib:
 api_lib_clean:
 	rm -rf ${OUTPUT_GEN_DIR}/antaris_api_autogen.o ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB} ${OUTPUT_GRPC_CPP_DIR}/*.o
 
-pc_sim:
-	echo Linking PC simulator;																	\
-	g++ -g ${PC_SIM_DIR}/antaris_pc_stub.cc ${PC_SIM_DIR}/config_db.cc  ${THIRD_PARTY_INCLUDES} -I ${OUTPUT_GEN_DIR} -I ${CPP_LIB_DIR}/include -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS} -o ${PC_SIM_DIR}/pc-sim ; 	\
-
-	@tree ${PC_SIM_DIR}
-
-
 agent_package:
 	./tools/package-agent.sh
 
@@ -163,11 +155,6 @@ sample_app:
 
 all: api_lib pc_sim sample_app
 
-pc_sim_clean:
-	rm -rf pc-sim/pc-sim
-	rm -rf ${CPP_LIB_DIR}/*.o
-	rm -rf ${CPP_LIB_DIR}/*.a
-
 sample_app_clean:
 	rm -rf ${SAMPLE_SRC_DIR}/payload_app
 	rm -rf ${CPP_LIB_DIR}/*.o
@@ -179,7 +166,6 @@ gen_clean:
 	rm -rf defs/gen
 
 clean:
-	rm -rf pc-sim/pc-sim
 	rm -rf ${SAMPLE_SRC_DIR}/payload_app
 	rm -rf ${CPP_LIB_DIR}/*.o
 	rm -rf ${CPP_LIB_DIR}/*.a
