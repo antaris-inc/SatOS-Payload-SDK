@@ -18,8 +18,9 @@ import time
 import threading
 import unittest
 
-from satos_payload_sdk.examples import hello_world
 import satos_payload_sdk.gen.antaris_api_types as api_types
+
+import example_app
 
 
 
@@ -55,18 +56,19 @@ class LocalChannelClient:
             self.sequences_done.append(sequence_id)
 
 
-class TestHelloWorld(unittest.TestCase):
+class TestApp(unittest.TestCase):
 
-    def test_app(self):
+    def test_example_app(self):
         sequences = [
             ["HelloWorld", ""],
             ["HelloFriend", "Jake"],
             ["HelloFriend", "Finn"],
+            ["LogLocation", ""],
         ]
 
         deadline = datetime.datetime.now() + datetime.timedelta(seconds=3)
 
-        app = hello_world.new()
+        app = example_app.new()
         app.channel_client = LocalChannelClient()
 
         th = threading.Thread(target=app.run)
@@ -98,4 +100,4 @@ class TestHelloWorld(unittest.TestCase):
         self.assertFalse(th.is_alive())
 
         self.assertEqual(hc, api_types.AntarisReturnCode.An_SUCCESS)
-        self.assertEqual(app.channel_client.sequences_done, ["HelloWorld", "HelloFriend", "HelloFriend"])
+        self.assertEqual(app.channel_client.sequences_done, ["HelloWorld", "HelloFriend", "HelloFriend", "LogLocation"])

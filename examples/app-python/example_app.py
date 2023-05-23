@@ -26,27 +26,33 @@ from satos_payload_sdk import app_framework
 logger = logging.getLogger()
 
 
-class HelloController:
+class Controller:
 
     def is_healthy(self):
-        logger.info("Ran health check")
+        logger.info("Health check succeeded")
         return True
 
     def handle_hello_world(self, ctx):
-        logger.info("Hello, world!")
+        logger.info("Handling sequence: hello, world!")
 
     def handle_hello_friend(self, ctx):
         name = ctx.params
-        logger.info(f"Hello, {name}!")
+        logger.info(f"Handling sequence: hello, {name}!")
+
+    def handle_log_location(self, ctx):
+        loc = ctx.client.get_current_location()
+        logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude}")
 
 
 def new():
-    ctl = HelloController()
+    ctl = Controller()
 
     app = app_framework.PayloadApplication()
     app.set_health_check(ctl.is_healthy)
+
     app.mount_sequence("HelloWorld", ctl.handle_hello_world)
     app.mount_sequence("HelloFriend", ctl.handle_hello_friend)
+    app.mount_sequence("LogLocation", ctl.handle_log_location)
 
     return app
 
@@ -55,8 +61,7 @@ if __name__ == '__main__':
     DEBUG = os.environ.get('DEBUG')
     logging.basicConfig(level=logging.DEBUG if DEBUG else logging.INFO)
 
-    ctl = HelloController()
-    app = make_app(ctl)
+    app = new()
 
     try:
         app.run()
