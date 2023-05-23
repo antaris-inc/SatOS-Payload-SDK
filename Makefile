@@ -38,7 +38,6 @@ OUTPUT_LIB_DIR := ${LIB_DIR}/${LANGUAGE}
 ANTARIS_CPP_LIB := libantaris_api.a
 #OUTPUT_CPP_LIB := ${OUTPUT_BASE_DIR}/lib/${LANGUAGE}/${ANTARIS_CPP_LIB}
 CPP_APPS_DIR=apps/samples/cpp
-SAMPLE_SRC_DIR := apps/samples/${LANGUAGE}/payload
 
 #PROTO_FILES := $(wildcard ${DEFS_DIR}/samples/*.proto ${OUTPUT_BASE_DIR}/gen/proto/*.proto)
 PROTO_FILES := ${OUTPUT_GEN_PROTO_DIR}/antaris_api.proto
@@ -139,26 +138,10 @@ python_package:
 cpp_package:
 	./tools/package-cpp-lib.sh
 
-sample_app:
-	@if [ "${LANGUAGE}" == "python" ]; then																		\
-		echo nothing to build;																			\
-	elif [ "${LANGUAGE}" == "cpp" ]; then																		\
-		mkdir -p ${OUTPUT_LIB_DIR} ;																\
-		echo Linking Sample Application	;																	\
-		g++ -g ${SAMPLE_SRC_DIR}/payload_app.cc -I ${SAMPLE_SRC_DIR}  -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS} -o ${SAMPLE_SRC_DIR}/payload_app; 	\
-	else																						\
-		echo "Unknown LANGUAGE=${LANGUAGE}. ${LANGUAGE_HELP}";															\
-		exit -1;																				\
-	fi
-	@tree apps/samples/cpp/payload
-	@tree apps/samples/python
+cpp_example:
+	g++ -g examples/app-cpp/payload_app.cc -o examples/app-cpp/payload_app -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS};
 
 all: api_lib pc_sim sample_app
-
-sample_app_clean:
-	rm -rf ${SAMPLE_SRC_DIR}/payload_app
-	rm -rf ${CPP_LIB_DIR}/*.o
-	rm -rf ${CPP_LIB_DIR}/*.a
 
 gen_clean:
 	rm -rf lib/python/satos_payload_sdk/gen
@@ -166,7 +149,6 @@ gen_clean:
 	rm -rf defs/gen
 
 clean:
-	rm -rf ${SAMPLE_SRC_DIR}/payload_app
 	rm -rf ${CPP_LIB_DIR}/*.o
 	rm -rf ${CPP_LIB_DIR}/*.a
 	rm -rf output
