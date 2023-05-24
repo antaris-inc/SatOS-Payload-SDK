@@ -1,5 +1,3 @@
-Illustrations for the test below can be found at https://docs.google.com/presentation/d/1_yMxRDjxH1AtF1ChmBtKVncYdI4-FdHwmXElPZeCr9k/edit?usp=sharing (slide 6).
-
 (a) ATMOS-AGENT
 python3 agent.py -m atmos -i 127.0.0.1 -p 19051 -s 127.0.0.1 -t 30053 -l 127.0.0.1 -o 50051
 
