@@ -1,5 +1,0 @@
-apps/samples/python/payload_app.py      app/samples/python/payload_app.py
-apps/samples/cpp/payload/payload_app    app/samples/cpp/payload/payload_app
-apps/config.json                        app/config.json
-apps/entrypoint.sh                      entrypoint.sh
-LICENSE                                 LICENSE

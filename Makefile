@@ -19,7 +19,7 @@
 ARCH=x86_64
 SHELL := /bin/bash
 
-BUILD_TOOLS_DIR=build-tools
+BUILD_TOOLS_DIR=tools
 BUILD_CONTAINER_DIR=${BUILD_TOOLS_DIR}/containers
 DOCKER_FILE_BASE=${BUILD_CONTAINER_DIR}/Dockerfile.build.
 DOCKERFILE := ${DOCKER_FILE_BASE}${ARCH}
@@ -38,15 +38,13 @@ OUTPUT_LIB_DIR := ${LIB_DIR}/${LANGUAGE}
 ANTARIS_CPP_LIB := libantaris_api.a
 #OUTPUT_CPP_LIB := ${OUTPUT_BASE_DIR}/lib/${LANGUAGE}/${ANTARIS_CPP_LIB}
 CPP_APPS_DIR=apps/samples/cpp
-SAMPLE_SRC_DIR := apps/samples/${LANGUAGE}/payload
-PC_SIM_DIR := pc-sim
 
 #PROTO_FILES := $(wildcard ${DEFS_DIR}/samples/*.proto ${OUTPUT_BASE_DIR}/gen/proto/*.proto)
 PROTO_FILES := ${OUTPUT_GEN_PROTO_DIR}/antaris_api.proto
 DEFS_DIR=${OUTPUT_GEN_PROTO_DIR}
 CPP_LIB_DIR=lib/cpp
-API_SPEC_GEN_TOOL=python3 ${BUILD_TOOLS_DIR}/scripts/types-generator/main.py
-VERSION_GEN=${BUILD_TOOLS_DIR}/scripts/generate_build_info.sh
+API_SPEC_GEN_TOOL=python3 ${BUILD_TOOLS_DIR}/types-generator/main.py
+VERSION_GEN=${BUILD_TOOLS_DIR}/generate_build_info.sh
 API_SPEC=./defs/api/antaris_api.xml
 API_SPEC_SCHEMA=./defs/api/schema/antaris_api_schema.xsd
 API_SPEC_GEN_BASE_OPTIONS=-i ${API_SPEC} -o ${LIB_DIR}/gen -s ${API_SPEC_SCHEMA}
@@ -60,30 +58,20 @@ DOCKER_BUILD=docker build --platform=linux/amd64
 PYTHON_GEN=python3 -m grpc_tools.protoc
 CPP_GEN=/usr/local/antaris/grpc/bin/protoc
 GRPC_CPP_PLUGIN=/usr/local/antaris/grpc/bin/grpc_cpp_plugin
-SDK_PKG_CMD=${BUILD_TOOLS_DIR}/scripts/sdk_pkg.sh
-SAMPLE_APP_PKG_CMD=${BUILD_TOOLS_DIR}/scripts/build_app_pkg.sh
 DOCKER_RUN_CMD=docker run --platform=linux/amd64
 DOCKER_EXEC_CMD=docker exec
 DOCKER_RM_CMD=docker rm -f
 WORKSPACE_MAPPING_DIR=/workspace
 BUILD_CONTAINER_NAME=payload_sdk_build_env
 
-CREATE_DOCKER_IMG=${BUILD_TOOLS_DIR}/scripts/docker.sh
-DOCKERFILE_PATH=${BUILD_TOOLS_DIR}/scripts/
+CREATE_DOCKER_IMG=${BUILD_TOOLS_DIR}/docker.sh
+DOCKERFILE_PATH=${BUILD_TOOLS_DIR}/
 
 no_default:
 	@echo No default make target configured. Please proceed as per acommpanying documentation.
 
 pc_submodule_tools:
 	@${DOCKER_BUILD} --build-arg CONTAINER_USER=$(USER) --build-arg CONTAINER_UID=`id -u` --build-arg CONTAINER_GID=`id -g` -f ${DOCKERFILE} -t ${CONTAINER_IMAGE_NAME} .
-
-build_env:
-	@${DOCKER_BUILD} --build-arg CONTAINER_USER=$(USER) --build-arg CONTAINER_UID=`id -u` --build-arg CONTAINER_GID=`id -g` -f ${DOCKERFILE} -t ${CONTAINER_IMAGE_NAME} .
-	@${DOCKER_RM_CMD} ${BUILD_CONTAINER_NAME} 2>/dev/null
-	@${DOCKER_RUN_CMD} -v `pwd`:${WORKSPACE_MAPPING_DIR} --rm --name ${BUILD_CONTAINER_NAME} -it ${CONTAINER_IMAGE_NAME} /bin/bash
-
-build_env_shell:
-	@${DOCKER_EXEC_CMD} -it ${BUILD_CONTAINER_NAME} /bin/bash
 
 gen:
 	@echo ">>>>>>> Translating API-spec to user-facing python interfaces >>>>>>>"
@@ -131,47 +119,19 @@ api_lib:
 api_lib_clean:
 	rm -rf ${OUTPUT_GEN_DIR}/antaris_api_autogen.o ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB} ${OUTPUT_GRPC_CPP_DIR}/*.o
 
-pc_sim:
-	echo Linking PC simulator;																	\
-	g++ -g ${PC_SIM_DIR}/antaris_pc_stub.cc ${PC_SIM_DIR}/config_db.cc  ${THIRD_PARTY_INCLUDES} -I ${OUTPUT_GEN_DIR} -I ${CPP_LIB_DIR}/include -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS} -o ${PC_SIM_DIR}/pc-sim ; 	\
-
-	@tree ${PC_SIM_DIR}
-
-
 agent_package:
-	./build-tools/scripts/package-agent.sh
+	./tools/package-agent.sh
 
 python_package:
-	./build-tools/scripts/package-python-lib.sh
+	./tools/package-python-lib.sh
 
 cpp_package:
-	./build-tools/scripts/package-cpp-lib.sh
+	./tools/package-cpp-lib.sh
 
-sample_app:
-	@if [ "${LANGUAGE}" == "python" ]; then																		\
-		echo nothing to build;																			\
-	elif [ "${LANGUAGE}" == "cpp" ]; then																		\
-		mkdir -p ${OUTPUT_LIB_DIR} ;																\
-		echo Linking Sample Application	;																	\
-		g++ -g ${SAMPLE_SRC_DIR}/payload_app.cc -I ${SAMPLE_SRC_DIR}  -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS} -o ${SAMPLE_SRC_DIR}/payload_app; 	\
-	else																						\
-		echo "Unknown LANGUAGE=${LANGUAGE}. ${LANGUAGE_HELP}";															\
-		exit -1;																				\
-	fi
-	@tree apps/samples/cpp/payload
-	@tree apps/samples/python
+cpp_example:
+	g++ -g examples/app-cpp/payload_app.cc -o examples/app-cpp/payload_app -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS};
 
 all: api_lib pc_sim sample_app
-
-pc_sim_clean:
-	rm -rf pc-sim/pc-sim
-	rm -rf ${CPP_LIB_DIR}/*.o
-	rm -rf ${CPP_LIB_DIR}/*.a
-
-sample_app_clean:
-	rm -rf ${SAMPLE_SRC_DIR}/payload_app
-	rm -rf ${CPP_LIB_DIR}/*.o
-	rm -rf ${CPP_LIB_DIR}/*.a
 
 gen_clean:
 	rm -rf lib/python/satos_payload_sdk/gen
@@ -179,19 +139,6 @@ gen_clean:
 	rm -rf defs/gen
 
 clean:
-	rm -rf pc-sim/pc-sim
-	rm -rf ${SAMPLE_SRC_DIR}/payload_app
 	rm -rf ${CPP_LIB_DIR}/*.o
 	rm -rf ${CPP_LIB_DIR}/*.a
 	rm -rf output
-
-sdk_pkg:
-	${SDK_PKG_CMD} `pwd`
-
-payload_app_pkg:
-	${SAMPLE_APP_PKG_CMD} `pwd`
-
-docker_img:
-	${SDK_PKG_CMD} `pwd`
-	${CREATE_DOCKER_IMG} "`pwd`/${BUILD_TOOLS_DIR}/scripts/Dockerfile.ubuntu" "`pwd`/apps/samples/python/" "`pwd`/output/" "antaris_payload" 
-

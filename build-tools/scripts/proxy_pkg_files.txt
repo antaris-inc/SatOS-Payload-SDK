@@ -1,6 +1,0 @@
-lib/proxy/start_proxy.sh start_proxy.sh
-lib/proxy/README.md README.md
-lib/proxy/proxy-agent/agent.py  proxy-agent/agent.py
-lib/proxy/proxy-agent/hexdump.py proxy-agent/hexdump.py
-lib/proxy/proxy-agent/README proxy-agent/README
-lib/proxy/proxy-agent/socket_proxy.py  proxy-agent/socket_proxy.py
