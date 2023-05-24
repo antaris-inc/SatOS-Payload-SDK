@@ -3,9 +3,9 @@
 This SDK provides libraries, tools and documentation that support developing satellite payloads for use with SatOS (TM) from Antaris, Inc.
 Specifically, this enables the development and testing of payload applications: the software that handles communication with core spacecraft services as well as payload-specific devices.
 
-It is recommended to first read through the [SatOS Payload SDK Guide](./docs/Antaris_SatOS_Payload_SDK_Guide.pdf) to familiarize yourself with the concepts and expected operations of payloads within the SatOS platform.
+[Comprehensive documentation](https://antaris-inc.github.io/SatOS-Payload-SDK/index.html) is available online. Please read through the [Developer Guide](https://antaris-inc.github.io/SatOS-Payload-SDK/developer-guide.html) if this is your first time working with this SDK, as it will help you learn the terminology and concepts used herein.
 
-## Local Setup
+## Prerequisites
 
 Before you continue, it is assumed that:
 1. You have Docker installed on your local machine
@@ -15,7 +15,7 @@ If you do not have access to the cloud platform, you can still get started with 
 
 ## Quickstart
 
-Visit the [Python example application](./examples/app-python/) to quickly get a working example up and running locally.
+If you have read through the Developer Guide, simply visit the [Python example application](./examples/app-python/) to quickly get a Payload Application up and running locally.
 
 ## Developing Payload Applications
 

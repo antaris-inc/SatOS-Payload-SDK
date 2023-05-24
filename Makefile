@@ -14,7 +14,7 @@
 #   limitations under the License.
 #
 
-.PHONY: no_default pc_submodule_tools build_shell gen old_gen api_lib api_lib_clean gen_clean pc_sim pc_sim_clean sample_app sample_app_clean clean sdk_pkg payload_app_pkg docker_img python_package cpp_package agent_package
+.PHONY: no_default pc_submodule_tools build_shell gen old_gen api_lib api_lib_clean gen_clean pc_sim pc_sim_clean sample_app sample_app_clean clean sdk_pkg payload_app_pkg docker_img python_package cpp_package agent_package docs
 
 ARCH=x86_64
 SHELL := /bin/bash
@@ -127,6 +127,9 @@ python_package:
 
 cpp_package:
 	./tools/package-cpp-lib.sh
+
+docs:
+	/home/runner/.local/bin/sphinx-build docs/src dist/docs
 
 cpp_example:
 	g++ -g examples/app-cpp/payload_app.cc -o examples/app-cpp/payload_app -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS};
