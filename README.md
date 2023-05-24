@@ -25,7 +25,7 @@ It is expected that developers start from one of the supported base images:
 * Python applications: `quay.io/antaris-inc/satos-payload-app-python:stable`
 * C++ application: quay.io/antaris-inc/satos-payload-app-cpp:stable
 
-A developer does not even need to close this repository in order to build an application, however there are examples
+A developer does not even need to clone this repository in order to build an application, however there are examples
 here that are very helpful when getting started.
 Visit the `examples/` directory here for more information.
 

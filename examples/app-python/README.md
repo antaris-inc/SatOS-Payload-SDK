@@ -14,7 +14,7 @@ Build the app using the following command:
 docker build --platform=linux/amd64 -t satos-payload-example-app-python .
 ```
 
-Next, we can run the application in a container. The command below assumes that `CONFIG` is set to the name of the downloaded file in your current working directory:
+Next, we can run the application in a container. The command below assumes that `$CONFIG` is set to the name of the config file (zip) you downloaded from Antaris Cloud Platform. The file must be located in your current working directory:
 
 ```
 docker run --platform=linux/amd64 -e CONFIG=$CONFIG -v $(pwd):/workspace -it satos-payload-example-app-python 
