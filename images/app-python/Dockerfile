@@ -26,7 +26,7 @@ RUN apt update && apt install -y python3 python3-pip
 RUN python3 -m pip install --upgrade pip
 
 RUN mkdir /stage
-COPY lib/python/dist/satos_payload_sdk-*.whl /stage
+COPY dist/satos_payload_sdk-*.whl /stage
 RUN python3 -m pip install /stage/satos_payload_sdk-*.whl
 RUN rm -fr /stage
 
