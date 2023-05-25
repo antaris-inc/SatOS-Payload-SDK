@@ -31,3 +31,19 @@ Visit the `examples/` directory here for more information.
 
 Additional payload applications are maintained in a separate repository that actually integrate payload hardware for
 demonstration purposes: https://github.com/antaris-inc/SatOS-Payload-Demos
+
+## Tools Image
+
+This repo utilizes a container image containing a number of tools (e.g. scripts, software, etc).
+The tools image is used to provide a consistent environment for automation of tasks in CI.
+For example, the image is used to generate API bindings from protobuf schemas and package those bindings into client libraries.
+The image is automatically built and published at `quay.io/antaris-inc/satos-payload-sdk-tools:stable`.
+
+Typically, one can run the tools image with a command like the following. It is expected that the root of the SDK repo is mounted in to `/workspace`:
+
+```
+docker run --platform=linux/amd64 -v $PWD:/workspace -it quay.io/antaris-inc/satos-payload-sdk-tools:stable
+```
+
+If you are interested in making changes to the image, the Dockerfile resides at `images/sdk-tools/Dockerfile`.
+A `stable` tag is managed by hand in the image repository.

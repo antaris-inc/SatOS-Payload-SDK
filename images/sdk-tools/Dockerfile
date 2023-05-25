@@ -38,13 +38,9 @@ RUN cd googletest-release-1.12.1 && cmake -DBUILD_SHARED_LIBS=ON . && make && ma
 # more tools go here
 RUN dnf -y install sudo tree zip texlive-latex tcpdump net-tools dpkg
 
-# as suggested by gdb
-RUN yum debuginfo-install libgcc-8.5.0-4.el8_5.x86_64 libstdc++-8.5.0-4.el8_5.x86_64 zlib-1.2.11-17.el8.x86_64
-
 RUN yum -y clean all
 
 #install Python 3.10
-
 RUN cd /tmp/;\
       wget https://www.python.org/ftp/python/3.10.6/Python-3.10.6.tgz ; \
       tar -xvf Python-3.10.6.tgz; \
@@ -53,10 +49,10 @@ RUN cd /tmp/;\
       make; \
       make test;  \
       make install;     
+RUN python3 -m pip install --upgrade pip
 
 # install grpc components, see https://grpc.io/docs/languages/
 # python grpc
-RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install build grpcio grpcio-tools
 
 ARG ANTARIS_INSTALLATIONS_PATH=/usr/local/antaris
@@ -75,34 +71,11 @@ RUN cd /root/grpc && mkdir -p cmake/build && pushd cmake/build && mkdir -p ${GRP
 
 # api-generator dependencies
 RUN python3 -m pip install xmlschema
-#RUN wget https://www.doxygen.nl/files/doxygen-1.9.4.linux.bin.tar.gz
-#RUN tar -zxvf doxygen-1.9.4.linux.bin.tar.gz
-#RUN cd doxygen-1.9.4 && ls -ltr && make install
 
-ARG CONTAINER_USER=somebody
-ARG CONTAINER_UID=1000
-ARG CONTAINER_GID=1000
+# documentation dependencies
+RUN python3 -m pip install sphinx furo
 
-RUN echo Container user will be ${CONTAINER_USER}
-RUN echo Container user will be ${CONTAINER_UID}
-RUN echo Container user will be ${CONTAINER_GID}
-RUN useradd -m ${CONTAINER_USER} -u ${CONTAINER_UID}  -s /bin/bash
-RUN echo "${CONTAINER_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+RUN echo "export PATH=$PATH:${ANTARIS_INSTALLATIONS_PATH}/protoc" >> .bashrc
 
-RUN echo "Welcome to the Antaris SatOS Payload SDK build environment." >> /etc/motd
-RUN echo "Your username is ${CONTAINER_USER}, and your workspace is at /workspace. Have fun!" >> /etc/motd
-
-USER ${CONTAINER_USER}
-WORKDIR /home/${CONTAINER_USER}
-
-RUN echo "PS1='🐳  \[\033[1;34m\]\u @ \[\033[1;36m\]\h \[\033[1;34m\]\W\[\033[0;35m\] \[\033[1;36m\] $ \[\033[0m\]'" >> .bashrc
-RUN echo "export PATH=$PATH:${ANTARIS_GOPATH}/bin:${ANTARIS_INSTALLATIONS_PATH}/protoc" >> .bashrc
-RUN echo "export GOPATH=$GOPATH:$ANTARIS_GOPATH" >> .bashrc
-RUN echo "export PYTHONPATH=/workspace/lib/python/satos_payload_sdk" >> .bashrc
-RUN echo "cat /etc/motd" >> .bashrc
-
-SHELL ["/bin/bash", "-c"]
-
-CMD ["/bin/bash", "-c"]
-
+CMD ["/bin/bash"]
 WORKDIR /workspace
