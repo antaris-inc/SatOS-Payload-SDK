@@ -178,11 +178,6 @@ class ChannelClient:
             api_client.api_pa_pc_delete_channel(self._channel)
 
     def get_current_location(self):
-        #NOTE(bcwaldon): pc-sim currently not able to respond, so we provide a dummy response
-        return api_types.RespGetCurrentLocationParams(
-                latitude=1.0, longitude=2.0, altitude=3.0,
-                correlation_id=0, req_status=0, determined_at=None)
-
         with self._cond:
             params = api_types.ReqGetCurrentLocationParams(self._get_next_cid())
             resp = api_client.api_pa_pc_get_current_location(self._channel, params)
