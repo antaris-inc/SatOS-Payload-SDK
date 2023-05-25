@@ -8,7 +8,7 @@ import hexdump as HEX
 import time
 
 # Creating a logger object
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger(__name__.split('.')[0])
 
 gAgentMode=None
@@ -351,7 +351,7 @@ def handle_readable(sock):
     global g_MODE_USER
     socket_has_error = False
 
-    logger.debug("{} has readbale event".format(sock))
+    logger.debug("{} has readable event".format(sock))
 
     if sock.fileno() in gActionMap:
         # must be readable for data
@@ -402,7 +402,7 @@ def handle_readable(sock):
         if g_MODE_USER == gAgentMode:
             # we can only get connections from the app
             if sock == gInternalListener:
-                logger.debug("USER-AGENT: internal-listener {} has readbale event".format(sock))
+                logger.debug("USER-AGENT: internal-listener {} has readable event".format(sock))
 
                 newsock, addr = gInternalListener.accept()
 
@@ -425,7 +425,7 @@ def handle_readable(sock):
         else:
             # we can get connections from the app or the user-agent
             if sock == gInternalListener:
-                logger.debug("ATMOS-AGENT: internal-listener {} has readbale event".format(sock))
+                logger.debug("ATMOS-AGENT: internal-listener {} has readable event".format(sock))
 
                 newsock, addr = gInternalListener.accept()
                 new_handler = socket_proxy.HalfPermaConnectedSockets(gPermaSocket, newsock)
@@ -441,7 +441,7 @@ def handle_readable(sock):
 
                 log_sockets(logger.info, "AGENT-MODE, after accepting internal listener connection ====>\n")
             elif sock == gWebListerer:
-                logger.debug("ATMOS-AGENT: web-listener {} has readbale event".format(sock))
+                logger.debug("ATMOS-AGENT: web-listener {} has readable event".format(sock))
 
                 newsock, addr = gWebListerer.accept()
                 new_handler = socket_proxy.OnTheFlyDeferredConnect(newsock, gInternalPeerIP, gInternalPeerPort)

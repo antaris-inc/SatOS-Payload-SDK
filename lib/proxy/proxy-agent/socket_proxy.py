@@ -3,7 +3,7 @@ import logging
 import pdb, sys
 
 # Creating a logger object
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger(__name__.split('.')[0])
 
 def socket_recv(sock, read_size):
@@ -94,7 +94,7 @@ class ProxySocket:
         return None
 
     def __str__(self):
-        str = "{}: leg1 {}, leg2 {}\n".format(__class__.__name__, self.leg1, self.leg2)
+        str = "{} {}: leg1 {}, leg2 {}\n".format(__class__.__name__, hex(id(self)), self.leg1, self.leg2)
         return str
 
 class OnTheFly(ProxySocket):
@@ -157,7 +157,7 @@ class HalfPermaConnectedSockets(ProxySocket):
         self.leg2 = None
 
     def __str__(self):
-        str = "{}: leg1 {}, leg2 {}\n".format(__class__.__name__, self.leg1, self.leg2)
+        str = "{} {}: leg1 {}, leg2 {}\n".format(__class__.__name__, hex(id(self)), self.leg1, self.leg2)
         return str
 
 class HalfPerma:
@@ -200,5 +200,5 @@ class HalfPerma:
         self.proxy = None
 
     def __str__(self):
-        str = "HalfPerma: leg1 {}, leg2 {}\npeer_ip {}, peer_port {}\n".format(self.leg1, self.proxy, self.peer_ip, self.peer_port)
+        str = "{} {}: leg1 {}, leg2 {}\npeer_ip {}, peer_port {}\n".format(__class__.__name__, hex(id(self)), self.leg1, self.proxy, self.peer_ip, self.peer_port)
         return str
