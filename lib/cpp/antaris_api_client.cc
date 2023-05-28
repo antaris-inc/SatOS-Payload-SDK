@@ -463,6 +463,19 @@ void *start_callback_server(void *thread_param)
     // clients. In this case it corresponds to an *synchronous* service.
     builder.RegisterService(&ctx->callback_service_handle);
 
+    // Sample way of setting keepalive arguments on the server. Here, we are
+    // configuring the server to send keepalive pings at a period of 10 minutes
+    // with a timeout of 20 seconds. Additionally, pings will be sent even if
+    // there are no calls in flight on an active HTTP2 connection. When receiving
+    // pings, the server will permit pings at an interval of 10 seconds.
+    builder.AddChannelArgument(GRPC_ARG_KEEPALIVE_TIME_MS,
+                               10 * 60 * 1000 /*10 min*/);
+    builder.AddChannelArgument(GRPC_ARG_KEEPALIVE_TIMEOUT_MS,
+                               20 * 1000 /*20 sec*/);
+    builder.AddChannelArgument(GRPC_ARG_KEEPALIVE_PERMIT_WITHOUT_CALLS, 1);
+    builder.AddChannelArgument(GRPC_ARG_HTTP2_MIN_RECV_PING_INTERVAL_WITHOUT_DATA_MS,
+                               10 * 1000 /*10 sec*/);
+
     ctx->callback_service_handle.set_client_channel_ctx(ctx);
 
     // Finally assemble the server.
