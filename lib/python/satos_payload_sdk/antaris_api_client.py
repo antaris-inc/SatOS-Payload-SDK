@@ -156,15 +156,10 @@ def api_pa_pc_create_channel_common(secure, callback_func_list):
         pings to be sent even if there are no calls in flight.
     For more details, check: https://github.com/grpc/grpc/blob/master/doc/keepalive.md
     """
-    server_options = [('grpc.keepalive_time_ms', 20000),
-                      ('grpc.keepalive_timeout_ms', 10000),
-                      ('grpc.http2.min_ping_interval_without_data_ms', 5000),
-                      ('grpc.max_connection_idle_ms', 10000),
-                      ('grpc.max_connection_age_ms', 30000),
-                      ('grpc.max_connection_age_grace_ms', 5000),
-                      ('grpc.http2.max_pings_without_data', 5),
-                      ('grpc.keepalive_permit_without_calls', 1)]
-
+    server_options = [("grpc.keepalive_time_ms", 10000), 
+                      ("grpc.keepalive_timeout_ms", 5000), 
+                      ("grpc.keepalive_permit_without_calls", True),
+                      ("grpc.http2.max_ping_strikes", 0)] 
     if api_common.g_SSL_ENABLE == '0':
         print("Creating insecure channel")
         client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(grpc.insecure_channel(pc_endpoint, options=server_options))
