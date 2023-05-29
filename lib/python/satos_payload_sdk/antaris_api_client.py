@@ -135,35 +135,49 @@ def api_pa_pc_create_channel_common(secure, callback_func_list):
         print("Callback endpoint {} is not free".format(app_endpoint))
         return None
 
-    print("Starting server with keepalive")
-
-    """
-    grpc.keepalive_time_ms: The period (in milliseconds) after which a keepalive ping is
-        sent on the transport.
-    grpc.keepalive_timeout_ms: The amount of time (in milliseconds) the sender of the keepalive
-        ping waits for an acknowledgement. If it does not receive an acknowledgment within
-        this time, it will close the connection.
-    grpc.http2.min_ping_interval_without_data_ms: Minimum allowed time (in milliseconds)
-        between a server receiving successive ping frames without sending any data/header frame.
-    grpc.max_connection_idle_ms: Maximum time (in milliseconds) that a channel may have no
-        outstanding rpcs, after which the server will close the connection.
-    grpc.max_connection_age_ms: Maximum time (in milliseconds) that a channel may exist.
-    grpc.max_connection_age_grace_ms: Grace period (in milliseconds) after the channel
-        reaches its max age.
-    grpc.http2.max_pings_without_data: How many pings can the client send before needing to
-        send a data/header frame.
-    grpc.keepalive_permit_without_calls: If set to 1 (0 : false; 1 : true), allows keepalive
-        pings to be sent even if there are no calls in flight.
-    For more details, check: https://github.com/grpc/grpc/blob/master/doc/keepalive.md
-    """
-    server_options = [("grpc.keepalive_time_ms", 10000), 
-                      ("grpc.keepalive_timeout_ms", 5000), 
-                      ("grpc.keepalive_permit_without_calls", True),
-                      ("grpc.http2.max_ping_strikes", 0)] 
+    print("Starting server")
+    
+    if api_common.g_KEEPALIVE_ENABLE == '1':
+        """
+        grpc.keepalive_time_ms: The period (in milliseconds) after which a keepalive ping is
+            sent on the transport.
+        grpc.keepalive_timeout_ms: The amount of time (in milliseconds) the sender of the keepalive
+            ping waits for an acknowledgement. If it does not receive an acknowledgment within
+            this time, it will close the connection.
+        grpc.http2.min_ping_interval_without_data_ms: Minimum allowed time (in milliseconds)
+            between a server receiving successive ping frames without sending any data/header frame.
+        grpc.max_connection_idle_ms: Maximum time (in milliseconds) that a channel may have no
+            outstanding rpcs, after which the server will close the connection.
+        grpc.max_connection_age_ms: Maximum time (in milliseconds) that a channel may exist.
+        grpc.max_connection_age_grace_ms: Grace period (in milliseconds) after the channel
+            reaches its max age.
+        grpc.http2.max_pings_without_data: How many pings can the client send before needing to
+            send a data/header frame.
+        grpc.keepalive_permit_without_calls: If set to 1 (0 : false; 1 : true), allows keepalive
+            pings to be sent even if there are no calls in flight.
+        For more details, check: https://github.com/grpc/grpc/blob/master/doc/keepalive.md
+        """
+        server_options = [("grpc.keepalive_time_ms", 10000), 
+                          ("grpc.keepalive_timeout_ms", 5000), 
+                          ("grpc.keepalive_permit_without_calls", True),
+                          ("grpc.http2.max_ping_strikes", 0)] 
+    
     if api_common.g_SSL_ENABLE == '0':
         print("Creating insecure channel")
-        client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(grpc.insecure_channel(pc_endpoint, options=server_options))
-        server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10), options=server_options)
+        """
+        if api_common.g_KEEPALIVE_ENABLE == '0':
+            client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(grpc.insecure_channel(pc_endpoint))
+            server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        else:
+            client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(grpc.insecure_channel(pc_endpoint, options=server_options))
+            server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10), options=server_options)
+        """
+        client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(grpc.insecure_channel(pc_endpoint))
+        if api_common.g_KEEPALIVE_ENABLE == '0':
+            server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        else:
+            server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10), options=server_options)
+
         server_handle.add_insecure_port(app_endpoint)
     else:
         print("SSL is enabled in sdk_env.conf file, creating secure channel")
@@ -174,10 +188,20 @@ def api_pa_pc_create_channel_common(secure, callback_func_list):
             quit()
 
         credentials = grpc.ssl_channel_credentials(root_certs)
-        channel = grpc.secure_channel( pc_endpoint , credentials, options=server_options)
+        """
+        if api_common.g_KEEPALIVE_ENABLE == '0':
+            channel = grpc.secure_channel( pc_endpoint , credentials)
+        else:
+            channel = grpc.secure_channel( pc_endpoint , credentials, options=server_options)
+        """
+        channel = grpc.secure_channel( pc_endpoint , credentials)
+        
         client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(channel)
 
-        server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10), options=server_options)
+        if api_common.g_KEEPALIVE_ENABLE == '0':
+            server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        else:
+            server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10), options=server_options)
 
         print("Creating secure channel")
         try :
