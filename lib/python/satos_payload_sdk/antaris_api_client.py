@@ -38,6 +38,11 @@ g_CLIENT_KEY_FILE="/opt/antaris/app/client.key"
 g_CONFIG_JSON_FILE="/opt/antaris/app/config.json"
 g_COOKIE_STR="cookie"
 
+g_KEEPALIVE_TIME_MS = 10000
+g_KEEPALIVE_TIMEOUT_MS = 5000
+g_KEEPALIVE_PERMIT_WITHOUT_CALLS = True
+g_MAX_PING_STRIKES = 0
+
 class AntarisChannel:
     def __init__(self, grpc_client_handle, grpc_server_handle, pc_to_app_server, is_secure, callback_func_list):
         self.grpc_client_handle = grpc_client_handle
@@ -137,6 +142,7 @@ def api_pa_pc_create_channel_common(secure, callback_func_list):
 
     print("Starting server")
     
+    server_options = []
     if api_common.g_KEEPALIVE_ENABLE == '1':
         """
         grpc.keepalive_time_ms: The period (in milliseconds) after which a keepalive ping is
@@ -157,21 +163,13 @@ def api_pa_pc_create_channel_common(secure, callback_func_list):
             pings to be sent even if there are no calls in flight.
         For more details, check: https://github.com/grpc/grpc/blob/master/doc/keepalive.md
         """
-        server_options = [("grpc.keepalive_time_ms", 10000), 
-                          ("grpc.keepalive_timeout_ms", 5000), 
-                          ("grpc.keepalive_permit_without_calls", True),
-                          ("grpc.http2.max_ping_strikes", 0)] 
-    
+        server_options.extend ([("grpc.keepalive_time_ms", g_KEEPALIVE_TIME_MS), 
+                                 ("grpc.keepalive_timeout_ms", g_KEEPALIVE_TIMEOUT_MS), 
+                                 ("grpc.keepalive_permit_without_calls", g_KEEPALIVE_PERMIT_WITHOUT_CALLS),
+                                 ("grpc.http2.max_ping_strikes", g_MAX_PING_STRIKES)])
+
     if api_common.g_SSL_ENABLE == '0':
         print("Creating insecure channel")
-        """
-        if api_common.g_KEEPALIVE_ENABLE == '0':
-            client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(grpc.insecure_channel(pc_endpoint))
-            server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-        else:
-            client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(grpc.insecure_channel(pc_endpoint, options=server_options))
-            server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10), options=server_options)
-        """
         client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(grpc.insecure_channel(pc_endpoint))
         if api_common.g_KEEPALIVE_ENABLE == '0':
             server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10))
@@ -188,12 +186,7 @@ def api_pa_pc_create_channel_common(secure, callback_func_list):
             quit()
 
         credentials = grpc.ssl_channel_credentials(root_certs)
-        """
-        if api_common.g_KEEPALIVE_ENABLE == '0':
-            channel = grpc.secure_channel( pc_endpoint , credentials)
-        else:
-            channel = grpc.secure_channel( pc_endpoint , credentials, options=server_options)
-        """
+ 
         channel = grpc.secure_channel( pc_endpoint , credentials)
         
         client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(channel)

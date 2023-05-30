@@ -561,9 +561,9 @@ PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port, INT8
         // are configuring a keepalive time period of 20 seconds, with a timeout of 10
         // seconds. Additionally, pings will be sent even if there are no calls in
         // flight on an active connection.
-        args.SetInt(GRPC_ARG_KEEPALIVE_TIME_MS, 20 * 1000 /*20 sec*/);
-        args.SetInt(GRPC_ARG_KEEPALIVE_TIMEOUT_MS, 10 * 1000 /*10 sec*/);
-        args.SetInt(GRPC_ARG_KEEPALIVE_PERMIT_WITHOUT_CALLS, 1);
+        args.SetInt(GRPC_ARG_KEEPALIVE_TIME_MS, KEEPALIVE_TIME_MS);
+        args.SetInt(GRPC_ARG_KEEPALIVE_TIMEOUT_MS, KEEPALIVE_TIMEOUT_MS);
+        args.SetInt(GRPC_ARG_KEEPALIVE_PERMIT_WITHOUT_CALLS, KEEPALIVE_PERMIT_WITHOUT_CALLS);
     }   
     if (ssl_flag) {
         std::ifstream t(client_ssl_addr);
