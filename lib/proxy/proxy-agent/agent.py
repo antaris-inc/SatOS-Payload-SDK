@@ -8,7 +8,7 @@ import hexdump as HEX
 import time
 
 # Creating a logger object
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger(__name__.split('.')[0])
 
 gAgentMode=None
@@ -22,6 +22,7 @@ gInternalPeerPort=None
 gPermaSocket=None
 gInternalListener=None
 gWebListerer=None
+gPeerConnectedOnInternalListener=None
 gSleepBeforeConnect=5
 
 g_MODE_USER="user"
@@ -37,9 +38,11 @@ gKnownSockets = []
 def log_sockets(logger_fn, event_msg):
     global gActionMap
     global gKnownSockets
+    global gPeerConnectedOnInternalListener
 
     logger_fn("\n{}\nAction-Map: {}\n".format(event_msg, gActionMap))
     logger_fn("\nKnown-sockets: {}\n\n".format(gKnownSockets))
+    logger_fn("\nPeer-connected-on-internal-sock {}".format(gPeerConnectedOnInternalListener))
 
 def print_usage():
     global gAgentMode
@@ -278,6 +281,7 @@ def handle_exceptions(sock):
     global g_READ_SIZE
     global g_MODE_ATMOS
     global g_MODE_USER
+    global gPeerConnectedOnInternalListener
 
     # pdb.set_trace()
 
@@ -297,6 +301,9 @@ def handle_exceptions(sock):
             other_sock = connection_legs[1]
         else:
             other_sock = connection_legs[0]
+
+        if other_sock == gPeerConnectedOnInternalListener:
+            gPeerConnectedOnInternalListener = None
 
         if None != other_sock:
             logger.info("Cleaning up socket {}".format(other_sock))
@@ -322,8 +329,6 @@ def handle_exceptions(sock):
 
     logger.debug("Following sockets require cleanup => {}".format(cleanup_sock_list))
 
-    perma_sock_seen = False # as a result of the other leg closing
-
     for s in cleanup_sock_list:
         if gPermaSocket == s:
             logger.debug("Detected Perma-sock {} in cleanup list, will close and recover".format(s))
@@ -332,6 +337,9 @@ def handle_exceptions(sock):
             del gActionMap[s.fileno()]
             gKnownSockets.remove(s)
             s.close()
+
+        if gPeerConnectedOnInternalListener == s:
+            gPeerConnectedOnInternalListener = None
 
     # pdb.set_trace()
 
@@ -349,9 +357,11 @@ def handle_readable(sock):
     global g_READ_SIZE
     global g_MODE_ATMOS
     global g_MODE_USER
+    global gPeerConnectedOnInternalListener
+
     socket_has_error = False
 
-    logger.debug("{} has readbale event".format(sock))
+    logger.debug("{} has readable event".format(sock))
 
     if sock.fileno() in gActionMap:
         # must be readable for data
@@ -402,7 +412,7 @@ def handle_readable(sock):
         if g_MODE_USER == gAgentMode:
             # we can only get connections from the app
             if sock == gInternalListener:
-                logger.debug("USER-AGENT: internal-listener {} has readbale event".format(sock))
+                logger.debug("USER-AGENT: internal-listener {} has readable event".format(sock))
 
                 newsock, addr = gInternalListener.accept()
 
@@ -425,23 +435,50 @@ def handle_readable(sock):
         else:
             # we can get connections from the app or the user-agent
             if sock == gInternalListener:
-                logger.debug("ATMOS-AGENT: internal-listener {} has readbale event".format(sock))
+                logger.debug("ATMOS-AGENT: internal-listener {} has readable event".format(sock))
 
                 newsock, addr = gInternalListener.accept()
-                new_handler = socket_proxy.HalfPermaConnectedSockets(gPermaSocket, newsock)
 
-                gActionMap[newsock.fileno()] = new_handler
-                gActionMap[gPermaSocket.fileno()] = new_handler
+                if gPeerConnectedOnInternalListener == None:
+                    new_handler = socket_proxy.HalfPermaConnectedSockets(gPermaSocket, newsock)
 
-                gKnownSockets.append(newsock)
-                # gPermaSock is always in known-sockets
-                # gKnownSockets.append(gPermaSocket)
+                    gActionMap[newsock.fileno()] = new_handler
+                    gActionMap[gPermaSocket.fileno()] = new_handler
 
-                logger.debug("ATMOS: got internal connect from {}, created half-perma-connected-socks handler {}".format(addr, str(new_handler)))
+                    gKnownSockets.append(newsock)
+                    # gPermaSock is always in known-sockets
+                    # gKnownSockets.append(gPermaSocket)
 
-                log_sockets(logger.info, "AGENT-MODE, after accepting internal listener connection ====>\n")
+                    gPeerConnectedOnInternalListener = newsock
+
+                    logger.debug("ATMOS: got internal connect from {}, created half-perma-connected-socks handler {}".format(addr, str(new_handler)))
+
+                    log_sockets(logger.info, "AGENT-MODE, after accepting internal listener connection ====>\n")
+                else:
+                    logger.error("ATMOS-AGENT: received connect on internal-listener, but we were already connected {}".format(gPeerConnectedOnInternalListener))
+                    logger.error("ATMOS-AGENT: second connection on same port came from {}, connect {}".format(addr, newsock))
+
+                    logger.error("ATMOS-AGENT: as recovery attempt, dropping both old and new connections, and recovering permasock")
+
+                    log_sockets(logger.info, "AGENT-MODE, before error-recovery ====>\n")
+
+                    logger.debug("Recovering perma-sock")
+
+                    handle_exceptions(gPermaSocket)
+
+                    if gPeerConnectedOnInternalListener != None:
+                        logger.warn("ATMOS-AGENT: recovering perma-sock still did not clear out connected-peer on internal listener {}".format(gPeerConnectedOnInternalListener))
+                        handle_exceptions(gPeerConnectedOnInternalListener)
+                    else:
+                        logger.info("ATMOS-AGENT: peer-connected on internal listener got cleared out as part of perma-sock cleanup. This was expected.")
+
+                    logger.debug("ATMOS-AGENT: dropping the new connection {}".format(newsock))
+                    newsock.close()
+
+                    log_sockets(logger.info, "AGENT-MODE, after completed error-recovery for double-connect on internal listener ====>\n")
+
             elif sock == gWebListerer:
-                logger.debug("ATMOS-AGENT: web-listener {} has readbale event".format(sock))
+                logger.debug("ATMOS-AGENT: web-listener {} has readable event".format(sock))
 
                 newsock, addr = gWebListerer.accept()
                 new_handler = socket_proxy.OnTheFlyDeferredConnect(newsock, gInternalPeerIP, gInternalPeerPort)
