@@ -33,6 +33,11 @@ static char g_CONF_JSON[MAX_FILE_OR_PROP_LEN_NAME]="/opt/antaris/app/config.json
 #define LISTEN_IP_CONF_KEY                  "LISTEN_IP"
 #define PC_API_PORT_CONF_KEY                "PC_API_PORT"
 #define APP_API_PORT_CONF_KEY               "APP_API_PORT"
+#define KEEPALIVE_ENABLE_KEY                "KEEPALIVE"
+
+#define KEEPALIVE_TIME_MS                   20000
+#define KEEPALIVE_TIMEOUT_MS                10000
+#define KEEPALIVE_PERMIT_WITHOUT_CALLS      1
 
 char g_LISTEN_IP[MAX_FILE_OR_PROP_LEN_NAME] = "0.0.0.0";
 char g_PAYLOAD_CONTROLLER_IP[MAX_FILE_OR_PROP_LEN_NAME] = "127.0.0.1";
@@ -41,7 +46,8 @@ unsigned short g_PC_GRPC_SERVER_PORT = 50051;
 char g_PC_GRPC_SERVER_PORT_STR[MAX_FILE_OR_PROP_LEN_NAME] = "50051";
 unsigned short g_PA_GRPC_SERVER_PORT = 50053;
 char g_PA_GRPC_SERVER_PORT_STR[MAX_FILE_OR_PROP_LEN_NAME] = "50053";
-char g_SSL_ENABLE = '1';       
+char g_SSL_ENABLE = '1';              // SSL is enabled by default
+char g_KEEPALIVE_ENABLE = '1';        // Keepalive is disabled by default
 
 char g_PC_GRPC_LISTEN_ENDPOINT[MAX_FILE_OR_PROP_LEN_NAME] = "0.0.0.0:50051";
 char g_PC_GRPC_CONNECT_ENDPOINT[MAX_FILE_OR_PROP_LEN_NAME] = "127.0.0.1:50051";
@@ -121,6 +127,8 @@ static void update_a_conf(char *conf_line)
         strcpy(g_PA_GRPC_SERVER_PORT_STR, a_conf.value);
     } else if (strcmp(a_conf.prop, SSL_ENABLE_KEY) == 0) {
         strcpy(&g_SSL_ENABLE, a_conf.value);
+    } else if (strcmp(a_conf.prop, KEEPALIVE_ENABLE_KEY) == 0) {
+        strcpy(&g_KEEPALIVE_ENABLE, a_conf.value);
     }
 
     return;

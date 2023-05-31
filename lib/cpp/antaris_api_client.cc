@@ -43,6 +43,8 @@ unsigned int api_debug = 0;
 
 extern char g_SSL_ENABLE;
 
+extern char g_KEEPALIVE_ENABLE;
+
 #define ANTARIS_CALLBACK_GRACE_DELAY    10
 
 class PCServiceClient {
