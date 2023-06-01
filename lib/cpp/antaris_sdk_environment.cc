@@ -35,10 +35,6 @@ static char g_CONF_JSON[MAX_FILE_OR_PROP_LEN_NAME]="/opt/antaris/app/config.json
 #define APP_API_PORT_CONF_KEY               "APP_API_PORT"
 #define KEEPALIVE_ENABLE_KEY                "KEEPALIVE"
 
-#define KEEPALIVE_TIME_MS                   20000
-#define KEEPALIVE_TIMEOUT_MS                10000
-#define KEEPALIVE_PERMIT_WITHOUT_CALLS      1
-
 char g_LISTEN_IP[MAX_FILE_OR_PROP_LEN_NAME] = "0.0.0.0";
 char g_PAYLOAD_CONTROLLER_IP[MAX_FILE_OR_PROP_LEN_NAME] = "127.0.0.1";
 char g_PAYLOAD_APP_IP[MAX_FILE_OR_PROP_LEN_NAME] = "127.0.0.1";
