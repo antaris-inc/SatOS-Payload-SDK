@@ -6,7 +6,6 @@ CURRENT_DIR=`pwd`
 SDK_ROOT_DIR="${name}" 
 SDK_PACKAGE_NAME=${SDK_ROOT_DIR}
 SDK_DEBIAN_DIR="${SDK_ROOT_DIR}/DEBIAN"
-LOG_DIR="/opt/antaris/logs"
 VERSION="0.1"
 
 ROOT_DIR="${SDK_ROOT_DIR}/"
@@ -27,9 +26,6 @@ mkdir -p ${ROOT_DIR}
 
 cp -r ${CURRENT_DIR}/proxy-agent ${ROOT_DIR}/
 rm -rf ${ROOT_DIR}/proxy-agent/test
-
-mkdir -p ${ROOT_DIR}/${LOG_DIR}
-touch ${ROOT_DIR}/${LOG_DIR}/proxy.log
 
 touch $SDK_DEBIAN_DIR/control
 echo  "$PKG_CONTROL_CONTENTS" > $SDK_DEBIAN_DIR/control
