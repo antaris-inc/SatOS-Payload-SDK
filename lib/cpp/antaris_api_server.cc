@@ -39,6 +39,9 @@
 #define APP_ID_OFFSET               (AUTH_KEY_END_OFFSET + 1)
 #define APP_ID_LEN                  (3)
 
+#define KEEPALIVE_TIME_MS                   20000
+#define KEEPALIVE_TIMEOUT_MS                10000
+#define KEEPALIVE_PERMIT_WITHOUT_CALLS      1
 
 using grpc::Channel;
 using grpc::ClientContext;
@@ -46,7 +49,7 @@ using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::Status;
 
-extern char if g_KEEPALIVE_ENABLE;
+extern char g_KEEPALIVE_ENABLE;
 
 static AntarisReturnCode
 prepare_endpoint_string(std::string &out_string, INT8 *peer_ip_str, UINT16 port);
