@@ -1,5 +1,5 @@
-SatOS Payload SDK Developer Guide
-#################################
+SatOS Payload Developer Guide
+#############################
 
 The SatOS Payload SDK provides libraries, tools and documentation that support developing satellite payloads for use with SatOS (TM) from Antaris, Inc.
 This enables effective development and testing of payload applications, which handle communication with core spacecraft services as well as payload-specific devices.
