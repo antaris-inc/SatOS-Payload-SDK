@@ -1,6 +1,6 @@
 # Documentation
 
-This documentation automatically published here: https://antaris-inc.github.io/SatOS-Payload-SDK/.
+This documentation is automatically published here: https://antaris-inc.github.io/SatOS-Payload-SDK/.
 
 If you wish to modify the docs, please submit changes to the source files in `src/`.
 The framework in use is [Sphinx](https://www.sphinx-doc.org/en/master/).
