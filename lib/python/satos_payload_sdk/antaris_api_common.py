@@ -26,7 +26,7 @@ g_PC_GRPC_SERVER_PORT_STR=None
 g_PA_GRPC_SERVER_PORT=None
 g_PA_GRPC_SERVER_PORT_STR =None
 g_SSL_ENABLE=None
-g_KEEPALIVE_ENABLE=None
+g_TRUETWIN_ENABLE=None
 
 def init_vars():
     global g_LISTEN_IP
@@ -36,13 +36,13 @@ def init_vars():
     global g_PA_GRPC_SERVER_PORT
     global g_PA_GRPC_SERVER_PORT_STR
     global g_SSL_ENABLE
-    global g_KEEPALIVE_ENABLE
+    global g_TRUETWIN_ENABLE
 
     g_LISTEN_IP=environment.get_conf(environment.g_LISTEN_IP_CONF_KEY)
     g_PAYLOAD_CONTROLLER_IP=environment.get_conf(environment.g_PC_IP_CONF_KEY)
     g_PAYLOAD_APP_IP=environment.get_conf(environment.g_APP_IP_CONF_KEY)
     g_SSL_ENABLE=environment.get_conf(environment.g_SSL_ENABLE_KEY)
-    g_KEEPALIVE_ENABLE=environment.get_conf(environment.g_KEEPALIVE_ENABLE_KEY)
+    g_TRUETWIN_ENABLE=environment.get_conf(environment.g_TRUETWIN_ENABLE_KEY)
     g_PC_GRPC_SERVER_PORT=environment.get_conf(environment.g_PC_API_PORT_CONF_KEY)
     g_PA_GRPC_SERVER_PORT=environment.get_conf(environment.g_APP_API_PORT_CONF_KEY)
     g_PC_GRPC_SERVER_PORT_STR="{}".format(g_PC_GRPC_SERVER_PORT)

@@ -43,7 +43,7 @@ unsigned int api_debug = 0;
 
 extern char g_SSL_ENABLE;
 
-extern char g_KEEPALIVE_ENABLE;
+extern char g_TRUETWIN_ENABLE;
 
 #define ANTARIS_CALLBACK_GRACE_DELAY    10
 

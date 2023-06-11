@@ -26,6 +26,7 @@ from satos_payload_sdk.gen import antaris_api_pb2
 from satos_payload_sdk.gen import antaris_api_pb2_grpc
 from satos_payload_sdk.gen import antaris_api_types as api_types
 from satos_payload_sdk.gen import antaris_sdk_version as sdk_version
+from satos_payload_sdk import antaris_file_download as file_download
 
 api_debug = 0
 g_shutdown_grace_seconds=5
@@ -143,7 +144,7 @@ def api_pa_pc_create_channel_common(secure, callback_func_list):
     print("Starting server")
     
     server_options = []
-    if api_common.g_KEEPALIVE_ENABLE == '1':
+    if api_common.g_TRUETWIN_ENABLE == '1':
         """
         grpc.keepalive_time_ms: The period (in milliseconds) after which a keepalive ping is
             sent on the transport.
@@ -171,7 +172,7 @@ def api_pa_pc_create_channel_common(secure, callback_func_list):
     if api_common.g_SSL_ENABLE == '0':
         print("Creating insecure channel")
         client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(grpc.insecure_channel(pc_endpoint))
-        if api_common.g_KEEPALIVE_ENABLE == '0':
+        if api_common.g_TRUETWIN_ENABLE == '0':
             server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10))
         else:
             server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10), options=server_options)
@@ -191,7 +192,7 @@ def api_pa_pc_create_channel_common(secure, callback_func_list):
         
         client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(channel)
 
-        if api_common.g_KEEPALIVE_ENABLE == '0':
+        if api_common.g_TRUETWIN_ENABLE == '0':
             server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10))
         else:
             server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10), options=server_options)
@@ -285,6 +286,8 @@ def api_pa_pc_stage_file_download(channel, download_file_params):
     print("api_pa_pc_stage_file_download")
     if (api_debug):
         download_file_params.display()
+    file_stage = file_download.File_Stage(download_file_params, channel.jsfile_data)
+    File_download_status=file_stage.file_download()
     peer_params = api_types.app_to_peer_ReqStageFileDownloadParams(download_file_params)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
     peer_ret = channel.grpc_client_handle.PC_stage_file_download(peer_params , metadata = metadata)
