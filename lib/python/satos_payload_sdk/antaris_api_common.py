@@ -42,7 +42,7 @@ def init_vars():
     g_PAYLOAD_CONTROLLER_IP=environment.get_conf(environment.g_PC_IP_CONF_KEY)
     g_PAYLOAD_APP_IP=environment.get_conf(environment.g_APP_IP_CONF_KEY)
     g_SSL_ENABLE=environment.get_conf(environment.g_SSL_ENABLE_KEY)
-    g_TRUETWIN_ENABLE=environment.get_conf(environment.g_TRUETWIN_ENABLE_KEY)
+    g_TRUETWIN_ENABLE=environment.get_conf(environment.g_TRUETWIN_MODE_KEY)
     g_PC_GRPC_SERVER_PORT=environment.get_conf(environment.g_PC_API_PORT_CONF_KEY)
     g_PA_GRPC_SERVER_PORT=environment.get_conf(environment.g_APP_API_PORT_CONF_KEY)
     g_PC_GRPC_SERVER_PORT_STR="{}".format(g_PC_GRPC_SERVER_PORT)

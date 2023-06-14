@@ -46,7 +46,7 @@ class Controller:
 
     def handle_stage_filedownload(self, ctx):
         logger.info("Staging file for upload")
-        loc = ctx.client.stage_file_download("SampleFile.txt")
+        resp = ctx.client.stage_file_download("SampleFile.txt")
 
 def new():
     ctl = Controller()

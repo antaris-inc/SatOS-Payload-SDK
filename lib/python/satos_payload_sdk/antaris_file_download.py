@@ -13,6 +13,7 @@ g_FTM="FTM"
 g_File_String="File_Conn_Str"
 g_Truetwin_Dir="Truetwin_Dir"
 g_Share_Name="Share_Name"
+g_Outbound_Path_Prefix="/opt/antaris/ourbound/"
 
 class File_Stage():
 
@@ -25,7 +26,7 @@ class File_Stage():
 
     def get_file_size(self):
         try:
-            size = os.path.getsize("/opt/antaris/outbound/" + f"{self.file_name}")
+            size = os.path.getsize( f"{g_Outbound_Path_Prefix}" + f"{self.file_name}")
             return size
         except OSError as e:
             logger.error(f"Failed to get the size of {self.file_name}. Error: {str(e)}")
@@ -34,7 +35,7 @@ class File_Stage():
     def start_upload(self): 
         file_client = ShareFileClient.from_connection_string(conn_str=self.config_data[g_FTM][g_File_String], share_name=self.config_data[g_FTM][g_Share_Name], file_path=self.file_path_remote)
         try:
-            with open("/opt/antaris/outbound/" + f"{self.file_name}", "rb") as source_file:
+            with open(f"{g_Outbound_Path_Prefix}" + f"{self.file_name}", "rb") as source_file:
                 file_client.upload_file(source_file)
             return "Success"
         except Exception as e:
@@ -74,8 +75,7 @@ class File_Stage():
             return "Failure"
         
     def file_download(self):
-        if api_common.g_TRUETWIN_ENABLE == '1':
-            if  self.start_upload() and self.file_check():
-                return True
-            else:
-                return False
+        if  self.start_upload() and self.file_check():
+            return True
+        else:
+            return False

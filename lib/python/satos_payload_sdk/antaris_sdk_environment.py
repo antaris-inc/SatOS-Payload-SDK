@@ -26,11 +26,11 @@ g_APP_IP_CONF_KEY="PAYLOAD_APP_IP"
 g_LISTEN_IP_CONF_KEY="LISTEN_IP"
 g_PC_API_PORT_CONF_KEY="PC_API_PORT"
 g_APP_API_PORT_CONF_KEY="APP_API_PORT"
-g_TRUETWIN_ENABLE_KEY="KEEPALIVE"
+g_TRUETWIN_MODE_KEY="TRUETWIN_MODE"
 
 g_default_values = {    g_PC_IP_CONF_KEY: "127.0.0.1",
                         g_SSL_ENABLE_KEY: "1",                     # SSL is enabled by default
-                        g_TRUETWIN_ENABLE_KEY: "1",               # TrueTwin is enabled by default
+                        g_TRUETWIN_MODE_KEY: "1",               # TrueTwin is enabled by default
                         g_APP_IP_CONF_KEY: "127.0.0.1",
                         g_LISTEN_IP_CONF_KEY: "0.0.0.0",
                         g_PC_API_PORT_CONF_KEY: "50051",
