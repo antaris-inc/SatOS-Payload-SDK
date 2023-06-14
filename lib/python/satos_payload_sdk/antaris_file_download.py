@@ -13,7 +13,7 @@ g_FTM="FTM"
 g_File_String="File_Conn_Str"
 g_Truetwin_Dir="Truetwin_Dir"
 g_Share_Name="Share_Name"
-g_Outbound_Path_Prefix="/opt/antaris/ourbound/"
+g_Outbound_Path_Prefix="/opt/antaris/outbound/"
 
 class File_Stage():
 
