@@ -43,6 +43,9 @@ RUN rm -fr /stage
 
 ENV RUN_SDK_AGENT=1
 
+# Adding azure fileshare module
+RUN python3 -m pip install azure-storage-file-share
+
 # assume if SDK agent is installed that we will need a workspace
 RUN mkdir /workspace
 WORKDIR /workspace
