@@ -49,7 +49,7 @@ using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::Status;
 
-extern char g_KEEPALIVE_ENABLE;
+extern char g_TRUETWIN_ENABLE;
 
 static AntarisReturnCode
 prepare_endpoint_string(std::string &out_string, INT8 *peer_ip_str, UINT16 port);
@@ -559,7 +559,7 @@ PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port, INT8
     if (An_SUCCESS != prepare_endpoint_string(internal_ctx->client_cb_endpoint, peer_ip_str, port)) {
         goto fail_cleanup_ctx;
     }
-    if (g_KEEPALIVE_ENABLE == ENABLED) {
+    if (g_TRUETWIN_ENABLE == ENABLED) {
         // Sample way of setting keepalive arguments on the client channel. Here we
         // are configuring a keepalive time period of 20 seconds, with a timeout of 10
         // seconds. Additionally, pings will be sent even if there are no calls in
@@ -583,13 +583,13 @@ PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port, INT8
         ssl_opts.pem_root_certs=cacert;
 
         auto ssl_creds = grpc::SslCredentials(ssl_opts);
-        if (g_KEEPALIVE_ENABLE == ENABLED) { 
+        if (g_TRUETWIN_ENABLE == ENABLED) { 
             internal_ctx->client_api_handle = new AppToPCClient(grpc::CreateCustomChannel(internal_ctx->client_cb_endpoint, ssl_creds, args));
         } else {
             internal_ctx->client_api_handle = new AppToPCClient(grpc::CreateChannel(internal_ctx->client_cb_endpoint, ssl_creds));
         }
     } else {
-        if (g_KEEPALIVE_ENABLE == ENABLED) {
+        if (g_TRUETWIN_ENABLE == ENABLED) {
             internal_ctx->client_api_handle = new AppToPCClient(grpc::CreateCustomChannel(internal_ctx->client_cb_endpoint, grpc::InsecureChannelCredentials(), args));
         } else {
             internal_ctx->client_api_handle = new AppToPCClient(grpc::CreateChannel(internal_ctx->client_cb_endpoint, grpc::InsecureChannelCredentials()));
