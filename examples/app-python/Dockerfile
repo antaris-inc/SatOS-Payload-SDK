@@ -15,4 +15,5 @@
 FROM quay.io/antaris-inc/satos-payload-app-python:stable as app_image
 
 ADD example_app.py /opt/antaris/app/example_app.py
+ADD example_gpio.py /opt/antaris/app/example_gpio.py
 ADD entrypoint.sh /opt/antaris/app/entrypoint.sh

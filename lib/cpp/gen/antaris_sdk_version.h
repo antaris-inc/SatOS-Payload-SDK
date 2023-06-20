@@ -12,10 +12,10 @@
 #define __ANTARIS_SDK_VERSION_H__
 
 
-#define ANTARIS_SDK_BUILD_USER       "uid=501(bcwaldon) gid=1000(bcwaldon) groups=1000(bcwaldon)"
+#define ANTARIS_SDK_BUILD_USER       "uid=0(root) gid=0(root) groups=0(root)"
 
 
-#define ANTARIS_SDK_BUILD_TIME       "Tue Apr 18 19:29:21 UTC 2023"
+#define ANTARIS_SDK_BUILD_TIME       "Tue Jun 20 11:44:49 UTC 2023"
 
 
 #define ANTARIS_PA_PC_SDK_MAJOR_VERSION             1

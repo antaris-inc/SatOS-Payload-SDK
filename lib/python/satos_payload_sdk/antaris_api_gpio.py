@@ -18,7 +18,8 @@
 
 import time, sys, json
 
-from pylibftdi import BitBangDevice
+from satos_payload_sdk import antaris_api_common as api_common
+import pylibftdi as ftdi
 
 # Define error code
 g_GPIO_ERROR = -1
@@ -26,6 +27,7 @@ g_GPIO_AVAILABLE = 1
 g_SLEEP_TIME_IN_SEC = 1
 g_MASK_BIT_0 = 1
 g_MASK_BYTE = 0xFF
+g_TRUETWIN_FLAG = api_common.g_KEEPALIVE_ENABLE
 
 # Read config info
 jsonfile = open('/opt/antaris/app/config.json', 'r')
@@ -34,7 +36,6 @@ jsonfile = open('/opt/antaris/app/config.json', 'r')
 jsfile_data = json.load(jsonfile)
 
 total_gpio_pins = jsfile_data['IO_Access']['GPIO_PIN_COUNT']
-print("Pin count =", total_gpio_pins)
 
 def verify_gpio_pin(input_pin):
     status = g_GPIO_ERROR
@@ -47,24 +48,36 @@ def verify_gpio_pin(input_pin):
 
 #device specific functions
 # To know device, use python3 -m pylibftdi.examples.list_devices
-Device = BitBangDevice('FT769754')
+DeviceName = ftdi.Driver().list_devices()[0][2]
+Device = ftdi.BitBangDevice(DeviceName)
 
-def api_pa_pc_read_gpio(pin):
-    status = verify_gpio_pin(pin)
-    if status == g_GPIO_ERROR:
-        return g_GPIO_ERROR
+def api_pa_pc_read_gpio(port, pin):
+    # In case of True-twin, no need to check pin configuration in config.json
+    if g_TRUETWIN_FLAG != '1':
+        status = verify_gpio_pin(pin)
+        if status == g_GPIO_ERROR:
+            return g_GPIO_ERROR
+    
+    DeviceName = ftdi.Driver().list_devices()[0][2]
+    Device = ftdi.BitBangDevice(device_id=DeviceName, interface_select=port)
     time.sleep(g_SLEEP_TIME_IN_SEC)
     wr_port = g_MASK_BIT_0 << int(pin)
     wr_port = g_MASK_BYTE ^ wr_port
     out = Device.direction & wr_port
     Device.direction = out
     op = (Device.port >> pin) & g_MASK_BIT_0
+    Device.close()
     return op
 
-def api_pa_pc_write_gpio(pin, value):
-    status = verify_gpio_pin(pin)
-    if status == g_GPIO_ERROR:
-        return g_GPIO_ERROR
+def api_pa_pc_write_gpio(port, pin, value):
+    # In case of True-twin, no need to check pin configuration in config.json
+    if g_TRUETWIN_FLAG != '1':
+        status = verify_gpio_pin(pin)
+        if status == g_GPIO_ERROR:
+            return g_GPIO_ERROR
+
+    DeviceName = ftdi.Driver().list_devices()[0][2]
+    Device = ftdi.BitBangDevice(device_id=DeviceName, interface_select=port)
     time.sleep(g_SLEEP_TIME_IN_SEC)
     wr_port = g_MASK_BIT_0 << int(pin)
     Device.direction = Device.direction | wr_port
@@ -75,27 +88,5 @@ def api_pa_pc_write_gpio(pin, value):
         Device.port = (Device.port | wr_port)
     time.sleep(g_SLEEP_TIME_IN_SEC)
     op = (Device.port >> pin) & g_MASK_BIT_0
+    Device.close()
     return op
-
-
-if __name__ == "__main__":
-    #sample test program
-    val = api_gpio. api_pa_pc_read_gpio(int(sys.argv[1]))
-    if val != g_GPIO_ERROR:
-        print("initial Gpio vaue of  ", int(sys.argv[1])," is", val)
-    else:
-        print("Error in pin no")
-
-
-    val = api_gpio.api_pa_pc_write_gpio(int(sys.argv[2]), int(sys.argv[3]))
-    if val != g_GPIO_ERROR:
-        print("Written successfully")
-    else:
-        print("error in pin no")
-
-
-    val = api_gpio.api_pa_pc_read_gpio(int(sys.argv[1]))
-    if val != g_GPIO_ERROR:
-        print(" Final Gpio vaue of  ", int(sys.argv[1]), " is = ", val)
-    else:
-        print("Error in pin no")

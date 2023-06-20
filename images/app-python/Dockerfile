@@ -24,6 +24,8 @@ FROM shared_app_image as python_app_image
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y python3 python3-pip
 RUN python3 -m pip install --upgrade pip
+RUN apt install -y libftdi1
+RUN pip3 install pyserial
 
 RUN mkdir /stage
 COPY dist/satos_payload_sdk-*.whl /stage
