@@ -48,8 +48,6 @@ def verify_gpio_pin(input_pin):
 
 #device specific functions
 # To know device, use python3 -m pylibftdi.examples.list_devices
-DeviceName = ftdi.Driver().list_devices()[0][2]
-Device = ftdi.BitBangDevice(DeviceName)
 
 def api_pa_pc_read_gpio(port, pin):
     # In case of True-twin, no need to check pin configuration in config.json
