@@ -56,7 +56,15 @@ def api_pa_pc_read_gpio(port, pin):
         if status == g_GPIO_ERROR:
             return g_GPIO_ERROR
     
-    DeviceName = ftdi.Driver().list_devices()[0][2]
+    try:
+        DeviceName = ftdi.Driver().list_devices()[0][2]
+        if not DeviceName:
+            print("FTDI device not connected")
+            return g_GPIO_ERROR 
+    except Exception as e:
+        print("FTDI device not connected")
+        return g_GPIO_ERROR 
+    
     Device = ftdi.BitBangDevice(device_id=DeviceName, interface_select=port)
     time.sleep(g_SLEEP_TIME_IN_SEC)
     wr_port = g_MASK_BIT_0 << int(pin)
@@ -74,7 +82,15 @@ def api_pa_pc_write_gpio(port, pin, value):
         if status == g_GPIO_ERROR:
             return g_GPIO_ERROR
 
-    DeviceName = ftdi.Driver().list_devices()[0][2]
+    try:
+        DeviceName = ftdi.Driver().list_devices()[0][2]
+        if not DeviceName:
+            print("FTDI device not connected")
+            return g_GPIO_ERROR 
+    except Exception as e:
+        print("FTDI device not connected")
+        return g_GPIO_ERROR
+    
     Device = ftdi.BitBangDevice(device_id=DeviceName, interface_select=port)
     time.sleep(g_SLEEP_TIME_IN_SEC)
     wr_port = g_MASK_BIT_0 << int(pin)

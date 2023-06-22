@@ -105,8 +105,8 @@ def new():
     app.mount_sequence("HelloWorld", ctl.handle_hello_world)
     app.mount_sequence("HelloFriend", ctl.handle_hello_friend)
     app.mount_sequence("LogLocation", ctl.handle_log_location)
-    app.mount_sequence("Read_Gpio", ctl.handle_gpio_read)
-    app.mount_sequence("Write_Gpio", ctl.handle_gpio_write)
+    app.mount_sequence("Read_FTDI_Gpio", ctl.handle_gpio_read)
+    app.mount_sequence("Write_FTDI_Gpio", ctl.handle_gpio_write)
     app.mount_sequence("Uart_Loopback", ctl.handle_uart_loopback)
 
     return app

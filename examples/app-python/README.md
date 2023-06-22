@@ -4,7 +4,15 @@ This directory contains an example Payload Application using the Python.
 This is not production-ready code, but it is useful for learning how the platform functions.
 
 This contains following examples:
-	example_app.py = Sample python application with user defined sequences. It also contains sequences for GPIO r/w and Uart Rx/Tx. Note that, both interfaces are connected through FTDI.
+	example_app.py = Sample python application with user defined sequences. Below are the sequences added :-
+		A. HelloWorld = Prints "Hello world" message. 
+		B. HelloFriend = Prints message send by user in parameter
+		C. LogLocation = Prints latitude and longitude
+		D. Read_FTDI_Gpio = Reads level (high/low) of gpio pin.*
+		E. Write_FTDI_Gpio = Write value to gpio pin. The value is send as parameter to sequence.*
+		F. Uart_Loopback = Seuqnce to test Uart loopback. 
+
+	*Note : For Gpio read/write, interfaces are connected through FTDI.
 	
 ## Quickstart
 
