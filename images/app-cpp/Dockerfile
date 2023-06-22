@@ -39,9 +39,6 @@ RUN rm -fr /stage
 
 ENV RUN_SDK_AGENT=1
 
-RUN mkdir -p /opt/antaris/inbound
-RUN mkdir -p /opt/antaris/outbound
-
 # assume if SDK agent is installed that we will need a workspace
 RUN mkdir /workspace
 WORKDIR /workspace
