@@ -4,8 +4,7 @@ This directory contains an example Payload Application using the Python.
 This is not production-ready code, but it is useful for learning how the platform functions.
 
 This contains following examples:
-	example_app.py = Sample python application with user defined sequences
-	example_gpio.py = Sample python application to explain gpio access when gpio's are connected through FTDI.
+	example_app.py = Sample python application with user defined sequences. It also contains sequences for GPIO r/w and Uart Rx/Tx. Note that, both interfaces are connected through FTDI.
 	
 ## Quickstart
 
