@@ -54,7 +54,7 @@ class Controller:
         loc = ctx.client.get_current_location()
         logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude}")
 
-    def handle_get_interface_info(self, ctx):
+    def handle_get_io_details(self, ctx):
         gpio_count = api_gpio.api_pa_pc_total_gpio_pins()
         logger.info("Total gpio pins = %d", gpio_count)
         for i in range(int(gpio_count)):
@@ -62,7 +62,7 @@ class Controller:
             logger.info("Pin %d. Interface = %d", i, pin)
         logger.info("I/O Interface = %s", api_gpio.api_pa_pc_get_io_interface())
 
-    def handle_get_interrupt_pin(self, ctx):
+    def handle_get_intr_pin(self, ctx):
         interrupt_pin = api_gpio.api_pa_pc_get_io_interrupt()
         logger.info("Interrupt pin = %d", interrupt_pin)
 
@@ -114,14 +114,15 @@ def new():
     app = app_framework.PayloadApplication()
     app.set_health_check(ctl.is_healthy)
 
+    # Note : SatOS-Payload-SDK supports sequence upto 16 characters long
     app.mount_sequence("HelloWorld", ctl.handle_hello_world)
     app.mount_sequence("HelloFriend", ctl.handle_hello_friend)
     app.mount_sequence("LogLocation", ctl.handle_log_location)
     app.mount_sequence("Read_FTDI_GPIO", ctl.handle_gpio_read)
     app.mount_sequence("Write_FTDI_GPIO", ctl.handle_gpio_write)
     app.mount_sequence("UART_Loopback", ctl.handle_uart_loopback)
-    app.mount_sequence("Get_Interface_Info", ctl.handle_get_interface_info)
-    app.mount_sequence("Get_Interrupt_Pin", ctl.handle_get_interrupt_pin)
+    app.mount_sequence("Get_IO_Details", ctl.handle_get_io_details)
+    app.mount_sequence("Get_Intr_Pin", ctl.handle_get_intr_pin)
 
     return app
 
