@@ -24,13 +24,13 @@ import serial
 from satos_payload_sdk import app_framework
 from satos_payload_sdk import antaris_api_gpio as api_gpio
 
-# GPIO Pin and Port 
+# Note : Assign proper values of GPIO Pin and Port, as per your hardware interface. 
 g_GPIO_ERROR = -1
-g_GPIO_Port = 1
-g_GPIO_Read_Pin = 6
-g_GPIO_Write_Pin = 7
+g_GPIO_Port = 0
+g_GPIO_Read_Pin = 5
+g_GPIO_Write_Pin = 6
 
-# For serial port testing
+# Note : Assign proper pin numbers for serial port testing, as per your hardware interface.
 g_Uart_Port = '/dev/ttyUSB0'
 g_Uart_Baudrate = 9600
 
@@ -40,11 +40,11 @@ logger = logging.getLogger()
 class Controller:
 
     def is_healthy(self):
-        logger.info("Health check succeeded")
+        logger.info(f"Health check succeeded")
         return True
 
     def handle_hello_world(self, ctx):
-        logger.info("Handling sequence: hello, world!")
+        logger.info(f"Handling sequence: hello, world!")
 
     def handle_hello_friend(self, ctx):
         name = ctx.params
@@ -54,12 +54,24 @@ class Controller:
         loc = ctx.client.get_current_location()
         logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude}")
 
+    def handle_get_interface_info(self, ctx):
+        gpio_count = api_gpio.api_pa_pc_total_gpio_pins()
+        logger.info(f"Total gpio pins = %d", gpio_count)
+        for i in range(int(gpio_count)):
+            pin = api_gpio.api_pa_pc_get_gpio_pins_number(i)
+            logger.info(f"Pin %d. Interface = %d", i, pin)
+        logger.info(f"I/O Interface = %s", api_gpio.api_pa_pc_get_io_interface())
+
+    def handle_get_interrupt_pin(self, ctx):
+        interrupt_pin = api_gpio.api_pa_pc_get_io_interrupt()
+        logger.info(f"Interrupt pin = %d", interrupt_pin)
+
     def handle_gpio_read(self, ctx):
         val = api_gpio.api_pa_pc_read_gpio(g_GPIO_Port, g_GPIO_Read_Pin)
         if val != g_GPIO_ERROR:
-            print("Initial Gpio value of pin no ", g_GPIO_Read_Pin," is", val)
+            logger.info(f"Initial Gpio value of pin no %d is %d ", g_GPIO_Read_Pin, val)
         else:
-            print("Error in pin no ", g_GPIO_Read_Pin)
+            logger.info(f"Error in pin no %d", g_GPIO_Read_Pin)
 
     def handle_gpio_write(self, ctx):
         pin_value = int(ctx.params)
@@ -71,26 +83,26 @@ class Controller:
             pin_value = 0
         val = api_gpio.api_pa_pc_write_gpio(g_GPIO_Port, g_GPIO_Write_Pin, pin_value)
         if val != g_GPIO_ERROR:
-            print("Written ", pin_value, " successfully to pin no ", g_GPIO_Write_Pin)
+            logger.info(f"Written %d successfully to pin no %d", pin_value, g_GPIO_Write_Pin)
         else:
-            print("error in pin no ", g_GPIO_Write_Pin)
+            logger.info(f"error in pin no %d ", g_GPIO_Write_Pin)
 
     def handle_uart_loopback(self, ctx):
         data = ctx.params
         if data == "":
-            print("Using default string, as input string is empty")
+            logger.info(f"Using default string, as input string is empty")
             data = "Default string: Uart Tested working"
 
         data = data + "\n"
         ser = serial.Serial(g_Uart_Port, g_Uart_Baudrate)  # Replace '/dev/ttyUSB0' with your serial port and '9600' with your baud rate
-        print("writing data")
+        logger.info(f"writing data")
         # Write data to the serial port
         ser.write(data.encode('utf-8'))  # Send the data as bytes
 
-        print("Reading data")
+        logger.info(f"Reading data")
         # Read data from the serial port
         read_data = ser.readline()
-        print("Data =  ", read_data)
+        logger.info(f"Data =  %s", read_data)
 
         # Close the serial port
         ser.close()
@@ -105,9 +117,11 @@ def new():
     app.mount_sequence("HelloWorld", ctl.handle_hello_world)
     app.mount_sequence("HelloFriend", ctl.handle_hello_friend)
     app.mount_sequence("LogLocation", ctl.handle_log_location)
-    app.mount_sequence("Read_FTDI_Gpio", ctl.handle_gpio_read)
-    app.mount_sequence("Write_FTDI_Gpio", ctl.handle_gpio_write)
-    app.mount_sequence("Uart_Loopback", ctl.handle_uart_loopback)
+    app.mount_sequence("Read_FTDI_GPIO", ctl.handle_gpio_read)
+    app.mount_sequence("Write_FTDI_GPIO", ctl.handle_gpio_write)
+    app.mount_sequence("UART_Loopback", ctl.handle_uart_loopback)
+    app.mount_sequence("Get_Interface_Info", ctl.handle_get_interface_info)
+    app.mount_sequence("Get_Interrupt_Pin", ctl.handle_get_interrupt_pin)
 
     return app
 

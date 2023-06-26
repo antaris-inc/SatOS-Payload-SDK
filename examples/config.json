@@ -16,7 +16,7 @@
 	"GPIO_PIN_0": "5",
 	"GPIO_PIN_1": "6",
 	"GPIO_Interrupt": "0",
-	"UART_Access_Path": "/dev/ttyUSB1"
+	"Interface_Access_Path": "/dev/ttyUSB1"
     },
     "Network" : {
         "Bridge_Name": "br21",

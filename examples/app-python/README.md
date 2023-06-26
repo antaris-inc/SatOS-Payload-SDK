@@ -3,17 +3,6 @@
 This directory contains an example Payload Application using the Python.
 This is not production-ready code, but it is useful for learning how the platform functions.
 
-This contains following examples:
-	example_app.py = Sample python application with user defined sequences. Below are the sequences added :-
-		A. HelloWorld = Prints "Hello world" message. 
-		B. HelloFriend = Prints message send by user in parameter
-		C. LogLocation = Prints latitude and longitude
-		D. Read_FTDI_Gpio = Reads level (high/low) of gpio pin.*
-		E. Write_FTDI_Gpio = Write value to gpio pin. The value is send as parameter to sequence.*
-		F. Uart_Loopback = Seuqnce to test Uart loopback. 
-
-	*Note : For Gpio read/write, interfaces are connected through FTDI.
-	
 ## Quickstart
 
 # Building sample application
@@ -34,25 +23,10 @@ export $CONFIG=<zip file name>
 ```
 
 # Running sample application
-
-A. Sample application without any hardware interface
+To run sample application, simply do:
 ```
 docker run --platform=linux/amd64 -e CONFIG=$CONFIG -v $(pwd):/workspace -it satos-payload-example-app-python 
 ```
-
-B. Sample application with GPIO access
-   To support GPIO, docker should be run in privileged mode.
-```
-docker run --platform=linux/amd64 -e CONFIG=$CONFIG --privileged -v $(pwd):/workspace -it satos-payload-example-app-python
-```
-
-C. Sample application with USB/UART etc. interface access
-	To access USB/UART/PCI etc. interfaces, they should be mapped inside docker.
-```
-docker run --platform=linux/amd64 -e CONFIG=$CONFIG --device=/dev/<interface>:/dev/<interface> -v $(pwd):/workspace -it satos-payload-example-app-python /bin/bash
-```
-e.g.
-	docker run --platform=linux/amd64 -e CONFIG=$CONFIG --device=/dev/ttyUSB0:/dev/ttyUSB0 -v $(pwd):/workspace -it satos-payload-example-app-python /bin/bash
 
 # Testing sample application
 You may now use the Antaris Cloud Platform to submit payload sequences. For example, submit a `HelloWorld` payload with
@@ -62,6 +36,40 @@ The sequences supported by the example are described below:
 * `HelloWorld`: takes no parameters and simply logs "hello, world!"
 * `HelloFriend`: accepts parameter, logging "hello, <parameter>!"
 * `LogLocation`: queries the current satellite location and logs it
+
+## Working with I/O interface
+
+# Configuring GPIO in application
+The sample program supports GPIO read/write connected through FTDI interface.
+Assign right GPIO pin numbers in example_app.py.
+Kindly note that, GPIO pins used in application are same as pins declared while adding Payload in ACP.
+
+# Configuring UART in application
+Assign right UART port numbers in example_app.py. 
+Kindly note that, in case of UART testing, Tx and Rx are expected to be connected in loopback mode.
+
+# Building sample application with I/O interface 
+Build the app using the following command:
+
+```
+docker build --platform=linux/amd64 -t satos-payload-example-app-python .
+```
+
+# Running sample application with I/O interface
+ To support I/O interface, docker should be run in privileged mode.
+
+```
+docker run --platform=linux/amd64 -e CONFIG=$CONFIG --privileged -v $(pwd):/workspace -it satos-payload-example-app-python
+```
+
+# Testing I/O interface
+You may now use the Antaris Cloud Platform to submit payload sequences. 
+
+The sequences supported by the example are described below:
+* `Read_FTDI_GPIO` : Reads level (high/low) of GPIO pin connected through FTDI interface.
+* `Write_FTDI_GPIO` : Write <parameter> to GPIO pin connected thrugh FTDI interface. The <parameter> can be `1`(high) or '0' (low)
+* `UART_Loopback` : Sequence to test UART loopback.
+* `Get_Interface_Info` : Gives details of interface declared in config.json file 
 
 ## Running Tests
 

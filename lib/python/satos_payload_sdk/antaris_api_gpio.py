@@ -18,7 +18,6 @@
 
 import time, sys, json
 
-from satos_payload_sdk import antaris_api_common as api_common
 import pylibftdi as ftdi
 
 # Define error code
@@ -27,7 +26,6 @@ g_GPIO_AVAILABLE = 1
 g_SLEEP_TIME_IN_SEC = 1
 g_MASK_BIT_0 = 1
 g_MASK_BYTE = 0xFF
-g_TRUETWIN_FLAG = api_common.g_KEEPALIVE_ENABLE
 
 # Read config info
 jsonfile = open('/opt/antaris/app/config.json', 'r')
@@ -46,15 +44,26 @@ def verify_gpio_pin(input_pin):
             status = g_GPIO_AVAILABLE
     return status
 
-#device specific functions
-# To know device, use python3 -m pylibftdi.examples.list_devices
+def api_pa_pc_total_gpio_pins():
+    return total_gpio_pins
+
+def api_pa_pc_get_gpio_pins_number(index):
+    key = 'GPIO_PIN_'+str(index)
+    value = jsfile_data['IO_Access'][key]
+    return value
+
+def api_pa_pc_get_io_interface():
+    value = jsfile_data['IO_Access']["Interface_Access_Path"]
+    return value
+
+def api_pa_pc_get_io_interrupt():
+    value = jsfile_data['IO_Access']["GPIO_Interrupt"]
+    return value
 
 def api_pa_pc_read_gpio(port, pin):
-    # In case of True-twin, no need to check pin configuration in config.json
-    if g_TRUETWIN_FLAG != '1':
-        status = verify_gpio_pin(pin)
-        if status == g_GPIO_ERROR:
-            return g_GPIO_ERROR
+    status = verify_gpio_pin(pin)
+    if status == g_GPIO_ERROR:
+        return g_GPIO_ERROR
     
     try:
         DeviceName = ftdi.Driver().list_devices()[0][2]
@@ -76,11 +85,9 @@ def api_pa_pc_read_gpio(port, pin):
     return op
 
 def api_pa_pc_write_gpio(port, pin, value):
-    # In case of True-twin, no need to check pin configuration in config.json
-    if g_TRUETWIN_FLAG != '1':
-        status = verify_gpio_pin(pin)
-        if status == g_GPIO_ERROR:
-            return g_GPIO_ERROR
+    status = verify_gpio_pin(pin)
+    if status == g_GPIO_ERROR:
+        return g_GPIO_ERROR
 
     try:
         DeviceName = ftdi.Driver().list_devices()[0][2]
