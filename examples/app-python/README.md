@@ -42,10 +42,10 @@ The sequences supported by the example are described below:
 # Configuring GPIO in application
 The sample program supports GPIO connected through FTDI interface.
 To configure GPIO, assign right GPIO pin numbers in example_app.py.
-Kindly note that, GPIO pins used in application are same as pins declared while adding Payload in ACP.
+Kindly note that, GPIO pins used in application must be same as pins declared while adding Payload in ACP.
 
 # Configuring UART in application
-Assign right UART port number (e.g. /dev/ttyUSB0 etc.) in example_app.py. Assign expected Baud rate. Default Baud rate is 9600.
+Assign right UART port number (e.g. /dev/ttyUSB0 etc.) in example_app.py. Assign expected Baud rate in example_app.py. Default Baud rate is 9600.
 Kindly note that, sample program assumes that, Tx and Rx are connected in loopback mode.
 
 # Building sample application with I/O interface 
@@ -69,7 +69,8 @@ The sequences supported by the example are described below:
 * `Read_FTDI_GPIO` : Reads level (high/low) of GPIO pin connected through FTDI interface.
 * `Write_FTDI_GPIO` : Write <parameter> to GPIO pin connected thrugh FTDI interface. The <parameter> can be `1`(high) or '0' (low)
 * `UART_Loopback` : Sequence to test UART loopback.
-* `Get_Interface_Info` : Gives details of interface declared in config.json file 
+* `Get_IO_Details` : Gives details of interface declared in config.json file 
+* `Get_Intr_Pin` : Gives pin number of Interrupt pin.
 
 ## Running Tests
 
