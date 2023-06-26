@@ -56,7 +56,7 @@ class Controller:
 
     def handle_get_interface_info(self, ctx):
         gpio_count = api_gpio.api_pa_pc_total_gpio_pins()
-        logger.info(f"Total gpio pins = %d", gpio_count)
+        logger.info("Total gpio pins = %d", gpio_count)
         for i in range(int(gpio_count)):
             pin = api_gpio.api_pa_pc_get_gpio_pins_number(i)
             logger.info("Pin %d. Interface = %d", i, pin)
