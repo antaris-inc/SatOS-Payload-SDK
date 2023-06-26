@@ -40,11 +40,11 @@ logger = logging.getLogger()
 class Controller:
 
     def is_healthy(self):
-        logger.info(f"Health check succeeded")
+        logger.info("Health check succeeded")
         return True
 
     def handle_hello_world(self, ctx):
-        logger.info(f"Handling sequence: hello, world!")
+        logger.info("Handling sequence: hello, world!")
 
     def handle_hello_friend(self, ctx):
         name = ctx.params
@@ -59,19 +59,19 @@ class Controller:
         logger.info(f"Total gpio pins = %d", gpio_count)
         for i in range(int(gpio_count)):
             pin = api_gpio.api_pa_pc_get_gpio_pins_number(i)
-            logger.info(f"Pin %d. Interface = %d", i, pin)
-        logger.info(f"I/O Interface = %s", api_gpio.api_pa_pc_get_io_interface())
+            logger.info("Pin %d. Interface = %d", i, pin)
+        logger.info("I/O Interface = %s", api_gpio.api_pa_pc_get_io_interface())
 
     def handle_get_interrupt_pin(self, ctx):
         interrupt_pin = api_gpio.api_pa_pc_get_io_interrupt()
-        logger.info(f"Interrupt pin = %d", interrupt_pin)
+        logger.info("Interrupt pin = %d", interrupt_pin)
 
     def handle_gpio_read(self, ctx):
         val = api_gpio.api_pa_pc_read_gpio(g_GPIO_Port, g_GPIO_Read_Pin)
         if val != g_GPIO_ERROR:
-            logger.info(f"Initial Gpio value of pin no %d is %d ", g_GPIO_Read_Pin, val)
+            logger.info("Initial Gpio value of pin no %d is %d ", g_GPIO_Read_Pin, val)
         else:
-            logger.info(f"Error in pin no %d", g_GPIO_Read_Pin)
+            logger.info("Error in pin no %d", g_GPIO_Read_Pin)
 
     def handle_gpio_write(self, ctx):
         pin_value = int(ctx.params)
@@ -83,14 +83,14 @@ class Controller:
             pin_value = 0
         val = api_gpio.api_pa_pc_write_gpio(g_GPIO_Port, g_GPIO_Write_Pin, pin_value)
         if val != g_GPIO_ERROR:
-            logger.info(f"Written %d successfully to pin no %d", pin_value, g_GPIO_Write_Pin)
+            logger.info("Written %d successfully to pin no %d", pin_value, g_GPIO_Write_Pin)
         else:
-            logger.info(f"error in pin no %d ", g_GPIO_Write_Pin)
+            logger.info("error in pin no %d ", g_GPIO_Write_Pin)
 
     def handle_uart_loopback(self, ctx):
         data = ctx.params
         if data == "":
-            logger.info(f"Using default string, as input string is empty")
+            logger.info("Using default string, as input string is empty")
             data = "Default string: Uart Tested working"
 
         data = data + "\n"
@@ -99,10 +99,10 @@ class Controller:
         # Write data to the serial port
         ser.write(data.encode('utf-8'))  # Send the data as bytes
 
-        logger.info(f"Reading data")
+        logger.info("Reading data")
         # Read data from the serial port
         read_data = ser.readline()
-        logger.info(f"Data =  %s", read_data)
+        logger.info("Data =  %s", read_data)
 
         # Close the serial port
         ser.close()
