@@ -40,13 +40,13 @@ The sequences supported by the example are described below:
 ## Working with I/O interface
 
 # Configuring GPIO in application
-The sample program supports GPIO read/write connected through FTDI interface.
-Assign right GPIO pin numbers in example_app.py.
+The sample program supports GPIO connected through FTDI interface.
+To configure GPIO, assign right GPIO pin numbers in example_app.py.
 Kindly note that, GPIO pins used in application are same as pins declared while adding Payload in ACP.
 
 # Configuring UART in application
-Assign right UART port numbers in example_app.py. 
-Kindly note that, in case of UART testing, Tx and Rx are expected to be connected in loopback mode.
+Assign right UART port number (e.g. /dev/ttyUSB0 etc.) in example_app.py. 
+Kindly note that, sample program assumes that, Tx and Rx are connected in loopback mode.
 
 # Building sample application with I/O interface 
 Build the app using the following command:
