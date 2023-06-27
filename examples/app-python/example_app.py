@@ -118,11 +118,11 @@ def new():
     app.mount_sequence("HelloWorld", ctl.handle_hello_world)
     app.mount_sequence("HelloFriend", ctl.handle_hello_friend)
     app.mount_sequence("LogLocation", ctl.handle_log_location)
-    app.mount_sequence("Read_FTDI_GPIO", ctl.handle_gpio_read)
-    app.mount_sequence("Write_FTDI_GPIO", ctl.handle_gpio_write)
-    app.mount_sequence("UART_Loopback", ctl.handle_uart_loopback)
-    app.mount_sequence("Get_IO_Details", ctl.handle_get_io_details)
-    app.mount_sequence("Get_Intr_Pin", ctl.handle_get_intr_pin)
+    app.mount_sequence("FTDIReadGPIO", ctl.handle_gpio_read)
+    app.mount_sequence("FTDIWriteGPIO", ctl.handle_gpio_write)
+    app.mount_sequence("UARTLoopback", ctl.handle_uart_loopback)
+    app.mount_sequence("GetIODetails", ctl.handle_get_io_details)
+    app.mount_sequence("GetInterruptPin", ctl.handle_get_intr_pin)
 
     return app
 
