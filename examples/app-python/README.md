@@ -37,32 +37,32 @@ The sequences supported by the example are described below:
 * `HelloFriend`: accepts parameter, logging "hello, <parameter>!"
 * `LogLocation`: queries the current satellite location and logs it
 
-# Working with I/O interface
+## Working with I/O interface
 
-## Configuring GPIO in application
+### Configuring GPIO in application
 The sample program supports GPIO connected through FTDI interface.
 To configure GPIO, assign right GPIO pin numbers in example_app.py.
 Kindly note that, GPIO pins used in application must be same as pins declared while adding Payload in ACP.
 
-## Configuring UART in application
+### Configuring UART in application
 Assign right UART port number (e.g. /dev/ttyUSB0 etc.) in example_app.py. Assign expected Baud rate in example_app.py. Default Baud rate is 9600.
 Kindly note that, sample program assumes that, Tx and Rx are connected in loopback mode.
 
-## Building sample application with I/O interface 
+### Building sample application with I/O interface 
 Build the app using the following command:
 
 ```
 docker build --platform=linux/amd64 -t satos-payload-example-app-python .
 ```
 
-## Running sample application with I/O interface
+### Running sample application with I/O interface
  To support I/O interface, docker should be run in privileged mode.
 
 ```
 docker run --platform=linux/amd64 -e CONFIG=$CONFIG --privileged -v $(pwd):/workspace -it satos-payload-example-app-python
 ```
 
-## Testing I/O interface
+### Testing I/O interface
 You may now use the Antaris Cloud Platform to submit payload sequences. 
 
 The sequences supported by the example are described below:
