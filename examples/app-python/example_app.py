@@ -24,18 +24,10 @@ import serial
 from satos_payload_sdk import app_framework
 from satos_payload_sdk import antaris_api_gpio as api_gpio
 
-# Note : Assign proper values of GPIO Pin and Port, as per your hardware interface. 
 g_GPIO_ERROR = -1
-g_GPIO_Port = 0
-g_GPIO_Read_Pin = 5
-g_GPIO_Write_Pin = 6
-
-# Note : Assign proper pin numbers for serial port testing, as per your hardware interface.
-g_Uart_Port = '/dev/ttyUSB0'
 g_Uart_Baudrate = 9600
 
 logger = logging.getLogger()
-
 
 class Controller:
 
@@ -54,38 +46,44 @@ class Controller:
         loc = ctx.client.get_current_location()
         logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude}")
 
-    def handle_get_io_details(self, ctx):
+    def handle_test_gpio(self, ctx):
         gpio_count = api_gpio.api_pa_pc_total_gpio_pins()
-        logger.info("Total gpio pins = %d", gpio_count)
-        for i in range(int(gpio_count)):
-            pin = api_gpio.api_pa_pc_get_gpio_pins_number(i)
-            logger.info("Pin %d. Interface = %d", i, pin)
-        logger.info("I/O Interface = %s", api_gpio.api_pa_pc_get_io_interface())
+        logger.info("Total gpio pins = %d", int(gpio_count))
+        gpio_port = api_gpio.api_pa_pc_get_gpio_port()
+        logger.info("Port number = %d", int(gpio_port))
+        i = 0
+        while (i < int(gpio_count)):
+            # Get read and write pin numbers from coniguration
+            readPin = api_gpio.api_pa_pc_get_gpio_pins_number(i)
+            i += 1
+            writePin = api_gpio.api_pa_pc_get_gpio_pins_number(i)
+            
+            # Read level of Read pin
+            val = api_gpio.api_pa_pc_read_gpio(gpio_port, readPin)
+            if val != g_GPIO_ERROR:
+                logger.info("Initial Gpio value of pin no %d is %d ", int(readPin), val)
+            else:
+                logger.info("Error in pin no %d", int(readPin))
+            
+            # Toggle the value
+            val = val ^ 1
+            logger.info("Writing %d to pin no. %d", val, int(writePin))
 
-    def handle_get_intr_pin(self, ctx):
-        interrupt_pin = api_gpio.api_pa_pc_get_io_interrupt()
-        logger.info("Interrupt pin = %d", interrupt_pin)
-
-    def handle_gpio_read(self, ctx):
-        val = api_gpio.api_pa_pc_read_gpio(g_GPIO_Port, g_GPIO_Read_Pin)
-        if val != g_GPIO_ERROR:
-            logger.info("Initial Gpio value of pin no %d is %d ", g_GPIO_Read_Pin, val)
-        else:
-            logger.info("Error in pin no %d", g_GPIO_Read_Pin)
-
-    def handle_gpio_write(self, ctx):
-        pin_value = int(ctx.params)
-        # All values greater than 0 are considered high
-        if pin_value > 0:
-            pin_value = 1
-        # All values less than 0 are considered low
-        if pin_value < 0:
-            pin_value = 0
-        val = api_gpio.api_pa_pc_write_gpio(g_GPIO_Port, g_GPIO_Write_Pin, pin_value)
-        if val != g_GPIO_ERROR:
-            logger.info("Written %d successfully to pin no %d", pin_value, g_GPIO_Write_Pin)
-        else:
-            logger.info("error in pin no %d ", g_GPIO_Write_Pin)
+            # Writing value to WritePin.
+            val = api_gpio.api_pa_pc_write_gpio(gpio_port, writePin, val)
+            if val != g_GPIO_ERROR:
+                logger.info("Written %d successfully to pin no %d", val, int(writePin))
+            else:
+                logger.info("error in pin no %d ", int(writePin))
+            
+            # As Read and Write pins are back-to-back connected, 
+            # Reading value of Read pin to confirm GPIO success/failure
+            val = api_gpio.api_pa_pc_read_gpio(gpio_port, readPin)
+            if val != g_GPIO_ERROR:
+                logger.info("Final Gpio value of pin no %d is %d ", int(readPin), val)
+            else:
+                logger.info("Error in pin no %d", int(readPin))
+            i += 1
 
     def handle_uart_loopback(self, ctx):
         data = ctx.params
@@ -94,7 +92,8 @@ class Controller:
             data = "Default string: Uart Tested working"
 
         data = data + "\n"
-        ser = serial.Serial(g_Uart_Port, g_Uart_Baudrate)  # Replace '/dev/ttyUSB0' with your serial port and '9600' with your baud rate
+        uartPort = api_gpio.api_pa_pc_get_io_interface()
+        ser = serial.Serial(uartPort, g_Uart_Baudrate)  # Replace '/dev/ttyUSB0' with your serial port and '9600' with your baud rate
         logger.info(f"writing data")
         # Write data to the serial port
         ser.write(data.encode('utf-8'))  # Send the data as bytes
@@ -118,11 +117,8 @@ def new():
     app.mount_sequence("HelloWorld", ctl.handle_hello_world)
     app.mount_sequence("HelloFriend", ctl.handle_hello_friend)
     app.mount_sequence("LogLocation", ctl.handle_log_location)
-    app.mount_sequence("FTDIReadGPIO", ctl.handle_gpio_read)
-    app.mount_sequence("FTDIWriteGPIO", ctl.handle_gpio_write)
+    app.mount_sequence("TestGPIO", ctl.handle_test_gpio)
     app.mount_sequence("UARTLoopback", ctl.handle_uart_loopback)
-    app.mount_sequence("GetIODetails", ctl.handle_get_io_details)
-    app.mount_sequence("GetInterruptPin", ctl.handle_get_intr_pin)
 
     return app
 
