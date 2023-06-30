@@ -31,16 +31,14 @@ The sequences supported by the example are described below:
 ### Configuring I/O interface
 
 #### GPIO
-The sample program supports GPIO connected through FTDI interface.
-GPIO pins and port should be configured while adding Payload hardware in ACP.
+The required GPIO pin and port should be provided by user while adding payload hardware in ACP. The same is exposed to application inside cointainer through SatOS_Payload_SDK api's. 
 
 #### UART
-UART path (e.g. /dev/ttyUSB0 etc.) should be added while  adding Payload hardware in ACP.
-Expected Baud rate can be configured in example_app.py. Default Baud rate is 9600.
+The required UART path (e.g. /dev/ttyUSB0 etc.) should be provided by user while adding Payload hardware in ACP. The same is exposed to application inside cointainer. Expected Baud rate can be configured in example_app.py. Default Baud rate is 9600.
 
 The sequences supported by the example for testing IO are described below:
 * `TestGPIO` : The sample program assumes 2 GPIO pins are connected back-to-back. This sequence toggles level of 'Write Pin' and then reads level of 'Read Pin'. 
-* `UARTLoopback` : Sequence to test UART loopback.The sample program assumes Tx and Rx are connected in loopback mode.
+* `UARTLoopback` : Sequence to test UART loopback. The sample program assumes Tx and Rx are connected in loopback mode.
 
 ## Running Tests
 
