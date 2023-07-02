@@ -93,7 +93,12 @@ class Controller:
 
         data = data + "\n"
         uartPort = api_gpio.api_pa_pc_get_io_interface()
-        ser = serial.Serial(uartPort, g_Uart_Baudrate)  # Replace '/dev/ttyUSB0' with your serial port and '9600' with your baud rate
+        try: 
+            ser = serial.Serial(uartPort, g_Uart_Baudrate)  # Replace '9600' with your baud rate
+        except Exception as e:
+            print("Error in opening serial port")
+            return
+        
         logger.info(f"writing data")
         # Write data to the serial port
         ser.write(data.encode('utf-8'))  # Send the data as bytes

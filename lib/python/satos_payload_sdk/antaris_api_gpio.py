@@ -20,6 +20,16 @@ import time, sys, json
 
 import pylibftdi as ftdi
 
+g_JSON_Key_IO_Access = "IO_Access"
+g_JSON_Key_GPIO = "GPIO"
+g_JSON_Key_Adapter_Type = "ADAPTER_TYPE"
+g_JSON_Key_GPIO_Pin_Count = "GPIO_PIN_COUNT"
+g_JSON_Key_GPIO_Port = "GPIO_Port"
+g_JSON_Key_GPIO_Pin = "GPIO_PIN_"
+g_JSON_Key_UART = "UART"
+g_JSON_Key_Device_Path = "Device_Path"
+g_JSON_Key_Interrupt_Pin = "GPIO_Interrupt"
+
 # Define error code
 g_GPIO_ERROR = -1
 g_GPIO_AVAILABLE = 1
@@ -33,13 +43,13 @@ jsonfile = open('/opt/antaris/app/config.json', 'r')
 # returns JSON object as a dictionary
 jsfile_data = json.load(jsonfile)
 
-total_gpio_pins = jsfile_data['IO_Access']['GPIO_PIN_COUNT']
+total_gpio_pins = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_GPIO_Pin_Count]
 
 def verify_gpio_pin(input_pin):
     status = g_GPIO_ERROR
     for i in range(int(total_gpio_pins)):
-        key = 'GPIO_PIN_'+str(i)
-        value = jsfile_data['IO_Access'][key]
+        key = g_JSON_Key_GPIO_Pin+str(i)
+        value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][key]
         if int(input_pin) == int(value):
             status = g_GPIO_AVAILABLE
     return status
@@ -47,22 +57,32 @@ def verify_gpio_pin(input_pin):
 def api_pa_pc_total_gpio_pins():
     return total_gpio_pins
 
+def api_pa_pc_get_gpio_port():
+    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_GPIO_Port]
+    return value
+
 def api_pa_pc_get_gpio_pins_number(index):
-    key = 'GPIO_PIN_'+str(index)
-    value = jsfile_data['IO_Access'][key]
+    key = g_JSON_Key_GPIO_Pin+str(index)
+    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][key]
     return value
 
 def api_pa_pc_get_io_interface():
-    value = jsfile_data['IO_Access']["Interface_Access_Path"]
+    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_UART][g_JSON_Key_Device_Path]
     return value
 
 def api_pa_pc_get_io_interrupt():
-    value = jsfile_data['IO_Access']["GPIO_Interrupt"]
+    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_Interrupt_Pin]
     return value
 
 def api_pa_pc_read_gpio(port, pin):
     status = verify_gpio_pin(pin)
     if status == g_GPIO_ERROR:
+        return g_GPIO_ERROR
+    
+    adapter_type = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_Adapter_Type]
+
+    if adapter_type != "FTDI":
+        print("Only FTDI devices are supported")
         return g_GPIO_ERROR
     
     try:
@@ -89,6 +109,12 @@ def api_pa_pc_write_gpio(port, pin, value):
     if status == g_GPIO_ERROR:
         return g_GPIO_ERROR
 
+    adapter_type = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_Adapter_Type]
+
+    if adapter_type != "FTDI":
+        print("Only FTDI devices are supported")
+        return g_GPIO_ERROR
+    
     try:
         DeviceName = ftdi.Driver().list_devices()[0][2]
         if not DeviceName:

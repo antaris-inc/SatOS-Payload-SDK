@@ -11,19 +11,24 @@
         "vcpu": "1",
         "RAM": "1024 MB"
     },
-    "IO_Access" : {
-	"GPIO_PIN_COUNT": "2",
-	"GPIO_Port" : "0",
-	"GPIO_PIN_0": "5",
-	"GPIO_PIN_1": "6",
-	"GPIO_Interrupt": "0",
-	"Interface_Access_Path": "/dev/ttyUSB1"
+    "IO_Access": {
+    "GPIO": {
+      "ADAPTER_TYPE" : "FTDI",
+      "GPIO_PIN_COUNT": "2",
+      "GPIO_Port" : "0",
+      "GPIO_PIN_0": "5",
+      "GPIO_PIN_1": "6",
+      "GPIO_Interrupt": "0"
     },
+    "UART": {
+      "Device_Path": "/dev/ttyUSB1"
+    }
+  },
     "Network" : {
         "Bridge_Name": "br21",
         "MAC": "52:54:00:59:ce:01",
         "VM_IP_Address": "192.168.40.101",
-	"Payload_Hardware_IP_Address": "192.168.40.102",
+        "Payload_Hardware_IP_Address": "192.168.40.102",
         "Payload_Controller_IP_Address": "192.168.40.1",
         "NTP_Server_IP_Address" : "192.168.40.1"
     },
@@ -39,8 +44,8 @@
     },
     "cookie" : "xxxx|xxxx|xxxx|xxxx|",
     "Proxy" : {
-	"Run_Proxy" : "1",
-	"Proxy_IP" : "127.0.0.1",
-	"Proxy_Port" : "1051"
+        "Run_Proxy" : "1",
+        "Proxy_IP" : "127.0.0.1",
+        "Proxy_Port" : "1051"
     }
 }
