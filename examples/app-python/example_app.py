@@ -59,7 +59,7 @@ class Controller:
             writePin = api_gpio.api_pa_pc_get_gpio_pins_number(i)
             
             # Read level of Read pin
-            val = api_gpio.api_pa_pc_read_gpio(gpio_port, readPin)
+            val = api_gpio.api_pa_pc_read_gpio(int(gpio_port), int(readPin))
             if val != g_GPIO_ERROR:
                 logger.info("Initial Gpio value of pin no %d is %d ", int(readPin), val)
             else:
@@ -70,7 +70,7 @@ class Controller:
             logger.info("Writing %d to pin no. %d", val, int(writePin))
 
             # Writing value to WritePin.
-            val = api_gpio.api_pa_pc_write_gpio(gpio_port, writePin, val)
+            val = api_gpio.api_pa_pc_write_gpio(int(gpio_port), int(writePin), val)
             if val != g_GPIO_ERROR:
                 logger.info("Written %d successfully to pin no %d", val, int(writePin))
             else:
@@ -78,7 +78,7 @@ class Controller:
             
             # As Read and Write pins are back-to-back connected, 
             # Reading value of Read pin to confirm GPIO success/failure
-            val = api_gpio.api_pa_pc_read_gpio(gpio_port, readPin)
+            val = api_gpio.api_pa_pc_read_gpio(int(gpio_port), int(readPin))
             if val != g_GPIO_ERROR:
                 logger.info("Final Gpio value of pin no %d is %d ", int(readPin), val)
             else:
