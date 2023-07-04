@@ -86,7 +86,7 @@ def api_pa_pc_read_gpio(port, pin):
         return g_GPIO_ERROR
     
     try:
-        DeviceName = ftdi.Driver().list_devices()[0][2]
+        DeviceName = ftdi.Driver().list_devices()[0][2]  # Assumptioon: single FTDI device connected.
         if not DeviceName:
             print("FTDI device not connected")
             return g_GPIO_ERROR 
@@ -116,7 +116,7 @@ def api_pa_pc_write_gpio(port, pin, value):
         return g_GPIO_ERROR
     
     try:
-        DeviceName = ftdi.Driver().list_devices()[0][2]
+        DeviceName = ftdi.Driver().list_devices()[0][2] # Assumption : Single FTDI device connected.
         if not DeviceName:
             print("FTDI device not connected")
             return g_GPIO_ERROR 
