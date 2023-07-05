@@ -37,25 +37,29 @@ g_SLEEP_TIME_IN_SEC = 1
 g_MASK_BIT_0 = 1
 g_MASK_BYTE = 0xFF
 
+g_total_gpio_pins = -1
+
 # Read config info
 jsonfile = open('/opt/antaris/app/config.json', 'r')
 
 # returns JSON object as a dictionary
 jsfile_data = json.load(jsonfile)
 
-total_gpio_pins = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_GPIO_Pin_Count]
+def api_pa_pc_total_gpio_pins():
+    g_total_gpio_pins = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_GPIO_Pin_Count]
+    return g_total_gpio_pins
 
 def verify_gpio_pin(input_pin):
     status = g_GPIO_ERROR
-    for i in range(int(total_gpio_pins)):
+    if g_total_gpio_pins == -1:
+        api_pa_pc_total_gpio_pins()
+
+    for i in range(int(g_total_gpio_pins)):
         key = g_JSON_Key_GPIO_Pin+str(i)
         value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][key]
         if int(input_pin) == int(value):
             status = g_GPIO_AVAILABLE
     return status
-
-def api_pa_pc_total_gpio_pins():
-    return total_gpio_pins
 
 def api_pa_pc_get_gpio_port():
     value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_GPIO_Port]
