@@ -105,12 +105,12 @@ class SequenceContext:
 
 class SequenceHandler(Stoppable, threading.Thread):
 
-    def __init__(self, seq_id, seq_params, seq_deadline_ms, channel_client, handler_func, callback):
+    def __init__(self, seq_id, seq_params, seq_deadline, channel_client, handler_func, callback):
         super().__init__()
 
         self._seq_id = seq_id
         self._seq_params = seq_params
-        self._seq_deadline_ms = seq_deadline_ms
+        self._seq_deadline = seq_deadline
 
         self._channel_client = channel_client
         self._handler_func = handler_func
@@ -131,8 +131,7 @@ class SequenceHandler(Stoppable, threading.Thread):
         self.stopped()
 
     def deadline_reached(self):
-        now_ms = time.time() * 1000
-        return now_ms >= self._seq_deadline_ms
+        return time.time() >= self._seq_deadline
 
 
 class ChannelClient:
