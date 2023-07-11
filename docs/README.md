@@ -9,6 +9,12 @@ The [reStructuredText (RST) Primer](https://www.sphinx-doc.org/en/master/usage/r
 ## Building the Docs
 
 Simply install sphinx on your machine and use the `sphinx-build` tool to render the source format into HTML.
+
+Additionally, you may need to install 'furo' theme.
+```
+pip3 install furo
+```
+
 This process is documented via `make docs` in the `Makefile` at the root of the repository.
 
 You can see just how this automation works via Github Actions: https://github.com/antaris-inc/SatOS-Payload-SDK/actions
