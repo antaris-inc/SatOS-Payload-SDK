@@ -92,7 +92,7 @@ def api_pa_pc_get_gpio_pins_number(index):
     value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][key]
     return value
 
-def api_pa_pc_get_io_interface():
+def api_pa_pc_get_uart_dev():
     value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_UART][g_JSON_Key_Device_Path]
     return value
 
