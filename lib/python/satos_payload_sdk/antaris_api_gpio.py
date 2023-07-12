@@ -18,7 +18,17 @@
 
 import time, sys, json
 
-from pylibftdi import BitBangDevice
+import pylibftdi as ftdi
+
+g_JSON_Key_IO_Access = "IO_Access"
+g_JSON_Key_GPIO = "GPIO"
+g_JSON_Key_Adapter_Type = "ADAPTER_TYPE"
+g_JSON_Key_GPIO_Pin_Count = "GPIO_PIN_COUNT"
+g_JSON_Key_GPIO_Port = "GPIO_Port"
+g_JSON_Key_GPIO_Pin = "GPIO_PIN_"
+g_JSON_Key_UART = "UART"
+g_JSON_Key_Device_Path = "Device_Path"
+g_JSON_Key_Interrupt_Pin = "GPIO_Interrupt"
 
 # Define error code
 g_GPIO_ERROR = -1
@@ -27,44 +37,122 @@ g_SLEEP_TIME_IN_SEC = 1
 g_MASK_BIT_0 = 1
 g_MASK_BYTE = 0xFF
 
+g_total_gpio_pins = -1
+
 # Read config info
 jsonfile = open('/opt/antaris/app/config.json', 'r')
 
 # returns JSON object as a dictionary
 jsfile_data = json.load(jsonfile)
 
-total_gpio_pins = jsfile_data['IO_Access']['GPIO_PIN_COUNT']
-print("Pin count =", total_gpio_pins)
+class GPIO:
+    def __init__(self, pin_count, pin, interrupt):
+        self.pin_count = pin_count
+        self.pin = pin
+        self.interrupt = interrupt
+
+def api_pa_pc_get_pin_info():
+    global g_total_gpio_pins
+
+    api_pa_pc_get_gpio_pin_count()
+    pin = [-1, -1, -1, -1, -1, -1, -1, -1]
+    i = 0
+    for i in range(int(g_total_gpio_pins)):
+        key = g_JSON_Key_GPIO_Pin+str(i)
+        pin[i] = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][key]
+
+    interrupt = api_pa_pc_get_io_interrupt()
+    gpio = GPIO(g_total_gpio_pins, pin, interrupt)
+    return gpio    
+
+def api_pa_pc_get_gpio_pin_count():
+    global g_total_gpio_pins
+    g_total_gpio_pins = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_GPIO_Pin_Count]
 
 def verify_gpio_pin(input_pin):
+    global g_total_gpio_pins
+
     status = g_GPIO_ERROR
-    for i in range(int(total_gpio_pins)):
-        key = 'GPIO_PIN_'+str(i)
-        value = jsfile_data['IO_Access'][key]
+    if g_total_gpio_pins == -1:
+        api_pa_pc_get_gpio_pin_count()
+
+    for i in range(int(g_total_gpio_pins)):
+        key = g_JSON_Key_GPIO_Pin+str(i)
+        value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][key]
         if int(input_pin) == int(value):
             status = g_GPIO_AVAILABLE
     return status
 
-#device specific functions
-# To know device, use python3 -m pylibftdi.examples.list_devices
-Device = BitBangDevice('FT769754')
+def api_pa_pc_get_gpio_port():
+    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_GPIO_Port]
+    return value
+
+def api_pa_pc_get_gpio_pins_number(index):
+    key = g_JSON_Key_GPIO_Pin+str(index)
+    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][key]
+    return value
+
+def api_pa_pc_get_io_interface():
+    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_UART][g_JSON_Key_Device_Path]
+    return value
+
+def api_pa_pc_get_io_interrupt():
+    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_Interrupt_Pin]
+    return value
 
 def api_pa_pc_read_gpio(pin):
     status = verify_gpio_pin(pin)
     if status == g_GPIO_ERROR:
         return g_GPIO_ERROR
+    
+    adapter_type = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_Adapter_Type]
+
+    if adapter_type != "FTDI":
+        print("Only FTDI devices are supported")
+        return g_GPIO_ERROR
+    
+    try:
+        DeviceName = ftdi.Driver().list_devices()[0][2]  # Assumptioon: single FTDI device connected.
+        if not DeviceName:
+            print("FTDI device not connected")
+            return g_GPIO_ERROR 
+    except Exception as e:
+        print("FTDI device not connected")
+        return g_GPIO_ERROR 
+    
+    port = api_pa_pc_get_gpio_port()
+    Device = ftdi.BitBangDevice(device_id=DeviceName, interface_select=int(port))
     time.sleep(g_SLEEP_TIME_IN_SEC)
     wr_port = g_MASK_BIT_0 << int(pin)
     wr_port = g_MASK_BYTE ^ wr_port
     out = Device.direction & wr_port
     Device.direction = out
     op = (Device.port >> pin) & g_MASK_BIT_0
+    Device.close()
     return op
 
 def api_pa_pc_write_gpio(pin, value):
     status = verify_gpio_pin(pin)
     if status == g_GPIO_ERROR:
         return g_GPIO_ERROR
+
+    adapter_type = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_Adapter_Type]
+
+    if adapter_type != "FTDI":
+        print("Only FTDI devices are supported")
+        return g_GPIO_ERROR
+    
+    try:
+        DeviceName = ftdi.Driver().list_devices()[0][2] # Assumption : Single FTDI device connected.
+        if not DeviceName:
+            print("FTDI device not connected")
+            return g_GPIO_ERROR 
+    except Exception as e:
+        print("FTDI device not connected")
+        return g_GPIO_ERROR
+    
+    port = api_pa_pc_get_gpio_port()
+    Device = ftdi.BitBangDevice(device_id=DeviceName, interface_select=int(port))
     time.sleep(g_SLEEP_TIME_IN_SEC)
     wr_port = g_MASK_BIT_0 << int(pin)
     Device.direction = Device.direction | wr_port
@@ -75,6 +163,7 @@ def api_pa_pc_write_gpio(pin, value):
         Device.port = (Device.port | wr_port)
     time.sleep(g_SLEEP_TIME_IN_SEC)
     op = (Device.port >> pin) & g_MASK_BIT_0
+    Device.close()
     return op
 
 
