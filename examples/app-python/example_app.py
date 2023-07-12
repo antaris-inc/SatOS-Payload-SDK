@@ -47,7 +47,7 @@ class Controller:
         logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude}")
 
     def handle_test_gpio(self, ctx):
-        gpio_info = api_gpio.api_pa_pc_get_pin_info()
+        gpio_info = api_gpio.api_pa_pc_get_gpio_info()
 
         logger.info("Total gpio pins = %d", int(gpio_info.pin_count))
 
@@ -55,10 +55,10 @@ class Controller:
         # Read initial value of GPIO pins.
         # As GPIO pins are back-to-back connected, their value must be same.
         while (i < int(gpio_info.pin_count)):
-            if int(gpio_info.pin[i]) != -1:
-                readPin = gpio_info.pin[i];
+            if int(gpio_info.pins[i]) != -1:
+                readPin = gpio_info.pins[i];
                 i += 1
-                writePin = gpio_info.pin[i];
+                writePin = gpio_info.pins[i];
 
                 val = api_gpio.api_pa_pc_read_gpio(int(readPin))
                 if val != g_GPIO_ERROR:

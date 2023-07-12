@@ -46,12 +46,12 @@ jsonfile = open('/opt/antaris/app/config.json', 'r')
 jsfile_data = json.load(jsonfile)
 
 class GPIO:
-    def __init__(self, pin_count, pin, interrupt):
+    def __init__(self, pin_count, pin, interrupt_pin):
         self.pin_count = pin_count
-        self.pin = pin
-        self.interrupt = interrupt
+        self.pins = pin
+        self.interrupt_pin = interrupt_pin
 
-def api_pa_pc_get_pin_info():
+def api_pa_pc_get_gpio_info():
     global g_total_gpio_pins
 
     api_pa_pc_get_gpio_pin_count()
@@ -61,8 +61,8 @@ def api_pa_pc_get_pin_info():
         key = g_JSON_Key_GPIO_Pin+str(i)
         pin[i] = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][key]
 
-    interrupt = api_pa_pc_get_io_interrupt()
-    gpio = GPIO(g_total_gpio_pins, pin, interrupt)
+    interrupt_pin = api_pa_pc_get_io_interrupt_pin()
+    gpio = GPIO(g_total_gpio_pins, pin, interrupt_pin)
     return gpio    
 
 def api_pa_pc_get_gpio_pin_count():
@@ -96,7 +96,7 @@ def api_pa_pc_get_uart_dev():
     value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_UART][g_JSON_Key_Device_Path]
     return value
 
-def api_pa_pc_get_io_interrupt():
+def api_pa_pc_get_io_interrupt_pin():
     value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_Interrupt_Pin]
     return value
 
