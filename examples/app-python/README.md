@@ -31,7 +31,7 @@ The sequences supported by the example are described below:
 ### Configuring I/O interface
 
 #### GPIO
-The required GPIO pin and port should be provided by user while adding payload hardware in ACP. The same is exposed to application inside cointainer through SatOS_Payload_SDK api's. 
+The required GPIO pin (and port if 1:N USB to UART convertor used) should be provided by user while adding payload hardware in ACP. The same is exposed to application inside cointainer through SatOS_Payload_SDK api's. 
 
 #### UART
 The required UART path (e.g. /dev/ttyUSB0 etc.) should be provided by user while adding Payload hardware in ACP. The same is exposed to application inside cointainer. Expected Baud rate can be configured in example_app.py. Default Baud rate is 9600.

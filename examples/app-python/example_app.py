@@ -46,6 +46,8 @@ class Controller:
         loc = ctx.client.get_current_location()
         logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude}")
 
+    # The sample program assumes 2 GPIO pins are connected back-to-back. 
+    # This sequence toggles level of 'Write Pin' and then reads level of 'Read Pin'
     def handle_test_gpio(self, ctx):
         gpio_info = api_gpio.api_pa_pc_get_gpio_info()
 
@@ -87,7 +89,7 @@ class Controller:
                     return
             i += 1
 
-
+    # Sequence to test UART loopback. The sample program assumes Tx and Rx are connected in loopback mode.
     def handle_uart_loopback(self, ctx):
         data = ctx.params
         if data == "":

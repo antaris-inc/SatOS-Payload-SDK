@@ -37,8 +37,6 @@ g_SLEEP_TIME_IN_SEC = 1
 g_MASK_BIT_0 = 1
 g_MASK_BYTE = 0xFF
 
-g_total_gpio_pins = -1
-
 # Read config info
 jsonfile = open('/opt/antaris/app/config.json', 'r')
 
@@ -52,9 +50,7 @@ class GPIO:
         self.interrupt_pin = interrupt_pin
 
 def api_pa_pc_get_gpio_info():
-    global g_total_gpio_pins
-
-    api_pa_pc_get_gpio_pin_count()
+    g_total_gpio_pins = api_pa_pc_get_gpio_pin_count()
     pin = [-1, -1, -1, -1, -1, -1, -1, -1]
     i = 0
     for i in range(int(g_total_gpio_pins)):
@@ -66,15 +62,12 @@ def api_pa_pc_get_gpio_info():
     return gpio    
 
 def api_pa_pc_get_gpio_pin_count():
-    global g_total_gpio_pins
     g_total_gpio_pins = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_GPIO_Pin_Count]
+    return g_total_gpio_pins
 
 def verify_gpio_pin(input_pin):
-    global g_total_gpio_pins
-
     status = g_GPIO_ERROR
-    if g_total_gpio_pins == -1:
-        api_pa_pc_get_gpio_pin_count()
+    g_total_gpio_pins = api_pa_pc_get_gpio_pin_count()
 
     for i in range(int(g_total_gpio_pins)):
         key = g_JSON_Key_GPIO_Pin+str(i)
