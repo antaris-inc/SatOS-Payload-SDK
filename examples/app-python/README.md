@@ -8,16 +8,12 @@ This is not production-ready code, but it is useful for learning how the platfor
 In the Antaris Cloud Platform, create a TrueTwin Satellite with a remote payload and download the associated config.
 Place that downloaded zip file in this directory.
 
-Build the app using the following command:
+Add application file names in app_files.txt. 
+
+We can run the application in a container. The command below assumes that `$CONFIG` is set to the name of the config file (zip) you downloaded from Antaris Cloud Platform. The file must be located in your current working directory:
 
 ```
-docker build --platform=linux/amd64 -t satos-payload-example-app-python .
-```
-
-Next, we can run the application in a container. The command below assumes that `$CONFIG` is set to the name of the config file (zip) you downloaded from Antaris Cloud Platform. The file must be located in your current working directory:
-
-```
-docker run --platform=linux/amd64 -e CONFIG=$CONFIG --privileged -v $(pwd):/workspace -it satos-payload-example-app-python
+docker run --platform=linux/amd64 -e CONFIG=$CONFIG --privileged -v $(pwd):/workspace -it satos-payload-app-python
 ```
 
 You may now use the Antaris Cloud Platform to submit payload sequences. For example, submit a `HelloWorld` payload with

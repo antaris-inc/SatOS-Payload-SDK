@@ -38,6 +38,15 @@ if [ ! -f "${CONFIG_FILE}" ]; then
 	exit 1
 fi
 
+# Copy applictaion files in /opt/antaris/app directory
+cd /workspace
+input=/workspace/app_files.txt
+while IFS= read -r line
+do
+  cp --parents $line /opt/antaris/app/
+done < "$input"
+
 # execute entrypoint based on config
 ENTRYPOINT_FILE=`jq --raw-output  '.Storage.Entrypoint_File' ${CONFIG_FILE}`
+cp entrypoint.sh $ENTRYPOINT_FILE
 $ENTRYPOINT_FILE
