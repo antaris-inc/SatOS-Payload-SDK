@@ -75,7 +75,7 @@ When a Payload Application is scheduled to be active for a given period of time,
 5. Payload Controller instructs Payload Application to execute required Payload Sequences
 6. Payload Application acknowledges when sequences are complete
 7. Payload Controller stops application, with time allowed for graceful shutdown
-7. Payload Device is powered off
+8. Payload Device is powered off
 
 Payload Sequences
 =================
@@ -147,6 +147,15 @@ Network
 
 Each Payload Application receives a unique IP Address, as do any associated Payload Devices. The Payload Controller and an NTP server are also available over this network. The values assigned to these resources are defined in the PA config file, and should be accessed via the SDK library.
 
+Device Access
+=============
+
+All necessary devices are exposed to the payload application natively.
+Filesystem locations and device identifiers are provided by the application config (see `Configuration` above).
+
+Payload SDK library support is available to assist in reading device configuration from the config.
+Additional library support is also available to simplify GPIO I/O.
+
 Packaging
 =========
 
@@ -158,7 +167,6 @@ Developers work in a containerized environment during payload development. Base 
 Examples usage of these images are available: https://github.com/antaris-inc/SatOS-Payload-Demos.
 
 Integration of applications into SatOS for on-orbit operation as virtual machines is not addressed in this guide.
-
 
 Payload Tasks & Schedules
 *************************
@@ -229,10 +237,10 @@ Task definition and scheduling is a collaborative, ongoing exercise. During init
 Using the Payload SDK Libraries
 *******************************
 
-The SDK provides two key libraries:
+The SDK provides the following programming language support:
 
-* For Python-based applications: a python package named `satos_payload_sdk` containing Python Payload Interface client support and an application abstraction. This is distributed within the Python base docker image.
+* Python: see the :doc:`python-application-guide` for more information.
 
-* For CPP-based applications: a debian package named `satos-payload-sdk-cpp` containing CPP Payload Interface client support. This is distributed within the CPP base docker iamge.
+* For CPP-based applications: a debian package named `satos-payload-sdk-cpp` containing CPP Payload Interface client support. This is distributed within the CPP base docker image.
 
-Examples usage of these libraries are available: https://github.com/antaris-inc/SatOS-Payload-Demos.
+Sample payload applications demonstrating usage of these libraries are available here: https://github.com/antaris-inc/SatOS-Payload-Demos.

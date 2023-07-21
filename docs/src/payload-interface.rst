@@ -1,5 +1,5 @@
-SatOS Payload Interface Reference
-#################################
+Payload Interface Reference
+###########################
 
 This reference document describes how to work with the Payload Interface, from a conceptual level down to actual API requests and responses.
 
