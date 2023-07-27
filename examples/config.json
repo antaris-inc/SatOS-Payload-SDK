@@ -21,7 +21,9 @@
             "GPIO_Interrupt": "0"
         },
         "UART": {
-            "Device_Path": "/dev/ttyUSB1"
+            "UART_PORT_COUNT": "2",
+            "Device_Path_0": "/dev/ttyUSB1",
+            "Device_Path_1": "/dev/ttyUSB1"
         }
     },
     "Network" : {

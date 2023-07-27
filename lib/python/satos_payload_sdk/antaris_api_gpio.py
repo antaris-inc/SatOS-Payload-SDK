@@ -27,7 +27,8 @@ g_JSON_Key_GPIO_Pin_Count = "GPIO_PIN_COUNT"
 g_JSON_Key_GPIO_Port = "GPIO_Port"
 g_JSON_Key_GPIO_Pin = "GPIO_PIN_"
 g_JSON_Key_UART = "UART"
-g_JSON_Key_Device_Path = "Device_Path"
+g_JSON_Key_Device_Count = "UART_PORT_COUNT"
+g_JSON_Key_Device_Path = "Device_Path_"
 g_JSON_Key_Interrupt_Pin = "GPIO_Interrupt"
 
 # Define error code
@@ -42,6 +43,11 @@ jsonfile = open('/opt/antaris/app/config.json', 'r')
 
 # returns JSON object as a dictionary
 jsfile_data = json.load(jsonfile)
+
+class UART:
+    def __init__(self, port_count, uart_dev):
+        self.uart_port_count = port_count
+        self.uart_dev = uart_dev
 
 class GPIO:
     def __init__(self, pin_count, pin, interrupt_pin):
@@ -86,8 +92,16 @@ def api_pa_pc_get_gpio_pins_number(index):
     return value
 
 def api_pa_pc_get_uart_dev():
-    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_UART][g_JSON_Key_Device_Path]
-    return value
+    g_total_uart_port = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_UART][g_JSON_Key_Device_Count]
+    uart_dev = ["NULL" , "NULL"]
+
+    i = 0
+    for i in range(int(g_total_uart_port)):
+        key = g_JSON_Key_Device_Path+str(i)
+        uart_dev[i] = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_UART][key]
+
+    uart = UART(g_total_uart_port, uart_dev)
+    return uart
 
 def api_pa_pc_get_io_interrupt_pin():
     value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_Interrupt_Pin]

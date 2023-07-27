@@ -100,7 +100,10 @@ class Controller:
             data = "Default string: Uart Tested working"
 
         data = data + "\n"
-        uartPort = api_gpio.api_pa_pc_get_uart_dev()
+        uartInfo = api_gpio.api_pa_pc_get_uart_dev()
+        logger.info("Total uart ports = %d", int(uartInfo.uart_port_count))
+
+        uartPort = uartInfo.uart_dev[0]
         try: 
             ser = serial.Serial(uartPort, g_Uart_Baudrate)  # Replace '9600' with your baud rate
         except Exception as e:
