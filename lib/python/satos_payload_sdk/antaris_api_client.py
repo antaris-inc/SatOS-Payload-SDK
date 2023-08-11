@@ -144,7 +144,7 @@ def api_pa_pc_create_channel_common(secure, callback_func_list):
     print("Starting server")
     
     server_options = []
-    if api_common.g_TRUETWIN_ENABLE == '1':
+    if api_common.g_KEEPALIVE_ENABLE == '1':
         """
         grpc.keepalive_time_ms: The period (in milliseconds) after which a keepalive ping is
             sent on the transport.
@@ -172,7 +172,7 @@ def api_pa_pc_create_channel_common(secure, callback_func_list):
     if api_common.g_SSL_ENABLE == '0':
         print("Creating insecure channel")
         client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(grpc.insecure_channel(pc_endpoint))
-        if api_common.g_TRUETWIN_ENABLE == '0':
+        if api_common.g_KEEPALIVE_ENABLE == '0':
             server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10))
         else:
             server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10), options=server_options)
@@ -192,7 +192,7 @@ def api_pa_pc_create_channel_common(secure, callback_func_list):
         
         client_handle = antaris_api_pb2_grpc.AntarisapiPayloadControllerStub(channel)
 
-        if api_common.g_TRUETWIN_ENABLE == '0':
+        if api_common.g_KEEPALIVE_ENABLE == '0':
             server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10))
         else:
             server_handle =  grpc.server(futures.ThreadPoolExecutor(max_workers=10), options=server_options)
@@ -286,7 +286,7 @@ def api_pa_pc_stage_file_download(channel, download_file_params):
     print("api_pa_pc_stage_file_download")
     if (api_debug):
         download_file_params.display()
-    if api_common.g_TRUETWIN_ENABLE == '1':
+    if api_common.g_KEEPALIVE_ENABLE == '1':
         file_stage = file_download.File_Stage(download_file_params, channel.jsfile_data)
         if not file_stage.file_download():
             print(f"Payload server couldn't locate the {download_file_params.file_path} file")
