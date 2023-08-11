@@ -8,10 +8,10 @@ This is an auto-generated file. Any manual changes to this file will neither be 
 '''
 
 
-ANTARIS_SDK_BUILD_USER="uid=501(bcwaldon) gid=1000(bcwaldon) groups=1000(bcwaldon)"
+ANTARIS_SDK_BUILD_USER="uid=0(root) gid=0(root) groups=0(root)"
 
 
-ANTARIS_SDK_BUILD_TIME="Tue Apr 18 19:29:21 UTC 2023"
+ANTARIS_SDK_BUILD_TIME="Wed Jul 12 13:29:37 UTC 2023"
 
 
 ANTARIS_PA_PC_SDK_VERSION='1.1.1'
