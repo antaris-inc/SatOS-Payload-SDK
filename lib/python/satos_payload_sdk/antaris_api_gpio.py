@@ -93,12 +93,13 @@ def api_pa_pc_get_gpio_pins_number(index):
 
 def api_pa_pc_get_uart_dev():
     g_total_uart_port = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_UART][g_JSON_Key_Device_Count]
-    uart_dev = ["NULL" , "NULL"]
+    uart_dev = []
 
     i = 0
     for i in range(int(g_total_uart_port)):
         key = g_JSON_Key_Device_Path+str(i)
-        uart_dev[i] = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_UART][key]
+        element = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_UART][key]
+        uart_dev.append(element)
 
     uart = UART(g_total_uart_port, uart_dev)
     return uart

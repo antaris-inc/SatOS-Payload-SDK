@@ -22,7 +22,7 @@
         },
         "UART": {
             "UART_PORT_COUNT": "2",
-            "Device_Path_0": "/dev/ttyUSB1",
+            "Device_Path_0": "/dev/ttyUSB0",
             "Device_Path_1": "/dev/ttyUSB1"
         }
     },
