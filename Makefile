@@ -14,7 +14,7 @@
 #   limitations under the License.
 #
 
-.PHONY: no_default pc_submodule_tools build_shell gen old_gen api_lib api_lib_clean gen_clean pc_sim pc_sim_clean sample_app sample_app_clean clean sdk_pkg payload_app_pkg docker_img python_package cpp_package agent_package docs
+.PHONY: no_default pc_submodule_tools build_env gen old_gen api_lib api_lib_clean gen_clean pc_sim pc_sim_clean sample_app sample_app_clean clean sdk_pkg payload_app_pkg docker_img python_package cpp_package agent_package docs
 
 ARCH=x86_64
 SHELL := /bin/bash
@@ -64,14 +64,19 @@ DOCKER_RM_CMD=docker rm -f
 WORKSPACE_MAPPING_DIR=/workspace
 BUILD_CONTAINER_NAME=payload_sdk_build_env
 
-CREATE_DOCKER_IMG=${BUILD_TOOLS_DIR}/docker.sh
-DOCKERFILE_PATH=${BUILD_TOOLS_DIR}/
+DOCKER_FILE_BASE=${BUILD_TOOLS_DIR}/Dockerfile.build.
+DOCKERFILE := ${DOCKER_FILE_BASE}${ARCH}
 
 no_default:
 	@echo No default make target configured. Please proceed as per acommpanying documentation.
 
 pc_submodule_tools:
 	@${DOCKER_BUILD} --build-arg CONTAINER_USER=$(USER) --build-arg CONTAINER_UID=`id -u` --build-arg CONTAINER_GID=`id -g` -f ${DOCKERFILE} -t ${CONTAINER_IMAGE_NAME} .
+
+build_env:
+	@${DOCKER_BUILD} --build-arg CONTAINER_USER=$(USER) --build-arg CONTAINER_UID=`id -u` --build-arg CONTAINER_GID=`id -g` -f ${DOCKERFILE} -t ${CONTAINER_IMAGE_NAME} .
+	@${DOCKER_RM_CMD} ${BUILD_CONTAINER_NAME} 2>/dev/null
+	@${DOCKER_RUN_CMD} -v `pwd`:${WORKSPACE_MAPPING_DIR} --rm --name ${BUILD_CONTAINER_NAME} -it ${CONTAINER_IMAGE_NAME} /bin/bash
 
 gen:
 	@echo ">>>>>>> Translating API-spec to user-facing python interfaces >>>>>>>"
