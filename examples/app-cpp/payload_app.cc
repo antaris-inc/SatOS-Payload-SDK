@@ -68,25 +68,6 @@ typedef struct mythreadState_s {
     fsm_entry_fn_t          entry_fn;
 } mythreadState_t;
 
-static void sequence_cleanup(mythreadState_t *mythread)
-{
-    printf("%s: state %s, cleaning up sequence processor\n", mythread->seq_id, mythread->state);
-    pthread_mutex_unlock(&mythread->cond_lock);
-    printf("%s: cleaned up...\n", mythread->seq_id);
-    return;
-}
-
-static void sequence_lock(mythreadState_t *mythread)
-{
-    printf("%s: state %s, scheduled_deadline %ul\n", mythread->seq_id, mythread->state, mythread->scheduled_deadline);
-
-    /* lock mutex - all cond-waits require this */
-    pthread_mutex_lock(&mythread->cond_lock);
-
-    printf("%s: starting sequence ...\n", mythread->seq_id);
-    return;
-}
-
 //This sequence should complete within its scheduled_deadline
 void handle_HelloWorld(mythreadState_t *mythread)
 {
@@ -134,11 +115,6 @@ static void handle_LogLocation(mythreadState_t *mythread)
     AntarisReturnCode ret;
     unsigned long current_time_in_ms;
 
-    sequence_lock(mythread);
-
-    // Initialize correlation_id
-    mythread->correlation_id = 0;
-
     // Request PC to get current location
     ReqGetCurrentLocationParams get_current_location_params = {0};
     get_current_location_params.correlation_id = mythread->correlation_id;
@@ -150,70 +126,6 @@ static void handle_LogLocation(mythreadState_t *mythread)
         _exit(-1);
     } else {
         printf("%s: api_pa_pc_get_current_location returned success, ret %d\n", __FUNCTION__, ret);
-    }
-
-    mythread->correlation_id += 1;
-    strcpy(&mythread->state[0], "WAITING_FOR_GET_LOCATION");
-    printf("%s: state %s\n", mythread->seq_id, mythread->state);
-    /* wait for condition */
-    pthread_cond_wait(&mythread->condition, &mythread->cond_lock);
-
-    if (shutdown_requested) {
-        printf("%s: exiting as shutdown was requested\n", mythread->seq_id);
-        sequence_cleanup(mythread);
-        return;
-    }
-
-    // Request PC to stage a file download
-    ReqStageFileDownloadParams stage_file_download_params = {0};
-    stage_file_download_params.correlation_id = mythread->correlation_id;
-    strncpy(&stage_file_download_params.file_path[0], "telemetry/payload_teledata.txt", ANTARIS_MAX_FILE_NAME_LENGTH);
-    ret = api_pa_pc_stage_file_download(channel, &stage_file_download_params);
-
-    printf("%s: sent stage file-download request with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
-    if (An_SUCCESS != ret) {
-        fprintf(stderr, "%s: api_pa_pc_stage_file_download failed, ret %d\n", __FUNCTION__, ret);
-        _exit(-1);
-    } else {
-        printf("%s: api_pa_pc_stage_file_download returned success, ret %d\n", __FUNCTION__, ret);
-    }
-
-    mythread->correlation_id += 1;
-    strcpy(&mythread->state[0], "WAITING_FOR_STAGE_FILE_DOWNLOAD_COMPLETION");
-    printf("%s: state %s\n", mythread->seq_id, mythread->state);
-    /* wait for condition */
-    pthread_cond_wait(&mythread->condition, &mythread->cond_lock);
-
-    if (shutdown_requested) {
-        printf("%s: exiting as shutdown was requested\n", mythread->seq_id);
-        sequence_cleanup(mythread);
-        return;
-    }
-
-    // Request PC to power-off my payload device
-    ReqPayloadPowerControlParams payload_power_control_params = {0};
-    payload_power_control_params.correlation_id = mythread->correlation_id;
-    payload_power_control_params.power_operation = 0;	//0=>Power-Off, 1=>Power-On, 2=>Power-Cycle
-    ret = api_pa_pc_payload_power_control(mythread->channel, &payload_power_control_params);
-
-    printf("%s: sent payload-power-ctrl request with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
-    if (An_SUCCESS != ret) {
-        fprintf(stderr, "%s: api_pa_pc_payload_power_control failed, ret %d\n", __FUNCTION__, ret);
-        _exit(-1);
-    } else {
-        printf("%s: api_pa_pc_payload_power_control returned success, ret %d\n", __FUNCTION__, ret);
-    }
-
-    mythread->correlation_id += 1;
-    strcpy(&mythread->state[0], "WAITING_FOR_PAYLOAD_POWER_OFF");
-    printf("%s: state %s\n", mythread->seq_id, mythread->state);
-    /* wait for condition */
-    pthread_cond_wait(&mythread->condition, &mythread->cond_lock);
-
-    if (shutdown_requested) {
-        printf("%s: exiting as shutdown was requested\n", mythread->seq_id);
-        sequence_cleanup(mythread);
-        return;
     }
 
     // Tell PC that current sequence is done
@@ -229,21 +141,6 @@ static void handle_LogLocation(mythreadState_t *mythread)
         printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
     }
 
-    current_time_in_ms = time(nullptr) * 1000;
-
-    if (mythread->scheduled_deadline > current_time_in_ms) {
-        printf("CONGRATULATIONS! :  %s completed at %ul earlier than the deadline %ul\n", mythread->seq_id, current_time_in_ms, mythread->scheduled_deadline);
-    } else {
-        printf("WARNING! :  %s completed at %ul, after the deadline %ul\n", mythread->seq_id, current_time_in_ms, mythread->scheduled_deadline);
-    }
-
-    /* wait for condition */
-    pthread_cond_wait(&mythread->condition, &mythread->cond_lock);
-    // TODO : Put a check here if thread woke up due to shutdown-request from PC or something else
-    strcpy(&mythread->state[0], "COMPLETED-READY-TO-RESTART");
-    printf("%s : state %s\n", mythread->seq_id, mythread->state);
-
-    sequence_cleanup(mythread);
     return;
 }
 
@@ -325,7 +222,6 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
 }
 
 // Callback functions (PC => Application)
-
 AntarisReturnCode start_sequence(StartSequenceParams *start_seq_param)
 {
     printf("start_sequence with received id %s, params %s\n", &start_seq_param->sequence_id[0], &start_seq_param->sequence_params[0]);
