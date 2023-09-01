@@ -19,9 +19,13 @@ import pathlib
 import os
 import sys
 import time
+import serial
 
 from satos_payload_sdk import app_framework
+from satos_payload_sdk import antaris_api_gpio as api_gpio
 
+g_GPIO_ERROR = -1
+g_Uart_Baudrate = 9600
 
 logger = logging.getLogger()
 
@@ -130,6 +134,7 @@ def new():
     app = app_framework.PayloadApplication()
     app.set_health_check(ctl.is_healthy)
 
+    # Note : SatOS-Payload-SDK supports sequence upto 16 characters long
     app.mount_sequence("HelloWorld", ctl.handle_hello_world)
     app.mount_sequence("HelloFriend", ctl.handle_hello_friend)
     app.mount_sequence("LogLocation", ctl.handle_log_location)
