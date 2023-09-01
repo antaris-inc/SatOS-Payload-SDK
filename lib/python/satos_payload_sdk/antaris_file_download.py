@@ -59,8 +59,7 @@ class File_Stage():
                         time.sleep(1)
                         try:
                             if file["size"] == self.get_file_size():
-                                print("File uploaded successfully.")
-                                logger.info("File uploaded successfully")
+                                logger.info("File uploaded from remote to truetwin")
                                 return "Success"
                         except Exception as e:
                             logger.error(f"Error: {e}")
