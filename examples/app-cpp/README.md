@@ -1,6 +1,6 @@
 # Example C++ Payload Application
 
-This directory contains an example Payload Application using the Python.
+This directory contains an example Payload Application using the C++.
 This is not production-ready code, but it is useful for learning how the platform functions.
 
 ## Quickstart

@@ -32,7 +32,7 @@ Visit the `examples/` directory here for more information.
 Additional payload applications are maintained in a separate repository that actually integrate payload hardware for
 demonstration purposes: https://github.com/antaris-inc/SatOS-Payload-Demos
 
-### Compile c++ applictaion
+### Build Example C++ Application
 
   `make build_cpp` will instantiate a build environment container and compile c++ application present at examples/app-cpp.
 
