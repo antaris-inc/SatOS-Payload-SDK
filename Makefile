@@ -21,8 +21,8 @@ SHELL := /bin/bash
 
 BUILD_TOOLS_DIR=tools
 BUILD_CONTAINER_DIR=${BUILD_TOOLS_DIR}/containers
-DOCKER_FILE_BASE=${BUILD_CONTAINER_DIR}/Dockerfile.build.
-DOCKERFILE := ${DOCKER_FILE_BASE}${ARCH}
+DOCKER_FILE_BASE="images/sdk-tools"
+DOCKERFILE := ${DOCKER_FILE_BASE}/Dockerfile
 
 #Default language - C++
 LANGUAGE=cpp
@@ -63,9 +63,6 @@ DOCKER_EXEC_CMD=docker exec
 DOCKER_RM_CMD=docker rm -f
 WORKSPACE_MAPPING_DIR=/workspace
 BUILD_CONTAINER_NAME=payload_sdk_build_env
-
-DOCKER_FILE_BASE=${BUILD_TOOLS_DIR}/Dockerfile.build.
-DOCKERFILE := ${DOCKER_FILE_BASE}${ARCH}
 
 no_default:
 	@echo No default make target configured. Please proceed as per acommpanying documentation.
