@@ -26,12 +26,12 @@
 #define SEQ_PARAMS_LEN 64
 #define SEQ_NAME_LEN   32
 
-#define SEQUENCE_A_ID                   "Sequence_A"
-#define SEQUENCE_A_IDX                  0
-#define SEQUENCE_B_ID                   "Sequence_B"
-#define SEQUENCE_B_IDX                  1
-#define SEQUENCE_C_ID                   "Sequence_C"
-#define SEQUENCE_C_IDX                  2
+#define HelloWorld_ID                   "HelloWorld"
+#define HelloWorld_IDX                  0
+#define HelloFriend_ID                  "HelloFriend"
+#define HelloFriend_IDX                 1
+#define LogLocation_ID                  "LogLocation"
+#define LogLocation_IDX                 2
 #define SEQUENCE_ID_MAX                 3
 
 #define APP_STATE_ACTIVE                1  // 1 => Indicates application is running
@@ -68,28 +68,52 @@ typedef struct mythreadState_s {
     fsm_entry_fn_t          entry_fn;
 } mythreadState_t;
 
-static void sequence_cleanup(mythreadState_t *mythread)
+//This sequence should complete within its scheduled_deadline
+void handle_HelloWorld(mythreadState_t *mythread)
 {
-    printf("%s: state %s, cleaning up sequence processor\n", mythread->seq_id, mythread->state);
-    pthread_mutex_unlock(&mythread->cond_lock);
-    printf("%s: cleaned up...\n", mythread->seq_id);
-    return;
+    AntarisReturnCode ret;
+
+    printf("\n Handling sequence: hello, world! \n");
+
+    // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], HelloWorld_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } else {
+        printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+    }
 }
 
-static void sequence_core(mythreadState_t *mythread)
+void handle_HelloFriend(mythreadState_t *mythread)
 {
     AntarisReturnCode ret;
     unsigned long current_time_in_ms;
 
-    printf("%s: state %s, scheduled_deadline %ul\n", mythread->seq_id, mythread->state, mythread->scheduled_deadline);
+    printf("Handling sequence: hello, %s \n", mythread->seq_params);
 
-    /* lock mutex - all cond-waits require this */
-    pthread_mutex_lock(&mythread->cond_lock);
+    // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], HelloFriend_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
 
-    printf("%s: starting sequence ...\n", mythread->seq_id);
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } else {
+        printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+    }
+}
 
-    // Initialize correlation_id
-    mythread->correlation_id = 0;
+static void handle_LogLocation(mythreadState_t *mythread)
+{
+    AntarisReturnCode ret;
+    unsigned long current_time_in_ms;
 
     // Request PC to get current location
     ReqGetCurrentLocationParams get_current_location_params = {0};
@@ -104,73 +128,9 @@ static void sequence_core(mythreadState_t *mythread)
         printf("%s: api_pa_pc_get_current_location returned success, ret %d\n", __FUNCTION__, ret);
     }
 
-    mythread->correlation_id += 1;
-    strcpy(&mythread->state[0], "WAITING_FOR_GET_LOCATION");
-    printf("%s: state %s\n", mythread->seq_id, mythread->state);
-    /* wait for condition */
-    pthread_cond_wait(&mythread->condition, &mythread->cond_lock);
-
-    if (shutdown_requested) {
-        printf("%s: exiting as shutdown was requested\n", mythread->seq_id);
-        sequence_cleanup(mythread);
-        return;
-    }
-
-    // Request PC to stage a file download
-    ReqStageFileDownloadParams stage_file_download_params = {0};
-    stage_file_download_params.correlation_id = mythread->correlation_id;
-    strncpy(&stage_file_download_params.file_path[0], "telemetry/payload_teledata.txt", ANTARIS_MAX_FILE_NAME_LENGTH);
-    ret = api_pa_pc_stage_file_download(channel, &stage_file_download_params);
-
-    printf("%s: sent stage file-download request with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
-    if (An_SUCCESS != ret) {
-        fprintf(stderr, "%s: api_pa_pc_stage_file_download failed, ret %d\n", __FUNCTION__, ret);
-        _exit(-1);
-    } else {
-        printf("%s: api_pa_pc_stage_file_download returned success, ret %d\n", __FUNCTION__, ret);
-    }
-
-    mythread->correlation_id += 1;
-    strcpy(&mythread->state[0], "WAITING_FOR_STAGE_FILE_DOWNLOAD_COMPLETION");
-    printf("%s: state %s\n", mythread->seq_id, mythread->state);
-    /* wait for condition */
-    pthread_cond_wait(&mythread->condition, &mythread->cond_lock);
-
-    if (shutdown_requested) {
-        printf("%s: exiting as shutdown was requested\n", mythread->seq_id);
-        sequence_cleanup(mythread);
-        return;
-    }
-
-    // Request PC to power-off my payload device
-    ReqPayloadPowerControlParams payload_power_control_params = {0};
-    payload_power_control_params.correlation_id = mythread->correlation_id;
-    payload_power_control_params.power_operation = 0;	//0=>Power-Off, 1=>Power-On, 2=>Power-Cycle
-    ret = api_pa_pc_payload_power_control(mythread->channel, &payload_power_control_params);
-
-    printf("%s: sent payload-power-ctrl request with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
-    if (An_SUCCESS != ret) {
-        fprintf(stderr, "%s: api_pa_pc_payload_power_control failed, ret %d\n", __FUNCTION__, ret);
-        _exit(-1);
-    } else {
-        printf("%s: api_pa_pc_payload_power_control returned success, ret %d\n", __FUNCTION__, ret);
-    }
-
-    mythread->correlation_id += 1;
-    strcpy(&mythread->state[0], "WAITING_FOR_PAYLOAD_POWER_OFF");
-    printf("%s: state %s\n", mythread->seq_id, mythread->state);
-    /* wait for condition */
-    pthread_cond_wait(&mythread->condition, &mythread->cond_lock);
-
-    if (shutdown_requested) {
-        printf("%s: exiting as shutdown was requested\n", mythread->seq_id);
-        sequence_cleanup(mythread);
-        return;
-    }
-
     // Tell PC that current sequence is done
     CmdSequenceDoneParams sequence_done_params = {0};
-    strcpy(&sequence_done_params.sequence_id[0], SEQUENCE_A_ID);
+    strcpy(&sequence_done_params.sequence_id[0], LogLocation_ID);
     ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
 
     printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
@@ -181,47 +141,12 @@ static void sequence_core(mythreadState_t *mythread)
         printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
     }
 
-    current_time_in_ms = time(nullptr) * 1000;
-
-    if (mythread->scheduled_deadline > current_time_in_ms) {
-        printf("CONGRATULATIONS! :  %s completed at %ul earlier than the deadline %ul\n", mythread->seq_id, current_time_in_ms, mythread->scheduled_deadline);
-    } else {
-        printf("WARNING! :  %s completed at %ul, after the deadline %ul\n", mythread->seq_id, current_time_in_ms, mythread->scheduled_deadline);
-    }
-
-    /* wait for condition */
-    pthread_cond_wait(&mythread->condition, &mythread->cond_lock);
-    // TODO : Put a check here if thread woke up due to shutdown-request from PC or something else
-    strcpy(&mythread->state[0], "COMPLETED-READY-TO-RESTART");
-    printf("%s : state %s\n", mythread->seq_id, mythread->state);
-
-    sequence_cleanup(mythread);
     return;
 }
 
-//This sequence should complete within its scheduled_deadline
-void sequence_a_fsm(mythreadState_t *mythread)
-{
-    printf("Starting sequence_a_fsm\n");
-    sequence_core(mythread);
-}
-
-void sequence_b_fsm(mythreadState_t *mythread)
-{
-    printf("Starting sequence_b_fsm\n");
-    sequence_core(mythread);
-}
-
-void sequence_c_fsm(mythreadState_t *mythread)
-{
-    printf("Starting sequence_b_fsm\n");
-    sequence_core(mythread);
-}
-
-
 // Table of Sequence_id : FsmThread
 mythreadState_t *payload_sequences_fsms[SEQUENCE_ID_MAX];
-unsigned int current_sequence_idx = SEQUENCE_A_IDX;
+unsigned int current_sequence_idx = HelloWorld_IDX;
 
 void *threadStartWrapper(void *s)
 {
@@ -281,15 +206,15 @@ int fsmThreadStart(mythreadState_t *threadState)
 static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
 {
     printf("%s: Decoding Sequence %s\n", __FUNCTION__, sequence_string);
-    if (strcmp(sequence_string, SEQUENCE_A_ID) == 0) {
-        printf("\t => %d\n", SEQUENCE_A_IDX);
-        return SEQUENCE_A_IDX;
-    } else if (strcmp(sequence_string, SEQUENCE_B_ID) == 0) {
-        printf("\t => %d\n", SEQUENCE_B_IDX);
-        return SEQUENCE_B_IDX;
-    } else if (strcmp(sequence_string, SEQUENCE_C_ID) == 0) {
-        printf("\t => %d\n", SEQUENCE_C_IDX);
-        return SEQUENCE_C_IDX;
+    if (strcmp(sequence_string, HelloWorld_ID) == 0) {
+        printf("\t => %d\n", HelloWorld_IDX);
+        return HelloWorld_IDX;
+    } else if (strcmp(sequence_string, HelloFriend_ID) == 0) {
+        printf("\t => %d\n", HelloFriend_IDX);
+        return HelloFriend_IDX;
+    } else if (strcmp(sequence_string, LogLocation_ID) == 0) {
+        printf("\t => %d\n", LogLocation_IDX);
+        return LogLocation_IDX;
     }
 
     printf("Unknown sequence, returning -1\n");
@@ -297,7 +222,6 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
 }
 
 // Callback functions (PC => Application)
-
 AntarisReturnCode start_sequence(StartSequenceParams *start_seq_param)
 {
     printf("start_sequence with received id %s, params %s\n", &start_seq_param->sequence_id[0], &start_seq_param->sequence_params[0]);
@@ -442,9 +366,9 @@ int main(int argc, char *argv[])
     }
 
     // Create FSM threads (arg : channel, count, seq_id, fsm-function)
-    payload_sequences_fsms[SEQUENCE_A_IDX] = fsmThreadCreate(channel, 1, SEQUENCE_A_ID, sequence_a_fsm);
-    payload_sequences_fsms[SEQUENCE_B_IDX] = fsmThreadCreate(channel, 1, SEQUENCE_B_ID, sequence_b_fsm);
-    payload_sequences_fsms[SEQUENCE_C_IDX] = fsmThreadCreate(channel, 1, SEQUENCE_C_ID, sequence_c_fsm);
+    payload_sequences_fsms[HelloWorld_IDX] = fsmThreadCreate(channel, 1, HelloWorld_ID, handle_HelloWorld);
+    payload_sequences_fsms[HelloFriend_IDX] = fsmThreadCreate(channel, 1, HelloFriend_ID, handle_HelloFriend);
+    payload_sequences_fsms[LogLocation_IDX] = fsmThreadCreate(channel, 1, LogLocation_ID, handle_LogLocation);
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure
@@ -456,7 +380,7 @@ int main(int argc, char *argv[])
     printf("api_pa_pc_register returned %d (%s)\n", ret, ret == An_SUCCESS ? "SUCCESS" : "FAILURE");
     correlation_id += 1;
 
-    // After registration, simulated PC will ask application to start sequence Sequence_A
+    // After registration, simulated PC will ask application to start sequence HelloWorld
 
     printf("All sequences ready to start ...\n");
 
@@ -468,23 +392,23 @@ int main(int argc, char *argv[])
 
     // Wait for all FSM threads to complete
 
-    if (strcmp(payload_sequences_fsms[SEQUENCE_A_IDX]->state, "NOT_STARTED") != 0) {
-        pthread_join(payload_sequences_fsms[SEQUENCE_A_IDX]->thread_id, &exit_status);
+    if (strcmp(payload_sequences_fsms[HelloWorld_IDX]->state, "NOT_STARTED") != 0) {
+        pthread_join(payload_sequences_fsms[HelloWorld_IDX]->thread_id, &exit_status);
     }
 
-    if (strcmp(payload_sequences_fsms[SEQUENCE_B_IDX]->state, "NOT_STARTED") != 0) {    
-        pthread_join(payload_sequences_fsms[SEQUENCE_B_IDX]->thread_id, &exit_status);
+    if (strcmp(payload_sequences_fsms[HelloFriend_IDX]->state, "NOT_STARTED") != 0) {    
+        pthread_join(payload_sequences_fsms[HelloFriend_IDX]->thread_id, &exit_status);
     }
 
-    if (strcmp(payload_sequences_fsms[SEQUENCE_C_IDX]->state, "NOT_STARTED") != 0) {
-        pthread_join(payload_sequences_fsms[SEQUENCE_C_IDX]->thread_id, &exit_status);
+    if (strcmp(payload_sequences_fsms[LogLocation_IDX]->state, "NOT_STARTED") != 0) {
+        pthread_join(payload_sequences_fsms[LogLocation_IDX]->thread_id, &exit_status);
     }
 
     printf("Cleaning up sequence resources\n");
 
-    fsmThreadCleanup(payload_sequences_fsms[SEQUENCE_A_IDX]);
-    fsmThreadCleanup(payload_sequences_fsms[SEQUENCE_B_IDX]);
-    fsmThreadCleanup(payload_sequences_fsms[SEQUENCE_C_IDX]);
+    fsmThreadCleanup(payload_sequences_fsms[HelloWorld_IDX]);
+    fsmThreadCleanup(payload_sequences_fsms[HelloFriend_IDX]);
+    fsmThreadCleanup(payload_sequences_fsms[LogLocation_IDX]);
 
     // Delete Channel
     api_pa_pc_delete_channel(channel);
