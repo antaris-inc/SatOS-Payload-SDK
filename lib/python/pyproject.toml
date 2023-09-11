@@ -16,6 +16,7 @@ dependencies = [
   "grpcio-tools",
   "protobuf ~=4.0",
   "pylibftdi",
+  "azure-storage-file-share",
 ]
 dynamic = [
   "version"
