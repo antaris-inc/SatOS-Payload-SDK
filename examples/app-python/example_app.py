@@ -26,8 +26,11 @@ from satos_payload_sdk import antaris_api_gpio as api_gpio
 
 g_GPIO_ERROR = -1
 g_Uart_Baudrate = 9600
+g_FileDownloadDir = "/opt/antaris/outbound/"    # path for staged file download
+g_StageFileName = "SampleFile.txt"              # name of staged file
 
 logger = logging.getLogger()
+
 
 class Controller:
 
@@ -117,6 +120,16 @@ class Controller:
         ser.close()
 
 
+    def handle_stage_filedownload(self, ctx):
+        logger.info("Staging file for download")
+        # creating a sample text file
+        new_file = g_FileDownloadDir + g_StageFileName
+        with open(new_file, "w") as file:
+            file.write("Testing file download with payload")
+        
+        # Files must be present in "/opt/antaris/outbound/" before staging them for download
+        resp = ctx.client.stage_file_download(g_StageFileName)
+
 def new():
     ctl = Controller()
 
@@ -129,6 +142,7 @@ def new():
     app.mount_sequence("LogLocation", ctl.handle_log_location)
     app.mount_sequence("TestGPIO", ctl.handle_test_gpio)
     app.mount_sequence("UARTLoopback", ctl.handle_uart_loopback)
+    app.mount_sequence("StageFile",ctl.handle_stage_filedownload)
 
     return app
 

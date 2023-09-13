@@ -26,6 +26,7 @@ from satos_payload_sdk.gen import antaris_api_pb2
 from satos_payload_sdk.gen import antaris_api_pb2_grpc
 from satos_payload_sdk.gen import antaris_api_types as api_types
 from satos_payload_sdk.gen import antaris_sdk_version as sdk_version
+from satos_payload_sdk import antaris_file_download as file_download
 
 api_debug = 0
 g_shutdown_grace_seconds=5
@@ -285,6 +286,11 @@ def api_pa_pc_stage_file_download(channel, download_file_params):
     print("api_pa_pc_stage_file_download")
     if (api_debug):
         download_file_params.display()
+    if api_common.g_KEEPALIVE_ENABLE == '1':
+        file_stage = file_download.File_Stage(download_file_params, channel.jsfile_data)
+        if not file_stage.file_download():
+            print(f"Payload server couldn't locate the {download_file_params.file_path} file")
+            return False
     peer_params = api_types.app_to_peer_ReqStageFileDownloadParams(download_file_params)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
     peer_ret = channel.grpc_client_handle.PC_stage_file_download(peer_params , metadata = metadata)
