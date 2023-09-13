@@ -28,7 +28,7 @@ RUN yum repolist
 RUN dnf makecache --refresh
 
 # heavy tools as a bottom layer for docker image-caching
-RUN dnf -y install wget gcc gcc-c++ gdb cmake protobuf-compiler autoconf automake libtool pkg-config git openssl-devel bzip2-devel libffi-devel
+RUN dnf -y install wget gcc gcc-c++ gdb cmake golang protobuf-compiler autoconf automake libtool pkg-config git openssl-devel bzip2-devel libffi-devel
 
 # install gtest
 RUN wget https://github.com/google/googletest/archive/release-1.12.1.tar.gz
@@ -37,6 +37,9 @@ RUN cd googletest-release-1.12.1 && cmake -DBUILD_SHARED_LIBS=ON . && make && ma
 
 # more tools go here
 RUN dnf -y install sudo tree zip texlive-latex tcpdump net-tools dpkg
+
+# as suggested by gdb
+RUN yum debuginfo-install libgcc-8.5.0-4.el8_5.x86_64 libstdc++-8.5.0-4.el8_5.x86_64 zlib-1.2.11-17.el8.x86_64
 
 RUN yum -y clean all
 
@@ -75,7 +78,28 @@ RUN python3 -m pip install xmlschema
 # documentation dependencies
 RUN python3 -m pip install sphinx furo
 
-RUN echo "export PATH=$PATH:${ANTARIS_INSTALLATIONS_PATH}/protoc" >> .bashrc
+ARG CONTAINER_USER=somebody
+ARG CONTAINER_UID=1000
+ARG CONTAINER_GID=1000
+
+RUN echo Container user will be ${CONTAINER_USER}
+RUN echo Container user will be ${CONTAINER_UID}
+RUN echo Container user will be ${CONTAINER_GID}
+RUN useradd -m ${CONTAINER_USER} -u ${CONTAINER_UID}  -s /bin/bash
+RUN echo "${CONTAINER_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+RUN echo "Welcome to the Antaris SatOS Payload SDK build environment." >> /etc/motd
+RUN echo "Your username is ${CONTAINER_USER}, and your workspace is at /workspace. Have fun!" >> /etc/motd
+
+USER ${CONTAINER_USER}
+WORKDIR /home/${CONTAINER_USER}
+
+RUN echo "PS1='🐳  \[\033[1;34m\]\u @ \[\033[1;36m\]\h \[\033[1;34m\]\W\[\033[0;35m\] \[\033[1;36m\] $ \[\033[0m\]'" >> .bashrc
+RUN echo "export PATH=$PATH:${ANTARIS_GOPATH}/bin:${ANTARIS_INSTALLATIONS_PATH}/protoc" >> .bashrc
+RUN echo "export GOPATH=$GOPATH:$ANTARIS_GOPATH" >> .bashrc
+RUN echo "export PYTHONPATH=/workspace/lib/python/satos_payload_sdk" >> .bashrc
+RUN echo "cat /etc/motd" >> .bashrc
+
 
 CMD ["/bin/bash"]
 WORKDIR /workspace

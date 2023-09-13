@@ -32,6 +32,15 @@ Visit the `examples/` directory here for more information.
 Additional payload applications are maintained in a separate repository that actually integrate payload hardware for
 demonstration purposes: https://github.com/antaris-inc/SatOS-Payload-Demos
 
+### Build Example C++ Application
+
+  `make build_cpp` will instantiate a build environment container and compile c++ application present at examples/app-cpp.
+
+```
+make build_cpp
+```
+  NOTE: This step also builds the requisite Docker image which requires internet access to install some system packages.
+		
 ## Tools Image
 
 This repo utilizes a container image containing a number of tools (e.g. scripts, software, etc).
