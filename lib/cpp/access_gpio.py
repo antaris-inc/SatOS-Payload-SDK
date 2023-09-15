@@ -23,12 +23,11 @@ import pylibftdi as ftdi
 
 # Define error code
 g_GPIO_ERROR = -1
-g_GPIO_AVAILABLE = 1
 g_SLEEP_TIME_IN_SEC = 1
 g_MASK_BIT_0 = 1
 g_MASK_BYTE = 0xFF
 
-def api_pa_pc_read_gpio(pin, port):
+def api_pa_pc_read_gpio(port, pin):
     try:
         DeviceName = ftdi.Driver().list_devices()[0][2]  # Assumptioon: single FTDI device connected.
         if not DeviceName:
@@ -37,19 +36,18 @@ def api_pa_pc_read_gpio(pin, port):
     except Exception as e:
         print("FTDI device not connected")
         return g_GPIO_ERROR 
-    
+
     Device = ftdi.BitBangDevice(device_id=DeviceName, interface_select=int(port))
     time.sleep(g_SLEEP_TIME_IN_SEC)
     wr_port = g_MASK_BIT_0 << int(pin)
     wr_port = g_MASK_BYTE ^ wr_port
     out = Device.direction & wr_port
     Device.direction = out
-    op = (Device.port >> pin) & g_MASK_BIT_0
+    op = (Device.port >> int(pin)) & g_MASK_BIT_0
     Device.close()
     return op
 
 def api_pa_pc_write_gpio(port, pin, value):
-        
     try:
         DeviceName = ftdi.Driver().list_devices()[0][2] # Assumption : Single FTDI device connected.
         if not DeviceName:
@@ -69,11 +67,12 @@ def api_pa_pc_write_gpio(port, pin, value):
     else:
         Device.port = (Device.port | wr_port)
     time.sleep(g_SLEEP_TIME_IN_SEC)
-    op = (Device.port >> pin) & g_MASK_BIT_0
+    op = (Device.port >> int(pin)) & g_MASK_BIT_0
     Device.close()
     return op
 
 if __name__ == "__main__":
+    output = g_GPIO_ERROR
     argc = len(sys.argv)
     if argc < 4:
         print("Error: Not enough arguments")
@@ -86,9 +85,10 @@ if __name__ == "__main__":
 
 
     if sys.argv[1] == "0":
-        api_pa_pc_read_gpio(sys.argv[2], sys.argv[3])
+        output = api_pa_pc_read_gpio(sys.argv[2], sys.argv[3])
     elif sys.argv[1] == "1":
-        api_pa_pc_write_gpio(sys.argv[2], sys.argv[3], sys.argv[4])
+        output = api_pa_pc_write_gpio(sys.argv[2], sys.argv[3], sys.argv[4])
     else:
         print("Script should use 1 or 0")
     
+    sys.exit(output)
