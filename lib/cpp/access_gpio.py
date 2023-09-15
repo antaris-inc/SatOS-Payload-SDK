@@ -74,14 +74,21 @@ def api_pa_pc_write_gpio(port, pin, value):
     return op
 
 if __name__ == "__main__":
-    input_port = sys.argv[1]
-    input_pin = sys.argv[2]
-    input_port = sys.argv[3]
-    
-    if (sys.argv[0] == "0") {
-        api_pa_pc_read_gpio(input_port, input_pin)
-    } else if (sys.argv[0] == "1") {
-        api_pa_pc_write_gpio(input_port, input_pin, input_value)
-    } else {
+    argc = len(sys.argv)
+    if argc < 4:
+        print("Error: Not enough arguments")
+        print("Usage:")
+        print(" To read any pin: ")
+        print("     python3 access_gpio.py 0 <port> <pin number>")
+        print(" To write any pin: ")
+        print("     python3 access_gpio.py 1 <port> <pin number> <value>")
+        sys.exit() 
+
+
+    if sys.argv[1] == "0":
+        api_pa_pc_read_gpio(sys.argv[2], sys.argv[3])
+    elif sys.argv[1] == "1":
+        api_pa_pc_write_gpio(sys.argv[2], sys.argv[3], sys.argv[4])
+    else:
         print("Script should use 1 or 0")
-    }
+    
