@@ -119,35 +119,52 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio){
     return An_SUCCESS;
 }
 
-AntarisReturnCode AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number) {
+int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number) {
+    FILE *pipe = NULL;
     int result = 0;
     char pin[2] = "\0";
     char port[2] = "\0";
+    int8_t status = -1;
+    char buffer[2] = "\0";
+    int error;
 
     pin[0] = pin_number + '0';
     port[0] = gpio_port + '0';
 
-    const char* pythonArgs[] = {
-        "python3",      // The Python interpreter
-        PYTHON_SCRIPT,   // The name of the script
-        "0",           // indicates read_gpio
-        port,          // port number
-        pin,         // pin number
-        nullptr         // Null-terminated array
-    };
+    // Build the command to run the Python script with parameters
+    std::string command = "python3 " + std::string(PYTHON_SCRIPT) + " " +
+                          std::string("0") + " " +
+                          std::string(port) + " " +
+                          std::string(pin);
 
-    // Use the system function to execute the Python script with arguments
-    result = execvp(pythonArgs[0], const_cast<char* const*>(pythonArgs));
-    
-    if (result == 0) {
-        // Script executed successfully
-        return An_SUCCESS;
-    } else {
-        // An error occurred while executing the script
-        return An_GENERIC_FAILURE;
+    // Open a pipe to run the Python script and capture its output
+    pipe = popen(command.c_str(), "r");
+    if (!pipe) {
+        perror("popen");
+        return status;
     }
-}
 
+    std::string result = "";
+
+    // Read the output of the Python script
+    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
+        status = buffer[0] - '0';
+    }
+
+    // Close the pipe
+    error = pclose(pipe);
+
+    if (error != 0) {
+        printf("Failed to run the Python script.");
+        return status;
+    }
+
+    // Process and use the Python script's result in your C++ code
+    printf("Python script returned: %d \n", status);
+
+    return status;
+}
+   
 AntarisReturnCode AntarisApiGPIO::api_pa_pc_write_gpio(int8_t gpio_port, int8_t pin_number, int8_t value) {
     int result = 0;
     char pin[2] = "\0";
