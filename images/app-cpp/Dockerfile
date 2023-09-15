@@ -25,6 +25,7 @@ RUN apt update && apt install -y python3 python3-pip
 RUN python3 -m pip install --upgrade pip
 
 # This is required for GPIO and UART access using FTDI
+RUN pip install pylibftdi
 RUN apt install -y libftdi1
 RUN python3 -m pip install pyserial
 
@@ -47,6 +48,5 @@ RUN rm -fr /stage
 ENV RUN_SDK_AGENT=1
 
 # assume if SDK agent is installed that we will need a workspace
-RUN mkdir -p /workspace/python_lib
-COPY lib/cpp/access_gpio.py /workspace/python_lib/
+RUN mkdir -p /workspace
 WORKDIR /workspace
