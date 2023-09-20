@@ -77,9 +77,6 @@ build_cpp:
 	@${DOCKER_RM_CMD} ${BUILD_CONTAINER_NAME} 2>/dev/null
 	@${DOCKER_RUN_CMD} -v `pwd`:${WORKSPACE_MAPPING_DIR} --rm --name ${BUILD_CONTAINER_NAME} -it ${CONTAINER_IMAGE_NAME} make cpp_example 
 
-debug_cpp: build_cpp
-	@${DOCKER_RUN_CMD} -v `pwd`:${WORKSPACE_MAPPING_DIR} --rm --name ${BUILD_CONTAINER_NAME} -it ${CONTAINER_IMAGE_NAME} /bin/bash
-
 gen:
 	@echo ">>>>>>> Translating API-spec to user-facing python interfaces >>>>>>>"
 	${API_SPEC_GEN_TOOL} ${API_SPEC_GEN_BASE_OPTIONS} -o ${LIB_DIR} -l python
