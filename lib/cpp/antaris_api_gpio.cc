@@ -25,11 +25,15 @@
 #include <fstream>
 #include "cJSON.h"
 #include <cstdlib>
+#include <sys/wait.h>
 
 #include "antaris_api_gpio.h"
 #include "antaris_api.h"
 #include "antaris_api_internal.h"
 #include "antaris_sdk_environment.h"
+
+
+#define GENERIC_ERROR       -1
 
 AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio){
     cJSON* p_cJson = NULL;
@@ -45,7 +49,6 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio){
     gpio->interrupt_pin = -1;    
         
     read_config_json(&p_cJson);
-
     if (p_cJson == NULL){
         printf("Failed to read the config.json\n") ;
     } else {
@@ -121,77 +124,73 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio){
 
 int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number) {
     FILE *pipe = NULL;
-    int result = 0;
     char pin[2] = "\0";
     char port[2] = "\0";
     int8_t status = -1;
-    char buffer[2] = "\0";
-    int error;
+    int pystatus;
+    int exit_status;
 
     pin[0] = pin_number + '0';
     port[0] = gpio_port + '0';
 
     // Build the command to run the Python script with parameters
-    std::string command = "python3 " + std::string(PYTHON_SCRIPT) + " " +
-                          std::string("0") + " " +
-                          std::string(port) + " " +
-                          std::string(pin);
+    std::string command = "python3  " + std::string(PYTHON_SCRIPT) + " " + std::string("0") + " " + std::string(port) + " " + std::string(pin) + "\0";
 
     // Open a pipe to run the Python script and capture its output
-    pipe = popen(command.c_str(), "r");
+    pipe = popen(command.c_str(), "we");
     if (!pipe) {
+        printf("Error in execution \n");
         perror("popen");
-        return status;
+        return GENERIC_ERROR;
     }
 
-    std::string result = "";
-
-    // Read the output of the Python script
-    while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
-        status = buffer[0] - '0';
+    pystatus = pclose(pipe);
+    if (pystatus == GENERIC_ERROR) {
+        printf("Error in execution \n");
+        perror("pclose");
+        return GENERIC_ERROR;
     }
 
-    // Close the pipe
-    error = pclose(pipe);
-
-    if (error != 0) {
-        printf("Failed to run the Python script.");
-        return status;
+    // Check the exit status of the Python script
+    if (WIFEXITED(pystatus)) {
+        exit_status = WEXITSTATUS(pystatus);
+    } else {
+        printf("Python script did not exit normally.\n");
+        return GENERIC_ERROR;
     }
 
     // Process and use the Python script's result in your C++ code
-    printf("Python script returned: %d \n", status);
+   // printf("Pin level : %d \n", exit_status);
 
-    return status;
+    return exit_status;
 }
    
 AntarisReturnCode AntarisApiGPIO::api_pa_pc_write_gpio(int8_t gpio_port, int8_t pin_number, int8_t value) {
-    int result = 0;
+    FILE *pipe = NULL;
+    int pystatus;
     char pin[2] = "\0";
     char port[2] = "\0";
     char pin_value[2] = "\0";
 
     pin[0] = pin_number + '0';
     port[0] = gpio_port + '0';
-    pin_value[0] = gpio_port + '0';
+    pin_value[0] = value + '0';
 
-    const char* pythonArgs[] = {
-        "python3",      // The Python interpreter
-        PYTHON_SCRIPT,   // The name of the script
-        "1",           // indicates write_gpio
-        pin,         // pin number
-        pin_value,      // high/low value
-        nullptr         // Null-terminated array
-    };
+    std::string command = "python3  " + std::string(PYTHON_SCRIPT) + " " + std::string("1") + " " + std::string(port) + " " + std::string(pin) + + " " + std::string(pin_value) + "\0";
 
-    // Use the system function to execute the Python script with arguments
-    result = execvp(pythonArgs[0], const_cast<char* const*>(pythonArgs));
-    
-    if (result == 0) {
-        // Script executed successfully
-        return An_SUCCESS;
-    } else {
-        // An error occurred while executing the script
+    // Open a pipe to run the Python script and capture its output
+    pipe = popen(command.c_str(), "we");
+    if (!pipe) {
+        perror("popen");
         return An_GENERIC_FAILURE;
     }
+
+    pystatus = pclose(pipe);
+    if (pystatus == -1) {
+        printf("Error \n");
+        perror("pclose");
+        return An_GENERIC_FAILURE;
+    }
+
+    return An_SUCCESS;
 }

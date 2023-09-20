@@ -30,7 +30,7 @@
 #include "antaris_api_internal.h"
 #include "antaris_sdk_environment.h"
 
-#define PYTHON_SCRIPT             "/workspace/lib/cpp//access_gpio.py"
+#define PYTHON_SCRIPT             "/lib/antaris/tools/access_gpio.py"
 #define JSON_Key_GPIO_Pin_Count   ("GPIO_PIN_COUNT")
 #define JSON_Key_IO_Access        ("IO_Access")
 #define JSON_Key_GPIO             ("GPIO")
