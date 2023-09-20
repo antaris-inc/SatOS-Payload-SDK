@@ -205,7 +205,7 @@ void handle_TestGPIO(mythreadState_t *mythread)
 
     // Tell PC that current sequence is done
     CmdSequenceDoneParams sequence_done_params = {0};
-    strcpy(&sequence_done_params.sequence_id[0], HelloWorld_ID);
+    strcpy(&sequence_done_params.sequence_id[0], TestGPIO_ID);
     ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
 
     printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
