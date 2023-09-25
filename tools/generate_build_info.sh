@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 OUTPUT_C_HEADER=./lib/cpp/gen/antaris_sdk_version.h
 OUTPUT_PYTHON_FILE=./lib/python/satos_payload_sdk/gen/antaris_sdk_version.py
