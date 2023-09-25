@@ -17,10 +17,10 @@ jobs:
       uses: docker/setup-buildx-action@v2
 
     - name: Build SDK dependencies
-      run: docker run --platform linux/amd64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable make api_lib agent_package
+      run: docker run --platform linux/amd64 -u 1001 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable make api_lib agent_package
 
     - name: Package cpp lib
-      run: docker run --platform linux/amd64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable make cpp_package
+      run: docker run --platform linux/amd64 -u 1001 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable make cpp_package
 
     - name: Login to image registry
       uses: docker/login-action@v2
@@ -46,10 +46,10 @@ jobs:
       uses: docker/setup-buildx-action@v2
 
     - name: Build SDK dependencies
-      run: docker run --platform linux/amd64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable make api_lib agent_package
+      run: docker run --platform linux/amd64 -u 1001 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable make api_lib agent_package
 
     - name: Package python lib
-      run: docker run --platform linux/amd64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable make python_package
+      run: docker run --platform linux/amd64 -u 1001 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable make python_package
 
     - name: Login to image registry
       uses: docker/login-action@v2
