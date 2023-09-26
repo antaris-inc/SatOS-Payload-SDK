@@ -78,27 +78,10 @@ RUN python3 -m pip install xmlschema
 # documentation dependencies
 RUN python3 -m pip install sphinx furo
 
-ARG CONTAINER_USER=somebody
-ARG CONTAINER_UID=1000
-ARG CONTAINER_GID=1000
-
-RUN echo Container user will be ${CONTAINER_USER}
-RUN echo Container user will be ${CONTAINER_UID}
-RUN echo Container user will be ${CONTAINER_GID}
-RUN useradd -m ${CONTAINER_USER} -u ${CONTAINER_UID}  -s /bin/bash
-RUN echo "${CONTAINER_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
-RUN echo "Welcome to the Antaris SatOS Payload SDK build environment." >> /etc/motd
-RUN echo "Your username is ${CONTAINER_USER}, and your workspace is at /workspace. Have fun!" >> /etc/motd
-
-USER ${CONTAINER_USER}
-WORKDIR /home/${CONTAINER_USER}
-
 RUN echo "PS1='🐳  \[\033[1;34m\]\u @ \[\033[1;36m\]\h \[\033[1;34m\]\W\[\033[0;35m\] \[\033[1;36m\] $ \[\033[0m\]'" >> .bashrc
 RUN echo "export PATH=$PATH:${ANTARIS_GOPATH}/bin:${ANTARIS_INSTALLATIONS_PATH}/protoc" >> .bashrc
 RUN echo "export GOPATH=$GOPATH:$ANTARIS_GOPATH" >> .bashrc
 RUN echo "export PYTHONPATH=/workspace/lib/python/satos_payload_sdk" >> .bashrc
-RUN echo "cat /etc/motd" >> .bashrc
 
 
 CMD ["/bin/bash"]
