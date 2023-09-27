@@ -119,6 +119,13 @@ def api_pa_pc_read_gpio(pin):
         print("Only FTDI devices are supported")
         return g_GPIO_ERROR
     
+    port = api_pa_pc_get_gpio_port()
+
+    op = api_read_gpio(port, pin)
+    
+    return op
+
+def api_read_gpio(port, pin):
     try:
         DeviceName = ftdi.Driver().list_devices()[0][2]  # Assumptioon: single FTDI device connected.
         if not DeviceName:
@@ -127,15 +134,14 @@ def api_pa_pc_read_gpio(pin):
     except Exception as e:
         print("FTDI device not connected")
         return g_GPIO_ERROR 
-    
-    port = api_pa_pc_get_gpio_port()
+
     Device = ftdi.BitBangDevice(device_id=DeviceName, interface_select=int(port))
     time.sleep(g_SLEEP_TIME_IN_SEC)
     wr_port = g_MASK_BIT_0 << int(pin)
     wr_port = g_MASK_BYTE ^ wr_port
     out = Device.direction & wr_port
     Device.direction = out
-    op = (Device.port >> pin) & g_MASK_BIT_0
+    op = (Device.port >> int(pin)) & g_MASK_BIT_0
     Device.close()
     return op
 
@@ -150,6 +156,12 @@ def api_pa_pc_write_gpio(pin, value):
         print("Only FTDI devices are supported")
         return g_GPIO_ERROR
     
+    port = api_pa_pc_get_gpio_port()
+    op = api_write_gpio(port, pin, value)
+    
+    return op
+
+def api_write_gpio(port, pin, value):
     try:
         DeviceName = ftdi.Driver().list_devices()[0][2] # Assumption : Single FTDI device connected.
         if not DeviceName:
@@ -159,17 +171,38 @@ def api_pa_pc_write_gpio(pin, value):
         print("FTDI device not connected")
         return g_GPIO_ERROR
     
-    port = api_pa_pc_get_gpio_port()
     Device = ftdi.BitBangDevice(device_id=DeviceName, interface_select=int(port))
     time.sleep(g_SLEEP_TIME_IN_SEC)
     wr_port = g_MASK_BIT_0 << int(pin)
     Device.direction = Device.direction | wr_port
-    if value == 0:
+    if int(value) == 0:
         wr_val = g_MASK_BYTE ^ wr_port
         Device.port = Device.port & wr_val
     else:
         Device.port = (Device.port | wr_port)
     time.sleep(g_SLEEP_TIME_IN_SEC)
-    op = (Device.port >> pin) & g_MASK_BIT_0
+    op = (Device.port >> int(pin)) & g_MASK_BIT_0
     Device.close()
     return op
+
+if __name__ == "__main__":
+    output = g_GPIO_ERROR
+    argc = len(sys.argv)
+
+    if argc < 4:
+        print("Error: Not enough arguments")
+        print("Usage:")
+        print(" To read any pin: ")
+        print("     python3 antaris_api_gpio.py 0 <port> <pin number>")
+        print(" To write any pin: ")
+        print("     python3 antaris_api_gpio.py 1 <port> <pin number> <value>")
+        sys.exit()
+
+    if sys.argv[1] == "0":
+        output = api_read_gpio(int(sys.argv[2]), sys.argv[3])
+    elif sys.argv[1] == "1":
+        output = api_write_gpio(sys.argv[2], sys.argv[3], sys.argv[4])
+    else:
+        print("Script should use 1 or 0")
+    
+    sys.exit(output)

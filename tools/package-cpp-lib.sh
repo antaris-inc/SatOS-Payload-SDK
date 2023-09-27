@@ -31,7 +31,7 @@ mkdir -p $DEB_OUTPUT_DIR/lib/antaris/gen
 cp $BUILD_ROOT/lib/cpp/gen/antaris_api.h $DEB_OUTPUT_DIR/lib/antaris/gen
 
 mkdir -p $DEB_OUTPUT_DIR/lib/antaris/tools
-cp $BUILD_ROOT/lib/cpp/access_gpio.py $DEB_OUTPUT_DIR/lib/antaris/tools
+cp $BUILD_ROOT/lib/python/satos_payload_sdk/antaris_api_gpio.py $DEB_OUTPUT_DIR/lib/antaris/tools
 
 mkdir -p $DEB_OUTPUT_DIR/lib/antaris/include
 cp $BUILD_ROOT/lib/cpp/include/antaris_api_common.h $DEB_OUTPUT_DIR/lib/antaris/include
