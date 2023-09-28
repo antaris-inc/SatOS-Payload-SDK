@@ -42,7 +42,7 @@ using grpc::Status;
 
 void app_to_peer_UINT16(void *ptr_src_app, void *ptr_dst_peer)
 {
-    *(INT32 *)ptr_dst_peer = *(UINT16 *)ptr_src_app;
+    *(UINT32 *)ptr_dst_peer = *(UINT16 *)ptr_src_app;
 }
 
 void peer_to_app_UINT16(void *ptr_src_peer, void *ptr_dst_app)
@@ -62,7 +62,7 @@ void peer_to_app_UINT32(void *ptr_src_peer, void *ptr_dst_app)
 
 void app_to_peer_UINT64(void *ptr_src_app, void *ptr_dst_peer)
 {
-    *(INT64 *)ptr_dst_peer = *(UINT64 *)ptr_src_app;
+    *(UINT64 *)ptr_dst_peer = *(UINT64 *)ptr_src_app;
 }
 
 void peer_to_app_UINT64(void *ptr_src_peer, void *ptr_dst_app)
@@ -90,7 +90,6 @@ void peer_to_app_FLOAT(void *ptr_src_peer, void *ptr_dst_app)
     *(FLOAT *)ptr_dst_app = *(FLOAT *)ptr_src_peer;
 }
 
-
 INT32 is_server_endpoint_available(INT8 *ipv4, UINT16 port)
 {
     struct sockaddr_in ep = {0};
@@ -100,20 +99,23 @@ INT32 is_server_endpoint_available(INT8 *ipv4, UINT16 port)
     ep.sin_family = AF_INET;
     ep.sin_port = htons(port);
 
-    if (0 == inet_aton(ipv4, (struct in_addr *)(&ep.sin_addr))) {
+    if (0 == inet_aton(ipv4, (struct in_addr *)(&ep.sin_addr)))
+    {
         is_good = 0;
         goto done;
     }
 
     s = socket(AF_INET, SOCK_STREAM, 0);
 
-    if (s < 0) {
+    if (s < 0)
+    {
         is_good = 0;
         perror("SOCKET: ");
         goto done;
     }
 
-    if (0 != bind(s, (struct sockaddr *)&ep, sizeof(ep))) {
+    if (0 != bind(s, (struct sockaddr *)&ep, sizeof(ep)))
+    {
         is_good = 0;
         perror("BIND: ");
         goto clean_socket;
