@@ -15,7 +15,7 @@
 
 #include "cJSON.h"
 #define MAX_FILE_OR_PROP_LEN_NAME       256
-
+#define MAX_IP_OR_PORT_LENGTH           32
 
 /* refresh config by considering environment and config file */
 void sdk_environment_read_config(void);

@@ -35,24 +35,24 @@ static char g_CONF_JSON[MAX_FILE_OR_PROP_LEN_NAME]="/opt/antaris/app/config.json
 #define APP_API_PORT_CONF_KEY               "APP_API_PORT"
 #define KEEPALIVE_ENABLE_KEY                "KEEPALIVE"
 
-char g_LISTEN_IP[MAX_FILE_OR_PROP_LEN_NAME] = "0.0.0.0";
-char g_PAYLOAD_CONTROLLER_IP[MAX_FILE_OR_PROP_LEN_NAME] = "127.0.0.1";
-char g_PAYLOAD_APP_IP[MAX_FILE_OR_PROP_LEN_NAME] = "127.0.0.1";
+char g_LISTEN_IP[MAX_IP_OR_PORT_LENGTH] = "0.0.0.0";
+char g_PAYLOAD_CONTROLLER_IP[MAX_IP_OR_PORT_LENGTH] = "127.0.0.1";
+char g_PAYLOAD_APP_IP[MAX_IP_OR_PORT_LENGTH] = "127.0.0.1";
 unsigned short g_PC_GRPC_SERVER_PORT = 50051;
-char g_PC_GRPC_SERVER_PORT_STR[MAX_FILE_OR_PROP_LEN_NAME] = "50051";
+char g_PC_GRPC_SERVER_PORT_STR[MAX_IP_OR_PORT_LENGTH] = "50051";
 unsigned short g_PA_GRPC_SERVER_PORT = 50053;
-char g_PA_GRPC_SERVER_PORT_STR[MAX_FILE_OR_PROP_LEN_NAME] = "50053";
+char g_PA_GRPC_SERVER_PORT_STR[MAX_IP_OR_PORT_LENGTH] = "50053";
 char g_SSL_ENABLE = '1';              // SSL is enabled by default
 char g_KEEPALIVE_ENABLE = '1';        // TrueTwin is disabled by default
 
-char g_PC_GRPC_LISTEN_ENDPOINT[MAX_FILE_OR_PROP_LEN_NAME] = "0.0.0.0:50051";
-char g_PC_GRPC_CONNECT_ENDPOINT[MAX_FILE_OR_PROP_LEN_NAME] = "127.0.0.1:50051";
-char g_APP_GRPC_LISTEN_ENDPOINT[MAX_FILE_OR_PROP_LEN_NAME] = "0.0.0.0:50053";
-char g_APP_GRPC_CONNECT_ENDPOINT[MAX_FILE_OR_PROP_LEN_NAME] = "127.0.0.1:50053";
+char g_PC_GRPC_LISTEN_ENDPOINT[2 * MAX_IP_OR_PORT_LENGTH] = "0.0.0.0:50051";
+char g_PC_GRPC_CONNECT_ENDPOINT[2 * MAX_IP_OR_PORT_LENGTH] = "127.0.0.1:50051";
+char g_APP_GRPC_LISTEN_ENDPOINT[2 * MAX_IP_OR_PORT_LENGTH] = "0.0.0.0:50053";
+char g_APP_GRPC_CONNECT_ENDPOINT[2 * MAX_IP_OR_PORT_LENGTH] = "127.0.0.1:50053";
 
 typedef struct _conf {
-    char prop[MAX_FILE_OR_PROP_LEN_NAME];
-    char value[MAX_FILE_OR_PROP_LEN_NAME];
+    char prop[MAX_IP_OR_PORT_LENGTH];
+    char value[MAX_IP_OR_PORT_LENGTH];
 } conf_t;
 
 static void determine_conf_file(void)
@@ -112,19 +112,19 @@ static void update_a_conf(char *conf_line)
     parse_a_conf(conf_line, &a_conf);
 
     if (strcmp(a_conf.prop, PC_IP_CONF_KEY) == 0) {
-        strcpy(g_PAYLOAD_CONTROLLER_IP, a_conf.value);
+        strncpy(g_PAYLOAD_CONTROLLER_IP, a_conf.value, MAX_IP_OR_PORT_LENGTH);
     } else if (strcmp(a_conf.prop, APP_IP_CONF_KEY) == 0) {
-        strcpy(g_PAYLOAD_APP_IP, a_conf.value);
+        strncpy(g_PAYLOAD_APP_IP, a_conf.value, MAX_IP_OR_PORT_LENGTH);
     } else if (strcmp(a_conf.prop, LISTEN_IP_CONF_KEY) == 0) {
-        strcpy(g_LISTEN_IP, a_conf.value);
+        strncpy(g_LISTEN_IP, a_conf.value, MAX_IP_OR_PORT_LENGTH);
     } else if (strcmp(a_conf.prop, PC_API_PORT_CONF_KEY) == 0) {
-        strcpy(g_PC_GRPC_SERVER_PORT_STR, a_conf.value);
+        strncpy(g_PC_GRPC_SERVER_PORT_STR, a_conf.value, MAX_IP_OR_PORT_LENGTH);
     } else if (strcmp(a_conf.prop, APP_API_PORT_CONF_KEY) == 0) {
-        strcpy(g_PA_GRPC_SERVER_PORT_STR, a_conf.value);
+        strncpy(g_PA_GRPC_SERVER_PORT_STR, a_conf.value, MAX_IP_OR_PORT_LENGTH);
     } else if (strcmp(a_conf.prop, SSL_ENABLE_KEY) == 0) {
-        strcpy(&g_SSL_ENABLE, a_conf.value);
+        strncpy(&g_SSL_ENABLE, a_conf.value, sizeof(g_SSL_ENABLE));
     } else if (strcmp(a_conf.prop, KEEPALIVE_ENABLE_KEY) == 0) {
-        strcpy(&g_KEEPALIVE_ENABLE, a_conf.value);
+        strncpy(&g_KEEPALIVE_ENABLE, a_conf.value, sizeof(g_KEEPALIVE_ENABLE));
     }
 
     return;
@@ -146,7 +146,7 @@ static void refresh_config_vars(void)
 void sdk_environment_read_config(void)
 {
     FILE *conf_file;
-    char line[MAX_FILE_OR_PROP_LEN_NAME + MAX_FILE_OR_PROP_LEN_NAME];
+    char line[MAX_FILE_OR_PROP_LEN_NAME];
     char *fgets_ret;
 
     determine_conf_file();
