@@ -24,7 +24,7 @@ BUILD_CONTAINER_DIR=${BUILD_TOOLS_DIR}/containers
 DOCKER_FILE_BASE="images/sdk-tools"
 DOCKERFILE := ${DOCKER_FILE_BASE}/Dockerfile
 
-OPTIMIZATION_LEVEL := -O3
+OPTIMIZATION_LEVEL := -g
 
 #Default language - C++
 LANGUAGE=cpp
