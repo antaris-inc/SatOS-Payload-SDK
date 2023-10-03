@@ -30,9 +30,8 @@ if [ "${RUN_SDK_AGENT}" != "" ]; then
 	sudo dpkg -i *.deb
 
 	sudo chown -R ${USER}:root /opt/antaris/
-	sudo chown -R ${USER}:root /workspace
 
-	sudo /opt/antaris/sdk-agent/run-agent.sh &> /opt/antaris/logs/sdk-agent.log &
+	/opt/antaris/sdk-agent/run-agent.sh &> /opt/antaris/logs/sdk-agent.log &
 fi
 
 CONFIG_FILE=/opt/antaris/app/config.json
