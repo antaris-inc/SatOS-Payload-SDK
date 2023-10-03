@@ -107,24 +107,33 @@ not_found:
 
 static void update_a_conf(char *conf_line)
 {
+    int8_t length = -1;
     conf_t a_conf = {0};
 
     parse_a_conf(conf_line, &a_conf);
 
+    do {
+        length++;
+        if(length >= MAX_IP_OR_PORT_LENGTH) {
+            printf("Property value is greater than %d characters is not supported. Going with default value \n", MAX_IP_OR_PORT_LENGTH);
+            return;
+        }
+    } while (a_conf.value[length] != '\0');
+
     if (strcmp(a_conf.prop, PC_IP_CONF_KEY) == 0) {
-        strncpy(g_PAYLOAD_CONTROLLER_IP, a_conf.value, MAX_IP_OR_PORT_LENGTH);
+        strcpy(g_PAYLOAD_CONTROLLER_IP, a_conf.value);
     } else if (strcmp(a_conf.prop, APP_IP_CONF_KEY) == 0) {
-        strncpy(g_PAYLOAD_APP_IP, a_conf.value, MAX_IP_OR_PORT_LENGTH);
+        strcpy(g_PAYLOAD_APP_IP, a_conf.value);
     } else if (strcmp(a_conf.prop, LISTEN_IP_CONF_KEY) == 0) {
-        strncpy(g_LISTEN_IP, a_conf.value, MAX_IP_OR_PORT_LENGTH);
+        strcpy(g_LISTEN_IP, a_conf.value);
     } else if (strcmp(a_conf.prop, PC_API_PORT_CONF_KEY) == 0) {
-        strncpy(g_PC_GRPC_SERVER_PORT_STR, a_conf.value, MAX_IP_OR_PORT_LENGTH);
+        strcpy(g_PC_GRPC_SERVER_PORT_STR, a_conf.value);
     } else if (strcmp(a_conf.prop, APP_API_PORT_CONF_KEY) == 0) {
-        strncpy(g_PA_GRPC_SERVER_PORT_STR, a_conf.value, MAX_IP_OR_PORT_LENGTH);
+        strcpy(g_PA_GRPC_SERVER_PORT_STR, a_conf.value);
     } else if (strcmp(a_conf.prop, SSL_ENABLE_KEY) == 0) {
-        strncpy(&g_SSL_ENABLE, a_conf.value, sizeof(g_SSL_ENABLE));
+        g_SSL_ENABLE = a_conf.value[0];
     } else if (strcmp(a_conf.prop, KEEPALIVE_ENABLE_KEY) == 0) {
-        strncpy(&g_KEEPALIVE_ENABLE, a_conf.value, sizeof(g_KEEPALIVE_ENABLE));
+        g_KEEPALIVE_ENABLE = a_conf.value[0];
     }
 
     return;
