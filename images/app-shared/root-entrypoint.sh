@@ -27,7 +27,7 @@ if [ "${RUN_SDK_AGENT}" != "" ]; then
 	mkdir -p /tmp/sdk-agent-init/
 	cd /tmp/sdk-agent-init/
 	unzip ${CONFIG_ABS}
-	dpkg -i *.deb
+	sudo dpkg -i *.deb
 
 	/opt/antaris/sdk-agent/run-agent.sh &> /opt/antaris/logs/sdk-agent.log &
 fi

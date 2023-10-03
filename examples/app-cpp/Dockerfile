@@ -14,5 +14,17 @@
 
 FROM quay.io/antaris-inc/satos-payload-app-cpp:stable
 
+# By default, docker runs as root user.
+# Enable following code, to run docker as user-defined ${USER}
+
+# ENV USER=pa
+# RUN apt-get update && apt-get install -y sudo
+
+# Add your user and grant passwordless sudo access
+# RUN useradd -rms /bin/bash -g root -G sudo -u 1001 "${USER}" \
+#    && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# USER "${USER}" 
+
 ADD payload_app /opt/antaris/app/payload_app
 ADD entrypoint.sh /opt/antaris/app/entrypoint.sh

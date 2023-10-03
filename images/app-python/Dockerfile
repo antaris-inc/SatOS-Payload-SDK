@@ -13,6 +13,8 @@
 # limitations under the License.
 
 FROM ubuntu:22.04 as shared_app_image
+
+RUN apt-get update && apt-get install -y sudo
 COPY images/app-shared/root-entrypoint.sh /entrypoint.sh
 CMD /entrypoint.sh
 RUN mkdir -p /opt/antaris/app /opt/antaris/logs
