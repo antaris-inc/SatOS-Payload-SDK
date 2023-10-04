@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -109,16 +108,14 @@ static void update_a_conf(char *conf_line)
 {
     int8_t length = -1;
     conf_t a_conf = {0};
+    size_t length = 0;
 
     parse_a_conf(conf_line, &a_conf);
-
-    do {
-        length++;
-        if(length >= MAX_IP_OR_PORT_LENGTH) {
-            printf("Property value is greater than %d characters is not supported. Going with default value \n", MAX_IP_OR_PORT_LENGTH);
-            return;
-        }
-    } while (a_conf.value[length] != '\0');
+    length = strnlen(a_conf.value, MAX_IP_OR_PORT_LENGTH);
+    if(length == MAX_IP_OR_PORT_LENGTH) {
+        printf("Property value is greater than %d characters is not supported. Going with default value \n", MAX_IP_OR_PORT_LENGTH);
+        return;
+    }
 
     if (strcmp(a_conf.prop, PC_IP_CONF_KEY) == 0) {
         strcpy(g_PAYLOAD_CONTROLLER_IP, a_conf.value);
