@@ -14,55 +14,42 @@
 #   limitations under the License.
 #
 
-from quay.io/centos/centos:8
+# Use the official Ubuntu 22.04 base image
+FROM ubuntu:22.04
 
-RUN cd /etc/yum.repos.d/
-RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
-RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+# Update the package list and upgrade existing packages
+RUN apt-get update && apt-get upgrade -y
 
-RUN dnf -y upgrade
-
-RUN yum -y install epel-release
-RUN yum repolist
-
-RUN dnf makecache --refresh
-
+# Install required packages
 # heavy tools as a bottom layer for docker image-caching
-RUN dnf -y install wget gcc gcc-c++ gdb cmake golang protobuf-compiler autoconf automake libtool pkg-config git openssl-devel bzip2-devel libffi-devel
+RUN apt-get install -y wget gcc g++ gdb cmake golang protobuf-compiler autoconf automake libtool pkg-config git \
+    libssl-dev libbz2-dev libffi-dev sudo tree zip texlive tcpdump net-tools dpkg-dev python3 python3-pip
 
-# install gtest
-RUN wget https://github.com/google/googletest/archive/release-1.12.1.tar.gz
-RUN tar -xf release-1.12.1.tar.gz
-RUN cd googletest-release-1.12.1 && cmake -DBUILD_SHARED_LIBS=ON . && make && make install
+# Install Google Test
+RUN wget https://github.com/google/googletest/archive/release-1.12.1.tar.gz \
+    && tar -xf release-1.12.1.tar.gz \
+    && cd googletest-release-1.12.1 \
+    && cmake -DBUILD_SHARED_LIBS=ON . \
+    && make \
+    && make install
 
-# more tools go here
-RUN dnf -y install sudo tree zip texlive-latex tcpdump net-tools dpkg
+# Clean up the package cache
+RUN apt-get clean
 
-# as suggested by gdb
-RUN yum debuginfo-install libgcc-8.5.0-4.el8_5.x86_64 libstdc++-8.5.0-4.el8_5.x86_64 zlib-1.2.11-17.el8.x86_64
-
-RUN yum -y clean all
-
-#install Python 3.10
-RUN cd /tmp/;\
-      wget https://www.python.org/ftp/python/3.10.6/Python-3.10.6.tgz ; \
-      tar -xvf Python-3.10.6.tgz; \
-      cd Python-3.10.6;\
-      ./configure;      \
-      make; \
-      make test;  \
-      make install;     
+# Upgrade pip for Python 3
 RUN python3 -m pip install --upgrade pip
 
-# install grpc components, see https://grpc.io/docs/languages/
-# python grpc
-RUN python3 -m pip install build grpcio grpcio-tools
+# Install grpcio and grpcio-tools
+RUN python3 -m pip install grpcio grpcio-tools
 
 ARG ANTARIS_INSTALLATIONS_PATH=/usr/local/antaris
 
 # install protoc
 ADD https://github.com/protocolbuffers/protobuf/releases/download/v3.15.8/protoc-3.15.8-linux-x86_64.zip /tmp/.
 RUN mkdir -p ${ANTARIS_INSTALLATIONS_PATH}/protoc && unzip /tmp/protoc-3.15.8-linux-x86_64.zip -d ${ANTARIS_INSTALLATIONS_PATH}/protoc/.
+
+# Clean up
+RUN rm -rf /tmp/*
 
 # c++
 ARG GRPC_INSTALL_DIR=${ANTARIS_INSTALLATIONS_PATH}/grpc
@@ -78,10 +65,27 @@ RUN python3 -m pip install xmlschema
 # documentation dependencies
 RUN python3 -m pip install sphinx furo
 
+ARG CONTAINER_USER=somebody
+ARG CONTAINER_UID=1000
+ARG CONTAINER_GID=1000
+
+RUN echo Container user will be ${CONTAINER_USER}
+RUN echo Container user will be ${CONTAINER_UID}
+RUN echo Container user will be ${CONTAINER_GID}
+RUN useradd -m ${CONTAINER_USER} -u ${CONTAINER_UID}  -s /bin/bash
+RUN echo "${CONTAINER_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+RUN echo "Welcome to the Antaris SatOS Payload SDK build environment." >> /etc/motd
+RUN echo "Your username is ${CONTAINER_USER}, and your workspace is at /workspace. Have fun!" >> /etc/motd
+
+USER ${CONTAINER_USER}
+WORKDIR /home/${CONTAINER_USER}
+
 RUN echo "PS1='🐳  \[\033[1;34m\]\u @ \[\033[1;36m\]\h \[\033[1;34m\]\W\[\033[0;35m\] \[\033[1;36m\] $ \[\033[0m\]'" >> .bashrc
 RUN echo "export PATH=$PATH:${ANTARIS_GOPATH}/bin:${ANTARIS_INSTALLATIONS_PATH}/protoc" >> .bashrc
 RUN echo "export GOPATH=$GOPATH:$ANTARIS_GOPATH" >> .bashrc
 RUN echo "export PYTHONPATH=/workspace/lib/python/satos_payload_sdk" >> .bashrc
+RUN echo "cat /etc/motd" >> .bashrc
 
 
 CMD ["/bin/bash"]
