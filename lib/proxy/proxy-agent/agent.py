@@ -54,7 +54,7 @@ def print_usage():
     global gInternalPeerPort
 
     logger.error("{}: Usage".format(sys.argv[0]))
-    logger.error("{} -m/--mode atmos|user -i/--web-public-ip WEB-PUBLIC-IP -p/--web-public-port WEB_PUBLIC_PORT -s/--internal-server-ip SERVER_IP -t/--internal-server-port SERVER_PORT -l/--local-peer-ip LOCAL_PEER_SERVER_IP -o/--local-peer-port LOCAL_PEER_SERVER_PORT -f/--flat-sat-mode [-h/--help]".format(sys.argv[0], gServerIp))
+    logger.error("{} -m/--mode atmos|user -i/--web-public-ip WEB-PUBLIC-IP -p/--web-public-port WEB_PUBLIC_PORT -s/--internal-server-ip SERVER_IP -t/--internal-server-port SERVER_PORT -l/--local-peer-ip LOCAL_PEER_SERVER_IP -o/--local-peer-port LOCAL_PEER_SERVER_PORT [-f/--flat-sat-mode] [-h/--help]".format(sys.argv[0], gServerIp))
 
 def print_params():
     global gAgentMode
