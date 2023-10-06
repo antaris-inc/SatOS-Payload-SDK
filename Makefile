@@ -24,6 +24,8 @@ BUILD_CONTAINER_DIR=${BUILD_TOOLS_DIR}/containers
 DOCKER_FILE_BASE="images/sdk-tools"
 DOCKERFILE := ${DOCKER_FILE_BASE}/Dockerfile
 
+OPTIMIZATION_LEVEL := -g
+
 #Default language - C++
 LANGUAGE=cpp
 LANGUAGE_HELP='Please specify a language for code generation [python/cpp].'
@@ -99,14 +101,14 @@ api_lib:
 	elif [ "${LANGUAGE}" == "cpp" ]; then																													\
 		#mkdir -p ${OUTPUT_LIB_DIR} ${OUTPUT_BIN_DIR} ;																										\
 		echo building cpp api library;																														\
-		gcc -g -c ${VENDOR_LIB_DIR}/cJSON/src/cJSON.c	${VENDOR_cJSON_INCLUDES}	-o ${VENDOR_LIB_DIR}/cJSON/src/cJSON.o	;																							\
-		g++ -g -c ${OUTPUT_GEN_DIR}/antaris_api_autogen.cc -I ${CPP_LIB_DIR}/include ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_DIR} -o ${OUTPUT_GEN_DIR}/antaris_api_autogen.o ;					\
-		g++ -g -c ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.o ;								\
-		g++ -g -c ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.o ;											\
-		g++ -g -c ${CPP_LIB_DIR}/antaris_api_common.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${CPP_LIB_DIR}/antaris_api_common.o ;						\
-		g++ -g -c ${CPP_LIB_DIR}/antaris_sdk_environment.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${CPP_LIB_DIR}/antaris_sdk_environment.o ;				\
-		g++ -g -c ${CPP_LIB_DIR}/antaris_api_client.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -o ${CPP_LIB_DIR}/antaris_api_client.o ;							\
-		g++ -g -c ${CPP_LIB_DIR}/antaris_api_server.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -o ${CPP_LIB_DIR}/antaris_api_server.o ;							\
+		gcc ${OPTIMIZATION_LEVEL} -c ${VENDOR_LIB_DIR}/cJSON/src/cJSON.c	${VENDOR_cJSON_INCLUDES}	-o ${VENDOR_LIB_DIR}/cJSON/src/cJSON.o	;																							\
+		g++ ${OPTIMIZATION_LEVEL} -c ${OUTPUT_GEN_DIR}/antaris_api_autogen.cc -I ${CPP_LIB_DIR}/include ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_DIR} -o ${OUTPUT_GEN_DIR}/antaris_api_autogen.o ;					\
+		g++ ${OPTIMIZATION_LEVEL} -c ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.o ;								\
+		g++ ${OPTIMIZATION_LEVEL} -c ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.o ;											\
+		g++ ${OPTIMIZATION_LEVEL} -c ${CPP_LIB_DIR}/antaris_api_common.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${CPP_LIB_DIR}/antaris_api_common.o ;						\
+		g++ ${OPTIMIZATION_LEVEL} -c ${CPP_LIB_DIR}/antaris_sdk_environment.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${CPP_LIB_DIR}/antaris_sdk_environment.o ;				\
+		g++ ${OPTIMIZATION_LEVEL} -c ${CPP_LIB_DIR}/antaris_api_client.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -o ${CPP_LIB_DIR}/antaris_api_client.o ;							\
+		g++ ${OPTIMIZATION_LEVEL} -c ${CPP_LIB_DIR}/antaris_api_server.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -o ${CPP_LIB_DIR}/antaris_api_server.o ;							\
 		ar cr ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB} ${OUTPUT_GEN_DIR}/antaris_api_autogen.o ${CPP_LIB_DIR}/antaris_api_client.o ${CPP_LIB_DIR}/antaris_api_server.o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.o 					\
 				${CPP_LIB_DIR}/antaris_api_common.o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.o ${CPP_LIB_DIR}/antaris_sdk_environment.o \
 				${VENDOR_LIB_DIR}/cJSON/src/cJSON.o ; \
@@ -134,7 +136,7 @@ docs:
 	sphinx-build docs/src dist/docs
 
 cpp_example: all
-	g++ -g examples/app-cpp/payload_app.cc -o examples/app-cpp/payload_app -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS};
+	g++ ${OPTIMIZATION_LEVEL} examples/app-cpp/payload_app.cc -o examples/app-cpp/payload_app -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS};
 
 all: api_lib pc_sim sample_app
 

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -35,24 +34,24 @@ static char g_CONF_JSON[MAX_FILE_OR_PROP_LEN_NAME]="/opt/antaris/app/config.json
 #define APP_API_PORT_CONF_KEY               "APP_API_PORT"
 #define KEEPALIVE_ENABLE_KEY                "KEEPALIVE"
 
-char g_LISTEN_IP[MAX_FILE_OR_PROP_LEN_NAME] = "0.0.0.0";
-char g_PAYLOAD_CONTROLLER_IP[MAX_FILE_OR_PROP_LEN_NAME] = "127.0.0.1";
-char g_PAYLOAD_APP_IP[MAX_FILE_OR_PROP_LEN_NAME] = "127.0.0.1";
+char g_LISTEN_IP[MAX_IP_OR_PORT_LENGTH] = "0.0.0.0";
+char g_PAYLOAD_CONTROLLER_IP[MAX_IP_OR_PORT_LENGTH] = "127.0.0.1";
+char g_PAYLOAD_APP_IP[MAX_IP_OR_PORT_LENGTH] = "127.0.0.1";
 unsigned short g_PC_GRPC_SERVER_PORT = 50051;
-char g_PC_GRPC_SERVER_PORT_STR[MAX_FILE_OR_PROP_LEN_NAME] = "50051";
+char g_PC_GRPC_SERVER_PORT_STR[MAX_IP_OR_PORT_LENGTH] = "50051";
 unsigned short g_PA_GRPC_SERVER_PORT = 50053;
-char g_PA_GRPC_SERVER_PORT_STR[MAX_FILE_OR_PROP_LEN_NAME] = "50053";
+char g_PA_GRPC_SERVER_PORT_STR[MAX_IP_OR_PORT_LENGTH] = "50053";
 char g_SSL_ENABLE = '1';              // SSL is enabled by default
 char g_KEEPALIVE_ENABLE = '1';        // TrueTwin is disabled by default
 
-char g_PC_GRPC_LISTEN_ENDPOINT[MAX_FILE_OR_PROP_LEN_NAME] = "0.0.0.0:50051";
-char g_PC_GRPC_CONNECT_ENDPOINT[MAX_FILE_OR_PROP_LEN_NAME] = "127.0.0.1:50051";
-char g_APP_GRPC_LISTEN_ENDPOINT[MAX_FILE_OR_PROP_LEN_NAME] = "0.0.0.0:50053";
-char g_APP_GRPC_CONNECT_ENDPOINT[MAX_FILE_OR_PROP_LEN_NAME] = "127.0.0.1:50053";
+char g_PC_GRPC_LISTEN_ENDPOINT[2 * MAX_IP_OR_PORT_LENGTH] = "0.0.0.0:50051";
+char g_PC_GRPC_CONNECT_ENDPOINT[2 * MAX_IP_OR_PORT_LENGTH] = "127.0.0.1:50051";
+char g_APP_GRPC_LISTEN_ENDPOINT[2 * MAX_IP_OR_PORT_LENGTH] = "0.0.0.0:50053";
+char g_APP_GRPC_CONNECT_ENDPOINT[2 * MAX_IP_OR_PORT_LENGTH] = "127.0.0.1:50053";
 
 typedef struct _conf {
-    char prop[MAX_FILE_OR_PROP_LEN_NAME];
-    char value[MAX_FILE_OR_PROP_LEN_NAME];
+    char prop[MAX_IP_OR_PORT_LENGTH];
+    char value[MAX_IP_OR_PORT_LENGTH];
 } conf_t;
 
 static void determine_conf_file(void)
@@ -107,9 +106,16 @@ not_found:
 
 static void update_a_conf(char *conf_line)
 {
+    int8_t length = -1;
     conf_t a_conf = {0};
+    size_t length = 0;
 
     parse_a_conf(conf_line, &a_conf);
+    length = strnlen(a_conf.value, MAX_IP_OR_PORT_LENGTH);
+    if(length == MAX_IP_OR_PORT_LENGTH) {
+        printf("Property value is greater than %d characters is not supported. Going with default value \n", MAX_IP_OR_PORT_LENGTH);
+        return;
+    }
 
     if (strcmp(a_conf.prop, PC_IP_CONF_KEY) == 0) {
         strcpy(g_PAYLOAD_CONTROLLER_IP, a_conf.value);
@@ -122,9 +128,9 @@ static void update_a_conf(char *conf_line)
     } else if (strcmp(a_conf.prop, APP_API_PORT_CONF_KEY) == 0) {
         strcpy(g_PA_GRPC_SERVER_PORT_STR, a_conf.value);
     } else if (strcmp(a_conf.prop, SSL_ENABLE_KEY) == 0) {
-        strcpy(&g_SSL_ENABLE, a_conf.value);
+        g_SSL_ENABLE = a_conf.value[0];
     } else if (strcmp(a_conf.prop, KEEPALIVE_ENABLE_KEY) == 0) {
-        strcpy(&g_KEEPALIVE_ENABLE, a_conf.value);
+        g_KEEPALIVE_ENABLE = a_conf.value[0];
     }
 
     return;
@@ -146,7 +152,7 @@ static void refresh_config_vars(void)
 void sdk_environment_read_config(void)
 {
     FILE *conf_file;
-    char line[MAX_FILE_OR_PROP_LEN_NAME + MAX_FILE_OR_PROP_LEN_NAME];
+    char line[MAX_FILE_OR_PROP_LEN_NAME];
     char *fgets_ret;
 
     determine_conf_file();
