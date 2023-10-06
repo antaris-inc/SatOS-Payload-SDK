@@ -51,6 +51,7 @@ RUN mkdir -p ${ANTARIS_INSTALLATIONS_PATH}/protoc && unzip /tmp/protoc-3.15.8-li
 # Clean up
 RUN rm -rf /tmp/*
 
+SHELL ["/bin/bash", "-c"]
 # c++
 ARG GRPC_INSTALL_DIR=${ANTARIS_INSTALLATIONS_PATH}/grpc
 RUN cd /root/ && git clone --recurse-submodules -b v1.46.3 --depth 1 --shallow-submodules https://github.com/grpc/grpc
@@ -59,6 +60,7 @@ RUN cd /root/grpc && mkdir -p cmake/build && pushd cmake/build && mkdir -p ${GRP
       -DCMAKE_INSTALL_PREFIX=${GRPC_INSTALL_DIR} \
       ../.. && make -j 4 && make install && popd
 
+SHELL ["/bin/bash", "-c"]
 # api-generator dependencies
 RUN python3 -m pip install xmlschema
 
