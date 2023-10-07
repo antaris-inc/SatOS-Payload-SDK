@@ -24,7 +24,7 @@ gInternalListener=None
 gWebListerer=None
 gPeerConnectedOnInternalListener=None
 gSleepBeforeConnect=5
-
+gFlatSatMode=False
 g_MODE_USER="user"
 g_MODE_ATMOS="atmos"
 g_READ_SIZE=8192
@@ -54,7 +54,7 @@ def print_usage():
     global gInternalPeerPort
 
     logger.error("{}: Usage".format(sys.argv[0]))
-    logger.error("{} -m/--mode atmos|user -i/--web-public-ip WEB-PUBLIC-IP -p/--web-public-port WEB_PUBLIC_PORT -s/--internal-server-ip SERVER_IP -t/--internal-server-port SERVER_PORT -l/--local-peer-ip LOCAL_PEER_SERVER_IP -o/--local-peer-port LOCAL_PEER_SERVER_PORT [-h/--help]".format(sys.argv[0], gServerIp))
+    logger.error("{} -m/--mode atmos|user -i/--web-public-ip WEB-PUBLIC-IP -p/--web-public-port WEB_PUBLIC_PORT -s/--internal-server-ip SERVER_IP -t/--internal-server-port SERVER_PORT -l/--local-peer-ip LOCAL_PEER_SERVER_IP -o/--local-peer-port LOCAL_PEER_SERVER_PORT [-f/--flat-sat-mode] [-h/--help]".format(sys.argv[0], gServerIp))
 
 def print_params():
     global gAgentMode
@@ -64,9 +64,11 @@ def print_params():
     global gServerPort
     global gInternalPeerIP
     global gInternalPeerPort
+    global gFlatSatMode
 
     logger.info("\n\n{}: working with parameters".format(sys.argv[0]))
     logger.info("MODE={}".format(gAgentMode))
+    logger.info("FlatSat Mode={}".format(gFlatSatMode))
     logger.info("PUBLIC-IP={}".format(gAgentPublicIp))
     logger.info("PUBLIC-PORT={}".format(gAgentPublicPort))
     logger.info("INTERNAL-SERVER-IP={}".format(gServerIp))
@@ -83,11 +85,12 @@ def parse_opts():
     global g_VALID_MODES
     global gInternalPeerIP
     global gInternalPeerPort
+    global gFlatSatMode
 
     argv = sys.argv[1:]
     print("Got args: {}".format(argv))
     try:
-      opts, args = getopt.getopt(argv, "hm:i:p:s:t:l:o:",["help", "mode=", "web-public-ip=", "web-public-port=", "internal-server-ip=", "internal-server-port", "local-peer-ip", "local-peer-port"])
+      opts, args = getopt.getopt(argv, "hm:i:p:s:t:l:o:f",["help", "mode=", "web-public-ip=", "web-public-port=", "internal-server-ip=", "internal-server-port", "local-peer-ip", "local-peer-port", "flat-sat-mode"])
     except getopt.GetoptError:
       logger.critical ('Error parsing arguments')
       print_usage()
@@ -117,6 +120,8 @@ def parse_opts():
             gInternalPeerIP = arg
         elif opt in ("-o", "--local-peer-port"):
             gInternalPeerPort = int(arg)
+        elif opt in ("-f", "--flat-sat-mode"):
+            gFlatSatMode = True
 
     if None == gAgentMode:
         logger.critical("Compulsory parameter mode missing")
@@ -133,12 +138,12 @@ def parse_opts():
         print_usage()
         sys.exit(-1)
 
-    if None == gServerIp:
+    if None == gServerIp and gFlatSatMode == False:
         logger.critical("Compulsory parameter Internal-IP missing")
         print_usage()
         sys.exit(-1)
 
-    if None == gServerPort:
+    if None == gServerPort and gFlatSatMode == False:
         logger.critical("Compulsory parameter Internal-port missing")
         print_usage()
         sys.exit(-1)
@@ -210,16 +215,20 @@ def setup_internal_listener():
     global gActionMap
     global gKnownSockets
 
-    gInternalListener = socket_proxy.socket_create_listener(gServerIp, gServerPort)
-
-    logger.info("Set up internal server at {}:{}".format(gServerIp, gServerPort))
-    
-    if g_MODE_USER == gAgentMode:
-        logger.info("Will mimic PC")
+    if gFlatSatMode == True:
+        if g_MODE_ATMOS == gAgentMode:
+            gInternalListener = socket_proxy.socket_create_listener(gServerIp, gServerPort)
+            logger.info("Set up internal server at {}:{}".format(gServerIp, gServerPort))
+            logger.info("Will mimic Flat sat")
+            gKnownSockets.append(gInternalListener)
     else:
-        logger.info("Will mimic Payload App")
-
-    gKnownSockets.append(gInternalListener)
+        gInternalListener = socket_proxy.socket_create_listener(gServerIp, gServerPort)
+        logger.info("Set up internal server at {}:{}".format(gServerIp, gServerPort))
+        if g_MODE_USER == gAgentMode:
+            logger.info("Will mimic PC")
+        else:
+            logger.info("Will mimic Payload App")
+        gKnownSockets.append(gInternalListener)
 
     # log_sockets(logger.info, "Setup internal-listener completed")
 
