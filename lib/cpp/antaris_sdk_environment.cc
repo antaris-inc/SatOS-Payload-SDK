@@ -106,9 +106,8 @@ not_found:
 
 static void update_a_conf(char *conf_line)
 {
-    int8_t length = -1;
     conf_t a_conf = {0};
-    size_t length = 0;
+    size_t length;
 
     parse_a_conf(conf_line, &a_conf);
     length = strnlen(a_conf.value, MAX_IP_OR_PORT_LENGTH);
