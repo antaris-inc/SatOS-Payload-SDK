@@ -246,7 +246,7 @@ def install_permanent_handler():
     # on the user side, make a HalfPerma connecting perma-socket to the app's callback listener
     if g_MODE_USER == gAgentMode:
         logger.debug("USER-MODE: setting up a permanent handler for permasock")
-        half_perma = socket_proxy.HalfPerma(gPermaSocket, gInternalPeerIP, gInternalPeerPort)
+        half_perma = socket_proxy.HalfPerma(gPermaSocket, gInternalPeerIP, gInternalPeerPort, gFlatSatMode)
         gActionMap[gPermaSocket.fileno()] = half_perma
 
         logger.debug("Created permanent half-perma handler {}".format(str(half_perma)))
