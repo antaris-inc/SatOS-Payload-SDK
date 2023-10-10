@@ -34,7 +34,7 @@
 #define LogLocation_IDX                 2
 #define SEQUENCE_ID_MAX                 3
 
-#define APP_STATE_ACTIVE                1  // 1 => Indicates application is running
+#define APP_STATE_ACTIVE                0  // Application State : Good (0), Error (non-Zero)
 
 /*
  * Following counters should be incremented whenever
