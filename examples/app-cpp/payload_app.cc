@@ -236,6 +236,7 @@ AntarisReturnCode start_sequence(StartSequenceParams *start_seq_param)
     strcpy(thread_state->received_name, &start_seq_param->sequence_id[0]);
     strncpy(thread_state->seq_params, start_seq_param->sequence_params, SEQ_PARAMS_LEN);
     thread_state->scheduled_deadline = start_seq_param->scheduled_deadline;
+    thread_state->correlation_id = start_seq_param->correlation_id;
     fsmThreadStart(thread_state);
 
     return An_SUCCESS;
