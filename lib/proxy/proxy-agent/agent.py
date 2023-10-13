@@ -25,6 +25,9 @@ gWebListerer=None
 gPeerConnectedOnInternalListener=None
 gSleepBeforeConnect=5
 gFlatSatMode=False
+gUDPMode=False
+g_UDP_Cmd_Size=223
+udppacket=b""
 g_MODE_USER="user"
 g_MODE_ATMOS="atmos"
 g_READ_SIZE=8192
@@ -54,7 +57,7 @@ def print_usage():
     global gInternalPeerPort
 
     logger.error("{}: Usage".format(sys.argv[0]))
-    logger.error("{} -m/--mode atmos|user -i/--web-public-ip WEB-PUBLIC-IP -p/--web-public-port WEB_PUBLIC_PORT -s/--internal-server-ip SERVER_IP -t/--internal-server-port SERVER_PORT -l/--local-peer-ip LOCAL_PEER_SERVER_IP -o/--local-peer-port LOCAL_PEER_SERVER_PORT [-f/--flat-sat-mode] [-h/--help]".format(sys.argv[0], gServerIp))
+    logger.error("{} -m/--mode atmos|user -i/--web-public-ip WEB-PUBLIC-IP -p/--web-public-port WEB_PUBLIC_PORT -s/--internal-server-ip SERVER_IP -t/--internal-server-port SERVER_PORT -l/--local-peer-ip LOCAL_PEER_SERVER_IP -o/--local-peer-port LOCAL_PEER_SERVER_PORT [-f/--flat-sat-mode] [-u/--udp-mode] [-h/--help]".format(sys.argv[0], gServerIp))
 
 def print_params():
     global gAgentMode
@@ -65,10 +68,12 @@ def print_params():
     global gInternalPeerIP
     global gInternalPeerPort
     global gFlatSatMode
+    global gUDPMode
 
     logger.info("\n\n{}: working with parameters".format(sys.argv[0]))
     logger.info("MODE={}".format(gAgentMode))
     logger.info("FlatSat Mode={}".format(gFlatSatMode))
+    logger.info("FlatSat Mode UDP={}".format(gUDPMode))
     logger.info("PUBLIC-IP={}".format(gAgentPublicIp))
     logger.info("PUBLIC-PORT={}".format(gAgentPublicPort))
     logger.info("INTERNAL-SERVER-IP={}".format(gServerIp))
@@ -86,11 +91,12 @@ def parse_opts():
     global gInternalPeerIP
     global gInternalPeerPort
     global gFlatSatMode
+    global gUDPMode
 
     argv = sys.argv[1:]
     print("Got args: {}".format(argv))
     try:
-      opts, args = getopt.getopt(argv, "hm:i:p:s:t:l:o:f",["help", "mode=", "web-public-ip=", "web-public-port=", "internal-server-ip=", "internal-server-port", "local-peer-ip", "local-peer-port", "flat-sat-mode"])
+      opts, args = getopt.getopt(argv, "hm:i:p:s:t:l:o:fu",["help", "mode=", "web-public-ip=", "web-public-port=", "internal-server-ip=", "internal-server-port", "local-peer-ip", "local-peer-port", "flat-sat-mode", "udp-mode"])
     except getopt.GetoptError:
       logger.critical ('Error parsing arguments')
       print_usage()
@@ -122,6 +128,8 @@ def parse_opts():
             gInternalPeerPort = int(arg)
         elif opt in ("-f", "--flat-sat-mode"):
             gFlatSatMode = True
+        elif opt in ("-u", "--udp-mode"):
+            gUDPMode = True
 
     if None == gAgentMode:
         logger.critical("Compulsory parameter mode missing")
@@ -155,6 +163,11 @@ def parse_opts():
 
     if None == gInternalPeerPort:
         logger.critical("Compulsory parameter Local-Peer-port missing")
+        print_usage()
+        sys.exit(-1)
+    
+    if False == gFlatSatMode and True == gUDPMode:
+        logger.critical("UDP mode can only be used with flat sat mode")
         print_usage()
         sys.exit(-1)
 
@@ -246,7 +259,7 @@ def install_permanent_handler():
     # on the user side, make a HalfPerma connecting perma-socket to the app's callback listener
     if g_MODE_USER == gAgentMode:
         logger.debug("USER-MODE: setting up a permanent handler for permasock")
-        half_perma = socket_proxy.HalfPerma(gPermaSocket, gInternalPeerIP, gInternalPeerPort, gFlatSatMode)
+        half_perma = socket_proxy.HalfPerma(gPermaSocket, gInternalPeerIP, gInternalPeerPort, gUDPMode)
         gActionMap[gPermaSocket.fileno()] = half_perma
 
         logger.debug("Created permanent half-perma handler {}".format(str(half_perma)))
@@ -354,6 +367,48 @@ def handle_exceptions(sock):
 
     log_sockets(logger.info, "After exception handling ==> \n")
 
+
+def handle_udp(sock ,databuf):
+    global udppacket
+    while len(databuf) > 0:
+
+        if (len(udppacket) + len(databuf)) == g_UDP_Cmd_Size:
+            #if total length is equal to command size append and send buffer
+            udppacket += databuf
+            databuf = b""
+
+        elif (len(udppacket) + len(databuf)) < g_UDP_Cmd_Size:
+            #if total length is less than command size append and save buffer
+            udppacket += databuf
+            return
+        
+        else:
+            #if total length is more then append bytes required and send buffer
+            n = g_UDP_Cmd_Size - len(udppacket) 
+            udppacket += databuf[:n]
+            databuf = databuf[n:]
+        
+        logger.debug("\n\n >>>>>>>>>>>>> =====> DATA packet {} bytes for udp sock {} ===>\n\n{}\n".format(len(udppacket), sock, str(HEX.hexdump(udppacket))))
+        handler = gActionMap[sock.fileno()]
+        logger.debug("Handler for this READ is {}".format(str(handler)))
+        forwarded_leg_sock = handler.on_data(sock, udppacket)
+
+        if forwarded_leg_sock == None:
+            logger.warn("Handler {} forced to drop data without forwarding".format(str(handler)))
+            udppacket = []
+            return
+
+        logger.debug("Handler has forwarded to socket {}".format(str(forwarded_leg_sock)))
+        udppacket = b""
+
+    forwarded_sock_no = forwarded_leg_sock.fileno()
+    if forwarded_sock_no not in gActionMap:
+        gKnownSockets.append(forwarded_leg_sock)
+        gActionMap[forwarded_sock_no] = handler
+
+    return
+
+
 def handle_readable(sock):
     global gAgentMode
     global gAgentPublicIp
@@ -385,21 +440,27 @@ def handle_readable(sock):
         if socket_has_error or None == databuf or 0 == len(databuf):
             handle_exceptions(sock)
         else:
-            handler = gActionMap[sock.fileno()]
-            logger.debug("Handler for this READ is {}".format(str(handler)))
-            forwarded_leg_sock = handler.on_data(sock, databuf)
 
-            if forwarded_leg_sock == None:
-                logger.warn("Handler {} forced to drop data without forwarding".format(str(handler)))
-                return
+            if sock.fileno() == gPermaSocket.fileno() and gUDPMode == True and gAgentMode == g_MODE_USER:
+                #handle udp socket in user mode
+                handle_udp(sock, databuf)
 
-            logger.debug("Handler has forwarded to socket {}".format(str(forwarded_leg_sock)))
+            else:
+                handler = gActionMap[sock.fileno()]
+                logger.debug("Handler for this READ is {}".format(str(handler)))
+                forwarded_leg_sock = handler.on_data(sock, databuf)
 
-            forwarded_sock_no = forwarded_leg_sock.fileno()
+                if forwarded_leg_sock == None:
+                    logger.warn("Handler {} forced to drop data without forwarding".format(str(handler)))
+                    return
 
-            if forwarded_sock_no not in gActionMap:
-                gKnownSockets.append(forwarded_leg_sock)
-                gActionMap[forwarded_sock_no] = handler
+                logger.debug("Handler has forwarded to socket {}".format(str(forwarded_leg_sock)))
+
+                forwarded_sock_no = forwarded_leg_sock.fileno()
+
+                if forwarded_sock_no not in gActionMap:
+                    gKnownSockets.append(forwarded_leg_sock)
+                    gActionMap[forwarded_sock_no] = handler
 
     elif sock.fileno() == gPermaSocket.fileno():
         # should only happen on a perma-disconnect before previous usage, otherwise we should have been in the action-map

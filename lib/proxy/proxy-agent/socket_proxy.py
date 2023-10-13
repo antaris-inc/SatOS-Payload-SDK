@@ -98,9 +98,9 @@ class ProxySocket:
         return str
 
 class OnTheFly(ProxySocket):
-    def __init__(self, sock1, peer_ip, peer_port, gFlatSatMode):
+    def __init__(self, sock1, peer_ip, peer_port, gUDPMode):
         self.leg1 = sock1
-        if gFlatSatMode == False:
+        if gUDPMode == False:
             self.leg2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         else:
             self.leg2 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -164,17 +164,17 @@ class HalfPermaConnectedSockets(ProxySocket):
         return str
 
 class HalfPerma:
-    def __init__(self, sock1, peer_ip, peer_port, gFlatSatMode):
+    def __init__(self, sock1, peer_ip, peer_port, gUDPMode):
         self.leg1 = sock1
         self.peer_ip = peer_ip
         self.peer_port = peer_port
         self.proxy = None
-        self.gFlatSatMode = gFlatSatMode
+        self.gUDPMode = gUDPMode
 
     def on_data(self, sock, buf):
         if self.leg1 == sock:
             if self.proxy == None:
-                self.proxy = OnTheFly(self.leg1, self.peer_ip, self.peer_port, self.gFlatSatMode)
+                self.proxy = OnTheFly(self.leg1, self.peer_ip, self.peer_port, self.gUDPMode)
 
             logger.debug("Check proxy {}".format(self.proxy))
             return self.proxy.on_data(sock, buf)
