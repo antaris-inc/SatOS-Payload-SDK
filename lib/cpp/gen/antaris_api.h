@@ -52,6 +52,9 @@ extern "C" {
 #endif
 
 
+#define MAX_SEQUENCE_ID_LENGTH      16
+#define MAX_SEQUENCE_PARAM_LENGTH   64
+
 // >>>> Forward declarations and enums <<<<<
 
 /// @enum AntarisReturnCode
