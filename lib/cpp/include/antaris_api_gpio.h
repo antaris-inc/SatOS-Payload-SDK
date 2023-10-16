@@ -30,7 +30,7 @@
 #include "antaris_api_internal.h"
 #include "antaris_sdk_environment.h"
 
-#define PYTHON_SCRIPT             "/lib/antaris/tools/antaris_api_gpio.py"
+#define PYTHON_SCRIPT             "lib.antaris.tools.antaris_api_gpio"
 #define JSON_Key_GPIO_Pin_Count   ("GPIO_PIN_COUNT")
 #define JSON_Key_IO_Access        ("IO_Access")
 #define JSON_Key_GPIO             ("GPIO")
@@ -40,6 +40,9 @@
 #define JSON_Key_UART             ("UART")
 #define JSON_Key_Device_Path      ("Device_Path")
 #define JSON_Key_Interrupt_Pin    ("GPIO_Interrupt")
+
+#define TRUE        1
+#define FALSE       0
 
 typedef struct gpio {
     int8_t pin_count;
