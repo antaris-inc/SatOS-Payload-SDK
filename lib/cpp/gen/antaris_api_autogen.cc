@@ -597,6 +597,7 @@ app_to_peer_StartSequenceParams(const void *ptr_src_app, void *ptr_dst_peer)
 void
 peer_to_app_StartSequenceParams(const void *ptr_src_peer, void *ptr_dst_app)
 {
+    size_t length;
     StartSequenceParams *dst = (StartSequenceParams *)ptr_dst_app;
     ::antaris_api_peer_to_peer::StartSequenceParams *src = (::antaris_api_peer_to_peer::StartSequenceParams *)ptr_src_peer;
 
