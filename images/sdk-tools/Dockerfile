@@ -40,7 +40,7 @@ RUN apt-get clean
 RUN python3 -m pip install --upgrade pip
 
 # Install grpcio and grpcio-tools
-RUN python3 -m pip install grpcio grpcio-tools
+RUN python3 -m pip install grpcio grpcio-tools build
 
 ARG ANTARIS_INSTALLATIONS_PATH=/usr/local/antaris
 
