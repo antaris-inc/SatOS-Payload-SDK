@@ -606,15 +606,13 @@ peer_to_app_StartSequenceParams(const void *ptr_src_peer, void *ptr_dst_app)
     length = strnlen(src->sequence_id().c_str(), MAX_SEQUENCE_ID_LENGTH);
     if(length >= MAX_SEQUENCE_ID_LENGTH) {
         printf("Sequence id greater than %d characters is not supported. Truncating length to %d \n", MAX_SEQUENCE_ID_LENGTH, (MAX_SEQUENCE_ID_LENGTH - 1));
-        return;
     }
     strncpy(&dst->sequence_id[0], src->sequence_id().c_str(), MAX_SEQUENCE_ID_LENGTH);
     dst->sequence_id[MAX_SEQUENCE_ID_LENGTH - 1] = '\0';
-
+    printf("rahul id = %s \n", dst->sequence_id);
     length = strnlen(src->sequence_id().c_str(), MAX_SEQUENCE_PARAM_LENGTH);
     if(length >= MAX_SEQUENCE_PARAM_LENGTH) {
         printf("Sequence parameters greater than %d characters is not supported. Truncating length to %d \n", MAX_SEQUENCE_PARAM_LENGTH, (MAX_SEQUENCE_PARAM_LENGTH - 1));
-        return;
     }
     strncpy(&dst->sequence_params[0], src->sequence_params().c_str(), MAX_SEQUENCE_PARAM_LENGTH);
     dst->sequence_params[MAX_SEQUENCE_PARAM_LENGTH - 1] = '\0';
