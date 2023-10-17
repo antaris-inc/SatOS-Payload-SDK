@@ -164,43 +164,44 @@ void handle_TestGPIO(mythreadState_t *mythread)
 
     while (i < gpio_info.pin_count) {
         // Read initial value of GPIO pins.
-        // As GPIO pins are back-to-back connected, their value must be same.
-        if (gpio_info.pins[i] != -1) {
-            readPin = gpio_info.pins[i];
-            i += 1;
-            writePin = gpio_info.pins[i];
-            val = api_gpio.api_pa_pc_read_gpio(gpio_info.gpio_port, readPin);
-            if (val != GPIO_ERROR) {
-                printf("Initial Gpio value of pin no %d is %d \n", int(readPin), val);
-            } else {
-                printf("Error in pin no %d \n", int(readPin));
-                return;
-            }
-           
-            // Toggle the value
-            val = val ^ 1; 
-            // Writing value to WritePin.
-            ret = api_gpio.api_pa_pc_write_gpio(gpio_info.gpio_port, writePin, val);
-            if (ret != GPIO_ERROR) {
-                printf("Written %d successfully to pin no %d \n", val, int(writePin));
-            } else {
-                printf("error in pin no %d \n", int(writePin));
-                return;
-            } 
-            
-            /* As Read and Write pins are back-to-back connected, 
-               Reading value of Read pin to confirm GPIO success/failure
-             */
-            val = api_gpio.api_pa_pc_read_gpio(gpio_info.gpio_port, readPin);
-
-            if (val != GPIO_ERROR) {
-                printf("Final Gpio value of pin no %d is %d \n", int(readPin), val);
-            } else {
-                printf("Error in pin no %d \n", int(readPin));
-                return;
-            }
-            i += 1;
+        // Assume GPIO pins are in loopback mode, their value must be same.
+        if (gpio_info.pins[i] == -1) {
+            printf("Error: GPIO pins are not specified in config file \n");
         }
+        readPin = gpio_info.pins[i];
+        i += 1;
+        writePin = gpio_info.pins[i];
+        val = api_gpio.api_pa_pc_read_gpio(gpio_info.gpio_port, readPin);
+        if (val != GPIO_ERROR) {
+            printf("Initial Gpio value of pin no %d is %d \n", int(readPin), val);
+        } else {
+            printf("Error in pin no %d \n", int(readPin));
+            return;
+        }
+           
+        // Toggle the value
+        val = val ^ 1; 
+        // Writing value to WritePin.
+        ret = api_gpio.api_pa_pc_write_gpio(gpio_info.gpio_port, writePin, val);
+        if (ret != GPIO_ERROR) {
+            printf("Written %d successfully to pin no %d \n", val, int(writePin));
+        } else {
+            printf("Error in pin no %d \n", int(writePin));
+            return;
+        } 
+            
+        /* As Read and Write pins are back-to-back connected, 
+           Reading value of Read pin to confirm GPIO success/failure
+         */
+        val = api_gpio.api_pa_pc_read_gpio(gpio_info.gpio_port, readPin);
+
+        if (val != GPIO_ERROR) {
+            printf("Final Gpio value of pin no %d is %d \n", int(readPin), val);
+        } else {
+            printf("Error in pin no %d \n", int(readPin));
+            return;
+        }
+        i += 1;
     }
 
     // Tell PC that current sequence is done
