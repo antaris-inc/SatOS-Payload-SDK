@@ -423,6 +423,8 @@ int main(int argc, char *argv[])
     AntarisReturnCode ret;
     void *exit_status;
 
+    init_satos_lib();
+    
     // Callback functions (PC => PA)
     AntarisApiCallbackFuncList callback_func_list = {
             start_sequence: start_sequence,
@@ -498,5 +500,6 @@ int main(int argc, char *argv[])
 
     printf("==== All Done: Exiting Main Thread ====\n\n");
 
+    deinit_satos_lib();
     _exit(0);
 }

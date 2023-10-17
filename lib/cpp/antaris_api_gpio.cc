@@ -146,50 +146,69 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio)
     return An_SUCCESS;
 }
 
-int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number)
+AntarisReturnCode init_satos_lib()
 {
-    int exit_status;
-    long result;
-
     Py_Initialize();
     PyObject* sysPath = PySys_GetObject("path");
 
     if (sysPath == nullptr) {
-        PyErr_Print();
+        printf("Error: Can not initialize SatOS library \n");
+        return An_GENERIC_FAILURE;
     } else {
         PyObject* directoryPath = PyUnicode_DecodeFSDefault("/lib/antaris/tools/");
         if (directoryPath != nullptr)  {
             PyList_Append(sysPath, directoryPath);
             Py_XDECREF(directoryPath);
-            printf("rahul 11 \n");
         } else  {
-            PyErr_Print();
+            printf("Error: Can not initialize SatOS library \n");
+            return An_GENERIC_FAILURE;
         }
     }
 
-    PyObject *pName = PyUnicode_DecodeFSDefault("antaris_api_gpio");
-    PyObject *pModule = PyImport_Import(pName);
-    if (pModule != nullptr)
-    {
-        PyObject *pFunction = PyObject_GetAttrString(pModule, "api_read_gpio"); // Replace with your function name
+    return An_SUCCESS;
+}
+
+void deinit_satos_lib()
+{
+    Py_Finalize();
+}
+
+int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number)
+{
+    int exit_status;
+    long result;
+    PyObject *pName = NULL;
+    PyObject *pModule = NULL;
+    PyObject *pFunction = NULL;
+    PyObject *pArgs = NULL;
+    PyObject *pValue = NULL;
+
+
+    pName = PyUnicode_DecodeFSDefault(PYTHON_GPIO_MODULE);
+    pModule = PyImport_Import(pName);
+
+    if (pModule != nullptr)  {
+        pFunction = PyObject_GetAttrString(pModule, PYTHON_GPIO_READ_FUNCTION); 
+        
         if (PyCallable_Check(pFunction)) {
-            PyObject *pArgs = PyTuple_Pack(2, PyLong_FromLong((long) gpio_port), PyLong_FromLong((long) pin_number)); // Pass arguments
-            PyObject *pValue = PyObject_CallObject(pFunction, pArgs);                  // Call the function
+            pArgs = PyTuple_Pack(2, PyLong_FromLong((long) gpio_port), PyLong_FromLong((long) pin_number)); // Pass arguments
+            pValue = PyObject_CallObject(pFunction, pArgs);                  // Call the function
             result = PyLong_AsLong(pValue);                                       // Convert the result to a C++ type
             exit_status = (int) result;
-            // Use 'result' as needed
+            
+            // Dereference python objects
             Py_XDECREF(pValue);
             Py_XDECREF(pArgs);
             Py_XDECREF(pFunction);
         } else {
-            PyErr_Print();
+            printf("Error: Can not read GPIO pin %d \n", pin_number);
+            return An_GENERIC_FAILURE;
         }
         Py_XDECREF(pModule);
     } else  {
-        PyErr_Print();
+        printf("Error: Can not read GPIO pin %d \n", pin_number);
+        return An_GENERIC_FAILURE;
     }
-
-    Py_Finalize();
 
     // Process and use the Python script's result in your C++ code
     printf("Pin level : %d \n", exit_status);
@@ -200,49 +219,40 @@ int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number)
 AntarisReturnCode AntarisApiGPIO::api_pa_pc_write_gpio(int8_t gpio_port, int8_t pin_number, int8_t value)
 {
     long pystatus = -1;
+    PyObject *pName = NULL;
+    PyObject *pModule = NULL;
+    PyObject *pFunction = NULL;
+    PyObject *pArgs = NULL;
+    PyObject *pValue = NULL;
 
-    Py_Initialize();
-    PyObject* sysPath = PySys_GetObject("path");
+    pName = PyUnicode_DecodeFSDefault(PYTHON_GPIO_MODULE);
+    pModule = PyImport_Import(pName);
+    if (pModule != nullptr)  {
 
-    if (sysPath == nullptr) {
-        PyErr_Print();
-    } else {
-        PyObject* directoryPath = PyUnicode_DecodeFSDefault("/lib/antaris/tools/");
-        if (directoryPath != nullptr)  {
-            PyList_Append(sysPath, directoryPath);
-            Py_XDECREF(directoryPath);
-            printf("rahul 11 \n");
-        } else  {
-            PyErr_Print();
-        }
-    }
-
-    PyObject *pName = PyUnicode_DecodeFSDefault("antaris_api_gpio");
-    PyObject *pModule = PyImport_Import(pName);
-    if (pModule != nullptr)
-    {
-        printf("rahul 12 \n");
-        PyObject *pFunction = PyObject_GetAttrString(pModule, "api_write_gpio"); // Replace with your function name
+        pFunction = PyObject_GetAttrString(pModule, PYTHON_GPIO_WRITE_FUNCTION);
+        
         if (PyCallable_Check(pFunction)) {
-            PyObject *pArgs = PyTuple_Pack(3, PyLong_FromLong((long) gpio_port), PyLong_FromLong((long) pin_number), PyLong_FromLong((long) value)); // Pass arguments
-            PyObject *pValue = PyObject_CallObject(pFunction, pArgs);                  // Call the function
-            pystatus = PyLong_AsLong(pValue);                                       // Convert the result to a C++ type
-            printf("rahul 13 %ld \n", pystatus);
+            pArgs = PyTuple_Pack(3, PyLong_FromLong((long) gpio_port), PyLong_FromLong((long) pin_number), PyLong_FromLong((long) value));                            // Pass arguments
+            pValue = PyObject_CallObject(pFunction, pArgs);            // Call the function
+            pystatus = PyLong_AsLong(pValue);                          // Convert the result to a C++ type
+
+            // Dereference all objects
             Py_XDECREF(pValue);
             Py_XDECREF(pArgs);
             Py_XDECREF(pFunction);
         } else {
-            PyErr_Print();
+            printf("Error: Can not write GPIO pin %d \n", pin_number);
+            return An_GENERIC_FAILURE;
         }
         Py_XDECREF(pModule);
     } else  {
-        PyErr_Print();
+        printf("Error: Can not write GPIO pin %d \n", pin_number);
+        return An_GENERIC_FAILURE;
     }
-    Py_Finalize();
+    
 
-    if (pystatus == -1)
-    {
-        printf("Error \n");
+    if (pystatus == An_GENERIC_FAILURE) {
+        printf("Error: Can not write GPIO pin %d \n", pin_number);
         return An_GENERIC_FAILURE;
     }
 

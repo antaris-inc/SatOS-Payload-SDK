@@ -102,6 +102,7 @@ api_lib:
 		#mkdir -p ${OUTPUT_LIB_DIR} ${OUTPUT_BIN_DIR} ;																										\
 		echo building cpp api library;																														\
 		gcc ${OPTIMIZATION_LEVEL} -c ${VENDOR_LIB_DIR}/cJSON/src/cJSON.c	${VENDOR_cJSON_INCLUDES}	-o ${VENDOR_LIB_DIR}/cJSON/src/cJSON.o	;																							\
+		g++ ${OPTIMIZATION_LEVEL} -c ${CPP_LIB_DIR}/antaris_api_gpio.cc ${VENDOR_cJSON_INCLUDES} -I /usr/include/python3.10 -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_CPP_DIR} -o ${CPP_LIB_DIR}/antaris_api_gpio.o ;	\
 		g++ ${OPTIMIZATION_LEVEL} -c ${OUTPUT_GEN_DIR}/antaris_api_autogen.cc -I ${CPP_LIB_DIR}/include ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_DIR} -o ${OUTPUT_GEN_DIR}/antaris_api_autogen.o ;					\
 		g++ ${OPTIMIZATION_LEVEL} -c ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.o ;								\
 		g++ ${OPTIMIZATION_LEVEL} -c ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.o ;											\
@@ -136,11 +137,7 @@ docs:
 	sphinx-build docs/src dist/docs
 
 cpp_example: all
-<<<<<<< HEAD
-	g++ ${OPTIMIZATION_LEVEL} examples/app-cpp/payload_app.cc -o examples/app-cpp/payload_app -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS};
-=======
-	g++ -g examples/app-cpp/payload_app.cc -o examples/app-cpp/payload_app ${VENDOR_cJSON_INCLUDES} -I /usr/local/include/ -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS};
->>>>>>> 661f289 (Added GPIO support in cpp applictaion)
+	g++ ${OPTIMIZATION_LEVEL} examples/app-cpp/payload_app.cc -o examples/app-cpp/payload_app ${VENDOR_cJSON_INCLUDES} -I /usr/local/include/ -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS};
 
 all: api_lib pc_sim sample_app
 
