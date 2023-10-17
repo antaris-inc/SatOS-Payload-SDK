@@ -142,7 +142,12 @@ peer_to_app_RespRegisterParams(const void *ptr_src_peer, void *ptr_dst_app)
 
     dst->correlation_id = src->correlation_id();
     dst->req_status = src->req_status();
-    strcpy(&dst->auth_token[0], src->auth_token().c_str());
+    size_t auth_token_length = strlen(src->auth_token().c_str());
+    if ( auth_token_length >= [256] ) {
+        printf(" auth_token_length can not be greater than [256], exiting\n");
+        return;
+    }
+    strncpy(&dst->auth_token[0], src->auth_token().c_str(), [256]);
 
 }
 
@@ -301,7 +306,12 @@ peer_to_app_ReqStageFileDownloadParams(const void *ptr_src_peer, void *ptr_dst_a
     ::antaris_api_peer_to_peer::ReqStageFileDownloadParams *src = (::antaris_api_peer_to_peer::ReqStageFileDownloadParams *)ptr_src_peer;
 
     dst->correlation_id = src->correlation_id();
-    strcpy(&dst->file_path[0], src->file_path().c_str());
+    size_t file_path_length = strlen(src->file_path().c_str());
+    if ( file_path_length >= [256] ) {
+        printf(" file_path_length can not be greater than [256], exiting\n");
+        return;
+    }
+    strncpy(&dst->file_path[0], src->file_path().c_str(), [256]);
 
 }
 
@@ -597,26 +607,22 @@ app_to_peer_StartSequenceParams(const void *ptr_src_app, void *ptr_dst_peer)
 void
 peer_to_app_StartSequenceParams(const void *ptr_src_peer, void *ptr_dst_app)
 {
-    size_t length;
     StartSequenceParams *dst = (StartSequenceParams *)ptr_dst_app;
     ::antaris_api_peer_to_peer::StartSequenceParams *src = (::antaris_api_peer_to_peer::StartSequenceParams *)ptr_src_peer;
 
     dst->correlation_id = src->correlation_id();
-
-    length = strnlen(src->sequence_id().c_str(), MAX_SEQUENCE_ID_LENGTH);
-    if(length >= MAX_SEQUENCE_ID_LENGTH) {
-        printf("Sequence id greater than %d characters is not supported. Truncating length to %d \n", MAX_SEQUENCE_ID_LENGTH, (MAX_SEQUENCE_ID_LENGTH - 1));
+    size_t sequence_id_length = strlen(src->sequence_id().c_str());
+    if ( sequence_id_length >= [16] ) {
+        printf(" sequence_id_length can not be greater than [16], exiting\n");
+        return;
     }
-    strncpy(&dst->sequence_id[0], src->sequence_id().c_str(), MAX_SEQUENCE_ID_LENGTH);
-    dst->sequence_id[MAX_SEQUENCE_ID_LENGTH - 1] = '\0';
-    printf("rahul id = %s \n", dst->sequence_id);
-    length = strnlen(src->sequence_id().c_str(), MAX_SEQUENCE_PARAM_LENGTH);
-    if(length >= MAX_SEQUENCE_PARAM_LENGTH) {
-        printf("Sequence parameters greater than %d characters is not supported. Truncating length to %d \n", MAX_SEQUENCE_PARAM_LENGTH, (MAX_SEQUENCE_PARAM_LENGTH - 1));
+    strncpy(&dst->sequence_id[0], src->sequence_id().c_str(), [16]);
+    size_t sequence_params_length = strlen(src->sequence_params().c_str());
+    if ( sequence_params_length >= [64] ) {
+        printf(" sequence_params_length can not be greater than [64], exiting\n");
+        return;
     }
-    strncpy(&dst->sequence_params[0], src->sequence_params().c_str(), MAX_SEQUENCE_PARAM_LENGTH);
-    dst->sequence_params[MAX_SEQUENCE_PARAM_LENGTH - 1] = '\0';
-
+    strncpy(&dst->sequence_params[0], src->sequence_params().c_str(), [64]);
     dst->scheduled_deadline = src->scheduled_deadline();
 
 }
@@ -760,7 +766,12 @@ peer_to_app_CmdSequenceDoneParams(const void *ptr_src_peer, void *ptr_dst_app)
     CmdSequenceDoneParams *dst = (CmdSequenceDoneParams *)ptr_dst_app;
     ::antaris_api_peer_to_peer::CmdSequenceDoneParams *src = (::antaris_api_peer_to_peer::CmdSequenceDoneParams *)ptr_src_peer;
 
-    strcpy(&dst->sequence_id[0], src->sequence_id().c_str());
+    size_t sequence_id_length = strlen(src->sequence_id().c_str());
+    if ( sequence_id_length >= [16] ) {
+        printf(" sequence_id_length can not be greater than [16], exiting\n");
+        return;
+    }
+    strncpy(&dst->sequence_id[0], src->sequence_id().c_str(), [16]);
 
 }
 
