@@ -248,12 +248,13 @@ class CPPField(PARSER_INTF.Field):
                 targetFile.write("{}{}(&src->{}, &{});\n".format(gIndent * 2, get_peer_to_app_fn_for_type(self.type), self.name, tmpVarName))
                 targetFile.write("{}{}\n".format(gIndent, "}"))
             else:
-                targetFile.write("{}size_t {}_length = strnlen(src->{}().c_str(), {});\n".format(gIndent, self.name, self.name, self.array))
-                targetFile.write("{}{} {}_length >= {} {}\n".format(gIndent, "if (", self.name, self.array, ") {"))
-                targetFile.write("{}{}{} {}_length can not be greater than {}{}\n".format(gIndent, gIndent, "printf(\"", self.name, self.array, ", exiting\\n\");" ))
+                srtlength = int(''.join(self.array[1:-1]))
+                targetFile.write("{}size_t {}_length = strnlen(src->{}().c_str(), {});\n".format(gIndent, self.name, self.name, srtlength))
+                targetFile.write("{}{} {}_length >= {} {}\n".format(gIndent, "if (", self.name, srtlength, ") {"))
+                targetFile.write("{}{}{} {}_length can not be greater than {}{}\n".format(gIndent, gIndent, "printf(\"", self.name, srtlength, ", exiting\\n\");" ))
                 targetFile.write("{}{}{}\n".format(gIndent, gIndent, "return;"))
                 targetFile.write("{}{}\n".format(gIndent, "}"))
-                targetFile.write("{}strncpy(&dst->{}[0], src->{}().c_str(), {});\n".format(gIndent, self.name, self.name, self.array))
+                targetFile.write("{}strncpy(&dst->{}[0], src->{}().c_str(), {});\n".format(gIndent, self.name, self.name, srtlength))
 
     def get_peer_local_tmp_varname(self):
         return "__tmp_{}".format(self.name)
