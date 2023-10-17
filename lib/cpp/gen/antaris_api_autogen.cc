@@ -144,7 +144,7 @@ peer_to_app_RespRegisterParams(const void *ptr_src_peer, void *ptr_dst_app)
     dst->req_status = src->req_status();
     size_t auth_token_length = strnlen(src->auth_token().c_str(), 256);
     if ( auth_token_length >= 256 ) {
-        printf(" auth_token_length can not be greater than 256, exiting\n");
+        printf("Error:  auth_token_length can not be greater than 256 \n");
         return;
     }
     strncpy(&dst->auth_token[0], src->auth_token().c_str(), 256);
@@ -308,7 +308,7 @@ peer_to_app_ReqStageFileDownloadParams(const void *ptr_src_peer, void *ptr_dst_a
     dst->correlation_id = src->correlation_id();
     size_t file_path_length = strnlen(src->file_path().c_str(), 256);
     if ( file_path_length >= 256 ) {
-        printf(" file_path_length can not be greater than 256, exiting\n");
+        printf("Error:  file_path_length can not be greater than 256 \n");
         return;
     }
     strncpy(&dst->file_path[0], src->file_path().c_str(), 256);
@@ -613,13 +613,13 @@ peer_to_app_StartSequenceParams(const void *ptr_src_peer, void *ptr_dst_app)
     dst->correlation_id = src->correlation_id();
     size_t sequence_id_length = strnlen(src->sequence_id().c_str(), 16);
     if ( sequence_id_length >= 16 ) {
-        printf(" sequence_id_length can not be greater than 16, exiting\n");
+        printf("Error:  sequence_id_length can not be greater than 16 \n");
         return;
     }
     strncpy(&dst->sequence_id[0], src->sequence_id().c_str(), 16);
     size_t sequence_params_length = strnlen(src->sequence_params().c_str(), 64);
     if ( sequence_params_length >= 64 ) {
-        printf(" sequence_params_length can not be greater than 64, exiting\n");
+        printf("Error:  sequence_params_length can not be greater than 64 \n");
         return;
     }
     strncpy(&dst->sequence_params[0], src->sequence_params().c_str(), 64);
@@ -768,7 +768,7 @@ peer_to_app_CmdSequenceDoneParams(const void *ptr_src_peer, void *ptr_dst_app)
 
     size_t sequence_id_length = strnlen(src->sequence_id().c_str(), 16);
     if ( sequence_id_length >= 16 ) {
-        printf(" sequence_id_length can not be greater than 16, exiting\n");
+        printf("Error:  sequence_id_length can not be greater than 16 \n");
         return;
     }
     strncpy(&dst->sequence_id[0], src->sequence_id().c_str(), 16);
