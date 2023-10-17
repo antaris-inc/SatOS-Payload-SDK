@@ -248,7 +248,7 @@ class CPPField(PARSER_INTF.Field):
                 targetFile.write("{}{}(&src->{}, &{});\n".format(gIndent * 2, get_peer_to_app_fn_for_type(self.type), self.name, tmpVarName))
                 targetFile.write("{}{}\n".format(gIndent, "}"))
             else:
-                targetFile.write("{}size_t {}_length = strlen(src->{}().c_str());\n".format(gIndent, self.name, self.name))
+                targetFile.write("{}size_t {}_length = strnlen(src->{}().c_str(), {});\n".format(gIndent, self.name, self.name, self.array))
                 targetFile.write("{}{} {}_length >= {} {}\n".format(gIndent, "if (", self.name, self.array, ") {"))
                 targetFile.write("{}{}{} {}_length can not be greater than {}{}\n".format(gIndent, gIndent, "printf(\"", self.name, self.array, ", exiting\\n\");" ))
                 targetFile.write("{}{}{}\n".format(gIndent, gIndent, "return;"))

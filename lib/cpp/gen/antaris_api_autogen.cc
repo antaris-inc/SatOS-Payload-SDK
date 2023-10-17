@@ -142,7 +142,7 @@ peer_to_app_RespRegisterParams(const void *ptr_src_peer, void *ptr_dst_app)
 
     dst->correlation_id = src->correlation_id();
     dst->req_status = src->req_status();
-    size_t auth_token_length = strlen(src->auth_token().c_str());
+    size_t auth_token_length = strnlen(src->auth_token().c_str(), [256]);
     if ( auth_token_length >= [256] ) {
         printf(" auth_token_length can not be greater than [256], exiting\n");
         return;
@@ -306,7 +306,7 @@ peer_to_app_ReqStageFileDownloadParams(const void *ptr_src_peer, void *ptr_dst_a
     ::antaris_api_peer_to_peer::ReqStageFileDownloadParams *src = (::antaris_api_peer_to_peer::ReqStageFileDownloadParams *)ptr_src_peer;
 
     dst->correlation_id = src->correlation_id();
-    size_t file_path_length = strlen(src->file_path().c_str());
+    size_t file_path_length = strnlen(src->file_path().c_str(), [256]);
     if ( file_path_length >= [256] ) {
         printf(" file_path_length can not be greater than [256], exiting\n");
         return;
@@ -611,13 +611,13 @@ peer_to_app_StartSequenceParams(const void *ptr_src_peer, void *ptr_dst_app)
     ::antaris_api_peer_to_peer::StartSequenceParams *src = (::antaris_api_peer_to_peer::StartSequenceParams *)ptr_src_peer;
 
     dst->correlation_id = src->correlation_id();
-    size_t sequence_id_length = strlen(src->sequence_id().c_str());
+    size_t sequence_id_length = strnlen(src->sequence_id().c_str(), [16]);
     if ( sequence_id_length >= [16] ) {
         printf(" sequence_id_length can not be greater than [16], exiting\n");
         return;
     }
     strncpy(&dst->sequence_id[0], src->sequence_id().c_str(), [16]);
-    size_t sequence_params_length = strlen(src->sequence_params().c_str());
+    size_t sequence_params_length = strnlen(src->sequence_params().c_str(), [64]);
     if ( sequence_params_length >= [64] ) {
         printf(" sequence_params_length can not be greater than [64], exiting\n");
         return;
@@ -766,7 +766,7 @@ peer_to_app_CmdSequenceDoneParams(const void *ptr_src_peer, void *ptr_dst_app)
     CmdSequenceDoneParams *dst = (CmdSequenceDoneParams *)ptr_dst_app;
     ::antaris_api_peer_to_peer::CmdSequenceDoneParams *src = (::antaris_api_peer_to_peer::CmdSequenceDoneParams *)ptr_src_peer;
 
-    size_t sequence_id_length = strlen(src->sequence_id().c_str());
+    size_t sequence_id_length = strnlen(src->sequence_id().c_str(), [16]);
     if ( sequence_id_length >= [16] ) {
         printf(" sequence_id_length can not be greater than [16], exiting\n");
         return;
