@@ -137,7 +137,7 @@ docs:
 	sphinx-build docs/src dist/docs
 
 cpp_example: all
-	g++ ${OPTIMIZATION_LEVEL} examples/app-cpp/payload_app.cc -o examples/app-cpp/payload_app ${VENDOR_cJSON_INCLUDES} -I /usr/local/include/ -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS};
+	g++ ${OPTIMIZATION_LEVEL} examples/app-cpp/payload_app.cc -o examples/app-cpp/payload_app ${VENDOR_cJSON_INCLUDES} -I /usr/local/include/ -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS} -lpython3.10;
 
 all: api_lib pc_sim sample_app
 
