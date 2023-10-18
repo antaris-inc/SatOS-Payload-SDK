@@ -248,7 +248,13 @@ class CPPField(PARSER_INTF.Field):
                 targetFile.write("{}{}(&src->{}, &{});\n".format(gIndent * 2, get_peer_to_app_fn_for_type(self.type), self.name, tmpVarName))
                 targetFile.write("{}{}\n".format(gIndent, "}"))
             else:
-                targetFile.write("{}strcpy(&dst->{}[0], src->{}().c_str());\n".format(gIndent, self.name, self.name))
+                strlength = int(''.join(self.array[1:-1]))
+                targetFile.write("{}size_t {}_length = strnlen(src->{}().c_str(), {});\n".format(gIndent, self.name, self.name, strlength))
+                targetFile.write("{}{} {}_length >= {} {}\n".format(gIndent, "if (", self.name, strlength, ") {"))
+                targetFile.write("{}{}{} {}_length should be less than {}{}\n".format(gIndent, gIndent, "printf(\"Error: ", self.name, strlength, " \\n\");" ))
+                targetFile.write("{}{}{}\n".format(gIndent, gIndent, "return;"))
+                targetFile.write("{}{}\n".format(gIndent, "}"))
+                targetFile.write("{}strncpy(&dst->{}[0], src->{}().c_str(), {});\n".format(gIndent, self.name, self.name, strlength))
 
     def get_peer_local_tmp_varname(self):
         return "__tmp_{}".format(self.name)

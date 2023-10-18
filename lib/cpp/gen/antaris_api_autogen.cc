@@ -142,7 +142,12 @@ peer_to_app_RespRegisterParams(const void *ptr_src_peer, void *ptr_dst_app)
 
     dst->correlation_id = src->correlation_id();
     dst->req_status = src->req_status();
-    strcpy(&dst->auth_token[0], src->auth_token().c_str());
+    size_t auth_token_length = strnlen(src->auth_token().c_str(), 256);
+    if ( auth_token_length >= 256 ) {
+        printf("Error:  auth_token_length should be less than 256 \n");
+        return;
+    }
+    strncpy(&dst->auth_token[0], src->auth_token().c_str(), 256);
 
 }
 
@@ -301,7 +306,12 @@ peer_to_app_ReqStageFileDownloadParams(const void *ptr_src_peer, void *ptr_dst_a
     ::antaris_api_peer_to_peer::ReqStageFileDownloadParams *src = (::antaris_api_peer_to_peer::ReqStageFileDownloadParams *)ptr_src_peer;
 
     dst->correlation_id = src->correlation_id();
-    strcpy(&dst->file_path[0], src->file_path().c_str());
+    size_t file_path_length = strnlen(src->file_path().c_str(), 256);
+    if ( file_path_length >= 256 ) {
+        printf("Error:  file_path_length should be less than 256 \n");
+        return;
+    }
+    strncpy(&dst->file_path[0], src->file_path().c_str(), 256);
 
 }
 
@@ -601,8 +611,18 @@ peer_to_app_StartSequenceParams(const void *ptr_src_peer, void *ptr_dst_app)
     ::antaris_api_peer_to_peer::StartSequenceParams *src = (::antaris_api_peer_to_peer::StartSequenceParams *)ptr_src_peer;
 
     dst->correlation_id = src->correlation_id();
-    strcpy(&dst->sequence_id[0], src->sequence_id().c_str());
-    strcpy(&dst->sequence_params[0], src->sequence_params().c_str());
+    size_t sequence_id_length = strnlen(src->sequence_id().c_str(), 16);
+    if ( sequence_id_length >= 16 ) {
+        printf("Error:  sequence_id_length should be less than 16 \n");
+        return;
+    }
+    strncpy(&dst->sequence_id[0], src->sequence_id().c_str(), 16);
+    size_t sequence_params_length = strnlen(src->sequence_params().c_str(), 64);
+    if ( sequence_params_length >= 64 ) {
+        printf("Error:  sequence_params_length should be less than 64 \n");
+        return;
+    }
+    strncpy(&dst->sequence_params[0], src->sequence_params().c_str(), 64);
     dst->scheduled_deadline = src->scheduled_deadline();
 
 }
@@ -746,7 +766,12 @@ peer_to_app_CmdSequenceDoneParams(const void *ptr_src_peer, void *ptr_dst_app)
     CmdSequenceDoneParams *dst = (CmdSequenceDoneParams *)ptr_dst_app;
     ::antaris_api_peer_to_peer::CmdSequenceDoneParams *src = (::antaris_api_peer_to_peer::CmdSequenceDoneParams *)ptr_src_peer;
 
-    strcpy(&dst->sequence_id[0], src->sequence_id().c_str());
+    size_t sequence_id_length = strnlen(src->sequence_id().c_str(), 16);
+    if ( sequence_id_length >= 16 ) {
+        printf("Error:  sequence_id_length should be less than 16 \n");
+        return;
+    }
+    strncpy(&dst->sequence_id[0], src->sequence_id().c_str(), 16);
 
 }
 
