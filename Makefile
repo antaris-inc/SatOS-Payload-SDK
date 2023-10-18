@@ -110,7 +110,7 @@ api_lib:
 		g++ ${OPTIMIZATION_LEVEL} -c ${CPP_LIB_DIR}/antaris_sdk_environment.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${CPP_LIB_DIR}/antaris_sdk_environment.o ;				\
 		g++ ${OPTIMIZATION_LEVEL} -c ${CPP_LIB_DIR}/antaris_api_client.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -o ${CPP_LIB_DIR}/antaris_api_client.o ;							\
 		g++ ${OPTIMIZATION_LEVEL} -c ${CPP_LIB_DIR}/antaris_api_server.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -o ${CPP_LIB_DIR}/antaris_api_server.o ;							\
-		ar cr ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB} ${OUTPUT_GEN_DIR}/antaris_api_autogen.o ${CPP_LIB_DIR}/antaris_api_client.o ${CPP_LIB_DIR}/antaris_api_server.o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.o 					\
+		ar cr ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB} ${CPP_LIB_DIR}/antaris_api_gpio.o ${OUTPUT_GEN_DIR}/antaris_api_autogen.o ${CPP_LIB_DIR}/antaris_api_client.o ${CPP_LIB_DIR}/antaris_api_server.o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.o 					\
 				${CPP_LIB_DIR}/antaris_api_common.o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.o ${CPP_LIB_DIR}/antaris_sdk_environment.o \
 				${VENDOR_LIB_DIR}/cJSON/src/cJSON.o ; \
 		tree ${OUTPUT_LIB_DIR};							\
