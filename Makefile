@@ -75,7 +75,7 @@ pc_submodule_tools:
 build_cpp:
 	@${DOCKER_BUILD} --build-arg CONTAINER_USER=$(USER) --build-arg CONTAINER_UID=`id -u` --build-arg CONTAINER_GID=`id -g` -f ${DOCKERFILE} -t ${CONTAINER_IMAGE_NAME} .
 	@${DOCKER_RM_CMD} ${BUILD_CONTAINER_NAME} 2>/dev/null
-	@${DOCKER_RUN_CMD} -v `pwd`:${WORKSPACE_MAPPING_DIR} --rm --name ${BUILD_CONTAINER_NAME} -it ${CONTAINER_IMAGE_NAME} make cpp_example 
+	@${DOCKER_RUN_CMD} -v `pwd`:${WORKSPACE_MAPPING_DIR} --rm --name ${BUILD_CONTAINER_NAME} -it ${CONTAINER_IMAGE_NAME} make cpp_example
 
 gen:
 	@echo ">>>>>>> Translating API-spec to user-facing python interfaces >>>>>>>"

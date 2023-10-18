@@ -185,6 +185,7 @@ def api_write_gpio(port, pin, value):
     Device.close()
     return op
 
+# Main function is added for standalone testing of GPIO, if needed
 if __name__ == "__main__":
     output = g_GPIO_ERROR
     argc = len(sys.argv)

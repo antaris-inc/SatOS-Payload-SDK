@@ -436,7 +436,7 @@ int main(int argc, char *argv[])
             process_response_stage_file_download : process_response_stage_file_download,
             process_response_payload_power_control : process_response_payload_power_control,
     };
-    
+
     // Create Channel to talk to Payload Controller (PC)
     channel = api_pa_pc_create_channel(&callback_func_list);
 

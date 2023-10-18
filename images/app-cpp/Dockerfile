@@ -48,5 +48,5 @@ RUN rm -fr /stage
 ENV RUN_SDK_AGENT=1
 
 # assume if SDK agent is installed that we will need a workspace
-RUN mkdir -p /workspace
+RUN mkdir /workspace
 WORKDIR /workspace
