@@ -173,16 +173,36 @@ void deinit_satos_lib()
     Py_Finalize();
 }
 
+AntarisReturnCode AntarisApiGPIO::verify_gpio_pin(int8_t pin_number) 
+{
+    gpio_s gpio_info;
+    int i = 0;
+
+    api_pa_pc_get_gpio_info(&gpio_info);
+
+    while (i < gpio_info.pin_count) {
+        if (gpio_info.pins[i] == pin_number) {
+            return An_SUCCESS;
+        }
+        i += 1;
+    }
+
+    return An_GENERIC_FAILURE; 
+}
 int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number)
 {
-    int exit_status;
+    int exit_status = An_GENERIC_FAILURE;
     long result;
     PyObject *pName = NULL;
     PyObject *pModule = NULL;
     PyObject *pFunction = NULL;
     PyObject *pArgs = NULL;
     PyObject *pValue = NULL;
-
+    
+    if (An_GENERIC_FAILURE == verify_gpio_pin(pin_number) ) {
+        printf("Error: Wrong configuration for GPIO pin %d \n", pin_number);
+        return An_GENERIC_FAILURE;
+    }
 
     pName = PyUnicode_DecodeFSDefault(PYTHON_GPIO_MODULE);
     pModule = PyImport_Import(pName);
@@ -218,12 +238,17 @@ int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number)
 
 AntarisReturnCode AntarisApiGPIO::api_pa_pc_write_gpio(int8_t gpio_port, int8_t pin_number, int8_t value)
 {
-    long pystatus = -1;
+    long pystatus = An_GENERIC_FAILURE;
     PyObject *pName = NULL;
     PyObject *pModule = NULL;
     PyObject *pFunction = NULL;
     PyObject *pArgs = NULL;
     PyObject *pValue = NULL;
+
+    if (An_GENERIC_FAILURE == verify_gpio_pin(pin_number) ) {
+        printf("Error: Wrong configuration for GPIO pin %d \n", pin_number);
+        return An_GENERIC_FAILURE;
+    }
 
     pName = PyUnicode_DecodeFSDefault(PYTHON_GPIO_MODULE);
     pModule = PyImport_Import(pName);
