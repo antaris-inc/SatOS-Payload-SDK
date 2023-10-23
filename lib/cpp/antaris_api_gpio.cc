@@ -52,97 +52,133 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio)
     read_config_json(&p_cJson);
     if (p_cJson == NULL)
     {
-        printf("Failed to read the config.json\n");
+        printf("Error: Failed to read the config.json\n");
+        return An_GENERIC_FAILURE;
     }
-    else
+
+    key_io_access = cJSON_GetObjectItemCaseSensitive(p_cJson, JSON_Key_IO_Access);
+    if (key_io_access == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_IO_Access);
+        return An_GENERIC_FAILURE;
+    }
+        
+    key_gpio = cJSON_GetObjectItemCaseSensitive(key_io_access, JSON_Key_GPIO);
+    if (key_gpio == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_GPIO);
+        return An_GENERIC_FAILURE;
+    }
+        
+    // Check adapter type
+    pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_Adapter_Type);
+    if (pJsonStr == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_Adapter_Type);
+        return An_GENERIC_FAILURE;
+    }
+    if (cJSON_IsString(pJsonStr) == cJSON_False) {
+        printf("Error: %s value is not a string \n", JSON_Key_Adapter_Type);
+        return An_GENERIC_FAILURE;
+    }
+    str = cJSON_GetStringValue(pJsonStr);
+    if ((str == NULL) ||
+        ((strncmp(str, "FTDI", 4) != 0)))
     {
-        key_io_access = cJSON_GetObjectItemCaseSensitive(p_cJson, JSON_Key_IO_Access);
-        if (key_io_access)
-        {
-            key_gpio = cJSON_GetObjectItemCaseSensitive(key_io_access, JSON_Key_GPIO);
-            if (key_gpio)
-            {
-                // Check adapter type
-                pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_Adapter_Type);
-                if (cJSON_IsString(pJsonStr))
-                {
-                    str = cJSON_GetStringValue(pJsonStr);
-                    if ((str == NULL) ||
-                        ((strncmp(str, "FTDI", 4) != 0)))
-                    {
-                        printf("Only FTDI devices are supported");
-                        return An_GENERIC_FAILURE;
-                    }
-                }
+        printf("Only FTDI devices are supported");
+        return An_GENERIC_FAILURE;
+    }
+    
+    // get GPIO pin count
+    pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_GPIO_Pin_Count);
+    if (pJsonStr == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_GPIO_Pin_Count);
+        return An_GENERIC_FAILURE;
+    }
+    if (cJSON_IsString(pJsonStr) == cJSON_False) {
+        printf("Error: %s value is not a string \n", JSON_Key_GPIO_Pin_Count);
+        return An_GENERIC_FAILURE;
+    }
 
-                // get GPIO pin count
-                pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_GPIO_Pin_Count);
-                if (cJSON_IsString(pJsonStr))
-                {
-                    str = cJSON_GetStringValue(pJsonStr);
-                    if ((str != NULL) && (strlen(str) <= sizeof(int8_t)))
-                    {
-                        gpio->pin_count = *str - '0';
-                    }
-                    else
-                    {
-                        printf("Failed to read gpio count the json");
-                    }
-                }
+    str = cJSON_GetStringValue(pJsonStr);
+    if ((str == NULL) && (strlen(str) > sizeof(int8_t)))
+    {
+        printf("Failed to read gpio count the json, GPIO support not added \n");
+        return An_GENERIC_FAILURE;
+    }
+    gpio->pin_count = *str - '0';
+    if (gpio->pin_count > MAX_GPIO_PIN_COUNT) {
+        printf("Error: GPIO pin count canot be greater than %d \n", MAX_GPIO_PIN_COUNT);
+        gpio->pin_count = 0;
+        return An_GENERIC_FAILURE;
+    }
 
-                // Get GPIO port
-                pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_GPIO_Port);
-                if (cJSON_IsString(pJsonStr))
-                {
-                    str = cJSON_GetStringValue(pJsonStr);
-                    if ((str != NULL) && (strlen(str) <= sizeof(int8_t)))
-                    {
-                        gpio->gpio_port = *str - '0';
-                    }
-                    else
-                    {
-                        printf("Failed to read gpio count the json");
-                    }
-                }
+    // Get GPIO port
+    pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_GPIO_Port);
+    if (pJsonStr == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_GPIO_Port);
+        return An_GENERIC_FAILURE;
+    }
+    if (cJSON_IsString(pJsonStr) == cJSON_False) {
+        printf("Error: %s value is not a string \n", JSON_Key_GPIO_Port);
+        return An_GENERIC_FAILURE;
+    }
 
-                // get GPIO pins
-                for (int i = 0; i < gpio->pin_count; i++)
-                {
-                    sprintf(key, "%s%d", JSON_Key_GPIO_Pin, i);
-                    pJsonStr = cJSON_GetObjectItem(key_gpio, key);
-                    if (cJSON_IsString(pJsonStr))
-                    {
-                        str = cJSON_GetStringValue(pJsonStr);
-                        if ((str != NULL) && (strlen(str) <= sizeof(int8_t)))
-                        {
-                            gpio->pins[i] = *str - '0';
-                        }
-                        else
-                        {
-                            printf("Failed to read gpio pin number %d the json", i);
-                        }
-                    }
-                }
+    str = cJSON_GetStringValue(pJsonStr);
+    if ((str == NULL) && (strlen(str) > sizeof(int8_t)))
+    {
+        printf("Failed to read gpio port the json, GPIO support not added \n");
+        return An_SUCCESS;
+    }
+    gpio->gpio_port = *str - '0';
+    if (gpio->gpio_port > MAX_GPIO_PORT_NUMBER) {
+        printf("Error: GPIO port canot be greater than %d \n", MAX_GPIO_PORT_NUMBER);
+        gpio->gpio_port = -1;
+        return An_GENERIC_FAILURE;
+    }
 
-                // get Interrupt pin
-                pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_Interrupt_Pin);
-                if (cJSON_IsString(pJsonStr))
-                {
-                    char *str = cJSON_GetStringValue(pJsonStr);
-                    if ((str != NULL) && (strlen(str) <= sizeof(int8_t)))
-                    {
-                        gpio->interrupt_pin = *str - '0';
-                    }
-                    else
-                    {
-                        printf("Failed to read interrupt pin number from the json");
-                    }
-                }
-            }
+    // get GPIO pins
+    for (int i = 0; i < gpio->pin_count; i++)
+    {
+        sprintf(key, "%s%d", JSON_Key_GPIO_Pin, i);
+        pJsonStr = cJSON_GetObjectItem(key_gpio, key);
+        if (cJSON_IsString(pJsonStr) == cJSON_False) {
+            printf("Error: %s value is not a string \n", key);
+            return An_GENERIC_FAILURE;
         }
 
-        cJSON_Delete(p_cJson);
+        str = cJSON_GetStringValue(pJsonStr);
+        if ((str == NULL) && (strlen(str) > sizeof(int8_t))) {
+            printf("Error: Failed to read gpio pin number %d the json", i);
+            return An_GENERIC_FAILURE;
+        }
+        gpio->pins[i] = *str - '0';
+        if ((gpio->pins[i] < MIN_GPIO_PIN_NUMBER) ||
+            (gpio->pins[i] > MAX_GPIO_PIN_NUMBER)) {
+            printf("Error: GPIO pin number is %d. It should be in range of %d to %d \n", gpio->pins[i], MIN_GPIO_PIN_NUMBER, MAX_GPIO_PIN_NUMBER);
+            return An_GENERIC_FAILURE;
+        }
     }
+
+    // get Interrupt pin
+    pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_Interrupt_Pin);
+    if (cJSON_IsString(pJsonStr) == cJSON_False) {
+        printf("Error: %s value is not a string \n", JSON_Key_Interrupt_Pin);
+        return An_GENERIC_FAILURE;
+    }
+
+    str = cJSON_GetStringValue(pJsonStr);
+    if ((str == NULL) && (strlen(str) > sizeof(int8_t))) {
+        printf("Error: Failed to read interrupt pin number from the json");
+        return An_GENERIC_FAILURE;
+    }
+
+    gpio->interrupt_pin = *str - '0';
+    if ((gpio->interrupt_pin < MIN_GPIO_PIN_NUMBER) ||
+        (gpio->interrupt_pin > MAX_GPIO_PIN_NUMBER)) {
+        printf("Error: Interrupt pin number is %d. It should be in range of %d to %d \n", gpio->interrupt_pin, MIN_GPIO_PIN_NUMBER, MAX_GPIO_PIN_NUMBER);
+        return An_GENERIC_FAILURE;
+    }
+       
+    cJSON_Delete(p_cJson);
+
     return An_SUCCESS;
 }
 
@@ -154,16 +190,16 @@ AntarisReturnCode init_satos_lib()
     if (sysPath == nullptr) {
         printf("Error: Can not initialize SatOS library \n");
         return An_GENERIC_FAILURE;
-    } else {
-        PyObject* directoryPath = PyUnicode_DecodeFSDefault("/lib/antaris/tools/");
-        if (directoryPath != nullptr)  {
-            PyList_Append(sysPath, directoryPath);
-            Py_XDECREF(directoryPath);
-        } else  {
-            printf("Error: Can not initialize SatOS library \n");
-            return An_GENERIC_FAILURE;
-        }
+    } 
+    
+    PyObject* directoryPath = PyUnicode_DecodeFSDefault("/lib/antaris/tools/");
+    if (directoryPath == nullptr)  {
+        printf("Error: Can not initialize SatOS library \n");
+        return An_GENERIC_FAILURE;
     }
+
+    PyList_Append(sysPath, directoryPath);
+    Py_XDECREF(directoryPath);
 
     return An_SUCCESS;
 }
@@ -207,29 +243,29 @@ int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number)
     pName = PyUnicode_DecodeFSDefault(PYTHON_GPIO_MODULE);
     pModule = PyImport_Import(pName);
 
-    if (pModule != nullptr)  {
-        pFunction = PyObject_GetAttrString(pModule, PYTHON_GPIO_READ_FUNCTION); 
-        
-        if (PyCallable_Check(pFunction)) {
-            pArgs = PyTuple_Pack(2, PyLong_FromLong((long) gpio_port), PyLong_FromLong((long) pin_number)); // Pass arguments
-            pValue = PyObject_CallObject(pFunction, pArgs);                  // Call the function
-            result = PyLong_AsLong(pValue);                                       // Convert the result to a C++ type
-            exit_status = (int) result;
-            
-            // Dereference python objects
-            Py_XDECREF(pValue);
-            Py_XDECREF(pArgs);
-            Py_XDECREF(pFunction);
-        } else {
-            printf("Error: Can not read GPIO pin %d \n", pin_number);
-            return An_GENERIC_FAILURE;
-        }
-        Py_XDECREF(pModule);
-    } else  {
+    if (pModule == nullptr)  {
         printf("Error: Can not read GPIO pin %d \n", pin_number);
         return An_GENERIC_FAILURE;
     }
-
+    
+    pFunction = PyObject_GetAttrString(pModule, PYTHON_GPIO_READ_FUNCTION); 
+       
+    if (PyCallable_Check(pFunction) == FALSE) {
+        printf("Error: Can not read GPIO pin %d \n", pin_number);
+        return An_GENERIC_FAILURE;
+    }
+    
+    pArgs = PyTuple_Pack(2, PyLong_FromLong((long) gpio_port), PyLong_FromLong((long) pin_number)); // Pass arguments
+    pValue = PyObject_CallObject(pFunction, pArgs);                  // Call the function
+    result = PyLong_AsLong(pValue);                                       // Convert the result to a C++ type
+    exit_status = (int) result;
+          
+    // Dereference python objects
+    Py_XDECREF(pValue);
+    Py_XDECREF(pArgs);
+    Py_XDECREF(pFunction);
+    Py_XDECREF(pModule);
+    
     // Process and use the Python script's result in your C++ code
     printf("Pin level : %d \n", exit_status);
 
@@ -252,29 +288,27 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_write_gpio(int8_t gpio_port, int8_t 
 
     pName = PyUnicode_DecodeFSDefault(PYTHON_GPIO_MODULE);
     pModule = PyImport_Import(pName);
-    if (pModule != nullptr)  {
-
-        pFunction = PyObject_GetAttrString(pModule, PYTHON_GPIO_WRITE_FUNCTION);
-        
-        if (PyCallable_Check(pFunction)) {
-            pArgs = PyTuple_Pack(3, PyLong_FromLong((long) gpio_port), PyLong_FromLong((long) pin_number), PyLong_FromLong((long) value));                            // Pass arguments
-            pValue = PyObject_CallObject(pFunction, pArgs);            // Call the function
-            pystatus = PyLong_AsLong(pValue);                          // Convert the result to a C++ type
-
-            // Dereference all objects
-            Py_XDECREF(pValue);
-            Py_XDECREF(pArgs);
-            Py_XDECREF(pFunction);
-        } else {
-            printf("Error: Can not write GPIO pin %d \n", pin_number);
-            return An_GENERIC_FAILURE;
-        }
-        Py_XDECREF(pModule);
-    } else  {
+    if (pModule == nullptr) {
         printf("Error: Can not write GPIO pin %d \n", pin_number);
         return An_GENERIC_FAILURE;
     }
     
+    pFunction = PyObject_GetAttrString(pModule, PYTHON_GPIO_WRITE_FUNCTION);
+       
+    if (PyCallable_Check(pFunction) == FALSE) {
+        printf("Error: Can not write GPIO pin %d \n", pin_number);
+        return An_GENERIC_FAILURE;
+    }
+    
+    pArgs = PyTuple_Pack(3, PyLong_FromLong((long) gpio_port), PyLong_FromLong((long) pin_number), PyLong_FromLong((long) value));                            // Pass arguments
+    pValue = PyObject_CallObject(pFunction, pArgs);            // Call the function
+    pystatus = PyLong_AsLong(pValue);                          // Convert the result to a C++ type
+
+    // Dereference all objects
+    Py_XDECREF(pValue);
+    Py_XDECREF(pArgs);
+    Py_XDECREF(pFunction);
+    Py_XDECREF(pModule);
 
     if (pystatus == An_GENERIC_FAILURE) {
         printf("Error: Can not write GPIO pin %d \n", pin_number);
