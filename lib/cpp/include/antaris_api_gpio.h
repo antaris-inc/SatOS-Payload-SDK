@@ -48,6 +48,11 @@
 #define TRUE        1
 #define FALSE       0
 
+#define MAX_GPIO_PIN_COUNT         8
+#define MAX_GPIO_PIN_NUMBER        7
+#define MIN_GPIO_PIN_NUMBER        0
+#define MAX_GPIO_PORT_NUMBER       3
+
 typedef struct gpio {
     int8_t pin_count;
     int8_t gpio_port;
