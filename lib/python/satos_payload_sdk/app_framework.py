@@ -21,7 +21,7 @@ import satos_payload_sdk.antaris_api_client as api_client
 import satos_payload_sdk.gen.antaris_api_types as api_types
 
 
-logger = logging.getLogger()
+logger = logging.getLogger("satos_payload_sdk")
 
 
 DO_NOTHING_ON_HEALTH_CHECK_FAILURE = 0
