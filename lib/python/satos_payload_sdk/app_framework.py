@@ -222,9 +222,12 @@ class ChannelClient:
         return resp
 
     def payload_power_control(self):
+        # In case if True-twin mode, return success
         if api_common.g_KEEPALIVE_ENABLE == '1':
             return api_types.AntarisReturnCode.An_SUCCESS 
         else:
+            #TODO: In flat-sat mode and in satellite, 'power control' information
+            #      should be send to OBC.
             raise NotImplementedError()
 
     def _sequence_done(self, sequence_id):
