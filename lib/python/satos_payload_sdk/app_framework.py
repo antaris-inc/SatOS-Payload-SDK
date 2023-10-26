@@ -221,7 +221,8 @@ class ChannelClient:
         return resp
 
     def payload_power_control(self):
-        raise NotImplementedError()
+        return api_types.AntarisReturnCode.An_SUCCESS 
+        #raise NotImplementedError()
 
     def _sequence_done(self, sequence_id):
         params = api_types.CmdSequenceDoneParams(sequence_id)
