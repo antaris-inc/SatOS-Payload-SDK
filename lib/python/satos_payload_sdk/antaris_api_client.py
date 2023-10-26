@@ -39,10 +39,10 @@ g_CLIENT_KEY_FILE="/opt/antaris/app/client.key"
 g_CONFIG_JSON_FILE="/opt/antaris/app/config.json"
 g_COOKIE_STR="cookie"
 
-g_KEEPALIVE_TIME_MS = 10000
-g_KEEPALIVE_TIMEOUT_MS = 5000
+g_KEEPALIVE_TIME_MS = 60000
+g_KEEPALIVE_TIMEOUT_MS = 15000
 g_KEEPALIVE_PERMIT_WITHOUT_CALLS = True
-g_MAX_PING_STRIKES = 0
+g_MAX_PING_STRIKES = 10
 
 class AntarisChannel:
     def __init__(self, grpc_client_handle, grpc_server_handle, pc_to_app_server, is_secure, callback_func_list):
