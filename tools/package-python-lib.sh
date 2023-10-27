@@ -20,7 +20,6 @@ mkdir -p $BUILD_ROOT/dist
 python3 -m pip install --upgrade pip
 
 cd lib/python
-apt install -y python3.10-venv
 python3 -m pip install build
 
 python3 -m build
