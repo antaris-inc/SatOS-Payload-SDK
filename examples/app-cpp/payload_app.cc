@@ -158,8 +158,12 @@ void handle_TestGPIO(mythreadState_t *mythread)
 
     printf("\n Handling sequence: TestGPIO! \n");
 
-    api_gpio.api_pa_pc_get_gpio_info(&gpio_info);
+    ret = api_gpio.api_pa_pc_get_gpio_info(&gpio_info);
 
+    if (ret != An_SUCCESS) {
+        printf("Error: json file is not configured properly. Kindly check configurations done in ACP \n");
+        return;
+    }
     printf("Total gpio pins = %d \n", gpio_info.pin_count);
 
     while (i < gpio_info.pin_count) {
