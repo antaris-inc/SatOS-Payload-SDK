@@ -19,6 +19,7 @@ import time
 
 import satos_payload_sdk.antaris_api_client as api_client
 import satos_payload_sdk.gen.antaris_api_types as api_types
+from satos_payload_sdk import antaris_api_common as api_common
 
 
 logger = logging.getLogger("satos_payload_sdk")
@@ -221,7 +222,13 @@ class ChannelClient:
         return resp
 
     def payload_power_control(self):
-        raise NotImplementedError()
+        # In case if True-twin mode, return success
+        if api_common.g_KEEPALIVE_ENABLE == '1':
+            return api_types.AntarisReturnCode.An_SUCCESS 
+        else:
+            #TODO: In flat-sat mode and in satellite, 'power control' information
+            #      should be send to OBC.
+            raise NotImplementedError()
 
     def _sequence_done(self, sequence_id):
         params = api_types.CmdSequenceDoneParams(sequence_id)
