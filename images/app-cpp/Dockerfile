@@ -21,6 +21,14 @@ RUN mkdir -p /opt/antaris/app /opt/antaris/logs
 # This image layers on support for cpp-based payload applications
 FROM shared_app_image as cpp_app_image
 
+RUN apt update && apt install -y python3 python3-pip
+RUN python3 -m pip install --upgrade pip
+
+# This is required for GPIO and UART access using FTDI
+RUN pip install pylibftdi
+RUN apt install -y libftdi1
+RUN python3 -m pip install pyserial
+
 RUN mkdir /stage
 COPY dist/satos-payload-sdk-cpp.deb /stage
 RUN apt update && apt install -y /stage/satos-payload-sdk-cpp.deb
