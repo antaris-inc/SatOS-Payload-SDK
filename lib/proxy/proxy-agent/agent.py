@@ -59,6 +59,8 @@ def print_usage():
 
     logger.error("{}: Usage".format(sys.argv[0]))
     logger.error("{} -m/--mode atmos|user -i/--web-public-ip WEB-PUBLIC-IP -p/--web-public-port WEB_PUBLIC_PORT -s/--internal-server-ip SERVER_IP -t/--internal-server-port SERVER_PORT -l/--local-peer-ip LOCAL_PEER_SERVER_IP -o/--local-peer-port LOCAL_PEER_SERVER_PORT [-f/--flat-sat-mode] [-u/--udp-mode] [-h/--help]".format(sys.argv[0], gServerIp))
+    logger.error("Flat sat mode is optional and tcp socket will be used by default")
+    logger.error("Udp Socket is only available in flat sat mode specify packet size after flag")
 
 def print_params():
     global gAgentMode
@@ -131,6 +133,8 @@ def parse_opts():
             gFlatSatMode = True
         elif opt in ("-u", "--udp-mode"):
             gUDPMode = True
+            if arg:
+                g_UDP_Cmd_Size = int(arg)
 
     if None == gAgentMode:
         logger.critical("Compulsory parameter mode missing")

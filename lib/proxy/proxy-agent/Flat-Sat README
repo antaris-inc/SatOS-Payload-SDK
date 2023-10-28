@@ -1,0 +1,82 @@
+(a) ATMOS-AGENT
+python3 agent.py -m atmos -i 127.0.0.1 -p 19051 -s 127.0.0.1 -t 30053 -f 
+
+(b) USER-AGENT
+#for tcp socket by default in flat sat mode
+python3 agent.py -m user -i 127.0.0.1 -p 19051 -l 127.0.0.1 -o 50053 -f
+
+or
+
+#for udp socket
+Packet size is optional default value 223 bytes
+
+python3 agent.py -m user -i 127.0.0.1 -p 19051 -l 127.0.0.1 -o 50053 -f -u [PACKET_SIZE]
+
+
+(c) Start App api-listener (50053)
+nc -l 50053  or nc -ul 50053 (for udp ) 
+
+(d) Start the PC callback-invoker (towards APP 50053)
+nc 127.0.0.1 30053
+
+Now test by sending data.
+
+On terminal (d) if I type data, it should appear in terminal (c). Any 'immediate response' I type in terminal (c) should show up in terminal (d).
+
+
+======
+
+Container-based Test Architecture:
+
+
+    Atmos Container
+     __________________________________________
+     |                                         |
+     |    ________________________________     |
+     |    |                               |    |
+     |    |        Atos App or nc.        |    |
+     |    |                               |    |
+     |    |  CB client                    |    |
+     |    |  (C 127.0.0.1:50053)          |    |
+     |    |_________X_____________________|    |
+     |                                         |
+     |    __________X_____________________     |
+     |    |  (S 127.0.0.1:50053)          |    | 
+     |    |    Internal Server            |    |       
+     |    |                               |    |                   
+     |    |               Atmos Agent     |    |
+     |    |                               |    |
+     |    |  Public Endpoint              |    |
+     |    |  (L 172.155.155.2:19051)      |    |
+     |    |__________X____________________|    |
+     |_________________________________________|
+
+                PermaSock
+                (on bridge
+                network)
+     ___________________________________________
+     |                                          |                           
+     |    __________X_____________________      |
+     |    |  (C 172.155.155.2:19051)      |     |                    
+     |    |   Public Endpoint Client      |     |  
+     |    |                               |     |   
+     |    |            User Agent         |     |     
+     |    |                               |     |                      
+     |    |   Internal Client (tcp/udp)   |     |         
+     |    |  (C 127.0.0.1:50053)          |     |
+     |    |___________X___________________|     |
+     |                                          |
+     |    ____________X___________________      |
+     |    |                               |     |         
+     |    |  CB Server  (tcp/udp)         |     |        
+     |    |  (S 127.0.0.1:50053)          |     | 
+     |    |                               |     |                    
+     |    |    App, Sample-APP or nc -l.  |     | 
+     |    |                               |     |                    
+     |    |_______________________________|     |
+     |                                          |
+     |__________________________________________|
+
+     User Container
+
+====================================
