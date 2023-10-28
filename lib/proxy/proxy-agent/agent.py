@@ -25,6 +25,7 @@ gWebListerer=None
 gPeerConnectedOnInternalListener=None
 gSleepBeforeConnect=5
 gFlatSatMode=False
+gFlatSatModeHandler=None
 gUDPMode=False
 g_UDP_Cmd_Size=223
 udppacket=b""
@@ -201,6 +202,16 @@ def setup_permanent_socket(skip_bind = False):
 
         logger.info("ATMOS-MODE: perma-socket {}, fd {} created with peer {}".format(gPermaSocket, gPermaSocket.fileno(), peer_addr))
 
+        if gFlatSatModeHandler != None:
+            gFlatSatModeHandler.leg1 = gPermaSocket
+            if gFlatSatModeHandler.leg1 == None:
+                gFlatSatModeHandler.leg1 = gPermaSocket
+            else:
+                gFlatSatModeHandler.leg2 = gPermaSocket
+
+            gActionMap[gPermaSocket.fileno()] = gFlatSatModeHandler
+            logger.debug("After Recreating handler {}".format(gFlatSatModeHandler))
+
     else:
         gPermaSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -304,8 +315,28 @@ def handle_exceptions(sock):
     global g_MODE_ATMOS
     global g_MODE_USER
     global gPeerConnectedOnInternalListener
+    global gFlatSatMode
 
-    # pdb.set_trace()
+    if gFlatSatMode == True and gAgentMode == g_MODE_ATMOS:
+        if gPermaSocket == sock:
+            logger.warning("Permanent socket closed")
+
+            logger.info("Mode {} gPermaSock closed, cleaning up state and waiting for USER-AGENT reconnect".format(gPermaSocket))
+            handler = gActionMap[sock.fileno()]
+
+            logger.info("Connection handled by handler {}".format(str(handler)))
+
+            if handler.leg1 == gPermaSocket:
+                handler.leg1 = None
+            else:
+                handler.leg2 = None
+
+            recover_perma_sock()
+
+            log_sockets(logger.info, "After perma-sock recovery")
+            logger.debug("handler after permasock disconnect {}".format(handler))
+
+            return
 
     if gPermaSocket == sock:
         logger.warning("Permanent socket closed")
@@ -422,6 +453,7 @@ def handle_readable(sock):
     global g_MODE_ATMOS
     global g_MODE_USER
     global gPeerConnectedOnInternalListener
+    global gFlatSatModeHandler
 
     socket_has_error = False
 
@@ -514,6 +546,7 @@ def handle_readable(sock):
 
                     gActionMap[newsock.fileno()] = new_handler
                     gActionMap[gPermaSocket.fileno()] = new_handler
+                    gFlatSatModeHandler = new_handler
 
                     gKnownSockets.append(newsock)
                     # gPermaSock is always in known-sockets
