@@ -229,7 +229,7 @@ void handle_StageFile(mythreadState_t *mythread)
     AntarisReturnCode ret;
     FILE *fp = NULL;
     size_t filename_size = 0;
-    ReqStageFileDownloadParams *download_file_params = {0};
+    ReqStageFileDownloadParams download_file_params = {0};
     printf("\n Handling sequence: StageFile! \n");
 
     filename_size = strnlen(STAGE_FILE_DOWNLOAD_DIR, MAX_FILE_OR_PROP_LEN_NAME) + strnlen(STAGE_FILE_NAME, MAX_FILE_OR_PROP_LEN_NAME);
@@ -239,22 +239,22 @@ void handle_StageFile(mythreadState_t *mythread)
         return;
     }
 
-    sprintf(download_file_params->file_path, "%s%s", STAGE_FILE_DOWNLOAD_DIR, STAGE_FILE_NAME);
+    sprintf(download_file_params.file_path, "%s%s", STAGE_FILE_DOWNLOAD_DIR, STAGE_FILE_NAME);
     
     // Adding dummy data in file
-    fp = fopen(download_file_params->file_path, "w");
+    fp = fopen(download_file_params.file_path, "w");
     if (fp == NULL) {
-        printf("Error: Can not open file %s. Sequence failed \n", download_file_params->file_path);
+        printf("Error: Can not open file %s. Sequence failed \n", download_file_params.file_path);
         return;
     }
     
-    printf("Info: Downloading file = %s \n", download_file_params->file_path);
+    printf("Info: Downloading file = %s \n", download_file_params.file_path);
 
     // Staging file
-    ret = api_pa_pc_stage_file_download(channel, download_file_params);
+    ret = api_pa_pc_stage_file_download(channel, &download_file_params);
 
     if (ret == An_GENERIC_FAILURE) {
-        printf("Error: Failed to stage file %s \n", download_file_params->file_path);
+        printf("Error: Failed to stage file %s \n", download_file_params.file_path);
     }
     
     // Tell PC that current sequence is done
