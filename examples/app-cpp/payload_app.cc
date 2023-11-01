@@ -22,6 +22,7 @@
 
 #include "antaris_api.h"
 #include "antaris_api_gpio.h"
+#include "antaris_api_pyfunctions.h"
 
 #define MAX_STR_LEN 256
 #define SEQ_PARAMS_LEN 64
@@ -33,12 +34,16 @@
 #define HelloFriend_IDX                 1
 #define LogLocation_ID                  "LogLocation"
 #define LogLocation_IDX                 2
-#define TestGPIO_Sequence_ID                     "TestGPIO"
-#define TestGPIO_Sequence_IDX                    3
-#define SEQUENCE_ID_MAX                 4
+#define TestGPIO_Sequence_ID            "TestGPIO"
+#define TestGPIO_Sequence_IDX           3
+#define StageFile_Sequence_ID           "StageFile"
+#define StageFile_Sequence_IDX          4
+#define SEQUENCE_ID_MAX                 5
 
 #define APP_STATE_ACTIVE                0  // Application State : Good (0), Error (non-Zero)
 
+#define STAGE_FILE_DOWNLOAD_DIR         "/opt/antaris/outbound/"    // path for staged file download
+#define STAGE_FILE_NAME                 "SampleFile.txt"            // name of staged file
 /*
  * Following counters should be incremented whenever
  * a reqeust/response (to PC) API hits error
@@ -219,6 +224,54 @@ void handle_TestGPIO(mythreadState_t *mythread)
     
 }
 
+void handle_StageFile(mythreadState_t *mythread)
+{
+    AntarisReturnCode ret;
+    FILE *fp = NULL;
+    size_t filename_size = 0;
+    ReqStageFileDownloadParams *download_file_params = {0};
+    printf("\n Handling sequence: StageFile! \n");
+
+    filename_size = strnlen(STAGE_FILE_DOWNLOAD_DIR, MAX_FILE_OR_PROP_LEN_NAME) + strnlen(STAGE_FILE_NAME, MAX_FILE_OR_PROP_LEN_NAME);
+
+    if (filename_size > MAX_FILE_OR_PROP_LEN_NAME) {
+        printf("Error: Stagefile path can not be greater than %d \n", MAX_FILE_OR_PROP_LEN_NAME);
+        return;
+    }
+
+    sprintf(download_file_params->file_path, "%s%s", STAGE_FILE_DOWNLOAD_DIR, STAGE_FILE_NAME);
+    
+    // Adding dummy data in file
+    fp = fopen(download_file_params->file_path, "w");
+    if (fp == NULL) {
+        printf("Error: Can not open file %s. Sequence failed \n", download_file_params->file_path);
+        return;
+    }
+    
+    printf("Info: Downloading file = %s \n", download_file_params->file_path);
+
+    // Staging file
+    ret = api_pa_pc_stage_file_download(channel, download_file_params);
+
+    if (ret == An_GENERIC_FAILURE) {
+        printf("Error: Failed to stage file %s \n", download_file_params->file_path);
+    }
+    
+    // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], StageFile_Sequence_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } 
+    
+    printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+    
+}
+
 // Table of Sequence_id : FsmThread
 mythreadState_t *payload_sequences_fsms[SEQUENCE_ID_MAX];
 unsigned int current_sequence_idx = HelloWorld_IDX;
@@ -293,7 +346,10 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
     } else if (strcmp(sequence_string, TestGPIO_Sequence_ID) == 0) {
         printf("\t => %d\n", TestGPIO_Sequence_IDX);
         return TestGPIO_Sequence_IDX;
-    } 
+    } else if (strcmp(sequence_string, StageFile_Sequence_ID) == 0) {
+        printf("\t => %d\n", StageFile_Sequence_IDX);
+        return StageFile_Sequence_IDX;
+    }
 
     printf("Unknown sequence, returning -1\n");
     return -1;
@@ -451,6 +507,7 @@ int main(int argc, char *argv[])
     payload_sequences_fsms[HelloFriend_IDX] = fsmThreadCreate(channel, 1, HelloFriend_ID, handle_HelloFriend);
     payload_sequences_fsms[LogLocation_IDX] = fsmThreadCreate(channel, 1, LogLocation_ID, handle_LogLocation);
     payload_sequences_fsms[TestGPIO_Sequence_IDX] = fsmThreadCreate(channel, 1, TestGPIO_Sequence_ID, handle_TestGPIO);
+    payload_sequences_fsms[StageFile_Sequence_IDX] = fsmThreadCreate(channel, 1, StageFile_Sequence_ID, handle_StageFile);
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure
@@ -490,12 +547,17 @@ int main(int argc, char *argv[])
         pthread_join(payload_sequences_fsms[TestGPIO_Sequence_IDX]->thread_id, &exit_status);
     }
 
+    if (strcmp(payload_sequences_fsms[StageFile_Sequence_IDX]->state, "NOT_STARTED") != 0) {
+        pthread_join(payload_sequences_fsms[StageFile_Sequence_IDX]->thread_id, &exit_status);
+    }
+
     printf("Cleaning up sequence resources\n");
 
     fsmThreadCleanup(payload_sequences_fsms[HelloWorld_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[HelloFriend_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[LogLocation_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[TestGPIO_Sequence_IDX]);
+    fsmThreadCleanup(payload_sequences_fsms[StageFile_Sequence_IDX]);
 
     // Delete Channel
     api_pa_pc_delete_channel(channel);
