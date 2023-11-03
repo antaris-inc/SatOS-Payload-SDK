@@ -88,25 +88,47 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
 
     if (pModule == nullptr)
     {
-        printf("Error:1 Can not upload file %s \n", download_file_params->file_path);
-        return An_GENERIC_FAILURE;
-    }
-
-    pFunction = PyObject_GetAttrString(pModule, PYTHON_STAGEFILE_MODULE);
-
-    if (PyCallable_Check(pFunction) == FALSE)
-    {
-        printf("Error:2 Can not upload file %s \n", download_file_params->file_path);
+        printf("Error: Can not upload file %s \n", download_file_params->file_path);
         return An_GENERIC_FAILURE;
     }
 
     // Create a Python tuple and pack the structure and character array into it
     pArgs = PyTuple_Pack(10, Py_BuildValue("i", download_file_params->correlation_id), Py_BuildValue("s", download_file_params->file_path), next, prev, child, type, valuestring, valueint, valuedouble, string); // Pass arguments
 
+    // Create an instance of the File_Stage class
+    PyObject* pInstance = PyObject_CallObject(pModule, pArgs);
+
+    if (pInstance != NULL) {
+        pFunction = PyObject_GetAttrString(pInstance, PYTHON_STAGEFILE_MODULE);
+
+        if (pFunction != NULL) {
+            // Call the method
+            PyObject* pResult = PyObject_CallObject(pFunction, NULL);
+            if (pResult != NULL) {
+                // Handle the result as needed
+                // Note: You should check for exceptions here.
+
+                // Don't forget to decref the result
+                Py_DECREF(pResult);
+                printf("Success success \n");
+            } else {
+                PyErr_Print();
+                printf("Error:2 Can not upload file %s \n", download_file_params->file_path);
+                return An_GENERIC_FAILURE;
+            }
+        }
+    }
+
+/*    if (PyCallable_Check(pFunction) == FALSE)
+    {
+        printf("Error:2 Can not upload file %s \n", download_file_params->file_path);
+        return An_GENERIC_FAILURE;
+    }
+
     pValue = PyObject_CallObject(pFunction, pArgs); // Call the function
     result = PyLong_AsLong(pValue);                 // Convert the result to a C++ type
     exit_status = (int)result;
-
+*/
     // Dereference python objects
     Py_XDECREF(pValue);
     Py_XDECREF(pArgs);

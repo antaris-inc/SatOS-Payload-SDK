@@ -28,6 +28,8 @@ RUN python3 -m pip install --upgrade pip
 RUN pip install pylibftdi
 RUN apt install -y libftdi1
 RUN python3 -m pip install pyserial
+RUN python3 -m pip install azure-storage-file-share
+
 
 RUN mkdir /stage
 COPY dist/satos-payload-sdk-cpp.deb /stage

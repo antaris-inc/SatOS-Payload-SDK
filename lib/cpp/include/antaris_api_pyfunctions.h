@@ -32,7 +32,7 @@
 #include "antaris_api_internal.h"
 #include "antaris_sdk_environment.h"
 
-#define PYTHON_SCRIPT_FILE         "lib.antaris.tools.antaris_file_download"
+#define PYTHON_SCRIPT_FILE         "antaris_file_download" //"lib.antaris.tools.antaris_file_download"
 #define PYTHON_STAGEFILE_MODULE    "file_download"
 
 #define TRUE        1
