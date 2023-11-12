@@ -4,11 +4,11 @@ import logging
 logger = logging.getLogger("azure.core.pipeline.policies.http_logging_policy")
 logger.setLevel(logging.WARNING)
 
-g_FTM="FTM"
-g_File_String="File_Conn_Str"
-g_Truetwin_Dir="Truetwin_Dir"
-g_Share_Name="Share_Name"
-g_Outbound_Path_Prefix="/opt/antaris/outbound/"
+g_FTM = "FTM"
+g_File_String = "File_Conn_Str"
+g_Truetwin_Dir = "Truetwin_Dir"
+g_Share_Name = "Share_Name"
+g_Outbound_Path_Prefix = "/opt/antaris/outbound/"
 
 class File_Stage():
 
@@ -31,17 +31,12 @@ class File_Stage():
             return False
         
 def azure_file_upload(file_name, conn_str, share_name, file_path):
-    print("file name = ", file_name)
-    print("conn str = ", conn_str)
-    print("share name =", share_name)
-    print("file path =", file_path)
-
     file_client = ShareFileClient.from_connection_string(conn_str, share_name, file_path)
     try:
         with open(file_name, "rb") as source_file:
             file_client.upload_file(source_file)
-            return 1
+            return True
     except Exception as e:
         logger.error("Upload  to truetwin failed")
         logger.error(f"Error message: {str(e)}")
-        return -1
+        return False

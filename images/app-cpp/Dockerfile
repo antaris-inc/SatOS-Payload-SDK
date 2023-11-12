@@ -29,7 +29,6 @@ RUN pip install pylibftdi
 RUN apt install -y libftdi1
 RUN python3 -m pip install pyserial
 
-
 RUN mkdir /stage
 COPY dist/satos-payload-sdk-cpp.deb /stage
 RUN apt update && apt install -y /stage/satos-payload-sdk-cpp.deb

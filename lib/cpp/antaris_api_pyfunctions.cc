@@ -41,13 +41,11 @@
 
 AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, ReqStageFileDownloadParams *download_file_params)
 {
-    size_t filename_len = 0;
     AntarisReturnCode exit_status = An_GENERIC_FAILURE;
     cJSON *key_ftm = NULL;
     cJSON *pJsonStr = NULL;
 
     PyObject *pArgs = NULL;
-    PyObject *arg1 = NULL;
     PyObject *pName = NULL;
     PyObject *pModule = NULL;
     PyObject *pFunction = NULL;
@@ -87,6 +85,7 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
         exit_status = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
     }
+
     g_File_String = cJSON_GetStringValue(pJsonStr);
     if (g_File_String == NULL) {
         printf("Error: %s string not present \n", JSON_Key_File_Conn);
@@ -105,8 +104,8 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
         exit_status = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
     }
-    g_Truetwin_Dir = cJSON_GetStringValue(pJsonStr);
 
+    g_Truetwin_Dir = cJSON_GetStringValue(pJsonStr);
     if (g_Truetwin_Dir == NULL) {
         printf("Error: %s string not present \n", JSON_Key_TrueTwin_Dir);
     }
@@ -124,16 +123,13 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
         exit_status = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
     }
+
     g_Share_Name = cJSON_GetStringValue(pJsonStr);
     if (g_Share_Name == NULL) {
         printf("Error: %s string not present \n", JSON_Key_Share_Name);
         exit_status = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
     }
-    printf("%s\n", download_file_params->file_path);
-    printf("%s\n", g_File_String);
-    printf("%s\n", g_Truetwin_Dir);
-    printf("%s\n", g_Share_Name);
 
     // Creating destination file path
     position = strstr(download_file_params->file_path, FILE_DOWNLOAD_DIR);
@@ -147,7 +143,6 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
     remaining_length = strlen(position);
     strcpy(dst_file_name, g_Truetwin_Dir);
     strncat(dst_file_name, position, remaining_length);
-    printf("dst file = %s \n", dst_file_name);
 
     pArgs = PyTuple_New(4);  // Create a tuple with 4 elements
 
@@ -160,9 +155,7 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
 
     pName = PyUnicode_DecodeFSDefault(PYTHON_SCRIPT_FILE);
     pModule = PyImport_Import(pName);
-
-    if (pModule == nullptr)
-    {
+    if (pModule == nullptr)   {
         printf("Error: Import failed, Can not upload file %s \n", download_file_params->file_path);
         exit_status = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
@@ -179,7 +172,7 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
     if (pResult != NULL) {
         // Don't forget to decref the result
         long int ret = PyLong_AsLong(pResult);
-        if (ret == 1) {
+        if (ret == TRUE) {
             exit_status = An_SUCCESS;
         }
     } else {
@@ -192,7 +185,6 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
 cleanup_and_exit:
     // Dereference python objects
     Py_XDECREF(pArgs);
-    Py_XDECREF(arg1);
     Py_XDECREF(pName);
     Py_XDECREF(pModule);
     Py_XDECREF(pFunction);
