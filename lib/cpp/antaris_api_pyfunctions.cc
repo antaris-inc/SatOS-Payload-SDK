@@ -32,54 +32,129 @@
 #include "antaris_sdk_environment.h"
 #include "antaris_api_pyfunctions.h"
 
+#define JSON_Key_FTM            ("FTM")
+#define JSON_Key_File_Conn      ("File_Conn_Str")
+#define JSON_Key_TrueTwin_Dir   ("Truetwin_Dir")
+#define JSON_Key_Share_Name     ("Share_Name")
+
+#define FILE_DOWNLOAD_DIR    "/opt/antaris/outbound/"
+
 AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, ReqStageFileDownloadParams *download_file_params)
 {
     size_t filename_len = 0;
-    AntarisReturnCode ret = An_SUCCESS;
-    long result;
-    int exit_status = An_GENERIC_FAILURE;
+    AntarisReturnCode exit_status = An_GENERIC_FAILURE;
+    cJSON *key_ftm = NULL;
+    cJSON *pJsonStr = NULL;
+
+    PyObject *pArgs = NULL;
+    PyObject *arg1 = NULL;
     PyObject *pName = NULL;
     PyObject *pModule = NULL;
     PyObject *pFunction = NULL;
-    PyObject *pArgs = NULL;
-    PyObject *pValue = NULL;
-    PyObject *next = NULL;
-    PyObject *prev = NULL;
-    PyObject *child = NULL;
-    PyObject *valuestring = NULL;
-    PyObject *string = NULL;
+    PyObject *pResult = NULL;
 
-    if (p_cJson->next != NULL)
-    {
-        next = PyLong_FromVoidPtr(p_cJson->next);
-    }
-    if (p_cJson->prev != NULL)
-    {
-        prev = PyLong_FromVoidPtr(p_cJson->prev);
+    char *g_File_String = NULL;
+    char *g_Truetwin_Dir = NULL;
+    char *g_Share_Name = NULL;
+    char dst_file_name[MAX_FILE_OR_PROP_LEN_NAME] = {'\0'};
+    char *position = NULL;
+    size_t remaining_length = 0;
+
+    read_config_json(&p_cJson);
+    if (p_cJson == NULL)  {
+        printf("Error: Failed to read the config.json\n");
+        exit_status = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
     }
 
-    if (p_cJson->child != NULL)
-    {
-        child = PyLong_FromVoidPtr(p_cJson->child);
+    key_ftm = cJSON_GetObjectItemCaseSensitive(p_cJson, JSON_Key_FTM);
+    if (key_ftm == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_FTM);
+        exit_status = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
     }
-    PyObject *type = PyLong_FromLong(p_cJson->type);
-    if (p_cJson->valuestring != NULL)
-    {
-        valuestring = PyUnicode_DecodeUTF8(p_cJson->valuestring, strlen(p_cJson->valuestring), NULL);
+    
+    // get File_Conn_Str
+    pJsonStr = cJSON_GetObjectItem(key_ftm, JSON_Key_File_Conn);
+    if (pJsonStr == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_File_Conn);
+        exit_status = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
     }
-    PyObject *valueint = PyLong_FromLong(p_cJson->valueint);
-    PyObject *valuedouble = PyFloat_FromDouble(p_cJson->valuedouble);
-    if (p_cJson->string != NULL)
-    {
-        string = PyUnicode_DecodeUTF8(p_cJson->string, strlen(p_cJson->string), NULL);
-    }
-    filename_len = strnlen(download_file_params->file_path, MAX_FILE_OR_PROP_LEN_NAME);
 
-    if ((download_file_params->file_path == NULL) || (filename_len > MAX_FILE_OR_PROP_LEN_NAME))
-    {
-        printf("Error: Filename greater than %d \n", MAX_FILE_OR_PROP_LEN_NAME);
-        return An_GENERIC_FAILURE;
+    if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
+        printf("Error: %s value is not a string \n", JSON_Key_File_Conn);
+        exit_status = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
     }
+    g_File_String = cJSON_GetStringValue(pJsonStr);
+    if (g_File_String == NULL) {
+        printf("Error: %s string not present \n", JSON_Key_File_Conn);
+    }
+
+    // get Truetwin_Dir
+    pJsonStr = cJSON_GetObjectItem(key_ftm, JSON_Key_TrueTwin_Dir);
+    if (pJsonStr == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_TrueTwin_Dir);
+        exit_status = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
+    }
+
+    if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
+        printf("Error: %s value is not a string \n", JSON_Key_TrueTwin_Dir);
+        exit_status = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
+    }
+    g_Truetwin_Dir = cJSON_GetStringValue(pJsonStr);
+
+    if (g_Truetwin_Dir == NULL) {
+        printf("Error: %s string not present \n", JSON_Key_TrueTwin_Dir);
+    }
+
+    // get  Share_Name
+    pJsonStr = cJSON_GetObjectItem(key_ftm, JSON_Key_Share_Name);
+    if (pJsonStr == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_Share_Name);
+        exit_status = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
+    }
+
+    if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
+        printf("Error: %s value is not a string \n", JSON_Key_Share_Name);
+        exit_status = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
+    }
+    g_Share_Name = cJSON_GetStringValue(pJsonStr);
+    if (g_Share_Name == NULL) {
+        printf("Error: %s string not present \n", JSON_Key_Share_Name);
+        exit_status = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
+    }
+    printf("%s\n", download_file_params->file_path);
+    printf("%s\n", g_File_String);
+    printf("%s\n", g_Truetwin_Dir);
+    printf("%s\n", g_Share_Name);
+
+    // Creating destination file path
+    position = strstr(download_file_params->file_path, FILE_DOWNLOAD_DIR);
+    if ( position == NULL ) {
+        printf("Error: source file should be at %s \n", FILE_DOWNLOAD_DIR);
+        exit_status = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
+    }
+
+    position += strlen(FILE_DOWNLOAD_DIR);
+    remaining_length = strlen(position);
+    strcpy(dst_file_name, g_Truetwin_Dir);
+    strncat(dst_file_name, position, remaining_length);
+    printf("dst file = %s \n", dst_file_name);
+
+    pArgs = PyTuple_New(4);  // Create a tuple with 4 elements
+
+    PyTuple_SetItem(pArgs, 0, Py_BuildValue("s", download_file_params->file_path));  // 's' for string
+    PyTuple_SetItem(pArgs, 1, Py_BuildValue("s", g_File_String));
+    PyTuple_SetItem(pArgs, 2, Py_BuildValue("s", g_Share_Name));
+    PyTuple_SetItem(pArgs, 3, Py_BuildValue("s", dst_file_name));
 
     printf("Antaris_SatOS : Uploading file %s \n", download_file_params->file_path);
 
@@ -88,55 +163,43 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
 
     if (pModule == nullptr)
     {
-        printf("Error: Can not upload file %s \n", download_file_params->file_path);
-        return An_GENERIC_FAILURE;
+        printf("Error: Import failed, Can not upload file %s \n", download_file_params->file_path);
+        exit_status = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
     }
 
-    // Create a Python tuple and pack the structure and character array into it
-    pArgs = PyTuple_Pack(10, Py_BuildValue("i", download_file_params->correlation_id), Py_BuildValue("s", download_file_params->file_path), next, prev, child, type, valuestring, valueint, valuedouble, string); // Pass arguments
+    pFunction = PyObject_GetAttrString(pModule, PYTHON_STAGEFILE_MODULE);
+    if (pFunction == NULL) {
+        printf("Error: module failed, Can not upload file %s \n", download_file_params->file_path);
+        exit_status = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
+    }
 
-    // Create an instance of the File_Stage class
-    PyObject* pInstance = PyObject_CallObject(pModule, pArgs);
-
-    if (pInstance != NULL) {
-        pFunction = PyObject_GetAttrString(pInstance, PYTHON_STAGEFILE_MODULE);
-
-        if (pFunction != NULL) {
-            // Call the method
-            PyObject* pResult = PyObject_CallObject(pFunction, NULL);
-            if (pResult != NULL) {
-                // Handle the result as needed
-                // Note: You should check for exceptions here.
-
-                // Don't forget to decref the result
-                Py_DECREF(pResult);
-                printf("Success success \n");
-            } else {
-                PyErr_Print();
-                printf("Error:2 Can not upload file %s \n", download_file_params->file_path);
-                return An_GENERIC_FAILURE;
-            }
+    pResult = PyObject_CallObject(pFunction, pArgs);
+    if (pResult != NULL) {
+        // Don't forget to decref the result
+        long int ret = PyLong_AsLong(pResult);
+        if (ret == 1) {
+            exit_status = An_SUCCESS;
         }
+    } else {
+        PyErr_Print();
+        printf("Error: Can not upload file %s \n", download_file_params->file_path);
+        exit_status = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
     }
 
-/*    if (PyCallable_Check(pFunction) == FALSE)
-    {
-        printf("Error:2 Can not upload file %s \n", download_file_params->file_path);
-        return An_GENERIC_FAILURE;
-    }
-
-    pValue = PyObject_CallObject(pFunction, pArgs); // Call the function
-    result = PyLong_AsLong(pValue);                 // Convert the result to a C++ type
-    exit_status = (int)result;
-*/
+cleanup_and_exit:
     // Dereference python objects
-    Py_XDECREF(pValue);
     Py_XDECREF(pArgs);
-    Py_XDECREF(pFunction);
+    Py_XDECREF(arg1);
+    Py_XDECREF(pName);
     Py_XDECREF(pModule);
+    Py_XDECREF(pFunction);
+    Py_XDECREF(pResult);
 
     // Process and use the Python script's result in your C++ code
     printf("File upload status : %d \n", exit_status);
 
-    return ret;
+    return exit_status;
 }
