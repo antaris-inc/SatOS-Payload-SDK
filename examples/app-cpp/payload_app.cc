@@ -230,13 +230,14 @@ void handle_StageFile(mythreadState_t *mythread)
     FILE *fp = NULL;
     size_t filename_size = 0;
     ReqStageFileDownloadParams download_file_params = {0};
+    
     printf("\n Handling sequence: StageFile! \n");
 
     filename_size = strnlen(STAGE_FILE_DOWNLOAD_DIR, MAX_FILE_OR_PROP_LEN_NAME) + strnlen(STAGE_FILE_NAME, MAX_FILE_OR_PROP_LEN_NAME);
 
     if (filename_size > MAX_FILE_OR_PROP_LEN_NAME) {
         printf("Error: Stagefile path can not be greater than %d \n", MAX_FILE_OR_PROP_LEN_NAME);
-        return;
+        goto exit_sequence;
     }
 
     sprintf(download_file_params.file_path, "%s%s", STAGE_FILE_DOWNLOAD_DIR, STAGE_FILE_NAME);
@@ -245,9 +246,11 @@ void handle_StageFile(mythreadState_t *mythread)
     fp = fopen(download_file_params.file_path, "w");
     if (fp == NULL) {
         printf("Error: Can not open file %s. Sequence failed \n", download_file_params.file_path);
-        return;
+        goto exit_sequence;
     }
-    
+    fprintf(fp, "Testing file download with payload \n");
+    fclose(fp);
+
     printf("Info: Downloading file = %s \n", download_file_params.file_path);
 
     // Staging file
@@ -256,7 +259,8 @@ void handle_StageFile(mythreadState_t *mythread)
     if (ret == An_GENERIC_FAILURE) {
         printf("Error: Failed to stage file %s \n", download_file_params.file_path);
     }
-    
+
+exit_sequence:    
     // Tell PC that current sequence is done
     CmdSequenceDoneParams sequence_done_params = {0};
     strcpy(&sequence_done_params.sequence_id[0], StageFile_Sequence_ID);
