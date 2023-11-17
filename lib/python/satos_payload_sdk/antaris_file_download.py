@@ -13,10 +13,10 @@ g_Outbound_Path_Prefix = "/opt/antaris/outbound/"
 class File_Stage():
 
     def __init__(self, download_file_params,config_data ): 
-        self.download_file_params=download_file_params
-        self.config_data=config_data
-        self.file_name=self.download_file_params.file_path
-        self.file_path_remote=self.config_data[g_FTM][g_Truetwin_Dir] + "/" + self.file_name
+        self.download_file_params = download_file_params
+        self.config_data = config_data
+        self.file_name = self.download_file_params.file_path
+        self.file_path_remote = self.config_data[g_FTM][g_Truetwin_Dir] + "/" + self.file_name
 
     def start_upload(self):
         file_path_local = g_Outbound_Path_Prefix + self.download_file_params.file_path
