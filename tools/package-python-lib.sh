@@ -20,7 +20,7 @@ mkdir -p $BUILD_ROOT/dist
 apt-get update -y --fix-missing
 apt-get upgrade
 
-python3 -m pip install --upgrade pip
+python3 -m pip install --upgrade pip -y
 apt install -y python3.10-venv
 
 cd lib/python
