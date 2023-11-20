@@ -21,6 +21,7 @@
 #include <cstdlib>
 
 #include "antaris_api.h"
+#include "antaris_api_gpio.h"
 
 #define MAX_STR_LEN 256
 #define SEQ_PARAMS_LEN 64
@@ -32,9 +33,11 @@
 #define HelloFriend_IDX                 1
 #define LogLocation_ID                  "LogLocation"
 #define LogLocation_IDX                 2
-#define SEQUENCE_ID_MAX                 3
+#define TestGPIO_Sequence_ID                     "TestGPIO"
+#define TestGPIO_Sequence_IDX                    3
+#define SEQUENCE_ID_MAX                 4
 
-#define APP_STATE_ACTIVE                1  // 1 => Indicates application is running
+#define APP_STATE_ACTIVE                0  // Application State : Good (0), Error (non-Zero)
 
 /*
  * Following counters should be incremented whenever
@@ -144,6 +147,78 @@ static void handle_LogLocation(mythreadState_t *mythread)
     return;
 }
 
+void handle_TestGPIO(mythreadState_t *mythread)
+{
+    AntarisReturnCode ret;
+    AntarisApiGPIO api_gpio;
+    gpio_s gpio_info;
+    int i = 0;
+    int8_t readPin, writePin, val;
+    int8_t GPIO_ERROR = -1;
+
+    printf("\n Handling sequence: TestGPIO! \n");
+
+    ret = api_gpio.api_pa_pc_get_gpio_info(&gpio_info);
+
+    if (ret != An_SUCCESS) {
+        printf("Error: json file is not configured properly. Kindly check configurations done in ACP \n");
+        return;
+    }
+    printf("Total gpio pins = %d \n", gpio_info.pin_count);
+
+    while (i < gpio_info.pin_count) {
+        // Read initial value of GPIO pins.
+        // Assume GPIO pins are in loopback mode, their value must be same.
+
+        readPin = gpio_info.pins[i];
+        writePin = gpio_info.pins[i+1];
+        val = api_gpio.api_pa_pc_read_gpio(gpio_info.gpio_port, readPin);
+
+        if (val == GPIO_ERROR) {
+            printf("Error in pin no %d \n", int(readPin));
+            return;
+        }
+        printf("Initial Gpio value of pin no %d is %d \n", int(readPin), val);
+                   
+        // Toggle the value
+        val = val ^ 1; 
+        
+        // Writing value to WritePin.
+        ret = api_gpio.api_pa_pc_write_gpio(gpio_info.gpio_port, writePin, val);
+        if (ret == GPIO_ERROR) {
+            printf("Error in pin no %d \n", int(writePin));
+            return;
+        }
+        printf("Written %d successfully to pin no %d \n", val, int(writePin));
+        
+        /* As Read and Write pins are back-to-back connected, 
+           Reading value of Read pin to confirm GPIO success/failure
+         */
+        val = api_gpio.api_pa_pc_read_gpio(gpio_info.gpio_port, readPin);
+        if (val == GPIO_ERROR) {
+            printf("Error in pin no %d \n", int(readPin));
+            return;
+        }
+        printf("Final Gpio value of pin no %d is %d \n", int(readPin), val);
+         
+        i += 2;
+    }
+
+    // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], TestGPIO_Sequence_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } 
+    
+    printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+    
+}
+
 // Table of Sequence_id : FsmThread
 mythreadState_t *payload_sequences_fsms[SEQUENCE_ID_MAX];
 unsigned int current_sequence_idx = HelloWorld_IDX;
@@ -215,7 +290,10 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
     } else if (strcmp(sequence_string, LogLocation_ID) == 0) {
         printf("\t => %d\n", LogLocation_IDX);
         return LogLocation_IDX;
-    }
+    } else if (strcmp(sequence_string, TestGPIO_Sequence_ID) == 0) {
+        printf("\t => %d\n", TestGPIO_Sequence_IDX);
+        return TestGPIO_Sequence_IDX;
+    } 
 
     printf("Unknown sequence, returning -1\n");
     return -1;
@@ -236,6 +314,7 @@ AntarisReturnCode start_sequence(StartSequenceParams *start_seq_param)
     strcpy(thread_state->received_name, &start_seq_param->sequence_id[0]);
     strncpy(thread_state->seq_params, start_seq_param->sequence_params, SEQ_PARAMS_LEN);
     thread_state->scheduled_deadline = start_seq_param->scheduled_deadline;
+    thread_state->correlation_id = start_seq_param->correlation_id;
     fsmThreadStart(thread_state);
 
     return An_SUCCESS;
@@ -345,6 +424,8 @@ int main(int argc, char *argv[])
     unsigned short int correlation_id = 0;
     AntarisReturnCode ret;
     void *exit_status;
+
+    init_satos_lib();
     
     // Callback functions (PC => PA)
     AntarisApiCallbackFuncList callback_func_list = {
@@ -369,6 +450,7 @@ int main(int argc, char *argv[])
     payload_sequences_fsms[HelloWorld_IDX] = fsmThreadCreate(channel, 1, HelloWorld_ID, handle_HelloWorld);
     payload_sequences_fsms[HelloFriend_IDX] = fsmThreadCreate(channel, 1, HelloFriend_ID, handle_HelloFriend);
     payload_sequences_fsms[LogLocation_IDX] = fsmThreadCreate(channel, 1, LogLocation_ID, handle_LogLocation);
+    payload_sequences_fsms[TestGPIO_Sequence_IDX] = fsmThreadCreate(channel, 1, TestGPIO_Sequence_ID, handle_TestGPIO);
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure
@@ -404,16 +486,22 @@ int main(int argc, char *argv[])
         pthread_join(payload_sequences_fsms[LogLocation_IDX]->thread_id, &exit_status);
     }
 
+    if (strcmp(payload_sequences_fsms[TestGPIO_Sequence_IDX]->state, "NOT_STARTED") != 0) {
+        pthread_join(payload_sequences_fsms[TestGPIO_Sequence_IDX]->thread_id, &exit_status);
+    }
+
     printf("Cleaning up sequence resources\n");
 
     fsmThreadCleanup(payload_sequences_fsms[HelloWorld_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[HelloFriend_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[LogLocation_IDX]);
+    fsmThreadCleanup(payload_sequences_fsms[TestGPIO_Sequence_IDX]);
 
     // Delete Channel
     api_pa_pc_delete_channel(channel);
 
     printf("==== All Done: Exiting Main Thread ====\n\n");
 
+    deinit_satos_lib();
     _exit(0);
 }

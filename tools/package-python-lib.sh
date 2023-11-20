@@ -17,6 +17,10 @@
 BUILD_ROOT=`pwd`
 mkdir -p $BUILD_ROOT/dist
 
+python3 -m pip install --upgrade pip
+
 cd lib/python
+python3 -m pip install build
+
 python3 -m build
 mv dist/*.whl $BUILD_ROOT/dist
