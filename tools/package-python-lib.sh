@@ -17,7 +17,7 @@
 BUILD_ROOT=`pwd`
 mkdir -p $BUILD_ROOT/dist
 
-apt-get update --fix-missing
+apt-get update -y --fix-missing
 apt-get upgrade
 
 python3 -m pip install --upgrade pip
