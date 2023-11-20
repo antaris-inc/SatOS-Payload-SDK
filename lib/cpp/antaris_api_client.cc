@@ -28,6 +28,7 @@
 #include "antaris_api.h"
 #include "antaris_api_internal.h"
 #include "antaris_sdk_environment.h"
+#include "antaris_api_pyfunctions.h"
 
 #include "antaris_api.grpc.pb.h"
 #include "antaris_api.pb.h"
@@ -657,6 +658,9 @@ AntarisReturnCode api_pa_pc_get_current_location(AntarisChannel channel, ReqGetC
 
 AntarisReturnCode api_pa_pc_stage_file_download(AntarisChannel channel, ReqStageFileDownloadParams *download_file_params)
 {
+    cJSON* p_cJson = NULL;
+    AntarisApiPyFunctions stageFile ;
+
     AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
     AntarisReturnCode ret = An_SUCCESS;
 
@@ -671,6 +675,17 @@ AntarisReturnCode api_pa_pc_stage_file_download(AntarisChannel channel, ReqStage
         displayReqStageFileDownloadParams(download_file_params);
     }
 
+    // In case of True-twin mode call Python function
+    if (g_KEEPALIVE_ENABLE == ENABLED) {
+        read_config_json(&p_cJson);
+        
+        if (p_cJson == NULL){
+            std::cout << "Failed to read the config.json\n" ;
+        } else {
+            ret = stageFile.api_pa_pc_staged_file(p_cJson, download_file_params);     
+            cJSON_Delete(p_cJson);
+        }
+    }
     return channel_ctx->pc_service_handle->Invoke_PC_stage_file_download(download_file_params);
 }
 

@@ -45,7 +45,7 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio)
     char *str = NULL;
     char key[32] = {'\0'};
 
-    gpio->pins[8] = {-1};
+    memset(gpio->pins, -1, sizeof(gpio->pins));
     gpio->gpio_port = -1;
     gpio->pin_count = -1;
     gpio->interrupt_pin = -1;
