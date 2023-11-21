@@ -41,7 +41,6 @@ RUN python3 -m pip install --upgrade pip
 
 # Install grpcio and grpcio-tools
 RUN python3 -m pip install grpcio grpcio-tools build
-RUN python3 -m pip install azure-storage-file-share
 
 ARG ANTARIS_INSTALLATIONS_PATH=/usr/local/antaris
 

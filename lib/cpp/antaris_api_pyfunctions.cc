@@ -156,6 +156,7 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
     pName = PyUnicode_DecodeFSDefault(PYTHON_SCRIPT_FILE);
     pModule = PyImport_Import(pName);
     if (pModule == nullptr)   {
+        PyErr_Print();
         printf("Error: Import failed, Can not upload file %s \n", download_file_params->file_path);
         exit_status = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
@@ -163,6 +164,7 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
 
     pFunction = PyObject_GetAttrString(pModule, PYTHON_STAGEFILE_MODULE);
     if (pFunction == NULL) {
+        PyErr_Print();
         printf("Error: module failed, Can not upload file %s \n", download_file_params->file_path);
         exit_status = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
