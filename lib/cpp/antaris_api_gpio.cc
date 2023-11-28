@@ -45,7 +45,7 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio)
     char *str = NULL;
     char key[32] = {'\0'};
 
-    gpio->pins[8] = {-1};
+    memset(gpio->pins, -1, sizeof(gpio->pins));
     gpio->gpio_port = -1;
     gpio->pin_count = -1;
     gpio->interrupt_pin = -1;
@@ -204,12 +204,14 @@ AntarisReturnCode init_satos_lib()
     PyObject* sysPath = PySys_GetObject("path");
 
     if (sysPath == nullptr) {
+        PyErr_Print();
         printf("Error: Can not initialize SatOS library \n");
         return An_GENERIC_FAILURE;
     } 
     
     PyObject* directoryPath = PyUnicode_DecodeFSDefault("/lib/antaris/tools/");
     if (directoryPath == nullptr)  {
+        PyErr_Print();
         printf("Error: Can not initialize SatOS library \n");
         return An_GENERIC_FAILURE;
     }
@@ -217,6 +219,7 @@ AntarisReturnCode init_satos_lib()
     PyList_Append(sysPath, directoryPath);
     Py_XDECREF(directoryPath);
 
+    printf("Completed initialization of SatOS \n");
     return An_SUCCESS;
 }
 
@@ -260,14 +263,16 @@ int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number)
     pModule = PyImport_Import(pName);
 
     if (pModule == nullptr)  {
-        printf("Error: Can not read GPIO pin %d \n", pin_number);
+        PyErr_Print();
+        printf("Error: Module import error. Can not read GPIO pin %d \n", pin_number);
         return An_GENERIC_FAILURE;
     }
     
     pFunction = PyObject_GetAttrString(pModule, PYTHON_GPIO_READ_FUNCTION); 
        
     if (PyCallable_Check(pFunction) == FALSE) {
-        printf("Error: Can not read GPIO pin %d \n", pin_number);
+        PyErr_Print();
+        printf("Error: Python function not found. Can not read GPIO pin %d \n", pin_number);
         return An_GENERIC_FAILURE;
     }
     
@@ -305,14 +310,16 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_write_gpio(int8_t gpio_port, int8_t 
     pName = PyUnicode_DecodeFSDefault(PYTHON_GPIO_MODULE);
     pModule = PyImport_Import(pName);
     if (pModule == nullptr) {
-        printf("Error: Can not write GPIO pin %d \n", pin_number);
+        PyErr_Print();
+        printf("Error: Module not found. Can not write GPIO pin %d \n", pin_number);
         return An_GENERIC_FAILURE;
     }
     
     pFunction = PyObject_GetAttrString(pModule, PYTHON_GPIO_WRITE_FUNCTION);
        
     if (PyCallable_Check(pFunction) == FALSE) {
-        printf("Error: Can not write GPIO pin %d \n", pin_number);
+        PyErr_Print();
+        printf("Error: Function not found. Can not write GPIO pin %d \n", pin_number);
         return An_GENERIC_FAILURE;
     }
     
