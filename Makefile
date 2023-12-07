@@ -23,7 +23,7 @@ BUILD_TOOLS_DIR=tools
 BUILD_CONTAINER_DIR=${BUILD_TOOLS_DIR}/containers
 DOCKER_FILE_BASE="images/sdk-tools"
 DOCKERFILE := ${DOCKER_FILE_BASE}/Dockerfile
-
+DOCKERFILE_CENTOS := ${DOCKER_FILE_BASE}/Dockerfile.centos
 OPTIMIZATION_LEVEL := -g
 
 #Default language - C++
@@ -70,7 +70,7 @@ no_default:
 	@echo No default make target configured. Please proceed as per acommpanying documentation.
 
 pc_submodule_tools:
-	@${DOCKER_BUILD} --build-arg CONTAINER_USER=$(USER) --build-arg CONTAINER_UID=`id -u` --build-arg CONTAINER_GID=`id -g` -f ${DOCKERFILE} -t ${CONTAINER_IMAGE_NAME} .
+	@${DOCKER_BUILD} --build-arg CONTAINER_USER=$(USER) --build-arg CONTAINER_UID=`id -u` --build-arg CONTAINER_GID=`id -g` -f ${DOCKERFILE_CENTOS} -t ${CONTAINER_IMAGE_NAME} .
 
 build_cpp:
 	@${DOCKER_BUILD} --build-arg CONTAINER_USER=$(USER) --build-arg CONTAINER_UID=`id -u` --build-arg CONTAINER_GID=`id -g` -f ${DOCKERFILE} -t ${CONTAINER_IMAGE_NAME} .
