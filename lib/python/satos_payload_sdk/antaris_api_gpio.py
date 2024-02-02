@@ -136,11 +136,6 @@ def api_read_gpio(port, pin):
         return g_GPIO_ERROR 
 
     Device = ftdi.BitBangDevice(device_id=DeviceName, interface_select=int(port))
-    time.sleep(g_SLEEP_TIME_IN_SEC)
-    wr_port = g_MASK_BIT_0 << int(pin)
-    wr_port = g_MASK_BYTE ^ wr_port
-    out = Device.direction & wr_port
-    Device.direction = out
     op = (Device.port >> int(pin)) & g_MASK_BIT_0
     Device.close()
     return op
@@ -172,15 +167,14 @@ def api_write_gpio(port, pin, value):
         return g_GPIO_ERROR
     
     Device = ftdi.BitBangDevice(device_id=DeviceName, interface_select=int(port))
-    time.sleep(g_SLEEP_TIME_IN_SEC)
     wr_port = g_MASK_BIT_0 << int(pin)
-    Device.direction = Device.direction | wr_port
+    Device.direction = wr_port
     if int(value) == 0:
         wr_val = g_MASK_BYTE ^ wr_port
         Device.port = Device.port & wr_val
     else:
         Device.port = (Device.port | wr_port)
-    time.sleep(g_SLEEP_TIME_IN_SEC)
+
     op = (Device.port >> int(pin)) & g_MASK_BIT_0
     Device.close()
     return op
