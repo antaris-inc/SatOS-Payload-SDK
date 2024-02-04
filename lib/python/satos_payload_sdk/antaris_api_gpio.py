@@ -34,7 +34,6 @@ g_JSON_Key_Interrupt_Pin = "GPIO_Interrupt"
 # Define error code
 g_GPIO_ERROR = -1
 g_GPIO_AVAILABLE = 1
-g_SLEEP_TIME_IN_SEC = 1
 g_MASK_BIT_0 = 1
 g_MASK_BYTE = 0xFF
 
