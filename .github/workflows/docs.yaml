@@ -19,6 +19,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
+      - name: Enable debug logging
+        run: export ACTIONS_RUNNER_DEBUG=true
       - name: Build docs
         run: docker run --platform linux/amd64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable /bin/bash -c "pip install sphinx furo && make docs"
       - name: upload docs artifact
