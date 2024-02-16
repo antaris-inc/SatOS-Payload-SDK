@@ -17,7 +17,11 @@
 BUILD_ROOT=`pwd`
 mkdir -p $BUILD_ROOT/dist
 
+apt-get update -y --fix-missing
+apt-get upgrade -y
+
 python3 -m pip install --upgrade pip
+apt install -y python3.10-venv
 
 cd lib/python
 python3 -m pip install build

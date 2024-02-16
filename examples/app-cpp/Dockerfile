@@ -16,3 +16,4 @@ FROM quay.io/antaris-inc/satos-payload-app-cpp:stable
 
 ADD payload_app /opt/antaris/app/payload_app
 ADD entrypoint.sh /opt/antaris/app/entrypoint.sh
+RUN mkdir -p /opt/antaris/outbound -p /opt/antaris/inbound

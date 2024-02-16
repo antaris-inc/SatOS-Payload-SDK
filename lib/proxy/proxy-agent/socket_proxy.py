@@ -98,7 +98,7 @@ class ProxySocket:
         return str
 
 class OnTheFly(ProxySocket):
-    def __init__(self, sock1, peer_ip, peer_port, gUDPMode):
+    def __init__(self, sock1, peer_ip, peer_port, gUDPMode = False):
         self.leg1 = sock1
         if gUDPMode == False:
             self.leg2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
