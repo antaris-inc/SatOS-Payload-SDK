@@ -49,6 +49,12 @@ class Controller:
         loc = ctx.client.get_current_location()
         logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude}")
 
+    def handle_power_control(self, ctx):
+        print("Handling payload power")
+        power_state = ctx.params                    # 0 = power off, 1 = power on
+        resp = ctx.payload_power_control(power_state)
+        logger.info("Status of Power control={power_state} call ={resp}")
+        
     # The sample program assumes 2 GPIO pins are connected back-to-back. 
     # This sequence toggles level of 'Write Pin' and then reads level of 'Read Pin'
     def handle_test_gpio(self, ctx):
@@ -146,7 +152,7 @@ def new():
     app.mount_sequence("TestGPIO", ctl.handle_test_gpio)
     app.mount_sequence("UARTLoopback", ctl.handle_uart_loopback)
     app.mount_sequence("StageFile",ctl.handle_stage_filedownload)
-
+    app.mount_sequence("PowerControl", ctl.handle_power_control)
     return app
 
 
