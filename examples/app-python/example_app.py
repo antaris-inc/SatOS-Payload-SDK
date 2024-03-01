@@ -52,8 +52,8 @@ class Controller:
     def handle_power_control(self, ctx):
         print("Handling payload power")
         power_state = ctx.params                    # 0 = power off, 1 = power on
-        resp = ctx.payload_power_control(power_state)
-        logger.info("Status of Power control={power_state} call ={resp}")
+        resp = ctx.client.payload_power_control(power_state)
+        logger.info(f"Power control state = {power_state}. Call response is = {resp}")
         
     # The sample program assumes 2 GPIO pins are connected back-to-back. 
     # This sequence toggles level of 'Write Pin' and then reads level of 'Read Pin'
