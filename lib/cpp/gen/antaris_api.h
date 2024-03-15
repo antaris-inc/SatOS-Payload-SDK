@@ -396,7 +396,7 @@ struct PayloadStatsResponse {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     UINT64                                          timestamp;                                       ///< @var Capture time stamp
     UINT32                                          used_counter;                                    ///< @var Counters used out of maximum 32 counters
-    PayloadStatsdInfo                               statsd[32];                                      ///< @var Counter values, maximum 32 counters
+    PayloadStatsdInfo                               statsd[16];                                      ///< @var Counter values, maximum 32 counters
 };
 
 void displayPayloadStatsResponse(const void *obj);

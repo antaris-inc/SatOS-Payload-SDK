@@ -834,7 +834,7 @@ displayPayloadStatsResponse(const void *obj)
     printf("used_counter ==>\n");
     displayUINT32((void *)&p->used_counter);
     printf("statsd ==>\n");
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < 16; i++) {
         displayPayloadStatsdInfo((void *)&p->statsd[i]);
     }
 
@@ -864,7 +864,7 @@ app_to_peer_PayloadStatsResponse(const void *ptr_src_app, void *ptr_dst_peer)
 
     dst->set_used_counter(__tmp_used_counter);
 
-    for (int i = 0; i < 32; i++) { // statsd
+    for (int i = 0; i < 16; i++) { // statsd
         ::antaris_api_peer_to_peer::PayloadStatsdInfo *dst_info = dst->mutable_statsd(i);
         app_to_peer_PayloadStatsdInfo(&src->statsd[i], dst_info);
     }
@@ -880,7 +880,7 @@ peer_to_app_PayloadStatsResponse(const void *ptr_src_peer, void *ptr_dst_app)
     dst->correlation_id = src->correlation_id();
     dst->timestamp = src->timestamp();
     dst->used_counter = src->used_counter();
-    for (int i = 0; i < 32; i++) { // statsd
+    for (int i = 0; i < 16; i++) { // statsd
         const ::antaris_api_peer_to_peer::PayloadStatsdInfo &src_info = src->statsd(i);
         PayloadStatsdInfo *dst_info = &dst->statsd[i];
 

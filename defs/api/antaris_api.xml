@@ -138,7 +138,7 @@
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="timestamp" type="UINT64" sequence="2" description="Capture time stamp"/>
             <Field name="used_counter" type="UINT32" sequence="3" description="Counters used out of maximum 32 counters"/>
-            <Field name="statsd" type="PayloadStatsdInfo" sequence="4" description="Counter values, maximum 32 counters" array="32"/>
+            <Field name="statsd" type="PayloadStatsdInfo" sequence="4" description="Counter values, maximum 32 counters" array="16"/>
         </Struct>
 
         <Struct name="CmdSequenceDoneParams" description="Parameters for Command Sequence Done notification to Payload Controller">
