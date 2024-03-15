@@ -734,6 +734,162 @@ peer_to_app_HealthCheckParams(const void *ptr_src_peer, void *ptr_dst_app)
 }
 
 void
+displayPayloadStatsdInfo(const void *obj)
+{
+    PayloadStatsdInfo *p = (PayloadStatsdInfo *)obj;
+
+    printf("PayloadStatsdInfo %p =>\n", obj);
+
+    printf("stats_counter ==>\n");
+    displayUINT32((void *)&p->stats_counter);
+    printf("stats_names ==>\n");
+    for (int i = 0; i < 32; i++) {
+        displayINT8((void *)&p->stats_names[i]);
+    }
+
+
+}
+
+void
+app_to_peer_PayloadStatsdInfo(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    PayloadStatsdInfo *src = (PayloadStatsdInfo *)ptr_src_app;
+    ::antaris_api_peer_to_peer::PayloadStatsdInfo *dst = (::antaris_api_peer_to_peer::PayloadStatsdInfo *)ptr_dst_peer;
+
+    UINT32 __tmp_stats_counter;
+
+    app_to_peer_UINT32(&src->stats_counter, &__tmp_stats_counter); // stats_counter
+
+    dst->set_stats_counter(__tmp_stats_counter);
+
+    dst->set_stats_names(&src->stats_names[0]);
+
+
+}
+
+void
+peer_to_app_PayloadStatsdInfo(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    PayloadStatsdInfo *dst = (PayloadStatsdInfo *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::PayloadStatsdInfo *src = (::antaris_api_peer_to_peer::PayloadStatsdInfo *)ptr_src_peer;
+
+    dst->stats_counter = src->stats_counter();
+    size_t stats_names_length = strnlen(src->stats_names().c_str(), 32);
+    if ( stats_names_length >= 32 ) {
+        printf("Error:  stats_names_length should be less than 32 \n");
+        return;
+    }
+    strncpy(&dst->stats_names[0], src->stats_names().c_str(), 32);
+
+}
+
+void
+displayReqPayloadStatsParams(const void *obj)
+{
+    ReqPayloadStatsParams *p = (ReqPayloadStatsParams *)obj;
+
+    printf("ReqPayloadStatsParams %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+
+}
+
+void
+app_to_peer_ReqPayloadStatsParams(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    ReqPayloadStatsParams *src = (ReqPayloadStatsParams *)ptr_src_app;
+    ::antaris_api_peer_to_peer::ReqPayloadStatsParams *dst = (::antaris_api_peer_to_peer::ReqPayloadStatsParams *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+
+}
+
+void
+peer_to_app_ReqPayloadStatsParams(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    ReqPayloadStatsParams *dst = (ReqPayloadStatsParams *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::ReqPayloadStatsParams *src = (::antaris_api_peer_to_peer::ReqPayloadStatsParams *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+
+}
+
+void
+displayPayloadStatsResponse(const void *obj)
+{
+    PayloadStatsResponse *p = (PayloadStatsResponse *)obj;
+
+    printf("PayloadStatsResponse %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("timestamp ==>\n");
+    displayUINT64((void *)&p->timestamp);
+    printf("used_counter ==>\n");
+    displayUINT32((void *)&p->used_counter);
+    printf("statsd ==>\n");
+    for (int i = 0; i < 32; i++) {
+        displayPayloadStatsdInfo((void *)&p->statsd[i]);
+    }
+
+
+}
+
+void
+app_to_peer_PayloadStatsResponse(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    PayloadStatsResponse *src = (PayloadStatsResponse *)ptr_src_app;
+    ::antaris_api_peer_to_peer::PayloadStatsResponse *dst = (::antaris_api_peer_to_peer::PayloadStatsResponse *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id;
+    UINT64 __tmp_timestamp;
+    UINT32 __tmp_used_counter;
+    PayloadStatsdInfo __tmp_statsd;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT64(&src->timestamp, &__tmp_timestamp); // timestamp
+
+    dst->set_timestamp(__tmp_timestamp);
+
+    app_to_peer_UINT32(&src->used_counter, &__tmp_used_counter); // used_counter
+
+    dst->set_used_counter(__tmp_used_counter);
+
+    for (int i = 0; i < 32; i++) { // statsd
+        ::antaris_api_peer_to_peer::PayloadStatsdInfo *dst_info = dst->mutable_statsd(i);
+        app_to_peer_PayloadStatsdInfo(&src->statsd[i], dst_info);
+    }
+
+}
+
+void
+peer_to_app_PayloadStatsResponse(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    PayloadStatsResponse *dst = (PayloadStatsResponse *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::PayloadStatsResponse *src = (::antaris_api_peer_to_peer::PayloadStatsResponse *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->timestamp = src->timestamp();
+    dst->used_counter = src->used_counter();
+    for (int i = 0; i < 32; i++) { // statsd
+        const ::antaris_api_peer_to_peer::PayloadStatsdInfo &src_info = src->statsd(i);
+        PayloadStatsdInfo *dst_info = &dst->statsd[i];
+
+        peer_to_app_PayloadStatsdInfo(&src_info, dst_info);
+    }
+
+}
+
+void
 displayCmdSequenceDoneParams(const void *obj)
 {
     CmdSequenceDoneParams *p = (CmdSequenceDoneParams *)obj;
@@ -796,6 +952,8 @@ displayAntarisApiCallbackFuncList(const void *obj)
     displayProcessResponseStageFileDownload_Fptr((void *)&p->process_response_stage_file_download);
     printf("process_response_payload_power_control ==>\n");
     displayProcessResponsePayloadPowerControl_Fptr((void *)&p->process_response_payload_power_control);
+    printf("req_payload_stats ==>\n");
+    displayProcessReqPayloadStats_Fptr((void *)&p->req_payload_stats);
 
 }
 

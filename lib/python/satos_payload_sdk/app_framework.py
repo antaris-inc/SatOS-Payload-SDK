@@ -20,7 +20,7 @@ import time
 import satos_payload_sdk.antaris_api_client as api_client
 import satos_payload_sdk.gen.antaris_api_types as api_types
 from satos_payload_sdk import antaris_api_common as api_common
-
+from satos_payload_sdk import gen as api_gen
 
 logger = logging.getLogger("satos_payload_sdk")
 
@@ -136,14 +136,14 @@ class SequenceHandler(Stoppable, threading.Thread):
 
 
 class ChannelClient:
-    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb):
+    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_stats_cb):
         self._channel = None
         self._cond = threading.Condition()
         self._next_cid = 0
         self._responses = {}
 
         self._start_sequence_cb = start_sequence_cb
-
+        self._req_payload_stats_cb = req_payload_stats_cb
         # used to facilitate communications with payload interface
         self._callback_map = {
             'StartSequence': self._handle_start_sequence,
@@ -153,6 +153,7 @@ class ChannelClient:
             'RespGetCurrentLocation': self._handle_response,
             'RespStageFileDownload': self._handle_response,
             'RespPayloadPowerControl': self._handle_response,
+            'ReqPayloadStats':self._handle_payload_stats,
         }
 
     def _get_next_cid(self):
@@ -252,6 +253,21 @@ class ChannelClient:
     def _handle_start_sequence(self, params):
         return self._start_sequence_cb(params.sequence_id, params.sequence_params, params.scheduled_deadline)
 
+    def _handle_payload_stats(self, params):
+        print("Inside _handle_payload_stats")
+        return self._req_payload_stats_cb(params)
+    
+class PayloadStatsdInfo:
+    def __init__(self):
+        self.stats_counter = 0            # Counter number
+        self.stats_names = [''] * 32      # Counter names, string
+
+class Payload:
+    def __init__(self):
+        self.correlation_id = 0
+        self.used_counter = 0
+        self.timestamp = 0
+        self.statsd = [api_gen.antaris_api_pb2.PayloadStatsdInfo() for _ in range(32)] #    [PayloadStatsdInfo()] * 32        
 
 class PayloadApplication(Stoppable):
 
@@ -276,6 +292,9 @@ class PayloadApplication(Stoppable):
         # used to help coordinate shutdown
         self.shutdown_correlation_id = None
 
+        # Additional payload attributes
+        self.payload = Payload()
+        
     def mount_sequence(self, sequence_id, sequence_handler_func):
         self.sequence_handler_func_idx[sequence_id] = sequence_handler_func
 
@@ -301,8 +320,8 @@ class PayloadApplication(Stoppable):
         logger.info("payload app starting")
 
         if not self.channel_client:
-            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown)
-
+            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_stats)
+        
         self.channel_client._connect()
 
         logger.info("payload app running")
@@ -369,5 +388,22 @@ class PayloadApplication(Stoppable):
         # non-blocking, as we just want to accept the request and proceed
         # in the background with full shutdown. Response will be sent later.
         self.request_stop()
+
+        return api_types.AntarisReturnCode.An_SUCCESS
+
+    def _req_payload_stats(self, params):
+        logger.info("Handling req_payload_stats")
+
+    #    with self.lock:
+    #        self._req_payload_stats.correlation_id = params.correlation_id
+
+        payload = self.payload
+
+        # Now, assign params.correlation_id to payload.correlation_id
+        payload.correlation_id = params.correlation_id
+    
+        resp = api_client.api_pa_pc_response_payload_stats(self.channel_client._channel, payload)
+        if resp != api_types.AntarisReturnCode.An_SUCCESS:
+            logger.error("sequence_done request failed: resp=%d" % resp)
 
         return api_types.AntarisReturnCode.An_SUCCESS

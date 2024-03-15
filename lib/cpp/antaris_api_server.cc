@@ -202,6 +202,26 @@ class AppToPCClient {
         }
   }
 
+  AntarisReturnCode InvokeProcessReqPayloadStats(ReqPayloadStatsParams *req_params) {
+		antaris_api_peer_to_peer::ReqPayloadStatsParams cb_req;
+		antaris_api_peer_to_peer::AntarisReturnType cb_response;
+		Status cb_status;
+		// Context for the client. It could be used to convey extra information to
+		// the server and/or tweak certain RPC behaviors.
+		ClientContext context;
+        
+		app_to_peer_ReqPayloadStatsParams(req_params, &cb_req);
+
+		cb_status = app_grpc_handle_->PA_ProcessReqPayloadStats(&context, cb_req, &cb_response);
+
+		// Act upon its status.
+		if (cb_status.ok()) {
+		    return (AntarisReturnCode)(cb_response.return_code());
+		} else {
+		    return An_GENERIC_FAILURE;
+		}
+  }
+
  private:
   std::unique_ptr<antaris_api_peer_to_peer::AntarisapiApplicationCallback::Stub> app_grpc_handle_;
   std::uint32_t appId;
@@ -404,6 +424,21 @@ done:
         peer_to_app_RespShutdownParams(request, &api_request);
 
         user_callbacks_(user_cb_ctx_ , cookie , e_app2PC_shutdownResponse, &api_request, &api_response.return_code);
+
+        app_to_peer_AntarisReturnType(&api_response, response);
+
+        return Status::OK;
+    }
+
+    Status PC_response_payload_stats(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::PayloadStatsResponse* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+        AppToPCCallbackParams_t api_request = {0};
+        AntarisReturnType api_response = {return_code: An_SUCCESS};
+        cookie_t cookie;
+        cookie = decodeCookie(context);
+
+        peer_to_app_PayloadStatsResponse(request, &api_request);
+
+        user_callbacks_(user_cb_ctx_ , cookie , e_app2PC_PayloadStatsResponse, &api_request, &api_response.return_code);
 
         app_to_peer_AntarisReturnType(&api_response, response);
 
@@ -667,6 +702,8 @@ AntarisReturnCode an_pc_pa_invoke_api(PCToAppClientContext ctx, PCToAppApiId_e a
         ret = internal_ctx->client_api_handle->InvokeProcessProcessHealthCheck(&api_params->health_check);
     break;
 
+    case e_PC2App_ReqPayloadStats:
+        ret = internal_ctx->client_api_handle->InvokeProcessReqPayloadStats(&api_params->payload_stats);
     } // switch api_id
 
     return ret;

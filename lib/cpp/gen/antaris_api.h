@@ -109,6 +109,15 @@ typedef struct ShutdownParams ShutdownParams;
 struct HealthCheckParams;
 typedef struct HealthCheckParams HealthCheckParams;
 
+struct PayloadStatsdInfo;
+typedef struct PayloadStatsdInfo PayloadStatsdInfo;
+
+struct ReqPayloadStatsParams;
+typedef struct ReqPayloadStatsParams ReqPayloadStatsParams;
+
+struct PayloadStatsResponse;
+typedef struct PayloadStatsResponse PayloadStatsResponse;
+
 struct CmdSequenceDoneParams;
 typedef struct CmdSequenceDoneParams CmdSequenceDoneParams;
 
@@ -194,6 +203,16 @@ typedef AntarisReturnCode
 );
 static inline void
 displayProcessResponsePayloadPowerControl_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessReqPayloadStats_Fptr
+/// @typedef payload stats callback
+
+typedef AntarisReturnCode
+(*ProcessReqPayloadStats_Fptr)
+(
+    ReqPayloadStatsParams *          ///< @param request payload stats params
+);
+static inline void
+displayProcessReqPayloadStats_Fptr(void *obj) { printf("%p\n", obj); }
 
 // >>>> Data Types <<<<<
 
@@ -350,6 +369,40 @@ void displayHealthCheckParams(const void *obj);
 void app_to_peer_HealthCheckParams(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_HealthCheckParams(const void *ptr_src_peer, void *ptr_dst_app);
 
+/// @struct PayloadStatsdInfo
+/// @brief Payload Statsd Parameters
+struct PayloadStatsdInfo {
+    UINT32                                          stats_counter;                                   ///< @var Counter number
+    INT8                                            stats_names[32];                                 ///< @var Counter names, string
+};
+
+void displayPayloadStatsdInfo(const void *obj);
+void app_to_peer_PayloadStatsdInfo(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_PayloadStatsdInfo(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct ReqPayloadStatsParams
+/// @brief Payload Statsd Parameters
+struct ReqPayloadStatsParams {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+};
+
+void displayReqPayloadStatsParams(const void *obj);
+void app_to_peer_ReqPayloadStatsParams(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_ReqPayloadStatsParams(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct PayloadStatsResponse
+/// @brief Payload Statsd Parameters
+struct PayloadStatsResponse {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT64                                          timestamp;                                       ///< @var Capture time stamp
+    UINT32                                          used_counter;                                    ///< @var Counters used out of maximum 32 counters
+    PayloadStatsdInfo                               statsd[32];                                      ///< @var Counter values, maximum 32 counters
+};
+
+void displayPayloadStatsResponse(const void *obj);
+void app_to_peer_PayloadStatsResponse(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_PayloadStatsResponse(const void *ptr_src_peer, void *ptr_dst_app);
+
 /// @struct CmdSequenceDoneParams
 /// @brief Parameters for Command Sequence Done notification to Payload Controller
 struct CmdSequenceDoneParams {
@@ -370,6 +423,7 @@ struct AntarisApiCallbackFuncList {
     ProcessResponseGetCurrentLocation_Fptr          process_response_get_current_location;           ///< @var callback handler for current-location response
     ProcessResponseStageFileDownload_Fptr           process_response_stage_file_download;            ///< @var callback handler for stage file download response
     ProcessResponsePayloadPowerControl_Fptr         process_response_payload_power_control;          ///< @var callback handler for payload power control response
+    ProcessReqPayloadStats_Fptr                     req_payload_stats;                               ///< @var callback handler for request payload stats from PC
 };
 
 void displayAntarisApiCallbackFuncList(const void *obj);
@@ -394,14 +448,6 @@ void peer_to_app_AntarisReturnType(const void *ptr_src_peer, void *ptr_dst_app);
 
 
 // >>>> Function Prototypes <<<<<
-
-/// @brief Function init_satos_lib
-/// @fn Initializes satos library
-AntarisReturnCode init_satos_lib();
-
-/// @brief Function deinit_satos_lib
-/// @fn Closes satos library
-void deinit_satos_lib();
 
 /// @brief Function api_pa_pc_create_channel
 /// @fn Create a channel for use as API Context
@@ -488,6 +534,15 @@ api_pa_pc_response_shutdown
 (
     AntarisChannel                  channel,                         ///< @param channel context for API execution
     RespShutdownParams *            response_shutdown_params         ///< @param Shutdown response parameters
+);
+
+/// @brief Function api_pa_pc_response_payload_stats
+/// @fn API to respond to payload-stats request from PC
+AntarisReturnCode
+api_pa_pc_response_payload_stats
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    PayloadStatsResponse *          response_payload_stats_params    ///< @param Payload stats response parameters
 );
 
 
