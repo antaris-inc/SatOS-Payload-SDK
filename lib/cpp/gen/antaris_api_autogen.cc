@@ -743,7 +743,7 @@ displayPayloadStatsdInfo(const void *obj)
     printf("stats_counter ==>\n");
     displayUINT32((void *)&p->stats_counter);
     printf("stats_names ==>\n");
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < 16; i++) {
         displayINT8((void *)&p->stats_names[i]);
     }
 
@@ -774,12 +774,12 @@ peer_to_app_PayloadStatsdInfo(const void *ptr_src_peer, void *ptr_dst_app)
     ::antaris_api_peer_to_peer::PayloadStatsdInfo *src = (::antaris_api_peer_to_peer::PayloadStatsdInfo *)ptr_src_peer;
 
     dst->stats_counter = src->stats_counter();
-    size_t stats_names_length = strnlen(src->stats_names().c_str(), 32);
-    if ( stats_names_length >= 32 ) {
-        printf("Error:  stats_names_length should be less than 32 \n");
+    size_t stats_names_length = strnlen(src->stats_names().c_str(), 16);
+    if ( stats_names_length >= 16 ) {
+        printf("Error:  stats_names_length should be less than 16 \n");
         return;
     }
-    strncpy(&dst->stats_names[0], src->stats_names().c_str(), 32);
+    strncpy(&dst->stats_names[0], src->stats_names().c_str(), 16);
 
 }
 
@@ -834,7 +834,7 @@ displayPayloadStatsResponse(const void *obj)
     printf("used_counter ==>\n");
     displayUINT32((void *)&p->used_counter);
     printf("statsd ==>\n");
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < 8; i++) {
         displayPayloadStatsdInfo((void *)&p->statsd[i]);
     }
 
@@ -864,7 +864,7 @@ app_to_peer_PayloadStatsResponse(const void *ptr_src_app, void *ptr_dst_peer)
 
     dst->set_used_counter(__tmp_used_counter);
 
-    for (int i = 0; i < 16; i++) { // statsd
+    for (int i = 0; i < 8; i++) { // statsd
         ::antaris_api_peer_to_peer::PayloadStatsdInfo *dst_info = dst->mutable_statsd(i);
         app_to_peer_PayloadStatsdInfo(&src->statsd[i], dst_info);
     }
@@ -880,7 +880,7 @@ peer_to_app_PayloadStatsResponse(const void *ptr_src_peer, void *ptr_dst_app)
     dst->correlation_id = src->correlation_id();
     dst->timestamp = src->timestamp();
     dst->used_counter = src->used_counter();
-    for (int i = 0; i < 16; i++) { // statsd
+    for (int i = 0; i < 8; i++) { // statsd
         const ::antaris_api_peer_to_peer::PayloadStatsdInfo &src_info = src->statsd(i);
         PayloadStatsdInfo *dst_info = &dst->statsd[i];
 

@@ -373,7 +373,7 @@ void peer_to_app_HealthCheckParams(const void *ptr_src_peer, void *ptr_dst_app);
 /// @brief Payload Statsd Parameters
 struct PayloadStatsdInfo {
     UINT32                                          stats_counter;                                   ///< @var Counter number
-    INT8                                            stats_names[32];                                 ///< @var Counter names, string
+    INT8                                            stats_names[16];                                 ///< @var Counter names, string
 };
 
 void displayPayloadStatsdInfo(const void *obj);
@@ -396,7 +396,7 @@ struct PayloadStatsResponse {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     UINT64                                          timestamp;                                       ///< @var Capture time stamp
     UINT32                                          used_counter;                                    ///< @var Counters used out of maximum 32 counters
-    PayloadStatsdInfo                               statsd[16];                                      ///< @var Counter values, maximum 32 counters
+    PayloadStatsdInfo                               statsd[8];                                       ///< @var Counter values, maximum 32 counters
 };
 
 void displayPayloadStatsResponse(const void *obj);

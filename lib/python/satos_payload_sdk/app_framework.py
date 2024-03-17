@@ -260,14 +260,14 @@ class ChannelClient:
 class PayloadStatsdInfo:
     def __init__(self):
         self.stats_counter = 0            # Counter number
-        self.stats_names = [''] * 32      # Counter names, string
+        self.stats_names = [''] * 16      # Counter names, string
 
 class Payload:
     def __init__(self):
         self.correlation_id = 0
         self.used_counter = 0
         self.timestamp = 0
-        self.statsd = [api_gen.antaris_api_pb2.PayloadStatsdInfo() for _ in range(16)] #    [PayloadStatsdInfo()] * 32        
+        self.statsd = [api_gen.antaris_api_pb2.PayloadStatsdInfo() for _ in range(8)] #    [PayloadStatsdInfo()] * 32        
 
 class PayloadApplication(Stoppable):
 
