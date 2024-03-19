@@ -95,6 +95,7 @@ def parse_opts():
     global gInternalPeerPort
     global gFlatSatMode
     global gUDPMode
+    global g_UDP_Cmd_Size
 
     argv = sys.argv[1:]
     print("Got args: {}".format(argv))
@@ -218,6 +219,11 @@ def setup_permanent_socket(skip_bind = False):
 
     else:
         gPermaSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        if gFlatSatMode == True:
+            gPermaSocket.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+            gPermaSocket.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPIDLE, 60)  
+            gPermaSocket.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPINTVL, 60)
+            gPermaSocket.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPCNT, 3)
 
         logger.info("Connecting to atmos-agent, will retry till this works")
         while True:
@@ -429,7 +435,7 @@ def handle_udp(sock ,databuf):
         forwarded_leg_sock = handler.on_data(sock, udppacket)
 
         if forwarded_leg_sock == None:
-            logger.warn("Handler {} forced to drop data without forwarding".format(str(handler)))
+            logger.warning("Handler {} forced to drop data without forwarding".format(str(handler)))
             udppacket = []
             return
 
@@ -574,7 +580,7 @@ def handle_readable(sock):
                     handle_exceptions(gPermaSocket)
 
                     if gPeerConnectedOnInternalListener != None:
-                        logger.warn("ATMOS-AGENT: recovering perma-sock still did not clear out connected-peer on internal listener {}".format(gPeerConnectedOnInternalListener))
+                        logger.warning("ATMOS-AGENT: recovering perma-sock still did not clear out connected-peer on internal listener {}".format(gPeerConnectedOnInternalListener))
                         handle_exceptions(gPeerConnectedOnInternalListener)
                     else:
                         logger.info("ATMOS-AGENT: peer-connected on internal listener got cleared out as part of perma-sock cleanup. This was expected.")
@@ -600,7 +606,7 @@ def handle_readable(sock):
                     gActionMap[other_leg.fileno()] = new_handler
                     gKnownSockets.append(other_leg)
                 else:
-                    logger.warn("ATMOS: could not connect to local peer's server endpoint on incoming Web connect")
+                    logger.warning("ATMOS: could not connect to local peer's server endpoint on incoming Web connect")
 
                 logger.debug("ATMOS: got internal connect from {}, created on-the-fly-deffered-connect handler {}".format(addr, str(new_handler)))
 
