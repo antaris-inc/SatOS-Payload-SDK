@@ -34,7 +34,7 @@ jobs:
       name: docs
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-    - uses: actions/download-artifact@master
+    - uses: actions/download-artifact@v3
       with:
         name: docs
         path: docs/
