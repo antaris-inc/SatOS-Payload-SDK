@@ -555,7 +555,9 @@ def handle_readable(sock):
 
                     gActionMap[newsock.fileno()] = new_handler
                     gActionMap[gPermaSocket.fileno()] = new_handler
-                    gFlatSatModeHandler = new_handler
+
+                    if gFlatSatMode == True:
+                        gFlatSatModeHandler = new_handler
 
                     gKnownSockets.append(newsock)
                     # gPermaSock is always in known-sockets
