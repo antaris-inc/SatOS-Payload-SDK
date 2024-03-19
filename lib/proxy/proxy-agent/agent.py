@@ -218,8 +218,8 @@ def setup_permanent_socket(skip_bind = False):
             logger.debug("After Recreating handler {}".format(gFlatSatModeHandler))
 
     else:
+        gPermaSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         if gFlatSatMode == True:
-            gPermaSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             gPermaSocket.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
             gPermaSocket.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPIDLE, 60)  
             gPermaSocket.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPINTVL, 60)
