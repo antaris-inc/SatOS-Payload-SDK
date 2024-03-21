@@ -207,8 +207,7 @@ def setup_permanent_socket(skip_bind = False):
 
         logger.info("ATMOS-MODE: perma-socket {}, fd {} created with peer {}".format(gPermaSocket, gPermaSocket.fileno(), peer_addr))
 
-        if gFlatSatModeHandler != None:
-            gFlatSatModeHandler.leg1 = gPermaSocket
+        if gFlatSatModeHandler != None and gFlatSatMode == True:
             if gFlatSatModeHandler.leg1 == None:
                 gFlatSatModeHandler.leg1 = gPermaSocket
             else:
@@ -556,7 +555,9 @@ def handle_readable(sock):
 
                     gActionMap[newsock.fileno()] = new_handler
                     gActionMap[gPermaSocket.fileno()] = new_handler
-                    gFlatSatModeHandler = new_handler
+
+                    if gFlatSatMode == True:
+                        gFlatSatModeHandler = new_handler
 
                     gKnownSockets.append(newsock)
                     # gPermaSock is always in known-sockets
