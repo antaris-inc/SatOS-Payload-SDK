@@ -145,6 +145,9 @@ def new():
     app = app_framework.PayloadApplication()
     app.set_health_check(ctl.is_healthy)
 
+    # Sample function to add stats counters and names
+    set_payload_values(app)
+
     # Note : SatOS-Payload-SDK supports sequence upto 16 characters long
     app.mount_sequence("HelloWorld", ctl.handle_hello_world)
     app.mount_sequence("HelloFriend", ctl.handle_hello_friend)
@@ -155,6 +158,25 @@ def new():
     app.mount_sequence("PowerControl", ctl.handle_power_control)
     return app
 
+def set_payload_values(payload_app):
+    payload_metrics = payload_app.payload_metrics
+    # Set used_counter
+    payload_metrics.used_counter = 5  # Example value
+
+    # Set counter values
+    for i in range(payload_metrics.used_counter):
+        payload_metrics.metrics[i].counter= i  # Example value
+
+    # Set counter_name values
+    for i in range(payload_metrics.used_counter):
+        payload_metrics.metrics[i].names = f"Counter {i}"  # Example value
+    
+    # Change counter name
+    payload_metrics.define_counter(0, "NewName 1")
+    # Increment counter
+    payload_metrics.inc_counter(0)
+
+    return 
 
 if __name__ == '__main__':
     DEBUG = os.environ.get('DEBUG')
