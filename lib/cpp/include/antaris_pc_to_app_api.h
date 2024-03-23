@@ -35,7 +35,7 @@ typedef enum {
     e_app2PC_payloadPowerControl,
     e_app2PC_healthCheckResponse,
     e_app2PC_shutdownResponse,
-    e_app2PC_PayloadStatsResponse,
+    e_app2PC_PayloadMetricsResponse,
     e_app2PC_sdkVersionInfo,
 } AppToPCCallbackId_e;
 
@@ -53,7 +53,7 @@ typedef union {
     ReqPayloadPowerControlParams    payload_power_ctrl;
     RespHealthCheckParams           health_check_response;
     RespShutdownParams              shutdown_response;
-    PayloadStatsResponse            payload_stats_respose;
+    PayloadMetricsResponse          payload_metrics_respose;
     AntarisAppSdkVersion_t          sdk_version;
 } AppToPCCallbackParams_t;
 
@@ -79,7 +79,7 @@ typedef enum {
     e_PC2App_responseStageFileDownload,
     e_PC2App_responsePayloadPowerControl,
     e_PC2App_processHealthCheck,
-    e_PC2App_ReqPayloadStats,
+    e_PC2App_ReqPayloadMetrics,
 } PCToAppApiId_e;
 
 typedef union {
@@ -90,7 +90,7 @@ typedef union {
     RespStageFileDownloadParams         resp_stage_file_download;
     RespPayloadPowerControlParams       resp_payload_power_ctrl;
     HealthCheckParams                   health_check;
-    ReqPayloadStatsParams               payload_stats;
+    ReqPayloadMetricsParams               payload_stats;
 } PCToAppApiParams_t;
 
 PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port, INT8 *client_ssl_addr, UINT32 ssl_flag);

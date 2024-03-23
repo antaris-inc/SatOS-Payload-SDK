@@ -57,7 +57,7 @@ class AntarisChannel:
         self.process_resp_get_curr_location = callback_func_list['RespGetCurrentLocation']
         self.process_resp_stage_file_download = callback_func_list['RespStageFileDownload']
         self.process_resp_payload_power_control = callback_func_list['RespPayloadPowerControl']
-        self.req_payload_stats = callback_func_list['ReqPayloadStats']
+        self.req_payload_metrics = callback_func_list['ReqPayloadMetrics']
         try :
             # Read config info
             jsonfile = open(g_CONFIG_JSON_FILE, 'r')
@@ -93,10 +93,10 @@ class PCToAppService(antaris_api_pb2_grpc.AntarisapiApplicationCallbackServicer)
         else:
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
 
-    def PA_ProcessReqPayloadStats(self, request, context):
-        if self.channel.req_payload_stats:
-            app_request = api_types.peer_to_app_ReqPayloadStatsParams(request)
-            app_ret = self.channel.req_payload_stats(app_request)
+    def PA_ProcessReqPayloadMetrics(self, request, context):
+        if self.channel.req_payload_metrics:
+            app_request = api_types.peer_to_app_ReqPayloadMetricsParams(request)
+            app_ret = self.channel.req_payload_metrics(app_request)
             return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
         else:
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
@@ -348,13 +348,13 @@ def api_pa_pc_response_health_check(channel, response_health_check_params):
 
     return peer_ret.return_code
 
-def api_pa_pc_response_payload_stats(channel, response_payload_stats_params):
-    print("api_pa_pc_response_payload_stats")
+def api_pa_pc_response_payload_metrics(channel, response_payload_metrics_params):
+    print("api_pa_pc_response_payload_metrics")
     if (api_debug):
-        response_payload_stats_params.display()
-    peer_params = api_types.app_to_peer_PayloadStatsResponse(response_payload_stats_params)
+        response_payload_metrics_params.display()
+    peer_params = api_types.app_to_peer_PayloadMetricsResponse(response_payload_metrics_params)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_response_payload_stats(peer_params , metadata=metadata)
+    peer_ret = channel.grpc_client_handle.PC_response_payload_metrics(peer_params , metadata=metadata)
 
     if (api_debug):
         print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))

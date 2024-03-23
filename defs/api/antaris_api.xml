@@ -125,20 +125,20 @@
             <Field name="resps_to_pc_in_err_cnt" type="UINT16" sequence="4" description="Number of responses to PC that faced error"/>
         </Struct>
 
-        <Struct name="PayloadStatsdInfo" description="Payload Statsd Parameters">
-            <Field name="stats_counter" type="UINT32" sequence="1" description="Counter number"/>
-            <Field name="stats_names" type="INT8" sequence="2" description="Counter names, string" array="16"/>
+        <Struct name="PayloadMetricsInfo" description="Payload Metrics Parameters">
+            <Field name="counter" type="UINT32" sequence="1" description="Counter number"/>
+            <Field name="names" type="INT8" sequence="2" description="Counter names, string" array="16"/>
         </Struct>
 
-        <Struct name="ReqPayloadStatsParams" description="Payload Statsd Parameters">
+        <Struct name="ReqPayloadMetricsParams" description="Payload Metrics Parameters">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
         </Struct>
 
-        <Struct name="PayloadStatsResponse" description="Payload Statsd Parameters">
+        <Struct name="PayloadMetricsResponse" description="Payload Metrics Parameters">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="timestamp" type="UINT64" sequence="2" description="Capture time stamp"/>
             <Field name="used_counter" type="UINT32" sequence="3" description="Counters used out of maximum 32 counters"/>
-            <Field name="statsd" type="PayloadStatsdInfo" sequence="4" description="Counter values, maximum 32 counters" array="8"/>
+            <Field name="metrics" type="PayloadMetricsInfo" sequence="4" description="Counter values, maximum 32 counters" array="8"/>
         </Struct>
 
         <Struct name="CmdSequenceDoneParams" description="Parameters for Command Sequence Done notification to Payload Controller">
@@ -153,7 +153,7 @@
             <Field name="process_response_get_current_location" type="ProcessResponseGetCurrentLocation_Fptr" sequence="5" description="callback handler for current-location response"/>
             <Field name="process_response_stage_file_download" type="ProcessResponseStageFileDownload_Fptr" sequence="6" description="callback handler for stage file download response"/>
             <Field name="process_response_payload_power_control" type="ProcessResponsePayloadPowerControl_Fptr" sequence="7" description="callback handler for payload power control response"/>
-            <Field name="req_payload_stats" type="ProcessReqPayloadStats_Fptr" sequence="8" description="callback handler for request payload stats from PC"/>
+            <Field name="req_payload_metrics" type="ProcessReqPayloadMetrics_Fptr" sequence="8" description="callback handler for request payload stats from PC"/>
         </Struct>
 
         <Struct name="AntarisCorrelationId" description="Wrapper structure for correlation-id">
@@ -196,8 +196,8 @@
             <Parameter variable_name="payload_power_control_response" type="RespPayloadPowerControlParams *" description="Payload-power-control response parameters"/>
         </FunctionPtr>
 
-        <FunctionPtr name="ProcessReqPayloadStats_Fptr" description="payload stats callback" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
-            <Parameter variable_name="req_payload_stats" type="ReqPayloadStatsParams *" description="request payload stats params"/>
+        <FunctionPtr name="ProcessReqPayloadMetrics_Fptr" description="payload stats callback" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="req_payload_metrics" type="ReqPayloadMetricsParams *" description="request payload stats params"/>
         </FunctionPtr>
     </Callbacks>
 
@@ -260,10 +260,10 @@
             <Parameter variable_name="response_shutdown_params" type="RespShutdownParams *" description="Shutdown response parameters"/>
         </Function>
 
-        <Function name="api_pa_pc_response_payload_stats" description="API to respond to payload-stats request from PC"
+        <Function name="api_pa_pc_response_payload_metrics" description="API to respond to payload-stats request from PC"
                         return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
             <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
-            <Parameter variable_name="response_payload_stats_params" type="PayloadStatsResponse *" description="Payload stats response parameters"/>
+            <Parameter variable_name="response_payload_metrics_params" type="PayloadMetricsResponse *" description="Payload stats response parameters"/>
         </Function>
 
     </Functions>

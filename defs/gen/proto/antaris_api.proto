@@ -138,20 +138,20 @@ message HealthCheckParams {
     int32                           resps_to_pc_in_err_cnt = 4; // Number of responses to PC that faced error
 }
 
-message PayloadStatsdInfo {
-    int32                           stats_counter    = 1; // Counter number
-    string                          stats_names      = 2; // Counter names, string
+message PayloadMetricsInfo {
+    int32                           counter          = 1; // Counter number
+    string                          names            = 2; // Counter names, string
 }
 
-message ReqPayloadStatsParams {
+message ReqPayloadMetricsParams {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
 }
 
-message PayloadStatsResponse {
+message PayloadMetricsResponse {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     int64                           timestamp        = 2; // Capture time stamp
     int32                           used_counter     = 3; // Counters used out of maximum 32 counters
-    repeated PayloadStatsdInfo      statsd           = 4; // Counter values, maximum 32 counters
+    repeated PayloadMetricsInfo     metrics          = 4; // Counter values, maximum 32 counters
 }
 
 message CmdSequenceDoneParams {
@@ -174,7 +174,7 @@ service AntarisapiApplicationCallback {
     rpc PA_ProcessResponseGetCurrentLocation(RespGetCurrentLocationParams) returns (AntarisReturnType) {}
     rpc PA_ProcessResponseStageFileDownload(RespStageFileDownloadParams) returns (AntarisReturnType) {}
     rpc PA_ProcessResponsePayloadPowerControl(RespPayloadPowerControlParams) returns (AntarisReturnType) {}
-    rpc PA_ProcessReqPayloadStats(ReqPayloadStatsParams) returns (AntarisReturnType) {}
+    rpc PA_ProcessReqPayloadMetrics(ReqPayloadMetricsParams) returns (AntarisReturnType) {}
 }
 
 service AntarisapiPayloadController {
@@ -185,6 +185,6 @@ service AntarisapiPayloadController {
     rpc PC_payload_power_control(ReqPayloadPowerControlParams) returns (AntarisReturnType) {}
     rpc PC_response_health_check(RespHealthCheckParams) returns (AntarisReturnType) {}
     rpc PC_response_shutdown(RespShutdownParams) returns (AntarisReturnType) {}
-    rpc PC_response_payload_stats(PayloadStatsResponse) returns (AntarisReturnType) {}
+    rpc PC_response_payload_metrics(PayloadMetricsResponse) returns (AntarisReturnType) {}
 }
 

@@ -159,18 +159,23 @@ def new():
     return app
 
 def set_payload_values(payload_app):
-    payload = payload_app.payload
+    payload_metrics = payload_app.payload_metrics
     # Set used_counter
-    payload.used_counter = 5  # Example value
+    payload_metrics.used_counter = 5  # Example value
 
     # Set counter values
-    for i in range(payload.used_counter):
-        payload.statsd[i].stats_counter= i  # Example value
+    for i in range(payload_metrics.used_counter):
+        payload_metrics.metrics[i].counter= i  # Example value
 
     # Set counter_name values
-    for i in range(payload.used_counter):
-        payload.statsd[i].stats_names = f"Counter {i}"  # Example value
+    for i in range(payload_metrics.used_counter):
+        payload_metrics.metrics[i].names = f"Counter {i}"  # Example value
     
+    # Change counter name
+    payload_metrics.define_counter(0, "NewName 1")
+    # Increment counter
+    payload_metrics.inc_counter(0)
+
     return 
 
 if __name__ == '__main__':
