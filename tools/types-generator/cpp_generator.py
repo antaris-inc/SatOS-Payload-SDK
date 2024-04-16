@@ -226,8 +226,11 @@ class CPPField(PARSER_INTF.Field):
             targetFile.write("{}dst->set_{}({}{});\n\n".format(gIndent, self.name, type_cast, tmpVarName))
         else:
             if self.type != "INT8":
+                # ::antaris_api_peer_to_peer::PayloadMetricsInfo *dst_info = dst->mutable_mystats(i);
+                # app_to_peer_PayloadMetricsInfo(&src->mystats[i], dst_info);
                 targetFile.write("{}for (int i = 0; i < {}; i++) {} // {}\n".format(gIndent, self.array_xml, "{", self.name))
-                targetFile.write("{}{}(&src->{}, &{});\n".format(gIndent * 2, get_app_to_peer_fn_for_type(self.type), self.name, tmpVarName))
+                targetFile.write("{}{}{} *dst_info = dst->mutable_{}(i);\n".format(gIndent * 2, namespace, appint_type_to_peerint_type(self.type), self.name))
+                targetFile.write("{}{}(&src->{}[i], dst_info);\n".format(gIndent * 2, get_app_to_peer_fn_for_type(self.type), self.name, tmpVarName))
                 targetFile.write("{}{}\n".format(gIndent, "}"))
             else:
                 targetFile.write("{}dst->set_{}(&src->{}[0]);\n\n".format(gIndent, self.name, self.name, ))
@@ -245,7 +248,10 @@ class CPPField(PARSER_INTF.Field):
         else:
             if self.type != "INT8":
                 targetFile.write("{}for (int i = 0; i < {}; i++) {} // {}\n".format(gIndent, self.array_xml, "{", self.name))
-                targetFile.write("{}{}(&src->{}, &{});\n".format(gIndent * 2, get_peer_to_app_fn_for_type(self.type), self.name, tmpVarName))
+                #here imp
+                targetFile.write("{}const {}{} &src_info = src->{}(i);\n".format(gIndent * 2, namespace, appint_type_to_peerint_type(self.type), self.name))
+                targetFile.write("{}{} *dst_info = &dst->{}[i];\n\n".format(gIndent * 2, appint_type_to_peerint_type(self.type), self.name))
+                targetFile.write("{}{}(&src_info, dst_info);\n".format(gIndent * 2, get_peer_to_app_fn_for_type(self.type), self.name, self.name))
                 targetFile.write("{}{}\n".format(gIndent, "}"))
             else:
                 strlength = int(''.join(self.array[1:-1]))

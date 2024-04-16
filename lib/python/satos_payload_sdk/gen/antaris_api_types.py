@@ -487,6 +487,98 @@ def peer_to_app_HealthCheckParams(peer_struct):
 def app_to_peer_HealthCheckParams(app_struct):
     return antaris_api_pb2.HealthCheckParams(correlation_id = app_struct.correlation_id, application_state = app_struct.application_state, reqs_to_pc_in_err_cnt = app_struct.reqs_to_pc_in_err_cnt, resps_to_pc_in_err_cnt = app_struct.resps_to_pc_in_err_cnt)
 
+## @class: PayloadMetricsInfo
+## @brief: Payload Metrics Parameters
+## @param: counter                                         :    Counter number                                  
+## @param: names                                           :    Counter names, string                           
+class PayloadMetricsInfo:
+    def __init__(self, counter, names):
+        self.counter = counter
+        self.names = names
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "counter:\n"
+        ret_str += str(self.counter) + "\n"
+        ret_str += "names:\n"
+        ret_str += str(self.names) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_PayloadMetricsInfo(peer_struct):
+    counter = peer_struct.counter
+    names = peer_struct.names
+    return PayloadMetricsInfo(counter, names)
+
+def app_to_peer_PayloadMetricsInfo(app_struct):
+    return antaris_api_pb2.PayloadMetricsInfo(counter = app_struct.counter, names = app_struct.names)
+
+## @class: ReqPayloadMetricsParams
+## @brief: Payload Metrics Parameters
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+class ReqPayloadMetricsParams:
+    def __init__(self, correlation_id):
+        self.correlation_id = correlation_id
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_ReqPayloadMetricsParams(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    return ReqPayloadMetricsParams(correlation_id)
+
+def app_to_peer_ReqPayloadMetricsParams(app_struct):
+    return antaris_api_pb2.ReqPayloadMetricsParams(correlation_id = app_struct.correlation_id)
+
+## @class: PayloadMetricsResponse
+## @brief: Payload Metrics Parameters
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: timestamp                                       :    Capture time stamp                              
+## @param: used_counter                                    :    Counters used out of maximum 32 counters        
+## @param: metrics                                         :    Counter values, maximum 32 counters             
+class PayloadMetricsResponse:
+    def __init__(self, correlation_id, timestamp, used_counter, metrics):
+        self.correlation_id = correlation_id
+        self.timestamp = timestamp
+        self.used_counter = used_counter
+        self.metrics = metrics
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "timestamp:\n"
+        ret_str += str(self.timestamp) + "\n"
+        ret_str += "used_counter:\n"
+        ret_str += str(self.used_counter) + "\n"
+        ret_str += "metrics:\n"
+        ret_str += str(self.metrics) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_PayloadMetricsResponse(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    timestamp = peer_struct.timestamp
+    used_counter = peer_struct.used_counter
+    metrics = peer_struct.metrics
+    return PayloadMetricsResponse(correlation_id, timestamp, used_counter, metrics)
+
+def app_to_peer_PayloadMetricsResponse(app_struct):
+    return antaris_api_pb2.PayloadMetricsResponse(correlation_id = app_struct.correlation_id, timestamp = app_struct.timestamp, used_counter = app_struct.used_counter, metrics = app_struct.metrics)
+
 ## @class: CmdSequenceDoneParams
 ## @brief: Parameters for Command Sequence Done notification to Payload Controller
 ## @param: sequence_id                                     :    sequence id that has completed execution. MUST agree with StartSequenceParams.sequence-id.
@@ -520,8 +612,9 @@ def app_to_peer_CmdSequenceDoneParams(app_struct):
 ## @param: process_response_get_current_location           :    callback handler for current-location response  
 ## @param: process_response_stage_file_download            :    callback handler for stage file download response
 ## @param: process_response_payload_power_control          :    callback handler for payload power control response
+## @param: req_payload_metrics                             :    callback handler for request payload stats from PC
 class AntarisApiCallbackFuncList:
-    def __init__(self, start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control):
+    def __init__(self, start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics):
         self.start_sequence = start_sequence
         self.shutdown_app = shutdown_app
         self.process_health_check = process_health_check
@@ -529,6 +622,7 @@ class AntarisApiCallbackFuncList:
         self.process_response_get_current_location = process_response_get_current_location
         self.process_response_stage_file_download = process_response_stage_file_download
         self.process_response_payload_power_control = process_response_payload_power_control
+        self.req_payload_metrics = req_payload_metrics
 
     def __str__(self):
         ret_str = ""
@@ -546,6 +640,8 @@ class AntarisApiCallbackFuncList:
         ret_str += str(self.process_response_stage_file_download) + "\n"
         ret_str += "process_response_payload_power_control:\n"
         ret_str += str(self.process_response_payload_power_control) + "\n"
+        ret_str += "req_payload_metrics:\n"
+        ret_str += str(self.req_payload_metrics) + "\n"
 
         return ret_str
 
@@ -560,10 +656,11 @@ def peer_to_app_AntarisApiCallbackFuncList(peer_struct):
     process_response_get_current_location = peer_struct.process_response_get_current_location
     process_response_stage_file_download = peer_struct.process_response_stage_file_download
     process_response_payload_power_control = peer_struct.process_response_payload_power_control
-    return AntarisApiCallbackFuncList(start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control)
+    req_payload_metrics = peer_struct.req_payload_metrics
+    return AntarisApiCallbackFuncList(start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics)
 
 def app_to_peer_AntarisApiCallbackFuncList(app_struct):
-    return antaris_api_pb2.AntarisApiCallbackFuncList(start_sequence = app_struct.start_sequence, shutdown_app = app_struct.shutdown_app, process_health_check = app_struct.process_health_check, process_response_register = app_struct.process_response_register, process_response_get_current_location = app_struct.process_response_get_current_location, process_response_stage_file_download = app_struct.process_response_stage_file_download, process_response_payload_power_control = app_struct.process_response_payload_power_control)
+    return antaris_api_pb2.AntarisApiCallbackFuncList(start_sequence = app_struct.start_sequence, shutdown_app = app_struct.shutdown_app, process_health_check = app_struct.process_health_check, process_response_register = app_struct.process_response_register, process_response_get_current_location = app_struct.process_response_get_current_location, process_response_stage_file_download = app_struct.process_response_stage_file_download, process_response_payload_power_control = app_struct.process_response_payload_power_control, req_payload_metrics = app_struct.req_payload_metrics)
 
 ## @class: AntarisReturnType
 ## @brief: Wrapper structure for AntarisReturnCode

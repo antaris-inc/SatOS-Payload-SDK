@@ -126,6 +126,13 @@ class AntarisapiApplicationCallback final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPA_ProcessResponsePayloadPowerControl(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPayloadPowerControlParams& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPA_ProcessResponsePayloadPowerControlRaw(context, request, cq));
     }
+    virtual ::grpc::Status PA_ProcessReqPayloadMetrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> AsyncPA_ProcessReqPayloadMetrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(AsyncPA_ProcessReqPayloadMetricsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPA_ProcessReqPayloadMetrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPA_ProcessReqPayloadMetricsRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
@@ -143,6 +150,8 @@ class AntarisapiApplicationCallback final {
       virtual void PA_ProcessResponseStageFileDownload(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStageFileDownloadParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void PA_ProcessResponsePayloadPowerControl(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPayloadPowerControlParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) = 0;
       virtual void PA_ProcessResponsePayloadPowerControl(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPayloadPowerControlParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void PA_ProcessReqPayloadMetrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void PA_ProcessReqPayloadMetrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -162,6 +171,8 @@ class AntarisapiApplicationCallback final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessResponseStageFileDownloadRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStageFileDownloadParams& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessResponsePayloadPowerControlRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPayloadPowerControlParams& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessResponsePayloadPowerControlRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPayloadPowerControlParams& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessReqPayloadMetricsRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessReqPayloadMetricsRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -215,6 +226,13 @@ class AntarisapiApplicationCallback final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPA_ProcessResponsePayloadPowerControl(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPayloadPowerControlParams& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPA_ProcessResponsePayloadPowerControlRaw(context, request, cq));
     }
+    ::grpc::Status PA_ProcessReqPayloadMetrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> AsyncPA_ProcessReqPayloadMetrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(AsyncPA_ProcessReqPayloadMetricsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPA_ProcessReqPayloadMetrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPA_ProcessReqPayloadMetricsRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
@@ -232,6 +250,8 @@ class AntarisapiApplicationCallback final {
       void PA_ProcessResponseStageFileDownload(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStageFileDownloadParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
       void PA_ProcessResponsePayloadPowerControl(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPayloadPowerControlParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) override;
       void PA_ProcessResponsePayloadPowerControl(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPayloadPowerControlParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void PA_ProcessReqPayloadMetrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) override;
+      void PA_ProcessReqPayloadMetrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -257,6 +277,8 @@ class AntarisapiApplicationCallback final {
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessResponseStageFileDownloadRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStageFileDownloadParams& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessResponsePayloadPowerControlRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPayloadPowerControlParams& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessResponsePayloadPowerControlRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPayloadPowerControlParams& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessReqPayloadMetricsRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessReqPayloadMetricsRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_PA_StartSequence_;
     const ::grpc::internal::RpcMethod rpcmethod_PA_ShutdownApp_;
     const ::grpc::internal::RpcMethod rpcmethod_PA_ProcessHealthCheck_;
@@ -264,6 +286,7 @@ class AntarisapiApplicationCallback final {
     const ::grpc::internal::RpcMethod rpcmethod_PA_ProcessResponseGetCurrentLocation_;
     const ::grpc::internal::RpcMethod rpcmethod_PA_ProcessResponseStageFileDownload_;
     const ::grpc::internal::RpcMethod rpcmethod_PA_ProcessResponsePayloadPowerControl_;
+    const ::grpc::internal::RpcMethod rpcmethod_PA_ProcessReqPayloadMetrics_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -278,6 +301,7 @@ class AntarisapiApplicationCallback final {
     virtual ::grpc::Status PA_ProcessResponseGetCurrentLocation(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGetCurrentLocationParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     virtual ::grpc::Status PA_ProcessResponseStageFileDownload(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespStageFileDownloadParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     virtual ::grpc::Status PA_ProcessResponsePayloadPowerControl(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespPayloadPowerControlParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+    virtual ::grpc::Status PA_ProcessReqPayloadMetrics(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_PA_StartSequence : public BaseClass {
@@ -419,7 +443,27 @@ class AntarisapiApplicationCallback final {
       ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_PA_StartSequence<WithAsyncMethod_PA_ShutdownApp<WithAsyncMethod_PA_ProcessHealthCheck<WithAsyncMethod_PA_ProcessResponseRegister<WithAsyncMethod_PA_ProcessResponseGetCurrentLocation<WithAsyncMethod_PA_ProcessResponseStageFileDownload<WithAsyncMethod_PA_ProcessResponsePayloadPowerControl<Service > > > > > > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_PA_ProcessReqPayloadMetrics : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_PA_ProcessReqPayloadMetrics() {
+      ::grpc::Service::MarkMethodAsync(7);
+    }
+    ~WithAsyncMethod_PA_ProcessReqPayloadMetrics() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PA_ProcessReqPayloadMetrics(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestPA_ProcessReqPayloadMetrics(::grpc::ServerContext* context, ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* request, ::grpc::ServerAsyncResponseWriter< ::antaris_api_peer_to_peer::AntarisReturnType>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_PA_StartSequence<WithAsyncMethod_PA_ShutdownApp<WithAsyncMethod_PA_ProcessHealthCheck<WithAsyncMethod_PA_ProcessResponseRegister<WithAsyncMethod_PA_ProcessResponseGetCurrentLocation<WithAsyncMethod_PA_ProcessResponseStageFileDownload<WithAsyncMethod_PA_ProcessResponsePayloadPowerControl<WithAsyncMethod_PA_ProcessReqPayloadMetrics<Service > > > > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_PA_StartSequence : public BaseClass {
    private:
@@ -609,7 +653,34 @@ class AntarisapiApplicationCallback final {
     virtual ::grpc::ServerUnaryReactor* PA_ProcessResponsePayloadPowerControl(
       ::grpc::CallbackServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespPayloadPowerControlParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_PA_StartSequence<WithCallbackMethod_PA_ShutdownApp<WithCallbackMethod_PA_ProcessHealthCheck<WithCallbackMethod_PA_ProcessResponseRegister<WithCallbackMethod_PA_ProcessResponseGetCurrentLocation<WithCallbackMethod_PA_ProcessResponseStageFileDownload<WithCallbackMethod_PA_ProcessResponsePayloadPowerControl<Service > > > > > > > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_PA_ProcessReqPayloadMetrics : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_PA_ProcessReqPayloadMetrics() {
+      ::grpc::Service::MarkMethodCallback(7,
+          new ::grpc::internal::CallbackUnaryHandler< ::antaris_api_peer_to_peer::ReqPayloadMetricsParams, ::antaris_api_peer_to_peer::AntarisReturnType>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) { return this->PA_ProcessReqPayloadMetrics(context, request, response); }));}
+    void SetMessageAllocatorFor_PA_ProcessReqPayloadMetrics(
+        ::grpc::MessageAllocator< ::antaris_api_peer_to_peer::ReqPayloadMetricsParams, ::antaris_api_peer_to_peer::AntarisReturnType>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(7);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::antaris_api_peer_to_peer::ReqPayloadMetricsParams, ::antaris_api_peer_to_peer::AntarisReturnType>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_PA_ProcessReqPayloadMetrics() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PA_ProcessReqPayloadMetrics(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* PA_ProcessReqPayloadMetrics(
+      ::grpc::CallbackServerContext* /*context*/, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_PA_StartSequence<WithCallbackMethod_PA_ShutdownApp<WithCallbackMethod_PA_ProcessHealthCheck<WithCallbackMethod_PA_ProcessResponseRegister<WithCallbackMethod_PA_ProcessResponseGetCurrentLocation<WithCallbackMethod_PA_ProcessResponseStageFileDownload<WithCallbackMethod_PA_ProcessResponsePayloadPowerControl<WithCallbackMethod_PA_ProcessReqPayloadMetrics<Service > > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_PA_StartSequence : public BaseClass {
@@ -726,6 +797,23 @@ class AntarisapiApplicationCallback final {
     }
     // disable synchronous version of this method
     ::grpc::Status PA_ProcessResponsePayloadPowerControl(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespPayloadPowerControlParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_PA_ProcessReqPayloadMetrics : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_PA_ProcessReqPayloadMetrics() {
+      ::grpc::Service::MarkMethodGeneric(7);
+    }
+    ~WithGenericMethod_PA_ProcessReqPayloadMetrics() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PA_ProcessReqPayloadMetrics(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -868,6 +956,26 @@ class AntarisapiApplicationCallback final {
     }
     void RequestPA_ProcessResponsePayloadPowerControl(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_PA_ProcessReqPayloadMetrics : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_PA_ProcessReqPayloadMetrics() {
+      ::grpc::Service::MarkMethodRaw(7);
+    }
+    ~WithRawMethod_PA_ProcessReqPayloadMetrics() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PA_ProcessReqPayloadMetrics(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestPA_ProcessReqPayloadMetrics(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1022,6 +1130,28 @@ class AntarisapiApplicationCallback final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* PA_ProcessResponsePayloadPowerControl(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_PA_ProcessReqPayloadMetrics : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_PA_ProcessReqPayloadMetrics() {
+      ::grpc::Service::MarkMethodRawCallback(7,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->PA_ProcessReqPayloadMetrics(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_PA_ProcessReqPayloadMetrics() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PA_ProcessReqPayloadMetrics(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* PA_ProcessReqPayloadMetrics(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -1213,9 +1343,36 @@ class AntarisapiApplicationCallback final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedPA_ProcessResponsePayloadPowerControl(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::antaris_api_peer_to_peer::RespPayloadPowerControlParams,::antaris_api_peer_to_peer::AntarisReturnType>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_PA_StartSequence<WithStreamedUnaryMethod_PA_ShutdownApp<WithStreamedUnaryMethod_PA_ProcessHealthCheck<WithStreamedUnaryMethod_PA_ProcessResponseRegister<WithStreamedUnaryMethod_PA_ProcessResponseGetCurrentLocation<WithStreamedUnaryMethod_PA_ProcessResponseStageFileDownload<WithStreamedUnaryMethod_PA_ProcessResponsePayloadPowerControl<Service > > > > > > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_PA_ProcessReqPayloadMetrics : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_PA_ProcessReqPayloadMetrics() {
+      ::grpc::Service::MarkMethodStreamed(7,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::antaris_api_peer_to_peer::ReqPayloadMetricsParams, ::antaris_api_peer_to_peer::AntarisReturnType>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::antaris_api_peer_to_peer::ReqPayloadMetricsParams, ::antaris_api_peer_to_peer::AntarisReturnType>* streamer) {
+                       return this->StreamedPA_ProcessReqPayloadMetrics(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_PA_ProcessReqPayloadMetrics() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status PA_ProcessReqPayloadMetrics(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedPA_ProcessReqPayloadMetrics(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::antaris_api_peer_to_peer::ReqPayloadMetricsParams,::antaris_api_peer_to_peer::AntarisReturnType>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_PA_StartSequence<WithStreamedUnaryMethod_PA_ShutdownApp<WithStreamedUnaryMethod_PA_ProcessHealthCheck<WithStreamedUnaryMethod_PA_ProcessResponseRegister<WithStreamedUnaryMethod_PA_ProcessResponseGetCurrentLocation<WithStreamedUnaryMethod_PA_ProcessResponseStageFileDownload<WithStreamedUnaryMethod_PA_ProcessResponsePayloadPowerControl<WithStreamedUnaryMethod_PA_ProcessReqPayloadMetrics<Service > > > > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_PA_StartSequence<WithStreamedUnaryMethod_PA_ShutdownApp<WithStreamedUnaryMethod_PA_ProcessHealthCheck<WithStreamedUnaryMethod_PA_ProcessResponseRegister<WithStreamedUnaryMethod_PA_ProcessResponseGetCurrentLocation<WithStreamedUnaryMethod_PA_ProcessResponseStageFileDownload<WithStreamedUnaryMethod_PA_ProcessResponsePayloadPowerControl<Service > > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_PA_StartSequence<WithStreamedUnaryMethod_PA_ShutdownApp<WithStreamedUnaryMethod_PA_ProcessHealthCheck<WithStreamedUnaryMethod_PA_ProcessResponseRegister<WithStreamedUnaryMethod_PA_ProcessResponseGetCurrentLocation<WithStreamedUnaryMethod_PA_ProcessResponseStageFileDownload<WithStreamedUnaryMethod_PA_ProcessResponsePayloadPowerControl<WithStreamedUnaryMethod_PA_ProcessReqPayloadMetrics<Service > > > > > > > > StreamedService;
 };
 
 class AntarisapiPayloadController final {
@@ -1275,6 +1432,13 @@ class AntarisapiPayloadController final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPC_response_shutdown(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespShutdownParams& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPC_response_shutdownRaw(context, request, cq));
     }
+    virtual ::grpc::Status PC_response_payload_metrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> AsyncPC_response_payload_metrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(AsyncPC_response_payload_metricsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPC_response_payload_metrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPC_response_payload_metricsRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
@@ -1292,6 +1456,8 @@ class AntarisapiPayloadController final {
       virtual void PC_response_health_check(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespHealthCheckParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void PC_response_shutdown(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespShutdownParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) = 0;
       virtual void PC_response_shutdown(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespShutdownParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void PC_response_payload_metrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void PC_response_payload_metrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -1311,6 +1477,8 @@ class AntarisapiPayloadController final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPC_response_health_checkRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespHealthCheckParams& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPC_response_shutdownRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespShutdownParams& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPC_response_shutdownRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespShutdownParams& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPC_response_payload_metricsRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPC_response_payload_metricsRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -1364,6 +1532,13 @@ class AntarisapiPayloadController final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPC_response_shutdown(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespShutdownParams& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPC_response_shutdownRaw(context, request, cq));
     }
+    ::grpc::Status PC_response_payload_metrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> AsyncPC_response_payload_metrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(AsyncPC_response_payload_metricsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPC_response_payload_metrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPC_response_payload_metricsRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
@@ -1381,6 +1556,8 @@ class AntarisapiPayloadController final {
       void PC_response_health_check(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespHealthCheckParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
       void PC_response_shutdown(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespShutdownParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) override;
       void PC_response_shutdown(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespShutdownParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void PC_response_payload_metrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) override;
+      void PC_response_payload_metrics(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -1406,6 +1583,8 @@ class AntarisapiPayloadController final {
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPC_response_health_checkRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespHealthCheckParams& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPC_response_shutdownRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespShutdownParams& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPC_response_shutdownRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespShutdownParams& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPC_response_payload_metricsRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPC_response_payload_metricsRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_PC_register_;
     const ::grpc::internal::RpcMethod rpcmethod_PC_get_current_location_;
     const ::grpc::internal::RpcMethod rpcmethod_PC_stage_file_download_;
@@ -1413,6 +1592,7 @@ class AntarisapiPayloadController final {
     const ::grpc::internal::RpcMethod rpcmethod_PC_payload_power_control_;
     const ::grpc::internal::RpcMethod rpcmethod_PC_response_health_check_;
     const ::grpc::internal::RpcMethod rpcmethod_PC_response_shutdown_;
+    const ::grpc::internal::RpcMethod rpcmethod_PC_response_payload_metrics_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -1427,6 +1607,7 @@ class AntarisapiPayloadController final {
     virtual ::grpc::Status PC_payload_power_control(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::ReqPayloadPowerControlParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     virtual ::grpc::Status PC_response_health_check(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespHealthCheckParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     virtual ::grpc::Status PC_response_shutdown(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespShutdownParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+    virtual ::grpc::Status PC_response_payload_metrics(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_PC_register : public BaseClass {
@@ -1568,7 +1749,27 @@ class AntarisapiPayloadController final {
       ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_PC_register<WithAsyncMethod_PC_get_current_location<WithAsyncMethod_PC_stage_file_download<WithAsyncMethod_PC_sequence_done<WithAsyncMethod_PC_payload_power_control<WithAsyncMethod_PC_response_health_check<WithAsyncMethod_PC_response_shutdown<Service > > > > > > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_PC_response_payload_metrics : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_PC_response_payload_metrics() {
+      ::grpc::Service::MarkMethodAsync(7);
+    }
+    ~WithAsyncMethod_PC_response_payload_metrics() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PC_response_payload_metrics(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::PayloadMetricsResponse* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestPC_response_payload_metrics(::grpc::ServerContext* context, ::antaris_api_peer_to_peer::PayloadMetricsResponse* request, ::grpc::ServerAsyncResponseWriter< ::antaris_api_peer_to_peer::AntarisReturnType>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_PC_register<WithAsyncMethod_PC_get_current_location<WithAsyncMethod_PC_stage_file_download<WithAsyncMethod_PC_sequence_done<WithAsyncMethod_PC_payload_power_control<WithAsyncMethod_PC_response_health_check<WithAsyncMethod_PC_response_shutdown<WithAsyncMethod_PC_response_payload_metrics<Service > > > > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_PC_register : public BaseClass {
    private:
@@ -1758,7 +1959,34 @@ class AntarisapiPayloadController final {
     virtual ::grpc::ServerUnaryReactor* PC_response_shutdown(
       ::grpc::CallbackServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespShutdownParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_PC_register<WithCallbackMethod_PC_get_current_location<WithCallbackMethod_PC_stage_file_download<WithCallbackMethod_PC_sequence_done<WithCallbackMethod_PC_payload_power_control<WithCallbackMethod_PC_response_health_check<WithCallbackMethod_PC_response_shutdown<Service > > > > > > > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_PC_response_payload_metrics : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_PC_response_payload_metrics() {
+      ::grpc::Service::MarkMethodCallback(7,
+          new ::grpc::internal::CallbackUnaryHandler< ::antaris_api_peer_to_peer::PayloadMetricsResponse, ::antaris_api_peer_to_peer::AntarisReturnType>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) { return this->PC_response_payload_metrics(context, request, response); }));}
+    void SetMessageAllocatorFor_PC_response_payload_metrics(
+        ::grpc::MessageAllocator< ::antaris_api_peer_to_peer::PayloadMetricsResponse, ::antaris_api_peer_to_peer::AntarisReturnType>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(7);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::antaris_api_peer_to_peer::PayloadMetricsResponse, ::antaris_api_peer_to_peer::AntarisReturnType>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_PC_response_payload_metrics() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PC_response_payload_metrics(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::PayloadMetricsResponse* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* PC_response_payload_metrics(
+      ::grpc::CallbackServerContext* /*context*/, const ::antaris_api_peer_to_peer::PayloadMetricsResponse* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_PC_register<WithCallbackMethod_PC_get_current_location<WithCallbackMethod_PC_stage_file_download<WithCallbackMethod_PC_sequence_done<WithCallbackMethod_PC_payload_power_control<WithCallbackMethod_PC_response_health_check<WithCallbackMethod_PC_response_shutdown<WithCallbackMethod_PC_response_payload_metrics<Service > > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_PC_register : public BaseClass {
@@ -1875,6 +2103,23 @@ class AntarisapiPayloadController final {
     }
     // disable synchronous version of this method
     ::grpc::Status PC_response_shutdown(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespShutdownParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_PC_response_payload_metrics : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_PC_response_payload_metrics() {
+      ::grpc::Service::MarkMethodGeneric(7);
+    }
+    ~WithGenericMethod_PC_response_payload_metrics() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PC_response_payload_metrics(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::PayloadMetricsResponse* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -2017,6 +2262,26 @@ class AntarisapiPayloadController final {
     }
     void RequestPC_response_shutdown(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_PC_response_payload_metrics : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_PC_response_payload_metrics() {
+      ::grpc::Service::MarkMethodRaw(7);
+    }
+    ~WithRawMethod_PC_response_payload_metrics() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PC_response_payload_metrics(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::PayloadMetricsResponse* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestPC_response_payload_metrics(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2171,6 +2436,28 @@ class AntarisapiPayloadController final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* PC_response_shutdown(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_PC_response_payload_metrics : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_PC_response_payload_metrics() {
+      ::grpc::Service::MarkMethodRawCallback(7,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->PC_response_payload_metrics(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_PC_response_payload_metrics() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PC_response_payload_metrics(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::PayloadMetricsResponse* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* PC_response_payload_metrics(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -2362,9 +2649,36 @@ class AntarisapiPayloadController final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedPC_response_shutdown(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::antaris_api_peer_to_peer::RespShutdownParams,::antaris_api_peer_to_peer::AntarisReturnType>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_PC_register<WithStreamedUnaryMethod_PC_get_current_location<WithStreamedUnaryMethod_PC_stage_file_download<WithStreamedUnaryMethod_PC_sequence_done<WithStreamedUnaryMethod_PC_payload_power_control<WithStreamedUnaryMethod_PC_response_health_check<WithStreamedUnaryMethod_PC_response_shutdown<Service > > > > > > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_PC_response_payload_metrics : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_PC_response_payload_metrics() {
+      ::grpc::Service::MarkMethodStreamed(7,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::antaris_api_peer_to_peer::PayloadMetricsResponse, ::antaris_api_peer_to_peer::AntarisReturnType>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::antaris_api_peer_to_peer::PayloadMetricsResponse, ::antaris_api_peer_to_peer::AntarisReturnType>* streamer) {
+                       return this->StreamedPC_response_payload_metrics(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_PC_response_payload_metrics() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status PC_response_payload_metrics(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::PayloadMetricsResponse* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedPC_response_payload_metrics(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::antaris_api_peer_to_peer::PayloadMetricsResponse,::antaris_api_peer_to_peer::AntarisReturnType>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_PC_register<WithStreamedUnaryMethod_PC_get_current_location<WithStreamedUnaryMethod_PC_stage_file_download<WithStreamedUnaryMethod_PC_sequence_done<WithStreamedUnaryMethod_PC_payload_power_control<WithStreamedUnaryMethod_PC_response_health_check<WithStreamedUnaryMethod_PC_response_shutdown<WithStreamedUnaryMethod_PC_response_payload_metrics<Service > > > > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_PC_register<WithStreamedUnaryMethod_PC_get_current_location<WithStreamedUnaryMethod_PC_stage_file_download<WithStreamedUnaryMethod_PC_sequence_done<WithStreamedUnaryMethod_PC_payload_power_control<WithStreamedUnaryMethod_PC_response_health_check<WithStreamedUnaryMethod_PC_response_shutdown<Service > > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_PC_register<WithStreamedUnaryMethod_PC_get_current_location<WithStreamedUnaryMethod_PC_stage_file_download<WithStreamedUnaryMethod_PC_sequence_done<WithStreamedUnaryMethod_PC_payload_power_control<WithStreamedUnaryMethod_PC_response_health_check<WithStreamedUnaryMethod_PC_response_shutdown<WithStreamedUnaryMethod_PC_response_payload_metrics<Service > > > > > > > > StreamedService;
 };
 
 }  // namespace antaris_api_peer_to_peer

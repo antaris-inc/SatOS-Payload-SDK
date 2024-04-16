@@ -233,6 +233,31 @@ class PCServiceClient {
         return tmp_return;
   }
 
+  AntarisReturnCode Invoke_PC_response_payload_metrics(PayloadMetricsResponse *req_params) {
+        antaris_api_peer_to_peer::PayloadMetricsResponse pc_req;
+        antaris_api_peer_to_peer::AntarisReturnType pc_response;
+        Status pc_status;
+        // Context for the client. It could be used to convey extra information to
+        // the server and/or tweak certain RPC behaviors.
+        ClientContext context;
+
+        app_to_peer_PayloadMetricsResponse(req_params, &pc_req);
+        context.AddMetadata(COOKIE_STR, this->cookie_str);
+
+        pc_status = stub_->PC_response_payload_metrics(&context, pc_req, &pc_response);
+
+        AntarisReturnCode tmp_return;
+
+        // Act upon its status.
+        if (pc_status.ok()) {
+             tmp_return = (AntarisReturnCode)(pc_response.return_code());
+        } else {
+            tmp_return = An_GENERIC_FAILURE;
+        }
+
+        return tmp_return;
+  }
+  
   AntarisReturnCode Invoke_PC_response_shutdown(RespShutdownParams *req_params) {
         antaris_api_peer_to_peer::RespShutdownParams pc_req;
         antaris_api_peer_to_peer::AntarisReturnType pc_response;
@@ -284,6 +309,7 @@ public:
 
     Status PA_ProcessHealthCheck(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::HealthCheckParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
+    Status PA_ProcessReqPayloadMetrics(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 public:
 
     void set_client_channel_ctx(AntarisInternalClientChannelContext_t *ctx) {
@@ -313,6 +339,20 @@ Status AppCallbackServiceImpl::PA_ProcessHealthCheck(::grpc::ServerContext* cont
     if (client_channel_ctx_->callbacks.process_health_check) {
         peer_to_app_HealthCheckParams((void *)request, &app_request);
         app_ret = client_channel_ctx_->callbacks.process_health_check(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessReqPayloadMetrics(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+    ReqPayloadMetricsParams app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+
+    if (client_channel_ctx_->callbacks.req_payload_metrics) {
+		peer_to_app_ReqPayloadMetricsParams((void *)request, &app_request);
+		app_ret = client_channel_ctx_->callbacks.req_payload_metrics(&app_request);
     }
 
     response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
@@ -763,6 +803,25 @@ AntarisReturnCode api_pa_pc_response_shutdown(AntarisChannel channel, RespShutdo
     }
 
     return channel_ctx->pc_service_handle->Invoke_PC_response_shutdown(response_shutdown_params);
+}
+
+AntarisReturnCode api_pa_pc_response_payload_metrics(AntarisChannel channel, PayloadMetricsResponse *response_payload_metrics_params)
+{
+    AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
+    AntarisReturnCode ret = An_SUCCESS;
+
+    printf("api_pa_pc_response_payload_metrics\n");
+
+    if (!channel_ctx || !channel_ctx->pc_service_handle || !response_payload_metrics_params) {
+        ret = An_GENERIC_FAILURE;
+        return ret;
+    }
+
+    if (api_debug) {
+        displayPayloadMetricsResponse(response_payload_metrics_params);
+    }
+
+    return channel_ctx->pc_service_handle->Invoke_PC_response_payload_metrics(response_payload_metrics_params);
 }
 
 } // extern C
