@@ -176,30 +176,29 @@ class Controller:
         
         # Defining limits for data send and receive
         send_msg_limit = 10
-        start_msg_read = 5
-        loop_reset_limit = 12
 
         loopCounter = 0
 
         # Main loop to send CAN messages
-        while loopCounter < loop_reset_limit:
+        logger.info("Sending data in CAN bus")
+        while loopCounter < send_msg_limit:
             loopCounter = loopCounter + 1
+            arb_id = arb_id + 1
+            api_can.api_pa_pc_send_can_message(channel, arb_id, data_bytes)
+            time.sleep(1)
 
-            if loopCounter < send_msg_limit:
-                # Example message: arbitration_id=0x123, data=[0x01, 0x02, 0x03, loopCounter]
-                api_can.api_pa_pc_send_can_message(channel, arb_id, data_bytes)
+        logger.info("Data send = ", api_can.api_pa_pc_get_can_message_received_count())
 
-            if loopCounter >  start_msg_read:
-                print("Start reading")
-                while api_can.api_pa_pc_get_can_message_received_count() > 0: 
-                    received_data = api_can.api_pa_pc_read_can_data()
-                    if received_data != g_GPIO_ERROR:
-                        print("received data =", received_data)
-                    else:
-                        print("Error in receiving data")
-                print("Completed reading")
+        while api_can.api_pa_pc_get_can_message_received_count() > 0: 
+            received_data = api_can.api_pa_pc_read_can_data()
+            if received_data != g_GPIO_ERROR:
+                print("received data =", received_data)
+            else:
+                print("Error in receiving data")
+        
+        logger.info("Completed reading")
 
-            time.sleep(1) 
+             
 
         return 
     
