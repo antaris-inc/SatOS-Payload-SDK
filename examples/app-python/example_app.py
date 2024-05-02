@@ -145,10 +145,6 @@ class Controller:
 
         # Get Arbitration ID & data
         data = ctx.params
-        if data == "":
-            logger.info("Using default Arbitration ID & data, as input string is empty")
-            data = "0x123 0x11,0x12,0x13,0x14,0x15,0x16,0x17"
-
         parts = data.split()
 
         if len(parts) != 2:
