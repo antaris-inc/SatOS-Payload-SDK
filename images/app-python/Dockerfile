@@ -28,6 +28,7 @@ RUN python3 -m pip install --upgrade pip
 # This is required for GPIO and UART access using FTDI
 RUN apt install -y libftdi1
 RUN python3 -m pip install pyserial
+RUN python3 -m pip install python-can
 
 RUN mkdir /stage
 COPY dist/satos_payload_sdk-*.whl /stage

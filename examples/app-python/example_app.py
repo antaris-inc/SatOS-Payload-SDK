@@ -23,6 +23,7 @@ import serial
 
 from satos_payload_sdk import app_framework
 from satos_payload_sdk import antaris_api_gpio as api_gpio
+from satos_payload_sdk import antaris_api_can as api_can
 
 g_GPIO_ERROR = -1
 g_Uart_Baudrate = 9600
@@ -139,6 +140,69 @@ class Controller:
         # Files must be present in "/opt/antaris/outbound/" before staging them for download
         resp = ctx.client.stage_file_download(g_StageFileName)
 
+    def handle_test_can_bus(self, ctx):
+        logger.info("Test CAN bus")
+
+        # Get Arbitration ID & data
+        data = ctx.params
+        if data == "":
+            logger.info("Using default Arbitration ID & data, as input string is empty")
+            data = "0x123 0x11,0x12,0x13,0x14,0x15,0x16,0x17"
+
+        parts = data.split()
+
+        if len(parts) != 2:
+            logger.info("Input format is incorrect. The format is: ")
+            logger.info("Arbitration ID data[0],data[1],data[2],data[3]..data[7]") 
+            logger.info("Using defaullt arbitration ID and data bytes.")
+            data = "0x123 0x11,0x12,0x13,0x14,0x15,0x16,0x17"
+            parts = data.split()
+
+        # Extract arbitration ID and data bytes
+        arb_id = int(parts[0], 16)
+        data_str = parts[1]
+        data_bytes = [int(byte, 16) for byte in data_str.split(",")]
+
+        # Get CAN bus info from config file
+        canInfo = api_can.api_pa_pc_get_can_dev()
+        logger.info("Total CAN bus ports = %d", int(canInfo.can_port_count))
+
+        # Define the CAN channel to use (assuming the first device)
+        channel = canInfo.can_dev[0]
+        logger.info("Starting CAN receiver port", channel)
+
+        # Starting CAN received thread
+        api_can.api_pa_pc_start_can_receiver_thread(channel)
+        
+        # Defining limits for data send and receive
+        send_msg_limit = 10
+        start_msg_read = 5
+        loop_reset_limit = 12
+
+        loopCounter = 0
+
+        # Main loop to send CAN messages
+        while loopCounter < loop_reset_limit:
+            loopCounter = loopCounter + 1
+
+            if loopCounter < send_msg_limit:
+                # Example message: arbitration_id=0x123, data=[0x01, 0x02, 0x03, loopCounter]
+                api_can.api_pa_pc_send_can_message(channel, 0x123, [0x01, 0x02, 0x03, loopCounter])
+
+            if loopCounter >  start_msg_read:
+                print("Start reading")
+                while api_can.api_pa_pc_get_can_message_received_count() > 0: 
+                    received_data = api_can.api_pa_pc_read_can_data()
+                    if received_data != g_GPIO_ERROR:
+                        print("received data =", received_data)
+                    else:
+                        print("Error in receiving data")
+                print("Completed reading")
+
+            time.sleep(1) 
+
+        return 
+    
 def new():
     ctl = Controller()
 
@@ -156,6 +220,7 @@ def new():
     app.mount_sequence("UARTLoopback", ctl.handle_uart_loopback)
     app.mount_sequence("StageFile",ctl.handle_stage_filedownload)
     app.mount_sequence("PowerControl", ctl.handle_power_control)
+    app.mount_sequence("TestCanBus", ctl.handle_test_can_bus)
     return app
 
 def set_payload_values(payload_app):
