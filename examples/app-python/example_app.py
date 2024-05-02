@@ -187,7 +187,7 @@ class Controller:
 
             if loopCounter < send_msg_limit:
                 # Example message: arbitration_id=0x123, data=[0x01, 0x02, 0x03, loopCounter]
-                api_can.api_pa_pc_send_can_message(channel, 0x123, [0x01, 0x02, 0x03, loopCounter])
+                api_can.api_pa_pc_send_can_message(channel, arb_id, data_bytes)
 
             if loopCounter >  start_msg_read:
                 print("Start reading")
