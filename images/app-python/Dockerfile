@@ -28,6 +28,8 @@ RUN python3 -m pip install --upgrade pip
 # This is required for GPIO and UART access using FTDI
 RUN apt install -y libftdi1
 RUN python3 -m pip install pyserial
+
+#This is required for CAN bus read/write
 RUN python3 -m pip install python-can
 
 RUN mkdir /stage

@@ -194,8 +194,6 @@ class Controller:
         
         logger.info("Completed reading")
 
-             
-
         return 
     
 def new():
@@ -215,7 +213,7 @@ def new():
     app.mount_sequence("UARTLoopback", ctl.handle_uart_loopback)
     app.mount_sequence("StageFile",ctl.handle_stage_filedownload)
     app.mount_sequence("PowerControl", ctl.handle_power_control)
-    app.mount_sequence("TestCanBus", ctl.handle_test_can_bus)
+    app.mount_sequence("TestCANBus", ctl.handle_test_can_bus)
     return app
 
 def set_payload_values(payload_app):

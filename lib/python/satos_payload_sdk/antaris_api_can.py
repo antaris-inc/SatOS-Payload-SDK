@@ -1,5 +1,5 @@
 #
-#   Copyright 2022 Antaris, Inc.
+#   Copyright 2024 Antaris, Inc.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -111,42 +111,3 @@ def api_pa_pc_send_can_message(channel, arbitration_id, data):
 
 def api_pa_pc_get_can_message_received_count():
     return len(data_array)
-
-if __name__ == "__main__":
-    send_msg_limit = 10
-    start_msg_read = 5
-    loop_reset_limit = 12
-
-    loopCounter = 0
-
-     # Get CAN devices from configuration
-    can_obj = api_pa_pc_get_can_dev()
-
-    # Define the CAN channel to use (assuming the first device)
-    channel = can_obj.can_dev[0]
-
-    # Start a thread to continuously receive CAN messages
-    api_pa_pc_start_can_receiver_thread(channel)
-
-    # Main loop to send CAN messages
-    while True:
-        loopCounter = loopCounter + 1
-
-        if loopCounter < send_msg_limit:
-            # Example message: arbitration_id=0x123, data=[0x01, 0x02, 0x03, loopCounter]
-            api_pa_pc_send_can_message(channel, 0x123, [0x01, 0x02, 0x03, loopCounter])
-
-        if loopCounter >  start_msg_read:
-            print("Start reading")
-            while api_pa_pc_get_can_message_received_count() > 0: 
-                received_data = api_pa_pc_read_can_data()
-                if received_data != g_GPIO_ERROR:
-                    print("received data =", received_data)
-                else:
-                    print("Error in receiving data")
-            print("Completed reading")
-
-        if loopCounter == loop_reset_limit:
-            loopCounter = 0
-
-        time.sleep(1) 
