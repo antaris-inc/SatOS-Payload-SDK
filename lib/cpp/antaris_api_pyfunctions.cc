@@ -140,6 +140,7 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
     }
 
     position += strlen(FILE_DOWNLOAD_DIR);
+    position--;
     remaining_length = strlen(position);
     strcpy(dst_file_name, g_Truetwin_Dir);
     strncat(dst_file_name, position, remaining_length);
@@ -152,6 +153,9 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
     PyTuple_SetItem(pArgs, 3, Py_BuildValue("s", dst_file_name));
 
     printf("Antaris_SatOS : Uploading file %s \n", download_file_params->file_path);
+    printf("Antaris_SatOS : file string %s \n", g_File_String);
+    printf("Antaris_SatOS : Share name %s \n", g_Share_Name);
+    printf("Antaris_SatOS : dst file name %s \n", dst_file_name);
 
     pName = PyUnicode_DecodeFSDefault(PYTHON_SCRIPT_FILE);
     pModule = PyImport_Import(pName);

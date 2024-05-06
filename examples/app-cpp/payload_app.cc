@@ -370,6 +370,10 @@ AntarisReturnCode start_sequence(StartSequenceParams *start_seq_param)
     // <Payload Application Business Logic>
     // Start Sequence FSM Thread
     current_sequence_idx = get_sequence_idx_from_seq_string(&start_seq_param->sequence_id[0]);
+    if (current_sequence_idx ==  -1) {
+        printf("Invalid Sequence \n");
+        return An_GENERIC_FAILURE;
+    }
     mythreadState_t *thread_state = payload_sequences_fsms[current_sequence_idx];
     strcpy(thread_state->received_name, &start_seq_param->sequence_id[0]);
     strncpy(thread_state->seq_params, start_seq_param->sequence_params, SEQ_PARAMS_LEN);
