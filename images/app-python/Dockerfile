@@ -29,6 +29,9 @@ RUN python3 -m pip install --upgrade pip
 RUN apt install -y libftdi1
 RUN python3 -m pip install pyserial
 
+#This is required for CAN bus read/write
+RUN python3 -m pip install python-can
+
 RUN mkdir /stage
 COPY dist/satos_payload_sdk-*.whl /stage
 RUN python3 -m pip install /stage/satos_payload_sdk-*.whl
