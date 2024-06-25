@@ -230,7 +230,7 @@ def set_payload_values(payload_app):
         payload_metrics.metrics[i].names = f"Counter {i}"  # Example value
     
     # Change counter name
-    payload_metrics.define_counter(1, "NewMatrixName_1")
+    payload_metrics.define_counter(1, "MetricName_1")
     # Increment counter
     payload_metrics.inc_counter(1)
 
