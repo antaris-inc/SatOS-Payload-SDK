@@ -223,16 +223,16 @@ def set_payload_values(payload_app):
 
     # Set counter values
     for i in range(payload_metrics.used_counter):
-        payload_metrics.metrics[i].counter= i  # Example value
+        payload_metrics.metrics[i].counter = i + 1 # Example value
 
     # Set counter_name values
     for i in range(payload_metrics.used_counter):
         payload_metrics.metrics[i].names = f"Counter {i}"  # Example value
     
     # Change counter name
-    payload_metrics.define_counter(0, "NewName 1")
+    payload_metrics.define_counter(1, "NewMatrixName_1")
     # Increment counter
-    payload_metrics.inc_counter(0)
+    payload_metrics.inc_counter(1)
 
     return 
 

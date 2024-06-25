@@ -414,7 +414,7 @@ class PayloadApplication(Stoppable):
             logger.error("sequence_done request failed: resp=%d" % resp)
 
         # Reset all counters to zero after sending
-        for i in range(payload_metrics.used_counter):
-            payload_metrics.metrics[i].counter = 0 
+    #    for i in range(payload_metrics.used_counter):
+    #        payload_metrics.metrics[i].counter = 0 
 
         return api_types.AntarisReturnCode.An_SUCCESS
