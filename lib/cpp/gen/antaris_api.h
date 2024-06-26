@@ -449,6 +449,14 @@ void peer_to_app_AntarisReturnType(const void *ptr_src_peer, void *ptr_dst_app);
 
 // >>>> Function Prototypes <<<<<
 
+/// @brief Function init_satos_lib
+/// @fn Initializes satos library
+AntarisReturnCode init_satos_lib();
+
+/// @brief Function deinit_satos_lib
+/// @fn Closes satos library
+void deinit_satos_lib();
+
 /// @brief Function api_pa_pc_create_channel
 /// @fn Create a channel for use as API Context
 AntarisChannel
