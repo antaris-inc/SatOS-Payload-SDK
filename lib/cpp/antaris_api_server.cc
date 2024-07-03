@@ -19,6 +19,7 @@
 
 #include <fstream>
 #include <string>
+#include <chrono>
 
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <grpcpp/grpcpp.h>
@@ -42,6 +43,8 @@
 #define KEEPALIVE_TIME_MS                   20000
 #define KEEPALIVE_TIMEOUT_MS                10000
 #define KEEPALIVE_PERMIT_WITHOUT_CALLS      1
+
+#define GRPC_RESPONSE_TIMEOUT_IN_MS         3000
 
 using grpc::Channel;
 using grpc::ClientContext;
@@ -70,6 +73,10 @@ class AppToPCClient {
         // the server and/or tweak certain RPC behaviors.
         ClientContext context;
 
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
+
         app_to_peer_StartSequenceParams(req_params, &cb_req);
 
         cb_status = app_grpc_handle_->PA_StartSequence(&context, cb_req, &cb_response);
@@ -89,6 +96,10 @@ class AppToPCClient {
         // Context for the client. It could be used to convey extra information to
         // the server and/or tweak certain RPC behaviors.
         ClientContext context;
+
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
 
         app_to_peer_ShutdownParams(req_params, &cb_req);
 
@@ -110,6 +121,10 @@ class AppToPCClient {
         // the server and/or tweak certain RPC behaviors.
         ClientContext context;
 
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
+
         app_to_peer_RespRegisterParams(req_params, &cb_req);
 
         cb_status = app_grpc_handle_->PA_ProcessResponseRegister(&context, cb_req, &cb_response);
@@ -129,6 +144,10 @@ class AppToPCClient {
         // Context for the client. It could be used to convey extra information to
         // the server and/or tweak certain RPC behaviors.
         ClientContext context;
+
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
 
         app_to_peer_RespGetCurrentLocationParams(req_params, &cb_req);
 
@@ -150,6 +169,10 @@ class AppToPCClient {
         // the server and/or tweak certain RPC behaviors.
         ClientContext context;
 
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
+
         app_to_peer_RespStageFileDownloadParams(req_params, &cb_req);
 
         cb_status = app_grpc_handle_->PA_ProcessResponseStageFileDownload(&context, cb_req, &cb_response);
@@ -169,6 +192,10 @@ class AppToPCClient {
         // Context for the client. It could be used to convey extra information to
         // the server and/or tweak certain RPC behaviors.
         ClientContext context;
+
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
 
         app_to_peer_RespPayloadPowerControlParams(req_params, &cb_req);
 
@@ -190,6 +217,10 @@ class AppToPCClient {
         // the server and/or tweak certain RPC behaviors.
         ClientContext context;
 
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
+
         app_to_peer_HealthCheckParams(req_params, &cb_req);
 
         cb_status = app_grpc_handle_->PA_ProcessHealthCheck(&context, cb_req, &cb_response);
@@ -210,6 +241,10 @@ class AppToPCClient {
 		// the server and/or tweak certain RPC behaviors.
 		ClientContext context;
         
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
+
 		app_to_peer_ReqPayloadMetricsParams(req_params, &cb_req);
 
 		cb_status = app_grpc_handle_->PA_ProcessReqPayloadMetrics(&context, cb_req, &cb_response);
