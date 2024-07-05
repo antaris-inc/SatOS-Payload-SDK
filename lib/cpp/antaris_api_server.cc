@@ -76,7 +76,7 @@ class AppToPCClient {
         // Adding deadline or timeout
         std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
         context.set_deadline(deadline);
-        std::cout << "Start sequence" <<std::endl;
+
         app_to_peer_StartSequenceParams(req_params, &cb_req);
 
         cb_status = app_grpc_handle_->PA_StartSequence(&context, cb_req, &cb_response);
@@ -220,7 +220,7 @@ class AppToPCClient {
         // Adding deadline or timeout
         std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
         context.set_deadline(deadline);
-        std::cout << "Req health params" <<std::endl;
+
         app_to_peer_HealthCheckParams(req_params, &cb_req);
 
         cb_status = app_grpc_handle_->PA_ProcessHealthCheck(&context, cb_req, &cb_response);
@@ -244,7 +244,7 @@ class AppToPCClient {
         // Adding deadline or timeout
         std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
         context.set_deadline(deadline);
-        std::cout << "Req payload matrix" <<std::endl;
+
 		app_to_peer_ReqPayloadMetricsParams(req_params, &cb_req);
 
 		cb_status = app_grpc_handle_->PA_ProcessReqPayloadMetrics(&context, cb_req, &cb_response);
