@@ -3,7 +3,17 @@
 This directory contains an example Payload Application using the C++.
 This is not production-ready code, but it is useful for learning how the platform functions.
 
+NOTE: All the cpp files need to have .cc extention only.
+
 ## Quickstart
+
+Build the cpp app in the SatOS-Payload-SDK. For this go two directories up and run make build.
+`make build_cpp` will instantiate a build environment container and compile c++ application present at examples/app-cpp.
+
+```
+cd ../.. 
+make build_cpp
+```
 
 In the Antaris Cloud Platform, create a TrueTwin Satellite with a remote payload and download the associated config.
 Place that downloaded zip file in this directory.

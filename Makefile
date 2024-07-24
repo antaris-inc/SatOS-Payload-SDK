@@ -66,6 +66,10 @@ DOCKER_RM_CMD=docker rm -f
 WORKSPACE_MAPPING_DIR=/workspace
 BUILD_CONTAINER_NAME=payload_sdk_build_env
 
+# To help in building sample cpp application
+SRCDIR = examples/app-cpp
+SRCS = $(wildcard $(SRCDIR)/*.cc)
+
 no_default:
 	@echo No default make target configured. Please proceed as per acommpanying documentation.
 
@@ -138,7 +142,7 @@ docs:
 	sphinx-build docs/src dist/docs
 
 cpp_example: all
-	g++ ${OPTIMIZATION_LEVEL} examples/app-cpp/payload_app.cc -o examples/app-cpp/payload_app ${VENDOR_cJSON_INCLUDES} -I /usr/local/include/ -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS} -lpython3.10;
+	g++ ${OPTIMIZATION_LEVEL} -o examples/app-cpp/payload_app  $(SRCS) ${VENDOR_cJSON_INCLUDES} -I /usr/local/include/ -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -L ${OUTPUT_LIB_DIR} -lantaris_api -lpthread ${GRPC_CPP_ADDITIONAL_LIBS} -lpython3.10;
 
 all: api_lib pc_sim sample_app
 
