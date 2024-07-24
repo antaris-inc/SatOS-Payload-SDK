@@ -5,15 +5,19 @@ This is not production-ready code, but it is useful for learning how the platfor
 
 NOTE: All the cpp files need to have .cc extention only.
 
-## Quickstart
 
-Build the cpp app in the SatOS-Payload-SDK. For this go two directories up and run make build.
-`make build_cpp` will instantiate a build environment container and compile c++ application present at examples/app-cpp.
+## Build Cpp application
+
+To build application in examples/app-cpp , go to SatOS_Payload_SDK parent directory and run `make build_cpp`.
+
+`make build_cpp` will instantiate a build environment container and compile cpp application present at examples/app-cpp.
 
 ```
 cd ../.. 
 make build_cpp
 ```
+
+## Quickstart
 
 In the Antaris Cloud Platform, create a TrueTwin Satellite with a remote payload and download the associated config.
 Place that downloaded zip file in this directory.
