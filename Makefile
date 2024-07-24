@@ -67,8 +67,8 @@ WORKSPACE_MAPPING_DIR=/workspace
 BUILD_CONTAINER_NAME=payload_sdk_build_env
 
 # To help in building sample cpp application
-SRCDIR = examples/app-cpp
-SRCS = $(wildcard $(SRCDIR)/*.cc)
+SRC_DIR = examples/app-cpp
+SRCS = $(wildcard $(SRC_DIR)/*.cc)
 
 no_default:
 	@echo No default make target configured. Please proceed as per acommpanying documentation.
