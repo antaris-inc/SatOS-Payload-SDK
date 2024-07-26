@@ -39,7 +39,7 @@ demonstration purposes: https://github.com/antaris-inc/SatOS-Payload-Demos
 ```
 make build_cpp
 ```
-  NOTE: This step also builds the requisite Docker image which requires internet access to install some system packages.
+  NOTE: This step also builds the requisite Docker image which requires internet access to install some system packages. If your cpp application location is different then please check MakeFile as how to do it.
 		
 ## Tools Image
 
