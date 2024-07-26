@@ -67,7 +67,6 @@ WORKSPACE_MAPPING_DIR=/workspace
 BUILD_CONTAINER_NAME=payload_sdk_build_env
 
 # To help in building sample cpp application which is located inside examples/app-cpp.
-# NOTE: If your app location is different then you need to provide the path here, and this path must exist within SatOS-Payload-SDK only. After changing go ahead and change SRC_DIR path.
 SRC_DIR = examples/app-cpp
 SRCS = $(wildcard $(SRC_DIR)/*.cc)
 # Define the target executable

@@ -10,7 +10,7 @@ NOTE: All the cpp files need to have .cc extention only.
 
 To build application in examples/app-cpp , go to SatOS_Payload_SDK parent directory and run `make build_cpp`.
 
-`make build_cpp` will instantiate a build environment container and compile cpp application present at examples/app-cpp.
+`make build_cpp` will instantiate a build environment container and compile cpp application present at examples/app-cpp. For other locations please refer the main README iniside SatOS-Payload-SDK.
 
 ```
 cd ../.. 
