@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/antaris-inc/satos-payload-app-python:stable as app_image
+FROM quay.io/antaris-inc/satos-payload-app-python:stable AS app_image
 
 ADD example_app.py /opt/antaris/app/example_app.py
 ADD entrypoint.sh /opt/antaris/app/entrypoint.sh
