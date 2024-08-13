@@ -26,6 +26,10 @@
 #include "cJSON.h"
 #include <cstdlib>
 #include <sys/wait.h>
+#include <chrono>
+#include <thread>
+#include <future>
+
 #include "Python.h"
 
 #include "antaris_api_gpio.h"
@@ -34,6 +38,7 @@
 #include "antaris_sdk_environment.h"
 
 #define GENERIC_ERROR -1
+#define TIMEOUT_PYFINALIZE 5
 
 AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio)
 {
@@ -200,32 +205,70 @@ cleanup_and_exit:
 
 AntarisReturnCode init_satos_lib()
 {
-    Py_Initialize();
-    PyObject* sysPath = PySys_GetObject("path");
+    Py_Initialize(); // Initialize the Python interpreter
 
-    if (sysPath == nullptr) {
-        PyErr_Print();
-        printf("Error: Can not initialize SatOS library \n");
-        return An_GENERIC_FAILURE;
-    } 
-    
-    PyObject* directoryPath = PyUnicode_DecodeFSDefault("/lib/antaris/tools/");
-    if (directoryPath == nullptr)  {
-        PyErr_Print();
-        printf("Error: Can not initialize SatOS library \n");
+    // Declare resources at the beginning
+    PyObject* sysPath = nullptr;
+    PyObject* directoryPath = nullptr;
+
+    // Try to perform operations
+    try {
+        sysPath = PySys_GetObject("path");
+        if (sysPath == nullptr) {
+            PyErr_Print();
+            throw std::runtime_error("Error: Can not initialize SatOS library");
+        } 
+        
+        directoryPath = PyUnicode_DecodeFSDefault("/lib/antaris/tools/");
+        if (directoryPath == nullptr)  {
+            PyErr_Print();
+            throw std::runtime_error("Error: Can not initialize SatOS library");
+        }
+
+        // Add directoryPath to sysPath
+        PyList_Append(sysPath, directoryPath);
+        // Cleanup: Decrease reference count for directoryPath
+        Py_XDECREF(directoryPath);
+
+        printf("Completed initialization of SatOS \n");
+        return An_SUCCESS;
+    }
+    catch (const std::exception& e) {
+        // Handle any errors
+        printf("%s\n", e.what());
+
+        // Cleanup: Decrease reference count for directoryPath if it was created
+        if (directoryPath != nullptr) {
+            Py_XDECREF(directoryPath);
+        }
+
         return An_GENERIC_FAILURE;
     }
-
-    PyList_Append(sysPath, directoryPath);
-    Py_XDECREF(directoryPath);
-
-    printf("Completed initialization of SatOS \n");
-    return An_SUCCESS;
 }
 
 void deinit_satos_lib()
 {
-    Py_Finalize();
+    printf("Before Py_Finalize\n");
+    Py_Finalize(); // Finalize the Python interpreter
+    printf("After Py_Finalize\n");
+}
+
+
+void with_timeout_deinit_satos_lib()
+{
+    // Run Py_Finalize() in a separate thread
+    std::chrono::milliseconds timeout(TIMEOUT_PYFINALIZE*1000);
+    std::future<void> finalize_result = std::async(std::launch::async, deinit_satos_lib);
+
+    // Wait for the result with a timeout
+    if (finalize_result.wait_for(timeout) == std::future_status::timeout) {
+        // Timeout occurred, Py_Finalize() did not complete in time
+        printf("After Py_Finalize() closed forcefully\n");
+        _exit(0);
+    } else {
+        printf("Py_Finalize() completed within the timeout");
+        return;
+    }
 }
 
 AntarisReturnCode AntarisApiGPIO::verify_gpio_pin(int8_t pin_number) 

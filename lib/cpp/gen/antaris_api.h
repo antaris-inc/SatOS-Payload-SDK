@@ -456,6 +456,7 @@ AntarisReturnCode init_satos_lib();
 /// @brief Function deinit_satos_lib
 /// @fn Closes satos library
 void deinit_satos_lib();
+void with_timeout_deinit_satos_lib();
 
 /// @brief Function api_pa_pc_create_channel
 /// @fn Create a channel for use as API Context
