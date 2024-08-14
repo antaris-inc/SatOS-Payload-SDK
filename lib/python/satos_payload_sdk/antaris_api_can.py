@@ -33,6 +33,7 @@ g_GPIO_ERROR = -1
 # threading lock
 threadLock = -1
 data_array = []
+canReceiveThreadstarted = False
 
 # returns JSON object as a dictionary
 jsfile_data = json.load(jsonfile)
@@ -67,13 +68,15 @@ def api_pa_pc_receive_can_message(channel, data_array, lock):
             if message is not None:
                 with lock:
                     data_array.append(message)  # Append the received message to the data array
-
+            print("Printing DATA ARRAY")
+            print(data_array)
     except can.CanError as e:
         print("Error receiving message:", e)
         return g_GPIO_ERROR
     
     finally:
         # Clean up and close the bus
+        print("Shutting down Bus")
         bus.shutdown()
 
 def api_pa_pc_read_can_data():
@@ -86,10 +89,15 @@ def api_pa_pc_read_can_data():
 
 def api_pa_pc_start_can_receiver_thread(channel):
     # Create shared data array and lock
-    threadLock = threading.Lock()
-    receive_thread = threading.Thread(target=api_pa_pc_receive_can_message, args=(channel, data_array, threadLock))
-    receive_thread.daemon = True
-    receive_thread.start()
+    global threadLock
+    if not canReceiveThreadstarted:
+        threadLock = threading.Lock()
+        receive_thread = threading.Thread(target=api_pa_pc_receive_can_message, args=(channel, data_array, threadLock))
+        receive_thread.daemon = True
+        receive_thread.start()
+        canReceiveThreadstarted = True
+    else:
+        print("Receive Thread Already Running")
 
 def api_pa_pc_send_can_message(channel, arbitration_id, data):
     try:

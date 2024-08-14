@@ -20,6 +20,7 @@ import os
 import sys
 import time
 import serial
+import threading
 
 from satos_payload_sdk import app_framework
 from satos_payload_sdk import antaris_api_gpio as api_gpio
@@ -40,6 +41,8 @@ class Controller:
         return True
 
     def handle_hello_world(self, ctx):
+        print("#### ACTIVE THREADS ####")
+        print(threading.active_count())
         logger.info("Handling sequence: hello, world!")
 
     def handle_hello_friend(self, ctx):
@@ -142,7 +145,7 @@ class Controller:
 
     def handle_test_can_bus(self, ctx):
         logger.info("Test CAN bus")
-
+        print(api_can.api_pa_pc_get_can_message_received_count())
         # Get Arbitration ID & data
         data = ctx.params
         parts = data.split()
@@ -165,7 +168,7 @@ class Controller:
 
         # Define the CAN channel to use (assuming the first device)
         channel = canInfo.can_dev[0]
-        logger.info("Starting CAN receiver port", channel)
+        logger.info("Starting CAN receiver port %s", channel)
 
         # Starting CAN received thread
         api_can.api_pa_pc_start_can_receiver_thread(channel)
@@ -178,12 +181,14 @@ class Controller:
         # Main loop to send CAN messages
         logger.info("Sending data in CAN bus")
         while loopCounter < send_msg_limit:
+            print(api_can.api_pa_pc_get_can_message_received_count())
             loopCounter = loopCounter + 1
             arb_id = arb_id + 1
             api_can.api_pa_pc_send_can_message(channel, arb_id, data_bytes)
+            print(api_can.api_pa_pc_get_can_message_received_count())
             time.sleep(1)
 
-        logger.info("Data send = ", api_can.api_pa_pc_get_can_message_received_count())
+        logger.info("Data send = %d", api_can.api_pa_pc_get_can_message_received_count())
 
         while api_can.api_pa_pc_get_can_message_received_count() > 0: 
             received_data = api_can.api_pa_pc_read_can_data()
