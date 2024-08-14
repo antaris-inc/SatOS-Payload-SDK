@@ -248,9 +248,7 @@ AntarisReturnCode init_satos_lib()
 
 void deinit_satos_lib()
 {
-    printf("Before Py_Finalize\n");
     Py_Finalize(); // Finalize the Python interpreter
-    printf("After Py_Finalize\n");
 }
 
 
