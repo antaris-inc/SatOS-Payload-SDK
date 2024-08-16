@@ -392,6 +392,10 @@ void wakeup_seq_fsm(mythreadState_t *threadState)
 
 AntarisReturnCode shutdown_app(ShutdownParams *shutdown_param)
 {
+    if (shutdown_param == NULL){
+        printf("ERROR: shutdown params are NULL!");
+        _exit(-1);
+    }
     RespShutdownParams   resp_shutdown_params;
 
     printf("shutdown_app : Got Shutdown request from PC\n");
@@ -412,6 +416,8 @@ AntarisReturnCode shutdown_app(ShutdownParams *shutdown_param)
 
     api_pa_pc_response_shutdown(channel, &resp_shutdown_params);
 
+    printf("Current sequence id: %d", current_sequence_idx);
+    
     wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
 
     return An_SUCCESS;
@@ -572,6 +578,7 @@ int main(int argc, char *argv[])
 
     printf("==== All Done: Exiting Main Thread ====\n\n");
 
-    deinit_satos_lib();
+    // Deafault timeout is set to exit the function running inside this function
+    with_timeout_deinit_satos_lib();
     _exit(0);
 }

@@ -26,6 +26,10 @@
 #include "cJSON.h"
 #include <cstdlib>
 #include <sys/wait.h>
+#include <chrono>
+#include <thread>
+#include <future>
+
 #include "Python.h"
 
 #include "antaris_api_gpio.h"
@@ -34,6 +38,7 @@
 #include "antaris_sdk_environment.h"
 
 #define GENERIC_ERROR -1
+#define TIMEOUT_PYFINALIZE 5
 
 AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio)
 {
@@ -225,7 +230,25 @@ AntarisReturnCode init_satos_lib()
 
 void deinit_satos_lib()
 {
-    Py_Finalize();
+    Py_Finalize(); // Finalize the Python interpreter
+}
+
+
+void with_timeout_deinit_satos_lib()
+{
+    // Run Py_Finalize() in a separate thread
+    std::chrono::milliseconds timeout(TIMEOUT_PYFINALIZE*1000);
+    std::future<void> finalize_result = std::async(std::launch::async, deinit_satos_lib);
+
+    // Wait for the result with a timeout
+    if (finalize_result.wait_for(timeout) == std::future_status::timeout) {
+        // Timeout occurred, Py_Finalize() did not complete in time
+        printf("After Py_Finalize() closed forcefully\n");
+        _exit(0);
+    } else {
+        printf("Py_Finalize() completed within the timeout");
+        return;
+    }
 }
 
 AntarisReturnCode AntarisApiGPIO::verify_gpio_pin(int8_t pin_number) 
