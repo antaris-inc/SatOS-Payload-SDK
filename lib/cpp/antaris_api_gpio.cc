@@ -205,45 +205,27 @@ cleanup_and_exit:
 
 AntarisReturnCode init_satos_lib()
 {
-    Py_Initialize(); // Initialize the Python interpreter
+    Py_Initialize();
+    PyObject* sysPath = PySys_GetObject("path");
 
-    // Declare resources at the beginning
-    PyObject* sysPath = nullptr;
-    PyObject* directoryPath = nullptr;
-
-    // Try to perform operations
-    try {
-        sysPath = PySys_GetObject("path");
-        if (sysPath == nullptr) {
-            PyErr_Print();
-            throw std::runtime_error("Error: Can not initialize SatOS library");
-        } 
-        
-        directoryPath = PyUnicode_DecodeFSDefault("/lib/antaris/tools/");
-        if (directoryPath == nullptr)  {
-            PyErr_Print();
-            throw std::runtime_error("Error: Can not initialize SatOS library");
-        }
-
-        // Add directoryPath to sysPath
-        PyList_Append(sysPath, directoryPath);
-        // Cleanup: Decrease reference count for directoryPath
-        Py_XDECREF(directoryPath);
-
-        printf("Completed initialization of SatOS \n");
-        return An_SUCCESS;
-    }
-    catch (const std::exception& e) {
-        // Handle any errors
-        printf("%s\n", e.what());
-
-        // Cleanup: Decrease reference count for directoryPath if it was created
-        if (directoryPath != nullptr) {
-            Py_XDECREF(directoryPath);
-        }
-
+    if (sysPath == nullptr) {
+        PyErr_Print();
+        printf("Error: Can not initialize SatOS library \n");
+        return An_GENERIC_FAILURE;
+    } 
+    
+    PyObject* directoryPath = PyUnicode_DecodeFSDefault("/lib/antaris/tools/");
+    if (directoryPath == nullptr)  {
+        PyErr_Print();
+        printf("Error: Can not initialize SatOS library \n");
         return An_GENERIC_FAILURE;
     }
+
+    PyList_Append(sysPath, directoryPath);
+    Py_XDECREF(directoryPath);
+
+    printf("Completed initialization of SatOS \n");
+    return An_SUCCESS;
 }
 
 void deinit_satos_lib()
