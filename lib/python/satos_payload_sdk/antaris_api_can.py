@@ -39,81 +39,82 @@ canReceiveThreadstarted = False
 jsfile_data = json.load(jsonfile)
 
 class CAN:
-   def __init__(self, port_count, can_dev):
-       self.can_port_count = port_count
-       self.can_dev = can_dev
+    def __init__(self, port_count, can_dev):
+        self.can_port_count = port_count
+        self.can_dev = can_dev
 
 def api_pa_pc_get_can_dev():
-   g_total_can_port = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_CAN][g_JSON_Key_Device_Count]
-   can_dev = []
+    g_total_can_port = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_CAN][g_JSON_Key_Device_Count]
+    can_dev = []
 
-   i = 0
-   for i in range(int(g_total_can_port)):
-       key = g_JSON_Key_CAN_Device_Path+str(i)
-       element = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_CAN][key]
-       can_dev.append(element)
+    i = 0
+    for i in range(int(g_total_can_port)):
+        key = g_JSON_Key_CAN_Device_Path+str(i)
+        element = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_CAN][key]
+        can_dev.append(element)
 
-   canObj = CAN(g_total_can_port, can_dev)
-   return canObj
+    canObj = CAN(g_total_can_port, can_dev)
+    return canObj
 
 def api_pa_pc_receive_can_message(channel, data_array, lock):
-   try:
-       # Initialize a CAN bus interface
-       bus = can.interface.Bus(channel=channel, bustype='socketcan')
+    try:
+        # Initialize a CAN bus interface
+        bus = can.interface.Bus(channel=channel, bustype='socketcan')
 
-       # Continuously receive CAN messages
-       while True:
-           # Receive a CAN message
-           message = bus.recv(timeout=1)
-           if message is not None:
-               with lock:
-                   data_array.append(message)  # Append the received message to the data array
+        # Continuously receive CAN messages
+        while True:
+            # Receive a CAN message
+            message = bus.recv(timeout=1)
+            if message is not None:
+                with lock:
+                    data_array.append(message)  # Append the received message to the data array
 
-   except can.CanError as e:
-       print("Error receiving message:", e)
-       return g_GPIO_ERROR
-   
-   finally:
-       # Clean up and close the bus
-       bus.shutdown()
+    except can.CanError as e:
+        print("Error receiving message:", e)
+        return g_GPIO_ERROR
+
+    finally:
+        # Clean up and close the bus
+        bus.shutdown()
 
 def api_pa_pc_read_can_data():
-   with threadLock:
-       if data_array:
-           data = data_array.pop(0)
-           return data
-       else:
-           return g_GPIO_ERROR
+    with threadLock:
+        if data_array:
+            data = data_array.pop(0)
+            return data
+        else:
+            return g_GPIO_ERROR
 
 def api_pa_pc_start_can_receiver_thread(channel):
-   # Create shared data array and lock
-   global threadLock, canReceiveThreadstarted
-   if not canReceiveThreadstarted:
-       threadLock = threading.Lock()
-       receive_thread = threading.Thread(target=api_pa_pc_receive_can_message, args=(channel, data_array, threadLock))
-       receive_thread.daemon = True
-       receive_thread.start()
-       canReceiveThreadstarted= True
-   else:
-       print("Receive Thread Already Running")
+    # Create shared data array and lock
+    global threadLock, canReceiveThreadstarted
+    if not canReceiveThreadstarted:
+        threadLock = threading.Lock()
+        receive_thread = threading.Thread(
+            target=api_pa_pc_receive_can_message, args=(channel, data_array, threadLock))
+        receive_thread.daemon = True
+        receive_thread.start()
+        canReceiveThreadstarted = True
+    else:
+        print("Receive Thread Already Running")
 
 def api_pa_pc_send_can_message(channel, arbitration_id, data):
-   try:
-       # Initialize a CAN bus interface
-       bus = can.interface.Bus(channel=channel, bustype='socketcan')
+    try:
+        # Initialize a CAN bus interface
+        bus = can.interface.Bus(channel=channel, bustype='socketcan')
 
-       # Send a CAN message
-       message = can.Message(arbitration_id=arbitration_id, data=data, is_extended_id=False)
-       bus.send(message)
-       return 0
+        # Send a CAN message
+        message = can.Message(arbitration_id=arbitration_id, data=data, is_extended_id=False)
+        bus.send(message)
+        return 0
 
-   except can.CanError as e:
-       print("Error sending message:", e)
-       return g_GPIO_ERROR
-   
-   finally:
-       # Clean up and close the bus
-       bus.shutdown()
+    except can.CanError as e:
+        print("Error sending message:", e)
+        return g_GPIO_ERROR
+
+    finally:
+        # Clean up and close the bus
+        bus.shutdown()
 
 def api_pa_pc_get_can_message_received_count():
-   return len(data_array)
+    return len(data_array)

@@ -20,7 +20,6 @@ import os
 import sys
 import time
 import serial
-import threading
 
 from satos_payload_sdk import app_framework
 from satos_payload_sdk import antaris_api_gpio as api_gpio
