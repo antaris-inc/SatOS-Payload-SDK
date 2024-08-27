@@ -43,7 +43,7 @@
 #define APP_STATE_ACTIVE                0  // Application State : Good (0), Error (non-Zero)
 
 #define STAGE_FILE_DOWNLOAD_DIR         "/opt/antaris/outbound/"    // path for staged file download
-#define STAGE_FILE_NAME                 "SampleFile.txt"            // name of staged file  
+#define STAGE_FILE_NAME                 "SampleFile.txt"            // name of staged file
 /*
  * Following counters should be incremented whenever
  * a reqeust/response (to PC) API hits error
@@ -143,7 +143,7 @@ static void handle_LogLocation(mythreadState_t *mythread)
 
     printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
     if (An_SUCCESS != ret) {
-        fprintf(stderr,"%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
         _exit(-1);
     } else {
         printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
@@ -166,7 +166,7 @@ void handle_TestGPIO(mythreadState_t *mythread)
     ret = api_gpio.api_pa_pc_get_gpio_info(&gpio_info);
 
     if (ret != An_SUCCESS) {
-        printf("Error: json file is not configured properly. Kindly check configurations done in ACP \n" );
+        printf("Error: json file is not configured properly. Kindly check configurations done in ACP \n");
         return;
     }
     printf("Total gpio pins = %d \n", gpio_info.pin_count);
@@ -216,7 +216,7 @@ void handle_TestGPIO(mythreadState_t *mythread)
 
     printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
     if (An_SUCCESS != ret) {
-        fprintf(stderr,"%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
         _exit(-1);
     } 
     
@@ -268,7 +268,7 @@ exit_sequence:
 
     printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
     if (An_SUCCESS != ret) {
-        fprintf(stderr,"%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
         _exit(-1);
     } 
     
@@ -512,7 +512,7 @@ int main(int argc, char *argv[])
     channel = api_pa_pc_create_channel(&callback_func_list);
 
     if (channel == (AntarisChannel)NULL) {
-        fprintf(stderr,"api_pa_pc_create_channel failed \n");
+        fprintf(stderr, "api_pa_pc_create_channel failed \n");
         _exit(-1);
     }
 
