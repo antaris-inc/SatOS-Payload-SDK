@@ -27,7 +27,8 @@ logger = logging.getLogger("satos_payload_sdk")
 
 DO_NOTHING_ON_HEALTH_CHECK_FAILURE = 0
 REBOOT_ON_HEALTH_CHECK_FAILURE = 1
-
+RED_COLOR = "\x1b[31;20m"
+RESET = "\x1b[0m"
 
 class Stoppable:
     def __init__(self):
@@ -124,7 +125,7 @@ class SequenceHandler(Stoppable, threading.Thread):
             self._handler_func(SequenceContext(self))
             logger.info("sequence execution completed: id=%s" % self._seq_id)
         except:
-            logger.exception("sequence execution failed: id=%s" % self._seq_id)
+            logger.exception( RED_COLOR + "sequence execution failed: id=%s" + RESET % self._seq_id)
 
         #TODO(bcwaldon): need a way to bubble up failures
         self._callback()
@@ -183,7 +184,7 @@ class ChannelClient:
             params = api_types.ReqGetCurrentLocationParams(self._get_next_cid())
             resp = api_client.api_pa_pc_get_current_location(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
-                logger.error("get_current_location request failed")
+                logger.error( RED_COLOR + "get_current_location request failed" + RESET)
                 return None
 
             resp_cond = threading.Condition()
@@ -205,7 +206,7 @@ class ChannelClient:
             params = api_types.ReqStageFileDownloadParams(self._get_next_cid(), loc)
             resp = api_client.api_pa_pc_stage_file_download(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
-                logger.error("stage_file_download request failed")
+                logger.error( RED_COLOR + "stage_file_download request failed" + RESET)
                 return None
 
             resp_cond = threading.Condition()
@@ -231,14 +232,14 @@ class ChannelClient:
 
             resp = api_client.api_pa_pc_payload_power_control(self._channel, payload_power_control_params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
-                logger.error("sequence_done request failed: resp=%d" % resp)
+                logger.error( RED_COLOR + "sequence_done request failed: resp=%d" + RESET % resp)
             return resp
             
     def _sequence_done(self, sequence_id):
         params = api_types.CmdSequenceDoneParams(sequence_id)
         resp = api_client.api_pa_pc_sequence_done(self._channel, params)
         if resp != api_types.AntarisReturnCode.An_SUCCESS:
-            logger.error("sequence_done request failed: resp=%d" % resp)
+            logger.error( RED_COLOR + "sequence_done request failed: resp=%d" + RESET % resp)
 
     def _handle_response(self, params):
         with self._cond:
@@ -254,7 +255,7 @@ class ChannelClient:
         return self._start_sequence_cb(params.sequence_id, params.sequence_params, params.scheduled_deadline)
 
     def _handle_payload_metrics(self, params):
-        print("Inside _handle_payload_metrics")
+        logger.info("Inside _handle_payload_metrics")
         return self._req_payload_metrics_cb(params)
     
 class PayloadMetrics:
@@ -315,7 +316,7 @@ class PayloadApplication(Stoppable):
         try:
             hv = self.health_check_handler_func()
         except:
-            logger.exception("health check failed")
+            logger.exception( RED_COLOR + "health check failed" + RESET )
             hv = False
 
         if hv:
@@ -356,7 +357,7 @@ class PayloadApplication(Stoppable):
             if self.seq_handler:
                 self.seq_handler.wait_until_stopped()
         except Exception as exc:
-            logger.exception("failed waiting for seq_handler to stop")
+            logger.exception( RED_COLOR + "failed waiting for seq_handler to stop" + RESET)
 
         self.channel_client._disconnect(cid)
 
@@ -366,12 +367,12 @@ class PayloadApplication(Stoppable):
         try:
             handler_func = self.sequence_handler_func_idx[seq_id]
         except KeyError:
-            logger.info("sequence_id not recognized")
+            logger.error( RED_COLOR + "sequence_id not recognized" + RESET)
             return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
         with self.lock:
             if self.seq_handler:
-                logger.error("sequence already active, unable to start another")
+                logger.error( RED_COLOR + "sequence already active, unable to start another" + RESET)
                 return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
             # spawn a thread to handle the sequence, provding a callback that coordinates
@@ -411,6 +412,6 @@ class PayloadApplication(Stoppable):
     
         resp = api_client.api_pa_pc_response_payload_metrics(self.channel_client._channel, payload_metrics)
         if resp != api_types.AntarisReturnCode.An_SUCCESS:
-            logger.error("sequence_done request failed: resp=%d" % resp)
+            logger.error( RED_COLOR + "sequence_done request failed: resp=%d" + RESET % resp)
 
         return api_types.AntarisReturnCode.An_SUCCESS

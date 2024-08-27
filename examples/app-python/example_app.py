@@ -29,6 +29,8 @@ g_GPIO_ERROR = -1
 g_Uart_Baudrate = 9600
 g_FileDownloadDir = "/opt/antaris/outbound/"    # path for staged file download
 g_StageFileName = "SampleFile.txt"              # name of staged file
+RED_COLOR = "\x1b[31;20m"   # Print logs in Red color
+RESET = "\x1b[0m"           # Reset the color and other formattings
 
 logger = logging.getLogger()
 
@@ -51,7 +53,7 @@ class Controller:
         logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude}")
 
     def handle_power_control(self, ctx):
-        print("Handling payload power")
+        logger.info("Handling payload power")
         power_state = ctx.params                    # 0 = power off, 1 = power on
         resp = ctx.client.payload_power_control(power_state)
         logger.info(f"Power control state = {power_state}. Call response is = {resp}")
@@ -76,7 +78,7 @@ class Controller:
                 if val != g_GPIO_ERROR:
                     logger.info("Initial Gpio value of pin no %d is %d ", int(readPin), val)
                 else:
-                    logger.info("Error in pin no %d", int(readPin))
+                    logger.error( RED_COLOR + "Error in pin no %d" + RESET, int(readPin))
                     return 
                 # Toggle the value
                 val = val ^ 1                      
@@ -87,7 +89,7 @@ class Controller:
                 if val != g_GPIO_ERROR:
                     logger.info("Written %d successfully to pin no %d", val, int(writePin))
                 else:
-                    logger.info("error in pin no %d ", int(writePin))
+                    logger.error( RED_COLOR + "error in pin no %d " + RESET, int(writePin))
                     return 
                 # As Read and Write pins are back-to-back connected, 
                 # Reading value of Read pin to confirm GPIO success/failure
@@ -95,7 +97,7 @@ class Controller:
                 if val != g_GPIO_ERROR:
                     logger.info("Final Gpio value of pin no %d is %d ", int(readPin), val)
                 else:
-                    logger.info("Error in pin no %d", int(readPin))
+                    logger.error(RED_COLOR+"Error in pin no %d"+RESET, int(readPin))
                     return
             i += 1
 
@@ -114,7 +116,7 @@ class Controller:
         try: 
             ser = serial.Serial(uartPort, g_Uart_Baudrate)  # Replace '9600' with your baud rate
         except Exception as e:
-            print("Error in opening serial port")
+            logger.critical( RED_COLOR + "Error in opening serial port" + RESET)
             return
         
         logger.info(f"writing data")
@@ -188,9 +190,9 @@ class Controller:
         while api_can.api_pa_pc_get_can_message_received_count() > 0: 
             received_data = api_can.api_pa_pc_read_can_data()
             if received_data != g_GPIO_ERROR:
-                print("received data =", received_data)
+                logger.info("received data =", received_data)
             else:
-                print("Error in receiving data")
+                logger.error( RED_COLOR + "Error in receiving data" + RESET)
         
         logger.info("Completed reading")
 
@@ -245,5 +247,5 @@ if __name__ == '__main__':
     try:
         app.run()
     except Exception as exc:
-        logger.exception("payload app failed")
+        logger.exception( RED_COLOR + "payload app failed" + RESET)
         sys.exit(1)
