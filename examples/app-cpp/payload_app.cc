@@ -44,6 +44,11 @@
 
 #define STAGE_FILE_DOWNLOAD_DIR         "/opt/antaris/outbound/"    // path for staged file download
 #define STAGE_FILE_NAME                 "SampleFile.txt"            // name of staged file
+
+// color for error text
+#define RED_COLOR "\x1b[31;20m"
+#define RESET "\x1b[0m"
+
 /*
  * Following counters should be incremented whenever
  * a reqeust/response (to PC) API hits error
@@ -90,7 +95,7 @@ void handle_HelloWorld(mythreadState_t *mythread)
 
     printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
     if (An_SUCCESS != ret) {
-        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        fprintf(stderr, RED_COLOR "%s: api_pa_pc_sequence_done failed, ret %d\n" RESET, __FUNCTION__, ret);
         _exit(-1);
     } else {
         printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
@@ -111,7 +116,7 @@ void handle_HelloFriend(mythreadState_t *mythread)
 
     printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
     if (An_SUCCESS != ret) {
-        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        fprintf(stderr, RED_COLOR "%s: api_pa_pc_sequence_done failed, ret %d\n" RESET, __FUNCTION__, ret);
         _exit(-1);
     } else {
         printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
@@ -130,7 +135,7 @@ static void handle_LogLocation(mythreadState_t *mythread)
 
     printf("%s: sent get-current-location request with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
     if (An_SUCCESS != ret) {
-        fprintf(stderr, "%s: api_pa_pc_get_current_location failed, ret %d\n", __FUNCTION__, ret);
+        fprintf(stderr,  RED_COLOR "%s: api_pa_pc_get_current_location failed, ret %d\n" RESET, __FUNCTION__, ret);
         _exit(-1);
     } else {
         printf("%s: api_pa_pc_get_current_location returned success, ret %d\n", __FUNCTION__, ret);
@@ -143,7 +148,7 @@ static void handle_LogLocation(mythreadState_t *mythread)
 
     printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
     if (An_SUCCESS != ret) {
-        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        fprintf(stderr, RED_COLOR "%s: api_pa_pc_sequence_done failed, ret %d\n" RESET, __FUNCTION__, ret);
         _exit(-1);
     } else {
         printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
@@ -166,7 +171,7 @@ void handle_TestGPIO(mythreadState_t *mythread)
     ret = api_gpio.api_pa_pc_get_gpio_info(&gpio_info);
 
     if (ret != An_SUCCESS) {
-        printf("Error: json file is not configured properly. Kindly check configurations done in ACP \n");
+        printf( RED_COLOR "Error: json file is not configured properly. Kindly check configurations done in ACP \n"  RESET);
         return;
     }
     printf("Total gpio pins = %d \n", gpio_info.pin_count);
@@ -180,7 +185,7 @@ void handle_TestGPIO(mythreadState_t *mythread)
         val = api_gpio.api_pa_pc_read_gpio(gpio_info.gpio_port, readPin);
 
         if (val == GPIO_ERROR) {
-            printf("Error in pin no %d \n", int(readPin));
+            printf( RED_COLOR "Error in pin no %d \n" RESET, int(readPin));
             return;
         }
         printf("Initial Gpio value of pin no %d is %d \n", int(readPin), val);
@@ -191,7 +196,7 @@ void handle_TestGPIO(mythreadState_t *mythread)
         // Writing value to WritePin.
         ret = api_gpio.api_pa_pc_write_gpio(gpio_info.gpio_port, writePin, val);
         if (ret == GPIO_ERROR) {
-            printf("Error in pin no %d \n", int(writePin));
+            printf( RED_COLOR "Error in pin no %d \n" RESET, int(writePin));
             return;
         }
         printf("Written %d successfully to pin no %d \n", val, int(writePin));
@@ -201,7 +206,7 @@ void handle_TestGPIO(mythreadState_t *mythread)
          */
         val = api_gpio.api_pa_pc_read_gpio(gpio_info.gpio_port, readPin);
         if (val == GPIO_ERROR) {
-            printf("Error in pin no %d \n", int(readPin));
+            printf( RED_COLOR "Error in pin no %d \n" RESET, int(readPin));
             return;
         }
         printf("Final Gpio value of pin no %d is %d \n", int(readPin), val);
@@ -216,7 +221,7 @@ void handle_TestGPIO(mythreadState_t *mythread)
 
     printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
     if (An_SUCCESS != ret) {
-        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        fprintf(stderr, RED_COLOR "%s: api_pa_pc_sequence_done failed, ret %d\n" RESET, __FUNCTION__, ret);
         _exit(-1);
     } 
     
@@ -236,7 +241,7 @@ void handle_StageFile(mythreadState_t *mythread)
     filename_size = strnlen(STAGE_FILE_DOWNLOAD_DIR, MAX_FILE_OR_PROP_LEN_NAME) + strnlen(STAGE_FILE_NAME, MAX_FILE_OR_PROP_LEN_NAME);
 
     if (filename_size > MAX_FILE_OR_PROP_LEN_NAME) {
-        printf("Error: Stagefile path can not be greater than %d \n", MAX_FILE_OR_PROP_LEN_NAME);
+        printf( RED_COLOR "Error: Stagefile path can not be greater than %d \n" RESET, MAX_FILE_OR_PROP_LEN_NAME);
         goto exit_sequence;
     }
 
@@ -245,7 +250,7 @@ void handle_StageFile(mythreadState_t *mythread)
     // Adding dummy data in file
     fp = fopen(download_file_params.file_path, "w");
     if (fp == NULL) {
-        printf("Error: Can not open file %s. Sequence failed \n", download_file_params.file_path);
+        printf( RED_COLOR "Error: Can not open file %s. Sequence failed \n" RESET, download_file_params.file_path);
         goto exit_sequence;
     }
     fprintf(fp, "Testing file download with payload \n");
@@ -257,7 +262,7 @@ void handle_StageFile(mythreadState_t *mythread)
     ret = api_pa_pc_stage_file_download(channel, &download_file_params);
 
     if (ret == An_GENERIC_FAILURE) {
-        printf("Error: Failed to stage file %s \n", download_file_params.file_path);
+        printf( RED_COLOR "Error: Failed to stage file %s \n" RESET, download_file_params.file_path);
     }
 
 exit_sequence:    
@@ -268,7 +273,7 @@ exit_sequence:
 
     printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
     if (An_SUCCESS != ret) {
-        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        fprintf(stderr, RED_COLOR "%s: api_pa_pc_sequence_done failed, ret %d\n" RESET, __FUNCTION__, ret);
         _exit(-1);
     } 
     
@@ -355,7 +360,7 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
         return StageFile_Sequence_IDX;
     }
 
-    printf("Unknown sequence, returning -1\n");
+    printf( RED_COLOR "Unknown sequence, returning -1\n" RESET);
     return -1;
 }
 
@@ -371,7 +376,7 @@ AntarisReturnCode start_sequence(StartSequenceParams *start_seq_param)
     // Start Sequence FSM Thread
     current_sequence_idx = get_sequence_idx_from_seq_string(&start_seq_param->sequence_id[0]);
     if (current_sequence_idx ==  -1) {
-        printf("Invalid Sequence \n");
+        printf( RED_COLOR "Invalid Sequence \n" RESET);
         return An_GENERIC_FAILURE;
     }
     mythreadState_t *thread_state = payload_sequences_fsms[current_sequence_idx];
@@ -393,7 +398,7 @@ void wakeup_seq_fsm(mythreadState_t *threadState)
 AntarisReturnCode shutdown_app(ShutdownParams *shutdown_param)
 {
     if (shutdown_param == NULL){
-        printf("ERROR: shutdown params are NULL!");
+        printf( RED_COLOR "ERROR: shutdown params are NULL!" RESET);
         _exit(-1);
     }
     RespShutdownParams   resp_shutdown_params;
@@ -512,7 +517,7 @@ int main(int argc, char *argv[])
     channel = api_pa_pc_create_channel(&callback_func_list);
 
     if (channel == (AntarisChannel)NULL) {
-        fprintf(stderr, "api_pa_pc_create_channel failed \n");
+        fprintf(stderr, RED_COLOR "api_pa_pc_create_channel failed \n" RESET);
         _exit(-1);
     }
 
@@ -530,7 +535,7 @@ int main(int argc, char *argv[])
     register_params.correlation_id = correlation_id;
     register_params.health_check_fail_action = 0;
     ret = api_pa_pc_register(channel, &register_params);
-    printf("api_pa_pc_register returned %d (%s)\n", ret, ret == An_SUCCESS ? "SUCCESS" : "FAILURE");
+    printf("api_pa_pc_register returned %d (%s)\n", ret, ret == An_SUCCESS ? "SUCCESS" :  RED_COLOR "FAILURE" RESET);
     correlation_id += 1;
 
     // After registration, simulated PC will ask application to start sequence HelloWorld
