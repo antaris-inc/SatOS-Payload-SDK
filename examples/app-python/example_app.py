@@ -165,7 +165,7 @@ class Controller:
 
         # Define the CAN channel to use (assuming the first device)
         channel = canInfo.can_dev[0]
-        logger.info("Starting CAN receiver port", channel)
+        logger.info("Starting CAN receiver port %s", channel)
 
         # Starting CAN received thread
         api_can.api_pa_pc_start_can_receiver_thread(channel)
@@ -183,7 +183,7 @@ class Controller:
             api_can.api_pa_pc_send_can_message(channel, arb_id, data_bytes)
             time.sleep(1)
 
-        logger.info("Data send = ", api_can.api_pa_pc_get_can_message_received_count())
+        logger.info("Data send = %d", api_can.api_pa_pc_get_can_message_received_count())
 
         while api_can.api_pa_pc_get_can_message_received_count() > 0: 
             received_data = api_can.api_pa_pc_read_can_data()
