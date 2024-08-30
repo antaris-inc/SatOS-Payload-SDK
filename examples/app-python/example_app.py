@@ -114,7 +114,7 @@ class Controller:
         try: 
             ser = serial.Serial(uartPort, g_Uart_Baudrate)  # Replace '9600' with your baud rate
         except Exception as e:
-            logger.critical("Error in opening serial port")
+            logger.error("Error in opening serial port")
             return
         
         logger.info(f"writing data")
