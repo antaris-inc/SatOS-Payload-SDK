@@ -254,7 +254,7 @@ class ChannelClient:
         return self._start_sequence_cb(params.sequence_id, params.sequence_params, params.scheduled_deadline)
 
     def _handle_payload_metrics(self, params):
-        print("Inside _handle_payload_metrics")
+        logger.info("Inside _handle_payload_metrics")
         return self._req_payload_metrics_cb(params)
     
 class PayloadMetrics:
@@ -366,7 +366,7 @@ class PayloadApplication(Stoppable):
         try:
             handler_func = self.sequence_handler_func_idx[seq_id]
         except KeyError:
-            logger.info("sequence_id not recognized")
+            logger.error("sequence_id not recognized")
             return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
         with self.lock:
