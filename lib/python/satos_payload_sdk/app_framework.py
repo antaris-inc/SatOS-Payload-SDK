@@ -371,7 +371,8 @@ class PayloadApplication(Stoppable):
 
         with self.lock:
             if self.seq_handler:
-                logger.warn("sequence already active, but starting another sequence")
+                logger.error("sequence already active, unable to start another")
+                return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
             # spawn a thread to handle the sequence, providing a callback that coordinates
             # shutdown with the payload app
