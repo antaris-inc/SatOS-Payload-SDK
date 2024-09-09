@@ -20,6 +20,7 @@ import os
 import sys
 import time
 import serial
+import threading
 
 from satos_payload_sdk import app_framework
 from satos_payload_sdk import antaris_api_gpio as api_gpio
@@ -32,18 +33,49 @@ g_StageFileName = "SampleFile.txt"              # name of staged file
 
 logger = logging.getLogger()
 
+# Flag to indicate if the thread should stop
+stop_thread = False
+thread_created = False
+hello_thread = None
 
 class Controller:
 
     def is_healthy(self):
         logger.info("Health check succeeded")
         return True
+    
+    # Function to print numbers from 1 to 100000
+    def print_numbers(self):
+        global stop_thread
+        for i in range(1, 100001):
+            if stop_thread:
+                print("Thread stopped.")
+                return
+            time.sleep(2) # Slow down printing for demo purposes
+            print(i)
 
     def handle_hello_world(self, ctx):
+        global thread_created, hello_thread, stop_thread
         logger.info("Handling sequence: hello, world!")
+        if not thread_created:
+            stop_thread = False
+            hello_thread = threading.Thread(target=self.print_numbers, name="hello")
+            hello_thread.start()
+            thread_created = True
+            print("Thread 'hello' started.")
+        else:
+            print("Thread 'hello' is already running.")
 
     def handle_hello_friend(self, ctx):
+        global stop_thread, thread_created
         name = ctx.params
+        if thread_created:
+            stop_thread = True
+            hello_thread.join()  # Wait for the thread to terminate
+            thread_created = False
+            print("Thread 'hello' stopped.")
+        else:
+            print("No thread to stop.")
         logger.info(f"Handling sequence: hello, {name}!")
 
     def handle_log_location(self, ctx):
