@@ -36,47 +36,55 @@ logger = logging.getLogger()
 # Flag to indicate if the thread should stop
 stop_thread = False
 thread_created = False
-hello_thread = None
+demo_thread = None
 
 class Controller:
 
     def is_healthy(self):
         logger.info("Health check succeeded")
         return True
-    
-    # Function to print numbers from 1 to 100000
-    def print_numbers(self):
-        global stop_thread
-        for i in range(1, 100001):
-            if stop_thread:
-                print("Thread stopped.")
-                return
-            time.sleep(2) # Slow down printing for demo purposes
-            print(i)
 
     def handle_hello_world(self, ctx):
-        global thread_created, hello_thread, stop_thread
         logger.info("Handling sequence: hello, world!")
-        if not thread_created:
-            stop_thread = False
-            hello_thread = threading.Thread(target=self.print_numbers, name="hello")
-            hello_thread.start()
-            thread_created = True
-            print("Thread 'hello' started.")
-        else:
-            print("Thread 'hello' is already running.")
 
     def handle_hello_friend(self, ctx):
-        global stop_thread, thread_created
         name = ctx.params
+        logger.info(f"Handling sequence: hello, {name}!")
+
+    # Function to print numbers from 1 to 1000
+    def demo_counter(self):
+        global stop_thread, thread_created
+        for i in range(1, 1001):
+            if stop_thread:
+                logger.info("Thread demo stopped.")
+                thread_created = False
+                return
+            time.sleep(2)   # Slow down printing for demo purposes
+            logger.info(i)
+        thread_created = False
+
+    def handle_demo_thread_start(self, ctx):
+        global thread_created, demo_thread, stop_thread
+        logger.info("Handling sequence: demo thread start")
+        if not thread_created:
+            stop_thread = False
+            demo_thread = threading.Thread(target=self.demo_counter, name="demo")
+            demo_thread.start()
+            thread_created = True
+            logger.info("Thread 'demo' started.")
+        else:
+            logger.info("Thread 'demo' is already running.")
+
+    def handle_demo_thread_stop(self, ctx):
+        global stop_thread, thread_created
+        logger.info("Handling sequence: demo thread stop")
         if thread_created:
             stop_thread = True
-            hello_thread.join()  # Wait for the thread to terminate
+            demo_thread.join()  # Wait for the thread to terminate
             thread_created = False
-            print("Thread 'hello' stopped.")
+            logger.info("Thread 'demo' stopped.")
         else:
-            print("No thread to stop.")
-        logger.info(f"Handling sequence: hello, {name}!")
+            logger.info("No 'demo' thread to stop.")
 
     def handle_log_location(self, ctx):
         loc = ctx.client.get_current_location()
@@ -240,6 +248,8 @@ def new():
     # Note : SatOS-Payload-SDK supports sequence upto 16 characters long
     app.mount_sequence("HelloWorld", ctl.handle_hello_world)
     app.mount_sequence("HelloFriend", ctl.handle_hello_friend)
+    app.mount_sequence("ThreadStart", ctl.handle_demo_thread_start)
+    app.mount_sequence("ThreadStop", ctl.handle_demo_thread_stop)
     app.mount_sequence("LogLocation", ctl.handle_log_location)
     app.mount_sequence("TestGPIO", ctl.handle_test_gpio)
     app.mount_sequence("UARTLoopback", ctl.handle_uart_loopback)
