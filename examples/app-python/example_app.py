@@ -52,28 +52,26 @@ class Controller:
         logger.info(f"Handling sequence: hello, {name}!")
 
     # Function to print numbers from 1 to 1000
-    def demo_counter(self):
+    def demo_infinite_job(self):
         global stop_thread, thread_created
-        for i in range(1, 1001):
+        while 1:
             if stop_thread:
-                logger.info("Thread demo stopped.")
+                logger.info("Thread demo_infinite_job stopped.")
                 thread_created = False
                 return
-            time.sleep(2)   # Slow down printing for demo purposes
-            logger.info(i)
-        thread_created = False
+            time.sleep(2)
 
     def handle_demo_thread_start(self, ctx):
         global thread_created, demo_thread, stop_thread
-        logger.info("Handling sequence: demo thread start")
+        logger.info("Handling sequence: demo_infinite_job thread start")
         if not thread_created:
             stop_thread = False
-            demo_thread = threading.Thread(target=self.demo_counter, name="demo")
+            demo_thread = threading.Thread(target=self.demo_infinite_job, name="demo_infinite_job")
             demo_thread.start()
             thread_created = True
-            logger.info("Thread 'demo' started.")
+            logger.info("Thread 'demo_infinite_job' started.")
         else:
-            logger.info("Thread 'demo' is already running.")
+            logger.info("Thread 'demo_infinite_job' is already running.")
 
     def handle_demo_thread_stop(self, ctx):
         global stop_thread, thread_created
@@ -82,9 +80,9 @@ class Controller:
             stop_thread = True
             demo_thread.join()  # Wait for the thread to terminate
             thread_created = False
-            logger.info("Thread 'demo' stopped.")
+            logger.info("Thread 'demo_infinite_job' stopped.")
         else:
-            logger.info("No 'demo' thread to stop.")
+            logger.info("No 'demo_infinite_job' thread to stop.")
 
     def handle_log_location(self, ctx):
         loc = ctx.client.get_current_location()
