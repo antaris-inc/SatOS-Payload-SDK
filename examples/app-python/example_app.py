@@ -51,7 +51,6 @@ class Controller:
         name = ctx.params
         logger.info(f"Handling sequence: hello, {name}!")
 
-    # Function to print numbers from 1 to 1000
     def demo_infinite_job(self):
         global stop_thread, thread_created
         while 1:
