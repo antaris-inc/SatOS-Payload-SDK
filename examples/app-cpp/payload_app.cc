@@ -385,8 +385,13 @@ AntarisReturnCode start_sequence(StartSequenceParams *start_seq_param)
 }
 
 void wakeup_seq_fsm(mythreadState_t *threadState)
-{
+{   
+    if (threadState == NULL) {
+        printf("thread state is NULL!!\n");
+        return;
+    }
     sleep(1); // avoid lost wakeups by giving fsm thread time to block on its pthread_cond_wait
+    printf("called wakeup_seq_fsm for %s\n", threadState->seq_id);
     pthread_cond_signal(&threadState->condition);
 }
 
@@ -416,9 +421,12 @@ AntarisReturnCode shutdown_app(ShutdownParams *shutdown_param)
 
     api_pa_pc_response_shutdown(channel, &resp_shutdown_params);
 
-    printf("Current sequence id: %d", current_sequence_idx);
-    
-    wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
+    printf("Current sequence id: %d\n", current_sequence_idx);
+
+    for (int thread_seq_id=0; thread_seq_id< SEQUENCE_ID_MAX; thread_seq_id++){
+        printf("Stopping %s\n", payload_sequences_fsms[thread_seq_id]->seq_id);
+        wakeup_seq_fsm(payload_sequences_fsms[thread_seq_id]);
+    }
 
     return An_SUCCESS;
 }
