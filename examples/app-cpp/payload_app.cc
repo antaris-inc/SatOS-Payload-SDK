@@ -423,7 +423,7 @@ AntarisReturnCode shutdown_app(ShutdownParams *shutdown_param)
 
     printf("Current sequence id: %d\n", current_sequence_idx);
 
-    for (int thread_seq_id=0; thread_seq_id< SEQUENCE_ID_MAX; thread_seq_id++){
+    for ( int thread_seq_id = 0; thread_seq_id < SEQUENCE_ID_MAX; thread_seq_id++ ) {
         printf("Stopping %s\n", payload_sequences_fsms[thread_seq_id]->seq_id);
         wakeup_seq_fsm(payload_sequences_fsms[thread_seq_id]);
     }
