@@ -287,6 +287,9 @@ class PayloadApplication(Stoppable):
         # holds active sequence handler
         self.seq_handler = None
 
+        # holds active sequence handlers seq_ids
+        self.seq_handlers_list = []
+
         # index of registered sequence handler funcs
         self.sequence_handler_func_idx = dict()
 
@@ -369,9 +372,13 @@ class PayloadApplication(Stoppable):
             logger.error("sequence_id not recognized")
             return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
-        with self.lock:
-            if self.seq_handler:
-                logger.warning("Previous sequence already active, starting another sequence")
+        # Keep track of the active sequences
+        if seq_id in self.seq_handlers_list:
+            logger.error("sequence already active, unable to start another")
+            return api_types.AntarisReturnCode.An_GENERIC_FAILURE
+        # If sequence not active then append it to the list
+        else:
+            self.seq_handlers_list.append(seq_id)
 
             # spawn a thread to handle the sequence, provding a callback that coordinates
             # shutdown with the payload app
@@ -379,6 +386,7 @@ class PayloadApplication(Stoppable):
                 with self.lock:
                     self.seq_handler = None
                     self.channel_client._sequence_done(seq_id)
+                    self.seq_handlers_list.remove(seq_id)
 
             self.seq_handler = SequenceHandler(seq_id, seq_params, seq_deadline, self.channel_client, handler_func, callback)
             self.seq_handler.start()
