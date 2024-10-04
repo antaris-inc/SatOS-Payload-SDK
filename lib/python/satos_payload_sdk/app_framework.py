@@ -373,25 +373,26 @@ class PayloadApplication(Stoppable):
             return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
         # Keep track of the active sequences
-        if seq_id in self.active_seq_handlers_list:
-            logger.error("sequence already active, unable to start another")
-            return api_types.AntarisReturnCode.An_GENERIC_FAILURE
+        with self.lock:
+            if seq_id in self.active_seq_handlers_list:
+                logger.error("sequence already active, unable to start another")
+                return api_types.AntarisReturnCode.An_GENERIC_FAILURE
         # If sequence not active then append it to the list
-        else:
-            self.active_seq_handlers_list.append(seq_id)
+            else:
+                self.active_seq_handlers_list.append(seq_id)
 
-            # spawn a thread to handle the sequence, provding a callback that coordinates
-            # shutdown with the payload app
-            def callback():
-                with self.lock:
-                    self.seq_handler = None
-                    self.channel_client._sequence_done(seq_id)
-                    self.active_seq_handlers_list.remove(seq_id)
+                # spawn a thread to handle the sequence, provding a callback that coordinates
+                # shutdown with the payload app
+                def callback():
+                    with self.lock:
+                        self.seq_handler = None
+                        self.channel_client._sequence_done(seq_id)
+                        self.active_seq_handlers_list.remove(seq_id)
 
-            self.seq_handler = SequenceHandler(seq_id, seq_params, seq_deadline, self.channel_client, handler_func, callback)
-            self.seq_handler.start()
+                self.seq_handler = SequenceHandler(seq_id, seq_params, seq_deadline, self.channel_client, handler_func, callback)
+                self.seq_handler.start()
 
-            return api_types.AntarisReturnCode.An_SUCCESS
+                return api_types.AntarisReturnCode.An_SUCCESS
 
     def _handle_shutdown(self, params):
         logger.info("handling shutdown request")
