@@ -284,11 +284,11 @@ class PayloadApplication(Stoppable):
         # used to coordinate local state modifications
         self.lock = threading.Lock()
 
-        # holds active sequence handler
-        self.seq_handler = None
+        # holds active sequence handler objects
+        self.active_seq_handlers = []
 
         # holds active sequence handlers seq_ids
-        self.active_seq_handlers_list = []
+        self.active_seq_ids_list = []
 
         # index of registered sequence handler funcs
         self.sequence_handler_func_idx = dict()
@@ -349,17 +349,19 @@ class PayloadApplication(Stoppable):
         with self.lock:
             cid = self.shutdown_correlation_id
 
-            if self.seq_handler:
-                logger.info("stopping active sequence")
-                self.seq_handler.request_stop()
+            if self.active_seq_handlers:
+                logger.info("stopping active sequences")
+                for handler in self.active_seq_handlers:
+                    handler.request_stop()
 
         # might hit a race conditions here on shutdown without
         # relying on a lock, so we simply log and move on
+        # Wait for all active sequence handlers to stop
         try:
-            if self.seq_handler:
-                self.seq_handler.wait_until_stopped()
+            for handler in self.active_seq_handlers:
+                handler.wait_until_stopped()
         except Exception as exc:
-            logger.exception("failed waiting for seq_handler to stop")
+            logger.exception("failed waiting for sequence handlers to stop")
 
         self.channel_client._disconnect(cid)
 
@@ -374,25 +376,28 @@ class PayloadApplication(Stoppable):
 
         # Keep track of the active sequences
         with self.lock:
-            if seq_id in self.active_seq_handlers_list:
+            if seq_id in self.active_seq_ids_list:
                 logger.error("sequence already active, unable to start another")
                 return api_types.AntarisReturnCode.An_GENERIC_FAILURE
-        # If sequence not active then append it to the list
-            else:
-                self.active_seq_handlers_list.append(seq_id)
+            
+            # If sequence not active then append it to the list
+            self.active_seq_ids_list.append(seq_id)
 
                 # spawn a thread to handle the sequence, provding a callback that coordinates
                 # shutdown with the payload app
-                def callback():
-                    with self.lock:
-                        self.seq_handler = None
-                        self.channel_client._sequence_done(seq_id)
-                        self.active_seq_handlers_list.remove(seq_id)
+            def callback(sequence_handler):
+                with self.lock:
+                    sequence_handler.stopped()
+                    self.channel_client._sequence_done(seq_id)
+                    self.active_seq_handlers.remove(sequence_handler)
+                    self.active_seq_ids_list.remove(seq_id)
 
-                self.seq_handler = SequenceHandler(seq_id, seq_params, seq_deadline, self.channel_client, handler_func, callback)
-                self.seq_handler.start()
+            sequence_handler = SequenceHandler(seq_id, seq_params, seq_deadline, self.channel_client, handler_func, lambda: callback(sequence_handler))
+            self.active_seq_handlers.append(sequence_handler)
+            
+            sequence_handler.start()
 
-                return api_types.AntarisReturnCode.An_SUCCESS
+            return api_types.AntarisReturnCode.An_SUCCESS
 
     def _handle_shutdown(self, params):
         logger.info("handling shutdown request")
@@ -408,9 +413,6 @@ class PayloadApplication(Stoppable):
 
     def _req_payload_metrics(self, params):
         logger.info("Handling req_payload_metrics")
-
-    #    with self.lock:
-    #        self._req_payload_metrics.correlation_id = params.correlation_id
 
         payload_metrics = self.payload_metrics
 
