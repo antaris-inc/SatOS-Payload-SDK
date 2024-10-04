@@ -285,10 +285,7 @@ class PayloadApplication(Stoppable):
         self.lock = threading.Lock()
 
         # holds active sequence handler objects
-        self.active_seq_handlers = []
-
-        # holds active sequence handlers seq_ids
-        self.active_seq_ids_list = []
+        self.active_seq_handlers_map = {}
 
         # index of registered sequence handler funcs
         self.sequence_handler_func_idx = dict()
@@ -349,16 +346,16 @@ class PayloadApplication(Stoppable):
         with self.lock:
             cid = self.shutdown_correlation_id
 
-            if self.active_seq_handlers:
+            if self.active_seq_handlers_map:
                 logger.info("stopping active sequences")
-                for handler in self.active_seq_handlers:
+                for _, handler in self.active_seq_handlers_map.items():
                     handler.request_stop()
 
         # might hit a race conditions here on shutdown without
         # relying on a lock, so we simply log and move on
         # Wait for all active sequence handlers to stop
         try:
-            for handler in self.active_seq_handlers:
+            for _, handler in self.active_seq_handlers_map.items():
                 handler.wait_until_stopped()
         except Exception as exc:
             logger.exception("failed waiting for sequence handlers to stop")
@@ -371,30 +368,28 @@ class PayloadApplication(Stoppable):
         try:
             handler_func = self.sequence_handler_func_idx[seq_id]
         except KeyError:
-            logger.error("sequence_id not recognized")
+            logger.error(f"sequence_id not recognized: {seq_id}")
             return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
         # Keep track of the active sequences
         with self.lock:
-            if seq_id in self.active_seq_ids_list:
+            if seq_id in self.active_seq_handlers_map:
                 logger.error("sequence already active, unable to start another")
                 return api_types.AntarisReturnCode.An_GENERIC_FAILURE
             
-            # If sequence not active then append it to the list
-            self.active_seq_ids_list.append(seq_id)
-
                 # spawn a thread to handle the sequence, provding a callback that coordinates
                 # shutdown with the payload app
             def callback(sequence_handler):
                 with self.lock:
                     sequence_handler.stopped()
                     self.channel_client._sequence_done(seq_id)
-                    self.active_seq_handlers.remove(sequence_handler)
-                    self.active_seq_ids_list.remove(seq_id)
+                    del self.active_seq_handlers_map[seq_id]
 
             sequence_handler = SequenceHandler(seq_id, seq_params, seq_deadline, self.channel_client, handler_func, lambda: callback(sequence_handler))
-            self.active_seq_handlers.append(sequence_handler)
-            
+
+            # If sequence not active then append it to the list
+            self.active_seq_handlers_map[seq_id] = sequence_handler
+            logger.warning(f"Active Sequences: {self.active_seq_handlers_map}")
             sequence_handler.start()
 
             return api_types.AntarisReturnCode.An_SUCCESS
