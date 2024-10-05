@@ -348,14 +348,14 @@ class PayloadApplication(Stoppable):
 
             if self.active_seq_handlers_map:
                 logger.info("stopping active sequences")
-                for _, handler in self.active_seq_handlers_map.items():
+                for handler in self.active_seq_handlers_map.values():
                     handler.request_stop()
 
         # might hit a race conditions here on shutdown without
         # relying on a lock, so we simply log and move on
         # Wait for all active sequence handlers to stop
         try:
-            for _, handler in self.active_seq_handlers_map.items():
+            for handler in self.active_seq_handlers_map.values():
                 handler.wait_until_stopped()
         except Exception as exc:
             logger.exception("failed waiting for sequence handlers to stop")
