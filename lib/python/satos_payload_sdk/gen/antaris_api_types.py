@@ -154,14 +154,20 @@ def app_to_peer_ReqGetCurrentLocationParams(app_struct):
 ## @param: longitude                                       :    current latitude                                
 ## @param: latitude                                        :    current longitude                               
 ## @param: altitude                                        :    current altitude                                
+## @param: sd_longitude                                    :    Standard Deviation latitude                     
+## @param: sd_latitude                                     :    Standard Deviation longitude                    
+## @param: sd_altitude                                     :    Standard Deviation altitude                     
 ## @param: determined_at                                   :    time (seconds since epoch) when the location was determined
 class RespGetCurrentLocationParams:
-    def __init__(self, correlation_id, req_status, longitude, latitude, altitude, determined_at):
+    def __init__(self, correlation_id, req_status, longitude, latitude, altitude, sd_longitude, sd_latitude, sd_altitude, determined_at):
         self.correlation_id = correlation_id
         self.req_status = req_status
         self.longitude = longitude
         self.latitude = latitude
         self.altitude = altitude
+        self.sd_longitude = sd_longitude
+        self.sd_latitude = sd_latitude
+        self.sd_altitude = sd_altitude
         self.determined_at = determined_at
 
     def __str__(self):
@@ -176,6 +182,12 @@ class RespGetCurrentLocationParams:
         ret_str += str(self.latitude) + "\n"
         ret_str += "altitude:\n"
         ret_str += str(self.altitude) + "\n"
+        ret_str += "sd_longitude:\n"
+        ret_str += str(self.sd_longitude) + "\n"
+        ret_str += "sd_latitude:\n"
+        ret_str += str(self.sd_latitude) + "\n"
+        ret_str += "sd_altitude:\n"
+        ret_str += str(self.sd_altitude) + "\n"
         ret_str += "determined_at:\n"
         ret_str += str(self.determined_at) + "\n"
 
@@ -190,11 +202,14 @@ def peer_to_app_RespGetCurrentLocationParams(peer_struct):
     longitude = peer_struct.longitude
     latitude = peer_struct.latitude
     altitude = peer_struct.altitude
+    sd_longitude = peer_struct.sd_longitude
+    sd_latitude = peer_struct.sd_latitude
+    sd_altitude = peer_struct.sd_altitude
     determined_at = peer_struct.determined_at
-    return RespGetCurrentLocationParams(correlation_id, req_status, longitude, latitude, altitude, determined_at)
+    return RespGetCurrentLocationParams(correlation_id, req_status, longitude, latitude, altitude, sd_longitude, sd_latitude, sd_altitude, determined_at)
 
 def app_to_peer_RespGetCurrentLocationParams(app_struct):
-    return antaris_api_pb2.RespGetCurrentLocationParams(correlation_id = app_struct.correlation_id, req_status = app_struct.req_status, longitude = app_struct.longitude, latitude = app_struct.latitude, altitude = app_struct.altitude, determined_at = app_struct.determined_at)
+    return antaris_api_pb2.RespGetCurrentLocationParams(correlation_id = app_struct.correlation_id, req_status = app_struct.req_status, longitude = app_struct.longitude, latitude = app_struct.latitude, altitude = app_struct.altitude, sd_longitude = app_struct.sd_longitude, sd_latitude = app_struct.sd_latitude, sd_altitude = app_struct.sd_altitude, determined_at = app_struct.determined_at)
 
 ## @class: ReqStageFileDownloadParams
 ## @brief: Request parameters to stage file download

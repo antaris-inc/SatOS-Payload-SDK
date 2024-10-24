@@ -86,9 +86,12 @@ Expected async response from PC: ``ResponseGetCurrentLocation``
 
   * ``0`` if request succeeded, otherwise non-zero value indicating failure 
 
-* ``FLOAT Latitude``
-* ``FLOAT Longitude``
-* ``FLOAT Altitude``
+* ``DOUBLE Latitude``
+* ``DOUBLE Longitude``
+* ``DOUBLE Altitude``
+* ``FLOAT Standard Deviation Altitude``
+* ``FLOAT Standard Deviation Altitude``
+* ``FLOAT Standard Deviation Altitude``
 * ``U64 DeterminedAt``
 
   * Time at which the location was determined 

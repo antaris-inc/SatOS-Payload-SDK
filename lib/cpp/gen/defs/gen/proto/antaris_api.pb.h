@@ -962,8 +962,11 @@ class RespGetCurrentLocationParams final :
     kReqStatusFieldNumber = 2,
     kLongitudeFieldNumber = 3,
     kLatitudeFieldNumber = 4,
-    kDeterminedAtFieldNumber = 6,
     kAltitudeFieldNumber = 5,
+    kSdLongitudeFieldNumber = 6,
+    kSdLatitudeFieldNumber = 7,
+    kDeterminedAtFieldNumber = 9,
+    kSdAltitudeFieldNumber = 8,
   };
   // int32 correlation_id = 1;
   void clear_correlation_id();
@@ -983,25 +986,52 @@ class RespGetCurrentLocationParams final :
   void _internal_set_req_status(int32_t value);
   public:
 
-  // float longitude = 3;
+  // double longitude = 3;
   void clear_longitude();
-  float longitude() const;
-  void set_longitude(float value);
+  double longitude() const;
+  void set_longitude(double value);
   private:
-  float _internal_longitude() const;
-  void _internal_set_longitude(float value);
+  double _internal_longitude() const;
+  void _internal_set_longitude(double value);
   public:
 
-  // float latitude = 4;
+  // double latitude = 4;
   void clear_latitude();
-  float latitude() const;
-  void set_latitude(float value);
+  double latitude() const;
+  void set_latitude(double value);
   private:
-  float _internal_latitude() const;
-  void _internal_set_latitude(float value);
+  double _internal_latitude() const;
+  void _internal_set_latitude(double value);
   public:
 
-  // int64 determined_at = 6;
+  // double altitude = 5;
+  void clear_altitude();
+  double altitude() const;
+  void set_altitude(double value);
+  private:
+  double _internal_altitude() const;
+  void _internal_set_altitude(double value);
+  public:
+
+  // float sd_longitude = 6;
+  void clear_sd_longitude();
+  float sd_longitude() const;
+  void set_sd_longitude(float value);
+  private:
+  float _internal_sd_longitude() const;
+  void _internal_set_sd_longitude(float value);
+  public:
+
+  // float sd_latitude = 7;
+  void clear_sd_latitude();
+  float sd_latitude() const;
+  void set_sd_latitude(float value);
+  private:
+  float _internal_sd_latitude() const;
+  void _internal_set_sd_latitude(float value);
+  public:
+
+  // int64 determined_at = 9;
   void clear_determined_at();
   int64_t determined_at() const;
   void set_determined_at(int64_t value);
@@ -1010,13 +1040,13 @@ class RespGetCurrentLocationParams final :
   void _internal_set_determined_at(int64_t value);
   public:
 
-  // float altitude = 5;
-  void clear_altitude();
-  float altitude() const;
-  void set_altitude(float value);
+  // float sd_altitude = 8;
+  void clear_sd_altitude();
+  float sd_altitude() const;
+  void set_sd_altitude(float value);
   private:
-  float _internal_altitude() const;
-  void _internal_set_altitude(float value);
+  float _internal_sd_altitude() const;
+  void _internal_set_sd_altitude(float value);
   public:
 
   // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.RespGetCurrentLocationParams)
@@ -1028,10 +1058,13 @@ class RespGetCurrentLocationParams final :
   typedef void DestructorSkippable_;
   int32_t correlation_id_;
   int32_t req_status_;
-  float longitude_;
-  float latitude_;
+  double longitude_;
+  double latitude_;
+  double altitude_;
+  float sd_longitude_;
+  float sd_latitude_;
   int64_t determined_at_;
-  float altitude_;
+  float sd_altitude_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
 };
@@ -3836,67 +3869,127 @@ inline void RespGetCurrentLocationParams::set_req_status(int32_t value) {
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.RespGetCurrentLocationParams.req_status)
 }
 
-// float longitude = 3;
+// double longitude = 3;
 inline void RespGetCurrentLocationParams::clear_longitude() {
   longitude_ = 0;
 }
-inline float RespGetCurrentLocationParams::_internal_longitude() const {
+inline double RespGetCurrentLocationParams::_internal_longitude() const {
   return longitude_;
 }
-inline float RespGetCurrentLocationParams::longitude() const {
+inline double RespGetCurrentLocationParams::longitude() const {
   // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.RespGetCurrentLocationParams.longitude)
   return _internal_longitude();
 }
-inline void RespGetCurrentLocationParams::_internal_set_longitude(float value) {
+inline void RespGetCurrentLocationParams::_internal_set_longitude(double value) {
   
   longitude_ = value;
 }
-inline void RespGetCurrentLocationParams::set_longitude(float value) {
+inline void RespGetCurrentLocationParams::set_longitude(double value) {
   _internal_set_longitude(value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.RespGetCurrentLocationParams.longitude)
 }
 
-// float latitude = 4;
+// double latitude = 4;
 inline void RespGetCurrentLocationParams::clear_latitude() {
   latitude_ = 0;
 }
-inline float RespGetCurrentLocationParams::_internal_latitude() const {
+inline double RespGetCurrentLocationParams::_internal_latitude() const {
   return latitude_;
 }
-inline float RespGetCurrentLocationParams::latitude() const {
+inline double RespGetCurrentLocationParams::latitude() const {
   // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.RespGetCurrentLocationParams.latitude)
   return _internal_latitude();
 }
-inline void RespGetCurrentLocationParams::_internal_set_latitude(float value) {
+inline void RespGetCurrentLocationParams::_internal_set_latitude(double value) {
   
   latitude_ = value;
 }
-inline void RespGetCurrentLocationParams::set_latitude(float value) {
+inline void RespGetCurrentLocationParams::set_latitude(double value) {
   _internal_set_latitude(value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.RespGetCurrentLocationParams.latitude)
 }
 
-// float altitude = 5;
+// double altitude = 5;
 inline void RespGetCurrentLocationParams::clear_altitude() {
   altitude_ = 0;
 }
-inline float RespGetCurrentLocationParams::_internal_altitude() const {
+inline double RespGetCurrentLocationParams::_internal_altitude() const {
   return altitude_;
 }
-inline float RespGetCurrentLocationParams::altitude() const {
+inline double RespGetCurrentLocationParams::altitude() const {
   // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.RespGetCurrentLocationParams.altitude)
   return _internal_altitude();
 }
-inline void RespGetCurrentLocationParams::_internal_set_altitude(float value) {
+inline void RespGetCurrentLocationParams::_internal_set_altitude(double value) {
   
   altitude_ = value;
 }
-inline void RespGetCurrentLocationParams::set_altitude(float value) {
+inline void RespGetCurrentLocationParams::set_altitude(double value) {
   _internal_set_altitude(value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.RespGetCurrentLocationParams.altitude)
 }
 
-// int64 determined_at = 6;
+// float sd_longitude = 6;
+inline void RespGetCurrentLocationParams::clear_sd_longitude() {
+  sd_longitude_ = 0;
+}
+inline float RespGetCurrentLocationParams::_internal_sd_longitude() const {
+  return sd_longitude_;
+}
+inline float RespGetCurrentLocationParams::sd_longitude() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.RespGetCurrentLocationParams.sd_longitude)
+  return _internal_sd_longitude();
+}
+inline void RespGetCurrentLocationParams::_internal_set_sd_longitude(float value) {
+  
+  sd_longitude_ = value;
+}
+inline void RespGetCurrentLocationParams::set_sd_longitude(float value) {
+  _internal_set_sd_longitude(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.RespGetCurrentLocationParams.sd_longitude)
+}
+
+// float sd_latitude = 7;
+inline void RespGetCurrentLocationParams::clear_sd_latitude() {
+  sd_latitude_ = 0;
+}
+inline float RespGetCurrentLocationParams::_internal_sd_latitude() const {
+  return sd_latitude_;
+}
+inline float RespGetCurrentLocationParams::sd_latitude() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.RespGetCurrentLocationParams.sd_latitude)
+  return _internal_sd_latitude();
+}
+inline void RespGetCurrentLocationParams::_internal_set_sd_latitude(float value) {
+  
+  sd_latitude_ = value;
+}
+inline void RespGetCurrentLocationParams::set_sd_latitude(float value) {
+  _internal_set_sd_latitude(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.RespGetCurrentLocationParams.sd_latitude)
+}
+
+// float sd_altitude = 8;
+inline void RespGetCurrentLocationParams::clear_sd_altitude() {
+  sd_altitude_ = 0;
+}
+inline float RespGetCurrentLocationParams::_internal_sd_altitude() const {
+  return sd_altitude_;
+}
+inline float RespGetCurrentLocationParams::sd_altitude() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.RespGetCurrentLocationParams.sd_altitude)
+  return _internal_sd_altitude();
+}
+inline void RespGetCurrentLocationParams::_internal_set_sd_altitude(float value) {
+  
+  sd_altitude_ = value;
+}
+inline void RespGetCurrentLocationParams::set_sd_altitude(float value) {
+  _internal_set_sd_altitude(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.RespGetCurrentLocationParams.sd_altitude)
+}
+
+// int64 determined_at = 9;
 inline void RespGetCurrentLocationParams::clear_determined_at() {
   determined_at_ = int64_t{0};
 }

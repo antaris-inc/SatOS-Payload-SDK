@@ -77,8 +77,11 @@ constexpr RespGetCurrentLocationParams::RespGetCurrentLocationParams(
   , req_status_(0)
   , longitude_(0)
   , latitude_(0)
+  , altitude_(0)
+  , sd_longitude_(0)
+  , sd_latitude_(0)
   , determined_at_(int64_t{0})
-  , altitude_(0){}
+  , sd_altitude_(0){}
 struct RespGetCurrentLocationParamsDefaultTypeInternal {
   constexpr RespGetCurrentLocationParamsDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -339,6 +342,9 @@ const uint32_t TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto::offsets[]
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGetCurrentLocationParams, longitude_),
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGetCurrentLocationParams, latitude_),
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGetCurrentLocationParams, altitude_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGetCurrentLocationParams, sd_longitude_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGetCurrentLocationParams, sd_latitude_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGetCurrentLocationParams, sd_altitude_),
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGetCurrentLocationParams, determined_at_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqStageFileDownloadParams, _internal_metadata_),
@@ -471,21 +477,21 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 18, -1, -1, sizeof(::antaris_api_peer_to_peer::RespRegisterParams)},
   { 27, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGetCurrentLocationParams)},
   { 34, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGetCurrentLocationParams)},
-  { 46, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqStageFileDownloadParams)},
-  { 54, -1, -1, sizeof(::antaris_api_peer_to_peer::RespStageFileDownloadParams)},
-  { 62, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqPayloadPowerControlParams)},
-  { 70, -1, -1, sizeof(::antaris_api_peer_to_peer::RespPayloadPowerControlParams)},
-  { 78, -1, -1, sizeof(::antaris_api_peer_to_peer::RespShutdownParams)},
-  { 86, -1, -1, sizeof(::antaris_api_peer_to_peer::RespHealthCheckParams)},
-  { 96, -1, -1, sizeof(::antaris_api_peer_to_peer::StartSequenceParams)},
-  { 106, -1, -1, sizeof(::antaris_api_peer_to_peer::ShutdownParams)},
-  { 114, -1, -1, sizeof(::antaris_api_peer_to_peer::HealthCheckParams)},
-  { 124, -1, -1, sizeof(::antaris_api_peer_to_peer::PayloadMetricsInfo)},
-  { 132, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqPayloadMetricsParams)},
-  { 139, -1, -1, sizeof(::antaris_api_peer_to_peer::PayloadMetricsResponse)},
-  { 149, -1, -1, sizeof(::antaris_api_peer_to_peer::CmdSequenceDoneParams)},
-  { 156, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisCorrelationId)},
-  { 163, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisReturnType)},
+  { 49, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqStageFileDownloadParams)},
+  { 57, -1, -1, sizeof(::antaris_api_peer_to_peer::RespStageFileDownloadParams)},
+  { 65, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqPayloadPowerControlParams)},
+  { 73, -1, -1, sizeof(::antaris_api_peer_to_peer::RespPayloadPowerControlParams)},
+  { 81, -1, -1, sizeof(::antaris_api_peer_to_peer::RespShutdownParams)},
+  { 89, -1, -1, sizeof(::antaris_api_peer_to_peer::RespHealthCheckParams)},
+  { 99, -1, -1, sizeof(::antaris_api_peer_to_peer::StartSequenceParams)},
+  { 109, -1, -1, sizeof(::antaris_api_peer_to_peer::ShutdownParams)},
+  { 117, -1, -1, sizeof(::antaris_api_peer_to_peer::HealthCheckParams)},
+  { 127, -1, -1, sizeof(::antaris_api_peer_to_peer::PayloadMetricsInfo)},
+  { 135, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqPayloadMetricsParams)},
+  { 142, -1, -1, sizeof(::antaris_api_peer_to_peer::PayloadMetricsResponse)},
+  { 152, -1, -1, sizeof(::antaris_api_peer_to_peer::CmdSequenceDoneParams)},
+  { 159, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisCorrelationId)},
+  { 166, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisReturnType)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -522,104 +528,106 @@ const char descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[
   "RegisterParams\022\026\n\016correlation_id\030\001 \001(\005\022\022"
   "\n\nreq_status\030\002 \001(\005\022\022\n\nauth_token\030\003 \001(\t\"5"
   "\n\033ReqGetCurrentLocationParams\022\026\n\016correla"
-  "tion_id\030\001 \001(\005\"\230\001\n\034RespGetCurrentLocation"
+  "tion_id\030\001 \001(\005\"\330\001\n\034RespGetCurrentLocation"
   "Params\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nreq_st"
-  "atus\030\002 \001(\005\022\021\n\tlongitude\030\003 \001(\002\022\020\n\010latitud"
-  "e\030\004 \001(\002\022\020\n\010altitude\030\005 \001(\002\022\025\n\rdetermined_"
-  "at\030\006 \001(\003\"G\n\032ReqStageFileDownloadParams\022\026"
-  "\n\016correlation_id\030\001 \001(\005\022\021\n\tfile_path\030\002 \001("
-  "\t\"I\n\033RespStageFileDownloadParams\022\026\n\016corr"
-  "elation_id\030\001 \001(\005\022\022\n\nreq_status\030\002 \001(\005\"O\n\034"
-  "ReqPayloadPowerControlParams\022\026\n\016correlat"
-  "ion_id\030\001 \001(\005\022\027\n\017power_operation\030\002 \001(\005\"K\n"
-  "\035RespPayloadPowerControlParams\022\026\n\016correl"
-  "ation_id\030\001 \001(\005\022\022\n\nreq_status\030\002 \001(\005\"@\n\022Re"
-  "spShutdownParams\022\026\n\016correlation_id\030\001 \001(\005"
-  "\022\022\n\nreq_status\030\002 \001(\005\"\211\001\n\025RespHealthCheck"
-  "Params\022\026\n\016correlation_id\030\001 \001(\005\022\031\n\021applic"
-  "ation_state\030\002 \001(\005\022\035\n\025reqs_to_pc_in_err_c"
-  "nt\030\003 \001(\005\022\036\n\026resps_to_pc_in_err_cnt\030\004 \001(\005"
-  "\"w\n\023StartSequenceParams\022\026\n\016correlation_i"
-  "d\030\001 \001(\005\022\023\n\013sequence_id\030\002 \001(\t\022\027\n\017sequence"
-  "_params\030\003 \001(\t\022\032\n\022scheduled_deadline\030\004 \001("
-  "\003\"<\n\016ShutdownParams\022\026\n\016correlation_id\030\001 "
-  "\001(\005\022\022\n\ngrace_time\030\002 \001(\005\"\205\001\n\021HealthCheckP"
-  "arams\022\026\n\016correlation_id\030\001 \001(\005\022\031\n\021applica"
-  "tion_state\030\002 \001(\005\022\035\n\025reqs_to_pc_in_err_cn"
-  "t\030\003 \001(\005\022\036\n\026resps_to_pc_in_err_cnt\030\004 \001(\005\""
-  "4\n\022PayloadMetricsInfo\022\017\n\007counter\030\001 \001(\005\022\r"
-  "\n\005names\030\002 \001(\t\"1\n\027ReqPayloadMetricsParams"
-  "\022\026\n\016correlation_id\030\001 \001(\005\"\230\001\n\026PayloadMetr"
-  "icsResponse\022\026\n\016correlation_id\030\001 \001(\005\022\021\n\tt"
-  "imestamp\030\002 \001(\003\022\024\n\014used_counter\030\003 \001(\005\022=\n\007"
-  "metrics\030\004 \003(\0132,.antaris_api_peer_to_peer"
-  ".PayloadMetricsInfo\",\n\025CmdSequenceDonePa"
-  "rams\022\023\n\013sequence_id\030\001 \001(\t\".\n\024AntarisCorr"
-  "elationId\022\026\n\016correlation_id\030\001 \001(\005\"U\n\021Ant"
-  "arisReturnType\022@\n\013return_code\030\001 \001(\0162+.an"
-  "taris_api_peer_to_peer.AntarisReturnCode"
-  "*\354\001\n\021AntarisReturnCode\022\016\n\nAn_SUCCESS\020\000\022\037"
-  "\n\022An_GENERIC_FAILURE\020\377\377\377\377\377\377\377\377\377\001\022\037\n\022An_NO"
-  "T_IMPLEMENTED\020\376\377\377\377\377\377\377\377\377\001\022 \n\023An_OUT_OF_RE"
-  "SOURCES\020\375\377\377\377\377\377\377\377\377\001\022\035\n\020An_NOT_PERMITTED\020\374"
-  "\377\377\377\377\377\377\377\377\001\022\036\n\021An_INVALID_PARAMS\020\373\377\377\377\377\377\377\377\377"
-  "\001\022$\n\027An_INCOMPATIBLE_VERSION\020\372\377\377\377\377\377\377\377\377\0012"
-  "\235\010\n\035AntarisapiApplicationCallback\022p\n\020PA_"
-  "StartSequence\022-.antaris_api_peer_to_peer"
-  ".StartSequenceParams\032+.antaris_api_peer_"
-  "to_peer.AntarisReturnType\"\000\022i\n\016PA_Shutdo"
-  "wnApp\022(.antaris_api_peer_to_peer.Shutdow"
-  "nParams\032+.antaris_api_peer_to_peer.Antar"
-  "isReturnType\"\000\022s\n\025PA_ProcessHealthCheck\022"
-  "+.antaris_api_peer_to_peer.HealthCheckPa"
+  "atus\030\002 \001(\005\022\021\n\tlongitude\030\003 \001(\001\022\020\n\010latitud"
+  "e\030\004 \001(\001\022\020\n\010altitude\030\005 \001(\001\022\024\n\014sd_longitud"
+  "e\030\006 \001(\002\022\023\n\013sd_latitude\030\007 \001(\002\022\023\n\013sd_altit"
+  "ude\030\010 \001(\002\022\025\n\rdetermined_at\030\t \001(\003\"G\n\032ReqS"
+  "tageFileDownloadParams\022\026\n\016correlation_id"
+  "\030\001 \001(\005\022\021\n\tfile_path\030\002 \001(\t\"I\n\033RespStageFi"
+  "leDownloadParams\022\026\n\016correlation_id\030\001 \001(\005"
+  "\022\022\n\nreq_status\030\002 \001(\005\"O\n\034ReqPayloadPowerC"
+  "ontrolParams\022\026\n\016correlation_id\030\001 \001(\005\022\027\n\017"
+  "power_operation\030\002 \001(\005\"K\n\035RespPayloadPowe"
+  "rControlParams\022\026\n\016correlation_id\030\001 \001(\005\022\022"
+  "\n\nreq_status\030\002 \001(\005\"@\n\022RespShutdownParams"
+  "\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nreq_status\030\002"
+  " \001(\005\"\211\001\n\025RespHealthCheckParams\022\026\n\016correl"
+  "ation_id\030\001 \001(\005\022\031\n\021application_state\030\002 \001("
+  "\005\022\035\n\025reqs_to_pc_in_err_cnt\030\003 \001(\005\022\036\n\026resp"
+  "s_to_pc_in_err_cnt\030\004 \001(\005\"w\n\023StartSequenc"
+  "eParams\022\026\n\016correlation_id\030\001 \001(\005\022\023\n\013seque"
+  "nce_id\030\002 \001(\t\022\027\n\017sequence_params\030\003 \001(\t\022\032\n"
+  "\022scheduled_deadline\030\004 \001(\003\"<\n\016ShutdownPar"
+  "ams\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\ngrace_tim"
+  "e\030\002 \001(\005\"\205\001\n\021HealthCheckParams\022\026\n\016correla"
+  "tion_id\030\001 \001(\005\022\031\n\021application_state\030\002 \001(\005"
+  "\022\035\n\025reqs_to_pc_in_err_cnt\030\003 \001(\005\022\036\n\026resps"
+  "_to_pc_in_err_cnt\030\004 \001(\005\"4\n\022PayloadMetric"
+  "sInfo\022\017\n\007counter\030\001 \001(\005\022\r\n\005names\030\002 \001(\t\"1\n"
+  "\027ReqPayloadMetricsParams\022\026\n\016correlation_"
+  "id\030\001 \001(\005\"\230\001\n\026PayloadMetricsResponse\022\026\n\016c"
+  "orrelation_id\030\001 \001(\005\022\021\n\ttimestamp\030\002 \001(\003\022\024"
+  "\n\014used_counter\030\003 \001(\005\022=\n\007metrics\030\004 \003(\0132,."
+  "antaris_api_peer_to_peer.PayloadMetricsI"
+  "nfo\",\n\025CmdSequenceDoneParams\022\023\n\013sequence"
+  "_id\030\001 \001(\t\".\n\024AntarisCorrelationId\022\026\n\016cor"
+  "relation_id\030\001 \001(\005\"U\n\021AntarisReturnType\022@"
+  "\n\013return_code\030\001 \001(\0162+.antaris_api_peer_t"
+  "o_peer.AntarisReturnCode*\354\001\n\021AntarisRetu"
+  "rnCode\022\016\n\nAn_SUCCESS\020\000\022\037\n\022An_GENERIC_FAI"
+  "LURE\020\377\377\377\377\377\377\377\377\377\001\022\037\n\022An_NOT_IMPLEMENTED\020\376\377"
+  "\377\377\377\377\377\377\377\001\022 \n\023An_OUT_OF_RESOURCES\020\375\377\377\377\377\377\377\377"
+  "\377\001\022\035\n\020An_NOT_PERMITTED\020\374\377\377\377\377\377\377\377\377\001\022\036\n\021An_"
+  "INVALID_PARAMS\020\373\377\377\377\377\377\377\377\377\001\022$\n\027An_INCOMPAT"
+  "IBLE_VERSION\020\372\377\377\377\377\377\377\377\377\0012\235\010\n\035AntarisapiAp"
+  "plicationCallback\022p\n\020PA_StartSequence\022-."
+  "antaris_api_peer_to_peer.StartSequencePa"
   "rams\032+.antaris_api_peer_to_peer.AntarisR"
-  "eturnType\"\000\022y\n\032PA_ProcessResponseRegiste"
-  "r\022,.antaris_api_peer_to_peer.RespRegiste"
-  "rParams\032+.antaris_api_peer_to_peer.Antar"
-  "isReturnType\"\000\022\215\001\n$PA_ProcessResponseGet"
-  "CurrentLocation\0226.antaris_api_peer_to_pe"
-  "er.RespGetCurrentLocationParams\032+.antari"
-  "s_api_peer_to_peer.AntarisReturnType\"\000\022\213"
-  "\001\n#PA_ProcessResponseStageFileDownload\0225"
-  ".antaris_api_peer_to_peer.RespStageFileD"
-  "ownloadParams\032+.antaris_api_peer_to_peer"
-  ".AntarisReturnType\"\000\022\217\001\n%PA_ProcessRespo"
-  "nsePayloadPowerControl\0227.antaris_api_pee"
-  "r_to_peer.RespPayloadPowerControlParams\032"
+  "eturnType\"\000\022i\n\016PA_ShutdownApp\022(.antaris_"
+  "api_peer_to_peer.ShutdownParams\032+.antari"
+  "s_api_peer_to_peer.AntarisReturnType\"\000\022s"
+  "\n\025PA_ProcessHealthCheck\022+.antaris_api_pe"
+  "er_to_peer.HealthCheckParams\032+.antaris_a"
+  "pi_peer_to_peer.AntarisReturnType\"\000\022y\n\032P"
+  "A_ProcessResponseRegister\022,.antaris_api_"
+  "peer_to_peer.RespRegisterParams\032+.antari"
+  "s_api_peer_to_peer.AntarisReturnType\"\000\022\215"
+  "\001\n$PA_ProcessResponseGetCurrentLocation\022"
+  "6.antaris_api_peer_to_peer.RespGetCurren"
+  "tLocationParams\032+.antaris_api_peer_to_pe"
+  "er.AntarisReturnType\"\000\022\213\001\n#PA_ProcessRes"
+  "ponseStageFileDownload\0225.antaris_api_pee"
+  "r_to_peer.RespStageFileDownloadParams\032+."
+  "antaris_api_peer_to_peer.AntarisReturnTy"
+  "pe\"\000\022\217\001\n%PA_ProcessResponsePayloadPowerC"
+  "ontrol\0227.antaris_api_peer_to_peer.RespPa"
+  "yloadPowerControlParams\032+.antaris_api_pe"
+  "er_to_peer.AntarisReturnType\"\000\022\177\n\033PA_Pro"
+  "cessReqPayloadMetrics\0221.antaris_api_peer"
+  "_to_peer.ReqPayloadMetricsParams\032+.antar"
+  "is_api_peer_to_peer.AntarisReturnType\"\0002"
+  "\361\007\n\033AntarisapiPayloadController\022i\n\013PC_re"
+  "gister\022+.antaris_api_peer_to_peer.ReqReg"
+  "isterParams\032+.antaris_api_peer_to_peer.A"
+  "ntarisReturnType\"\000\022\177\n\027PC_get_current_loc"
+  "ation\0225.antaris_api_peer_to_peer.ReqGetC"
+  "urrentLocationParams\032+.antaris_api_peer_"
+  "to_peer.AntarisReturnType\"\000\022}\n\026PC_stage_"
+  "file_download\0224.antaris_api_peer_to_peer"
+  ".ReqStageFileDownloadParams\032+.antaris_ap"
+  "i_peer_to_peer.AntarisReturnType\"\000\022r\n\020PC"
+  "_sequence_done\022/.antaris_api_peer_to_pee"
+  "r.CmdSequenceDoneParams\032+.antaris_api_pe"
+  "er_to_peer.AntarisReturnType\"\000\022\201\001\n\030PC_pa"
+  "yload_power_control\0226.antaris_api_peer_t"
+  "o_peer.ReqPayloadPowerControlParams\032+.an"
+  "taris_api_peer_to_peer.AntarisReturnType"
+  "\"\000\022z\n\030PC_response_health_check\022/.antaris"
+  "_api_peer_to_peer.RespHealthCheckParams\032"
   "+.antaris_api_peer_to_peer.AntarisReturn"
-  "Type\"\000\022\177\n\033PA_ProcessReqPayloadMetrics\0221."
-  "antaris_api_peer_to_peer.ReqPayloadMetri"
-  "csParams\032+.antaris_api_peer_to_peer.Anta"
-  "risReturnType\"\0002\361\007\n\033AntarisapiPayloadCon"
-  "troller\022i\n\013PC_register\022+.antaris_api_pee"
-  "r_to_peer.ReqRegisterParams\032+.antaris_ap"
-  "i_peer_to_peer.AntarisReturnType\"\000\022\177\n\027PC"
-  "_get_current_location\0225.antaris_api_peer"
-  "_to_peer.ReqGetCurrentLocationParams\032+.a"
+  "Type\"\000\022s\n\024PC_response_shutdown\022,.antaris"
+  "_api_peer_to_peer.RespShutdownParams\032+.a"
   "ntaris_api_peer_to_peer.AntarisReturnTyp"
-  "e\"\000\022}\n\026PC_stage_file_download\0224.antaris_"
-  "api_peer_to_peer.ReqStageFileDownloadPar"
-  "ams\032+.antaris_api_peer_to_peer.AntarisRe"
-  "turnType\"\000\022r\n\020PC_sequence_done\022/.antaris"
-  "_api_peer_to_peer.CmdSequenceDoneParams\032"
-  "+.antaris_api_peer_to_peer.AntarisReturn"
-  "Type\"\000\022\201\001\n\030PC_payload_power_control\0226.an"
-  "taris_api_peer_to_peer.ReqPayloadPowerCo"
-  "ntrolParams\032+.antaris_api_peer_to_peer.A"
-  "ntarisReturnType\"\000\022z\n\030PC_response_health"
-  "_check\022/.antaris_api_peer_to_peer.RespHe"
-  "althCheckParams\032+.antaris_api_peer_to_pe"
-  "er.AntarisReturnType\"\000\022s\n\024PC_response_sh"
-  "utdown\022,.antaris_api_peer_to_peer.RespSh"
-  "utdownParams\032+.antaris_api_peer_to_peer."
-  "AntarisReturnType\"\000\022~\n\033PC_response_paylo"
-  "ad_metrics\0220.antaris_api_peer_to_peer.Pa"
-  "yloadMetricsResponse\032+.antaris_api_peer_"
-  "to_peer.AntarisReturnType\"\000b\006proto3"
+  "e\"\000\022~\n\033PC_response_payload_metrics\0220.ant"
+  "aris_api_peer_to_peer.PayloadMetricsResp"
+  "onse\032+.antaris_api_peer_to_peer.AntarisR"
+  "eturnType\"\000b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto = {
-  false, false, 4155, descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, "defs/gen/proto/antaris_api.proto", 
+  false, false, 4219, descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, "defs/gen/proto/antaris_api.proto", 
   &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once, nullptr, 0, 20,
   schemas, file_default_instances, TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto::offsets,
   file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, file_level_enum_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, file_level_service_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto,
@@ -1598,16 +1606,16 @@ RespGetCurrentLocationParams::RespGetCurrentLocationParams(const RespGetCurrentL
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&correlation_id_, &from.correlation_id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&altitude_) -
-    reinterpret_cast<char*>(&correlation_id_)) + sizeof(altitude_));
+    static_cast<size_t>(reinterpret_cast<char*>(&sd_altitude_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(sd_altitude_));
   // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.RespGetCurrentLocationParams)
 }
 
 inline void RespGetCurrentLocationParams::SharedCtor() {
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&altitude_) -
-    reinterpret_cast<char*>(&correlation_id_)) + sizeof(altitude_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&sd_altitude_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(sd_altitude_));
 }
 
 RespGetCurrentLocationParams::~RespGetCurrentLocationParams() {
@@ -1638,8 +1646,8 @@ void RespGetCurrentLocationParams::Clear() {
   (void) cached_has_bits;
 
   ::memset(&correlation_id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&altitude_) -
-      reinterpret_cast<char*>(&correlation_id_)) + sizeof(altitude_));
+      reinterpret_cast<char*>(&sd_altitude_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(sd_altitude_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1665,33 +1673,57 @@ const char* RespGetCurrentLocationParams::_InternalParse(const char* ptr, ::PROT
         } else
           goto handle_unusual;
         continue;
-      // float longitude = 3;
+      // double longitude = 3;
       case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 29)) {
-          longitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 25)) {
+          longitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
         } else
           goto handle_unusual;
         continue;
-      // float latitude = 4;
+      // double latitude = 4;
       case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 37)) {
-          latitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
-          ptr += sizeof(float);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 33)) {
+          latitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
         } else
           goto handle_unusual;
         continue;
-      // float altitude = 5;
+      // double altitude = 5;
       case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 45)) {
-          altitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 41)) {
+          altitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<double>(ptr);
+          ptr += sizeof(double);
+        } else
+          goto handle_unusual;
+        continue;
+      // float sd_longitude = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 53)) {
+          sd_longitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
           ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
-      // int64 determined_at = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+      // float sd_latitude = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 61)) {
+          sd_latitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // float sd_altitude = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 69)) {
+          sd_altitude_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 determined_at = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
           determined_at_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
@@ -1738,40 +1770,70 @@ uint8_t* RespGetCurrentLocationParams::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_req_status(), target);
   }
 
-  // float longitude = 3;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_longitude = this->_internal_longitude();
-  uint32_t raw_longitude;
+  // double longitude = 3;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_longitude = this->_internal_longitude();
+  uint64_t raw_longitude;
   memcpy(&raw_longitude, &tmp_longitude, sizeof(tmp_longitude));
   if (raw_longitude != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(3, this->_internal_longitude(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(3, this->_internal_longitude(), target);
   }
 
-  // float latitude = 4;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_latitude = this->_internal_latitude();
-  uint32_t raw_latitude;
+  // double latitude = 4;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_latitude = this->_internal_latitude();
+  uint64_t raw_latitude;
   memcpy(&raw_latitude, &tmp_latitude, sizeof(tmp_latitude));
   if (raw_latitude != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(4, this->_internal_latitude(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(4, this->_internal_latitude(), target);
   }
 
-  // float altitude = 5;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_altitude = this->_internal_altitude();
-  uint32_t raw_altitude;
+  // double altitude = 5;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_altitude = this->_internal_altitude();
+  uint64_t raw_altitude;
   memcpy(&raw_altitude, &tmp_altitude, sizeof(tmp_altitude));
   if (raw_altitude != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(5, this->_internal_altitude(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteDoubleToArray(5, this->_internal_altitude(), target);
   }
 
-  // int64 determined_at = 6;
+  // float sd_longitude = 6;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_sd_longitude = this->_internal_sd_longitude();
+  uint32_t raw_sd_longitude;
+  memcpy(&raw_sd_longitude, &tmp_sd_longitude, sizeof(tmp_sd_longitude));
+  if (raw_sd_longitude != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(6, this->_internal_sd_longitude(), target);
+  }
+
+  // float sd_latitude = 7;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_sd_latitude = this->_internal_sd_latitude();
+  uint32_t raw_sd_latitude;
+  memcpy(&raw_sd_latitude, &tmp_sd_latitude, sizeof(tmp_sd_latitude));
+  if (raw_sd_latitude != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(7, this->_internal_sd_latitude(), target);
+  }
+
+  // float sd_altitude = 8;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_sd_altitude = this->_internal_sd_altitude();
+  uint32_t raw_sd_altitude;
+  memcpy(&raw_sd_altitude, &tmp_sd_altitude, sizeof(tmp_sd_altitude));
+  if (raw_sd_altitude != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(8, this->_internal_sd_altitude(), target);
+  }
+
+  // int64 determined_at = 9;
   if (this->_internal_determined_at() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(6, this->_internal_determined_at(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(9, this->_internal_determined_at(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1800,35 +1862,62 @@ size_t RespGetCurrentLocationParams::ByteSizeLong() const {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_req_status());
   }
 
-  // float longitude = 3;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_longitude = this->_internal_longitude();
-  uint32_t raw_longitude;
+  // double longitude = 3;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_longitude = this->_internal_longitude();
+  uint64_t raw_longitude;
   memcpy(&raw_longitude, &tmp_longitude, sizeof(tmp_longitude));
   if (raw_longitude != 0) {
-    total_size += 1 + 4;
+    total_size += 1 + 8;
   }
 
-  // float latitude = 4;
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_latitude = this->_internal_latitude();
-  uint32_t raw_latitude;
+  // double latitude = 4;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_latitude = this->_internal_latitude();
+  uint64_t raw_latitude;
   memcpy(&raw_latitude, &tmp_latitude, sizeof(tmp_latitude));
   if (raw_latitude != 0) {
+    total_size += 1 + 8;
+  }
+
+  // double altitude = 5;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_altitude = this->_internal_altitude();
+  uint64_t raw_altitude;
+  memcpy(&raw_altitude, &tmp_altitude, sizeof(tmp_altitude));
+  if (raw_altitude != 0) {
+    total_size += 1 + 8;
+  }
+
+  // float sd_longitude = 6;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_sd_longitude = this->_internal_sd_longitude();
+  uint32_t raw_sd_longitude;
+  memcpy(&raw_sd_longitude, &tmp_sd_longitude, sizeof(tmp_sd_longitude));
+  if (raw_sd_longitude != 0) {
     total_size += 1 + 4;
   }
 
-  // int64 determined_at = 6;
+  // float sd_latitude = 7;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_sd_latitude = this->_internal_sd_latitude();
+  uint32_t raw_sd_latitude;
+  memcpy(&raw_sd_latitude, &tmp_sd_latitude, sizeof(tmp_sd_latitude));
+  if (raw_sd_latitude != 0) {
+    total_size += 1 + 4;
+  }
+
+  // int64 determined_at = 9;
   if (this->_internal_determined_at() != 0) {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64SizePlusOne(this->_internal_determined_at());
   }
 
-  // float altitude = 5;
+  // float sd_altitude = 8;
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_altitude = this->_internal_altitude();
-  uint32_t raw_altitude;
-  memcpy(&raw_altitude, &tmp_altitude, sizeof(tmp_altitude));
-  if (raw_altitude != 0) {
+  float tmp_sd_altitude = this->_internal_sd_altitude();
+  uint32_t raw_sd_altitude;
+  memcpy(&raw_sd_altitude, &tmp_sd_altitude, sizeof(tmp_sd_altitude));
+  if (raw_sd_altitude != 0) {
     total_size += 1 + 4;
   }
 
@@ -1860,29 +1949,50 @@ void RespGetCurrentLocationParams::MergeFrom(const RespGetCurrentLocationParams&
   if (from._internal_req_status() != 0) {
     _internal_set_req_status(from._internal_req_status());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_longitude = from._internal_longitude();
-  uint32_t raw_longitude;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_longitude = from._internal_longitude();
+  uint64_t raw_longitude;
   memcpy(&raw_longitude, &tmp_longitude, sizeof(tmp_longitude));
   if (raw_longitude != 0) {
     _internal_set_longitude(from._internal_longitude());
   }
-  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_latitude = from._internal_latitude();
-  uint32_t raw_latitude;
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_latitude = from._internal_latitude();
+  uint64_t raw_latitude;
   memcpy(&raw_latitude, &tmp_latitude, sizeof(tmp_latitude));
   if (raw_latitude != 0) {
     _internal_set_latitude(from._internal_latitude());
+  }
+  static_assert(sizeof(uint64_t) == sizeof(double), "Code assumes uint64_t and double are the same size.");
+  double tmp_altitude = from._internal_altitude();
+  uint64_t raw_altitude;
+  memcpy(&raw_altitude, &tmp_altitude, sizeof(tmp_altitude));
+  if (raw_altitude != 0) {
+    _internal_set_altitude(from._internal_altitude());
+  }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_sd_longitude = from._internal_sd_longitude();
+  uint32_t raw_sd_longitude;
+  memcpy(&raw_sd_longitude, &tmp_sd_longitude, sizeof(tmp_sd_longitude));
+  if (raw_sd_longitude != 0) {
+    _internal_set_sd_longitude(from._internal_sd_longitude());
+  }
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_sd_latitude = from._internal_sd_latitude();
+  uint32_t raw_sd_latitude;
+  memcpy(&raw_sd_latitude, &tmp_sd_latitude, sizeof(tmp_sd_latitude));
+  if (raw_sd_latitude != 0) {
+    _internal_set_sd_latitude(from._internal_sd_latitude());
   }
   if (from._internal_determined_at() != 0) {
     _internal_set_determined_at(from._internal_determined_at());
   }
   static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
-  float tmp_altitude = from._internal_altitude();
-  uint32_t raw_altitude;
-  memcpy(&raw_altitude, &tmp_altitude, sizeof(tmp_altitude));
-  if (raw_altitude != 0) {
-    _internal_set_altitude(from._internal_altitude());
+  float tmp_sd_altitude = from._internal_sd_altitude();
+  uint32_t raw_sd_altitude;
+  memcpy(&raw_sd_altitude, &tmp_sd_altitude, sizeof(tmp_sd_altitude));
+  if (raw_sd_altitude != 0) {
+    _internal_set_sd_altitude(from._internal_sd_altitude());
   }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -1902,8 +2012,8 @@ void RespGetCurrentLocationParams::InternalSwap(RespGetCurrentLocationParams* ot
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(RespGetCurrentLocationParams, altitude_)
-      + sizeof(RespGetCurrentLocationParams::altitude_)
+      PROTOBUF_FIELD_OFFSET(RespGetCurrentLocationParams, sd_altitude_)
+      + sizeof(RespGetCurrentLocationParams::sd_altitude_)
       - PROTOBUF_FIELD_OFFSET(RespGetCurrentLocationParams, correlation_id_)>(
           reinterpret_cast<char*>(&correlation_id_),
           reinterpret_cast<char*>(&other->correlation_id_));

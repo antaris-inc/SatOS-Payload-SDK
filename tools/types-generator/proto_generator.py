@@ -18,6 +18,7 @@ gProtoTypeString = "string"
 gProtoTypeInt = "int32"
 gProtoTypeLongInt = 'int64'
 gProtoTypeFloat = "float"
+gProtoTypeDouble = "double"
 gXMLCompulsoryFunctionPrefix = "api_pa_pc_"
 gProtoFunctionPrefix = "PC_"
 gXMLCompulsoryFunctionPtrSuffix = "_Fptr"
@@ -45,6 +46,7 @@ def remap_type(type, array):
     possible_int_types = ["INT8", "UINT8", "INT16", "UINT16", "INT32", "UINT32"]
     possible_long_int_types = ["INT64", "UINT64"]
     possible_float_types = ["FLOAT"]
+    possible_double_types = ["DOUBLE"]
     not_an_array = ""
 
     if type in possible_string_types:
@@ -61,6 +63,9 @@ def remap_type(type, array):
     if type in possible_float_types:
         return gProtoTypeFloat, array
 
+    if type in possible_double_types:
+        return gProtoTypeDouble, array
+    
     return type, array # custom?
 
 class InterfaceGen(PARSER_INTF.XMLToCode):

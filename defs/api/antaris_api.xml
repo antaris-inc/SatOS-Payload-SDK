@@ -68,10 +68,13 @@
         <Struct name="RespGetCurrentLocationParams" description="Response parameters for Get Location Flight Service">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="req_status" type="INT32" sequence="2" description="status of get-location request"/>
-            <Field name="longitude" type="FLOAT" sequence="3" description="current latitude"/>
-            <Field name="latitude" type="FLOAT" sequence="4" description="current longitude"/>
-            <Field name="altitude" type="FLOAT" sequence="5" description="current altitude"/>
-            <Field name="determined_at" type="UINT64" sequence="6" description="time (seconds since epoch) when the location was determined"/>
+            <Field name="longitude" type="DOUBLE" sequence="3" description="current latitude"/>
+            <Field name="latitude" type="DOUBLE" sequence="4" description="current longitude"/>
+            <Field name="altitude" type="DOUBLE" sequence="5" description="current altitude"/>
+            <Field name="sd_longitude" type="FLOAT" sequence="6" description="Standard Deviation latitude"/>
+            <Field name="sd_latitude" type="FLOAT" sequence="7" description="Standard Deviation longitude"/>
+            <Field name="sd_altitude" type="FLOAT" sequence="8" description="Standard Deviation altitude"/>
+            <Field name="determined_at" type="UINT64" sequence="9" description="time (seconds since epoch) when the location was determined"/>
         </Struct>
 
         <Struct name="ReqStageFileDownloadParams" description="Request parameters to stage file download">

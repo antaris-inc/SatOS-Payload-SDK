@@ -56,6 +56,7 @@ typedef int INT32;
 typedef unsigned long long int UINT64;
 typedef long long int INT64;
 typedef float FLOAT;
+typedef double DOUBLE;
 
 static inline
 void displayUINT8(void *obj)
@@ -111,6 +112,12 @@ void displayFLOAT(void *obj)
     printf("%f\n", *(float *)obj);
 }
 
+static inline
+void displayDOUBLE(void *obj)
+{
+    printf("%f\n", *(double *)obj);
+}
+
 void app_to_peer_UINT16(void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_UINT16(void *ptr_src_peer, void *ptr_dst_app);
 void app_to_peer_UINT32(void *ptr_src_app, void *ptr_dst_peer);
@@ -121,6 +128,8 @@ void app_to_peer_INT32(void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_INT32(void *ptr_src_peer, void *ptr_dst_app);
 void app_to_peer_FLOAT(void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_FLOAT(void *ptr_src_peer, void *ptr_dst_app);
+void app_to_peer_DOUBLE(void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_DOUBLE(void *ptr_src_peer, void *ptr_dst_app);
 
 INT32 is_server_endpoint_available(INT8 *ipv4, UINT16 port);
 

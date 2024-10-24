@@ -21,7 +21,7 @@ def get_peer_to_app_fn_for_type(a_type):
     return "peer_to_app_{}".format(a_type)
 
 def is_native_type(a_type):
-    native_types = ["INT8", "UINT8", "INT16", "UINT16", "INT32", "UINT32", "INT64", "UINT64", "FLOAT"]
+    native_types = ["INT8", "UINT8", "INT16", "UINT16", "INT32", "UINT32", "INT64", "UINT64", "FLOAT", "DOUBLE"]
 
     if a_type in native_types:
         return True
