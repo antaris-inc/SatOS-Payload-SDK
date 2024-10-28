@@ -48,7 +48,7 @@ class Controller:
 
     def handle_log_location(self, ctx):
         loc = ctx.client.get_current_location()
-        logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude}")
+        logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude} sd_lat={loc.sd_latitude}, sd_lng={loc.sd_longitude}, sd_alt={loc.sd_altitude}")
 
     def handle_power_control(self, ctx):
         logger.info("Handling payload power")
