@@ -19,6 +19,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <cstdlib>
+#include <ctime>
 
 #include "antaris_api.h"
 #include "antaris_api_gpio.h"
@@ -450,6 +451,33 @@ AntarisReturnCode process_health_check(HealthCheckParams *health_check_param)
     return An_SUCCESS;
 }
 
+AntarisReturnCode process_req_payload_metrics(ReqPayloadMetricsParams *payload_metrics_param)
+{
+    PayloadMetricsResponse   resp_payload_metrics_params;
+
+    printf("payload_metrics_param : Got payload_metrics_param request from PC\n");
+
+    if (debug) {
+        displayPayloadMetricsResponse(payload_metrics_param);
+    }
+
+    time_t now = time(0);
+    UINT64 epoch = static_cast<UINT64>(now);
+    resp_payload_metrics_params.correlation_id = payload_metrics_param->correlation_id;
+    resp_payload_metrics_params.used_counter = 5;   // Example value
+    resp_payload_metrics_params.timestamp = epoch;
+
+    // Set counter, names values
+    for (int i=0; i< resp_payload_metrics_params.used_counter ; i++) {
+        resp_payload_metrics_params.metrics->counter = i + 1;    // Example value
+        resp_payload_metrics_params.metrics->names[i] = sprintf("%s_%d", "Counter" , i);   // Example value
+    }
+
+    api_pa_pc_response_payload_metrics(channel, &resp_payload_metrics_params);
+
+    return An_SUCCESS;
+}
+
 AntarisReturnCode process_response_register(RespRegisterParams *resp_register_param)
 {
     printf("process_response_register\n");
@@ -514,6 +542,7 @@ int main(int argc, char *argv[])
             process_response_get_current_location : process_response_get_current_location,
             process_response_stage_file_download : process_response_stage_file_download,
             process_response_payload_power_control : process_response_payload_power_control,
+            req_payload_metrics: process_req_payload_metrics,
     };
 
     // Create Channel to talk to Payload Controller (PC)
