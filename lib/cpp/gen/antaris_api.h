@@ -254,9 +254,12 @@ void peer_to_app_ReqGetCurrentLocationParams(const void *ptr_src_peer, void *ptr
 struct RespGetCurrentLocationParams {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     INT32                                           req_status;                                      ///< @var status of get-location request
-    FLOAT                                           longitude;                                       ///< @var current latitude
-    FLOAT                                           latitude;                                        ///< @var current longitude
-    FLOAT                                           altitude;                                        ///< @var current altitude
+    DOUBLE                                          latitude;                                        ///< @var current latitude
+    DOUBLE                                          longitude;                                       ///< @var current longitude
+    DOUBLE                                          altitude;                                        ///< @var current altitude
+    FLOAT                                           sd_latitude;                                     ///< @var standard deviation in latitude
+    FLOAT                                           sd_longitude;                                    ///< @var standard deviation in longitude
+    FLOAT                                           sd_altitude;                                     ///< @var standard deviation in altitude
     UINT64                                          determined_at;                                   ///< @var time (seconds since epoch) when the location was determined
 };
 
@@ -448,18 +451,6 @@ void peer_to_app_AntarisReturnType(const void *ptr_src_peer, void *ptr_dst_app);
 
 
 // >>>> Function Prototypes <<<<<
-
-/// @brief Function init_satos_lib
-/// @fn Initializes satos library
-AntarisReturnCode init_satos_lib();
-
-/// @brief Function deinit_satos_lib
-/// @fn Closes satos library
-void deinit_satos_lib();
-
-/// @brief Function with_timeout_deinit_satos_lib
-/// @fn gives deadline to deinit_satos_lib function
-void with_timeout_deinit_satos_lib();
 
 /// @brief Function api_pa_pc_create_channel
 /// @fn Create a channel for use as API Context

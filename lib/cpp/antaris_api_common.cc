@@ -90,6 +90,16 @@ void peer_to_app_FLOAT(void *ptr_src_peer, void *ptr_dst_app)
     *(FLOAT *)ptr_dst_app = *(FLOAT *)ptr_src_peer;
 }
 
+void app_to_peer_DOUBLE(void *ptr_src_app, void *ptr_dst_peer)
+{
+    *(DOUBLE *)ptr_dst_peer = *(DOUBLE *)ptr_src_app;
+}
+
+void peer_to_app_DOUBLE(void *ptr_src_peer, void *ptr_dst_app)
+{
+    *(DOUBLE *)ptr_dst_app = *(DOUBLE *)ptr_src_peer;
+}
+
 
 INT32 is_server_endpoint_available(INT8 *ipv4, UINT16 port)
 {
