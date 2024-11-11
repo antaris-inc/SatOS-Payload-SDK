@@ -199,12 +199,18 @@ displayRespGetCurrentLocationParams(const void *obj)
     displayUINT16((void *)&p->correlation_id);
     printf("req_status ==>\n");
     displayINT32((void *)&p->req_status);
-    printf("longitude ==>\n");
-    displayFLOAT((void *)&p->longitude);
     printf("latitude ==>\n");
-    displayFLOAT((void *)&p->latitude);
+    displayDOUBLE((void *)&p->latitude);
+    printf("longitude ==>\n");
+    displayDOUBLE((void *)&p->longitude);
     printf("altitude ==>\n");
-    displayFLOAT((void *)&p->altitude);
+    displayDOUBLE((void *)&p->altitude);
+    printf("sd_latitude ==>\n");
+    displayFLOAT((void *)&p->sd_latitude);
+    printf("sd_longitude ==>\n");
+    displayFLOAT((void *)&p->sd_longitude);
+    printf("sd_altitude ==>\n");
+    displayFLOAT((void *)&p->sd_altitude);
     printf("determined_at ==>\n");
     displayUINT64((void *)&p->determined_at);
 
@@ -218,9 +224,12 @@ app_to_peer_RespGetCurrentLocationParams(const void *ptr_src_app, void *ptr_dst_
 
     UINT32 __tmp_correlation_id;
     INT32 __tmp_req_status;
-    FLOAT __tmp_longitude;
-    FLOAT __tmp_latitude;
-    FLOAT __tmp_altitude;
+    DOUBLE __tmp_latitude;
+    DOUBLE __tmp_longitude;
+    DOUBLE __tmp_altitude;
+    FLOAT __tmp_sd_latitude;
+    FLOAT __tmp_sd_longitude;
+    FLOAT __tmp_sd_altitude;
     UINT64 __tmp_determined_at;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
@@ -231,17 +240,29 @@ app_to_peer_RespGetCurrentLocationParams(const void *ptr_src_app, void *ptr_dst_
 
     dst->set_req_status(__tmp_req_status);
 
-    app_to_peer_FLOAT(&src->longitude, &__tmp_longitude); // longitude
-
-    dst->set_longitude(__tmp_longitude);
-
-    app_to_peer_FLOAT(&src->latitude, &__tmp_latitude); // latitude
+    app_to_peer_DOUBLE(&src->latitude, &__tmp_latitude); // latitude
 
     dst->set_latitude(__tmp_latitude);
 
-    app_to_peer_FLOAT(&src->altitude, &__tmp_altitude); // altitude
+    app_to_peer_DOUBLE(&src->longitude, &__tmp_longitude); // longitude
+
+    dst->set_longitude(__tmp_longitude);
+
+    app_to_peer_DOUBLE(&src->altitude, &__tmp_altitude); // altitude
 
     dst->set_altitude(__tmp_altitude);
+
+    app_to_peer_FLOAT(&src->sd_latitude, &__tmp_sd_latitude); // sd_latitude
+
+    dst->set_sd_latitude(__tmp_sd_latitude);
+
+    app_to_peer_FLOAT(&src->sd_longitude, &__tmp_sd_longitude); // sd_longitude
+
+    dst->set_sd_longitude(__tmp_sd_longitude);
+
+    app_to_peer_FLOAT(&src->sd_altitude, &__tmp_sd_altitude); // sd_altitude
+
+    dst->set_sd_altitude(__tmp_sd_altitude);
 
     app_to_peer_UINT64(&src->determined_at, &__tmp_determined_at); // determined_at
 
@@ -258,9 +279,12 @@ peer_to_app_RespGetCurrentLocationParams(const void *ptr_src_peer, void *ptr_dst
 
     dst->correlation_id = src->correlation_id();
     dst->req_status = src->req_status();
-    dst->longitude = src->longitude();
     dst->latitude = src->latitude();
+    dst->longitude = src->longitude();
     dst->altitude = src->altitude();
+    dst->sd_latitude = src->sd_latitude();
+    dst->sd_longitude = src->sd_longitude();
+    dst->sd_altitude = src->sd_altitude();
     dst->determined_at = src->determined_at();
 
 }

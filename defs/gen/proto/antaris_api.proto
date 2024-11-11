@@ -81,10 +81,13 @@ message ReqGetCurrentLocationParams {
 message RespGetCurrentLocationParams {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     int32                           req_status       = 2; // status of get-location request
-    float                           longitude        = 3; // current latitude
-    float                           latitude         = 4; // current longitude
-    float                           altitude         = 5; // current altitude
-    int64                           determined_at    = 6; // time (seconds since epoch) when the location was determined
+    double                          latitude         = 3; // current latitude
+    double                          longitude        = 4; // current longitude
+    double                          altitude         = 5; // current altitude
+    float                           sd_latitude      = 6; // standard deviation in latitude
+    float                           sd_longitude     = 7; // standard deviation in longitude
+    float                           sd_altitude      = 8; // standard deviation in altitude
+    int64                           determined_at    = 9; // time (seconds since epoch) when the location was determined
 }
 
 message ReqStageFileDownloadParams {
