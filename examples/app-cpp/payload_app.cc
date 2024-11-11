@@ -455,22 +455,24 @@ AntarisReturnCode process_req_payload_metrics(ReqPayloadMetricsParams *payload_m
 {
     PayloadMetricsResponse   resp_payload_metrics_params;
 
-    printf("payload_metrics_param : Got payload_metrics_param request from PC\n");
-
-    if (debug) {
-        displayPayloadMetricsResponse(payload_metrics_param);
-    }
+    printf("Before resp_payload_metrics_params\n");
 
     time_t now = time(0);
     UINT64 epoch = static_cast<UINT64>(now);
     resp_payload_metrics_params.correlation_id = payload_metrics_param->correlation_id;
-    resp_payload_metrics_params.used_counter = 5;   // Example value
+    resp_payload_metrics_params.used_counter = 8;   // Example value
     resp_payload_metrics_params.timestamp = epoch;
 
     // Set counter, names values
     for (int i=0; i< resp_payload_metrics_params.used_counter ; i++) {
         resp_payload_metrics_params.metrics->counter = i + 1;    // Example value
-        resp_payload_metrics_params.metrics->names[i] = sprintf("%s_%d", "Counter" , i);   // Example value
+        sprintf(resp_payload_metrics_params.metrics[i].names , "%s_%d\0", "Counter" , i);   // Example value
+    }
+
+    printf("payload_metrics_param : Got payload_metrics_param request from PC\n");
+
+    if (debug) {
+        displayPayloadMetricsResponse((const void *)&resp_payload_metrics_params);
     }
 
     api_pa_pc_response_payload_metrics(channel, &resp_payload_metrics_params);
