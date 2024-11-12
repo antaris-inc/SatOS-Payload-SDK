@@ -889,7 +889,12 @@ app_to_peer_PayloadMetricsResponse(const void *ptr_src_app, void *ptr_dst_peer)
     dst->set_used_counter(__tmp_used_counter);
 
     for (int i = 0; i < 8; i++) { // metrics
-        ::antaris_api_peer_to_peer::PayloadMetricsInfo *dst_info = dst->mutable_metrics(i);
+        ::antaris_api_peer_to_peer::PayloadMetricsInfo* dst_info;
+        if (i >= dst->metrics_size()) {
+            dst_info = dst->add_metrics();
+        } else {
+            dst_info = dst->mutable_metrics(i);
+        }
         app_to_peer_PayloadMetricsInfo(&src->metrics[i], dst_info);
     }
 
