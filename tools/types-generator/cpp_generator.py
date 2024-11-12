@@ -229,8 +229,18 @@ class CPPField(PARSER_INTF.Field):
                 # ::antaris_api_peer_to_peer::PayloadMetricsInfo *dst_info = dst->mutable_mystats(i);
                 # app_to_peer_PayloadMetricsInfo(&src->mystats[i], dst_info);
                 targetFile.write("{}for (int i = 0; i < {}; i++) {} // {}\n".format(gIndent, self.array_xml, "{", self.name))
-                targetFile.write("{}{}{} *dst_info = dst->mutable_{}(i);\n".format(gIndent * 2, namespace, appint_type_to_peerint_type(self.type), self.name))
-                targetFile.write("{}{}(&src->{}[i], dst_info);\n".format(gIndent * 2, get_app_to_peer_fn_for_type(self.type), self.name, tmpVarName))
+                # Declare dst_info and add condition for metrics size
+                targetFile.write("{}{}* dst_info;\n".format(gIndent * 2, namespace + appint_type_to_peerint_type(self.type)))
+
+                # Add the if-else structure for dst_info assignment
+                targetFile.write("{}if (i >= dst->{}_size()) {{\n".format(gIndent * 2, self.name))
+                targetFile.write("{}dst_info = dst->add_{}();\n".format(gIndent * 3, self.name))
+                targetFile.write("{}}} else {{\n".format(gIndent * 2))
+                targetFile.write("{}dst_info = dst->mutable_{}(i);\n".format(gIndent * 3, self.name))
+                targetFile.write("{}}}\n".format(gIndent * 2))
+
+                # Call the app_to_peer_PayloadMetricsInfo function
+                targetFile.write("{}{}(&src->{}[i], dst_info);\n".format(gIndent * 2, get_app_to_peer_fn_for_type(self.type), self.name))
                 targetFile.write("{}{}\n".format(gIndent, "}"))
             else:
                 targetFile.write("{}dst->set_{}(&src->{}[0]);\n\n".format(gIndent, self.name, self.name, ))

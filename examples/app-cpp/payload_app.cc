@@ -396,6 +396,41 @@ void wakeup_seq_fsm(mythreadState_t *threadState)
     pthread_cond_signal(&threadState->condition);
 }
 
+AntarisReturnCode req_payload_metrics(ReqPayloadMetricsParams *payload_metrics_param)
+{
+    PayloadMetricsResponse   resp_payload_metrics_params;
+
+    printf("Before resp_payload_metrics_params\n");
+
+    time_t now = time(0);
+    UINT64 epoch = static_cast<UINT64>(now);
+    resp_payload_metrics_params.correlation_id = payload_metrics_param->correlation_id;
+    resp_payload_metrics_params.used_counter = 8;   // Example value
+    resp_payload_metrics_params.timestamp = epoch;
+
+    // Total number of counters supported is 8, hence setting all names to 0
+    for (int i = 0; i < 8 ; i++) {
+        resp_payload_metrics_params.metrics[i].counter = 0; 
+        memset(resp_payload_metrics_params.metrics[i].names , 0 , 16);
+    }
+
+    // Set counter, names values
+    for (int i=0; i< resp_payload_metrics_params.used_counter ; i++) {
+        resp_payload_metrics_params.metrics[i].counter = i + 1;    // Example value
+        sprintf(resp_payload_metrics_params.metrics[i].names , "%s_%d", "Counter" , i);   // Example value
+        printf("%d = %s \n", resp_payload_metrics_params.metrics[i].counter, resp_payload_metrics_params.metrics[i].names);
+    }
+
+    printf("payload_metrics_param : Got payload_metrics_param request from PC\n");
+
+    if (debug) {
+        displayPayloadMetricsResponse((const void *)&resp_payload_metrics_params);
+    }
+
+    api_pa_pc_response_payload_metrics(channel, &resp_payload_metrics_params);
+
+    return An_SUCCESS;
+}
 AntarisReturnCode shutdown_app(ShutdownParams *shutdown_param)
 {
     if (shutdown_param == NULL){
