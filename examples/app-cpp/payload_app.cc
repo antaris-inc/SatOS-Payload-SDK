@@ -45,6 +45,9 @@
 
 #define STAGE_FILE_DOWNLOAD_DIR         "/opt/antaris/outbound/"    // path for staged file download
 #define STAGE_FILE_NAME                 "SampleFile.txt"            // name of staged file
+
+#define PAYLOAD_METRICS_INFO_NAME_SIZE  16
+#define USED_COUNTER_MAX                8
 /*
  * Following counters should be incremented whenever
  * a reqeust/response (to PC) API hits error
@@ -409,9 +412,9 @@ AntarisReturnCode process_req_payload_metrics(ReqPayloadMetricsParams *payload_m
     resp_payload_metrics_params.timestamp = epoch;
 
     // Total number of counters supported is 8, hence setting all names to 0
-    for (int i = 0; i < 8 ; i++) {
+    for (int i = 0; i < USED_COUNTER_MAX ; i++) {
         resp_payload_metrics_params.metrics[i].counter = 0; 
-        memset(resp_payload_metrics_params.metrics[i].names , 0 , 16);
+        memset(resp_payload_metrics_params.metrics[i].names , 0 , PAYLOAD_METRICS_INFO_NAME_SIZE);
     }
 
     // Set counter, names values
