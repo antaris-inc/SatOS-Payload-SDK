@@ -411,16 +411,19 @@ AntarisReturnCode process_req_payload_metrics(ReqPayloadMetricsParams *payload_m
     resp_payload_metrics_params.used_counter = 8;   // Example value
     resp_payload_metrics_params.timestamp = epoch;
 
-    // Total number of counters supported is 8, hence setting all names to 0
-    for (int i = 0; i < USED_COUNTER_MAX ; i++) {
+    size_t used_counter_max = sizeof(((struct PayloadMetricsResponse*)0)->metrics) / sizeof(struct PayloadMetricsInfo);
+    size_t name_size = sizeof(((struct PayloadMetricsInfo*)0)->names);
+
+    // Total number of counters supported is 'used_counter_max', hence setting all names to 0
+    for (int i = 0; i < used_counter_max ; i++) {
         resp_payload_metrics_params.metrics[i].counter = 0; 
-        memset(resp_payload_metrics_params.metrics[i].names , 0 , PAYLOAD_METRICS_INFO_NAME_SIZE);
+        memset(resp_payload_metrics_params.metrics[i].names, 0, name_size);
     }
 
     // Set counter, names values
     for (int i=0; i< resp_payload_metrics_params.used_counter ; i++) {
         resp_payload_metrics_params.metrics[i].counter = i + 1;    // Example value
-        sprintf(resp_payload_metrics_params.metrics[i].names , "%s_%d", "Counter" , i);   // Example value
+        sprintf(resp_payload_metrics_params.metrics[i].names, "%s_%d", "Counter", i);   // Example value
         printf("%d = %s \n", resp_payload_metrics_params.metrics[i].counter, resp_payload_metrics_params.metrics[i].names);
     }
 
