@@ -19,6 +19,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <cstdlib>
+#include <ctime>
 
 #include "antaris_api.h"
 #include "antaris_api_gpio.h"
@@ -44,6 +45,7 @@
 
 #define STAGE_FILE_DOWNLOAD_DIR         "/opt/antaris/outbound/"    // path for staged file download
 #define STAGE_FILE_NAME                 "SampleFile.txt"            // name of staged file
+
 /*
  * Following counters should be incremented whenever
  * a reqeust/response (to PC) API hits error
@@ -395,6 +397,44 @@ void wakeup_seq_fsm(mythreadState_t *threadState)
     pthread_cond_signal(&threadState->condition);
 }
 
+AntarisReturnCode process_req_payload_metrics(ReqPayloadMetricsParams *payload_metrics_param)
+{
+    PayloadMetricsResponse   resp_payload_metrics_params;
+
+    printf("Before resp_payload_metrics_params\n");
+
+    time_t now = time(0);
+    UINT64 epoch = static_cast<UINT64>(now);
+    resp_payload_metrics_params.correlation_id = payload_metrics_param->correlation_id;
+    resp_payload_metrics_params.used_counter = 8;   // Example value
+    resp_payload_metrics_params.timestamp = epoch;
+
+    size_t max_metrics_counter = sizeof(((struct PayloadMetricsResponse*)0)->metrics) / sizeof(struct PayloadMetricsInfo);
+    size_t metrics_name = sizeof(((struct PayloadMetricsInfo*)0)->names);
+
+    // Total number of counters supported is 'max_metrics_counter', hence setting all names to 0
+    for (int i = 0; i < max_metrics_counter ; i++) {
+        resp_payload_metrics_params.metrics[i].counter = 0; 
+        memset(resp_payload_metrics_params.metrics[i].names, 0, metrics_name);
+    }
+
+    // Set counter, names values
+    for (int i=0; i< resp_payload_metrics_params.used_counter ; i++) {
+        resp_payload_metrics_params.metrics[i].counter = i + 1;    // Example value
+        sprintf(resp_payload_metrics_params.metrics[i].names, "%s_%d", "Counter", i);   // Example value
+        printf("%d = %s \n", resp_payload_metrics_params.metrics[i].counter, resp_payload_metrics_params.metrics[i].names);
+    }
+
+    printf("payload_metrics_param : Got payload_metrics_param request from PC\n");
+
+    if (debug) {
+        displayPayloadMetricsResponse((const void *)&resp_payload_metrics_params);
+    }
+
+    api_pa_pc_response_payload_metrics(channel, &resp_payload_metrics_params);
+
+    return An_SUCCESS;
+}
 AntarisReturnCode shutdown_app(ShutdownParams *shutdown_param)
 {
     if (shutdown_param == NULL){
@@ -514,6 +554,7 @@ int main(int argc, char *argv[])
             process_response_get_current_location : process_response_get_current_location,
             process_response_stage_file_download : process_response_stage_file_download,
             process_response_payload_power_control : process_response_payload_power_control,
+            req_payload_metrics: process_req_payload_metrics,
     };
 
     // Create Channel to talk to Payload Controller (PC)

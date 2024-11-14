@@ -71,3 +71,7 @@ class AntarisApiGPIO {
     private:
         AntarisReturnCode verify_gpio_pin(int8_t pin_number);
 };
+
+AntarisReturnCode init_satos_lib();
+
+void with_timeout_deinit_satos_lib();

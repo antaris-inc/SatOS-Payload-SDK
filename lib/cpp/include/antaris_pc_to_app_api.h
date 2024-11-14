@@ -90,7 +90,7 @@ typedef union {
     RespStageFileDownloadParams         resp_stage_file_download;
     RespPayloadPowerControlParams       resp_payload_power_ctrl;
     HealthCheckParams                   health_check;
-    ReqPayloadMetricsParams               payload_stats;
+    ReqPayloadMetricsParams             payload_stats;
 } PCToAppApiParams_t;
 
 PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port, INT8 *client_ssl_addr, UINT32 ssl_flag);
