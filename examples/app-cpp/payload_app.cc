@@ -409,13 +409,13 @@ AntarisReturnCode process_req_payload_metrics(ReqPayloadMetricsParams *payload_m
     resp_payload_metrics_params.used_counter = 8;   // Example value
     resp_payload_metrics_params.timestamp = epoch;
 
-    size_t used_counter_max = sizeof(((struct PayloadMetricsResponse*)0)->metrics) / sizeof(struct PayloadMetricsInfo);
-    size_t name_size = sizeof(((struct PayloadMetricsInfo*)0)->names);
+    size_t max_metrics_counter = sizeof(((struct PayloadMetricsResponse*)0)->metrics) / sizeof(struct PayloadMetricsInfo);
+    size_t metrics_name = sizeof(((struct PayloadMetricsInfo*)0)->names);
 
-    // Total number of counters supported is 'used_counter_max', hence setting all names to 0
-    for (int i = 0; i < used_counter_max ; i++) {
+    // Total number of counters supported is 'max_metrics_counter', hence setting all names to 0
+    for (int i = 0; i < max_metrics_counter ; i++) {
         resp_payload_metrics_params.metrics[i].counter = 0; 
-        memset(resp_payload_metrics_params.metrics[i].names, 0, name_size);
+        memset(resp_payload_metrics_params.metrics[i].names, 0, metrics_name);
     }
 
     // Set counter, names values
