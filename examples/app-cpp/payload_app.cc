@@ -46,8 +46,6 @@
 #define STAGE_FILE_DOWNLOAD_DIR         "/opt/antaris/outbound/"    // path for staged file download
 #define STAGE_FILE_NAME                 "SampleFile.txt"            // name of staged file
 
-#define PAYLOAD_METRICS_INFO_NAME_SIZE  16
-#define USED_COUNTER_MAX                8
 /*
  * Following counters should be incremented whenever
  * a reqeust/response (to PC) API hits error
