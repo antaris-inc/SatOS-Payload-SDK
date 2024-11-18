@@ -1,0 +1,20 @@
+Date                    : 18 Nov 2024
+Version                 : 1.1.1
+Compatible PC Version   : 1.9.4
+
+Release notes:
+    1. Payload Metrics Support 
+       - Payload metrics are now supported in the C++ application.  
+       - Maximum 8 user-defined counters are supported.
+      
+    2.  Updated Log location parameters. The SatOS SDK library, as well as the C++ and Python applications, now include following parameters for Log location .  
+        - Latitude, longitude and altitude are provided as double-precision values.  
+        - Additionally, the standard deviation of these values is available as a float for improved accuracy.  
+      
+    3.  Parallel Sequence Support 
+        - Added support for handling multiple sequences in a parallel manner, improving efficiency and flexibility.  
+
+Bug Fixes  
+      1. Resolved a segmentation fault issue in the C++ application that occurred when an unknown sequence was sent.  
+
+--------------------------------------------------------------------------------------------------------------------------------    
