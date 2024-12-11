@@ -49,3 +49,12 @@ Now, simply run the image and use `pytest` to execute the tests:
 ```
 docker run --platform=linux/amd64 -v $PWD:/workspace -w /workspace -t satos-payload-example-app-python /bin/bash -c "pip3 install pytest && pytest"
 ```
+# Example Python application for camera payload support
+Build the camera app using the following command:
+
+```
+docker build --platform=linux/amd64 --build-arg APP_TYPE=Image -t satos-payload-example-app-python .
+```
+The sequences supported by the example are described below:
+* `CaptureImage`: Accepts Image name, dimensions & format as input parameters. It captures and downloads image.
+* `RecordVideo`: Accepts Image name, fps, duration, dimensions & format as input parameters. It records and downloads video.

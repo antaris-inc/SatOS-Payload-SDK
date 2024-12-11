@@ -30,6 +30,7 @@ RUN apt install -y libftdi1
 RUN python3 -m pip install pyserial
 RUN python3 -m pip install azure-storage-file-share
 RUN python3 -m pip install python-can
+RUN python3 -m pip install opencv-python
 
 RUN mkdir /stage
 COPY dist/satos-payload-sdk-cpp.deb /stage

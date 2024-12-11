@@ -14,6 +14,15 @@
 
 FROM quay.io/antaris-inc/satos-payload-app-python:stable AS app_image
 
-ADD example_app.py /opt/antaris/app/example_app.py
+ARG APP_TYPE=Default
+
+RUN if [ "$APP_TYPE" = "Image" ]; then \
+        echo "Building with example_camera_support.py"; \
+        cp /opt/antaris/app/example_camera_support.py /opt/antaris/app/example_app.py; \
+    else \
+        echo "Building with default example_app.py"; \
+        cp /opt/antaris/app/example_app.py /opt/antaris/app/example_app.py; \
+    fi
+
 ADD entrypoint.sh /opt/antaris/app/entrypoint.sh
 RUN mkdir -p /opt/antaris/outbound -p /opt/antaris/inbound

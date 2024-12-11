@@ -17,6 +17,7 @@
 # location. The sample file is checked-in in conf directory
 
 import time, sys, json
+import cv2
 
 import pylibftdi as ftdi
 
@@ -30,12 +31,17 @@ g_JSON_Key_UART = "UART"
 g_JSON_Key_Device_Count = "UART_PORT_COUNT"
 g_JSON_Key_Device_Path = "Device_Path_"
 g_JSON_Key_Interrupt_Pin = "GPIO_Interrupt"
+g_JSON_Key_Camera = "Camera"
+g_JSON_Key_Camera_Port = "Camera_Port"
+g_JSON_Key_Camera_Port_Id = "Camera_Port_Id"
 
 # Define error code
 g_GPIO_ERROR = -1
 g_GPIO_AVAILABLE = 1
 g_MASK_BIT_0 = 1
 g_MASK_BYTE = 0xFF
+
+g_SUCCESS = 0
 
 # Read config info
 jsonfile = open('/opt/antaris/app/config.json', 'r')
@@ -47,6 +53,11 @@ class UART:
     def __init__(self, port_count, uart_dev):
         self.uart_port_count = port_count
         self.uart_dev = uart_dev
+
+class Camera:
+    def __init__(self, port, port_id):
+        self.port = port
+        self.port_id = port_id
 
 class GPIO:
     def __init__(self, pin_count, pin, interrupt_pin):
@@ -102,6 +113,13 @@ def api_pa_pc_get_uart_dev():
 
     uart = UART(g_total_uart_port, uart_dev)
     return uart
+
+def api_pa_pc_get_camera_dev():
+    camera_port = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_Camera][g_JSON_Key_Camera_Port]
+    camera_port_id = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_Camera][g_JSON_Key_Camera_Port_Id]
+    
+    camera_dev = Camera(camera_port, camera_port_id)
+    return camera_dev
 
 def api_pa_pc_get_io_interrupt_pin():
     value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_Interrupt_Pin]
@@ -177,6 +195,141 @@ def api_write_gpio(port, pin, value):
     op = (Device.port >> int(pin)) & g_MASK_BIT_0
     Device.close()
     return op
+
+def api_capture_image(port_id, file, width, height, file_format):
+    supported_formats = ["jpg", "jpeg", "png", "bmp", "tiff", "ppm", "pgm", "pbm", "webp"]
+
+    # Validate file format
+    file_format = file_format.lower()
+    if file_format not in supported_formats:
+        print(f"Unsupported format '{file_format}'. Supported formats are: {', '.join(supported_formats)}")
+        return g_GPIO_ERROR
+    
+    # Validate dimension
+    if isinstance(width, float) or width <= 0:
+        print(f"Error: Width should be greater than 0")
+        return g_GPIO_ERROR
+    elif not isinstance(width, int):
+        print(f"Error: Width should be integer")
+        return g_GPIO_ERROR
+
+    if isinstance(height, float) or height <= 0:
+        print(f"Error: height should be greater than 0")
+        return g_GPIO_ERROR
+    elif not isinstance(height, int):
+        print(f"Error: height should be integer")
+        return g_GPIO_ERROR
+        
+    # Open the camera using port id. For e.g. port_id = 2 for device /dev/video2
+    cap = cv2.VideoCapture(port_id) 
+
+    # Check if the camera is opened correctly
+    if not cap.isOpened():
+        print("Error: Could not open Camera.")
+        return g_GPIO_ERROR
+    
+    # Read a frame from the camera
+    ret, frame = cap.read()
+    if not ret:
+        print("Error: Cannot capture image.")
+        cap.release()
+        return g_GPIO_ERROR
+    
+    # Resize the frame to the user-specified dimensions
+    dimensions = (width, height)
+    resized_frame = cv2.resize(frame, dimensions)
+
+    # Save the captured image
+    success = cv2.imwrite(file, resized_frame)
+    if success:
+        print(f"Image saved successfully at {file, width, height}")
+    else:
+        print("Error: Failed to save the image.")
+        cap.release()
+        return g_GPIO_ERROR
+    
+    # Release the webcam
+    cap.release()
+    return g_SUCCESS
+
+def api_capture_video(port_id, file, width, height, file_format, duration, fps):
+    # Define supported formats and their codecs
+    supported_formats = {
+        "avi": "XVID",
+        "mp4": "mp4v",
+        "mkv": "X264",
+        "webm": "VP80",
+    }
+
+    # Validate file format
+    file_format = file_format.lower()
+    if file_format not in supported_formats:
+        print(f"Unsupported format '{file_format}'. Supported formats are: {', '.join(supported_formats)}")
+        return g_GPIO_ERROR
+    
+    # Validate FPS : It should be integer and greater than 0
+    if isinstance(fps, float) or fps <= 0:
+        print(f"Error: fps should be greater than 0")
+        return g_GPIO_ERROR
+    elif not isinstance(fps, int):
+        print(f"Error: fps should be integer")
+        return g_GPIO_ERROR
+
+    # Validate dimensions : They should be greater than 0
+    if isinstance(width, float) or width <= 0:
+        print(f"Error: Width should be greater than 0")
+        return g_GPIO_ERROR
+    elif not isinstance(width, int):
+        print(f"Error: Width should be integer")
+        return g_GPIO_ERROR
+
+    if isinstance(height, float) or height <= 0:
+        print(f"Error: height should be greater than 0")
+        return g_GPIO_ERROR
+    elif not isinstance(height, int):
+        print(f"Error: height should be integer")
+        return g_GPIO_ERROR
+    
+    # validate duration
+    if isinstance(duration, float) or duration <= 0:
+        print(f"Error: duration should be greater than 0")
+        return g_GPIO_ERROR
+    elif not isinstance(duration, int):
+        print(f"Error: duration should be integer")
+        return g_GPIO_ERROR
+
+    # Open the camera using port id. For e.g. port_id = 2 for device /dev/video2
+    cap = cv2.VideoCapture(port_id) 
+
+    # Check if the camera is opened correctly
+    if not cap.isOpened():
+        print("Error: Could not open Camera.")
+        return g_GPIO_ERROR
+
+    # Set user-defined video dimensions
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+
+    # VideoWriter setup
+    fourcc = cv2.VideoWriter_fourcc(*file_format)
+    out = cv2.VideoWriter(file, fourcc, fps, (width, height))
+
+    print(f"Recording video with dimensions {width}x{height}, {fps} FPS, for {duration} seconds...")
+    frame_count = int(fps * duration)
+
+    for _ in range(frame_count):
+        ret, frame = cap.read()
+        if not ret:
+            print("Error: Could not read frame from webcam.")
+            break
+        out.write(frame)
+        cv2.imshow("Recording", frame)
+
+    # Release resources
+    cap.release()
+    out.release()
+    cv2.destroyAllWindows()
+    return 
 
 # Main function is added for standalone testing of GPIO, if needed
 if __name__ == "__main__":

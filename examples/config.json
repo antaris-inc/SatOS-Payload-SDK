@@ -29,6 +29,10 @@
             "CAN_PORT_COUNT": "1",
             "CAN_Bus_Path_0": "can1",
             "CAN_Bus_Path_1": "can0"
+        },
+        "Camera": {
+            "Camera_Port": "/dev/video0",
+            "Port_Id": "0"
         }
     },
     "Network" : {
