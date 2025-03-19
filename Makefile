@@ -96,36 +96,45 @@ gen:
 	@echo ">>>>>>>>>>>> Generating cpp GRPC sources from generated proto files <<<<<<<<<"
 	${CPP_GEN} --cpp_out=${OUTPUT_GEN_CPP_DIR} --grpc_out=${OUTPUT_GEN_CPP_DIR} --plugin=protoc-gen-grpc=${GRPC_CPP_PLUGIN} ${PROTO_FILES}
 
+#################### C++ API dependencies ########################
+CPP_OBJS = \
+    ${VENDOR_LIB_DIR}/cJSON/src/cJSON.o \
+    ${CPP_LIB_DIR}/antaris_api_gpio.o \
+    ${OUTPUT_GEN_DIR}/antaris_api_autogen.o \
+    ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.o \
+    ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.o \
+    ${CPP_LIB_DIR}/antaris_api_common.o \
+    ${CPP_LIB_DIR}/antaris_sdk_environment.o \
+    ${CPP_LIB_DIR}/antaris_api_client.o \
+    ${CPP_LIB_DIR}/antaris_api_server.o \
+    ${CPP_LIB_DIR}/antaris_api_pyfunctions.o
+
+${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB}: $(CPP_OBJS)
+	ar cr $@ $^
+
+%.o: %.cc
+	g++ ${OPTIMIZATION_LEVEL} -c $< ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -I /usr/include/python3.10 -o $@
+
+%.o: %.c
+	gcc ${OPTIMIZATION_LEVEL} -c $< ${VENDOR_cJSON_INCLUDES} -o $@
+###################################################################
+
 api_lib:
 	@echo Generating version info
 	@echo "GRPC CPP I : ${GRPC_CPP_ADDITIONAL_INCLUDES} , VENDOR LIB : ${VENDOR_LIB_DIR}"
 	@${VERSION_GEN}
-	@if [ "${LANGUAGE}" == "python" ]; then																													\
-		echo nothing to build;								\
-		#tree ${OUTPUT_LIB_DIR};							\
-												\
-	elif [ "${LANGUAGE}" == "cpp" ]; then																													\
-		#mkdir -p ${OUTPUT_LIB_DIR} ${OUTPUT_BIN_DIR} ;																										\
-		echo building cpp api library;																														\
-		gcc ${OPTIMIZATION_LEVEL} -c ${VENDOR_LIB_DIR}/cJSON/src/cJSON.c	${VENDOR_cJSON_INCLUDES}	-o ${VENDOR_LIB_DIR}/cJSON/src/cJSON.o	;																							\
-		g++ ${OPTIMIZATION_LEVEL} -c ${CPP_LIB_DIR}/antaris_api_gpio.cc ${VENDOR_cJSON_INCLUDES} -I /usr/include/python3.10 -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_CPP_DIR} -o ${CPP_LIB_DIR}/antaris_api_gpio.o ;	\
-		g++ ${OPTIMIZATION_LEVEL} -c ${OUTPUT_GEN_DIR}/antaris_api_autogen.cc -I ${CPP_LIB_DIR}/include ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_DIR} -o ${OUTPUT_GEN_DIR}/antaris_api_autogen.o ;					\
-		g++ ${OPTIMIZATION_LEVEL} -c ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.o ;								\
-		g++ ${OPTIMIZATION_LEVEL} -c ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.o ;											\
-		g++ ${OPTIMIZATION_LEVEL} -c ${CPP_LIB_DIR}/antaris_api_common.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${CPP_LIB_DIR}/antaris_api_common.o ;						\
-		g++ ${OPTIMIZATION_LEVEL} -c ${CPP_LIB_DIR}/antaris_sdk_environment.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GRPC_CPP_DIR} -I ${OUTPUT_GEN_CPP_DIR} -o ${CPP_LIB_DIR}/antaris_sdk_environment.o ;				\
-		g++ ${OPTIMIZATION_LEVEL} -c ${CPP_LIB_DIR}/antaris_api_client.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -o ${CPP_LIB_DIR}/antaris_api_client.o ;							\
-		g++ ${OPTIMIZATION_LEVEL} -c ${CPP_LIB_DIR}/antaris_api_server.cc ${GRPC_CPP_ADDITIONAL_INCLUDES} -I ${OUTPUT_GRPC_CPP_DIR} -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_DIR} -o ${CPP_LIB_DIR}/antaris_api_server.o ;							\
-		g++ ${OPTIMIZATION_LEVEL} -c ${CPP_LIB_DIR}/antaris_api_pyfunctions.cc ${VENDOR_cJSON_INCLUDES} -I /usr/include/python3.10 -I ${CPP_LIB_DIR}/include -I ${OUTPUT_GEN_CPP_DIR} -o ${CPP_LIB_DIR}/antaris_api_pyfunctions.o ;	\
-		ar cr ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB} ${CPP_LIB_DIR}/antaris_api_gpio.o ${OUTPUT_GEN_DIR}/antaris_api_autogen.o ${CPP_LIB_DIR}/antaris_api_client.o ${CPP_LIB_DIR}/antaris_api_server.o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.o 					\
-				${CPP_LIB_DIR}/antaris_api_common.o ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.o ${CPP_LIB_DIR}/antaris_sdk_environment.o ${CPP_LIB_DIR}/antaris_api_pyfunctions.o \
-				${VENDOR_LIB_DIR}/cJSON/src/cJSON.o ; \
-		tree ${OUTPUT_LIB_DIR};							\
-		echo "content of api-lib ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB} ===>";	\
-		ar -t ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB};				\
-	else																																					\
-		echo "Unknown LANGUAGE=${LANGUAGE}. ${LANGUAGE_HELP}";																								\
-		exit -1;																																			\
+	@if [ "${LANGUAGE}" == "python" ]; then \
+		echo "Nothing to build."; \
+		tree ${OUTPUT_LIB_DIR}; \
+	elif [ "${LANGUAGE}" == "cpp" ]; then \
+		echo "Building C++ API library..."; \
+		$(MAKE) -j $(OUTPUT_LIB_DIR)/$(ANTARIS_CPP_LIB); \
+		tree ${OUTPUT_LIB_DIR}; \
+		echo "Contents of ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB}:"; \
+		ar -t ${OUTPUT_LIB_DIR}/${ANTARIS_CPP_LIB}; \
+	else \
+		echo "Unknown LANGUAGE=${LANGUAGE}. ${LANGUAGE_HELP}"; \
+		exit -1; \
 	fi
 
 api_lib_clean:
