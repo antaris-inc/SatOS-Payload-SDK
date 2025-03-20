@@ -34,6 +34,10 @@ RUN python3 -m pip install python-can
 RUN mkdir /stage
 COPY dist/satos-payload-sdk-cpp.deb /stage
 RUN apt update && apt install -y /stage/satos-payload-sdk-cpp.deb
+
+COPY dist/grpc-dev.deb /stage
+RUN apt install -y pkg-config /stage/grpc-dev.deb
+
 RUN rm -fr /stage
 
 
