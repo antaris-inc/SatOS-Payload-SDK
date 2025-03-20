@@ -40,6 +40,9 @@ cp $BUILD_ROOT/lib/cpp/include/antaris_api_internal.h $DEB_OUTPUT_DIR/lib/antari
 cp $BUILD_ROOT/lib/cpp/include/antaris_cpp_standard_includes.h $DEB_OUTPUT_DIR/lib/antaris/include
 cp $BUILD_ROOT/lib/cpp/include/antaris_pc_to_app_api.h $DEB_OUTPUT_DIR/lib/antaris/include
 cp $BUILD_ROOT/lib/cpp/include/antaris_sdk_environment.h $DEB_OUTPUT_DIR/lib/antaris/include
+cp $BUILD_ROOT/lib/cpp/include/antaris_api_gpio.h $DEB_OUTPUT_DIR/lib/antaris/include
+cp $BUILD_ROOT/lib/cpp/include/antaris_api_pyfunctions.h $DEB_OUTPUT_DIR/lib/antaris/include
+cp $BUILD_ROOT/vendor/cJSON/interface/cJSON.h $DEB_OUTPUT_DIR/lib/antaris/include
 
 
 # Set package metadata and build
