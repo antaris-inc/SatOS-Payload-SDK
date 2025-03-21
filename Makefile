@@ -147,7 +147,7 @@ python_package:
 	./tools/package-python-lib.sh
 
 cpp_package:
-	./tools/package_grpc_build.sh
+	./tools/package-grpc-lib.sh
 	./tools/package-cpp-lib.sh
 
 docs:
