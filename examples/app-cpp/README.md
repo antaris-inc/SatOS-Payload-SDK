@@ -1,36 +1,27 @@
 # Example C++ Payload Application
 
-This directory contains an example Payload Application using the C++.
+This directory contains an example Payload Application using the C++ API.
 This is not production-ready code, but it is useful for learning how the platform functions.
-
-NOTE: All the cpp files need to have .cc extention only.
-
-
-## Build Cpp application
-
-To build application in examples/app-cpp , go to SatOS_Payload_SDK parent directory and run `make build_cpp`.
-
-`make build_cpp` will instantiate a build environment container and compile cpp application present at examples/app-cpp. For other locations please refer the main README iniside SatOS-Payload-SDK.
-
-```
-cd ../.. 
-make build_cpp
-```
 
 ## Quickstart
 
 In the Antaris Cloud Platform, create a TrueTwin Satellite with a remote payload and download the associated config.
 Place that downloaded zip file in this directory.
 
-Build the app using the following command:
+Build the C++ app using the following steps:
 
-```
+```bash
+cd examples/app-cpp
+
+# Builds your standalone application first 
 docker build --platform=linux/amd64 -t satos-payload-example-app-cpp .
 ```
 
-Next, we can run the application in a container. The command below assumes that `$CONFIG` is set to the name of the config file (zip) you downloaded from Antaris Cloud Platform. The file must be located in your current working directory:
+Next, we can run the payload application in the container. The command below assumes that `$CONFIG` is set to the name of the config file (zip) you downloaded from Antaris Cloud Platform. The file must be located in your current working directory:
 
-```
+```bash
+CONFIG=your_remote_config_from_acp.zip
+
 docker run --platform=linux/amd64 -e CONFIG=$CONFIG --privileged -v $(pwd):/workspace -it satos-payload-example-app-cpp
 ```
 
