@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
       - name: Build docs
-        run: docker run --platform linux/amd64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable /bin/bash -c "pip install sphinx furo && make docs"
+        run: docker run --platform linux/arm64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable /bin/bash -c "pip install sphinx furo && make docs"
       - name: upload docs artifact
         uses: actions/upload-artifact@v3
         with:

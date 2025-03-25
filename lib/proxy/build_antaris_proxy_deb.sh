@@ -16,7 +16,7 @@ read -r -d '' PKG_CONTROL_CONTENTS <<  MESSAGE_END
 Package: $SDK_PACKAGE_NAME  
 Version: $VERSION  
 Maintainer: antaris  
-Architecture: amd64  
+Architecture: arm64  
 Description: Debian package to install the proxy tool.  
 MESSAGE_END
 

@@ -56,11 +56,11 @@ GRPC_CPP_ADDITIONAL_LIBS=-L /usr/local/antaris/grpc/lib64/ -L /usr/local/antaris
 VENDOR_LIB_DIR=vendor
 CONTAINER_IMAGE_NAME := payload_sdk_build_env_${ARCH}
 
-DOCKER_BUILD=docker build --platform=linux/amd64
+DOCKER_BUILD=docker build --platform=linux/arm64
 PYTHON_GEN=python3 -m grpc_tools.protoc
 CPP_GEN=/usr/local/antaris/grpc/bin/protoc
 GRPC_CPP_PLUGIN=/usr/local/antaris/grpc/bin/grpc_cpp_plugin
-DOCKER_RUN_CMD=docker run --platform=linux/amd64
+DOCKER_RUN_CMD=docker run --platform=linux/arm64
 DOCKER_EXEC_CMD=docker exec
 DOCKER_RM_CMD=docker rm -f
 WORKSPACE_MAPPING_DIR=/workspace

@@ -48,7 +48,7 @@ cat << EOM > $DEB_OUTPUT_DIR/DEBIAN/control
 Package: $DEB_NAME
 Version: $VERSION
 Maintainer: antaris
-Architecture: amd64
+Architecture: arm64
 Description: C++ SatOS payload application library
 EOM
 
