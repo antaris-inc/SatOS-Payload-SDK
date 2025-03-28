@@ -1,3 +1,11 @@
+Date                    : 31 March 2025
+SatOS-SDK Version       : 1.1.2
+Compatible PC Version   : 1.9.5
+
+Release notes:
+    1. Updated build process for CPP example application
+
+--------------------------------------------------------------------------------------------------------------------------------
 Date                    : 18 Nov 2024
 SatOS-SDK Version       : 1.1.1
 Compatible PC Version   : 1.9.4

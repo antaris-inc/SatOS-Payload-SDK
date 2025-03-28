@@ -14,8 +14,9 @@
 #   limitations under the License.
 #
 
-.PHONY: no_default pc_submodule_tools build_cpp gen old_gen api_lib api_lib_clean gen_clean pc_sim pc_sim_clean sample_app sample_app_clean clean sdk_pkg payload_app_pkg docker_img python_package cpp_package agent_package docs
+.PHONY: no_default pc_submodule_tools build_cpp gen api_lib api_lib_clean gen_clean clean python_package cpp_package agent_package docs
 
+include Makefile.inc
 ARCH=x86_64
 SHELL := /bin/bash
 
@@ -51,8 +52,6 @@ API_SPEC=./defs/api/antaris_api.xml
 API_SPEC_SCHEMA=./defs/api/schema/antaris_api_schema.xsd
 API_SPEC_GEN_BASE_OPTIONS=-i ${API_SPEC} -o ${LIB_DIR}/gen -s ${API_SPEC_SCHEMA}
 VENDOR_cJSON_INCLUDES= -I vendor/cJSON/interface/
-GRPC_CPP_ADDITIONAL_INCLUDES=-I /usr/local/antaris/grpc/include/ ${VENDOR_cJSON_INCLUDES}
-GRPC_CPP_ADDITIONAL_LIBS=-L /usr/local/antaris/grpc/lib64/ -L /usr/local/antaris/grpc/lib/ -lprotobuf -lgrpc++ -lgrpc -lgrpc++_reflection -lgpr -lupb -labsl_bad_optional_access -labsl_cord -labsl_raw_logging_internal -labsl_cordz_info -labsl_cordz_handle -labsl_base -labsl_spinlock_wait -labsl_synchronization -labsl_base -labsl_malloc_internal -labsl_synchronization -labsl_symbolize -labsl_debugging_internal -labsl_demangle_internal -labsl_time -labsl_time_zone -labsl_int128 -labsl_graphcycles_internal -labsl_stacktrace -labsl_debugging_internal -labsl_cordz_functions -labsl_exponential_biased -labsl_cord_internal -labsl_throw_delegate -labsl_strings -labsl_strings_internal -labsl_status -labsl_str_format_internal -labsl_statusor -labsl_bad_variant_access -lre2 -lcares -laddress_sorting -labsl_hash -labsl_city -labsl_low_level_hash -labsl_random_internal_randen_slow -labsl_random_internal_platform -labsl_random_internal_randen_hwaes_impl -labsl_random_internal_pool_urbg -labsl_random_internal_seed_material -labsl_random_seed_gen_exception -labsl_random_internal_randen -labsl_random_internal_randen_hwaes -lpthread -lssl -lcrypto -lz
 VENDOR_LIB_DIR=vendor
 CONTAINER_IMAGE_NAME := payload_sdk_build_env_${ARCH}
 

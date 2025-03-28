@@ -44,6 +44,7 @@ cp $BUILD_ROOT/lib/cpp/include/antaris_api_gpio.h $DEB_OUTPUT_DIR/lib/antaris/in
 cp $BUILD_ROOT/lib/cpp/include/antaris_api_pyfunctions.h $DEB_OUTPUT_DIR/lib/antaris/include
 cp $BUILD_ROOT/vendor/cJSON/interface/cJSON.h $DEB_OUTPUT_DIR/lib/antaris/include
 
+cp $BUILD_ROOT/Makefile.inc $DEB_OUTPUT_DIR/lib/antaris/include
 
 # Set package metadata and build
 
