@@ -3,3 +3,6 @@ dist/
 __pycache__/
 .tox/
 *.o
+*.a
+**.zip
+**.DS_Store
