@@ -17,12 +17,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
       - name: Build docs
         run: docker run --platform linux/amd64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable /bin/bash -c "pip install sphinx furo && make docs"
       - name: upload docs artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: docs
           path: dist/docs/
@@ -34,12 +34,12 @@ jobs:
       name: docs
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
       with:
         name: docs
         path: docs/
-    - uses: actions/configure-pages@v3
-    - uses: actions/upload-pages-artifact@v1
+    - uses: actions/configure-pages@v4
+    - uses: actions/upload-pages-artifact@v2
       with:
         path: ./docs/
     - id: deployment
