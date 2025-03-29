@@ -20,7 +20,7 @@ RUN apt update && apt install -y build-essential
 FROM dependencies AS builder
 WORKDIR /workspace
 COPY . .
-RUN make
+RUN make payload_app
 
 # Stage 3: Runtime image
 FROM quay.io/antaris-inc/satos-payload-app-cpp:stable
