@@ -1,5 +1,9 @@
 from azure.storage.fileshare import ShareFileClient
 import logging
+import datetime
+import requests
+# from google.cloud import storage
+from google.oauth2 import service_account
 
 logger = logging.getLogger("azure.core.pipeline.policies.http_logging_policy")
 logger.setLevel(logging.WARNING)
@@ -20,8 +24,8 @@ class File_Stage():
 
     def start_upload(self):
         file_path_local = g_Outbound_Path_Prefix + self.download_file_params.file_path
-        ret = azure_file_upload(file_path_local, self.config_data[g_FTM][g_File_String], self.config_data[g_FTM][g_Share_Name], self.file_path_remote)
-
+        # ret = azure_file_upload(file_path_local, self.config_data[g_FTM][g_File_String], self.config_data[g_FTM][g_Share_Name], self.file_path_remote)
+        ret = gcp_file_upload(self.config_data[g_FTM][g_File_String], file_path_local)
         return ret
         
     def file_download(self):
@@ -40,3 +44,13 @@ def azure_file_upload(file_name, conn_str, share_name, file_path):
         logger.error("Upload  to truetwin failed")
         logger.error(f"Error message: {str(e)}")
         return False
+    
+def gcp_file_upload(signed_url, local_file_path):
+    """Uploads a file using the signed URL."""
+    with open(local_file_path, "rb") as file:
+        response = requests.put(signed_url, data=file, headers={"Content-Type": "application/octet-stream"})
+
+    if response.status_code == 200:
+        print("✅ File uploaded successfully!")
+    else:
+        print(f"❌ Upload failed. Status: {response.status_code}, Response: {response.text}")
