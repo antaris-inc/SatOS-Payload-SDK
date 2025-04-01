@@ -2,7 +2,6 @@ from azure.storage.fileshare import ShareFileClient
 import logging
 import datetime
 import requests
-# from google.cloud import storage
 from google.oauth2 import service_account
 
 logger = logging.getLogger("azure.core.pipeline.policies.http_logging_policy")
