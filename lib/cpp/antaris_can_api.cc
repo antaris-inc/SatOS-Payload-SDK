@@ -2,6 +2,8 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <errno.h>
+#include <thread>
+#include <mutex>
 
 #include "antaris_can_api.h"
 #include "antaris_api_common.h"
@@ -10,86 +12,90 @@
 const int GPIO_ERROR = -1;
 
 // Constructor
-AntarisApiCAN::AntarisApiCAN() {}
+AntarisApiCAN::AntarisApiCAN() {
+    for (int i = 0; i < MAX_CAN_DEVICES; i++) {
+        receiver_running.push_back(false);
+        message_buffers.emplace_back(MAX_CAN_MESSAGES);  // Initialize buffer
+    }
+}
 
 // Destructor
 AntarisApiCAN::~AntarisApiCAN() {
-    pthread_mutex_destroy(&queue_mutex);
+    for (auto& t : receiver_threads) {
+        if (t.joinable()) {
+            t.join();
+        }
+    }
 }
 
 // Get available CAN devices
-AntarisReturnCode AntarisApiCAN::api_pa_pc_get_can_dev(AntarisApiCAN *can_info) 
-{
+AntarisReturnCode AntarisApiCAN::api_pa_pc_get_can_dev(AntarisApiCAN* can_info) {
     AntarisReturnCode ret = An_SUCCESS;
-    cJSON *p_cJson = NULL;
-    cJSON *key_io_access = NULL;
-    cJSON *key_can = NULL;
-    cJSON *pJsonStr = NULL;
-    char *str = NULL;
+    cJSON *p_cJson = nullptr;
+    cJSON *key_io_access = nullptr;
+    cJSON *key_can = nullptr;
+    cJSON *pJsonStr = nullptr;
+    char *str = nullptr;
     char key[32] = {'\0'};
 
     read_config_json(&p_cJson);
 
-    if (p_cJson == NULL) {
-        printf("Error: Failed to read the config.json\n");
+    if (!p_cJson) {
+        std::cerr << "Error: Failed to read the config.json\n";
         ret = An_INVALID_PARAMS;
         goto cleanup_and_exit;
     }
-    
+
     key_io_access = cJSON_GetObjectItemCaseSensitive(p_cJson, JSON_Key_IO_Access);
-    if (key_io_access == NULL) {
-        printf("Error: %s key absent in config.json \n", JSON_Key_IO_Access);
+    if (!key_io_access) {
+        std::cerr << "Error: " << JSON_Key_IO_Access << " key absent in config.json\n";
         ret = An_INVALID_PARAMS;
         goto cleanup_and_exit;
     }
-   
+
     key_can = cJSON_GetObjectItemCaseSensitive(key_io_access, JSON_Key_CAN);
-    if (key_can == NULL) {
-        printf("Error: %s key absent in config.json \n", JSON_Key_CAN);
+    if (!key_can) {
+        std::cerr << "Error: " << JSON_Key_CAN << " key absent in config.json\n";
         ret = An_INVALID_PARAMS;
         goto cleanup_and_exit;
     }
-    
-    // get CAN port count
+
+    // Get CAN port count
     pJsonStr = cJSON_GetObjectItem(key_can, JSON_Key_CAN_Port_Count);
-    if (pJsonStr == NULL) {
-        printf("Error: %s key absent in config.json \n", JSON_Key_CAN_Port_Count);
-        ret = An_INVALID_PARAMS;
-        goto cleanup_and_exit;
-    }
-    if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
-        printf("Error: %s value is not a string \n", JSON_Key_CAN_Port_Count);
+    if (!pJsonStr || !cJSON_IsString(pJsonStr)) {
+        std::cerr << "Error: " << JSON_Key_CAN_Port_Count << " value is not a valid string\n";
         ret = An_INVALID_PARAMS;
         goto cleanup_and_exit;
     }
 
     str = cJSON_GetStringValue(pJsonStr);
-    if ((*str == 0) || (str == NULL) || (strlen(str) > sizeof(int8_t)))
-    {
-        printf("Failed to read CAN count the json, CAN support not added \n");
+    if (!str || strlen(str) > sizeof(int8_t)) {
+        std::cerr << "Failed to read CAN count in JSON, CAN support not added\n";
         ret = An_INVALID_PARAMS;
         goto cleanup_and_exit;
     }
 
     can_info->can_port_count = (*str) - '0';
 
-    // get CAN ports
-    for (int i = 0; i < can_info->can_port_count; i++)
-    {
+    // Get CAN port names
+    for (int i = 0; i < can_info->can_port_count; i++) {
         sprintf(key, "%s%d", JSON_Key_CAN_Bus_Path, i);
         pJsonStr = cJSON_GetObjectItem(key_can, key);
-        if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
-            printf("Error: %s value is not a string \n", key);
+        if (!pJsonStr || !cJSON_IsString(pJsonStr)) {
+            std::cerr << "Error: " << key << " value is not a valid string\n";
             ret = An_INVALID_PARAMS;
             goto cleanup_and_exit;
         }
 
         memset(can_info->can_dev[i], 0, MAX_CAN_PATH_LEN);
-        strncpy(can_info->can_dev[i], cJSON_GetStringValue(pJsonStr), MAX_CAN_PATH_LEN - 1);
+        strncpy(can_info->can_dev[i], cJSON_GetStringValue(pJsonStr), MAX_CAN_PATH_LEN - 2);
+        can_info->can_dev[i][MAX_CAN_PATH_LEN - 1] = '\0';
     }
 
 cleanup_and_exit:
-    cJSON_Delete(p_cJson);
+    if (p_cJson) {
+        cJSON_Delete(p_cJson);
+    }
 
     return ret;
 }
@@ -102,13 +108,14 @@ void AntarisApiCAN::api_pa_pc_receive_can_message(int device_index) {
     struct can_frame frame;
 
     if ((sockfd = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-        perror("Socket");
+        perror("Socket creation failed");
         return;
     }
 
     strcpy(ifr.ifr_name, can_dev[device_index]);
     if (ioctl(sockfd, SIOCGIFINDEX, &ifr) < 0) {
-        perror("ioctl");
+        perror("ioctl failed");
+        close(sockfd);
         return;
     }
 
@@ -116,7 +123,8 @@ void AntarisApiCAN::api_pa_pc_receive_can_message(int device_index) {
     addr.can_ifindex = ifr.ifr_ifindex;
 
     if (bind(sockfd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-        perror("Bind");
+        perror("Bind failed");
+        close(sockfd);
         return;
     }
 
@@ -124,59 +132,70 @@ void AntarisApiCAN::api_pa_pc_receive_can_message(int device_index) {
         ssize_t nbytes = read(sockfd, &frame, sizeof(struct can_frame));
         if (nbytes > 0) {
             std::lock_guard<std::mutex> lock(can_mutex[device_index]);
-            received_messages[device_index] = frame;
+            message_buffers[device_index].push(frame);
         }
     }
+
     close(sockfd);
 }
 
-struct can_frame AntarisApiCAN::api_pa_pc_read_can_data(int device_index) 
-{
+// Read CAN data from the buffer
+struct can_frame AntarisApiCAN::api_pa_pc_read_can_data(int device_index) {
+    struct can_frame frame = {0};
+
     std::lock_guard<std::mutex> lock(can_mutex[device_index]);
-    return received_messages[device_index];
+    if (!message_buffers[device_index].pop(frame)) {
+        std::cerr << "Error: No message available in buffer\n";
+    }
+
+    return frame;
 }
 
-void AntarisApiCAN::api_pa_pc_start_can_receiver_thread(int device_index) 
-{
+// Start CAN receiver thread for a specific device
+void AntarisApiCAN::api_pa_pc_start_can_receiver_thread(int device_index) {
     if (device_index < 0 || device_index >= MAX_CAN_DEVICES) return;
+
     if (!receiver_running[device_index]) {
         receiver_running[device_index] = true;
-        receiver_threads[device_index] = std::thread(&AntarisApiCAN::api_pa_pc_receive_can_message, this, device_index);
+        receiver_threads.emplace_back(&AntarisApiCAN::api_pa_pc_receive_can_message, this, device_index);
     }
 }
 
-int AntarisApiCAN::api_pa_pc_send_can_message(int device_index, int arbitration_id, const uint8_t data[8], uint8_t dlc) 
-{
+// Send a CAN message
+int AntarisApiCAN::api_pa_pc_send_can_message(int device_index, int arbitration_id, const uint8_t data[8], uint8_t dlc) {
     int sockfd;
     struct sockaddr_can addr;
     struct ifreq ifr;
     struct can_frame frame;
 
     if ((sockfd = socket(PF_CAN, SOCK_RAW, CAN_RAW)) < 0) {
-        perror("Socket");
+        perror("Socket creation failed");
         return GPIO_ERROR;
     }
 
     strcpy(ifr.ifr_name, can_dev[device_index]);
     if (ioctl(sockfd, SIOCGIFINDEX, &ifr) < 0) {
-        perror("ioctl");
-        return -1;
+        perror("ioctl failed");
+        close(sockfd);
+        return GPIO_ERROR;
     }
 
     addr.can_family = AF_CAN;
     addr.can_ifindex = ifr.ifr_ifindex;
 
     if (bind(sockfd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-        perror("Bind");
+        perror("Bind failed");
+        close(sockfd);
         return GPIO_ERROR;
     }
 
     frame.can_id = arbitration_id;
-    frame.can_dlc =dlc;
+    frame.can_dlc = dlc;
     memcpy(frame.data, data, dlc);
 
     if (write(sockfd, &frame, sizeof(struct can_frame)) != sizeof(struct can_frame)) {
-        perror("Write");
+        perror("Write failed");
+        close(sockfd);
         return GPIO_ERROR;
     }
 
@@ -185,15 +204,7 @@ int AntarisApiCAN::api_pa_pc_send_can_message(int device_index, int arbitration_
 }
 
 // Get received message count
-size_t AntarisApiCAN::api_pa_pc_get_can_message_received_count(int device_index) 
-{
+size_t AntarisApiCAN::api_pa_pc_get_can_message_received_count(int device_index) {
     std::lock_guard<std::mutex> lock(can_mutex[device_index]);
-    return received_messages[device_index].can_id != 0 ? 1 : 0;
-    /*
-    pthread_mutex_lock(&queue_mutex);
-    size_t count = (buffer_end >= buffer_start)
-                       ? (buffer_end - buffer_start)
-                       : (MAX_CAN_MESSAGES - buffer_start + buffer_end);
-    pthread_mutex_unlock(&queue_mutex);
-    return count; */
+    return message_buffers[device_index].count();
 }
