@@ -1,6 +1,5 @@
 from azure.storage.fileshare import ShareFileClient
 import logging
-import datetime
 import requests
 from google.oauth2 import service_account
 
@@ -23,8 +22,19 @@ class File_Stage():
 
     def start_upload(self):
         file_path_local = g_Outbound_Path_Prefix + self.download_file_params.file_path
-        # ret = azure_file_upload(file_path_local, self.config_data[g_FTM][g_File_String], self.config_data[g_FTM][g_Share_Name], self.file_path_remote)
-        ret = gcp_file_upload(self.config_data[g_FTM][g_File_String], file_path_local)
+        connection_string = self.config_data[g_FTM][g_File_String]
+        
+        if "FileEndpoint=" in connection_string :
+
+            ret = azure_file_upload(file_path_local, connection_string, self.config_data[g_FTM][g_Share_Name], self.file_path_remote)
+        
+        elif "https://storage.googleapis.com" in connection_string:
+
+            ret = gcp_file_upload(connection_string, file_path_local)
+
+        else:
+            raise ValueError("Unsupported connection string format")
+    
         return ret
         
     def file_download(self):
