@@ -17,52 +17,33 @@
 
 #define MAX_CAN_DEVICES        4   // Max number of CAN devices
 #define MAX_DEV_NAME_LENGTH    32  // Max length for each device name
-#define MAX_CAN_PATH_LEN       32  // Max CAN path length
 #define MAX_CAN_MESSAGES       100 // Buffer for received messages
+
+struct CircularBuffer {
+    public:
+        CircularBuffer() {
+            start = 0;
+            end = 0;
+        }; 
+        bool push(const struct can_frame& frame);
+        bool pop(struct can_frame& frame);
+        size_t count() const;
+    private:
+        struct can_frame buffer[MAX_CAN_MESSAGES];
+        size_t start;
+        size_t end;
+};
 
 class AntarisApiCAN {
 private:
-    struct CircularBuffer {
-    public:
-        CircularBuffer(size_t size) : buffer(size), start(0), end(0) {}
-
-        bool push(const struct can_frame& frame) {
-            size_t next = (end + 1) % buffer.size();
-            if (next == start) {  // Buffer is full
-                return false;
-            }
-            buffer[end] = frame;
-            end = next;
-            return true;
-        }
-
-        bool pop(struct can_frame& frame) {
-            if (start == end) {  // Buffer is empty
-                return false;
-            }
-            frame = buffer[start];
-            start = (start + 1) % buffer.size();
-            return true;
-        }
-
-        size_t count() const {
-            return (end >= start) ? (end - start) : (buffer.size() - start + end);
-        }
-
-    private:
-        std::vector<struct can_frame> buffer;
-        size_t start;
-        size_t end;
-    };
-
-    std::vector<CircularBuffer> message_buffers;  // One circular buffer per device
+    CircularBuffer message_buffers[MAX_CAN_DEVICES];  // One circular buffer per device
     std::vector<bool> receiver_running;  // Track receiver state
     std::vector<std::thread> receiver_threads;  // One thread per CAN device
-    std::vector<std::mutex> can_mutex;  // Mutex for each CAN device
+    std::vector<std::unique_ptr<std::mutex>> can_mutex; // Mutex for each CAN device
 
 public:
     int can_port_count;
-    static char can_dev[MAX_CAN_DEVICES][MAX_DEV_NAME_LENGTH];
+    char can_dev[MAX_CAN_DEVICES][MAX_DEV_NAME_LENGTH];
 
     // Constructor & Destructor
     AntarisApiCAN();
