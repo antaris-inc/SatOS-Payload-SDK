@@ -12,10 +12,11 @@
 const int GPIO_ERROR = -1;
 
 // Constructor
-AntarisApiCAN::AntarisApiCAN() {
+AntarisApiCAN::AntarisApiCAN() 
+{
     for (int i = 0; i < MAX_CAN_DEVICES; i++) {
-        receiver_running.push_back(false);
-        message_buffers.emplace_back(MAX_CAN_MESSAGES);  // Initialize buffer
+        receiver_running.push_back(false);    
+        can_mutex.emplace_back(std::make_unique<std::mutex>()); // Use unique_ptr for mutex
     }
 }
 
@@ -26,6 +27,38 @@ AntarisApiCAN::~AntarisApiCAN() {
             t.join();
         }
     }
+}
+
+// Circular buffer functions
+bool CircularBuffer::push(const struct can_frame& frame) 
+{
+    size_t next = (end + 1) % MAX_CAN_MESSAGES;
+    
+    // Return error if buffer is full
+    if (next == start) { 
+        return false;
+    }
+    
+    buffer[end] = frame;
+    end = next;
+    return true;
+}
+
+bool CircularBuffer::pop(struct can_frame& frame) 
+{
+    // return error if buffer is empty
+    if (start == end) {  
+        return false;
+    }
+
+    frame = buffer[start];
+    start = (start + 1) % MAX_CAN_MESSAGES;
+    return true;
+}
+
+size_t CircularBuffer::count() const 
+{
+    return (end >= start) ? (end - start) : (MAX_CAN_MESSAGES - start + end);
 }
 
 // Get available CAN devices
@@ -87,9 +120,9 @@ AntarisReturnCode AntarisApiCAN::api_pa_pc_get_can_dev(AntarisApiCAN* can_info) 
             goto cleanup_and_exit;
         }
 
-        memset(can_info->can_dev[i], 0, MAX_CAN_PATH_LEN);
-        strncpy(can_info->can_dev[i], cJSON_GetStringValue(pJsonStr), MAX_CAN_PATH_LEN - 2);
-        can_info->can_dev[i][MAX_CAN_PATH_LEN - 1] = '\0';
+        memset(can_info->can_dev[i], 0, MAX_DEV_NAME_LENGTH);
+        strncpy(can_info->can_dev[i], cJSON_GetStringValue(pJsonStr), MAX_DEV_NAME_LENGTH - 2);
+        can_info->can_dev[i][MAX_DEV_NAME_LENGTH - 1] = '\0';
     }
 
 cleanup_and_exit:
@@ -131,7 +164,7 @@ void AntarisApiCAN::api_pa_pc_receive_can_message(int device_index) {
     while (receiver_running[device_index]) {
         ssize_t nbytes = read(sockfd, &frame, sizeof(struct can_frame));
         if (nbytes > 0) {
-            std::lock_guard<std::mutex> lock(can_mutex[device_index]);
+            std::lock_guard<std::mutex> lock(*can_mutex[device_index]);
             message_buffers[device_index].push(frame);
         }
     }
@@ -143,7 +176,7 @@ void AntarisApiCAN::api_pa_pc_receive_can_message(int device_index) {
 struct can_frame AntarisApiCAN::api_pa_pc_read_can_data(int device_index) {
     struct can_frame frame = {0};
 
-    std::lock_guard<std::mutex> lock(can_mutex[device_index]);
+    std::lock_guard<std::mutex> lock(*can_mutex[device_index]);
     if (!message_buffers[device_index].pop(frame)) {
         std::cerr << "Error: No message available in buffer\n";
     }
@@ -205,6 +238,6 @@ int AntarisApiCAN::api_pa_pc_send_can_message(int device_index, int arbitration_
 
 // Get received message count
 size_t AntarisApiCAN::api_pa_pc_get_can_message_received_count(int device_index) {
-    std::lock_guard<std::mutex> lock(can_mutex[device_index]);
+    std::lock_guard<std::mutex> lock(*can_mutex[device_index]);
     return message_buffers[device_index].count();
 }
