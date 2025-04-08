@@ -326,7 +326,6 @@ void handle_Test_CAN_Bus(mythreadState_t *mythread)
         return;
     }
     
-    printf("Starting CAN receiver port: %s\n", channel);
     // Start receiver threads for each CAN device
     for (int i = 0; i < canInfo.can_port_count; i++) {
         printf("Starting CAN receiver on = %s \n", canInfo.can_dev[i]);
@@ -345,12 +344,16 @@ void handle_Test_CAN_Bus(mythreadState_t *mythread)
     printf("Checking received data \n");
 
     for (int i = 0; i < canInfo.can_port_count; i++) {
-        if (canInfo.api_pa_pc_get_can_message_received_count(i) > 0) {
+        while (canInfo.api_pa_pc_get_can_message_received_count(i) > 0) {
             struct can_frame frame = canInfo.api_pa_pc_read_can_data(i);
             printf("Received message from %s with id %d \n ",  canInfo.can_dev[i], frame.can_id);
-        } else {
-            printf("No message received from %s \n",canInfo.can_dev[i]);
+            for (int j = 0; j < CAN_MAX_DLEN; j++) {
+                printf("%x \t", frame.data[j]);
+            }
+            printf("\n");
         }
+        printf("Message queue from %s dev is empty now \n",canInfo.can_dev[i]);
+        sleep(1);
     }
 
     printf("Completed reading\n");
