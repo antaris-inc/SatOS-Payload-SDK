@@ -171,7 +171,8 @@ void sdk_environment_read_config(void)
 }
 
 
-#define BUFF_SIZE       (2048)
+#define BUFF_SIZE       (4096)   // Max data size from json file
+
 void read_config_json( cJSON ** pp_cJson)
 {
     FILE *conf_file;
