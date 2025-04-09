@@ -282,7 +282,7 @@ exit_sequence:
     
 }
 
-void handle_Test_CAN_Bus(mythreadState_t *mythread)
+void handle_TestCANBus(mythreadState_t *mythread)
 {
     AntarisReturnCode ret = An_SUCCESS;
     AntarisApiCAN canInfo;
@@ -670,7 +670,7 @@ int main(int argc, char *argv[])
     payload_sequences_fsms[LogLocation_IDX] = fsmThreadCreate(channel, 1, LogLocation_ID, handle_LogLocation);
     payload_sequences_fsms[TestGPIO_Sequence_IDX] = fsmThreadCreate(channel, 1, TestGPIO_Sequence_ID, handle_TestGPIO);
     payload_sequences_fsms[StageFile_Sequence_IDX] = fsmThreadCreate(channel, 1, StageFile_Sequence_ID, handle_StageFile);
-    payload_sequences_fsms[TestCANBus_Sequence_IDX] = fsmThreadCreate(channel, 1, TestCANBus_Sequence_ID, handle_Test_CAN_Bus);
+    payload_sequences_fsms[TestCANBus_Sequence_IDX] = fsmThreadCreate(channel, 1, TestCANBus_Sequence_ID, handle_TestCANBus);
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure
