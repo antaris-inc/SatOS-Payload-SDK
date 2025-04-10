@@ -105,6 +105,7 @@ CPP_OBJS = \
     ${CPP_LIB_DIR}/antaris_api_common.o \
     ${CPP_LIB_DIR}/antaris_sdk_environment.o \
     ${CPP_LIB_DIR}/antaris_api_client.o \
+    ${CPP_LIB_DIR}/antaris_can_api.o \
     ${CPP_LIB_DIR}/antaris_api_server.o \
     ${CPP_LIB_DIR}/antaris_api_pyfunctions.o
 

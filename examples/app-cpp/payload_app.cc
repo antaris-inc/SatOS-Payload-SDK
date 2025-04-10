@@ -24,6 +24,7 @@
 #include "antaris_api.h"
 #include "antaris_api_gpio.h"
 #include "antaris_api_pyfunctions.h"
+#include "antaris_can_api.h"
 
 #define MAX_STR_LEN 256
 #define SEQ_PARAMS_LEN 64
@@ -39,12 +40,16 @@
 #define TestGPIO_Sequence_IDX           3
 #define StageFile_Sequence_ID           "StageFile"
 #define StageFile_Sequence_IDX          4
-#define SEQUENCE_ID_MAX                 5
+#define TestCANBus_Sequence_ID          "TestCANBus"
+#define TestCANBus_Sequence_IDX         5
+#define SEQUENCE_ID_MAX                 6
 
 #define APP_STATE_ACTIVE                0  // Application State : Good (0), Error (non-Zero)
 
 #define STAGE_FILE_DOWNLOAD_DIR         "/opt/antaris/outbound/"    // path for staged file download
 #define STAGE_FILE_NAME                 "SampleFile.txt"            // name of staged file
+#define MAX_DATA_BYTES 8
+#define SEND_MSG_LIMIT 10
 
 /*
  * Following counters should be incremented whenever
@@ -261,6 +266,97 @@ void handle_StageFile(mythreadState_t *mythread)
     if (ret == An_GENERIC_FAILURE) {
         printf("Error: Failed to stage file %s \n", download_file_params.file_path);
     }
+exit_sequence:    
+    // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], StageFile_Sequence_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } 
+    
+    printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+    
+}
+
+void handle_TestCANBus(mythreadState_t *mythread)
+{
+    AntarisReturnCode ret = An_SUCCESS;
+    AntarisApiCAN canInfo;
+    int dlc = 8;
+    printf("Test CAN bus\n");
+
+    // Default data
+    char data[] = "0x123 0x11,0x12,0x13,0x14,0x15,0x16,0x17";
+    char *parts[2];
+
+    // Split input string into Arbitration ID and Data
+    char *token = strtok(data, " ");
+    for (int i = 0; i < 2 && token != NULL; i++) {
+        parts[i] = token;
+        token = strtok(NULL, " ");
+    }
+
+    if (parts[0] == NULL || parts[1] == NULL) {
+        printf("Input format is incorrect. Using default arbitration ID and data bytes.\n");
+    }
+
+    // Convert Arbitration ID
+    int arb_id = (int)strtol(parts[0], NULL, 16);
+
+    // Convert Data Bytes
+    unsigned char data_bytes[MAX_DATA_BYTES];
+    int data_count = 0;
+    token = strtok(parts[1], ",");
+    while (token != NULL && data_count < MAX_DATA_BYTES) {
+        data_bytes[data_count++] = (unsigned char)strtol(token, NULL, 16);
+        token = strtok(NULL, ",");
+    }
+
+    // Get CAN bus info
+    canInfo.api_pa_pc_get_can_dev(&canInfo);
+    printf("Total CAN bus ports = %d\n", canInfo.can_port_count);
+
+    // Select first available CAN device
+    if (canInfo.can_port_count == 0) {
+        printf("No CAN devices available!\n");
+        return;
+    }
+    
+    // Start receiver threads for each CAN device
+    for (int i = 0; i < canInfo.can_port_count; i++) {
+        printf("Starting CAN receiver on = %s \n", canInfo.can_dev[i]);
+        canInfo.api_pa_pc_start_can_receiver_thread(i);
+    }
+
+    // Send test messages on each CAN bus
+    int send_msg_limit = 10;
+    for (int loopCounter = 0; loopCounter < send_msg_limit; loopCounter++) {
+        for (int i = 0; i < canInfo.can_port_count; i++) {
+            canInfo.api_pa_pc_send_can_message(i, arb_id + i, data_bytes, dlc);
+        }
+        sleep(1);
+    }
+
+    printf("Checking received data \n");
+
+    for (int i = 0; i < canInfo.can_port_count; i++) {
+        while (canInfo.api_pa_pc_get_can_message_received_count(i) > 0) {
+            struct can_frame frame = canInfo.api_pa_pc_read_can_data(i);
+            printf("Received message from %s with id %d \n ",  canInfo.can_dev[i], frame.can_id);
+            for (int j = 0; j < CAN_MAX_DLEN; j++) {
+                printf("%x \t", frame.data[j]);
+            }
+            printf("\n");
+        }
+        printf("Message queue from %s dev is empty now \n",canInfo.can_dev[i]);
+        sleep(1);
+    }
+
+    printf("Completed reading\n");
 
 exit_sequence:    
     // Tell PC that current sequence is done
@@ -355,6 +451,9 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
     } else if (strcmp(sequence_string, StageFile_Sequence_ID) == 0) {
         printf("\t => %d\n", StageFile_Sequence_IDX);
         return StageFile_Sequence_IDX;
+    } else if (strcmp(sequence_string, TestCANBus_Sequence_ID) == 0) {
+        printf("\t => %d\n", TestCANBus_Sequence_IDX);
+        return TestCANBus_Sequence_IDX;
     }
 
     printf("Unknown sequence, returning -1\n");
@@ -571,6 +670,7 @@ int main(int argc, char *argv[])
     payload_sequences_fsms[LogLocation_IDX] = fsmThreadCreate(channel, 1, LogLocation_ID, handle_LogLocation);
     payload_sequences_fsms[TestGPIO_Sequence_IDX] = fsmThreadCreate(channel, 1, TestGPIO_Sequence_ID, handle_TestGPIO);
     payload_sequences_fsms[StageFile_Sequence_IDX] = fsmThreadCreate(channel, 1, StageFile_Sequence_ID, handle_StageFile);
+    payload_sequences_fsms[TestCANBus_Sequence_IDX] = fsmThreadCreate(channel, 1, TestCANBus_Sequence_ID, handle_TestCANBus);
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure

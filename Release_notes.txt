@@ -1,3 +1,11 @@
+Date                    : 8 April 2025
+SatOS-SDK Version       : 1.1.3
+Compatible PC Version   : 1.9.5
+
+Release notes:
+    1. Added CAN bus support in C++ library and updated CPP example application
+
+--------------------------------------------------------------------------------------------------------------------------------
 Date                    : 31 March 2025
 SatOS-SDK Version       : 1.1.2
 Compatible PC Version   : 1.9.5
