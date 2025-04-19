@@ -35,7 +35,7 @@ jobs:
           --platform linux/amd64,linux/arm64 \
           --push \
           -f images/sdk-tools/Dockerfile \
-          -t quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA} .
+          -t quay.io/antaris-inc/satos-payload-sdk-tools:stable .
 
   ## ========================
   ## C++ App: amd64
@@ -164,7 +164,7 @@ jobs:
       - name: Create multi-arch image manifest for Python app
         run: |
           docker buildx imagetools create \
-            --tag quay.io/antaris-inc/satos-payload-app-python:$stable \
+            --tag quay.io/antaris-inc/satos-payload-app-python:stable \
             quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA}-amd64 \
             quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA}-arm64
 
