@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup-qemu
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-tools-image
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
     - name: Build SDK dependencies
       run: docker run --platform linux/amd64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable make api_lib agent_package
@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [setup-qemu, build-tools-image]
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
     - name: Build SDK dependencies
       run: docker run --platform linux/arm64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable make api_lib agent_package
@@ -104,7 +104,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-tools-image
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
     - name: Build SDK dependencies
       run: docker run --platform linux/amd64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable make api_lib agent_package
@@ -134,7 +134,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [setup-qemu, build-tools-image]
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
 
     - name: Build SDK dependencies
       run: docker run --platform linux/arm64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:stable make api_lib agent_package
@@ -161,20 +161,36 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-python-app-amd64, build-python-app-arm64]
     steps:
-      - name: Create multi-arch image manifest for Python app
-        run: |
-          docker buildx imagetools create \
-            --tag quay.io/antaris-inc/satos-payload-app-python:stable \
-            quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA}-amd64 \
-            quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA}-arm64
+    - name: Login to image registry
+      uses: docker/login-action@v2
+      with:
+        registry: quay.io
+        username: ${{ secrets.QUAY_USERNAME }}
+        password: ${{ secrets.QUAY_PASSWORD }}
+
+    - name: Create multi-arch image manifest for Python app
+      run: |
+        docker manifest create quay.io/antaris-inc/satos-payload-app-python:stable \
+          quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA}-amd64 \
+          quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA}-arm64
+        
+        docker manifest push quay.io/antaris-inc/satos-payload-app-python:stable
 
   create-manifest-cpp:
     runs-on: ubuntu-latest
     needs: [build-cpp-app-amd64, build-cpp-app-arm64]
     steps:
-      - name: Create multi-arch image manifest for C++ app
-        run: |
-          docker buildx imagetools create \
-            --tag quay.io/antaris-inc/satos-payload-app-cpp:stable \
-            quay.io/antaris-inc/satos-payload-app-cpp:${GITHUB_SHA}-amd64 \
-            quay.io/antaris-inc/satos-payload-app-cpp:${GITHUB_SHA}-arm64
+    - name: Login to image registry
+      uses: docker/login-action@v2
+      with:
+        registry: quay.io
+        username: ${{ secrets.QUAY_USERNAME }}
+        password: ${{ secrets.QUAY_PASSWORD }}
+
+    - name: Create multi-arch image manifest for C++ app
+      run: |
+        docker manifest create quay.io/antaris-inc/satos-payload-app-cpp:stable \
+          quay.io/antaris-inc/satos-payload-app-cpp:${GITHUB_SHA}-amd64 \
+          quay.io/antaris-inc/satos-payload-app-cpp:${GITHUB_SHA}-arm64
+        
+        docker manifest push quay.io/antaris-inc/satos-payload-app-cpp:stable
