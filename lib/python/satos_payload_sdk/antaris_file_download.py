@@ -1,7 +1,9 @@
 from azure.storage.fileshare import ShareFileClient
+from google.oauth2 import service_account
 import logging
 import requests
-from google.oauth2 import service_account
+import json
+import base64
 
 logger = logging.getLogger("azure.core.pipeline.policies.http_logging_policy")
 logger.setLevel(logging.WARNING)
@@ -25,13 +27,9 @@ class File_Stage():
         connection_string = self.config_data[g_FTM][g_File_String]
         
         if "FileEndpoint=" in connection_string :
-
             ret = azure_file_upload(file_path_local, connection_string, self.config_data[g_FTM][g_Share_Name], self.file_path_remote)
-        
         elif "https://storage.googleapis.com" in connection_string:
-
             ret = gcp_file_upload(connection_string, file_path_local)
-
         else:
             raise ValueError("Unsupported connection string format")
     
@@ -55,11 +53,32 @@ def azure_file_upload(file_name, conn_str, share_name, file_path):
         return False
     
 def gcp_file_upload(signed_url, local_file_path):
+    # Read the file in binary mode
+    with open(local_file_path, "rb") as file_in:
+        binary_data = file_in.read()
+
+    # Encode binary data to base64 so it's safe for JSON
+    encoded_data = base64.b64encode(binary_data).decode('utf-8')
+
+    # Construct the JSON object
+    output = {
+        "name": local_file_path,
+        "data": encoded_data
+    }
+
+    # Write to output.json
+    with open("staged_file.json", "w") as file_js:
+        json.dump(output, file_js, indent=4)
+
+    print("output.json created successfully.")
+
     """Uploads a file using the signed URL."""
-    with open(local_file_path, "rb") as file:
+    with open("staged_file.json", "rb") as file:
         response = requests.put(signed_url, data=file, headers={"Content-Type": "application/octet-stream"})
 
     if response.status_code == 200:
         print("✅ File uploaded successfully!")
+        return True
     else:
         print(f"❌ Upload failed. Status: {response.status_code}, Response: {response.text}")
+        return False
