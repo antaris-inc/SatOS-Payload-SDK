@@ -9,6 +9,8 @@ OUTPUT_DIR="$BUILD_ROOT/dist"
 DEB_OUTPUT_DIR="$OUTPUT_DIR/$DEB_NAME"
 ANTARIS_INSTALLATIONS_PATH="/usr/local/antaris"
 GRPC_INSTALL_DIR="${ANTARIS_INSTALLATIONS_PATH}/grpc"
+ARCH=$(dpkg --print-architecture)
+
 
 mkdir -p "$DEB_OUTPUT_DIR" "$DEB_OUTPUT_DIR/DEBIAN"
 
@@ -21,7 +23,7 @@ cat << EOM > $DEB_OUTPUT_DIR/DEBIAN/control
 Package: $DEB_NAME
 Version: $VERSION
 Maintainer: antaris
-Architecture: amd64
+Architecture: $ARCH
 Description: gRPC development libraries and headers
 EOM
 
