@@ -25,6 +25,7 @@ jobs:
         run: |
           docker build \
             --push \
+            --platform linux/amd64 \
             -f images/sdk-tools/Dockerfile \
             -t quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA}-amd64 .
 
@@ -45,8 +46,9 @@ jobs:
 
       - name: Build and push multi-arch tools image
         run: |
-          docker build \ 
+          docker build \
             --push \
+            --platform linux/arm64 \
             -f images/sdk-tools/Dockerfile \
             -t quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA}-arm64 .
 
@@ -61,7 +63,7 @@ jobs:
           username: ${{ secrets.QUAY_USERNAME }}
           password: ${{ secrets.QUAY_PASSWORD }}
 
-      - name: Create multi-arch image manifest for Python app
+      - name: Create multi-arch image manifest for tools
         run: |
           docker manifest create quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA} \
             quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA}-amd64 \
@@ -95,6 +97,7 @@ jobs:
         run: |
           docker build \
             --push \
+            --platform linux/amd64 \
             -f images/app-cpp/Dockerfile \
             -t quay.io/antaris-inc/satos-payload-app-cpp:${GITHUB_SHA}-amd64 .
 
@@ -124,6 +127,7 @@ jobs:
         run: |
           docker build \
             --push \
+            --platform linux/arm64 \
             -f images/app-cpp/Dockerfile \
             -t quay.io/antaris-inc/satos-payload-app-cpp:${GITHUB_SHA}-arm64 .
 
@@ -153,6 +157,7 @@ jobs:
         run: |
           docker build \
             --push \
+            --platform linux/amd64 \
             -f images/app-python/Dockerfile \
             -t quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA}-amd64 .
 
@@ -182,6 +187,7 @@ jobs:
         run: |
           docker build \
             --push \
+            --platform linux/arm64 \
             -f images/app-python/Dockerfile \
             -t quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA}-arm64 .
 
