@@ -6,7 +6,7 @@ import os
 logger = logging.getLogger("azure.core.pipeline.policies.http_logging_policy")
 logger.setLevel(logging.WARNING)
 
-gHttpgHttpOk = 200
+gHttpOk = 200
 g_FTM = "FTM"
 g_File_String = "File_Conn_Str"
 g_Truetwin_Dir = "Truetwin_Dir"
@@ -66,7 +66,7 @@ def gcp_file_upload(endpoint, file_path, gcs_bucket, truetwin_dir, filename):
             }
             response = requests.post(endpoint, files=files, data=data)
 
-        if response.status_code == gHttpgHttpOk:
+        if response.status_code == gHttpOk:
             return True
         else:
             logger.error("Upload to GCS failed")
