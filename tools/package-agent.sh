@@ -30,6 +30,7 @@ cp $BUILD_ROOT/lib/proxy/proxy-agent/agent.py $DEB_OUTPUT_DIR/opt/antaris/sdk-ag
 cp $BUILD_ROOT/lib/proxy/proxy-agent/hexdump.py $DEB_OUTPUT_DIR/opt/antaris/sdk-agent/
 cp $BUILD_ROOT/lib/proxy/proxy-agent/socket_proxy.py $DEB_OUTPUT_DIR/opt/antaris/sdk-agent/
 
+ARCH=`$(dpkg --print-architecture)`
 
 # Set package metadata and build
 
@@ -37,7 +38,7 @@ cat << EOM > $DEB_OUTPUT_DIR/DEBIAN/control
 Package: $DEB_NAME
 Version: $VERSION
 Maintainer: antaris
-Architecture: amd64
+Architecture: ${ARCH}
 Description: SatOS Payload SDK agent
 Depends: python3, unzip, jq
 EOM

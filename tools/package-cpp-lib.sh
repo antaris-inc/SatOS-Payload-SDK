@@ -47,13 +47,15 @@ cp $BUILD_ROOT/vendor/cJSON/interface/cJSON.h $DEB_OUTPUT_DIR/lib/antaris/includ
 
 cp $BUILD_ROOT/Makefile.inc $DEB_OUTPUT_DIR/lib/antaris/include
 
+ARCH=`$(dpkg --print-architecture)`
+
 # Set package metadata and build
 
 cat << EOM > $DEB_OUTPUT_DIR/DEBIAN/control
 Package: $DEB_NAME
 Version: $VERSION
 Maintainer: antaris
-Architecture: amd64
+Architecture: ${ARCH}
 Description: C++ SatOS payload application library
 EOM
 

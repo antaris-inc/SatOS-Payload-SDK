@@ -16,12 +16,14 @@ mkdir -p "$DEB_OUTPUT_DIR" "$DEB_OUTPUT_DIR/DEBIAN"
 mkdir -p "$DEB_OUTPUT_DIR/usr/local/antaris/grpc"
 cp -r "$GRPC_INSTALL_DIR/"* "$DEB_OUTPUT_DIR/usr/local/antaris/grpc"
 
+ARCH=`$(dpkg --print-architecture)`
+
 # Set package metadata and build
 cat << EOM > $DEB_OUTPUT_DIR/DEBIAN/control
 Package: $DEB_NAME
 Version: $VERSION
 Maintainer: antaris
-Architecture: amd64
+Architecture: ${ARCH}
 Description: gRPC development libraries and headers
 EOM
 
