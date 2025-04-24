@@ -47,7 +47,7 @@ cp $BUILD_ROOT/vendor/cJSON/interface/cJSON.h $DEB_OUTPUT_DIR/lib/antaris/includ
 
 cp $BUILD_ROOT/Makefile.inc $DEB_OUTPUT_DIR/lib/antaris/include
 
-ARCH=`$(dpkg --print-architecture)`
+ARCH=$(dpkg --print-architecture)
 
 # Set package metadata and build
 

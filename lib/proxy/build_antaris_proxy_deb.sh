@@ -11,7 +11,7 @@ VERSION="0.1"
 
 ROOT_DIR="${SDK_ROOT_DIR}/"
 PROXY_DIR="${ROOT_DIR}"
-ARCH=`$(dpkg --print-architecture)`
+ARCH=$(dpkg --print-architecture)
 
 read -r -d '' PKG_CONTROL_CONTENTS <<  MESSAGE_END
 Package: $SDK_PACKAGE_NAME  

@@ -30,7 +30,7 @@ cp $BUILD_ROOT/lib/proxy/proxy-agent/agent.py $DEB_OUTPUT_DIR/opt/antaris/sdk-ag
 cp $BUILD_ROOT/lib/proxy/proxy-agent/hexdump.py $DEB_OUTPUT_DIR/opt/antaris/sdk-agent/
 cp $BUILD_ROOT/lib/proxy/proxy-agent/socket_proxy.py $DEB_OUTPUT_DIR/opt/antaris/sdk-agent/
 
-ARCH=`$(dpkg --print-architecture)`
+ARCH=$(dpkg --print-architecture)
 
 # Set package metadata and build
 
