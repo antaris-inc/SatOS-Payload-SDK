@@ -33,7 +33,12 @@
 #include "antaris_sdk_environment.h"
 
 #define PYTHON_SCRIPT_FILE         "antaris_file_download"
-#define PYTHON_STAGEFILE_MODULE    "azure_file_upload"
+
+#define AZURE_STRING                   "FileEndpoint="
+#define PYTHON_AZURE_STAGEFILE_MODULE  "azure_file_upload"
+
+#define GCS_STRING                     "gcs-bucket-upload"
+#define PYTHON_GCS_STAGEFILE_MODULE    "gcp_file_upload"
 
 #define TRUE        1
 #define FALSE       0

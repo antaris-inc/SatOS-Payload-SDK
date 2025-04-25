@@ -166,11 +166,24 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
         goto cleanup_and_exit;
     }
 
-    pFunction = PyObject_GetAttrString(pModule, PYTHON_STAGEFILE_MODULE);
-    if (pFunction == NULL) {
-        PyErr_Print();
-        printf("Error: module failed, Can not upload file %s \n", download_file_params->file_path);
-        exit_status = An_GENERIC_FAILURE;
+    if (strstr(download_file_params->file_path, AZURE_STRING) != NULL) {
+        pFunction = PyObject_GetAttrString(pModule, PYTHON_AZURE_STAGEFILE_MODULE);
+        if (pFunction == NULL) {
+            PyErr_Print();
+            printf("Error: module failed, Can not upload file %s \n", download_file_params->file_path);
+            exit_status = An_GENERIC_FAILURE;
+            goto cleanup_and_exit;
+        }
+    } else if (strstr(download_file_params->file_path, GCS_STRING) != NULL) {
+        pFunction = PyObject_GetAttrString(pModule, PYTHON_GCS_STAGEFILE_MODULE);
+        if (pFunction == NULL) {
+            PyErr_Print();
+            printf("Error: module failed, Can not upload file %s \n", download_file_params->file_path);
+            exit_status = An_GENERIC_FAILURE;
+            goto cleanup_and_exit;
+        }
+    } else {
+        printf("Unsupported connection string format");
         goto cleanup_and_exit;
     }
 
