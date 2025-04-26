@@ -145,17 +145,12 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
     strcpy(dst_file_name, g_Truetwin_Dir);
     strncat(dst_file_name, position, remaining_length);
 
-    pArgs = PyTuple_New(4);  // Create a tuple with 4 elements
-
-    PyTuple_SetItem(pArgs, 0, Py_BuildValue("s", download_file_params->file_path));  // 's' for string
-    PyTuple_SetItem(pArgs, 1, Py_BuildValue("s", g_File_String));
-    PyTuple_SetItem(pArgs, 2, Py_BuildValue("s", g_Share_Name));
-    PyTuple_SetItem(pArgs, 3, Py_BuildValue("s", dst_file_name));
-
     printf("Antaris_SatOS : Uploading file %s \n", download_file_params->file_path);
     printf("Antaris_SatOS : file string %s \n", g_File_String);
     printf("Antaris_SatOS : Share name %s \n", g_Share_Name);
-    printf("Antaris_SatOS : dst file name %s \n", dst_file_name);
+    printf("Antaris_SatOS : dst TrueTwin %s \n", g_Truetwin_Dir);
+    printf("Antaris_SatOS : dst file name %s \n", ++position);
+    printf("Antaris_SatOS : dst complete name %s \n", dst_file_name);
 
     pName = PyUnicode_DecodeFSDefault(PYTHON_SCRIPT_FILE);
     pModule = PyImport_Import(pName);
@@ -166,11 +161,37 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
         goto cleanup_and_exit;
     }
 
-    pFunction = PyObject_GetAttrString(pModule, PYTHON_STAGEFILE_MODULE);
-    if (pFunction == NULL) {
-        PyErr_Print();
-        printf("Error: module failed, Can not upload file %s \n", download_file_params->file_path);
-        exit_status = An_GENERIC_FAILURE;
+    if (strstr(g_File_String, AZURE_STRING) != NULL) {
+        pFunction = PyObject_GetAttrString(pModule, PYTHON_AZURE_STAGEFILE_MODULE);
+        if (pFunction == NULL) {
+            PyErr_Print();
+            printf("Error: module failed, Can not upload file %s \n", download_file_params->file_path);
+            exit_status = An_GENERIC_FAILURE;
+            goto cleanup_and_exit;
+        }
+        pArgs = PyTuple_New(4);  // Create a tuple with 4 elements
+
+        PyTuple_SetItem(pArgs, 0, Py_BuildValue("s", download_file_params->file_path));  // 's' for string
+        PyTuple_SetItem(pArgs, 1, Py_BuildValue("s", g_File_String));
+        PyTuple_SetItem(pArgs, 2, Py_BuildValue("s", g_Share_Name));
+        PyTuple_SetItem(pArgs, 3, Py_BuildValue("s", dst_file_name));
+    } else if (strstr(g_File_String, GCS_STRING) != NULL) {
+        pFunction = PyObject_GetAttrString(pModule, PYTHON_GCS_STAGEFILE_MODULE);
+        if (pFunction == NULL) {
+            PyErr_Print();
+            printf("Error: module failed, Can not upload file %s \n", download_file_params->file_path);
+            exit_status = An_GENERIC_FAILURE;
+            goto cleanup_and_exit;
+        }
+        pArgs = PyTuple_New(5);  // Create a tuple with 5 elements
+
+        PyTuple_SetItem(pArgs, 0, Py_BuildValue("s", g_File_String));  // 's' for string
+        PyTuple_SetItem(pArgs, 1, Py_BuildValue("s", download_file_params->file_path));
+        PyTuple_SetItem(pArgs, 2, Py_BuildValue("s", g_Share_Name));
+        PyTuple_SetItem(pArgs, 3, Py_BuildValue("s", g_Truetwin_Dir));
+        PyTuple_SetItem(pArgs, 4, Py_BuildValue("s", position));
+    } else {
+        printf("Unsupported connection string format");
         goto cleanup_and_exit;
     }
 
