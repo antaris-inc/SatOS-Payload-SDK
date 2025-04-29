@@ -29,7 +29,7 @@ RUN pip install pylibftdi
 RUN apt install -y libftdi1
 RUN python3 -m pip install pyserial
 RUN python3 -m pip install azure-storage-file-share
-RUN python3 -m pip install google-cloud-storage
+RUN python3 -m pip install requests
 RUN python3 -m pip install python-can
 
 RUN mkdir /stage
