@@ -1,11 +1,11 @@
-SatOS Payload Developer Guide
-#############################
+SatOS Application Developer Guide
+#################################
 
-The SatOS Payload SDK provides libraries, tools and documentation that support developing satellite payloads for use with SatOS (TM) from Antaris, Inc.
+The SatOS Application SDK provides libraries, tools and documentation that support developing satellite payloads for use with SatOS (TM) from Antaris, Inc.
 This enables effective development and testing of payload applications, which handle communication with core spacecraft services as well as payload-specific devices.
 
-Using the Payload SDK
-*********************
+Using the Application SDK
+*************************
 
 Developers should use this guide as a primary resource while developing a payload.
 Furthermore, SDK libraries and tools here MUST be adopted to develop a well-formed payload.
@@ -16,25 +16,25 @@ The demo apps should be used as a starting point for any new Payload Application
 Glossary
 ********
 
-**Payload**: an entity operating onboard a satellite, directly supporting mission objectives.
+**Payload**: an entity operating onboard a satellite, directly supporting mission objectives. It includes edge device as well.
 
 **Antaris Cloud Platform (ACP)**: the cloud-based SaaS platform developed and operated by Antaris. ACP is used to drive development, simulation and operation of satellites.
 
 **Payload Developer**: an individual working with the Antaris Cloud Platform to develop, deploy and operate a payload.
 
-**Payload SDK**: toolkit containing source code libraries and documentation used by Payload Developers to effectively develop a payload.
+**SatOS SDK**: toolkit containing source code libraries and documentation used by Payload Developers to interface with SatOS services.
 
-**Payload Application (PA)**: software developed by a Payload Developer using the Payload SDK which operates its Payload Device, interacts with PC for flight services and executes payload mission business logic.
+**Onboard Application (OA)**: software developed by a Payload or Edge Developer which operates its Payload/Edge Device, interacts with SatOS for flight services and executes payload mission business logic.
 
-**Payload Sequence**: a discrete operation implemented by a PA to execute mission objectives. Payload Sequences are triggered via Telecommands through ACP.
+**Payload Sequence**: a discrete operation implemented by an OA to execute mission objectives. Payload Sequences are triggered via Telecommands through ACP.
 
 **Telecommand**: an imperative command sent from an operator to a satellite representing a logical action to be taken. Examples include "point towards the ground", "establish X-band radio connection", and "execute XYZ payload sequence". Telecommands may be executed on-demand during a ground contact, or they may be scheduled for execution over time. Typically, Telecommands are executed via higher-level abstractions such as Tasks.
 
-**Payload Server**: the physical onboard system with CPU, memory, storage and I/O connectivity for Payload Devices. It hosts Payload Applications and various system services.
+**Onboard Server**: the physical onboard system with CPU, memory, storage and optional I/O connectivity with Payload Devices. It hosts Applications and various system services. OBC, Payload Server, Edge Server are three such entities.
 
-**Payload Controller (PC)**: control software that manages operations on the Payload Server and acts as a gateway to all services provided to Payload Applications.
+**Server Controller **: control software that manages operations on the Compute Server (PS, ES) and acts as a gateway to all services provided to Applications.
 
-**Payload Interface**: API enabling bidirectional communication between Payload Applications and the Payload Controller.
+**Payload Interface**: API enabling bidirectional communication between Payload Applications and the Server Controller.
 
 **Payload Device**: a physical device provided by a Payload Developer that is physically connected to the Payload Server via one of the designated interfaces (Ethernet, I2C, UART, USB, SPI, etc).
 
@@ -46,35 +46,35 @@ Glossary
 System Architecture
 *******************
 
-A developer is responsible for a Payload Application and a Payload Device – effectively everything highlighted in blue below:
+A developer is responsible for an Onboard Application and a Payload Device – effectively everything highlighted in blue below:
 
 .. image:: images/satellite-architecture.png
 
-Payload Applications contain payload-specific business logic and any device drivers necessary to interact with a Payload Device. Storage is made available to the application that persists across reboots or unexpected failures.
+Onboard Applications contain payload-specific business logic and any device drivers necessary to interact with a Payload Device. Storage is made available to the application that persists across reboots or unexpected failures.
 
-While active, a Payload Application has full control over its associated device and may interact with the Spacecraft Controller via the Payload Controller and the Payload Interface. This allows Payload Applications to coordinate with the onboard scheduler, emit telemetry/teledata for downlink, implement health checking, etc.
+While active, a Onboard Application has full control over its associated device and may interact with the Spacecraft Controller via the Server Controller and the Payload Interface. This allows Onboard Applications to coordinate with the onboard scheduler, emit telemetry/teledata for downlink, implement health checking, etc.
 
 The Spacecraft Controller manages all communication with ACP, typically via radio communication with ground stations. This is the control and data path for onboard payloads.
 
-Application Design
-******************
+Onboard Application Design
+**************************
 
-A Payload Application encompasses all software operating within the Payload Server for a single payload, including all necessary application-specific software and system libraries. Payload Applications are packaged as container images, and the environment within which the containers are executed is orchestrated by the Payload Controller.
+A Onboard Application encompasses all software operating within the Compute Server for a single payload, including all necessary application-specific software and system libraries. Onboard Applications are packaged as container images, and the environment within which the containers are executed is orchestrated by the Server Controller.
 
-This section of the SDK guide explains how a developer should think about design and implementation of a Payload Application.
+This section of the SDK guide explains how a developer should think about design and implementation of an Onboard Application.
 
 Application Operation
 =====================
 
-When a Payload Application is scheduled to be active for a given period of time, a simple state machine is executed:
+When an Onboard Application is scheduled to be active for a given period of time, a simple state machine is executed:
 
 1. Payload Device is powered on
-2. Payload Application is booted up
-3. Payload Application starts via developer-provided entrypoint script
-4. Payload Application initializes a Payload Interface connection (typically using an appropriate SDK library)
-5. Payload Controller instructs Payload Application to execute required Payload Sequences
-6. Payload Application acknowledges when sequences are complete
-7. Payload Controller stops application, with time allowed for graceful shutdown
+2. Onboard Application is booted up
+3. Onboard Application starts via developer-provided entrypoint script
+4. Onboard Application initializes a Payload Interface connection (typically using an appropriate SDK library)
+5. Server Controller instructs Onboard Application to execute required Payload Sequences
+6. Onboard Application acknowledges when sequences are complete
+7. Onboard Controller stops application, with time allowed for graceful shutdown
 8. Payload Device is powered off
 
 Payload Sequences
@@ -84,7 +84,7 @@ A Payload Sequence represents a discrete unit of work, and usually maps to speci
 
 Payload Sequences are scheduled using simple heuristics, all controlled by the Antaris Cloud Platform. Examples of this include "when the satellite is within range of X,Y coordinates" or "twice per orbit during the local day time". Any geographic triggers (ground target pointing, enter/leave bounding box, etc.) are resolved within ACP before Payload Sequences are executed.
 
-Payload Applications are instructed to execute Payload Sequences using the Payload Interface. Payload Applications are not "always on", and will only be booted up when its sequences are to be executed. Sequences are always given a duration within which they are expected to run, and are not able to run forever.
+Onboard Applications are instructed to execute Payload Sequences using the Payload Interface. Onboard Applications are not "always on", and will only be booted up when its sequences are to be executed. Sequences are always given a duration within which they are expected to run, and are not able to run forever.
 
 Dynamic/on-demand interaction for active debugging and diagnosis is supported directly via ACP.
 
@@ -98,12 +98,12 @@ File downloads are typically initiated in response to creation of some mission-o
 Application Modes
 =================
 
-On boot, the Payload Application has an opportunity to determine the "mode" of operation requested. This is used to instruct the Payload Application to start up in one or more states to facilitate actions such as upgrading application software or implementing a "factory reset" to recover from some failure. Mode handling is typically implemented via SDK libraries.
+On boot, the Onboard Application has an opportunity to determine the "mode" of operation requested. This is used to instruct the Onboard Application to start up in one or more states to facilitate actions such as upgrading application software or implementing a "factory reset" to recover from some failure. Mode handling is typically implemented via SDK libraries.
 
 Application Upgrades
 ====================
 
-Payload Applications are expected to upgrade themselves, typically using package-based processes (i.e. deb/rpm).
+Onboard Applications are expected to upgrade themselves, typically using package-based processes (i.e. deb/rpm).
 
 An alternate PA mode should be used to trigger an upgrade. This explicit approach is preferred as it allows for upgrade/recovery in the event the PA is unable to operate normally.
 
@@ -134,7 +134,7 @@ Both of these files are managed by the system and are readonly to the running ap
 Compute & Storage
 =================
 
-All Payload Applications are deployed as virtual machines. CPU and memory resources are configured within the Antaris Cloud Platform during satellite configuration. Storage capacity is also pre-configured.
+All Onboard Applications are deployed as docker containers. CPU and memory resources are configured within the Antaris Cloud Platform during satellite configuration. Storage capacity is also pre-configured.
 
 All storage is persistent and will maintain state across reboots. Access to storage is provided via the following filesystem mounts:
 
@@ -145,7 +145,7 @@ All storage is persistent and will maintain state across reboots. Access to stor
 Network
 =======
 
-Each Payload Application receives a unique IP Address, as do any associated Payload Devices. The Payload Controller and an NTP server are also available over this network. The values assigned to these resources are defined in the PA config file, and should be accessed via the SDK library.
+Each Onboard Application receives a unique IP Address, as do any associated Payload Devices. The Server Controller and an NTP server are also available over this network. The values assigned to these resources are defined in the PA config file, and should be accessed via the SDK library.
 
 Device Access
 =============
@@ -153,7 +153,7 @@ Device Access
 All necessary devices are exposed to the payload application natively.
 Filesystem locations and device identifiers are provided by the application config (see `Configuration` above).
 
-Payload SDK library support is available to assist in reading device configuration from the config.
+SatOS SDK library support is available to assist in reading device configuration from the config.
 Additional library support is also available to simplify GPIO I/O.
 
 Packaging
@@ -234,7 +234,7 @@ Task definition and scheduling is a collaborative, ongoing exercise. During init
 * **Payload Device Power State**: the expected payload device power state before and during Task execution
 * **Power Requirements**: the average and max power requirements required for the Task
 
-Using the Payload SDK Libraries
+Using the SatOS SDK Libraries
 *******************************
 
 The SDK provides the following programming language support:
