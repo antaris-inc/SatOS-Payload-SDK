@@ -53,7 +53,7 @@ The image is automatically built and published at `quay.io/antaris-inc/satos-pay
 Typically, one can run the tools image with a command like the following. It is expected that the root of the SDK repo is mounted in to `/workspace`:
 
 ```
-docker run --platform=linux/amd64 -v $PWD:/workspace -it quay.io/antaris-inc/satos-payload-sdk-tools:stable
+docker run -v $PWD:/workspace -it quay.io/antaris-inc/satos-payload-sdk-tools:stable
 ```
 
 If you are interested in making changes to the image, the Dockerfile resides at `images/sdk-tools/Dockerfile`.
