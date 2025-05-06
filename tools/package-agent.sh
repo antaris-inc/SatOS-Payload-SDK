@@ -19,6 +19,7 @@ BUILD_ROOT=`pwd`
 VERSION=`cat $BUILD_ROOT/VERSION`
 OUTPUT_DIR="$BUILD_ROOT/dist"
 DEB_OUTPUT_DIR="$OUTPUT_DIR/$DEB_NAME"
+ARCH=$(dpkg --print-architecture)
 
 mkdir -p $DEB_OUTPUT_DIR $DEB_OUTPUT_DIR/DEBIAN
 
@@ -37,7 +38,7 @@ cat << EOM > $DEB_OUTPUT_DIR/DEBIAN/control
 Package: $DEB_NAME
 Version: $VERSION
 Maintainer: antaris
-Architecture: amd64
+Architecture: $ARCH
 Description: SatOS Payload SDK agent
 Depends: python3, unzip, jq
 EOM

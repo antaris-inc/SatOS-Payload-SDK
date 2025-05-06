@@ -11,13 +11,13 @@ Place that downloaded zip file in this directory.
 Build the app using the following command:
 
 ```
-docker build --platform=linux/amd64 -t satos-payload-example-app-python .
+docker build -t satos-payload-example-app-python .
 ```
 
 Next, we can run the application in a container. The command below assumes that `$CONFIG` is set to the name of the config file (zip) you downloaded from Antaris Cloud Platform. The file must be located in your current working directory:
 
 ```
-docker run --platform=linux/amd64 -e CONFIG=$CONFIG --privileged -v $(pwd):/workspace -it satos-payload-example-app-python
+docker run -e CONFIG=$CONFIG --privileged -v $(pwd):/workspace -it satos-payload-example-app-python
 ```
 
 You may now use the Antaris Cloud Platform to submit payload sequences. For example, submit a `HelloWorld` payload with
@@ -47,5 +47,5 @@ To run these tests, first build the container image as documented above.
 Now, simply run the image and use `pytest` to execute the tests:
 
 ```
-docker run --platform=linux/amd64 -v $PWD:/workspace -w /workspace -t satos-payload-example-app-python /bin/bash -c "pip3 install pytest && pytest"
+docker run -v $PWD:/workspace -w /workspace -t satos-payload-example-app-python /bin/bash -c "pip3 install pytest && pytest"
 ```

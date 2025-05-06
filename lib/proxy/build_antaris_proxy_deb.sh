@@ -6,6 +6,7 @@ CURRENT_DIR=`pwd`
 SDK_ROOT_DIR="${name}" 
 SDK_PACKAGE_NAME=${SDK_ROOT_DIR}
 SDK_DEBIAN_DIR="${SDK_ROOT_DIR}/DEBIAN"
+ARCH=$(dpkg --print-architecture)
 
 VERSION="0.1"
 
@@ -16,7 +17,7 @@ read -r -d '' PKG_CONTROL_CONTENTS <<  MESSAGE_END
 Package: $SDK_PACKAGE_NAME  
 Version: $VERSION  
 Maintainer: antaris  
-Architecture: amd64  
+Architecture: $ARCH  
 Description: Debian package to install the proxy tool.  
 MESSAGE_END
 

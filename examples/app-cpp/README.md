@@ -14,7 +14,7 @@ Build the C++ app using the following steps:
 cd examples/app-cpp
 
 # Builds your standalone application first 
-docker build --platform=linux/amd64 -t satos-payload-example-app-cpp .
+docker build -t satos-payload-example-app-cpp .
 ```
 
 Next, we can run the payload application in the container. The command below assumes that `$CONFIG` is set to the name of the config file (zip) you downloaded from Antaris Cloud Platform. The file must be located in your current working directory:
@@ -22,7 +22,7 @@ Next, we can run the payload application in the container. The command below ass
 ```bash
 CONFIG=your_remote_config_from_acp.zip
 
-docker run --platform=linux/amd64 -e CONFIG=$CONFIG --privileged -v $(pwd):/workspace -it satos-payload-example-app-cpp
+docker run -e CONFIG=$CONFIG --privileged -v $(pwd):/workspace -it satos-payload-example-app-cpp
 ```
 
 You may now use the Antaris Cloud Platform to submit payload sequences. For example, submit a `HelloWorld` payload with
