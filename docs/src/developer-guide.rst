@@ -95,11 +95,6 @@ File uploads are facilitated by ACP. Uploaded files are made available at a pre-
 
 File downloads are typically initiated in response to creation of some mission-oriented data by the Payload Application and/or Payload Device. A PA must inform the satellite that files are ready to be downloaded using the Payload Interface. After notification, files can then be automatically downlinked to the ground and distributed to mission operators.
 
-Application Modes
-=================
-
-On boot, the Payload Application has an opportunity to determine the "mode" of operation requested. This is used to instruct the Payload Application to start up in one or more states to facilitate actions such as upgrading application software or implementing a "factory reset" to recover from some failure. Mode handling is typically implemented via SDK libraries.
-
 Application Upgrades
 ====================
 
@@ -109,27 +104,24 @@ An alternate PA mode should be used to trigger an upgrade. This explicit approac
 
 A typical upgrade flow would look like so:
 
-1. Operator uses ACP to uplink needed files to PA storage
-2. An upgrade task is sceduled via ACP, which results in a PA booting up in an ``upgrade`` mode
-3. The PA entrypoint detects the alternate mode of operation and applies any software/filesystem changes necessary, then shuts down normally
+1. SatOS application docker Upgrade_artifact is created at GS. This contains incremental change in SatOS application.
+2. Operator uses ACP to uplink Upgrade_artifact files to PA storage
+3. An upgrade task is sceduled via ACP, which results in updating SatOS application docker image.
 4. Subsequent tasks then boot the PA into a nominal mode and resume normal operations.
-
-If an upgrade needs to be applied to the entrypoint script itself, out-of-band update processes can also be applied.
 
 Application Environment
 ***********************
 
-This section describes the runtime compute environment a PA will operaet within.
+This section describes the runtime compute environment a PA will operate within.
 
 Configuration
 =============
 
-Application configuration is provided via the readonly ``/opt/antaris/app/`` directory. These files include:
+Application configuration is provided via the readonly ``/opt/antaris/app/`` directory. This file include:
 
 * **config.json** contains a JSON-encoded config file, constructed by the PC to help automate PA configuration
-* **mode** contains the current application mode. This file is typically read by the PA entrypoint script to influence PA startup behavior
 
-Both of these files are managed by the system and are readonly to the running application processes.
+Above file is managed by the system and is readonly to the running application processes.
 
 Compute & Storage
 =================
