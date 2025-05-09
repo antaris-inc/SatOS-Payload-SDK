@@ -104,10 +104,9 @@ An alternate PA mode should be used to trigger an upgrade. This explicit approac
 
 A typical upgrade flow would look like so:
 
-1. SatOS application docker Upgrade_artifact is created at GS. This contains incremental change in SatOS application.
-2. Operator uses SatOS File upload mechanism to uplink Upgrade_artifact files to PA storage.
-3. An upgrade task is sceduled via ACP, which results in updating SatOS application docker image.
-4. Subsequent tasks then boot the PA into a nominal mode and resume normal operations.
+1. SatOS application docker Upgrade_artifact is created at ground. This contains incremental change in SatOS application.
+2. Operator uses SatOS File upload mechanism to uplink Upgrade_artifact files to onboard compute storage.
+3. After artefact is uploaded successfully, Operator should send TC (mention TCID), which results in updating SatOS application docker image.
 
 Application Environment
 ***********************
