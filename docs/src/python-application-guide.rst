@@ -23,12 +23,19 @@ Fully functional applications using this SDK are available here: https://github.
 Device I/O
 **********
 
-Payload device access is not yet abstracted through the `satos_payload_sdk.app_framework` module.  
-Instead, developers should use the `satos_payload_sdk.antaris_api_gpio` module.
+UART
+^^^^
 
 To identify the location of a connected UART device, call `api_pa_pc_get_uart_dev()`. 
 The returned value will be a string containing a your device path (e.g. `"/dev/ttyUSB0"`).
 Your application may then interact with the device as necessary.
+
+
+GPIO
+^^^^
+
+Payload device access is not yet abstracted through the `satos_payload_sdk.app_framework` module.  
+Instead, developers should use the `satos_payload_sdk.antaris_api_gpio` module.
 
 To understand the available GPIO pin configuration, call `api_pa_pc_get_gpio_info()`.
 The function will return an object with three attributes:
@@ -46,3 +53,26 @@ The written value will be returned from the function.
 A value of -1 will be returned if the operation fails.
 
 At this time, GPIO support is limited to FTDI devices.
+
+
+CAN
+^^^
+
+To understand available CAN bus configuration, call `api_pa_pc_get_can_dev()`.
+The function will return an object with two attributes:
+
+* `can_port_count` holds the number of CAN bus connected
+* `can_dev` holds an array of assigned CAN bus interface (of length `can_port_count`)
+
+To start CAN receiver thread, call `api_pa_pc_start_can_receiver_thread()` with `can_dev[]` as input parameter
+The receiver thrad will now poll on requested CAN interface
+
+To get total count of messages received on CAN interface, call `api_pa_pc_get_can_message_received_count()`
+
+To read the message on CAN interface, call `api_pa_pc_read_can_data()`
+
+To send message over CAN bus, call `api_pa_pc_send_can_message()` with following three input parameters 
+
+* `channel` holds the CAN interface id
+* `arb_id` holds arbitration id
+* `data_bytes` holds 8-byte data 

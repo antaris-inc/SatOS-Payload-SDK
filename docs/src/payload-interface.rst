@@ -219,3 +219,30 @@ Expected async response from PA: ``ResponseHealthCheck``
 * ``U16 RespsToPCInErrCnt``
 
   * Number of responses from PA to PC that failed
+
+
+PayloadMetrics
+^^^^^^^^^^^^^^
+
+PA maintains an array of eight `name-value`` pairs, called Metrics, containing payload-specific statistical information. The PC periodically requests these statistics by sending a request to the PA. The PA must be ready to process this request and respond immediately with accurate, up-to-date statistics.
+
+Parameters:
+
+* ``U16 CorrelationId``
+
+Expected async response from PA: ``ResponsePayloadMatrics``
+
+* ``U16 UsedCounter``
+
+  * Indicate total number of metrics maintained by PA
+
+* ``U64 TimeStamp``
+
+  * Indicates current timestamp of response
+
+* ``Struct PayloadMetricsInfo Matrics``
+
+  * ``U8 name[256]``
+    * Name of counter 
+  * ``U32 counter``
+    * Value 
