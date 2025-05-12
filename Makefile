@@ -151,7 +151,7 @@ cpp_package:
 	./tools/package-cpp-lib.sh
 
 docs:
-	sphinx-build docs/src dist/docs
+	sphinx-build -E docs/src dist/docs
 
 cpp_example: all
 	$(info    SRC_DIR is $(SRC_DIR))
