@@ -1,17 +1,16 @@
-SatOS Payload Developer Guide
-#############################
+SatOS Application Developer Guide
+#################################
 
-The SatOS Payload SDK provides libraries, tools and documentation that support developing satellite payloads for use with SatOS (TM) from Antaris, Inc.
+The SatOS SDK provides libraries, tools and documentation that support developing satellite on-board applications for use with SatOS (TM) from Antaris, Inc.
 This enables effective development and testing of payload applications, which handle communication with core spacecraft services as well as payload-specific devices.
 
-Using the Payload SDK
-*********************
+Using the SatOS SDK
+*******************
 
-Developers should use this guide as a primary resource while developing a payload.
-Furthermore, SDK libraries and tools here MUST be adopted to develop a well-formed payload.
+Developers should use this guide to understand how to access SatOS services while developing a payload application.
 
 As a starting point, one should consult the ACP User Guide (available through ACP Support Portal) and experiment with a demo payload application: https://github.com/antaris-inc/SatOS-Payload-Demos.
-The demo apps should be used as a starting point for any new Payload Application.
+The demo apps can be used as a starting point for any new Payload Application.
 
 Glossary
 ********
@@ -22,21 +21,21 @@ Glossary
 
 **Payload Developer**: an individual working with the Antaris Cloud Platform to develop, deploy and operate a payload.
 
-**Payload SDK**: toolkit containing source code libraries and documentation used by Payload Developers to effectively develop a payload.
+**SatOS SDK**: toolkit containing source code libraries and documentation used by Payload Developers to access SatOS services.
 
-**Payload Application (PA)**: software developed by a Payload Developer using the Payload SDK which operates its Payload Device, interacts with PC for flight services and executes payload mission business logic.
+**SatOS Application **: software developed typically by payload developers which operates its Payload Device or/and uses Edge hw/sw for data processing, interacts with SatOS for flight services and executes overall mission business logic.
 
 **Payload Sequence**: a discrete operation implemented by a PA to execute mission objectives. Payload Sequences are triggered via Telecommands through ACP.
 
 **Telecommand**: an imperative command sent from an operator to a satellite representing a logical action to be taken. Examples include "point towards the ground", "establish X-band radio connection", and "execute XYZ payload sequence". Telecommands may be executed on-demand during a ground contact, or they may be scheduled for execution over time. Typically, Telecommands are executed via higher-level abstractions such as Tasks.
 
-**Payload Server**: the physical onboard system with CPU, memory, storage and I/O connectivity for Payload Devices. It hosts Payload Applications and various system services.
+**Application Host**: the physical onboard compute system with CPU, memory, storage and I/O connectivity for Payload Devices. Antaris reference bus architecture has two of them (QA7 and NVidia Jetson). It hosts Payload Applications and various system services.
 
-**Payload Controller (PC)**: control software that manages operations on the Payload Server and acts as a gateway to all services provided to Payload Applications.
+**Application Controller (AC)**: control software that manages operations on the Application Host and acts as a gateway to flight services provided to Payload Applications.
 
-**Payload Interface**: API enabling bidirectional communication between Payload Applications and the Payload Controller.
+**SatOS Interface**: API enabling bidirectional communication between Payload Applications and the Application Controller.
 
-**Payload Device**: a physical device provided by a Payload Developer that is physically connected to the Payload Server via one of the designated interfaces (Ethernet, I2C, UART, USB, SPI, etc).
+**Payload Device**: a physical device provided by a Payload Developer that is physically connected to the Application Host via one of the designated interfaces (Ethernet, I2C, UART, USB, SPI, etc).
 
 **Device Driver**: a general term used to describe any software supporting direct access to or manipulation of a Payload Device. A driver typically supports one or both of the following:
 
@@ -52,14 +51,14 @@ A developer is responsible for a Payload Application and a Payload Device – ef
 
 Payload Applications contain payload-specific business logic and any device drivers necessary to interact with a Payload Device. Storage is made available to the application that persists across reboots or unexpected failures.
 
-While active, a Payload Application has full control over its associated device and may interact with the Spacecraft Controller via the Payload Controller and the Payload Interface. This allows Payload Applications to coordinate with the onboard scheduler, emit telemetry/teledata for downlink, implement health checking, etc.
+While active, a Payload Application has full control over its associated device and may interact with the SatOS (spacecraft controller) via the SatOS Interface APIs. This allows Payload Applications to coordinate with the onboard scheduler, emit telemetry/teledata for downlink, implement health checking, etc.
 
-The Spacecraft Controller manages all communication with ACP, typically via radio communication with ground stations. This is the control and data path for onboard payloads.
+The Spacecraft Controller (SatOS) manages all communication with ACP, typically via radio communication with ground stations. This is the control and data path for onboard payloads.
 
 Application Design
 ******************
 
-A Payload Application encompasses all software operating within the Payload Server for a single payload, including all necessary application-specific software and system libraries. Payload Applications are packaged as container images, and the environment within which the containers are executed is orchestrated by the Payload Controller.
+A SatOS Application encompasses all software operating within the Application Host, usually for a single payload, including all necessary application-specific software and system libraries. SatOS Applications are packaged as container images, and the environment within which the containers are executed is orchestrated by the Application Controller.
 
 This section of the SDK guide explains how a developer should think about design and implementation of a Payload Application.
 
@@ -69,12 +68,12 @@ Application Operation
 When a Payload Application is scheduled to be active for a given period of time, a simple state machine is executed:
 
 1. Payload Device is powered on
-2. Payload Application is booted up
+2. Payload Application is booted up by Application Controller
 3. Payload Application starts via developer-provided entrypoint script
 4. Payload Application initializes a Payload Interface connection (typically using an appropriate SDK library)
-5. Payload Controller instructs Payload Application to execute required Payload Sequences
+5. Application Controller instructs Payload Application to execute required Payload Sequences
 6. Payload Application acknowledges when sequences are complete
-7. Payload Controller stops application, with time allowed for graceful shutdown
+7. Application Controller stops application, with time allowed for graceful shutdown
 8. Payload Device is powered off
 
 Payload Sequences
@@ -82,9 +81,9 @@ Payload Sequences
 
 A Payload Sequence represents a discrete unit of work, and usually maps to specific manipulation of a payload device in accordance with mission objectives.
 
-Payload Sequences are scheduled using simple heuristics, all controlled by the Antaris Cloud Platform. Examples of this include "when the satellite is within range of X,Y coordinates" or "twice per orbit during the local day time". Any geographic triggers (ground target pointing, enter/leave bounding box, etc.) are resolved within ACP before Payload Sequences are executed.
+Payload Sequences are scheduled by SatOS based on the on-board schedule generated & uploaded to satellite by the Antaris Cloud Platform. Examples of this include "when the satellite is within range of X,Y coordinates" or "twice per orbit during the local day time". Any geographic triggers (ground target pointing, enter/leave bounding box, etc.) are resolved within ACP before Payload Sequences are executed.
 
-Payload Applications are instructed to execute Payload Sequences using the Payload Interface. Payload Applications are not "always on", and will only be booted up when its sequences are to be executed. Sequences are always given a duration within which they are expected to run, and are not able to run forever.
+Payload Applications are instructed to execute Payload Sequences using the SatOS Interface. Payload Applications are not "always on", and will only be booted up when its sequences are to be executed. Sequences are always given a duration within which they are expected to run, and are not able to run forever.
 
 Dynamic/on-demand interaction for active debugging and diagnosis is supported directly via ACP.
 
@@ -93,41 +92,33 @@ File Upload & Download
 
 File uploads are facilitated by ACP. Uploaded files are made available at a pre-determined location in a Payload Application’s storage space. Keep in mind that radio uplink bandwidth is typically limited, so it is wise to minimize upload file size and to consider piecemeal update processes.
 
-File downloads are typically initiated in response to creation of some mission-oriented data by the Payload Application and/or Payload Device. A PA must inform the satellite that files are ready to be downloaded using the Payload Interface. After notification, files can then be automatically downlinked to the ground and distributed to mission operators.
+File downloads are typically initiated in response to creation of some mission-oriented data by the Payload Application and/or Payload Device. A PA must inform the satellite that files are ready to be downloaded using the SatOS Interface. After notification, files can then be automatically downlinked to the ground and distributed to mission operators.
 
 Application Upgrades
 ====================
 
-Payload Applications are expected to upgrade themselves, typically using package-based processes (i.e. deb/rpm).
+A typical Application upgrade flow would look like following :
 
-An alternate PA mode should be used to trigger an upgrade. This explicit approach is preferred as it allows for upgrade/recovery in the event the PA is unable to operate normally.
-
-A typical upgrade flow would look like so:
-
-1. SatOS application docker Upgrade_artifact is created at ground. This contains incremental change in SatOS application.
-2. Operator uses SatOS File upload mechanism to uplink Upgrade_artifact files to onboard compute storage.
-3. After artefact is uploaded successfully, Operator should send TC (TC 610), which results in updating SatOS application docker image. Detailed procedure to upgrade the application is available in Operator's manual.
+1. Incremental change in Application docker container (lets call it upgrade_artifact) created at ground by application developer. Antaris provides necessary tool to do that. 
+2. Operator uses File upload task in ACP to uplink the upgrade_artifact to onboard storage.
+3. After upgrade_artifact is uploaded successfully, Operator should send Application Upgrade Telecommand (TC 610), which results in updating the application conatiner image. More details regarding this is available in Operator's manual.
 
 Application Environment
 ***********************
 
-This section describes the runtime compute environment a PA will operate within.
+This section describes the runtime compute environment an Application will operate within.
 
 Configuration
 =============
 
-Application configuration is provided via the readonly ``/opt/antaris/app/`` directory. This file include:
-
-* **config.json** contains a JSON-encoded config file, constructed by the PC to help automate PA configuration
-
-Above file is managed by the system and is readonly to the running application processes.
+Application environment configuration is available (as readonly) as ``/opt/antaris/app/config.json`` file. It helps to automate Application environment configuration by Application Controller. Above file is managed by the system and is readonly to the running application processes.
 
 Compute & Storage
 =================
 
-All Payload Applications are deployed as virtual machines. CPU and memory resources are configured within the Antaris Cloud Platform during satellite configuration. Storage capacity is also pre-configured.
+All Payload Applications are deployed as docker containers. CPU, memory resources, storage are pre-configured during satellite configuration.
 
-All storage is persistent and will maintain state across reboots. Access to storage is provided via the following filesystem mounts:
+All storage is persistent and will maintain state across reboots. Access to application storage is provided via the following filesystem mounts:
 
 * ``/opt/antaris/outbound/``: contains files produced by the PA that are intended for downlink during a ground station contact
 * ``/opt/antaris/inbound/``: contains files uplinked and made available to the PA. The PA has readonly access of this folder.
@@ -136,28 +127,24 @@ All storage is persistent and will maintain state across reboots. Access to stor
 Network
 =======
 
-Each Payload Application receives a unique IP Address, as do any associated Payload Devices. The Payload Controller and an NTP server are also available over this network. The values assigned to these resources are defined in the PA config file, and should be accessed via the SDK library.
+Each Payload Application container is configured with a unique IP Address, as do any associated Payload Devices connected over IP network. The Application Controller and an NTP server are also available over this network. The IP addresses of all these resources are defined in the PA config file (/opt/antaris/app/config.json), and should be accessed via the SDK library functions.
 
-Device Access
-=============
+Device Interface Access
+=======================
 
-All necessary devices are exposed to the payload application natively.
-Filesystem locations and device identifiers are provided by the application config (see `Configuration` above).
+All necessary devices are exposed to the payload application natively. Devices paths and identifiers are provided by the application config (see `Configuration` above).
 
-Payload SDK library support is available to assist in reading device configuration from the config.
-Additional library support is also available to simplify GPIO I/O.
+SatOS SDK library support is available to assist in reading device configuration from the config. Additional library support is also available to simplify I/O over interfaces like GPIO, CAN, UART.
 
 Packaging
 =========
 
-Developers work in a containerized environment during payload development. Base docker images are available via quay.io:
+Application are expected to be containerized using Docker version 25.0 and above. Base docker images are available via quay.io:
 
 * Python-based applications: `quay.io/antaris-inc/satos-payload-app-python:stable`
 * CPP-based applications: `quay.io/antaris-inc/satos-payload-app-cpp:stable`
 
 Examples usage of these images are available: https://github.com/antaris-inc/SatOS-Payload-Demos.
-
-Integration of applications into SatOS for on-orbit operation as virtual machines is not addressed in this guide.
 
 Payload Tasks & Schedules
 *************************
@@ -225,7 +212,7 @@ Task definition and scheduling is a collaborative, ongoing exercise. During init
 * **Payload Device Power State**: the expected payload device power state before and during Task execution
 * **Power Requirements**: the average and max power requirements required for the Task
 
-Using the Payload SDK Libraries
+Using the SatOS SDK Libraries
 *******************************
 
 The SDK provides the following programming language support:
