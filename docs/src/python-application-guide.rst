@@ -1,7 +1,7 @@
 Python Application Guide
 ########################
 
-The SatOS Payload SDK contains assets that greatly simplify development of payload applications in Python.
+The SatOS SDK contains assets that greatly simplify development of payload applications in Python.
 The python library (named `satos_payload_sdk`) provides Payload Interface client bindings as well as a user-friendly abstraction for applications.
 This guide primarily describes how to use this library in pursuit of building a fully functional Payload Application.
 
