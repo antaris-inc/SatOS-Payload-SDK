@@ -1,5 +1,5 @@
-SatOS Payload SDK
-=================
+SatOS SDK
+==========
 
 The SDK documentation contains a number of useful resources:
 
