@@ -39,7 +39,7 @@ jobs:
         name: docs
         path: dist/docs/
     - uses: actions/configure-pages@v4
-    - uses: actions/upload-pages-artifact@v4
+    - uses: actions/upload-pages-artifact@v3
       with:
         path: dist/docs/
     - id: deployment
