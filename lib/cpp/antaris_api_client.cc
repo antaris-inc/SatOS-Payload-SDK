@@ -285,6 +285,56 @@ class PCServiceClient {
         return tmp_return;
   }
 
+  AntarisReturnCode Invoke_PC_GNSS_EPH_Stop_req(ReqGnssEphStopDataReq *req_params) {
+    antaris_api_peer_to_peer::ReqGnssEphStopDataReq pc_req;
+    antaris_api_peer_to_peer::AntarisReturnType pc_response;
+    Status pc_status;
+    // Context for the client. It could be used to convey extra information to
+    // the server and/or tweak certain RPC behaviors.
+    ClientContext context;
+
+    app_to_peer_ReqGnssEphStopDataReq(req_params, &pc_req);
+    context.AddMetadata(COOKIE_STR, this->cookie_str);
+
+    pc_status = stub_->PC_gnss_eph_stop_req(&context, pc_req, &pc_response);
+
+    AntarisReturnCode tmp_return;
+
+    // Act upon its status.
+    if (pc_status.ok()) {
+         tmp_return = (AntarisReturnCode)(pc_response.return_code());
+    } else {
+        tmp_return = An_GENERIC_FAILURE;
+    }
+
+    return tmp_return;
+  }
+
+  AntarisReturnCode Invoke_PC_GNSS_EPH_Start_req(ReqGnssEphStartDataReq *req_params) {
+    antaris_api_peer_to_peer::ReqGnssEphStartDataReq pc_req;
+    antaris_api_peer_to_peer::AntarisReturnType pc_response;
+    Status pc_status;
+    // Context for the client. It could be used to convey extra information to
+    // the server and/or tweak certain RPC behaviors.
+    ClientContext context;
+
+    app_to_peer_ReqGnssEphStartDataReq(req_params, &pc_req);
+    context.AddMetadata(COOKIE_STR, this->cookie_str);
+
+    pc_status = stub_->PC_gnss_eph_start_req(&context, pc_req, &pc_response);
+
+    AntarisReturnCode tmp_return;
+
+    // Act upon its status.
+    if (pc_status.ok()) {
+         tmp_return = (AntarisReturnCode)(pc_response.return_code());
+    } else {
+        tmp_return = An_GENERIC_FAILURE;
+    }
+
+    return tmp_return;
+  }
+
  private:
   std::unique_ptr<antaris_api_peer_to_peer::AntarisapiPayloadController::Stub> stub_;
   char cookie_str[COOKIE_LEN+1];
@@ -822,6 +872,25 @@ AntarisReturnCode api_pa_pc_response_payload_metrics(AntarisChannel channel, Pay
     }
 
     return channel_ctx->pc_service_handle->Invoke_PC_response_payload_metrics(response_payload_metrics_params);
+}
+
+AntarisReturnCode api_pa_pc_gnss_eph_stop_req(AntarisChannel channel, ReqGnssEphStopDataReq *req_gnss_eph_stop_req)
+{
+    AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
+    AntarisReturnCode ret = An_SUCCESS;
+
+    printf("api_pa_pc_gnss_eph_stop_req\n");
+
+    if (!channel_ctx || !channel_ctx->pc_service_handle || !req_gnss_eph_stop_req) {
+        ret = An_GENERIC_FAILURE;
+        return ret;
+    }
+
+    if (api_debug) {
+        displayPayloadMetricsResponse(req_gnss_eph_stop_req);
+    }
+
+    return channel_ctx->pc_service_handle->Invoke_PC_GNSS_EPH_Stop_req(req_gnss_eph_stop_req);
 }
 
 } // extern C

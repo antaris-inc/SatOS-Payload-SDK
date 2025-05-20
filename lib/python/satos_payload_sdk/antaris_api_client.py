@@ -58,6 +58,9 @@ class AntarisChannel:
         self.process_resp_stage_file_download = callback_func_list['RespStageFileDownload']
         self.process_resp_payload_power_control = callback_func_list['RespPayloadPowerControl']
         self.req_payload_metrics = callback_func_list['ReqPayloadMetrics']
+        self.process_resp_gnss_eph_stop_req = callback_func_list['RespGnssEphStopDataReq']
+        self.process_resp_gnss_eph_start_req = callback_func_list['RespGnssEphStartDataReq']
+        self.process_resp_gnss_eph_data = callback_func_list['GnssEphData']
         try :
             # Read config info
             jsonfile = open(g_CONFIG_JSON_FILE, 'r')
@@ -133,6 +136,29 @@ class PCToAppService(antaris_api_pb2_grpc.AntarisapiApplicationCallbackServicer)
         else:
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
 
+    def PA_ProcessResponseGnssEphDataStopReq(self, request, context):
+        if self.channel.process_resp_gnss_eph_stop_req:
+            app_request = api_types.peer_to_app_ReqGnssEphStopDataReq(request)
+            app_ret =  self.channel.process_resp_gnss_eph_stop_req(app_request)
+            return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
+        else:
+            return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
+
+    def PA_ProcessResponseGnssEphDataStartReq(self, request, context):
+        if self.channel.process_resp_gnss_eph_start_req:
+            app_request = api_types.peer_to_app_ReqGnssEphStartDataReq(request)
+            app_ret =  self.channel.process_resp_gnss_eph_start_req(app_request)
+            return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
+        else:
+            return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
+
+    def PA_GnssEphData(self, request, context):
+        if self.channel.process_resp_gnss_eph_data:
+            app_request = api_types.peer_to_app_GnssEphData(request)
+            app_ret = self.channel.process_resp_gnss_eph_data(app_request)
+            return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
+        else:
+            return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
 def api_pa_pc_create_channel_common(secure, callback_func_list):
     global g_SERVER_CERT_FILE
     global g_CLIENT_CERT_FILE
@@ -368,6 +394,29 @@ def api_pa_pc_response_shutdown(channel, response_shutdown_params):
     peer_params = api_types.app_to_peer_RespShutdownParams(response_shutdown_params)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
     peer_ret = channel.grpc_client_handle.PC_response_shutdown(peer_params , metadata=metadata)
+    if (api_debug):
+        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+
+    return peer_ret.return_code
+
+def api_pa_pc_gnss_eph_stop_req(channel):
+    print("api_pa_pc_gnss_eph_stop_req")
+
+    peer_params = api_types.app_to_peer_ReqGnssEphStopDataReq()
+    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = channel.grpc_client_handle.PC_gnss_eph_stop_req(peer_params , metadata=metadata)
+
+    if (api_debug):
+        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+
+    return peer_ret.return_code
+
+def api_pa_pc_gnss_eph_start_req(channel, req_gnss_eph_start):
+    print("api_pa_pc_gnss_eph_start_req")
+
+    peer_params = api_types.app_to_peer_ReqGnssEphStartDataReq(req_gnss_eph_start)
+    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = channel.grpc_client_handle.PC_gnss_eph_start_req(peer_params , metadata=metadata)
 
     if (api_debug):
         print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
