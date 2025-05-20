@@ -172,6 +172,8 @@ message RespGnssEphStopDataReq {
 
 message ReqGnssEphStartDataReq {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           periodicity_in_ms = 2; // Time between consecutive notifications in ms
+    int32                           eph2_enable      = 3; // 0 = disable eph2, 1 = enable eph2
 }
 
 message RespGnssEphStartDataReq {

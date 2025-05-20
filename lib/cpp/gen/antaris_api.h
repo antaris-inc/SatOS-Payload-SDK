@@ -485,6 +485,8 @@ void peer_to_app_RespGnssEphStopDataReq(const void *ptr_src_peer, void *ptr_dst_
 /// @brief Request parameters for Payload Power Control
 struct ReqGnssEphStartDataReq {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT16                                          periodicity_in_ms;                               ///< @var Time between consecutive notifications in ms
+    INT8                                            eph2_enable;                                     ///< @var 0 = disable eph2, 1 = enable eph2
 };
 
 void displayReqGnssEphStartDataReq(const void *obj);

@@ -3657,6 +3657,8 @@ class ReqGnssEphStartDataReq final :
 
   enum : int {
     kCorrelationIdFieldNumber = 1,
+    kPeriodicityInMsFieldNumber = 2,
+    kEph2EnableFieldNumber = 3,
   };
   // int32 correlation_id = 1;
   void clear_correlation_id();
@@ -3667,6 +3669,24 @@ class ReqGnssEphStartDataReq final :
   void _internal_set_correlation_id(int32_t value);
   public:
 
+  // int32 periodicity_in_ms = 2;
+  void clear_periodicity_in_ms();
+  int32_t periodicity_in_ms() const;
+  void set_periodicity_in_ms(int32_t value);
+  private:
+  int32_t _internal_periodicity_in_ms() const;
+  void _internal_set_periodicity_in_ms(int32_t value);
+  public:
+
+  // int32 eph2_enable = 3;
+  void clear_eph2_enable();
+  int32_t eph2_enable() const;
+  void set_eph2_enable(int32_t value);
+  private:
+  int32_t _internal_eph2_enable() const;
+  void _internal_set_eph2_enable(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.ReqGnssEphStartDataReq)
  private:
   class _Internal;
@@ -3675,6 +3695,8 @@ class ReqGnssEphStartDataReq final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   int32_t correlation_id_;
+  int32_t periodicity_in_ms_;
+  int32_t eph2_enable_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
 };
@@ -6090,6 +6112,46 @@ inline void ReqGnssEphStartDataReq::_internal_set_correlation_id(int32_t value) 
 inline void ReqGnssEphStartDataReq::set_correlation_id(int32_t value) {
   _internal_set_correlation_id(value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ReqGnssEphStartDataReq.correlation_id)
+}
+
+// int32 periodicity_in_ms = 2;
+inline void ReqGnssEphStartDataReq::clear_periodicity_in_ms() {
+  periodicity_in_ms_ = 0;
+}
+inline int32_t ReqGnssEphStartDataReq::_internal_periodicity_in_ms() const {
+  return periodicity_in_ms_;
+}
+inline int32_t ReqGnssEphStartDataReq::periodicity_in_ms() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.ReqGnssEphStartDataReq.periodicity_in_ms)
+  return _internal_periodicity_in_ms();
+}
+inline void ReqGnssEphStartDataReq::_internal_set_periodicity_in_ms(int32_t value) {
+  
+  periodicity_in_ms_ = value;
+}
+inline void ReqGnssEphStartDataReq::set_periodicity_in_ms(int32_t value) {
+  _internal_set_periodicity_in_ms(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ReqGnssEphStartDataReq.periodicity_in_ms)
+}
+
+// int32 eph2_enable = 3;
+inline void ReqGnssEphStartDataReq::clear_eph2_enable() {
+  eph2_enable_ = 0;
+}
+inline int32_t ReqGnssEphStartDataReq::_internal_eph2_enable() const {
+  return eph2_enable_;
+}
+inline int32_t ReqGnssEphStartDataReq::eph2_enable() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.ReqGnssEphStartDataReq.eph2_enable)
+  return _internal_eph2_enable();
+}
+inline void ReqGnssEphStartDataReq::_internal_set_eph2_enable(int32_t value) {
+  
+  eph2_enable_ = value;
+}
+inline void ReqGnssEphStartDataReq::set_eph2_enable(int32_t value) {
+  _internal_set_eph2_enable(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ReqGnssEphStartDataReq.eph2_enable)
 }
 
 // -------------------------------------------------------------------

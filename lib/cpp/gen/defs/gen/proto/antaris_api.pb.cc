@@ -293,7 +293,9 @@ struct RespGnssEphStopDataReqDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT RespGnssEphStopDataReqDefaultTypeInternal _RespGnssEphStopDataReq_default_instance_;
 constexpr ReqGnssEphStartDataReq::ReqGnssEphStartDataReq(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : correlation_id_(0){}
+  : correlation_id_(0)
+  , periodicity_in_ms_(0)
+  , eph2_enable_(0){}
 struct ReqGnssEphStartDataReqDefaultTypeInternal {
   constexpr ReqGnssEphStartDataReqDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -569,6 +571,8 @@ const uint32_t TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto::offsets[]
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqGnssEphStartDataReq, correlation_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqGnssEphStartDataReq, periodicity_in_ms_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqGnssEphStartDataReq, eph2_enable_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGnssEphStartDataReq, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -639,10 +643,10 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 159, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGnssEphStopDataReq)},
   { 166, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGnssEphStopDataReq)},
   { 174, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGnssEphStartDataReq)},
-  { 181, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGnssEphStartDataReq)},
-  { 189, -1, -1, sizeof(::antaris_api_peer_to_peer::GnssEphData)},
-  { 214, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisCorrelationId)},
-  { 221, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisReturnType)},
+  { 183, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGnssEphStartDataReq)},
+  { 191, -1, -1, sizeof(::antaris_api_peer_to_peer::GnssEphData)},
+  { 216, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisCorrelationId)},
+  { 223, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisReturnType)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -721,102 +725,104 @@ const char descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[
   "_id\030\001 \001(\t\"/\n\025ReqGnssEphStopDataReq\022\026\n\016co"
   "rrelation_id\030\001 \001(\005\"D\n\026RespGnssEphStopDat"
   "aReq\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nreq_stat"
-  "us\030\002 \001(\005\"0\n\026ReqGnssEphStartDataReq\022\026\n\016co"
-  "rrelation_id\030\001 \001(\005\"E\n\027RespGnssEphStartDa"
-  "taReq\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nreq_sta"
-  "tus\030\002 \001(\005\"\325\003\n\013GnssEphData\022\026\n\016correlation"
-  "_id\030\001 \001(\005\022\024\n\014gps_fix_time\030\002 \001(\005\022\024\n\014gps_s"
-  "ys_time\030\003 \001(\005\022\020\n\010obc_time\030\004 \001(\003\022\031\n\021gps_p"
-  "osition_ecef\030\005 \003(\005\022\031\n\021gps_velocity_ecef\030"
-  "\006 \003(\005\022!\n\031gps_validity_flag_pos_vel\030\007 \001(\005"
-  "\022\021\n\tadcs_time\030\010 \001(\003\022\030\n\020position_wrt_eci\030"
-  "\t \003(\003\022\030\n\020velocity_wrt_eci\030\n \003(\003\022\031\n\021posit"
-  "ion_wrt_ecef\030\013 \003(\003\022\031\n\021velocity_wrt_ecef\030"
-  "\014 \003(\003\022\021\n\tbody_rate\030\r \003(\005\022\020\n\010attitude\030\016 \003"
-  "(\005\022\020\n\010adcs_pos\030\017 \003(\005\022\031\n\021nadir_vector_bod"
-  "y\030\020 \003(\005\022\034\n\024gd_nadir_vector_body\030\021 \003(\005\022\022\n"
-  "\nbeta_angle\030\022 \001(\005\022\026\n\016validity_flags\030\023 \001("
-  "\005\".\n\024AntarisCorrelationId\022\026\n\016correlation"
-  "_id\030\001 \001(\005\"U\n\021AntarisReturnType\022@\n\013return"
-  "_code\030\001 \001(\0162+.antaris_api_peer_to_peer.A"
-  "ntarisReturnCode*\354\001\n\021AntarisReturnCode\022\016"
-  "\n\nAn_SUCCESS\020\000\022\037\n\022An_GENERIC_FAILURE\020\377\377\377"
-  "\377\377\377\377\377\377\001\022\037\n\022An_NOT_IMPLEMENTED\020\376\377\377\377\377\377\377\377\377\001"
-  "\022 \n\023An_OUT_OF_RESOURCES\020\375\377\377\377\377\377\377\377\377\001\022\035\n\020An"
-  "_NOT_PERMITTED\020\374\377\377\377\377\377\377\377\377\001\022\036\n\021An_INVALID_"
-  "PARAMS\020\373\377\377\377\377\377\377\377\377\001\022$\n\027An_INCOMPATIBLE_VER"
-  "SION\020\372\377\377\377\377\377\377\377\377\0012\232\013\n\035AntarisapiApplicatio"
-  "nCallback\022p\n\020PA_StartSequence\022-.antaris_"
-  "api_peer_to_peer.StartSequenceParams\032+.a"
-  "ntaris_api_peer_to_peer.AntarisReturnTyp"
-  "e\"\000\022i\n\016PA_ShutdownApp\022(.antaris_api_peer"
-  "_to_peer.ShutdownParams\032+.antaris_api_pe"
-  "er_to_peer.AntarisReturnType\"\000\022s\n\025PA_Pro"
-  "cessHealthCheck\022+.antaris_api_peer_to_pe"
-  "er.HealthCheckParams\032+.antaris_api_peer_"
-  "to_peer.AntarisReturnType\"\000\022y\n\032PA_Proces"
-  "sResponseRegister\022,.antaris_api_peer_to_"
-  "peer.RespRegisterParams\032+.antaris_api_pe"
-  "er_to_peer.AntarisReturnType\"\000\022\215\001\n$PA_Pr"
-  "ocessResponseGetCurrentLocation\0226.antari"
-  "s_api_peer_to_peer.RespGetCurrentLocatio"
-  "nParams\032+.antaris_api_peer_to_peer.Antar"
-  "isReturnType\"\000\022\213\001\n#PA_ProcessResponseSta"
-  "geFileDownload\0225.antaris_api_peer_to_pee"
-  "r.RespStageFileDownloadParams\032+.antaris_"
-  "api_peer_to_peer.AntarisReturnType\"\000\022\217\001\n"
-  "%PA_ProcessResponsePayloadPowerControl\0227"
-  ".antaris_api_peer_to_peer.RespPayloadPow"
-  "erControlParams\032+.antaris_api_peer_to_pe"
-  "er.AntarisReturnType\"\000\022\177\n\033PA_ProcessReqP"
-  "ayloadMetrics\0221.antaris_api_peer_to_peer"
-  ".ReqPayloadMetricsParams\032+.antaris_api_p"
-  "eer_to_peer.AntarisReturnType\"\000\022\203\001\n PA_P"
-  "rocessRespGnssEphStopDataReq\0220.antaris_a"
-  "pi_peer_to_peer.RespGnssEphStopDataReq\032+"
-  ".antaris_api_peer_to_peer.AntarisReturnT"
-  "ype\"\000\022\205\001\n!PA_ProcessRespGnssEphStartData"
-  "Req\0221.antaris_api_peer_to_peer.RespGnssE"
-  "phStartDataReq\032+.antaris_api_peer_to_pee"
-  "r.AntarisReturnType\"\000\022m\n\025PA_ProcessGnssE"
-  "phData\022%.antaris_api_peer_to_peer.GnssEp"
-  "hData\032+.antaris_api_peer_to_peer.Antaris"
-  "ReturnType\"\0002\343\t\n\033AntarisapiPayloadContro"
-  "ller\022i\n\013PC_register\022+.antaris_api_peer_t"
-  "o_peer.ReqRegisterParams\032+.antaris_api_p"
-  "eer_to_peer.AntarisReturnType\"\000\022\177\n\027PC_ge"
-  "t_current_location\0225.antaris_api_peer_to"
-  "_peer.ReqGetCurrentLocationParams\032+.anta"
-  "ris_api_peer_to_peer.AntarisReturnType\"\000"
-  "\022}\n\026PC_stage_file_download\0224.antaris_api"
-  "_peer_to_peer.ReqStageFileDownloadParams"
-  "\032+.antaris_api_peer_to_peer.AntarisRetur"
-  "nType\"\000\022r\n\020PC_sequence_done\022/.antaris_ap"
-  "i_peer_to_peer.CmdSequenceDoneParams\032+.a"
-  "ntaris_api_peer_to_peer.AntarisReturnTyp"
-  "e\"\000\022\201\001\n\030PC_payload_power_control\0226.antar"
-  "is_api_peer_to_peer.ReqPayloadPowerContr"
-  "olParams\032+.antaris_api_peer_to_peer.Anta"
-  "risReturnType\"\000\022z\n\030PC_response_health_ch"
-  "eck\022/.antaris_api_peer_to_peer.RespHealt"
-  "hCheckParams\032+.antaris_api_peer_to_peer."
-  "AntarisReturnType\"\000\022s\n\024PC_response_shutd"
-  "own\022,.antaris_api_peer_to_peer.RespShutd"
-  "ownParams\032+.antaris_api_peer_to_peer.Ant"
-  "arisReturnType\"\000\022~\n\033PC_response_payload_"
-  "metrics\0220.antaris_api_peer_to_peer.Paylo"
-  "adMetricsResponse\032+.antaris_api_peer_to_"
-  "peer.AntarisReturnType\"\000\022v\n\024PC_gnss_eph_"
-  "stop_req\022/.antaris_api_peer_to_peer.ReqG"
-  "nssEphStopDataReq\032+.antaris_api_peer_to_"
-  "peer.AntarisReturnType\"\000\022x\n\025PC_gnss_eph_"
-  "start_req\0220.antaris_api_peer_to_peer.Req"
-  "GnssEphStartDataReq\032+.antaris_api_peer_t"
-  "o_peer.AntarisReturnType\"\000b\006proto3"
+  "us\030\002 \001(\005\"`\n\026ReqGnssEphStartDataReq\022\026\n\016co"
+  "rrelation_id\030\001 \001(\005\022\031\n\021periodicity_in_ms\030"
+  "\002 \001(\005\022\023\n\013eph2_enable\030\003 \001(\005\"E\n\027RespGnssEp"
+  "hStartDataReq\022\026\n\016correlation_id\030\001 \001(\005\022\022\n"
+  "\nreq_status\030\002 \001(\005\"\325\003\n\013GnssEphData\022\026\n\016cor"
+  "relation_id\030\001 \001(\005\022\024\n\014gps_fix_time\030\002 \001(\005\022"
+  "\024\n\014gps_sys_time\030\003 \001(\005\022\020\n\010obc_time\030\004 \001(\003\022"
+  "\031\n\021gps_position_ecef\030\005 \003(\005\022\031\n\021gps_veloci"
+  "ty_ecef\030\006 \003(\005\022!\n\031gps_validity_flag_pos_v"
+  "el\030\007 \001(\005\022\021\n\tadcs_time\030\010 \001(\003\022\030\n\020position_"
+  "wrt_eci\030\t \003(\003\022\030\n\020velocity_wrt_eci\030\n \003(\003\022"
+  "\031\n\021position_wrt_ecef\030\013 \003(\003\022\031\n\021velocity_w"
+  "rt_ecef\030\014 \003(\003\022\021\n\tbody_rate\030\r \003(\005\022\020\n\010atti"
+  "tude\030\016 \003(\005\022\020\n\010adcs_pos\030\017 \003(\005\022\031\n\021nadir_ve"
+  "ctor_body\030\020 \003(\005\022\034\n\024gd_nadir_vector_body\030"
+  "\021 \003(\005\022\022\n\nbeta_angle\030\022 \001(\005\022\026\n\016validity_fl"
+  "ags\030\023 \001(\005\".\n\024AntarisCorrelationId\022\026\n\016cor"
+  "relation_id\030\001 \001(\005\"U\n\021AntarisReturnType\022@"
+  "\n\013return_code\030\001 \001(\0162+.antaris_api_peer_t"
+  "o_peer.AntarisReturnCode*\354\001\n\021AntarisRetu"
+  "rnCode\022\016\n\nAn_SUCCESS\020\000\022\037\n\022An_GENERIC_FAI"
+  "LURE\020\377\377\377\377\377\377\377\377\377\001\022\037\n\022An_NOT_IMPLEMENTED\020\376\377"
+  "\377\377\377\377\377\377\377\001\022 \n\023An_OUT_OF_RESOURCES\020\375\377\377\377\377\377\377\377"
+  "\377\001\022\035\n\020An_NOT_PERMITTED\020\374\377\377\377\377\377\377\377\377\001\022\036\n\021An_"
+  "INVALID_PARAMS\020\373\377\377\377\377\377\377\377\377\001\022$\n\027An_INCOMPAT"
+  "IBLE_VERSION\020\372\377\377\377\377\377\377\377\377\0012\232\013\n\035AntarisapiAp"
+  "plicationCallback\022p\n\020PA_StartSequence\022-."
+  "antaris_api_peer_to_peer.StartSequencePa"
+  "rams\032+.antaris_api_peer_to_peer.AntarisR"
+  "eturnType\"\000\022i\n\016PA_ShutdownApp\022(.antaris_"
+  "api_peer_to_peer.ShutdownParams\032+.antari"
+  "s_api_peer_to_peer.AntarisReturnType\"\000\022s"
+  "\n\025PA_ProcessHealthCheck\022+.antaris_api_pe"
+  "er_to_peer.HealthCheckParams\032+.antaris_a"
+  "pi_peer_to_peer.AntarisReturnType\"\000\022y\n\032P"
+  "A_ProcessResponseRegister\022,.antaris_api_"
+  "peer_to_peer.RespRegisterParams\032+.antari"
+  "s_api_peer_to_peer.AntarisReturnType\"\000\022\215"
+  "\001\n$PA_ProcessResponseGetCurrentLocation\022"
+  "6.antaris_api_peer_to_peer.RespGetCurren"
+  "tLocationParams\032+.antaris_api_peer_to_pe"
+  "er.AntarisReturnType\"\000\022\213\001\n#PA_ProcessRes"
+  "ponseStageFileDownload\0225.antaris_api_pee"
+  "r_to_peer.RespStageFileDownloadParams\032+."
+  "antaris_api_peer_to_peer.AntarisReturnTy"
+  "pe\"\000\022\217\001\n%PA_ProcessResponsePayloadPowerC"
+  "ontrol\0227.antaris_api_peer_to_peer.RespPa"
+  "yloadPowerControlParams\032+.antaris_api_pe"
+  "er_to_peer.AntarisReturnType\"\000\022\177\n\033PA_Pro"
+  "cessReqPayloadMetrics\0221.antaris_api_peer"
+  "_to_peer.ReqPayloadMetricsParams\032+.antar"
+  "is_api_peer_to_peer.AntarisReturnType\"\000\022"
+  "\203\001\n PA_ProcessRespGnssEphStopDataReq\0220.a"
+  "ntaris_api_peer_to_peer.RespGnssEphStopD"
+  "ataReq\032+.antaris_api_peer_to_peer.Antari"
+  "sReturnType\"\000\022\205\001\n!PA_ProcessRespGnssEphS"
+  "tartDataReq\0221.antaris_api_peer_to_peer.R"
+  "espGnssEphStartDataReq\032+.antaris_api_pee"
+  "r_to_peer.AntarisReturnType\"\000\022m\n\025PA_Proc"
+  "essGnssEphData\022%.antaris_api_peer_to_pee"
+  "r.GnssEphData\032+.antaris_api_peer_to_peer"
+  ".AntarisReturnType\"\0002\343\t\n\033AntarisapiPaylo"
+  "adController\022i\n\013PC_register\022+.antaris_ap"
+  "i_peer_to_peer.ReqRegisterParams\032+.antar"
+  "is_api_peer_to_peer.AntarisReturnType\"\000\022"
+  "\177\n\027PC_get_current_location\0225.antaris_api"
+  "_peer_to_peer.ReqGetCurrentLocationParam"
+  "s\032+.antaris_api_peer_to_peer.AntarisRetu"
+  "rnType\"\000\022}\n\026PC_stage_file_download\0224.ant"
+  "aris_api_peer_to_peer.ReqStageFileDownlo"
+  "adParams\032+.antaris_api_peer_to_peer.Anta"
+  "risReturnType\"\000\022r\n\020PC_sequence_done\022/.an"
+  "taris_api_peer_to_peer.CmdSequenceDonePa"
+  "rams\032+.antaris_api_peer_to_peer.AntarisR"
+  "eturnType\"\000\022\201\001\n\030PC_payload_power_control"
+  "\0226.antaris_api_peer_to_peer.ReqPayloadPo"
+  "werControlParams\032+.antaris_api_peer_to_p"
+  "eer.AntarisReturnType\"\000\022z\n\030PC_response_h"
+  "ealth_check\022/.antaris_api_peer_to_peer.R"
+  "espHealthCheckParams\032+.antaris_api_peer_"
+  "to_peer.AntarisReturnType\"\000\022s\n\024PC_respon"
+  "se_shutdown\022,.antaris_api_peer_to_peer.R"
+  "espShutdownParams\032+.antaris_api_peer_to_"
+  "peer.AntarisReturnType\"\000\022~\n\033PC_response_"
+  "payload_metrics\0220.antaris_api_peer_to_pe"
+  "er.PayloadMetricsResponse\032+.antaris_api_"
+  "peer_to_peer.AntarisReturnType\"\000\022v\n\024PC_g"
+  "nss_eph_stop_req\022/.antaris_api_peer_to_p"
+  "eer.ReqGnssEphStopDataReq\032+.antaris_api_"
+  "peer_to_peer.AntarisReturnType\"\000\022x\n\025PC_g"
+  "nss_eph_start_req\0220.antaris_api_peer_to_"
+  "peer.ReqGnssEphStartDataReq\032+.antaris_ap"
+  "i_peer_to_peer.AntarisReturnType\"\000b\006prot"
+  "o3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto = {
-  false, false, 5554, descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, "defs/gen/proto/antaris_api.proto", 
+  false, false, 5602, descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, "defs/gen/proto/antaris_api.proto", 
   &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once, nullptr, 0, 25,
   schemas, file_default_instances, TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto::offsets,
   file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, file_level_enum_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, file_level_service_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto,
@@ -5612,12 +5618,17 @@ ReqGnssEphStartDataReq::ReqGnssEphStartDataReq(::PROTOBUF_NAMESPACE_ID::Arena* a
 ReqGnssEphStartDataReq::ReqGnssEphStartDataReq(const ReqGnssEphStartDataReq& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  correlation_id_ = from.correlation_id_;
+  ::memcpy(&correlation_id_, &from.correlation_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&eph2_enable_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(eph2_enable_));
   // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.ReqGnssEphStartDataReq)
 }
 
 inline void ReqGnssEphStartDataReq::SharedCtor() {
-correlation_id_ = 0;
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&eph2_enable_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(eph2_enable_));
 }
 
 ReqGnssEphStartDataReq::~ReqGnssEphStartDataReq() {
@@ -5647,7 +5658,9 @@ void ReqGnssEphStartDataReq::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  correlation_id_ = 0;
+  ::memset(&correlation_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&eph2_enable_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(eph2_enable_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -5661,6 +5674,22 @@ const char* ReqGnssEphStartDataReq::_InternalParse(const char* ptr, ::PROTOBUF_N
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
           correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 periodicity_in_ms = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          periodicity_in_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 eph2_enable = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          eph2_enable_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -5700,6 +5729,18 @@ uint8_t* ReqGnssEphStartDataReq::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
   }
 
+  // int32 periodicity_in_ms = 2;
+  if (this->_internal_periodicity_in_ms() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_periodicity_in_ms(), target);
+  }
+
+  // int32 eph2_enable = 3;
+  if (this->_internal_eph2_enable() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_eph2_enable(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -5719,6 +5760,16 @@ size_t ReqGnssEphStartDataReq::ByteSizeLong() const {
   // int32 correlation_id = 1;
   if (this->_internal_correlation_id() != 0) {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  // int32 periodicity_in_ms = 2;
+  if (this->_internal_periodicity_in_ms() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_periodicity_in_ms());
+  }
+
+  // int32 eph2_enable = 3;
+  if (this->_internal_eph2_enable() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_eph2_enable());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -5746,6 +5797,12 @@ void ReqGnssEphStartDataReq::MergeFrom(const ReqGnssEphStartDataReq& from) {
   if (from._internal_correlation_id() != 0) {
     _internal_set_correlation_id(from._internal_correlation_id());
   }
+  if (from._internal_periodicity_in_ms() != 0) {
+    _internal_set_periodicity_in_ms(from._internal_periodicity_in_ms());
+  }
+  if (from._internal_eph2_enable() != 0) {
+    _internal_set_eph2_enable(from._internal_eph2_enable());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -5763,7 +5820,12 @@ bool ReqGnssEphStartDataReq::IsInitialized() const {
 void ReqGnssEphStartDataReq::InternalSwap(ReqGnssEphStartDataReq* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  swap(correlation_id_, other->correlation_id_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(ReqGnssEphStartDataReq, eph2_enable_)
+      + sizeof(ReqGnssEphStartDataReq::eph2_enable_)
+      - PROTOBUF_FIELD_OFFSET(ReqGnssEphStartDataReq, correlation_id_)>(
+          reinterpret_cast<char*>(&correlation_id_),
+          reinterpret_cast<char*>(&other->correlation_id_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ReqGnssEphStartDataReq::GetMetadata() const {

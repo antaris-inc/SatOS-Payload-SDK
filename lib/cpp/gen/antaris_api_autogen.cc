@@ -1051,6 +1051,10 @@ displayReqGnssEphStartDataReq(const void *obj)
 
     printf("correlation_id ==>\n");
     displayUINT16((void *)&p->correlation_id);
+    printf("periodicity_in_ms ==>\n");
+    displayUINT16((void *)&p->periodicity_in_ms);
+    printf("eph2_enable ==>\n");
+    displayINT8((void *)&p->eph2_enable);
 
 }
 
@@ -1061,11 +1065,20 @@ app_to_peer_ReqGnssEphStartDataReq(const void *ptr_src_app, void *ptr_dst_peer)
     ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq *dst = (::antaris_api_peer_to_peer::ReqGnssEphStartDataReq *)ptr_dst_peer;
 
     UINT32 __tmp_correlation_id;
+    UINT32 __tmp_periodicity_in_ms;
+    INT32 __tmp_eph2_enable;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
     dst->set_correlation_id(__tmp_correlation_id);
 
+    app_to_peer_UINT16(&src->periodicity_in_ms, &__tmp_periodicity_in_ms); // periodicity_in_ms
+
+    dst->set_periodicity_in_ms(__tmp_periodicity_in_ms);
+
+    app_to_peer_INT8(&src->eph2_enable, &__tmp_eph2_enable); // eph2_enable
+
+    dst->set_eph2_enable(__tmp_eph2_enable);
 
 }
 
@@ -1076,6 +1089,8 @@ peer_to_app_ReqGnssEphStartDataReq(const void *ptr_src_peer, void *ptr_dst_app)
     ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq *src = (::antaris_api_peer_to_peer::ReqGnssEphStartDataReq *)ptr_src_peer;
 
     dst->correlation_id = src->correlation_id();
+    dst->periodicity_in_ms = src->periodicity_in_ms();
+    dst->eph2_enable = src->eph2_enable();
 
 }
 

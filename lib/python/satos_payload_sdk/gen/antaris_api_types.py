@@ -674,14 +674,22 @@ def app_to_peer_RespGnssEphStopDataReq(app_struct):
 ## @class: ReqGnssEphStartDataReq
 ## @brief: Request parameters for Payload Power Control
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: periodicity_in_ms                               :    Time between consecutive notifications in ms    
+## @param: eph2_enable                                     :    0 = disable eph2, 1 = enable eph2               
 class ReqGnssEphStartDataReq:
-    def __init__(self, correlation_id):
+    def __init__(self, correlation_id, periodicity_in_ms, eph2_enable):
         self.correlation_id = correlation_id
+        self.periodicity_in_ms = periodicity_in_ms
+        self.eph2_enable = eph2_enable
 
     def __str__(self):
         ret_str = ""
         ret_str += "correlation_id:\n"
         ret_str += str(self.correlation_id) + "\n"
+        ret_str += "periodicity_in_ms:\n"
+        ret_str += str(self.periodicity_in_ms) + "\n"
+        ret_str += "eph2_enable:\n"
+        ret_str += str(self.eph2_enable) + "\n"
 
         return ret_str
 
@@ -690,10 +698,12 @@ class ReqGnssEphStartDataReq:
 
 def peer_to_app_ReqGnssEphStartDataReq(peer_struct):
     correlation_id = peer_struct.correlation_id
-    return ReqGnssEphStartDataReq(correlation_id)
+    periodicity_in_ms = peer_struct.periodicity_in_ms
+    eph2_enable = peer_struct.eph2_enable
+    return ReqGnssEphStartDataReq(correlation_id, periodicity_in_ms, eph2_enable)
 
 def app_to_peer_ReqGnssEphStartDataReq(app_struct):
-    return antaris_api_pb2.ReqGnssEphStartDataReq(correlation_id = app_struct.correlation_id)
+    return antaris_api_pb2.ReqGnssEphStartDataReq(correlation_id = app_struct.correlation_id, periodicity_in_ms = app_struct.periodicity_in_ms, eph2_enable = app_struct.eph2_enable)
 
 ## @class: RespGnssEphStartDataReq
 ## @brief: Response parameters for Payload Power Control request

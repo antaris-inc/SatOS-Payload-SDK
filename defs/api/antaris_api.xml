@@ -159,6 +159,8 @@
 
         <Struct name="ReqGnssEphStartDataReq" description="Request parameters for Payload Power Control">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="periodicity_in_ms" type="UINT16" sequence="2" description="Time between consecutive notifications in ms"/>
+            <Field name="eph2_enable" type="INT8" sequence="3" description="0 = disable eph2, 1 = enable eph2"/>
         </Struct>
 
         <Struct name="RespGnssEphStartDataReq" description="Response parameters for Payload Power Control request">

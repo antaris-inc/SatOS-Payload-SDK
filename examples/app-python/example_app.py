@@ -89,6 +89,8 @@ class Controller:
         logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude} sd_lat={loc.sd_latitude}, sd_lng={loc.sd_longitude}, sd_alt={loc.sd_altitude}")
     
     def handle_gnss_data(self, ctx):
+        periodicity_in_ms = 10000
+        eph2_enable = 0
         if ctx.params.lower() == "stop":
             logger.info("Sending GNSS EPH data stop request")
             resp = ctx.client.gnss_eph_stop_data_req()
@@ -98,7 +100,7 @@ class Controller:
                 logger.info("Stopping request failed")
         elif ctx.params.lower() == "start":
             logger.info("Sending GNSS EPH data start request")
-            resp = ctx.client.gnss_eph_start_data_req()
+            resp = ctx.client.gnss_eph_start_data_req(periodicity_in_ms, eph2_enable)
             if (resp == True):
                 logger.info("Starting request success")
             else:
