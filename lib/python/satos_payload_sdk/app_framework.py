@@ -225,9 +225,9 @@ class ChannelClient:
 
         return resp
     
-    def gnss_eph_start_data_req(self):
+    def gnss_eph_start_data_req(self, periodicity_in_ms, eph2_enable):
         with self._cond:
-            params = api_types.ReqGnssEphStartDataReq(self._get_next_cid())
+            params = api_types.ReqGnssEphStartDataReq(self._get_next_cid(), periodicity_in_ms, eph2_enable)
             resp = api_client.api_pa_pc_gnss_eph_start_req(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
                 logger.error("gnss_eph_start_data_req request failed")
@@ -339,6 +339,7 @@ class PayloadApplication(Stoppable):
 
         # default health check; can be overridden
         self.health_check_handler_func = lambda: True
+        
         # default gnss data handler; can be overridden
         self.gnss_eph_data_handler = lambda: True
 
@@ -473,6 +474,7 @@ class PayloadApplication(Stoppable):
             logger.error("sequence_done request failed: resp=%d" % resp)
 
         return api_types.AntarisReturnCode.An_SUCCESS
+
     def _set_gnss_eph_data_cb(self, params):
         logger.info("Handling GNSS EPH data")
         try:

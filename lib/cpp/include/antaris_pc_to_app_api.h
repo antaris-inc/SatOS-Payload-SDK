@@ -63,7 +63,7 @@ typedef union {
     AntarisAppSdkVersion_t          sdk_version;
 } AppToPCCallbackParams_t;
 
-typedef    UINT8 SHORT_APP_ID_t;
+typedef    UINT16 SHORT_APP_ID_t;
 #define AN_PS_APP_ID_INVALID       (SHORT_APP_ID_t)(-1)
 
 typedef struct {

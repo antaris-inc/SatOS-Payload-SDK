@@ -271,7 +271,7 @@ class AppToPCClient {
         context.set_deadline(deadline);
 
         app_to_peer_GnssEphData(req_params, &cb_req);
-
+        
         cb_status = app_grpc_handle_->PA_ProcessGnssEphData(&context, cb_req, &cb_response);
 
         // Act upon its status.
@@ -297,7 +297,6 @@ class AppToPCClient {
         // Adding deadline or timeout
         std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
         context.set_deadline(deadline);
-
         app_to_peer_RespGnssEphStartDataReq(req_params, &cb_req);
 
         cb_status = app_grpc_handle_->PA_ProcessRespGnssEphStartDataReq(&context, cb_req, &cb_response);
@@ -586,7 +585,7 @@ done:
         cookie_t cookie;
         cookie = decodeCookie(context);
 
-        peer_to_app_RespGnssEphStartDataReq(request, &api_request);
+        peer_to_app_ReqGnssEphStartDataReq(request, &api_request);
 
         user_callbacks_(user_cb_ctx_, cookie, e_app2PC_GnssEphStartReq, &api_request, &api_response.return_code);
 
@@ -855,17 +854,17 @@ AntarisReturnCode an_pc_pa_invoke_api(PCToAppClientContext ctx, PCToAppApiId_e a
         ret = internal_ctx->client_api_handle->InvokeProcessReqPayloadMetrics(&api_params->payload_stats);
             break;
 
-        case e_PC2App_GnssEphData:
-            ret = internal_ctx->client_api_handle->InvokeProcessGnssEphData(&api_params->gnss_eph_data);
-            break;
+    case e_PC2App_GnssEphData:
+        ret = internal_ctx->client_api_handle->InvokeProcessGnssEphData(&api_params->gnss_eph_data);
+        break;
 
-        case e_PC2App_responseGnssEphStartReq:
-            ret = internal_ctx->client_api_handle->InvokeProcessResponseGnssEphStartReq(&api_params->gnss_eph_start);
-            break;
+    case e_PC2App_responseGnssEphStartReq:
+        ret = internal_ctx->client_api_handle->InvokeProcessResponseGnssEphStartReq(&api_params->gnss_eph_start);
+        break;
 
-        case e_PC2App_responseGnssEphStopReq:
-            ret = internal_ctx->client_api_handle->InvokeProcessResponseGnssEphStopReq(&api_params->gnss_eph_stop);
-            break;
+    case e_PC2App_responseGnssEphStopReq:
+        ret = internal_ctx->client_api_handle->InvokeProcessResponseGnssEphStopReq(&api_params->gnss_eph_stop);
+        break;
     } // switch api_id
 
     return ret;

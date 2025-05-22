@@ -136,29 +136,30 @@ class PCToAppService(antaris_api_pb2_grpc.AntarisapiApplicationCallbackServicer)
         else:
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
 
-    def PA_ProcessResponseGnssEphDataStopReq(self, request, context):
+    def PA_ProcessRespGnssEphStopDataReq(self, request, context):
         if self.channel.process_resp_gnss_eph_stop_req:
-            app_request = api_types.peer_to_app_ReqGnssEphStopDataReq(request)
+            app_request = api_types.peer_to_app_RespGnssEphStopDataReq(request)
             app_ret =  self.channel.process_resp_gnss_eph_stop_req(app_request)
             return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
         else:
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
 
-    def PA_ProcessResponseGnssEphDataStartReq(self, request, context):
+    def PA_ProcessRespGnssEphStartDataReq(self, request, context):
         if self.channel.process_resp_gnss_eph_start_req:
-            app_request = api_types.peer_to_app_ReqGnssEphStartDataReq(request)
+            app_request = api_types.peer_to_app_RespGnssEphStartDataReq(request)
             app_ret =  self.channel.process_resp_gnss_eph_start_req(app_request)
             return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
         else:
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
 
-    def PA_GnssEphData(self, request, context):
+    def PA_ProcessGnssEphData(self, request, context):
         if self.channel.process_resp_gnss_eph_data:
             app_request = api_types.peer_to_app_GnssEphData(request)
             app_ret = self.channel.process_resp_gnss_eph_data(app_request)
             return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
         else:
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
+
 def api_pa_pc_create_channel_common(secure, callback_func_list):
     global g_SERVER_CERT_FILE
     global g_CLIENT_CERT_FILE

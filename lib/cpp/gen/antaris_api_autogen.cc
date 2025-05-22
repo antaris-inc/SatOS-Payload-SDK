@@ -1263,12 +1263,14 @@ app_to_peer_GnssEphData(const void *ptr_src_app, void *ptr_dst_peer)
     dst->set_obc_time(__tmp_obc_time);
 
     for (int i = 0; i < 3; i++) { // gps_position_ecef
-        UINT32* dst_info;
-        app_to_peer_UINT32(&src->gps_position_ecef[i], dst_info);
+        UINT32 converted_value;
+        app_to_peer_UINT32(&src->gps_position_ecef[i], &converted_value);
+        dst->add_gps_position_ecef(converted_value);
     }
     for (int i = 0; i < 3; i++) { // gps_velocity_ecef
-        UINT32* dst_info;
-        app_to_peer_UINT32(&src->gps_velocity_ecef[i], dst_info);
+        UINT32 converted_value;
+        app_to_peer_UINT32(&src->gps_velocity_ecef[i], &converted_value);
+        dst->add_gps_velocity_ecef(converted_value);
     }
     app_to_peer_UINT32(&src->gps_validity_flag_pos_vel, &__tmp_gps_validity_flag_pos_vel); // gps_validity_flag_pos_vel
 
@@ -1279,40 +1281,49 @@ app_to_peer_GnssEphData(const void *ptr_src_app, void *ptr_dst_peer)
     dst->set_adcs_time(__tmp_adcs_time);
 
     for (int i = 0; i < 3; i++) { // position_wrt_eci
-        UINT64* dst_info;
-        app_to_peer_UINT64(&src->position_wrt_eci[i], dst_info);
+        UINT64 converted_value;
+        app_to_peer_UINT64(&src->position_wrt_eci[i], &converted_value);
+        dst->add_position_wrt_eci(converted_value);
     }
     for (int i = 0; i < 3; i++) { // velocity_wrt_eci
-        UINT64* dst_info;
-        app_to_peer_UINT64(&src->velocity_wrt_eci[i], dst_info);
+        UINT64 converted_value;
+        app_to_peer_UINT64(&src->velocity_wrt_eci[i], &converted_value);
+        dst->add_velocity_wrt_eci(converted_value);
     }
     for (int i = 0; i < 3; i++) { // position_wrt_ecef
-        UINT64* dst_info;
-        app_to_peer_UINT64(&src->position_wrt_ecef[i], dst_info);
+        UINT64 converted_value;
+        app_to_peer_UINT64(&src->position_wrt_ecef[i], &converted_value);
+        dst->add_position_wrt_ecef(converted_value);
     }
     for (int i = 0; i < 3; i++) { // velocity_wrt_ecef
-        UINT64* dst_info;
-        app_to_peer_UINT64(&src->velocity_wrt_ecef[i], dst_info);
+        UINT64 converted_value;
+        app_to_peer_UINT64(&src->velocity_wrt_ecef[i], &converted_value);
+        dst->add_velocity_wrt_ecef(converted_value);
     }
     for (int i = 0; i < 3; i++) { // body_rate
-        UINT32* dst_info;
-        app_to_peer_UINT32(&src->body_rate[i], dst_info);
+        UINT32 converted_value;
+        app_to_peer_UINT32(&src->body_rate[i], &converted_value);
+        dst->add_body_rate(converted_value);
     }
     for (int i = 0; i < 3; i++) { // attitude
-        UINT32* dst_info;
-        app_to_peer_UINT32(&src->attitude[i], dst_info);
+        UINT32 converted_value;
+        app_to_peer_UINT32(&src->attitude[i], &converted_value);
+        dst->add_attitude(converted_value);
     }
     for (int i = 0; i < 3; i++) { // adcs_pos
-        UINT32* dst_info;
-        app_to_peer_UINT32(&src->adcs_pos[i], dst_info);
+        UINT32 converted_value;
+        app_to_peer_UINT32(&src->adcs_pos[i], &converted_value);
+        dst->add_adcs_pos(converted_value);
     }
     for (int i = 0; i < 3; i++) { // nadir_vector_body
-        UINT32* dst_info;
-        app_to_peer_UINT32(&src->nadir_vector_body[i], dst_info);
+        UINT32 converted_value;
+        app_to_peer_UINT32(&src->nadir_vector_body[i], &converted_value);
+        dst->add_nadir_vector_body(converted_value);
     }
     for (int i = 0; i < 3; i++) { // gd_nadir_vector_body
-        UINT32* dst_info;
-        app_to_peer_UINT32(&src->gd_nadir_vector_body[i], dst_info);
+        UINT32 converted_value;
+        app_to_peer_UINT32(&src->gd_nadir_vector_body[i], &converted_value);
+        dst->add_gd_nadir_vector_body(converted_value);
     }
     app_to_peer_UINT32(&src->beta_angle, &__tmp_beta_angle); // beta_angle
 

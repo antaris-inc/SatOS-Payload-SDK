@@ -360,6 +360,12 @@ public:
     Status PA_ProcessHealthCheck(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::HealthCheckParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
     Status PA_ProcessReqPayloadMetrics(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
+    Status PA_ProcessRespGnssEphStopDataReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStopDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
+    Status PA_ProcessRespGnssEphStartDataReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStartDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
+    Status PA_ProcessGnssEphData(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::GnssEphData* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 public:
 
     void set_client_channel_ctx(AntarisInternalClientChannelContext_t *ctx) {
@@ -491,6 +497,51 @@ Status AppCallbackServiceImpl::PA_ProcessResponseStageFileDownload(::grpc::Serve
     if (client_channel_ctx_->callbacks.process_response_stage_file_download) {
         peer_to_app_RespStageFileDownloadParams((void *)request, &app_request);
         app_ret = client_channel_ctx_->callbacks.process_response_stage_file_download(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status PA_ProcessRespGnssEphStopDataReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStopDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    RespGnssEphStopDataReq app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_resp_gnss_eph_stop_req) {
+        peer_to_app_RespGnssEphStopDataReq((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_resp_gnss_eph_stop_req(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status PA_ProcessRespGnssEphStartDataReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStartDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    RespGnssEphStartDataReq app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_resp_gnss_eph_start_req) {
+        peer_to_app_RespGnssEphStartDataReq((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_resp_gnss_eph_start_req(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status PA_ProcessGnssEphData(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::GnssEphData* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    GnssEphData app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_resp_gnss_eph_data) {
+        peer_to_app_GnssEphData((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_resp_gnss_eph_data(&app_request);
     }
 
     response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));

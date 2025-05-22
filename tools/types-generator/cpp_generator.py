@@ -229,12 +229,14 @@ class CPPField(PARSER_INTF.Field):
                 # Open for-loop
                 targetFile.write("{}for (int i = 0; i < {}; i++) {} // {}\n".format(gIndent, self.array_xml, "{", self.name))
 
-                # Declare dst_info (no namespace)
-                targetFile.write("{}{}* dst_info;\n".format(gIndent * 2, appint_type_to_peerint_type(self.type)))
+                # Declare temporary variable
+                targetFile.write("{}{} converted_value;\n".format(gIndent * 2, appint_type_to_peerint_type(self.type)))
 
-                # Call the app_to_peer function directly
-                targetFile.write("{}{}(&src->{}[i], dst_info);\n".format(
+                # Call the app_to_peer conversion function
+                targetFile.write("{}{}(&src->{}[i], &converted_value);\n".format(
                     gIndent * 2, get_app_to_peer_fn_for_type(self.type), self.name))
+                # Call protobuf add_ method
+                targetFile.write("{}dst->add_{}(converted_value);\n".format(gIndent * 2, self.name))
 
                 # Close for-loop
                 targetFile.write("{}{}\n".format(gIndent, "}"))

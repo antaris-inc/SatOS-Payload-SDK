@@ -30,6 +30,11 @@ g_Uart_Baudrate = 9600
 g_FileDownloadDir = "/opt/antaris/outbound/"    # path for staged file download
 g_StageFileName = "SampleFile.txt"              # name of staged file
 
+ADCS_start_success = 0
+ADCS_start_reconfigured = 1
+ADCS_start_failed = 2
+
+
 logger = logging.getLogger()
 
 
@@ -41,7 +46,7 @@ class Controller:
 
     def gnss_eph_data_handler(self, ctx):
         logger.info("GNSS EPH data received")
-        gnss_data = ctx.params
+        gnss_data = ctx
         # List of field names mapped to each bit position
         fields = [
             "Time Validity",
@@ -73,7 +78,7 @@ class Controller:
         logger.info(f"beta_angle: {gnss_data.beta_angle}")
         # Print each bit's meaning
         for i, name in enumerate(fields):
-            bit_value = (gnss_data.validity_flag >> i) & 1
+            bit_value = (gnss_data.validity_flags >> i) & 1
             print(f"{name}: {bit_value}")
         return True
     
@@ -89,8 +94,8 @@ class Controller:
         logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude} sd_lat={loc.sd_latitude}, sd_lng={loc.sd_longitude}, sd_alt={loc.sd_altitude}")
     
     def handle_gnss_data(self, ctx):
-        periodicity_in_ms = 10000
-        eph2_enable = 0
+        periodicity_in_ms = 2000
+        eph2_enable = 1
         if ctx.params.lower() == "stop":
             logger.info("Sending GNSS EPH data stop request")
             resp = ctx.client.gnss_eph_stop_data_req()
@@ -101,8 +106,10 @@ class Controller:
         elif ctx.params.lower() == "start":
             logger.info("Sending GNSS EPH data start request")
             resp = ctx.client.gnss_eph_start_data_req(periodicity_in_ms, eph2_enable)
-            if (resp == True):
+            if (resp.req_status == ADCS_start_success):
                 logger.info("Starting request success")
+            elif (resp.req_status == ADCS_start_reconfigured):
+                logger.info("Reconfiguring ADCS request success")
             else:
                 logger.info("Starting request failed")
         else:
