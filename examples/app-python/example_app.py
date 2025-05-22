@@ -94,7 +94,7 @@ class Controller:
         logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude} sd_lat={loc.sd_latitude}, sd_lng={loc.sd_longitude}, sd_alt={loc.sd_altitude}")
     
     def handle_gnss_data(self, ctx):
-        periodicity_in_ms = 2000
+        periodicity_in_ms = 2000    # Periodicity = 0 indicates one time GNSS EPH data
         eph2_enable = 1
         if ctx.params.lower() == "stop":
             logger.info("Sending GNSS EPH data stop request")
