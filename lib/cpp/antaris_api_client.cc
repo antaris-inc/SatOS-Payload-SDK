@@ -285,6 +285,55 @@ class PCServiceClient {
         return tmp_return;
   }
 
+  AntarisReturnCode Invoke_PC_GET_EPS_VOLTAGE_Stop_req(ReqGetEpsVoltageStopReq *req_params) {
+    antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq pc_req;
+    antaris_api_peer_to_peer::AntarisReturnType pc_response;
+    Status pc_status;
+    // Context for the client. It could be used to convey extra information to
+    // the server and/or tweak certain RPC behaviors.
+    ClientContext context;
+
+    app_to_peer_ReqGetEpsVoltageStopReq(req_params, &pc_req);
+    context.AddMetadata(COOKIE_STR, this->cookie_str);
+
+    pc_status = stub_->PC_get_eps_voltage_stop_req(&context, pc_req, &pc_response);
+
+    AntarisReturnCode tmp_return;
+
+    // Act upon its status.
+    if (pc_status.ok()) {
+         tmp_return = (AntarisReturnCode)(pc_response.return_code());
+    } else {
+        tmp_return = An_GENERIC_FAILURE;
+    }
+
+    return tmp_return;
+  }
+
+  AntarisReturnCode Invoke_PC_GET_EPS_VOLTAGE_Start_req(ReqGetEpsVoltageStartReq *req_params) {
+    antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq pc_req;
+    antaris_api_peer_to_peer::AntarisReturnType pc_response;
+    Status pc_status;
+    // Context for the client. It could be used to convey extra information to
+    // the server and/or tweak certain RPC behaviors.
+    ClientContext context;
+
+    app_to_peer_ReqGetEpsVoltageStartReq(req_params, &pc_req);
+    context.AddMetadata(COOKIE_STR, this->cookie_str);
+
+    pc_status = stub_->PC_get_eps_voltage_start_req(&context, pc_req, &pc_response);
+
+    AntarisReturnCode tmp_return;
+
+    // Act upon its status.
+    if (pc_status.ok()) {
+         tmp_return = (AntarisReturnCode)(pc_response.return_code());
+    } else {
+        tmp_return = An_GENERIC_FAILURE;
+    }
+
+    return tmp_return;
+  }
  private:
   std::unique_ptr<antaris_api_peer_to_peer::AntarisapiPayloadController::Stub> stub_;
   char cookie_str[COOKIE_LEN+1];
@@ -310,6 +359,11 @@ public:
     Status PA_ProcessHealthCheck(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::HealthCheckParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
     Status PA_ProcessReqPayloadMetrics(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::ReqPayloadMetricsParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+    Status PA_ProcessRespGetEpsVoltageStopReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
+    Status PA_ProcessRespGetEpsVoltageStartReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
+    Status PA_ProcessGetEpsVoltage(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::GetEpsVoltage* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 public:
 
     void set_client_channel_ctx(AntarisInternalClientChannelContext_t *ctx) {
@@ -441,6 +495,51 @@ Status AppCallbackServiceImpl::PA_ProcessResponseStageFileDownload(::grpc::Serve
     if (client_channel_ctx_->callbacks.process_response_stage_file_download) {
         peer_to_app_RespStageFileDownloadParams((void *)request, &app_request);
         app_ret = client_channel_ctx_->callbacks.process_response_stage_file_download(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessRespGetEpsVoltageStopReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    RespGetEpsVoltageStopReq app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_get_eps_voltage_stop_response) {
+        peer_to_app_RespGetEpsVoltageStopReq((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_get_eps_voltage_stop_response(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessRespGetEpsVoltageStartReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    RespGetEpsVoltageStartReq app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_get_eps_voltage_start_response) {
+        peer_to_app_RespGetEpsVoltageStartReq((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_get_eps_voltage_start_response(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessGetEpsVoltage(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::GetEpsVoltage* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    GetEpsVoltage app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_get_eps_voltage) {
+        peer_to_app_GetEpsVoltage((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_get_eps_voltage(&app_request);
     }
 
     response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
@@ -822,6 +921,25 @@ AntarisReturnCode api_pa_pc_response_payload_metrics(AntarisChannel channel, Pay
     }
 
     return channel_ctx->pc_service_handle->Invoke_PC_response_payload_metrics(response_payload_metrics_params);
+}
+
+AntarisReturnCode api_pa_pc_get_eps_voltage_stop_req(AntarisChannel channel, ReqGetEpsVoltageStopReq *req_get_eps_voltage_stop_req)
+{
+    AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
+    AntarisReturnCode ret = An_SUCCESS;
+
+    printf("api_pa_pc_get_eps_voltage_stop_req\n");
+
+    if (!channel_ctx || !channel_ctx->pc_service_handle || !req_get_eps_voltage_stop_req) {
+        ret = An_GENERIC_FAILURE;
+        return ret;
+    }
+
+    if (api_debug) {
+        displayPayloadMetricsResponse(req_get_eps_voltage_stop_req);
+    }
+
+    return channel_ctx->pc_service_handle->Invoke_PC_GET_EPS_VOLTAGE_Stop_req(req_get_eps_voltage_stop_req);
 }
 
 } // extern C

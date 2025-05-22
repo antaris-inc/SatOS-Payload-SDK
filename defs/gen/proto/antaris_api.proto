@@ -161,6 +161,29 @@ message CmdSequenceDoneParams {
     string                          sequence_id      = 1; // sequence id that has completed execution. MUST agree with StartSequenceParams.sequence-id.
 }
 
+message ReqGetEpsVoltageStopReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+}
+
+message RespGetEpsVoltageStopReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           req_status       = 2; // status of get-eps-voltage-stop request
+}
+
+message ReqGetEpsVoltageStartReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           periodicity_in_ms = 2; // Time between consecutive notifications in ms
+}
+
+message RespGetEpsVoltageStartReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           req_status       = 2; // status of get-eps-voltage-start request
+}
+
+message GetEpsVoltage {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           eps_voltage      = 2; // EPS voltage
+}
 message AntarisCorrelationId {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
 }
@@ -178,6 +201,9 @@ service AntarisapiApplicationCallback {
     rpc PA_ProcessResponseStageFileDownload(RespStageFileDownloadParams) returns (AntarisReturnType) {}
     rpc PA_ProcessResponsePayloadPowerControl(RespPayloadPowerControlParams) returns (AntarisReturnType) {}
     rpc PA_ProcessReqPayloadMetrics(ReqPayloadMetricsParams) returns (AntarisReturnType) {}
+    rpc PA_ProcessRespGetEpsVoltageStopReq(RespGetEpsVoltageStopReq) returns (AntarisReturnType) {}
+    rpc PA_ProcessRespGetEpsVoltageStartReq(RespGetEpsVoltageStartReq) returns (AntarisReturnType) {}
+    rpc PA_ProcessGetEpsVoltage(GetEpsVoltage) returns (AntarisReturnType) {}
 }
 
 service AntarisapiPayloadController {
@@ -189,5 +215,7 @@ service AntarisapiPayloadController {
     rpc PC_response_health_check(RespHealthCheckParams) returns (AntarisReturnType) {}
     rpc PC_response_shutdown(RespShutdownParams) returns (AntarisReturnType) {}
     rpc PC_response_payload_metrics(PayloadMetricsResponse) returns (AntarisReturnType) {}
+    rpc PC_get_eps_voltage_stop_req(ReqGetEpsVoltageStopReq) returns (AntarisReturnType) {}
+    rpc PC_get_eps_voltage_start_req(ReqGetEpsVoltageStartReq) returns (AntarisReturnType) {}
 }
 

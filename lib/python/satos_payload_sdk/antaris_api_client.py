@@ -58,6 +58,9 @@ class AntarisChannel:
         self.process_resp_stage_file_download = callback_func_list['RespStageFileDownload']
         self.process_resp_payload_power_control = callback_func_list['RespPayloadPowerControl']
         self.req_payload_metrics = callback_func_list['ReqPayloadMetrics']
+        self.process_resp_get_eps_voltage_stop_req = callback_func_list['RespGetEpsVoltageStopReq']
+        self.process_resp_get_eps_voltage_start_req = callback_func_list['RespGetEpsVoltageStartReq']
+        self.process_resp_get_eps_voltage = callback_func_list['GetEpsVoltage']
         try :
             # Read config info
             jsonfile = open(g_CONFIG_JSON_FILE, 'r')
@@ -129,6 +132,30 @@ class PCToAppService(antaris_api_pb2_grpc.AntarisapiApplicationCallbackServicer)
         if self.channel.process_resp_payload_power_control:
             app_request = api_types.peer_to_app_RespPayloadPowerControlParams(request)
             app_ret = self.channel.process_resp_payload_power_control(app_request)
+            return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
+        else:
+            return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
+
+    def PA_ProcessRespGetEpsVoltageStopReq(self, request, context):
+        if self.channel.process_resp_get_eps_voltage_stop_req:
+            app_request = api_types.peer_to_app_RespGetEpsVoltageStopReq(request)
+            app_ret =  self.channel.process_resp_get_eps_voltage_stop_req(app_request)
+            return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
+        else:
+            return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
+
+    def PA_ProcessRespGetEpsVoltageStartReq(self, request, context):
+        if self.channel.process_resp_get_eps_voltage_start_req:
+            app_request = api_types.peer_to_app_RespGetEpsVoltageStartReq(request)
+            app_ret =  self.channel.process_resp_get_eps_voltage_start_req(app_request)
+            return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
+        else:
+            return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
+
+    def PA_ProcessGetEpsVoltage(self, request, context):
+        if self.channel.process_resp_get_eps_voltage:
+            app_request = api_types.peer_to_app_GetEpsVoltage(request)
+            app_ret = self.channel.process_resp_get_eps_voltage(app_request)
             return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
         else:
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
@@ -368,6 +395,29 @@ def api_pa_pc_response_shutdown(channel, response_shutdown_params):
     peer_params = api_types.app_to_peer_RespShutdownParams(response_shutdown_params)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
     peer_ret = channel.grpc_client_handle.PC_response_shutdown(peer_params , metadata=metadata)
+    if (api_debug):
+        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+
+    return peer_ret.return_code
+
+def api_pa_pc_get_eps_voltage_stop_req(channel):
+    print("api_pa_pc_get_eps_voltage_stop_req")
+
+    peer_params = api_types.app_to_peer_ReqGetEpsVoltageStopReq()
+    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = channel.grpc_client_handle.PC_get_eps_voltage_stop_req(peer_params , metadata=metadata)
+
+    if (api_debug):
+        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+
+    return peer_ret.return_code
+
+def api_pa_pc_get_eps_voltage_start_req(channel, req_get_eps_voltage_start):
+    print("api_pa_pc_get_eps_voltage_start_req")
+
+    peer_params = api_types.app_to_peer_ReqGetEpsVoltageStartReq(req_get_eps_voltage_start)
+    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = channel.grpc_client_handle.PC_get_eps_voltage_start_req(peer_params , metadata=metadata)
 
     if (api_debug):
         print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))

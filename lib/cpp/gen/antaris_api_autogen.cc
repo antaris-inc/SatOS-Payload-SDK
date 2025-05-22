@@ -961,6 +961,223 @@ peer_to_app_CmdSequenceDoneParams(const void *ptr_src_peer, void *ptr_dst_app)
 }
 
 void
+displayReqGetEpsVoltageStopReq(const void *obj)
+{
+    ReqGetEpsVoltageStopReq *p = (ReqGetEpsVoltageStopReq *)obj;
+
+    printf("ReqGetEpsVoltageStopReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+
+}
+
+void
+app_to_peer_ReqGetEpsVoltageStopReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    ReqGetEpsVoltageStopReq *src = (ReqGetEpsVoltageStopReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq *dst = (::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+
+}
+
+void
+peer_to_app_ReqGetEpsVoltageStopReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    ReqGetEpsVoltageStopReq *dst = (ReqGetEpsVoltageStopReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq *src = (::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+
+}
+
+void
+displayRespGetEpsVoltageStopReq(const void *obj)
+{
+    RespGetEpsVoltageStopReq *p = (RespGetEpsVoltageStopReq *)obj;
+
+    printf("RespGetEpsVoltageStopReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("req_status ==>\n");
+    displayINT32((void *)&p->req_status);
+
+}
+
+void
+app_to_peer_RespGetEpsVoltageStopReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    RespGetEpsVoltageStopReq *src = (RespGetEpsVoltageStopReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq *dst = (::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id;
+    INT32 __tmp_req_status;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_INT32(&src->req_status, &__tmp_req_status); // req_status
+
+    dst->set_req_status(__tmp_req_status);
+
+
+}
+
+void
+peer_to_app_RespGetEpsVoltageStopReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    RespGetEpsVoltageStopReq *dst = (RespGetEpsVoltageStopReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq *src = (::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->req_status = src->req_status();
+
+}
+
+void
+displayReqGetEpsVoltageStartReq(const void *obj)
+{
+    ReqGetEpsVoltageStartReq *p = (ReqGetEpsVoltageStartReq *)obj;
+
+    printf("ReqGetEpsVoltageStartReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("periodicity_in_ms ==>\n");
+    displayUINT16((void *)&p->periodicity_in_ms);
+
+}
+
+void
+app_to_peer_ReqGetEpsVoltageStartReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    ReqGetEpsVoltageStartReq *src = (ReqGetEpsVoltageStartReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq *dst = (::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_periodicity_in_ms;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT16(&src->periodicity_in_ms, &__tmp_periodicity_in_ms); // periodicity_in_ms
+
+    dst->set_periodicity_in_ms(__tmp_periodicity_in_ms);
+
+
+}
+
+void
+peer_to_app_ReqGetEpsVoltageStartReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    ReqGetEpsVoltageStartReq *dst = (ReqGetEpsVoltageStartReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq *src = (::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->periodicity_in_ms = src->periodicity_in_ms();
+
+}
+
+void
+displayRespGetEpsVoltageStartReq(const void *obj)
+{
+    RespGetEpsVoltageStartReq *p = (RespGetEpsVoltageStartReq *)obj;
+
+    printf("RespGetEpsVoltageStartReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("req_status ==>\n");
+    displayINT32((void *)&p->req_status);
+
+}
+
+void
+app_to_peer_RespGetEpsVoltageStartReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    RespGetEpsVoltageStartReq *src = (RespGetEpsVoltageStartReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq *dst = (::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id;
+    INT32 __tmp_req_status;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_INT32(&src->req_status, &__tmp_req_status); // req_status
+
+    dst->set_req_status(__tmp_req_status);
+
+
+}
+
+void
+peer_to_app_RespGetEpsVoltageStartReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    RespGetEpsVoltageStartReq *dst = (RespGetEpsVoltageStartReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq *src = (::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->req_status = src->req_status();
+
+}
+
+void
+displayGetEpsVoltage(const void *obj)
+{
+    GetEpsVoltage *p = (GetEpsVoltage *)obj;
+
+    printf("GetEpsVoltage %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("eps_voltage ==>\n");
+    displayUINT32((void *)&p->eps_voltage);
+
+}
+
+void
+app_to_peer_GetEpsVoltage(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    GetEpsVoltage *src = (GetEpsVoltage *)ptr_src_app;
+    ::antaris_api_peer_to_peer::GetEpsVoltage *dst = (::antaris_api_peer_to_peer::GetEpsVoltage *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_eps_voltage;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT32(&src->eps_voltage, &__tmp_eps_voltage); // eps_voltage
+
+    dst->set_eps_voltage(__tmp_eps_voltage);
+
+
+}
+
+void
+peer_to_app_GetEpsVoltage(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    GetEpsVoltage *dst = (GetEpsVoltage *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::GetEpsVoltage *src = (::antaris_api_peer_to_peer::GetEpsVoltage *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->eps_voltage = src->eps_voltage();
+
+}
+
+void
 displayAntarisApiCallbackFuncList(const void *obj)
 {
     AntarisApiCallbackFuncList *p = (AntarisApiCallbackFuncList *)obj;
@@ -983,6 +1200,12 @@ displayAntarisApiCallbackFuncList(const void *obj)
     displayProcessResponsePayloadPowerControl_Fptr((void *)&p->process_response_payload_power_control);
     printf("req_payload_metrics ==>\n");
     displayProcessReqPayloadMetrics_Fptr((void *)&p->req_payload_metrics);
+    printf("process_get_eps_voltage_stop_response ==>\n");
+    displayProcessRespGetEpsVoltageStopReq_Fptr((void *)&p->process_get_eps_voltage_stop_response);
+    printf("process_get_eps_voltage_start_response ==>\n");
+    displayProcessRespGetEpsVoltageStartReq_Fptr((void *)&p->process_get_eps_voltage_start_response);
+    printf("process_get_eps_voltage ==>\n");
+    displayProcessGetEpsVoltage_Fptr((void *)&p->process_get_eps_voltage);
 
 }
 

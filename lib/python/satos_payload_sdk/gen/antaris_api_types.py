@@ -618,6 +618,146 @@ def peer_to_app_CmdSequenceDoneParams(peer_struct):
 def app_to_peer_CmdSequenceDoneParams(app_struct):
     return antaris_api_pb2.CmdSequenceDoneParams(sequence_id = app_struct.sequence_id)
 
+## @class: ReqGetEpsVoltageStopReq
+## @brief: Stop request get-eps-voltage
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+class ReqGetEpsVoltageStopReq:
+    def __init__(self, correlation_id):
+        self.correlation_id = correlation_id
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_ReqGetEpsVoltageStopReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    return ReqGetEpsVoltageStopReq(correlation_id)
+
+def app_to_peer_ReqGetEpsVoltageStopReq(app_struct):
+    return antaris_api_pb2.ReqGetEpsVoltageStopReq(correlation_id = app_struct.correlation_id)
+
+## @class: RespGetEpsVoltageStopReq
+## @brief: Response to stop get-eps-voltage
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: req_status                                      :    status of get-eps-voltage-stop request          
+class RespGetEpsVoltageStopReq:
+    def __init__(self, correlation_id, req_status):
+        self.correlation_id = correlation_id
+        self.req_status = req_status
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "req_status:\n"
+        ret_str += str(self.req_status) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_RespGetEpsVoltageStopReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    req_status = peer_struct.req_status
+    return RespGetEpsVoltageStopReq(correlation_id, req_status)
+
+def app_to_peer_RespGetEpsVoltageStopReq(app_struct):
+    return antaris_api_pb2.RespGetEpsVoltageStopReq(correlation_id = app_struct.correlation_id, req_status = app_struct.req_status)
+
+## @class: ReqGetEpsVoltageStartReq
+## @brief: Start request eps voltage
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: periodicity_in_ms                               :    Time between consecutive notifications in ms    
+class ReqGetEpsVoltageStartReq:
+    def __init__(self, correlation_id, periodicity_in_ms):
+        self.correlation_id = correlation_id
+        self.periodicity_in_ms = periodicity_in_ms
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "periodicity_in_ms:\n"
+        ret_str += str(self.periodicity_in_ms) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_ReqGetEpsVoltageStartReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    periodicity_in_ms = peer_struct.periodicity_in_ms
+    return ReqGetEpsVoltageStartReq(correlation_id, periodicity_in_ms)
+
+def app_to_peer_ReqGetEpsVoltageStartReq(app_struct):
+    return antaris_api_pb2.ReqGetEpsVoltageStartReq(correlation_id = app_struct.correlation_id, periodicity_in_ms = app_struct.periodicity_in_ms)
+
+## @class: RespGetEpsVoltageStartReq
+## @brief: Response to start get eps voltage
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: req_status                                      :    status of get-eps-voltage-start request         
+class RespGetEpsVoltageStartReq:
+    def __init__(self, correlation_id, req_status):
+        self.correlation_id = correlation_id
+        self.req_status = req_status
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "req_status:\n"
+        ret_str += str(self.req_status) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_RespGetEpsVoltageStartReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    req_status = peer_struct.req_status
+    return RespGetEpsVoltageStartReq(correlation_id, req_status)
+
+def app_to_peer_RespGetEpsVoltageStartReq(app_struct):
+    return antaris_api_pb2.RespGetEpsVoltageStartReq(correlation_id = app_struct.correlation_id, req_status = app_struct.req_status)
+
+## @class: GetEpsVoltage
+## @brief: get EPS voltage1
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: eps_voltage                                     :    EPS voltage                                     
+class GetEpsVoltage:
+    def __init__(self, correlation_id, eps_voltage):
+        self.correlation_id = correlation_id
+        self.eps_voltage = eps_voltage
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "eps_voltage:\n"
+        ret_str += str(self.eps_voltage) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_GetEpsVoltage(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    eps_voltage = peer_struct.eps_voltage
+    return GetEpsVoltage(correlation_id, eps_voltage)
+
+def app_to_peer_GetEpsVoltage(app_struct):
+    return antaris_api_pb2.GetEpsVoltage(correlation_id = app_struct.correlation_id, eps_voltage = app_struct.eps_voltage)
+
 ## @class: AntarisApiCallbackFuncList
 ## @brief: Callback-functions registration structure for channel creation
 ## @param: start_sequence                                  :    callback handler for start-sequence             
@@ -628,8 +768,11 @@ def app_to_peer_CmdSequenceDoneParams(app_struct):
 ## @param: process_response_stage_file_download            :    callback handler for stage file download response
 ## @param: process_response_payload_power_control          :    callback handler for payload power control response
 ## @param: req_payload_metrics                             :    callback handler for request payload stats from PC
+## @param: process_get_eps_voltage_stop_response           :    callback handler for get EPS voltage data stop  
+## @param: process_get_eps_voltage_start_response          :    callback handler for get EPS voltage data start 
+## @param: process_get_eps_voltage                         :    callback handler for EPS voltage data           
 class AntarisApiCallbackFuncList:
-    def __init__(self, start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics):
+    def __init__(self, start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_get_eps_voltage_stop_response, process_get_eps_voltage_start_response, process_get_eps_voltage):
         self.start_sequence = start_sequence
         self.shutdown_app = shutdown_app
         self.process_health_check = process_health_check
@@ -638,6 +781,9 @@ class AntarisApiCallbackFuncList:
         self.process_response_stage_file_download = process_response_stage_file_download
         self.process_response_payload_power_control = process_response_payload_power_control
         self.req_payload_metrics = req_payload_metrics
+        self.process_get_eps_voltage_stop_response = process_get_eps_voltage_stop_response
+        self.process_get_eps_voltage_start_response = process_get_eps_voltage_start_response
+        self.process_get_eps_voltage = process_get_eps_voltage
 
     def __str__(self):
         ret_str = ""
@@ -657,6 +803,12 @@ class AntarisApiCallbackFuncList:
         ret_str += str(self.process_response_payload_power_control) + "\n"
         ret_str += "req_payload_metrics:\n"
         ret_str += str(self.req_payload_metrics) + "\n"
+        ret_str += "process_get_eps_voltage_stop_response:\n"
+        ret_str += str(self.process_get_eps_voltage_stop_response) + "\n"
+        ret_str += "process_get_eps_voltage_start_response:\n"
+        ret_str += str(self.process_get_eps_voltage_start_response) + "\n"
+        ret_str += "process_get_eps_voltage:\n"
+        ret_str += str(self.process_get_eps_voltage) + "\n"
 
         return ret_str
 
@@ -672,10 +824,13 @@ def peer_to_app_AntarisApiCallbackFuncList(peer_struct):
     process_response_stage_file_download = peer_struct.process_response_stage_file_download
     process_response_payload_power_control = peer_struct.process_response_payload_power_control
     req_payload_metrics = peer_struct.req_payload_metrics
-    return AntarisApiCallbackFuncList(start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics)
+    process_get_eps_voltage_stop_response = peer_struct.process_get_eps_voltage_stop_response
+    process_get_eps_voltage_start_response = peer_struct.process_get_eps_voltage_start_response
+    process_get_eps_voltage = peer_struct.process_get_eps_voltage
+    return AntarisApiCallbackFuncList(start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_get_eps_voltage_stop_response, process_get_eps_voltage_start_response, process_get_eps_voltage)
 
 def app_to_peer_AntarisApiCallbackFuncList(app_struct):
-    return antaris_api_pb2.AntarisApiCallbackFuncList(start_sequence = app_struct.start_sequence, shutdown_app = app_struct.shutdown_app, process_health_check = app_struct.process_health_check, process_response_register = app_struct.process_response_register, process_response_get_current_location = app_struct.process_response_get_current_location, process_response_stage_file_download = app_struct.process_response_stage_file_download, process_response_payload_power_control = app_struct.process_response_payload_power_control, req_payload_metrics = app_struct.req_payload_metrics)
+    return antaris_api_pb2.AntarisApiCallbackFuncList(start_sequence = app_struct.start_sequence, shutdown_app = app_struct.shutdown_app, process_health_check = app_struct.process_health_check, process_response_register = app_struct.process_response_register, process_response_get_current_location = app_struct.process_response_get_current_location, process_response_stage_file_download = app_struct.process_response_stage_file_download, process_response_payload_power_control = app_struct.process_response_payload_power_control, req_payload_metrics = app_struct.req_payload_metrics, process_get_eps_voltage_stop_response = app_struct.process_get_eps_voltage_stop_response, process_get_eps_voltage_start_response = app_struct.process_get_eps_voltage_start_response, process_get_eps_voltage = app_struct.process_get_eps_voltage)
 
 ## @class: AntarisReturnType
 ## @brief: Wrapper structure for AntarisReturnCode

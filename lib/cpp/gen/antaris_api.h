@@ -121,6 +121,21 @@ typedef struct PayloadMetricsResponse PayloadMetricsResponse;
 struct CmdSequenceDoneParams;
 typedef struct CmdSequenceDoneParams CmdSequenceDoneParams;
 
+struct ReqGetEpsVoltageStopReq;
+typedef struct ReqGetEpsVoltageStopReq ReqGetEpsVoltageStopReq;
+
+struct RespGetEpsVoltageStopReq;
+typedef struct RespGetEpsVoltageStopReq RespGetEpsVoltageStopReq;
+
+struct ReqGetEpsVoltageStartReq;
+typedef struct ReqGetEpsVoltageStartReq ReqGetEpsVoltageStartReq;
+
+struct RespGetEpsVoltageStartReq;
+typedef struct RespGetEpsVoltageStartReq RespGetEpsVoltageStartReq;
+
+struct GetEpsVoltage;
+typedef struct GetEpsVoltage GetEpsVoltage;
+
 struct AntarisApiCallbackFuncList;
 typedef struct AntarisApiCallbackFuncList AntarisApiCallbackFuncList;
 
@@ -213,6 +228,36 @@ typedef AntarisReturnCode
 );
 static inline void
 displayProcessReqPayloadMetrics_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessRespGetEpsVoltageStopReq_Fptr
+/// @typedef Callback for get EPS voltage stop data request
+
+typedef AntarisReturnCode
+(*ProcessRespGetEpsVoltageStopReq_Fptr)
+(
+    RespGetEpsVoltageStopReq *       ///< @param request get EPS voltage stop
+);
+static inline void
+displayProcessRespGetEpsVoltageStopReq_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessRespGetEpsVoltageStartReq_Fptr
+/// @typedef Callback for GNSS EPS start data request
+
+typedef AntarisReturnCode
+(*ProcessRespGetEpsVoltageStartReq_Fptr)
+(
+    RespGetEpsVoltageStartReq *      ///< @param request get EPS voltage start
+);
+static inline void
+displayProcessRespGetEpsVoltageStartReq_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessGetEpsVoltage_Fptr
+/// @typedef Callback for GNSS EPS data
+
+typedef AntarisReturnCode
+(*ProcessGetEpsVoltage_Fptr)
+(
+    GetEpsVoltage *                  ///< @param get EPS voltage data
+);
+static inline void
+displayProcessGetEpsVoltage_Fptr(void *obj) { printf("%p\n", obj); }
 
 // >>>> Data Types <<<<<
 
@@ -416,6 +461,60 @@ void displayCmdSequenceDoneParams(const void *obj);
 void app_to_peer_CmdSequenceDoneParams(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_CmdSequenceDoneParams(const void *ptr_src_peer, void *ptr_dst_app);
 
+/// @struct ReqGetEpsVoltageStopReq
+/// @brief Stop request get-eps-voltage
+struct ReqGetEpsVoltageStopReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+};
+
+void displayReqGetEpsVoltageStopReq(const void *obj);
+void app_to_peer_ReqGetEpsVoltageStopReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_ReqGetEpsVoltageStopReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespGetEpsVoltageStopReq
+/// @brief Response to stop get-eps-voltage
+struct RespGetEpsVoltageStopReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    INT32                                           req_status;                                      ///< @var status of get-eps-voltage-stop request
+};
+
+void displayRespGetEpsVoltageStopReq(const void *obj);
+void app_to_peer_RespGetEpsVoltageStopReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespGetEpsVoltageStopReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct ReqGetEpsVoltageStartReq
+/// @brief Start request eps voltage
+struct ReqGetEpsVoltageStartReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT16                                          periodicity_in_ms;                               ///< @var Time between consecutive notifications in ms
+};
+
+void displayReqGetEpsVoltageStartReq(const void *obj);
+void app_to_peer_ReqGetEpsVoltageStartReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_ReqGetEpsVoltageStartReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespGetEpsVoltageStartReq
+/// @brief Response to start get eps voltage
+struct RespGetEpsVoltageStartReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    INT32                                           req_status;                                      ///< @var status of get-eps-voltage-start request
+};
+
+void displayRespGetEpsVoltageStartReq(const void *obj);
+void app_to_peer_RespGetEpsVoltageStartReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespGetEpsVoltageStartReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct GetEpsVoltage
+/// @brief get EPS voltage1
+struct GetEpsVoltage {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT32                                          eps_voltage;                                     ///< @var EPS voltage
+};
+
+void displayGetEpsVoltage(const void *obj);
+void app_to_peer_GetEpsVoltage(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_GetEpsVoltage(const void *ptr_src_peer, void *ptr_dst_app);
+
 /// @struct AntarisApiCallbackFuncList
 /// @brief Callback-functions registration structure for channel creation
 struct AntarisApiCallbackFuncList {
@@ -427,6 +526,9 @@ struct AntarisApiCallbackFuncList {
     ProcessResponseStageFileDownload_Fptr           process_response_stage_file_download;            ///< @var callback handler for stage file download response
     ProcessResponsePayloadPowerControl_Fptr         process_response_payload_power_control;          ///< @var callback handler for payload power control response
     ProcessReqPayloadMetrics_Fptr                   req_payload_metrics;                             ///< @var callback handler for request payload stats from PC
+    ProcessRespGetEpsVoltageStopReq_Fptr            process_get_eps_voltage_stop_response;           ///< @var callback handler for get EPS voltage data stop
+    ProcessRespGetEpsVoltageStartReq_Fptr           process_get_eps_voltage_start_response;          ///< @var callback handler for get EPS voltage data start
+    ProcessGetEpsVoltage_Fptr                       process_get_eps_voltage;                         ///< @var callback handler for EPS voltage data
 };
 
 void displayAntarisApiCallbackFuncList(const void *obj);
@@ -546,6 +648,24 @@ api_pa_pc_response_payload_metrics
 (
     AntarisChannel                  channel,                         ///< @param channel context for API execution
     PayloadMetricsResponse *        response_payload_metrics_params  ///< @param Payload stats response parameters
+);
+
+/// @brief Function api_pa_pc_get_eps_voltage_stop_req
+/// @fn API to request to stop get EPS voltage
+AntarisReturnCode
+api_pa_pc_get_eps_voltage_stop_req
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    ReqGetEpsVoltageStopReq *       req_get_eps_voltage_stop         ///< @param get EPS voltage stop response parameters
+);
+
+/// @brief Function api_pa_pc_get_eps_voltage_start_req
+/// @fn API to request to start get EPS voltage
+AntarisReturnCode
+api_pa_pc_get_eps_voltage_start_req
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    ReqGetEpsVoltageStartReq *      req_get_eps_voltage_start        ///< @param get EPS voltage start response parameters
 );
 
 
