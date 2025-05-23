@@ -189,6 +189,7 @@
             <Field name="beta_angle" type="UINT32" sequence="18" description="Beta Angle"/>
             <Field name="validity_flags" type="UINT16" sequence="19" description="1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity"/>
         </Struct>
+    
         <Struct name="AntarisApiCallbackFuncList" description="Callback-functions registration structure for channel creation" consumed_by="Application">
             <Field name="start_sequence" type="StartSequence_Fptr" sequence="1" description="callback handler for start-sequence"/>
             <Field name="shutdown_app" type="ShutdownApp_Fptr" sequence="2" description="callback handler for shutdown-app"/>
@@ -246,6 +247,7 @@
         <FunctionPtr name="ProcessReqPayloadMetrics_Fptr" description="payload stats callback" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
             <Parameter variable_name="req_payload_metrics" type="ReqPayloadMetricsParams *" description="request payload stats params"/>
         </FunctionPtr>
+        
         <FunctionPtr name="ProcessRespGnssEphStopDataReq_Fptr" description="Callback for GNSS EPS stop data request" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
             <Parameter variable_name="gnss_eph_stop_response" type="RespGnssEphStopDataReq *" description="request GNSS EPH stop"/>
         </FunctionPtr>
