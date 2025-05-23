@@ -39,6 +39,8 @@ typedef enum {
     e_app2PC_sdkVersionInfo,
     e_app2PC_GnssEphStartReq,
     e_app2PC_GnssEphStopReq,
+    e_app2PC_GetEpsVoltageStartReq,
+    e_app2PC_GetEpsVoltageStopReq,
     e_app2PC_MaxRequest
 } AppToPCCallbackId_e;
 
@@ -60,6 +62,9 @@ typedef union {
     ReqGnssEphStartDataReq          gnss_eph_start;
     ReqGnssEphStopDataReq           gnss_eph_stop;
     GnssEphData                     gnss_eph_data;
+    ReqGetEpsVoltageStartReq        get_eps_voltage_start;
+    ReqGetEpsVoltageStopReq         get_eps_voltage_stop;
+    GetEpsVoltage                   get_eps_voltage;
     AntarisAppSdkVersion_t          sdk_version;
 } AppToPCCallbackParams_t;
 
@@ -89,6 +94,9 @@ typedef enum {
     e_PC2App_GnssEphData,
     e_PC2App_responseGnssEphStartReq,
     e_PC2App_responseGnssEphStopReq,
+    e_PC2App_GetEpsVoltage,
+    e_PC2App_respGetEpsVoltageStartReq,
+    e_PC2App_respGetEpsVoltageStopReq,
     e_PC2App_MaxRequest,
 } PCToAppApiId_e;
 
@@ -104,6 +112,9 @@ typedef union {
     GnssEphData                         gnss_eph_data;
     RespGnssEphStartDataReq             gnss_eph_start;
     RespGnssEphStopDataReq              gnss_eph_stop;
+    GetEpsVoltage                       get_eps_voltage;
+    RespGetEpsVoltageStartReq           get_eps_voltage_start;
+    RespGetEpsVoltageStopReq            get_eps_voltage_stop;
 } PCToAppApiParams_t;
 
 PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port, INT8 *client_ssl_addr, UINT32 ssl_flag);

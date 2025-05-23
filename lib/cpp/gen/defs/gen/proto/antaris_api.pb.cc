@@ -359,6 +359,70 @@ struct GnssEphDataDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GnssEphDataDefaultTypeInternal _GnssEphData_default_instance_;
+constexpr ReqGetEpsVoltageStopReq::ReqGetEpsVoltageStopReq(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : correlation_id_(0){}
+struct ReqGetEpsVoltageStopReqDefaultTypeInternal {
+  constexpr ReqGetEpsVoltageStopReqDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~ReqGetEpsVoltageStopReqDefaultTypeInternal() {}
+  union {
+    ReqGetEpsVoltageStopReq _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ReqGetEpsVoltageStopReqDefaultTypeInternal _ReqGetEpsVoltageStopReq_default_instance_;
+constexpr RespGetEpsVoltageStopReq::RespGetEpsVoltageStopReq(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : correlation_id_(0)
+  , req_status_(0){}
+struct RespGetEpsVoltageStopReqDefaultTypeInternal {
+  constexpr RespGetEpsVoltageStopReqDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~RespGetEpsVoltageStopReqDefaultTypeInternal() {}
+  union {
+    RespGetEpsVoltageStopReq _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT RespGetEpsVoltageStopReqDefaultTypeInternal _RespGetEpsVoltageStopReq_default_instance_;
+constexpr ReqGetEpsVoltageStartReq::ReqGetEpsVoltageStartReq(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : correlation_id_(0)
+  , periodicity_in_ms_(0){}
+struct ReqGetEpsVoltageStartReqDefaultTypeInternal {
+  constexpr ReqGetEpsVoltageStartReqDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~ReqGetEpsVoltageStartReqDefaultTypeInternal() {}
+  union {
+    ReqGetEpsVoltageStartReq _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ReqGetEpsVoltageStartReqDefaultTypeInternal _ReqGetEpsVoltageStartReq_default_instance_;
+constexpr RespGetEpsVoltageStartReq::RespGetEpsVoltageStartReq(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : correlation_id_(0)
+  , req_status_(0){}
+struct RespGetEpsVoltageStartReqDefaultTypeInternal {
+  constexpr RespGetEpsVoltageStartReqDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~RespGetEpsVoltageStartReqDefaultTypeInternal() {}
+  union {
+    RespGetEpsVoltageStartReq _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT RespGetEpsVoltageStartReqDefaultTypeInternal _RespGetEpsVoltageStartReq_default_instance_;
+constexpr GetEpsVoltage::GetEpsVoltage(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : correlation_id_(0)
+  , eps_voltage_(0){}
+struct GetEpsVoltageDefaultTypeInternal {
+  constexpr GetEpsVoltageDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~GetEpsVoltageDefaultTypeInternal() {}
+  union {
+    GetEpsVoltage _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GetEpsVoltageDefaultTypeInternal _GetEpsVoltage_default_instance_;
 constexpr AntarisCorrelationId::AntarisCorrelationId(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : correlation_id_(0){}
@@ -385,7 +449,7 @@ struct AntarisReturnTypeDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AntarisReturnTypeDefaultTypeInternal _AntarisReturnType_default_instance_;
 }  // namespace antaris_api_peer_to_peer
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[25];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[30];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[1];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto = nullptr;
 
@@ -607,6 +671,45 @@ const uint32_t TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto::offsets[]
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, beta_angle_),
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, validity_flags_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq, correlation_id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq, correlation_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq, req_status_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq, correlation_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq, periodicity_in_ms_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq, correlation_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq, req_status_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GetEpsVoltage, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GetEpsVoltage, correlation_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GetEpsVoltage, eps_voltage_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::AntarisCorrelationId, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -645,8 +748,13 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 174, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGnssEphStartDataReq)},
   { 183, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGnssEphStartDataReq)},
   { 191, -1, -1, sizeof(::antaris_api_peer_to_peer::GnssEphData)},
-  { 216, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisCorrelationId)},
-  { 223, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisReturnType)},
+  { 216, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq)},
+  { 223, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq)},
+  { 231, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq)},
+  { 239, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq)},
+  { 247, -1, -1, sizeof(::antaris_api_peer_to_peer::GetEpsVoltage)},
+  { 255, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisCorrelationId)},
+  { 262, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisReturnType)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -673,6 +781,11 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_ReqGnssEphStartDataReq_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_RespGnssEphStartDataReq_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_GnssEphData_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_ReqGetEpsVoltageStopReq_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_RespGetEpsVoltageStopReq_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_ReqGetEpsVoltageStartReq_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_RespGetEpsVoltageStartReq_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_GetEpsVoltage_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_AntarisCorrelationId_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_AntarisReturnType_default_instance_),
 };
@@ -741,89 +854,113 @@ const char descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[
   "tude\030\016 \003(\005\022\020\n\010adcs_pos\030\017 \003(\005\022\031\n\021nadir_ve"
   "ctor_body\030\020 \003(\005\022\034\n\024gd_nadir_vector_body\030"
   "\021 \003(\005\022\022\n\nbeta_angle\030\022 \001(\005\022\026\n\016validity_fl"
-  "ags\030\023 \001(\005\".\n\024AntarisCorrelationId\022\026\n\016cor"
-  "relation_id\030\001 \001(\005\"U\n\021AntarisReturnType\022@"
-  "\n\013return_code\030\001 \001(\0162+.antaris_api_peer_t"
-  "o_peer.AntarisReturnCode*\354\001\n\021AntarisRetu"
-  "rnCode\022\016\n\nAn_SUCCESS\020\000\022\037\n\022An_GENERIC_FAI"
-  "LURE\020\377\377\377\377\377\377\377\377\377\001\022\037\n\022An_NOT_IMPLEMENTED\020\376\377"
-  "\377\377\377\377\377\377\377\001\022 \n\023An_OUT_OF_RESOURCES\020\375\377\377\377\377\377\377\377"
-  "\377\001\022\035\n\020An_NOT_PERMITTED\020\374\377\377\377\377\377\377\377\377\001\022\036\n\021An_"
-  "INVALID_PARAMS\020\373\377\377\377\377\377\377\377\377\001\022$\n\027An_INCOMPAT"
-  "IBLE_VERSION\020\372\377\377\377\377\377\377\377\377\0012\232\013\n\035AntarisapiAp"
-  "plicationCallback\022p\n\020PA_StartSequence\022-."
-  "antaris_api_peer_to_peer.StartSequencePa"
-  "rams\032+.antaris_api_peer_to_peer.AntarisR"
-  "eturnType\"\000\022i\n\016PA_ShutdownApp\022(.antaris_"
-  "api_peer_to_peer.ShutdownParams\032+.antari"
-  "s_api_peer_to_peer.AntarisReturnType\"\000\022s"
-  "\n\025PA_ProcessHealthCheck\022+.antaris_api_pe"
-  "er_to_peer.HealthCheckParams\032+.antaris_a"
-  "pi_peer_to_peer.AntarisReturnType\"\000\022y\n\032P"
-  "A_ProcessResponseRegister\022,.antaris_api_"
-  "peer_to_peer.RespRegisterParams\032+.antari"
-  "s_api_peer_to_peer.AntarisReturnType\"\000\022\215"
-  "\001\n$PA_ProcessResponseGetCurrentLocation\022"
-  "6.antaris_api_peer_to_peer.RespGetCurren"
-  "tLocationParams\032+.antaris_api_peer_to_pe"
-  "er.AntarisReturnType\"\000\022\213\001\n#PA_ProcessRes"
-  "ponseStageFileDownload\0225.antaris_api_pee"
-  "r_to_peer.RespStageFileDownloadParams\032+."
+  "ags\030\023 \001(\005\"1\n\027ReqGetEpsVoltageStopReq\022\026\n\016"
+  "correlation_id\030\001 \001(\005\"F\n\030RespGetEpsVoltag"
+  "eStopReq\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nreq_"
+  "status\030\002 \001(\005\"M\n\030ReqGetEpsVoltageStartReq"
+  "\022\026\n\016correlation_id\030\001 \001(\005\022\031\n\021periodicity_"
+  "in_ms\030\002 \001(\005\"G\n\031RespGetEpsVoltageStartReq"
+  "\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nreq_status\030\002"
+  " \001(\005\"<\n\rGetEpsVoltage\022\026\n\016correlation_id\030"
+  "\001 \001(\005\022\023\n\013eps_voltage\030\002 \001(\005\".\n\024AntarisCor"
+  "relationId\022\026\n\016correlation_id\030\001 \001(\005\"U\n\021An"
+  "tarisReturnType\022@\n\013return_code\030\001 \001(\0162+.a"
+  "ntaris_api_peer_to_peer.AntarisReturnCod"
+  "e*\354\001\n\021AntarisReturnCode\022\016\n\nAn_SUCCESS\020\000\022"
+  "\037\n\022An_GENERIC_FAILURE\020\377\377\377\377\377\377\377\377\377\001\022\037\n\022An_N"
+  "OT_IMPLEMENTED\020\376\377\377\377\377\377\377\377\377\001\022 \n\023An_OUT_OF_R"
+  "ESOURCES\020\375\377\377\377\377\377\377\377\377\001\022\035\n\020An_NOT_PERMITTED\020"
+  "\374\377\377\377\377\377\377\377\377\001\022\036\n\021An_INVALID_PARAMS\020\373\377\377\377\377\377\377\377"
+  "\377\001\022$\n\027An_INCOMPATIBLE_VERSION\020\372\377\377\377\377\377\377\377\377\001"
+  "2\243\016\n\035AntarisapiApplicationCallback\022p\n\020PA"
+  "_StartSequence\022-.antaris_api_peer_to_pee"
+  "r.StartSequenceParams\032+.antaris_api_peer"
+  "_to_peer.AntarisReturnType\"\000\022i\n\016PA_Shutd"
+  "ownApp\022(.antaris_api_peer_to_peer.Shutdo"
+  "wnParams\032+.antaris_api_peer_to_peer.Anta"
+  "risReturnType\"\000\022s\n\025PA_ProcessHealthCheck"
+  "\022+.antaris_api_peer_to_peer.HealthCheckP"
+  "arams\032+.antaris_api_peer_to_peer.Antaris"
+  "ReturnType\"\000\022y\n\032PA_ProcessResponseRegist"
+  "er\022,.antaris_api_peer_to_peer.RespRegist"
+  "erParams\032+.antaris_api_peer_to_peer.Anta"
+  "risReturnType\"\000\022\215\001\n$PA_ProcessResponseGe"
+  "tCurrentLocation\0226.antaris_api_peer_to_p"
+  "eer.RespGetCurrentLocationParams\032+.antar"
+  "is_api_peer_to_peer.AntarisReturnType\"\000\022"
+  "\213\001\n#PA_ProcessResponseStageFileDownload\022"
+  "5.antaris_api_peer_to_peer.RespStageFile"
+  "DownloadParams\032+.antaris_api_peer_to_pee"
+  "r.AntarisReturnType\"\000\022\217\001\n%PA_ProcessResp"
+  "onsePayloadPowerControl\0227.antaris_api_pe"
+  "er_to_peer.RespPayloadPowerControlParams"
+  "\032+.antaris_api_peer_to_peer.AntarisRetur"
+  "nType\"\000\022\177\n\033PA_ProcessReqPayloadMetrics\0221"
+  ".antaris_api_peer_to_peer.ReqPayloadMetr"
+  "icsParams\032+.antaris_api_peer_to_peer.Ant"
+  "arisReturnType\"\000\022\203\001\n PA_ProcessRespGnssE"
+  "phStopDataReq\0220.antaris_api_peer_to_peer"
+  ".RespGnssEphStopDataReq\032+.antaris_api_pe"
+  "er_to_peer.AntarisReturnType\"\000\022\205\001\n!PA_Pr"
+  "ocessRespGnssEphStartDataReq\0221.antaris_a"
+  "pi_peer_to_peer.RespGnssEphStartDataReq\032"
+  "+.antaris_api_peer_to_peer.AntarisReturn"
+  "Type\"\000\022m\n\025PA_ProcessGnssEphData\022%.antari"
+  "s_api_peer_to_peer.GnssEphData\032+.antaris"
+  "_api_peer_to_peer.AntarisReturnType\"\000\022\207\001"
+  "\n\"PA_ProcessRespGetEpsVoltageStopReq\0222.a"
+  "ntaris_api_peer_to_peer.RespGetEpsVoltag"
+  "eStopReq\032+.antaris_api_peer_to_peer.Anta"
+  "risReturnType\"\000\022\211\001\n#PA_ProcessRespGetEps"
+  "VoltageStartReq\0223.antaris_api_peer_to_pe"
+  "er.RespGetEpsVoltageStartReq\032+.antaris_a"
+  "pi_peer_to_peer.AntarisReturnType\"\000\022q\n\027P"
+  "A_ProcessGetEpsVoltage\022\'.antaris_api_pee"
+  "r_to_peer.GetEpsVoltage\032+.antaris_api_pe"
+  "er_to_peer.AntarisReturnType\"\0002\350\013\n\033Antar"
+  "isapiPayloadController\022i\n\013PC_register\022+."
+  "antaris_api_peer_to_peer.ReqRegisterPara"
+  "ms\032+.antaris_api_peer_to_peer.AntarisRet"
+  "urnType\"\000\022\177\n\027PC_get_current_location\0225.a"
+  "ntaris_api_peer_to_peer.ReqGetCurrentLoc"
+  "ationParams\032+.antaris_api_peer_to_peer.A"
+  "ntarisReturnType\"\000\022}\n\026PC_stage_file_down"
+  "load\0224.antaris_api_peer_to_peer.ReqStage"
+  "FileDownloadParams\032+.antaris_api_peer_to"
+  "_peer.AntarisReturnType\"\000\022r\n\020PC_sequence"
+  "_done\022/.antaris_api_peer_to_peer.CmdSequ"
+  "enceDoneParams\032+.antaris_api_peer_to_pee"
+  "r.AntarisReturnType\"\000\022\201\001\n\030PC_payload_pow"
+  "er_control\0226.antaris_api_peer_to_peer.Re"
+  "qPayloadPowerControlParams\032+.antaris_api"
+  "_peer_to_peer.AntarisReturnType\"\000\022z\n\030PC_"
+  "response_health_check\022/.antaris_api_peer"
+  "_to_peer.RespHealthCheckParams\032+.antaris"
+  "_api_peer_to_peer.AntarisReturnType\"\000\022s\n"
+  "\024PC_response_shutdown\022,.antaris_api_peer"
+  "_to_peer.RespShutdownParams\032+.antaris_ap"
+  "i_peer_to_peer.AntarisReturnType\"\000\022~\n\033PC"
+  "_response_payload_metrics\0220.antaris_api_"
+  "peer_to_peer.PayloadMetricsResponse\032+.an"
+  "taris_api_peer_to_peer.AntarisReturnType"
+  "\"\000\022v\n\024PC_gnss_eph_stop_req\022/.antaris_api"
+  "_peer_to_peer.ReqGnssEphStopDataReq\032+.an"
+  "taris_api_peer_to_peer.AntarisReturnType"
+  "\"\000\022x\n\025PC_gnss_eph_start_req\0220.antaris_ap"
+  "i_peer_to_peer.ReqGnssEphStartDataReq\032+."
   "antaris_api_peer_to_peer.AntarisReturnTy"
-  "pe\"\000\022\217\001\n%PA_ProcessResponsePayloadPowerC"
-  "ontrol\0227.antaris_api_peer_to_peer.RespPa"
-  "yloadPowerControlParams\032+.antaris_api_pe"
-  "er_to_peer.AntarisReturnType\"\000\022\177\n\033PA_Pro"
-  "cessReqPayloadMetrics\0221.antaris_api_peer"
-  "_to_peer.ReqPayloadMetricsParams\032+.antar"
-  "is_api_peer_to_peer.AntarisReturnType\"\000\022"
-  "\203\001\n PA_ProcessRespGnssEphStopDataReq\0220.a"
-  "ntaris_api_peer_to_peer.RespGnssEphStopD"
-  "ataReq\032+.antaris_api_peer_to_peer.Antari"
-  "sReturnType\"\000\022\205\001\n!PA_ProcessRespGnssEphS"
-  "tartDataReq\0221.antaris_api_peer_to_peer.R"
-  "espGnssEphStartDataReq\032+.antaris_api_pee"
-  "r_to_peer.AntarisReturnType\"\000\022m\n\025PA_Proc"
-  "essGnssEphData\022%.antaris_api_peer_to_pee"
-  "r.GnssEphData\032+.antaris_api_peer_to_peer"
-  ".AntarisReturnType\"\0002\343\t\n\033AntarisapiPaylo"
-  "adController\022i\n\013PC_register\022+.antaris_ap"
-  "i_peer_to_peer.ReqRegisterParams\032+.antar"
-  "is_api_peer_to_peer.AntarisReturnType\"\000\022"
-  "\177\n\027PC_get_current_location\0225.antaris_api"
-  "_peer_to_peer.ReqGetCurrentLocationParam"
-  "s\032+.antaris_api_peer_to_peer.AntarisRetu"
-  "rnType\"\000\022}\n\026PC_stage_file_download\0224.ant"
-  "aris_api_peer_to_peer.ReqStageFileDownlo"
-  "adParams\032+.antaris_api_peer_to_peer.Anta"
-  "risReturnType\"\000\022r\n\020PC_sequence_done\022/.an"
-  "taris_api_peer_to_peer.CmdSequenceDonePa"
-  "rams\032+.antaris_api_peer_to_peer.AntarisR"
-  "eturnType\"\000\022\201\001\n\030PC_payload_power_control"
-  "\0226.antaris_api_peer_to_peer.ReqPayloadPo"
-  "werControlParams\032+.antaris_api_peer_to_p"
-  "eer.AntarisReturnType\"\000\022z\n\030PC_response_h"
-  "ealth_check\022/.antaris_api_peer_to_peer.R"
-  "espHealthCheckParams\032+.antaris_api_peer_"
-  "to_peer.AntarisReturnType\"\000\022s\n\024PC_respon"
-  "se_shutdown\022,.antaris_api_peer_to_peer.R"
-  "espShutdownParams\032+.antaris_api_peer_to_"
-  "peer.AntarisReturnType\"\000\022~\n\033PC_response_"
-  "payload_metrics\0220.antaris_api_peer_to_pe"
-  "er.PayloadMetricsResponse\032+.antaris_api_"
-  "peer_to_peer.AntarisReturnType\"\000\022v\n\024PC_g"
-  "nss_eph_stop_req\022/.antaris_api_peer_to_p"
-  "eer.ReqGnssEphStopDataReq\032+.antaris_api_"
-  "peer_to_peer.AntarisReturnType\"\000\022x\n\025PC_g"
-  "nss_eph_start_req\0220.antaris_api_peer_to_"
-  "peer.ReqGnssEphStartDataReq\032+.antaris_ap"
-  "i_peer_to_peer.AntarisReturnType\"\000b\006prot"
-  "o3"
+  "pe\"\000\022\177\n\033PC_get_eps_voltage_stop_req\0221.an"
+  "taris_api_peer_to_peer.ReqGetEpsVoltageS"
+  "topReq\032+.antaris_api_peer_to_peer.Antari"
+  "sReturnType\"\000\022\201\001\n\034PC_get_eps_voltage_sta"
+  "rt_req\0222.antaris_api_peer_to_peer.ReqGet"
+  "EpsVoltageStartReq\032+.antaris_api_peer_to"
+  "_peer.AntarisReturnType\"\000b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto = {
-  false, false, 5602, descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, "defs/gen/proto/antaris_api.proto", 
-  &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once, nullptr, 0, 25,
+  false, false, 6593, descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, "defs/gen/proto/antaris_api.proto", 
+  &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once, nullptr, 0, 30,
   schemas, file_default_instances, TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto::offsets,
   file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, file_level_enum_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, file_level_service_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto,
 };
@@ -6836,6 +6973,1032 @@ void GnssEphData::InternalSwap(GnssEphData* other) {
 
 // ===================================================================
 
+class ReqGetEpsVoltageStopReq::_Internal {
+ public:
+};
+
+ReqGetEpsVoltageStopReq::ReqGetEpsVoltageStopReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:antaris_api_peer_to_peer.ReqGetEpsVoltageStopReq)
+}
+ReqGetEpsVoltageStopReq::ReqGetEpsVoltageStopReq(const ReqGetEpsVoltageStopReq& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  correlation_id_ = from.correlation_id_;
+  // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.ReqGetEpsVoltageStopReq)
+}
+
+inline void ReqGetEpsVoltageStopReq::SharedCtor() {
+correlation_id_ = 0;
+}
+
+ReqGetEpsVoltageStopReq::~ReqGetEpsVoltageStopReq() {
+  // @@protoc_insertion_point(destructor:antaris_api_peer_to_peer.ReqGetEpsVoltageStopReq)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void ReqGetEpsVoltageStopReq::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void ReqGetEpsVoltageStopReq::ArenaDtor(void* object) {
+  ReqGetEpsVoltageStopReq* _this = reinterpret_cast< ReqGetEpsVoltageStopReq* >(object);
+  (void)_this;
+}
+void ReqGetEpsVoltageStopReq::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void ReqGetEpsVoltageStopReq::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void ReqGetEpsVoltageStopReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:antaris_api_peer_to_peer.ReqGetEpsVoltageStopReq)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  correlation_id_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ReqGetEpsVoltageStopReq::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 correlation_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* ReqGetEpsVoltageStopReq::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:antaris_api_peer_to_peer.ReqGetEpsVoltageStopReq)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:antaris_api_peer_to_peer.ReqGetEpsVoltageStopReq)
+  return target;
+}
+
+size_t ReqGetEpsVoltageStopReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:antaris_api_peer_to_peer.ReqGetEpsVoltageStopReq)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ReqGetEpsVoltageStopReq::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ReqGetEpsVoltageStopReq::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ReqGetEpsVoltageStopReq::GetClassData() const { return &_class_data_; }
+
+void ReqGetEpsVoltageStopReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<ReqGetEpsVoltageStopReq *>(to)->MergeFrom(
+      static_cast<const ReqGetEpsVoltageStopReq &>(from));
+}
+
+
+void ReqGetEpsVoltageStopReq::MergeFrom(const ReqGetEpsVoltageStopReq& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:antaris_api_peer_to_peer.ReqGetEpsVoltageStopReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_correlation_id() != 0) {
+    _internal_set_correlation_id(from._internal_correlation_id());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ReqGetEpsVoltageStopReq::CopyFrom(const ReqGetEpsVoltageStopReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:antaris_api_peer_to_peer.ReqGetEpsVoltageStopReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ReqGetEpsVoltageStopReq::IsInitialized() const {
+  return true;
+}
+
+void ReqGetEpsVoltageStopReq::InternalSwap(ReqGetEpsVoltageStopReq* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(correlation_id_, other->correlation_id_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ReqGetEpsVoltageStopReq::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[23]);
+}
+
+// ===================================================================
+
+class RespGetEpsVoltageStopReq::_Internal {
+ public:
+};
+
+RespGetEpsVoltageStopReq::RespGetEpsVoltageStopReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:antaris_api_peer_to_peer.RespGetEpsVoltageStopReq)
+}
+RespGetEpsVoltageStopReq::RespGetEpsVoltageStopReq(const RespGetEpsVoltageStopReq& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&correlation_id_, &from.correlation_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&req_status_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+  // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.RespGetEpsVoltageStopReq)
+}
+
+inline void RespGetEpsVoltageStopReq::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&req_status_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+}
+
+RespGetEpsVoltageStopReq::~RespGetEpsVoltageStopReq() {
+  // @@protoc_insertion_point(destructor:antaris_api_peer_to_peer.RespGetEpsVoltageStopReq)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void RespGetEpsVoltageStopReq::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void RespGetEpsVoltageStopReq::ArenaDtor(void* object) {
+  RespGetEpsVoltageStopReq* _this = reinterpret_cast< RespGetEpsVoltageStopReq* >(object);
+  (void)_this;
+}
+void RespGetEpsVoltageStopReq::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void RespGetEpsVoltageStopReq::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void RespGetEpsVoltageStopReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:antaris_api_peer_to_peer.RespGetEpsVoltageStopReq)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&correlation_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&req_status_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RespGetEpsVoltageStopReq::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 correlation_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 req_status = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          req_status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RespGetEpsVoltageStopReq::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:antaris_api_peer_to_peer.RespGetEpsVoltageStopReq)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
+  }
+
+  // int32 req_status = 2;
+  if (this->_internal_req_status() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_req_status(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:antaris_api_peer_to_peer.RespGetEpsVoltageStopReq)
+  return target;
+}
+
+size_t RespGetEpsVoltageStopReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:antaris_api_peer_to_peer.RespGetEpsVoltageStopReq)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  // int32 req_status = 2;
+  if (this->_internal_req_status() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_req_status());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RespGetEpsVoltageStopReq::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    RespGetEpsVoltageStopReq::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RespGetEpsVoltageStopReq::GetClassData() const { return &_class_data_; }
+
+void RespGetEpsVoltageStopReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<RespGetEpsVoltageStopReq *>(to)->MergeFrom(
+      static_cast<const RespGetEpsVoltageStopReq &>(from));
+}
+
+
+void RespGetEpsVoltageStopReq::MergeFrom(const RespGetEpsVoltageStopReq& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:antaris_api_peer_to_peer.RespGetEpsVoltageStopReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_correlation_id() != 0) {
+    _internal_set_correlation_id(from._internal_correlation_id());
+  }
+  if (from._internal_req_status() != 0) {
+    _internal_set_req_status(from._internal_req_status());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RespGetEpsVoltageStopReq::CopyFrom(const RespGetEpsVoltageStopReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:antaris_api_peer_to_peer.RespGetEpsVoltageStopReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RespGetEpsVoltageStopReq::IsInitialized() const {
+  return true;
+}
+
+void RespGetEpsVoltageStopReq::InternalSwap(RespGetEpsVoltageStopReq* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(RespGetEpsVoltageStopReq, req_status_)
+      + sizeof(RespGetEpsVoltageStopReq::req_status_)
+      - PROTOBUF_FIELD_OFFSET(RespGetEpsVoltageStopReq, correlation_id_)>(
+          reinterpret_cast<char*>(&correlation_id_),
+          reinterpret_cast<char*>(&other->correlation_id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RespGetEpsVoltageStopReq::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[24]);
+}
+
+// ===================================================================
+
+class ReqGetEpsVoltageStartReq::_Internal {
+ public:
+};
+
+ReqGetEpsVoltageStartReq::ReqGetEpsVoltageStartReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:antaris_api_peer_to_peer.ReqGetEpsVoltageStartReq)
+}
+ReqGetEpsVoltageStartReq::ReqGetEpsVoltageStartReq(const ReqGetEpsVoltageStartReq& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&correlation_id_, &from.correlation_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&periodicity_in_ms_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(periodicity_in_ms_));
+  // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.ReqGetEpsVoltageStartReq)
+}
+
+inline void ReqGetEpsVoltageStartReq::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&periodicity_in_ms_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(periodicity_in_ms_));
+}
+
+ReqGetEpsVoltageStartReq::~ReqGetEpsVoltageStartReq() {
+  // @@protoc_insertion_point(destructor:antaris_api_peer_to_peer.ReqGetEpsVoltageStartReq)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void ReqGetEpsVoltageStartReq::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void ReqGetEpsVoltageStartReq::ArenaDtor(void* object) {
+  ReqGetEpsVoltageStartReq* _this = reinterpret_cast< ReqGetEpsVoltageStartReq* >(object);
+  (void)_this;
+}
+void ReqGetEpsVoltageStartReq::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void ReqGetEpsVoltageStartReq::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void ReqGetEpsVoltageStartReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:antaris_api_peer_to_peer.ReqGetEpsVoltageStartReq)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&correlation_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&periodicity_in_ms_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(periodicity_in_ms_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ReqGetEpsVoltageStartReq::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 correlation_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 periodicity_in_ms = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          periodicity_in_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* ReqGetEpsVoltageStartReq::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:antaris_api_peer_to_peer.ReqGetEpsVoltageStartReq)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
+  }
+
+  // int32 periodicity_in_ms = 2;
+  if (this->_internal_periodicity_in_ms() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_periodicity_in_ms(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:antaris_api_peer_to_peer.ReqGetEpsVoltageStartReq)
+  return target;
+}
+
+size_t ReqGetEpsVoltageStartReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:antaris_api_peer_to_peer.ReqGetEpsVoltageStartReq)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  // int32 periodicity_in_ms = 2;
+  if (this->_internal_periodicity_in_ms() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_periodicity_in_ms());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ReqGetEpsVoltageStartReq::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ReqGetEpsVoltageStartReq::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ReqGetEpsVoltageStartReq::GetClassData() const { return &_class_data_; }
+
+void ReqGetEpsVoltageStartReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<ReqGetEpsVoltageStartReq *>(to)->MergeFrom(
+      static_cast<const ReqGetEpsVoltageStartReq &>(from));
+}
+
+
+void ReqGetEpsVoltageStartReq::MergeFrom(const ReqGetEpsVoltageStartReq& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:antaris_api_peer_to_peer.ReqGetEpsVoltageStartReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_correlation_id() != 0) {
+    _internal_set_correlation_id(from._internal_correlation_id());
+  }
+  if (from._internal_periodicity_in_ms() != 0) {
+    _internal_set_periodicity_in_ms(from._internal_periodicity_in_ms());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ReqGetEpsVoltageStartReq::CopyFrom(const ReqGetEpsVoltageStartReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:antaris_api_peer_to_peer.ReqGetEpsVoltageStartReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ReqGetEpsVoltageStartReq::IsInitialized() const {
+  return true;
+}
+
+void ReqGetEpsVoltageStartReq::InternalSwap(ReqGetEpsVoltageStartReq* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(ReqGetEpsVoltageStartReq, periodicity_in_ms_)
+      + sizeof(ReqGetEpsVoltageStartReq::periodicity_in_ms_)
+      - PROTOBUF_FIELD_OFFSET(ReqGetEpsVoltageStartReq, correlation_id_)>(
+          reinterpret_cast<char*>(&correlation_id_),
+          reinterpret_cast<char*>(&other->correlation_id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ReqGetEpsVoltageStartReq::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[25]);
+}
+
+// ===================================================================
+
+class RespGetEpsVoltageStartReq::_Internal {
+ public:
+};
+
+RespGetEpsVoltageStartReq::RespGetEpsVoltageStartReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:antaris_api_peer_to_peer.RespGetEpsVoltageStartReq)
+}
+RespGetEpsVoltageStartReq::RespGetEpsVoltageStartReq(const RespGetEpsVoltageStartReq& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&correlation_id_, &from.correlation_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&req_status_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+  // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.RespGetEpsVoltageStartReq)
+}
+
+inline void RespGetEpsVoltageStartReq::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&req_status_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+}
+
+RespGetEpsVoltageStartReq::~RespGetEpsVoltageStartReq() {
+  // @@protoc_insertion_point(destructor:antaris_api_peer_to_peer.RespGetEpsVoltageStartReq)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void RespGetEpsVoltageStartReq::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void RespGetEpsVoltageStartReq::ArenaDtor(void* object) {
+  RespGetEpsVoltageStartReq* _this = reinterpret_cast< RespGetEpsVoltageStartReq* >(object);
+  (void)_this;
+}
+void RespGetEpsVoltageStartReq::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void RespGetEpsVoltageStartReq::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void RespGetEpsVoltageStartReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:antaris_api_peer_to_peer.RespGetEpsVoltageStartReq)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&correlation_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&req_status_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RespGetEpsVoltageStartReq::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 correlation_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 req_status = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          req_status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RespGetEpsVoltageStartReq::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:antaris_api_peer_to_peer.RespGetEpsVoltageStartReq)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
+  }
+
+  // int32 req_status = 2;
+  if (this->_internal_req_status() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_req_status(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:antaris_api_peer_to_peer.RespGetEpsVoltageStartReq)
+  return target;
+}
+
+size_t RespGetEpsVoltageStartReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:antaris_api_peer_to_peer.RespGetEpsVoltageStartReq)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  // int32 req_status = 2;
+  if (this->_internal_req_status() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_req_status());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RespGetEpsVoltageStartReq::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    RespGetEpsVoltageStartReq::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RespGetEpsVoltageStartReq::GetClassData() const { return &_class_data_; }
+
+void RespGetEpsVoltageStartReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<RespGetEpsVoltageStartReq *>(to)->MergeFrom(
+      static_cast<const RespGetEpsVoltageStartReq &>(from));
+}
+
+
+void RespGetEpsVoltageStartReq::MergeFrom(const RespGetEpsVoltageStartReq& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:antaris_api_peer_to_peer.RespGetEpsVoltageStartReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_correlation_id() != 0) {
+    _internal_set_correlation_id(from._internal_correlation_id());
+  }
+  if (from._internal_req_status() != 0) {
+    _internal_set_req_status(from._internal_req_status());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RespGetEpsVoltageStartReq::CopyFrom(const RespGetEpsVoltageStartReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:antaris_api_peer_to_peer.RespGetEpsVoltageStartReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RespGetEpsVoltageStartReq::IsInitialized() const {
+  return true;
+}
+
+void RespGetEpsVoltageStartReq::InternalSwap(RespGetEpsVoltageStartReq* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(RespGetEpsVoltageStartReq, req_status_)
+      + sizeof(RespGetEpsVoltageStartReq::req_status_)
+      - PROTOBUF_FIELD_OFFSET(RespGetEpsVoltageStartReq, correlation_id_)>(
+          reinterpret_cast<char*>(&correlation_id_),
+          reinterpret_cast<char*>(&other->correlation_id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RespGetEpsVoltageStartReq::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[26]);
+}
+
+// ===================================================================
+
+class GetEpsVoltage::_Internal {
+ public:
+};
+
+GetEpsVoltage::GetEpsVoltage(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:antaris_api_peer_to_peer.GetEpsVoltage)
+}
+GetEpsVoltage::GetEpsVoltage(const GetEpsVoltage& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&correlation_id_, &from.correlation_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&eps_voltage_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(eps_voltage_));
+  // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.GetEpsVoltage)
+}
+
+inline void GetEpsVoltage::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&eps_voltage_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(eps_voltage_));
+}
+
+GetEpsVoltage::~GetEpsVoltage() {
+  // @@protoc_insertion_point(destructor:antaris_api_peer_to_peer.GetEpsVoltage)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void GetEpsVoltage::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void GetEpsVoltage::ArenaDtor(void* object) {
+  GetEpsVoltage* _this = reinterpret_cast< GetEpsVoltage* >(object);
+  (void)_this;
+}
+void GetEpsVoltage::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void GetEpsVoltage::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void GetEpsVoltage::Clear() {
+// @@protoc_insertion_point(message_clear_start:antaris_api_peer_to_peer.GetEpsVoltage)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&correlation_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&eps_voltage_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(eps_voltage_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* GetEpsVoltage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 correlation_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 eps_voltage = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          eps_voltage_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* GetEpsVoltage::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:antaris_api_peer_to_peer.GetEpsVoltage)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
+  }
+
+  // int32 eps_voltage = 2;
+  if (this->_internal_eps_voltage() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_eps_voltage(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:antaris_api_peer_to_peer.GetEpsVoltage)
+  return target;
+}
+
+size_t GetEpsVoltage::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:antaris_api_peer_to_peer.GetEpsVoltage)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  // int32 eps_voltage = 2;
+  if (this->_internal_eps_voltage() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_eps_voltage());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData GetEpsVoltage::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    GetEpsVoltage::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetEpsVoltage::GetClassData() const { return &_class_data_; }
+
+void GetEpsVoltage::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<GetEpsVoltage *>(to)->MergeFrom(
+      static_cast<const GetEpsVoltage &>(from));
+}
+
+
+void GetEpsVoltage::MergeFrom(const GetEpsVoltage& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:antaris_api_peer_to_peer.GetEpsVoltage)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_correlation_id() != 0) {
+    _internal_set_correlation_id(from._internal_correlation_id());
+  }
+  if (from._internal_eps_voltage() != 0) {
+    _internal_set_eps_voltage(from._internal_eps_voltage());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void GetEpsVoltage::CopyFrom(const GetEpsVoltage& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:antaris_api_peer_to_peer.GetEpsVoltage)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool GetEpsVoltage::IsInitialized() const {
+  return true;
+}
+
+void GetEpsVoltage::InternalSwap(GetEpsVoltage* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(GetEpsVoltage, eps_voltage_)
+      + sizeof(GetEpsVoltage::eps_voltage_)
+      - PROTOBUF_FIELD_OFFSET(GetEpsVoltage, correlation_id_)>(
+          reinterpret_cast<char*>(&correlation_id_),
+          reinterpret_cast<char*>(&other->correlation_id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata GetEpsVoltage::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[27]);
+}
+
+// ===================================================================
+
 class AntarisCorrelationId::_Internal {
  public:
 };
@@ -7009,7 +8172,7 @@ void AntarisCorrelationId::InternalSwap(AntarisCorrelationId* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AntarisCorrelationId::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[23]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[28]);
 }
 
 // ===================================================================
@@ -7190,7 +8353,7 @@ void AntarisReturnType::InternalSwap(AntarisReturnType* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AntarisReturnType::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[24]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[29]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -7264,6 +8427,21 @@ template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::RespGnssEphStartDataReq
 }
 template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::GnssEphData* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::GnssEphData >(Arena* arena) {
   return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::GnssEphData >(arena);
+}
+template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::GetEpsVoltage* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::GetEpsVoltage >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::GetEpsVoltage >(arena);
 }
 template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::AntarisCorrelationId* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::AntarisCorrelationId >(Arena* arena) {
   return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::AntarisCorrelationId >(arena);

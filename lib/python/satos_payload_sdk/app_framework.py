@@ -136,7 +136,7 @@ class SequenceHandler(Stoppable, threading.Thread):
 
 
 class ChannelClient:
-    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb):
+    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb):
         self._channel = None
         self._cond = threading.Condition()
         self._next_cid = 0
@@ -156,7 +156,10 @@ class ChannelClient:
             'ReqPayloadMetrics':self._handle_payload_metrics,
             'RespGnssEphStopDataReq':self._handle_response,
             'RespGnssEphStartDataReq': self._handle_response,
-            'GnssEphData': gnss_eph_data_cb
+            'GnssEphData': gnss_eph_data_cb,
+            'RespGetEpsVoltageStopReq':self._handle_response,
+            'RespGetEpsVoltageStartReq': self._handle_response,
+            'GetEpsVoltage': get_eps_voltage_cb
         }
 
     def _get_next_cid(self):
@@ -247,6 +250,49 @@ class ChannelClient:
 
         return resp
 
+    def get_eps_voltage_stop_req(self):
+        with self._cond:
+            params = api_types.ReqGetEpsVoltageStopReq(self._get_next_cid())
+            resp = api_client.api_pa_pc_get_eps_voltage_stop_req(self._channel, params)
+            if resp != api_types.AntarisReturnCode.An_SUCCESS:
+                logger.error("api_pa_pc_get_eps_voltage_stop_req request failed")
+                return None
+
+            resp_cond = threading.Condition()
+            resp_cond.acquire()
+
+            self._responses[params.correlation_id] = [resp_cond, None]
+
+        # wait for response trigger
+        resp_cond.wait()
+
+        with self._cond:
+            resp = self._responses[params.correlation_id][1]
+            del self._responses[params.correlation_id]
+
+        return resp
+
+    def get_eps_voltage_start_req(self, periodicity_in_ms):
+        with self._cond:
+            params = api_types.ReqGetEpsVoltageStartReq(self._get_next_cid(), periodicity_in_ms)
+            resp = api_client.api_pa_pc_get_eps_voltage_start_req(self._channel, params)
+            if resp != api_types.AntarisReturnCode.An_SUCCESS:
+                logger.error("api_pa_pc_get_eps_voltage_start_req request failed")
+                return None
+
+            resp_cond = threading.Condition()
+            resp_cond.acquire()
+
+            self._responses[params.correlation_id] = [resp_cond, None]
+
+        # wait for response trigger
+        resp_cond.wait()
+
+        with self._cond:
+            resp = self._responses[params.correlation_id][1]
+            del self._responses[params.correlation_id]
+
+        return resp
     def stage_file_download(self, loc):
         with self._cond:
             params = api_types.ReqStageFileDownloadParams(self._get_next_cid(), loc)
@@ -343,6 +389,8 @@ class PayloadApplication(Stoppable):
         # default gnss data handler; can be overridden
         self.gnss_eph_data_handler = lambda: True
 
+        # default gnss data handler; can be overridden
+        self.get_eps_voltage_handler = lambda: True
         # abstracts access to channel APIs for sequences
         self.channel_client = None
 
@@ -364,6 +412,10 @@ class PayloadApplication(Stoppable):
     # to represent gnss eph data handling, respectively
     def set_gnss_eph_data_cb(self, gnss_eph_data_handler):
         self.gnss_eph_data_handler = gnss_eph_data_handler
+    # Provided function should expect no arguments and return True or False
+    # to represent get eps voltage handling, respectively
+    def set_get_eps_voltage_cb(self, get_eps_voltage_handler):
+        self.get_eps_voltage_handler = get_eps_voltage_handler
 
     #TODO(bcwaldon): actually do something with the provided params
     def _handle_health_check(self, params):
@@ -382,7 +434,7 @@ class PayloadApplication(Stoppable):
         logger.info("payload app starting")
 
         if not self.channel_client:
-            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb)
+            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb, self._set_get_eps_voltage_cb)
         
         self.channel_client._connect()
 
@@ -481,6 +533,19 @@ class PayloadApplication(Stoppable):
             hv = self.gnss_eph_data_handler(params)
         except:
             logger.exception("Handling GNSS EPH data failed")
+            hv = False
+
+        if hv:
+            return api_types.AntarisReturnCode.An_SUCCESS
+        else:
+            return api_types.AntarisReturnCode.An_GENERIC_FAILURE
+
+    def _set_get_eps_voltage_cb(self, params):
+        logger.info("Handling GNSS EPH data")
+        try:
+            hv = self.get_eps_voltage_handler(params)
+        except:
+            logger.exception("Handling get EPS voltage failed")
             hv = False
 
         if hv:
