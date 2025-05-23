@@ -148,24 +148,24 @@
             <Field name="sequence_id" type="INT8" sequence="1" description="sequence id that has completed execution. MUST agree with StartSequenceParams.sequence-id." array="16"/>
         </Struct>
 
-        <Struct name="ReqGnssEphStopDataReq" description="Request parameters for Payload Power Control">
+        <Struct name="ReqGnssEphStopDataReq" description="Request GNSS EPH data stop">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
         </Struct>
 
-        <Struct name="RespGnssEphStopDataReq" description="Response parameters for Payload Power Control request">
+        <Struct name="RespGnssEphStopDataReq" description="Response to GNSS EPH data stop request">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
-            <Field name="req_status" type="INT32" sequence="2" description="status of payload-power-control request"/>
+            <Field name="req_status" type="INT32" sequence="2" description="status of GNSS EPH data stop request"/>
          </Struct>
 
-        <Struct name="ReqGnssEphStartDataReq" description="Request parameters for Payload Power Control">
+        <Struct name="ReqGnssEphStartDataReq" description="Request GNSS EPH data start">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="periodicity_in_ms" type="UINT16" sequence="2" description="Time between consecutive notifications in ms"/>
             <Field name="eph2_enable" type="INT8" sequence="3" description="0 = disable eph2, 1 = enable eph2"/>
         </Struct>
 
-        <Struct name="RespGnssEphStartDataReq" description="Response parameters for Payload Power Control request">
+        <Struct name="RespGnssEphStartDataReq" description="Response to GNSS EPH data start request">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
-            <Field name="req_status" type="INT32" sequence="2" description="status of payload-power-control request"/>
+            <Field name="req_status" type="INT32" sequence="2" description="status of GNSS EPH data start request"/>
          </Struct>
 
         <Struct name="GnssEphData" description="GNSS Eph1/Eph2 data">
@@ -198,8 +198,8 @@
             <Field name="process_response_stage_file_download" type="ProcessResponseStageFileDownload_Fptr" sequence="6" description="callback handler for stage file download response"/>
             <Field name="process_response_payload_power_control" type="ProcessResponsePayloadPowerControl_Fptr" sequence="7" description="callback handler for payload power control response"/>
             <Field name="req_payload_metrics" type="ProcessReqPayloadMetrics_Fptr" sequence="8" description="callback handler for request payload stats from PC"/>
-            <Field name="gnss_eph_stop_response" type="ProcessRespGnssEphStopDataReq_Fptr" sequence="9" description="callback handler for GNSS EPH data stop"/>
-            <Field name="gnss_eph_start_response" type="ProcessRespGnssEphStartDataReq_Fptr" sequence="10" description="callback handler for GNSS EPH data start"/>
+            <Field name="gnss_eph_stop_response" type="ProcessRespGnssEphStopDataReq_Fptr" sequence="9" description="callback handler for GNSS EPH data stop response"/>
+            <Field name="gnss_eph_start_response" type="ProcessRespGnssEphStartDataReq_Fptr" sequence="10" description="callback handler for GNSS EPH data start response"/>
             <Field name="gnss_eph_data" type="ProcessGnssEphData_Fptr" sequence="11" description="callback handler for GNSS EPH data"/>
         </Struct>
 
@@ -250,8 +250,8 @@
             <Parameter variable_name="gnss_eph_stop_response" type="RespGnssEphStopDataReq *" description="request GNSS EPH stop"/>
         </FunctionPtr>
 
-        <FunctionPtr name="ProcessRespGnssEphStartDataReq_Fptr" description="Callback for GNSS EPS start data request" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
-            <Parameter variable_name="gnss_eph_start_response" type="RespGnssEphStartDataReq *" description="request GNSS EPH start"/>
+        <FunctionPtr name="ProcessRespGnssEphStartDataReq_Fptr" description="Callback for GNSS EPS start data response" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="gnss_eph_start_response" type="RespGnssEphStartDataReq *" description="response GNSS EPH data start"/>
         </FunctionPtr>
 
         <FunctionPtr name="ProcessGnssEphData_Fptr" description="Callback for GNSS EPS data" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">

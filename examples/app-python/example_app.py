@@ -94,24 +94,24 @@ class Controller:
         logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude} sd_lat={loc.sd_latitude}, sd_lng={loc.sd_longitude}, sd_alt={loc.sd_altitude}")
     
     def handle_gnss_data(self, ctx):
-        periodicity_in_ms = 2000    # Periodicity = 0 indicates one time GNSS EPH data
+        periodicity_in_ms = 2000    # Periodicity = 0 indicates one time GNSS EPH data. Max is 1 minute
         eph2_enable = 1
         if ctx.params.lower() == "stop":
             logger.info("Sending GNSS EPH data stop request")
             resp = ctx.client.gnss_eph_stop_data_req()
             if (resp == True):
-                logger.info("Stopping request success")
+                logger.info("GNSS EPH data stop request success")
             else:
-                logger.info("Stopping request failed")
+                logger.info("GNSS EPH data stop request failed")
         elif ctx.params.lower() == "start":
             logger.info("Sending GNSS EPH data start request")
             resp = ctx.client.gnss_eph_start_data_req(periodicity_in_ms, eph2_enable)
             if (resp.req_status == ADCS_start_success):
-                logger.info("Starting request success")
+                logger.info("GNSS EPH data start request success")
             elif (resp.req_status == ADCS_start_reconfigured):
-                logger.info("Reconfiguring ADCS request success")
+                logger.info("Reconfiguring GNSS EPH data start request success")
             else:
-                logger.info("Starting request failed")
+                logger.info("GNSS EPH data start request failed")
         else:
             logger.info("Wrong parameters. Parameter can be 'stop' or 'start'")
 
@@ -280,7 +280,7 @@ def new():
     app.mount_sequence("StageFile",ctl.handle_stage_filedownload)
     app.mount_sequence("PowerControl", ctl.handle_power_control)
     app.mount_sequence("TestCANBus", ctl.handle_test_can_bus)
-    app.mount_sequence("GNSSData", ctl.handle_gnss_data)
+    app.mount_sequence("GnssEphData", ctl.handle_gnss_data)
     return app
 
 def set_payload_values(payload_app):
