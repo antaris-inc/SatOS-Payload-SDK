@@ -156,7 +156,7 @@ class ChannelClient:
             'ReqPayloadMetrics':self._handle_payload_metrics,
             'RespGnssEphStopDataReq':self._handle_response,
             'RespGnssEphStartDataReq': self._handle_response,
-            'GnssEphData': gnss_eph_data_cb
+            'GnssEphData': gnss_eph_data_cb,
             'RespGetEpsVoltageStopReq':self._handle_response,
             'RespGetEpsVoltageStartReq': self._handle_response,
             'GetEpsVoltage': get_eps_voltage_cb
