@@ -89,6 +89,21 @@ class AntarisapiApplicationCallbackStub(object):
                 request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.GnssEphData.SerializeToString,
                 response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 _registered_method=True)
+        self.PA_ProcessRespGetEpsVoltageStopReq = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespGetEpsVoltageStopReq',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespGetEpsVoltageStopReq.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
+        self.PA_ProcessRespGetEpsVoltageStartReq = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespGetEpsVoltageStartReq',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespGetEpsVoltageStartReq.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
+        self.PA_ProcessGetEpsVoltage = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessGetEpsVoltage',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.GetEpsVoltage.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
 
 
 class AntarisapiApplicationCallbackServicer(object):
@@ -160,6 +175,24 @@ class AntarisapiApplicationCallbackServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def PA_ProcessRespGetEpsVoltageStopReq(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def PA_ProcessRespGetEpsVoltageStartReq(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def PA_ProcessGetEpsVoltage(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AntarisapiApplicationCallbackServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -216,6 +249,21 @@ def add_AntarisapiApplicationCallbackServicer_to_server(servicer, server):
             'PA_ProcessGnssEphData': grpc.unary_unary_rpc_method_handler(
                     servicer.PA_ProcessGnssEphData,
                     request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.GnssEphData.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PA_ProcessRespGetEpsVoltageStopReq': grpc.unary_unary_rpc_method_handler(
+                    servicer.PA_ProcessRespGetEpsVoltageStopReq,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespGetEpsVoltageStopReq.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PA_ProcessRespGetEpsVoltageStartReq': grpc.unary_unary_rpc_method_handler(
+                    servicer.PA_ProcessRespGetEpsVoltageStartReq,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespGetEpsVoltageStartReq.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PA_ProcessGetEpsVoltage': grpc.unary_unary_rpc_method_handler(
+                    servicer.PA_ProcessGetEpsVoltage,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.GetEpsVoltage.FromString,
                     response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
     }
@@ -526,6 +574,87 @@ class AntarisapiApplicationCallback(object):
             metadata,
             _registered_method=True)
 
+    @staticmethod
+    def PA_ProcessRespGetEpsVoltageStopReq(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespGetEpsVoltageStopReq',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespGetEpsVoltageStopReq.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PA_ProcessRespGetEpsVoltageStartReq(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespGetEpsVoltageStartReq',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespGetEpsVoltageStartReq.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PA_ProcessGetEpsVoltage(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessGetEpsVoltage',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.GetEpsVoltage.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
 
 class AntarisapiPayloadControllerStub(object):
     """Missing associated documentation comment in .proto file."""
@@ -584,6 +713,16 @@ class AntarisapiPayloadControllerStub(object):
         self.PC_gnss_eph_start_req = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_gnss_eph_start_req',
                 request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGnssEphStartDataReq.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
+        self.PC_get_eps_voltage_stop_req = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_get_eps_voltage_stop_req',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGetEpsVoltageStopReq.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
+        self.PC_get_eps_voltage_start_req = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_get_eps_voltage_start_req',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGetEpsVoltageStartReq.SerializeToString,
                 response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 _registered_method=True)
 
@@ -651,6 +790,18 @@ class AntarisapiPayloadControllerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def PC_get_eps_voltage_stop_req(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def PC_get_eps_voltage_start_req(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AntarisapiPayloadControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -702,6 +853,16 @@ def add_AntarisapiPayloadControllerServicer_to_server(servicer, server):
             'PC_gnss_eph_start_req': grpc.unary_unary_rpc_method_handler(
                     servicer.PC_gnss_eph_start_req,
                     request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGnssEphStartDataReq.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PC_get_eps_voltage_stop_req': grpc.unary_unary_rpc_method_handler(
+                    servicer.PC_get_eps_voltage_stop_req,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGetEpsVoltageStopReq.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PC_get_eps_voltage_start_req': grpc.unary_unary_rpc_method_handler(
+                    servicer.PC_get_eps_voltage_start_req,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGetEpsVoltageStartReq.FromString,
                     response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
     }
@@ -974,6 +1135,60 @@ class AntarisapiPayloadController(object):
             target,
             '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_gnss_eph_start_req',
             satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGnssEphStartDataReq.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PC_get_eps_voltage_stop_req(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_get_eps_voltage_stop_req',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGetEpsVoltageStopReq.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PC_get_eps_voltage_start_req(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_get_eps_voltage_start_req',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGetEpsVoltageStartReq.SerializeToString,
             satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options,
             channel_credentials,

@@ -619,7 +619,7 @@ def app_to_peer_CmdSequenceDoneParams(app_struct):
     return antaris_api_pb2.CmdSequenceDoneParams(sequence_id = app_struct.sequence_id)
 
 ## @class: ReqGnssEphStopDataReq
-## @brief: Request parameters for Payload Power Control
+## @brief: Request GNSS EPH data stop
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
 class ReqGnssEphStopDataReq:
     def __init__(self, correlation_id):
@@ -643,9 +643,9 @@ def app_to_peer_ReqGnssEphStopDataReq(app_struct):
     return antaris_api_pb2.ReqGnssEphStopDataReq(correlation_id = app_struct.correlation_id)
 
 ## @class: RespGnssEphStopDataReq
-## @brief: Response parameters for Payload Power Control request
+## @brief: Response to GNSS EPH data stop request
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
-## @param: req_status                                      :    status of payload-power-control request         
+## @param: req_status                                      :    status of GNSS EPH data stop request            
 class RespGnssEphStopDataReq:
     def __init__(self, correlation_id, req_status):
         self.correlation_id = correlation_id
@@ -672,7 +672,7 @@ def app_to_peer_RespGnssEphStopDataReq(app_struct):
     return antaris_api_pb2.RespGnssEphStopDataReq(correlation_id = app_struct.correlation_id, req_status = app_struct.req_status)
 
 ## @class: ReqGnssEphStartDataReq
-## @brief: Request parameters for Payload Power Control
+## @brief: Request GNSS EPH data start
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
 ## @param: periodicity_in_ms                               :    Time between consecutive notifications in ms    
 ## @param: eph2_enable                                     :    0 = disable eph2, 1 = enable eph2               
@@ -706,9 +706,9 @@ def app_to_peer_ReqGnssEphStartDataReq(app_struct):
     return antaris_api_pb2.ReqGnssEphStartDataReq(correlation_id = app_struct.correlation_id, periodicity_in_ms = app_struct.periodicity_in_ms, eph2_enable = app_struct.eph2_enable)
 
 ## @class: RespGnssEphStartDataReq
-## @brief: Response parameters for Payload Power Control request
+## @brief: Response to GNSS EPH data start request
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
-## @param: req_status                                      :    status of payload-power-control request         
+## @param: req_status                                      :    status of GNSS EPH data start request           
 class RespGnssEphStartDataReq:
     def __init__(self, correlation_id, req_status):
         self.correlation_id = correlation_id
@@ -848,6 +848,146 @@ def peer_to_app_GnssEphData(peer_struct):
 def app_to_peer_GnssEphData(app_struct):
     return antaris_api_pb2.GnssEphData(correlation_id = app_struct.correlation_id, gps_fix_time = app_struct.gps_fix_time, gps_sys_time = app_struct.gps_sys_time, obc_time = app_struct.obc_time, gps_position_ecef = app_struct.gps_position_ecef, gps_velocity_ecef = app_struct.gps_velocity_ecef, gps_validity_flag_pos_vel = app_struct.gps_validity_flag_pos_vel, adcs_time = app_struct.adcs_time, position_wrt_eci = app_struct.position_wrt_eci, velocity_wrt_eci = app_struct.velocity_wrt_eci, position_wrt_ecef = app_struct.position_wrt_ecef, velocity_wrt_ecef = app_struct.velocity_wrt_ecef, body_rate = app_struct.body_rate, attitude = app_struct.attitude, adcs_pos = app_struct.adcs_pos, nadir_vector_body = app_struct.nadir_vector_body, gd_nadir_vector_body = app_struct.gd_nadir_vector_body, beta_angle = app_struct.beta_angle, validity_flags = app_struct.validity_flags)
 
+## @class: ReqGetEpsVoltageStopReq
+## @brief: Stop request get-eps-voltage
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+class ReqGetEpsVoltageStopReq:
+    def __init__(self, correlation_id):
+        self.correlation_id = correlation_id
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_ReqGetEpsVoltageStopReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    return ReqGetEpsVoltageStopReq(correlation_id)
+
+def app_to_peer_ReqGetEpsVoltageStopReq(app_struct):
+    return antaris_api_pb2.ReqGetEpsVoltageStopReq(correlation_id = app_struct.correlation_id)
+
+## @class: RespGetEpsVoltageStopReq
+## @brief: Response to stop get-eps-voltage
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: req_status                                      :    status of get-eps-voltage-stop request          
+class RespGetEpsVoltageStopReq:
+    def __init__(self, correlation_id, req_status):
+        self.correlation_id = correlation_id
+        self.req_status = req_status
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "req_status:\n"
+        ret_str += str(self.req_status) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_RespGetEpsVoltageStopReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    req_status = peer_struct.req_status
+    return RespGetEpsVoltageStopReq(correlation_id, req_status)
+
+def app_to_peer_RespGetEpsVoltageStopReq(app_struct):
+    return antaris_api_pb2.RespGetEpsVoltageStopReq(correlation_id = app_struct.correlation_id, req_status = app_struct.req_status)
+
+## @class: ReqGetEpsVoltageStartReq
+## @brief: Start request eps voltage
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: periodicity_in_ms                               :    Time between consecutive notifications in ms    
+class ReqGetEpsVoltageStartReq:
+    def __init__(self, correlation_id, periodicity_in_ms):
+        self.correlation_id = correlation_id
+        self.periodicity_in_ms = periodicity_in_ms
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "periodicity_in_ms:\n"
+        ret_str += str(self.periodicity_in_ms) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_ReqGetEpsVoltageStartReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    periodicity_in_ms = peer_struct.periodicity_in_ms
+    return ReqGetEpsVoltageStartReq(correlation_id, periodicity_in_ms)
+
+def app_to_peer_ReqGetEpsVoltageStartReq(app_struct):
+    return antaris_api_pb2.ReqGetEpsVoltageStartReq(correlation_id = app_struct.correlation_id, periodicity_in_ms = app_struct.periodicity_in_ms)
+
+## @class: RespGetEpsVoltageStartReq
+## @brief: Response to start get eps voltage
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: req_status                                      :    status of get-eps-voltage-start request         
+class RespGetEpsVoltageStartReq:
+    def __init__(self, correlation_id, req_status):
+        self.correlation_id = correlation_id
+        self.req_status = req_status
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "req_status:\n"
+        ret_str += str(self.req_status) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_RespGetEpsVoltageStartReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    req_status = peer_struct.req_status
+    return RespGetEpsVoltageStartReq(correlation_id, req_status)
+
+def app_to_peer_RespGetEpsVoltageStartReq(app_struct):
+    return antaris_api_pb2.RespGetEpsVoltageStartReq(correlation_id = app_struct.correlation_id, req_status = app_struct.req_status)
+
+## @class: GetEpsVoltage
+## @brief: get EPS voltage1
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: eps_voltage                                     :    EPS voltage                                     
+class GetEpsVoltage:
+    def __init__(self, correlation_id, eps_voltage):
+        self.correlation_id = correlation_id
+        self.eps_voltage = eps_voltage
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "eps_voltage:\n"
+        ret_str += str(self.eps_voltage) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_GetEpsVoltage(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    eps_voltage = peer_struct.eps_voltage
+    return GetEpsVoltage(correlation_id, eps_voltage)
+
+def app_to_peer_GetEpsVoltage(app_struct):
+    return antaris_api_pb2.GetEpsVoltage(correlation_id = app_struct.correlation_id, eps_voltage = app_struct.eps_voltage)
+
 ## @class: AntarisApiCallbackFuncList
 ## @brief: Callback-functions registration structure for channel creation
 ## @param: start_sequence                                  :    callback handler for start-sequence             
@@ -858,11 +998,14 @@ def app_to_peer_GnssEphData(app_struct):
 ## @param: process_response_stage_file_download            :    callback handler for stage file download response
 ## @param: process_response_payload_power_control          :    callback handler for payload power control response
 ## @param: req_payload_metrics                             :    callback handler for request payload stats from PC
-## @param: gnss_eph_stop_response                          :    callback handler for GNSS EPH data stop         
-## @param: gnss_eph_start_response                         :    callback handler for GNSS EPH data start        
-## @param: gnss_eph_data                                   :    callback handler for GNSS EPH data              
+## @param: process_response_gnss_eph_stop                  :    callback handler for GNSS EPH data stop response
+## @param: process_response_gnss_eph_start                 :    callback handler for GNSS EPH data start response
+## @param: process_cb_gnss_eph_data                        :    callback handler for GNSS EPH data              
+## @param: process_response_get_eps_voltage_stop           :    callback handler for get EPS voltage data stop  
+## @param: process_response_get_eps_voltage_start          :    callback handler for get EPS voltage data start 
+## @param: process_cb_get_eps_voltage                      :    callback handler for EPS voltage data           
 class AntarisApiCallbackFuncList:
-    def __init__(self, start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, gnss_eph_stop_response, gnss_eph_start_response, gnss_eph_data):
+    def __init__(self, start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage):
         self.start_sequence = start_sequence
         self.shutdown_app = shutdown_app
         self.process_health_check = process_health_check
@@ -871,9 +1014,12 @@ class AntarisApiCallbackFuncList:
         self.process_response_stage_file_download = process_response_stage_file_download
         self.process_response_payload_power_control = process_response_payload_power_control
         self.req_payload_metrics = req_payload_metrics
-        self.gnss_eph_stop_response = gnss_eph_stop_response
-        self.gnss_eph_start_response = gnss_eph_start_response
-        self.gnss_eph_data = gnss_eph_data
+        self.process_response_gnss_eph_stop = process_response_gnss_eph_stop
+        self.process_response_gnss_eph_start = process_response_gnss_eph_start
+        self.process_cb_gnss_eph_data = process_cb_gnss_eph_data
+        self.process_response_get_eps_voltage_stop = process_response_get_eps_voltage_stop
+        self.process_response_get_eps_voltage_start = process_response_get_eps_voltage_start
+        self.process_cb_get_eps_voltage = process_cb_get_eps_voltage
 
     def __str__(self):
         ret_str = ""
@@ -893,12 +1039,18 @@ class AntarisApiCallbackFuncList:
         ret_str += str(self.process_response_payload_power_control) + "\n"
         ret_str += "req_payload_metrics:\n"
         ret_str += str(self.req_payload_metrics) + "\n"
-        ret_str += "gnss_eph_stop_response:\n"
-        ret_str += str(self.gnss_eph_stop_response) + "\n"
-        ret_str += "gnss_eph_start_response:\n"
-        ret_str += str(self.gnss_eph_start_response) + "\n"
-        ret_str += "gnss_eph_data:\n"
-        ret_str += str(self.gnss_eph_data) + "\n"
+        ret_str += "process_response_gnss_eph_stop:\n"
+        ret_str += str(self.process_response_gnss_eph_stop) + "\n"
+        ret_str += "process_response_gnss_eph_start:\n"
+        ret_str += str(self.process_response_gnss_eph_start) + "\n"
+        ret_str += "process_cb_gnss_eph_data:\n"
+        ret_str += str(self.process_cb_gnss_eph_data) + "\n"
+        ret_str += "process_response_get_eps_voltage_stop:\n"
+        ret_str += str(self.process_response_get_eps_voltage_stop) + "\n"
+        ret_str += "process_response_get_eps_voltage_start:\n"
+        ret_str += str(self.process_response_get_eps_voltage_start) + "\n"
+        ret_str += "process_cb_get_eps_voltage:\n"
+        ret_str += str(self.process_cb_get_eps_voltage) + "\n"
 
         return ret_str
 
@@ -914,13 +1066,16 @@ def peer_to_app_AntarisApiCallbackFuncList(peer_struct):
     process_response_stage_file_download = peer_struct.process_response_stage_file_download
     process_response_payload_power_control = peer_struct.process_response_payload_power_control
     req_payload_metrics = peer_struct.req_payload_metrics
-    gnss_eph_stop_response = peer_struct.gnss_eph_stop_response
-    gnss_eph_start_response = peer_struct.gnss_eph_start_response
-    gnss_eph_data = peer_struct.gnss_eph_data
-    return AntarisApiCallbackFuncList(start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, gnss_eph_stop_response, gnss_eph_start_response, gnss_eph_data)
+    process_response_gnss_eph_stop = peer_struct.process_response_gnss_eph_stop
+    process_response_gnss_eph_start = peer_struct.process_response_gnss_eph_start
+    process_cb_gnss_eph_data = peer_struct.process_cb_gnss_eph_data
+    process_response_get_eps_voltage_stop = peer_struct.process_response_get_eps_voltage_stop
+    process_response_get_eps_voltage_start = peer_struct.process_response_get_eps_voltage_start
+    process_cb_get_eps_voltage = peer_struct.process_cb_get_eps_voltage
+    return AntarisApiCallbackFuncList(start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage)
 
 def app_to_peer_AntarisApiCallbackFuncList(app_struct):
-    return antaris_api_pb2.AntarisApiCallbackFuncList(start_sequence = app_struct.start_sequence, shutdown_app = app_struct.shutdown_app, process_health_check = app_struct.process_health_check, process_response_register = app_struct.process_response_register, process_response_get_current_location = app_struct.process_response_get_current_location, process_response_stage_file_download = app_struct.process_response_stage_file_download, process_response_payload_power_control = app_struct.process_response_payload_power_control, req_payload_metrics = app_struct.req_payload_metrics, gnss_eph_stop_response = app_struct.gnss_eph_stop_response, gnss_eph_start_response = app_struct.gnss_eph_start_response, gnss_eph_data = app_struct.gnss_eph_data)
+    return antaris_api_pb2.AntarisApiCallbackFuncList(start_sequence = app_struct.start_sequence, shutdown_app = app_struct.shutdown_app, process_health_check = app_struct.process_health_check, process_response_register = app_struct.process_response_register, process_response_get_current_location = app_struct.process_response_get_current_location, process_response_stage_file_download = app_struct.process_response_stage_file_download, process_response_payload_power_control = app_struct.process_response_payload_power_control, req_payload_metrics = app_struct.req_payload_metrics, process_response_gnss_eph_stop = app_struct.process_response_gnss_eph_stop, process_response_gnss_eph_start = app_struct.process_response_gnss_eph_start, process_cb_gnss_eph_data = app_struct.process_cb_gnss_eph_data, process_response_get_eps_voltage_stop = app_struct.process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start = app_struct.process_response_get_eps_voltage_start, process_cb_get_eps_voltage = app_struct.process_cb_get_eps_voltage)
 
 ## @class: AntarisReturnType
 ## @brief: Wrapper structure for AntarisReturnCode

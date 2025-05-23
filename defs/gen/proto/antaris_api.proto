@@ -167,7 +167,7 @@ message ReqGnssEphStopDataReq {
 
 message RespGnssEphStopDataReq {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
-    int32                           req_status       = 2; // status of payload-power-control request
+    int32                           req_status       = 2; // status of GNSS EPH data stop request
 }
 
 message ReqGnssEphStartDataReq {
@@ -178,7 +178,7 @@ message ReqGnssEphStartDataReq {
 
 message RespGnssEphStartDataReq {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
-    int32                           req_status       = 2; // status of payload-power-control request
+    int32                           req_status       = 2; // status of GNSS EPH data start request
 }
 
 message GnssEphData {
@@ -202,7 +202,29 @@ message GnssEphData {
     int32                           beta_angle       = 18; // Beta Angle
     int32                           validity_flags   = 19; // 1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity
 }
+message ReqGetEpsVoltageStopReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+}
 
+message RespGetEpsVoltageStopReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           req_status       = 2; // status of get-eps-voltage-stop request
+}
+
+message ReqGetEpsVoltageStartReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           periodicity_in_ms = 2; // Time between consecutive notifications in ms
+}
+
+message RespGetEpsVoltageStartReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           req_status       = 2; // status of get-eps-voltage-start request
+}
+
+message GetEpsVoltage {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           eps_voltage      = 2; // EPS voltage
+}
 message AntarisCorrelationId {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
 }
@@ -223,6 +245,9 @@ service AntarisapiApplicationCallback {
     rpc PA_ProcessRespGnssEphStopDataReq(RespGnssEphStopDataReq) returns (AntarisReturnType) {}
     rpc PA_ProcessRespGnssEphStartDataReq(RespGnssEphStartDataReq) returns (AntarisReturnType) {}
     rpc PA_ProcessGnssEphData(GnssEphData) returns (AntarisReturnType) {}
+    rpc PA_ProcessRespGetEpsVoltageStopReq(RespGetEpsVoltageStopReq) returns (AntarisReturnType) {}
+    rpc PA_ProcessRespGetEpsVoltageStartReq(RespGetEpsVoltageStartReq) returns (AntarisReturnType) {}
+    rpc PA_ProcessGetEpsVoltage(GetEpsVoltage) returns (AntarisReturnType) {}
 }
 
 service AntarisapiPayloadController {
@@ -236,5 +261,7 @@ service AntarisapiPayloadController {
     rpc PC_response_payload_metrics(PayloadMetricsResponse) returns (AntarisReturnType) {}
     rpc PC_gnss_eph_stop_req(ReqGnssEphStopDataReq) returns (AntarisReturnType) {}
     rpc PC_gnss_eph_start_req(ReqGnssEphStartDataReq) returns (AntarisReturnType) {}
+    rpc PC_get_eps_voltage_stop_req(ReqGetEpsVoltageStopReq) returns (AntarisReturnType) {}
+    rpc PC_get_eps_voltage_start_req(ReqGetEpsVoltageStartReq) returns (AntarisReturnType) {}
 }
 

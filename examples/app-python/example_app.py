@@ -82,6 +82,9 @@ class Controller:
             print(f"{name}: {bit_value}")
         return True
     
+    def get_eps_voltage_handler(self, ctx):
+        logger.info(f"EPS voltage data received : {ctx}")
+        return True
     def handle_hello_world(self, ctx):
         logger.info("Handling sequence: hello, world!")
 
@@ -113,7 +116,23 @@ class Controller:
             else:
                 logger.info("GNSS EPH data start request failed")
         else:
-            logger.info("Wrong parameters. Parameter can be 'stop' or 'start'")
+            logger.info("Incorrect parameters. Parameter can be 'stop' or 'start'")
+
+    def handle_eps_voltage(self, ctx):
+        periodicity_in_ms = 2000   # Periodicity = 0 indicates one time GNSS EPH data. Max is 1 minute
+        if ctx.params.lower() == "stop":
+            logger.info("Sending Get Eps Voltage stop request")
+            resp = ctx.client.get_eps_voltage_stop_req()
+            if (resp == 0):
+                logger.info("Get Eps Voltage stop request success")
+            else:
+                logger.info("Get Eps Voltage stop request failed")
+        elif ctx.params.lower() == "start":
+            logger.info("Sending Get Eps Voltage start request")
+            resp = ctx.client.get_eps_voltage_start_req(periodicity_in_ms)
+            logger.info(f"Current voltage = {resp}")
+        else:
+            logger.info("Incorrect parameters. Parameter can be 'stop' or 'start'")
 
     def handle_power_control(self, ctx):
         logger.info("Handling payload power")
@@ -267,6 +286,7 @@ def new():
     app = app_framework.PayloadApplication()
     app.set_health_check(ctl.is_healthy)
     app.set_gnss_eph_data_cb(ctl.gnss_eph_data_handler)
+    app.set_get_eps_voltage_cb(ctl.get_eps_voltage_handler)
 
     # Sample function to add stats counters and names
     set_payload_values(app)
@@ -280,7 +300,8 @@ def new():
     app.mount_sequence("StageFile",ctl.handle_stage_filedownload)
     app.mount_sequence("PowerControl", ctl.handle_power_control)
     app.mount_sequence("TestCANBus", ctl.handle_test_can_bus)
-    app.mount_sequence("GnssEphData", ctl.handle_gnss_data)
+    app.mount_sequence("GetGnssEphData", ctl.handle_gnss_data)
+    app.mount_sequence("GetEpsVoltage", ctl.handle_eps_voltage)
     return app
 
 def set_payload_values(payload_app):
