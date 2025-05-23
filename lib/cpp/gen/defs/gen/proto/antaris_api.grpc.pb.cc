@@ -30,6 +30,9 @@ static const char* AntarisapiApplicationCallback_method_names[] = {
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessResponseStageFileDownload",
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessResponsePayloadPowerControl",
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessReqPayloadMetrics",
+  "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespGnssEphStopDataReq",
+  "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespGnssEphStartDataReq",
+  "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessGnssEphData",
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespGetEpsVoltageStopReq",
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespGetEpsVoltageStartReq",
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessGetEpsVoltage",
@@ -50,9 +53,12 @@ AntarisapiApplicationCallback::Stub::Stub(const std::shared_ptr< ::grpc::Channel
   , rpcmethod_PA_ProcessResponseStageFileDownload_(AntarisapiApplicationCallback_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PA_ProcessResponsePayloadPowerControl_(AntarisapiApplicationCallback_method_names[6], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PA_ProcessReqPayloadMetrics_(AntarisapiApplicationCallback_method_names[7], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_PA_ProcessRespGetEpsVoltageStopReq_(AntarisapiApplicationCallback_method_names[8], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_PA_ProcessRespGetEpsVoltageStartReq_(AntarisapiApplicationCallback_method_names[9], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_PA_ProcessGetEpsVoltage_(AntarisapiApplicationCallback_method_names[10], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PA_ProcessRespGnssEphStopDataReq_(AntarisapiApplicationCallback_method_names[8], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PA_ProcessRespGnssEphStartDataReq_(AntarisapiApplicationCallback_method_names[9], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PA_ProcessGnssEphData_(AntarisapiApplicationCallback_method_names[10], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PA_ProcessRespGetEpsVoltageStopReq_(AntarisapiApplicationCallback_method_names[11], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PA_ProcessRespGetEpsVoltageStartReq_(AntarisapiApplicationCallback_method_names[12], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PA_ProcessGetEpsVoltage_(AntarisapiApplicationCallback_method_names[13], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status AntarisapiApplicationCallback::Stub::PA_StartSequence(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::StartSequenceParams& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
@@ -239,6 +245,75 @@ void AntarisapiApplicationCallback::Stub::async::PA_ProcessReqPayloadMetrics(::g
   return result;
 }
 
+::grpc::Status AntarisapiApplicationCallback::Stub::PA_ProcessRespGnssEphStopDataReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStopDataReq& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::RespGnssEphStopDataReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PA_ProcessRespGnssEphStopDataReq_, context, request, response);
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessRespGnssEphStopDataReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStopDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::RespGnssEphStopDataReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessRespGnssEphStopDataReq_, context, request, response, std::move(f));
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessRespGnssEphStopDataReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStopDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessRespGnssEphStopDataReq_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::PrepareAsyncPA_ProcessRespGnssEphStopDataReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStopDataReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::RespGnssEphStopDataReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PA_ProcessRespGnssEphStopDataReq_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::AsyncPA_ProcessRespGnssEphStopDataReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStopDataReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPA_ProcessRespGnssEphStopDataReqRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AntarisapiApplicationCallback::Stub::PA_ProcessRespGnssEphStartDataReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStartDataReq& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::RespGnssEphStartDataReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PA_ProcessRespGnssEphStartDataReq_, context, request, response);
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessRespGnssEphStartDataReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStartDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::RespGnssEphStartDataReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessRespGnssEphStartDataReq_, context, request, response, std::move(f));
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessRespGnssEphStartDataReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStartDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessRespGnssEphStartDataReq_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::PrepareAsyncPA_ProcessRespGnssEphStartDataReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStartDataReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::RespGnssEphStartDataReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PA_ProcessRespGnssEphStartDataReq_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::AsyncPA_ProcessRespGnssEphStartDataReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStartDataReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPA_ProcessRespGnssEphStartDataReqRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AntarisapiApplicationCallback::Stub::PA_ProcessGnssEphData(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::GnssEphData& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::GnssEphData, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PA_ProcessGnssEphData_, context, request, response);
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessGnssEphData(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::GnssEphData* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::GnssEphData, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessGnssEphData_, context, request, response, std::move(f));
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessGnssEphData(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::GnssEphData* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessGnssEphData_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::PrepareAsyncPA_ProcessGnssEphDataRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::GnssEphData& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::GnssEphData, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PA_ProcessGnssEphData_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::AsyncPA_ProcessGnssEphDataRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::GnssEphData& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPA_ProcessGnssEphDataRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 ::grpc::Status AntarisapiApplicationCallback::Stub::PA_ProcessRespGetEpsVoltageStopReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
   return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PA_ProcessRespGetEpsVoltageStopReq_, context, request, response);
 }
@@ -392,6 +467,36 @@ AntarisapiApplicationCallback::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       AntarisapiApplicationCallback_method_names[8],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiApplicationCallback::Service, ::antaris_api_peer_to_peer::RespGnssEphStopDataReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiApplicationCallback::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::RespGnssEphStopDataReq* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PA_ProcessRespGnssEphStopDataReq(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiApplicationCallback_method_names[9],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiApplicationCallback::Service, ::antaris_api_peer_to_peer::RespGnssEphStartDataReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiApplicationCallback::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::RespGnssEphStartDataReq* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PA_ProcessRespGnssEphStartDataReq(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiApplicationCallback_method_names[10],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiApplicationCallback::Service, ::antaris_api_peer_to_peer::GnssEphData, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiApplicationCallback::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::GnssEphData* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PA_ProcessGnssEphData(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiApplicationCallback_method_names[11],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AntarisapiApplicationCallback::Service, ::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AntarisapiApplicationCallback::Service* service,
              ::grpc::ServerContext* ctx,
@@ -400,7 +505,7 @@ AntarisapiApplicationCallback::Service::Service() {
                return service->PA_ProcessRespGetEpsVoltageStopReq(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AntarisapiApplicationCallback_method_names[9],
+      AntarisapiApplicationCallback_method_names[12],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AntarisapiApplicationCallback::Service, ::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AntarisapiApplicationCallback::Service* service,
@@ -410,7 +515,7 @@ AntarisapiApplicationCallback::Service::Service() {
                return service->PA_ProcessRespGetEpsVoltageStartReq(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AntarisapiApplicationCallback_method_names[10],
+      AntarisapiApplicationCallback_method_names[13],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AntarisapiApplicationCallback::Service, ::antaris_api_peer_to_peer::GetEpsVoltage, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AntarisapiApplicationCallback::Service* service,
@@ -480,6 +585,27 @@ AntarisapiApplicationCallback::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
+::grpc::Status AntarisapiApplicationCallback::Service::PA_ProcessRespGnssEphStopDataReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStopDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AntarisapiApplicationCallback::Service::PA_ProcessRespGnssEphStartDataReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStartDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AntarisapiApplicationCallback::Service::PA_ProcessGnssEphData(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::GnssEphData* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
 ::grpc::Status AntarisapiApplicationCallback::Service::PA_ProcessRespGetEpsVoltageStopReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
   (void) context;
   (void) request;
@@ -511,6 +637,8 @@ static const char* AntarisapiPayloadController_method_names[] = {
   "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_response_health_check",
   "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_response_shutdown",
   "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_response_payload_metrics",
+  "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_gnss_eph_stop_req",
+  "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_gnss_eph_start_req",
   "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_get_eps_voltage_stop_req",
   "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_get_eps_voltage_start_req",
 };
@@ -530,8 +658,10 @@ AntarisapiPayloadController::Stub::Stub(const std::shared_ptr< ::grpc::ChannelIn
   , rpcmethod_PC_response_health_check_(AntarisapiPayloadController_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PC_response_shutdown_(AntarisapiPayloadController_method_names[6], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PC_response_payload_metrics_(AntarisapiPayloadController_method_names[7], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_PC_get_eps_voltage_stop_req_(AntarisapiPayloadController_method_names[8], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_PC_get_eps_voltage_start_req_(AntarisapiPayloadController_method_names[9], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PC_gnss_eph_stop_req_(AntarisapiPayloadController_method_names[8], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PC_gnss_eph_start_req_(AntarisapiPayloadController_method_names[9], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PC_get_eps_voltage_stop_req_(AntarisapiPayloadController_method_names[10], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PC_get_eps_voltage_start_req_(AntarisapiPayloadController_method_names[11], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status AntarisapiPayloadController::Stub::PC_register(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqRegisterParams& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
@@ -718,6 +848,52 @@ void AntarisapiPayloadController::Stub::async::PC_response_payload_metrics(::grp
   return result;
 }
 
+::grpc::Status AntarisapiPayloadController::Stub::PC_gnss_eph_stop_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PC_gnss_eph_stop_req_, context, request, response);
+}
+
+void AntarisapiPayloadController::Stub::async::PC_gnss_eph_stop_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PC_gnss_eph_stop_req_, context, request, response, std::move(f));
+}
+
+void AntarisapiPayloadController::Stub::async::PC_gnss_eph_stop_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PC_gnss_eph_stop_req_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiPayloadController::Stub::PrepareAsyncPC_gnss_eph_stop_reqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PC_gnss_eph_stop_req_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiPayloadController::Stub::AsyncPC_gnss_eph_stop_reqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPC_gnss_eph_stop_reqRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AntarisapiPayloadController::Stub::PC_gnss_eph_start_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PC_gnss_eph_start_req_, context, request, response);
+}
+
+void AntarisapiPayloadController::Stub::async::PC_gnss_eph_start_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PC_gnss_eph_start_req_, context, request, response, std::move(f));
+}
+
+void AntarisapiPayloadController::Stub::async::PC_gnss_eph_start_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PC_gnss_eph_start_req_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiPayloadController::Stub::PrepareAsyncPC_gnss_eph_start_reqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PC_gnss_eph_start_req_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiPayloadController::Stub::AsyncPC_gnss_eph_start_reqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPC_gnss_eph_start_reqRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 ::grpc::Status AntarisapiPayloadController::Stub::PC_get_eps_voltage_stop_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
   return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PC_get_eps_voltage_stop_req_, context, request, response);
 }
@@ -848,6 +1024,26 @@ AntarisapiPayloadController::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       AntarisapiPayloadController_method_names[8],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiPayloadController::Service, ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiPayloadController::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PC_gnss_eph_stop_req(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiPayloadController_method_names[9],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiPayloadController::Service, ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiPayloadController::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PC_gnss_eph_start_req(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiPayloadController_method_names[10],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AntarisapiPayloadController::Service, ::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AntarisapiPayloadController::Service* service,
              ::grpc::ServerContext* ctx,
@@ -856,7 +1052,7 @@ AntarisapiPayloadController::Service::Service() {
                return service->PC_get_eps_voltage_stop_req(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      AntarisapiPayloadController_method_names[9],
+      AntarisapiPayloadController_method_names[11],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AntarisapiPayloadController::Service, ::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AntarisapiPayloadController::Service* service,
@@ -920,6 +1116,20 @@ AntarisapiPayloadController::Service::~Service() {
 }
 
 ::grpc::Status AntarisapiPayloadController::Service::PC_response_payload_metrics(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::PayloadMetricsResponse* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AntarisapiPayloadController::Service::PC_gnss_eph_stop_req(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AntarisapiPayloadController::Service::PC_gnss_eph_start_req(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
   (void) context;
   (void) request;
   (void) response;

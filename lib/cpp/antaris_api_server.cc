@@ -257,6 +257,89 @@ class AppToPCClient {
 		}
   }
 
+    AntarisReturnCode InvokeProcessGnssEphData(GnssEphData *req_params)
+    {
+        antaris_api_peer_to_peer::GnssEphData cb_req;
+        antaris_api_peer_to_peer::AntarisReturnType cb_response;
+        Status cb_status;
+        // Context for the client. It could be used to convey extra information to
+        // the server and/or tweak certain RPC behaviors.
+        ClientContext context;
+
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
+
+        app_to_peer_GnssEphData(req_params, &cb_req);
+        
+        cb_status = app_grpc_handle_->PA_ProcessGnssEphData(&context, cb_req, &cb_response);
+
+        // Act upon its status.
+        if (cb_status.ok())
+        {
+            return (AntarisReturnCode)(cb_response.return_code());
+        }
+        else
+        {
+            return An_GENERIC_FAILURE;
+        }
+    }
+
+    AntarisReturnCode InvokeProcessResponseGnssEphStartReq(RespGnssEphStartDataReq *req_params)
+    {
+        antaris_api_peer_to_peer::RespGnssEphStartDataReq cb_req;
+        antaris_api_peer_to_peer::AntarisReturnType cb_response;
+        Status cb_status;
+        // Context for the client. It could be used to convey extra information to
+        // the server and/or tweak certain RPC behaviors.
+        ClientContext context;
+
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
+        app_to_peer_RespGnssEphStartDataReq(req_params, &cb_req);
+
+        cb_status = app_grpc_handle_->PA_ProcessRespGnssEphStartDataReq(&context, cb_req, &cb_response);
+
+        // Act upon its status.
+        if (cb_status.ok())
+        {
+            return (AntarisReturnCode)(cb_response.return_code());
+        }
+        else
+        {
+            return An_GENERIC_FAILURE;
+        }
+    }
+
+    AntarisReturnCode InvokeProcessResponseGnssEphStopReq(RespGnssEphStopDataReq *req_params)
+    {
+        antaris_api_peer_to_peer::RespGnssEphStopDataReq cb_req;
+        antaris_api_peer_to_peer::AntarisReturnType cb_response;
+        Status cb_status;
+        // Context for the client. It could be used to convey extra information to
+        // the server and/or tweak certain RPC behaviors.
+        ClientContext context;
+
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
+
+        app_to_peer_RespGnssEphStopDataReq(req_params, &cb_req);
+
+        cb_status = app_grpc_handle_->PA_ProcessRespGnssEphStopDataReq(&context, cb_req, &cb_response);
+
+        // Act upon its status.
+        if (cb_status.ok())
+        {
+            return (AntarisReturnCode)(cb_response.return_code());
+        }
+        else
+        {
+            return An_GENERIC_FAILURE;
+        }
+    }
+
   AntarisReturnCode InvokeProcessGetEpsVoltage(GetEpsVoltage *req_params)
   {
       antaris_api_peer_to_peer::GetEpsVoltage cb_req;
@@ -340,6 +423,7 @@ class AppToPCClient {
             return An_GENERIC_FAILURE;
         }
     }
+
  private:
   std::unique_ptr<antaris_api_peer_to_peer::AntarisapiApplicationCallback::Stub> app_grpc_handle_;
   std::uint32_t appId;
@@ -557,6 +641,38 @@ done:
         peer_to_app_PayloadMetricsResponse(request, &api_request);
 
         user_callbacks_(user_cb_ctx_ , cookie , e_app2PC_PayloadMetricsResponse, &api_request, &api_response.return_code);
+
+        app_to_peer_AntarisReturnType(&api_response, response);
+
+        return Status::OK;
+    }
+
+    Status PC_gnss_eph_stop_req(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
+    {
+        AppToPCCallbackParams_t api_request = {0};
+        AntarisReturnType api_response = {return_code : An_SUCCESS};
+        cookie_t cookie;
+        cookie = decodeCookie(context);
+
+        peer_to_app_RespGnssEphStopDataReq(request, &api_request);
+
+        user_callbacks_(user_cb_ctx_, cookie, e_app2PC_GnssEphStopReq, &api_request, &api_response.return_code);
+
+        app_to_peer_AntarisReturnType(&api_response, response);
+
+        return Status::OK;
+    }
+
+    Status PC_gnss_eph_start_req(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
+    {
+        AppToPCCallbackParams_t api_request = {0};
+        AntarisReturnType api_response = {return_code : An_SUCCESS};
+        cookie_t cookie;
+        cookie = decodeCookie(context);
+
+        peer_to_app_ReqGnssEphStartDataReq(request, &api_request);
+
+        user_callbacks_(user_cb_ctx_, cookie, e_app2PC_GnssEphStartReq, &api_request, &api_response.return_code);
 
         app_to_peer_AntarisReturnType(&api_response, response);
 
@@ -855,6 +971,18 @@ AntarisReturnCode an_pc_pa_invoke_api(PCToAppClientContext ctx, PCToAppApiId_e a
     case e_PC2App_ReqPayloadMetrics:
         ret = internal_ctx->client_api_handle->InvokeProcessReqPayloadMetrics(&api_params->payload_stats);
             break;
+
+    case e_PC2App_GnssEphData:
+        ret = internal_ctx->client_api_handle->InvokeProcessGnssEphData(&api_params->gnss_eph_data);
+        break;
+
+    case e_PC2App_responseGnssEphStartReq:
+        ret = internal_ctx->client_api_handle->InvokeProcessResponseGnssEphStartReq(&api_params->gnss_eph_start);
+        break;
+
+    case e_PC2App_responseGnssEphStopReq:
+        ret = internal_ctx->client_api_handle->InvokeProcessResponseGnssEphStopReq(&api_params->gnss_eph_stop);
+        break;
 
     case e_PC2App_GetEpsVoltage:
         ret = internal_ctx->client_api_handle->InvokeProcessGetEpsVoltage(&api_params->get_eps_voltage);

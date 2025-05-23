@@ -154,9 +154,11 @@ class ChannelClient:
             'RespStageFileDownload': self._handle_response,
             'RespPayloadPowerControl': self._handle_response,
             'ReqPayloadMetrics':self._handle_payload_metrics,
+            'RespGnssEphStopDataReq':self._handle_response,
+            'RespGnssEphStartDataReq': self._handle_response,
+            'GnssEphData': gnss_eph_data_cb
             'RespGetEpsVoltageStopReq':self._handle_response,
             'RespGetEpsVoltageStartReq': self._handle_response,
-            'GnssEphData': gnss_eph_data_cb,
             'GetEpsVoltage': get_eps_voltage_cb
         }
 

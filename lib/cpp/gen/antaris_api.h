@@ -121,6 +121,21 @@ typedef struct PayloadMetricsResponse PayloadMetricsResponse;
 struct CmdSequenceDoneParams;
 typedef struct CmdSequenceDoneParams CmdSequenceDoneParams;
 
+struct ReqGnssEphStopDataReq;
+typedef struct ReqGnssEphStopDataReq ReqGnssEphStopDataReq;
+
+struct RespGnssEphStopDataReq;
+typedef struct RespGnssEphStopDataReq RespGnssEphStopDataReq;
+
+struct ReqGnssEphStartDataReq;
+typedef struct ReqGnssEphStartDataReq ReqGnssEphStartDataReq;
+
+struct RespGnssEphStartDataReq;
+typedef struct RespGnssEphStartDataReq RespGnssEphStartDataReq;
+
+struct GnssEphData;
+typedef struct GnssEphData GnssEphData;
+
 struct ReqGetEpsVoltageStopReq;
 typedef struct ReqGetEpsVoltageStopReq ReqGetEpsVoltageStopReq;
 
@@ -228,6 +243,36 @@ typedef AntarisReturnCode
 );
 static inline void
 displayProcessReqPayloadMetrics_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessRespGnssEphStopDataReq_Fptr
+/// @typedef Callback for GNSS EPS stop data request
+
+typedef AntarisReturnCode
+(*ProcessRespGnssEphStopDataReq_Fptr)
+(
+    RespGnssEphStopDataReq *         ///< @param request GNSS EPH stop
+);
+static inline void
+displayProcessRespGnssEphStopDataReq_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessRespGnssEphStartDataReq_Fptr
+/// @typedef Callback for GNSS EPS start data response
+
+typedef AntarisReturnCode
+(*ProcessRespGnssEphStartDataReq_Fptr)
+(
+    RespGnssEphStartDataReq *        ///< @param response GNSS EPH data start
+);
+static inline void
+displayProcessRespGnssEphStartDataReq_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessGnssEphData_Fptr
+/// @typedef Callback for GNSS EPS data
+
+typedef AntarisReturnCode
+(*ProcessGnssEphData_Fptr)
+(
+    GnssEphData *                    ///< @param GNSS EPH data
+);
+static inline void
+displayProcessGnssEphData_Fptr(void *obj) { printf("%p\n", obj); }
 /// @brief Callback function type ProcessRespGetEpsVoltageStopReq_Fptr
 /// @typedef Callback for get EPS voltage stop data request
 
@@ -461,6 +506,78 @@ void displayCmdSequenceDoneParams(const void *obj);
 void app_to_peer_CmdSequenceDoneParams(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_CmdSequenceDoneParams(const void *ptr_src_peer, void *ptr_dst_app);
 
+/// @struct ReqGnssEphStopDataReq
+/// @brief Request GNSS EPH data stop
+struct ReqGnssEphStopDataReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+};
+
+void displayReqGnssEphStopDataReq(const void *obj);
+void app_to_peer_ReqGnssEphStopDataReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_ReqGnssEphStopDataReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespGnssEphStopDataReq
+/// @brief Response to GNSS EPH data stop request
+struct RespGnssEphStopDataReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    INT32                                           req_status;                                      ///< @var status of GNSS EPH data stop request
+};
+
+void displayRespGnssEphStopDataReq(const void *obj);
+void app_to_peer_RespGnssEphStopDataReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespGnssEphStopDataReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct ReqGnssEphStartDataReq
+/// @brief Request GNSS EPH data start
+struct ReqGnssEphStartDataReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT16                                          periodicity_in_ms;                               ///< @var Time between consecutive notifications in ms
+    INT8                                            eph2_enable;                                     ///< @var 0 = disable eph2, 1 = enable eph2
+};
+
+void displayReqGnssEphStartDataReq(const void *obj);
+void app_to_peer_ReqGnssEphStartDataReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_ReqGnssEphStartDataReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespGnssEphStartDataReq
+/// @brief Response to GNSS EPH data start request
+struct RespGnssEphStartDataReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    INT32                                           req_status;                                      ///< @var status of GNSS EPH data start request
+};
+
+void displayRespGnssEphStartDataReq(const void *obj);
+void app_to_peer_RespGnssEphStartDataReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespGnssEphStartDataReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct GnssEphData
+/// @brief GNSS Eph1/Eph2 data
+struct GnssEphData {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT32                                          gps_fix_time;                                    ///< @var GPS time
+    UINT32                                          gps_sys_time;                                    ///< @var GPS System time
+    UINT64                                          obc_time;                                        ///< @var OBC time
+    UINT32                                          gps_position_ecef[3];                            ///< @var GPS position
+    UINT32                                          gps_velocity_ecef[3];                            ///< @var GPS velocity
+    UINT32                                          gps_validity_flag_pos_vel;                       ///< @var GPS validity flag
+    UINT64                                          adcs_time;                                       ///< @var Orbit time
+    UINT64                                          position_wrt_eci[3];                             ///< @var Position
+    UINT64                                          velocity_wrt_eci[3];                             ///< @var Position
+    UINT64                                          position_wrt_ecef[3];                            ///< @var Position
+    UINT64                                          velocity_wrt_ecef[3];                            ///< @var Position
+    UINT32                                          body_rate[3];                                    ///< @var Body rate
+    UINT32                                          attitude[3];                                     ///< @var RPY WRT LVLH
+    UINT32                                          adcs_pos[3];                                     ///< @var Lat, Lon, Altitude (ADCS)
+    UINT32                                          nadir_vector_body[3];                            ///< @var Nadir vector
+    UINT32                                          gd_nadir_vector_body[3];                         ///< @var GD Nadir Vector Body
+    UINT32                                          beta_angle;                                      ///< @var Beta Angle
+    UINT16                                          validity_flags;                                  ///< @var 1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity
+};
+
+void displayGnssEphData(const void *obj);
+void app_to_peer_GnssEphData(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_GnssEphData(const void *ptr_src_peer, void *ptr_dst_app);
+
 /// @struct ReqGetEpsVoltageStopReq
 /// @brief Stop request get-eps-voltage
 struct ReqGetEpsVoltageStopReq {
@@ -526,9 +643,12 @@ struct AntarisApiCallbackFuncList {
     ProcessResponseStageFileDownload_Fptr           process_response_stage_file_download;            ///< @var callback handler for stage file download response
     ProcessResponsePayloadPowerControl_Fptr         process_response_payload_power_control;          ///< @var callback handler for payload power control response
     ProcessReqPayloadMetrics_Fptr                   req_payload_metrics;                             ///< @var callback handler for request payload stats from PC
-    ProcessRespGetEpsVoltageStopReq_Fptr            process_get_eps_voltage_stop_response;           ///< @var callback handler for get EPS voltage data stop
-    ProcessRespGetEpsVoltageStartReq_Fptr           process_get_eps_voltage_start_response;          ///< @var callback handler for get EPS voltage data start
-    ProcessGetEpsVoltage_Fptr                       process_get_eps_voltage;                         ///< @var callback handler for EPS voltage data
+    ProcessRespGnssEphStopDataReq_Fptr              process_response_gnss_eph_stop;                  ///< @var callback handler for GNSS EPH data stop response
+    ProcessRespGnssEphStartDataReq_Fptr             process_response_gnss_eph_start;                 ///< @var callback handler for GNSS EPH data start response
+    ProcessGnssEphData_Fptr                         process_cb_gnss_eph_data;                        ///< @var callback handler for GNSS EPH data
+    ProcessRespGetEpsVoltageStopReq_Fptr            process_response_get_eps_voltage_stop;           ///< @var callback handler for get EPS voltage data stop
+    ProcessRespGetEpsVoltageStartReq_Fptr           process_response_get_eps_voltage_start;          ///< @var callback handler for get EPS voltage data start
+    ProcessGetEpsVoltage_Fptr                       process_cb_get_eps_voltage;                      ///< @var callback handler for EPS voltage data
 };
 
 void displayAntarisApiCallbackFuncList(const void *obj);
@@ -648,6 +768,24 @@ api_pa_pc_response_payload_metrics
 (
     AntarisChannel                  channel,                         ///< @param channel context for API execution
     PayloadMetricsResponse *        response_payload_metrics_params  ///< @param Payload stats response parameters
+);
+
+/// @brief Function api_pa_pc_gnss_eph_stop_req
+/// @fn API to request to stop GNSS EPS
+AntarisReturnCode
+api_pa_pc_gnss_eph_stop_req
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    ReqGnssEphStopDataReq *         req_gnss_eph_stop                ///< @param gnss eph stop response parameters
+);
+
+/// @brief Function api_pa_pc_gnss_eph_start_req
+/// @fn API to request to start GNSS EPS
+AntarisReturnCode
+api_pa_pc_gnss_eph_start_req
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    ReqGnssEphStartDataReq *        req_gnss_eph_start               ///< @param gnss eph start response parameters
 );
 
 /// @brief Function api_pa_pc_get_eps_voltage_stop_req

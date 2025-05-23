@@ -37,6 +37,8 @@ typedef enum {
     e_app2PC_shutdownResponse,
     e_app2PC_PayloadMetricsResponse,
     e_app2PC_sdkVersionInfo,
+    e_app2PC_GnssEphStartReq,
+    e_app2PC_GnssEphStopReq,
     e_app2PC_GetEpsVoltageStartReq,
     e_app2PC_GetEpsVoltageStopReq,
     e_app2PC_MaxRequest
@@ -57,6 +59,9 @@ typedef union {
     RespHealthCheckParams           health_check_response;
     RespShutdownParams              shutdown_response;
     PayloadMetricsResponse          payload_metrics_respose;
+    ReqGnssEphStartDataReq          gnss_eph_start;
+    ReqGnssEphStopDataReq           gnss_eph_stop;
+    GnssEphData                     gnss_eph_data;
     ReqGetEpsVoltageStartReq        get_eps_voltage_start;
     ReqGetEpsVoltageStopReq         get_eps_voltage_stop;
     GetEpsVoltage                   get_eps_voltage;
@@ -86,6 +91,9 @@ typedef enum {
     e_PC2App_responsePayloadPowerControl,
     e_PC2App_processHealthCheck,
     e_PC2App_ReqPayloadMetrics,
+    e_PC2App_GnssEphData,
+    e_PC2App_responseGnssEphStartReq,
+    e_PC2App_responseGnssEphStopReq,
     e_PC2App_GetEpsVoltage,
     e_PC2App_respGetEpsVoltageStartReq,
     e_PC2App_respGetEpsVoltageStopReq,
@@ -101,6 +109,9 @@ typedef union {
     RespPayloadPowerControlParams       resp_payload_power_ctrl;
     HealthCheckParams                   health_check;
     ReqPayloadMetricsParams             payload_stats;
+    GnssEphData                         gnss_eph_data;
+    RespGnssEphStartDataReq             gnss_eph_start;
+    RespGnssEphStopDataReq              gnss_eph_stop;
     GetEpsVoltage                       get_eps_voltage;
     RespGetEpsVoltageStartReq           get_eps_voltage_start;
     RespGetEpsVoltageStopReq            get_eps_voltage_stop;

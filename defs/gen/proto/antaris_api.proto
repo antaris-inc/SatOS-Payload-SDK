@@ -161,6 +161,47 @@ message CmdSequenceDoneParams {
     string                          sequence_id      = 1; // sequence id that has completed execution. MUST agree with StartSequenceParams.sequence-id.
 }
 
+message ReqGnssEphStopDataReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+}
+
+message RespGnssEphStopDataReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           req_status       = 2; // status of GNSS EPH data stop request
+}
+
+message ReqGnssEphStartDataReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           periodicity_in_ms = 2; // Time between consecutive notifications in ms
+    int32                           eph2_enable      = 3; // 0 = disable eph2, 1 = enable eph2
+}
+
+message RespGnssEphStartDataReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           req_status       = 2; // status of GNSS EPH data start request
+}
+
+message GnssEphData {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           gps_fix_time     = 2; // GPS time
+    int32                           gps_sys_time     = 3; // GPS System time
+    int64                           obc_time         = 4; // OBC time
+    repeated int32                  gps_position_ecef = 5; // GPS position
+    repeated int32                  gps_velocity_ecef = 6; // GPS velocity
+    int32                           gps_validity_flag_pos_vel = 7; // GPS validity flag
+    int64                           adcs_time        = 8; // Orbit time
+    repeated int64                  position_wrt_eci = 9; // Position
+    repeated int64                  velocity_wrt_eci = 10; // Position
+    repeated int64                  position_wrt_ecef = 11; // Position
+    repeated int64                  velocity_wrt_ecef = 12; // Position
+    repeated int32                  body_rate        = 13; // Body rate
+    repeated int32                  attitude         = 14; // RPY WRT LVLH
+    repeated int32                  adcs_pos         = 15; // Lat, Lon, Altitude (ADCS)
+    repeated int32                  nadir_vector_body = 16; // Nadir vector
+    repeated int32                  gd_nadir_vector_body = 17; // GD Nadir Vector Body
+    int32                           beta_angle       = 18; // Beta Angle
+    int32                           validity_flags   = 19; // 1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity
+}
 message ReqGetEpsVoltageStopReq {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
 }
@@ -201,6 +242,9 @@ service AntarisapiApplicationCallback {
     rpc PA_ProcessResponseStageFileDownload(RespStageFileDownloadParams) returns (AntarisReturnType) {}
     rpc PA_ProcessResponsePayloadPowerControl(RespPayloadPowerControlParams) returns (AntarisReturnType) {}
     rpc PA_ProcessReqPayloadMetrics(ReqPayloadMetricsParams) returns (AntarisReturnType) {}
+    rpc PA_ProcessRespGnssEphStopDataReq(RespGnssEphStopDataReq) returns (AntarisReturnType) {}
+    rpc PA_ProcessRespGnssEphStartDataReq(RespGnssEphStartDataReq) returns (AntarisReturnType) {}
+    rpc PA_ProcessGnssEphData(GnssEphData) returns (AntarisReturnType) {}
     rpc PA_ProcessRespGetEpsVoltageStopReq(RespGetEpsVoltageStopReq) returns (AntarisReturnType) {}
     rpc PA_ProcessRespGetEpsVoltageStartReq(RespGetEpsVoltageStartReq) returns (AntarisReturnType) {}
     rpc PA_ProcessGetEpsVoltage(GetEpsVoltage) returns (AntarisReturnType) {}
@@ -215,6 +259,8 @@ service AntarisapiPayloadController {
     rpc PC_response_health_check(RespHealthCheckParams) returns (AntarisReturnType) {}
     rpc PC_response_shutdown(RespShutdownParams) returns (AntarisReturnType) {}
     rpc PC_response_payload_metrics(PayloadMetricsResponse) returns (AntarisReturnType) {}
+    rpc PC_gnss_eph_stop_req(ReqGnssEphStopDataReq) returns (AntarisReturnType) {}
+    rpc PC_gnss_eph_start_req(ReqGnssEphStartDataReq) returns (AntarisReturnType) {}
     rpc PC_get_eps_voltage_stop_req(ReqGetEpsVoltageStopReq) returns (AntarisReturnType) {}
     rpc PC_get_eps_voltage_start_req(ReqGetEpsVoltageStartReq) returns (AntarisReturnType) {}
 }
