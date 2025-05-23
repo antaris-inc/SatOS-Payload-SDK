@@ -115,7 +115,7 @@ class Controller:
             else:
                 logger.info("GNSS EPH data start request failed")
         else:
-            logger.info("Wrong parameters. Parameter can be 'stop' or 'start'")
+            logger.info("Incorrect parameters. Parameter can be 'stop' or 'start'")
 
     def handle_eps_voltage(self, ctx):
         periodicity_in_ms = 2000   # Periodicity = 0 indicates one time GNSS EPH data. Max is 1 minute
@@ -131,7 +131,7 @@ class Controller:
             resp = ctx.client.get_eps_voltage_start_req(periodicity_in_ms)
             logger.info(f"Current voltage = {resp}")
         else:
-            logger.info("Wrong parameters. Parameter can be 'stop' or 'start'")
+            logger.info("Incorrect parameters. Parameter can be 'stop' or 'start'")
 
     def handle_power_control(self, ctx):
         logger.info("Handling payload power")
