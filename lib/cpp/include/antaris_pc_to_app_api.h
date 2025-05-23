@@ -37,6 +37,9 @@ typedef enum {
     e_app2PC_shutdownResponse,
     e_app2PC_PayloadMetricsResponse,
     e_app2PC_sdkVersionInfo,
+    e_app2PC_GnssEphStartReq,
+    e_app2PC_GnssEphStopReq,
+    e_app2PC_MaxRequest
 } AppToPCCallbackId_e;
 
 typedef struct {
@@ -54,10 +57,13 @@ typedef union {
     RespHealthCheckParams           health_check_response;
     RespShutdownParams              shutdown_response;
     PayloadMetricsResponse          payload_metrics_respose;
+    ReqGnssEphStartDataReq          gnss_eph_start;
+    ReqGnssEphStopDataReq           gnss_eph_stop;
+    GnssEphData                     gnss_eph_data;
     AntarisAppSdkVersion_t          sdk_version;
 } AppToPCCallbackParams_t;
 
-typedef    UINT8 SHORT_APP_ID_t;
+typedef    UINT16 SHORT_APP_ID_t;
 #define AN_PS_APP_ID_INVALID       (SHORT_APP_ID_t)(-1)
 
 typedef struct {
@@ -80,6 +86,10 @@ typedef enum {
     e_PC2App_responsePayloadPowerControl,
     e_PC2App_processHealthCheck,
     e_PC2App_ReqPayloadMetrics,
+    e_PC2App_GnssEphData,
+    e_PC2App_responseGnssEphStartReq,
+    e_PC2App_responseGnssEphStopReq,
+    e_PC2App_MaxRequest,
 } PCToAppApiId_e;
 
 typedef union {
@@ -91,6 +101,9 @@ typedef union {
     RespPayloadPowerControlParams       resp_payload_power_ctrl;
     HealthCheckParams                   health_check;
     ReqPayloadMetricsParams             payload_stats;
+    GnssEphData                         gnss_eph_data;
+    RespGnssEphStartDataReq             gnss_eph_start;
+    RespGnssEphStopDataReq              gnss_eph_stop;
 } PCToAppApiParams_t;
 
 PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port, INT8 *client_ssl_addr, UINT32 ssl_flag);

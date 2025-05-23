@@ -30,6 +30,11 @@ g_Uart_Baudrate = 9600
 g_FileDownloadDir = "/opt/antaris/outbound/"    # path for staged file download
 g_StageFileName = "SampleFile.txt"              # name of staged file
 
+ADCS_start_success = 0
+ADCS_start_reconfigured = 1
+ADCS_start_failed = 2
+
+
 logger = logging.getLogger()
 
 
@@ -39,6 +44,44 @@ class Controller:
         logger.info("Health check succeeded")
         return True
 
+    def gnss_eph_data_handler(self, ctx):
+        logger.info("GNSS EPH data received")
+        gnss_data = ctx
+        # List of field names mapped to each bit position
+        fields = [
+            "Time Validity",
+            "ECI Pos/Vel Validity",
+            "ECEF Pos/Vel Validity",
+            "Rate Validity",
+            "Attitude Validity",
+            "Lat-Lon-Altitude Validity",
+            "Nadir Vector Validity",
+            "GD Nadir Vector Validity",
+            "Beta Angle Validity"
+        ]
+        logger.info(f"gps_fix_time: {gnss_data.gps_fix_time}")
+        logger.info(f"gps_sys_time: {gnss_data.gps_sys_time}")
+        logger.info(f"obc_time: {gnss_data.obc_time}")
+        logger.info(f"gps_position_ecef: {gnss_data.gps_position_ecef}")
+        logger.info(f"gps_velocity_ecef: {gnss_data.gps_velocity_ecef}")
+        logger.info(f"gps_validity_flag_pos_vel: {gnss_data.gps_validity_flag_pos_vel}")
+        logger.info(f"adcs_time: {gnss_data.adcs_time}")
+        logger.info(f"position_wrt_eci: {gnss_data.position_wrt_eci}")
+        logger.info(f"velocity_wrt_eci: {gnss_data.velocity_wrt_eci}")
+        logger.info(f"position_wrt_ecef: {gnss_data.position_wrt_ecef}")
+        logger.info(f"velocity_wrt_ecef: {gnss_data.velocity_wrt_ecef}")
+        logger.info(f"body_rate: {gnss_data.body_rate}")
+        logger.info(f"attitude: {gnss_data.attitude}")
+        logger.info(f"adcs_pos: {gnss_data.adcs_pos}")
+        logger.info(f"nadir_vector_body: {gnss_data.nadir_vector_body}")
+        logger.info(f"gd_nadir_vector_body: {gnss_data.gd_nadir_vector_body}")
+        logger.info(f"beta_angle: {gnss_data.beta_angle}")
+        # Print each bit's meaning
+        for i, name in enumerate(fields):
+            bit_value = (gnss_data.validity_flags >> i) & 1
+            print(f"{name}: {bit_value}")
+        return True
+    
     def handle_hello_world(self, ctx):
         logger.info("Handling sequence: hello, world!")
 
@@ -49,6 +92,28 @@ class Controller:
     def handle_log_location(self, ctx):
         loc = ctx.client.get_current_location()
         logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude} sd_lat={loc.sd_latitude}, sd_lng={loc.sd_longitude}, sd_alt={loc.sd_altitude}")
+    
+    def handle_gnss_data(self, ctx):
+        periodicity_in_ms = 2000    # Periodicity = 0 indicates one time GNSS EPH data. Max is 1 minute
+        eph2_enable = 1
+        if ctx.params.lower() == "stop":
+            logger.info("Sending GNSS EPH data stop request")
+            resp = ctx.client.gnss_eph_stop_data_req()
+            if (resp == True):
+                logger.info("GNSS EPH data stop request success")
+            else:
+                logger.info("GNSS EPH data stop request failed")
+        elif ctx.params.lower() == "start":
+            logger.info("Sending GNSS EPH data start request")
+            resp = ctx.client.gnss_eph_start_data_req(periodicity_in_ms, eph2_enable)
+            if (resp.req_status == ADCS_start_success):
+                logger.info("GNSS EPH data start request success")
+            elif (resp.req_status == ADCS_start_reconfigured):
+                logger.info("Reconfiguring GNSS EPH data start request success")
+            else:
+                logger.info("GNSS EPH data start request failed")
+        else:
+            logger.info("Wrong parameters. Parameter can be 'stop' or 'start'")
 
     def handle_power_control(self, ctx):
         logger.info("Handling payload power")
@@ -201,6 +266,7 @@ def new():
 
     app = app_framework.PayloadApplication()
     app.set_health_check(ctl.is_healthy)
+    app.set_gnss_eph_data_cb(ctl.gnss_eph_data_handler)
 
     # Sample function to add stats counters and names
     set_payload_values(app)
@@ -214,6 +280,7 @@ def new():
     app.mount_sequence("StageFile",ctl.handle_stage_filedownload)
     app.mount_sequence("PowerControl", ctl.handle_power_control)
     app.mount_sequence("TestCANBus", ctl.handle_test_can_bus)
+    app.mount_sequence("GnssEphData", ctl.handle_gnss_data)
     return app
 
 def set_payload_values(payload_app):

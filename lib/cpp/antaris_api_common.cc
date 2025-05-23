@@ -40,6 +40,10 @@ using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::Status;
 
+void app_to_peer_INT8(void *ptr_src_app, void *ptr_dst_peer)
+{
+    *(INT8 *)ptr_dst_peer = *(INT8 *)ptr_src_app;
+}
 void app_to_peer_UINT16(void *ptr_src_app, void *ptr_dst_peer)
 {
     *(INT32 *)ptr_dst_peer = *(UINT16 *)ptr_src_app;

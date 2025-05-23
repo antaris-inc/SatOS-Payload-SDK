@@ -225,7 +225,22 @@ class CPPField(PARSER_INTF.Field):
             targetFile.write("{}{}(&src->{}, &{}); // {}\n\n".format(gIndent, get_app_to_peer_fn_for_type(self.type), self.name, tmpVarName, self.name))
             targetFile.write("{}dst->set_{}({}{});\n\n".format(gIndent, self.name, type_cast, tmpVarName))
         else:
-            if self.type != "INT8":
+            if self.type in ("UINT32", "UINT64", "INT32"):
+                # Open for-loop
+                targetFile.write("{}for (int i = 0; i < {}; i++) {} // {}\n".format(gIndent, self.array_xml, "{", self.name))
+
+                # Declare temporary variable
+                targetFile.write("{}{} converted_value;\n".format(gIndent * 2, appint_type_to_peerint_type(self.type)))
+
+                # Call the app_to_peer conversion function
+                targetFile.write("{}{}(&src->{}[i], &converted_value);\n".format(
+                    gIndent * 2, get_app_to_peer_fn_for_type(self.type), self.name))
+                # Call protobuf add_ method
+                targetFile.write("{}dst->add_{}(converted_value);\n".format(gIndent * 2, self.name))
+
+                # Close for-loop
+                targetFile.write("{}{}\n".format(gIndent, "}"))
+            elif self.type != "INT8":
                 # ::antaris_api_peer_to_peer::PayloadMetricsInfo *dst_info = dst->mutable_mystats(i);
                 # app_to_peer_PayloadMetricsInfo(&src->mystats[i], dst_info);
                 targetFile.write("{}for (int i = 0; i < {}; i++) {} // {}\n".format(gIndent, self.array_xml, "{", self.name))
@@ -256,7 +271,21 @@ class CPPField(PARSER_INTF.Field):
         if self.array == "":
             targetFile.write("{}dst->{} = {}src->{}();\n".format(gIndent, self.name, type_cast, self.name))
         else:
-            if self.type != "INT8":
+            if self.type == "UINT32":
+                targetFile.write("{}for (int i = 1; i < {}; i++) {} // {}\n".format(gIndent, self.array_xml, "{", self.name))
+                # Changed from using a reference to a value
+                targetFile.write("{}{} src_info = src->{}(i);\n".format(gIndent * 2, appint_type_to_peerint_type(self.type), self.name))
+                targetFile.write("{}{} *dst_info = &dst->{}[i];\n\n".format(gIndent * 2, appint_type_to_peerint_type(self.type), self.name))
+                targetFile.write("{}{}(&src_info, dst_info);\n".format(gIndent * 2, get_peer_to_app_fn_for_type(self.type)))
+                targetFile.write("{}{}\n".format(gIndent, "}"))
+            elif self.type == "UINT64":
+                targetFile.write("{}for (int i = 1; i < {}; i++) {} // {}\n".format(gIndent, self.array_xml, "{", self.name))
+                # Changed from using a reference to a value
+                targetFile.write("{}{} src_info = src->{}(i);\n".format(gIndent * 2, appint_type_to_peerint_type(self.type), self.name))
+                targetFile.write("{}{} *dst_info = &dst->{}[i];\n\n".format(gIndent * 2, appint_type_to_peerint_type(self.type), self.name))
+                targetFile.write("{}{}(&src_info, dst_info);\n".format(gIndent * 2, get_peer_to_app_fn_for_type(self.type)))
+                targetFile.write("{}{}\n".format(gIndent, "}"))
+            elif self.type != "INT8":
                 targetFile.write("{}for (int i = 0; i < {}; i++) {} // {}\n".format(gIndent, self.array_xml, "{", self.name))
                 #here imp
                 targetFile.write("{}const {}{} &src_info = src->{}(i);\n".format(gIndent * 2, namespace, appint_type_to_peerint_type(self.type), self.name))

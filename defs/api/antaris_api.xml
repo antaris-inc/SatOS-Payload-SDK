@@ -148,6 +148,48 @@
             <Field name="sequence_id" type="INT8" sequence="1" description="sequence id that has completed execution. MUST agree with StartSequenceParams.sequence-id." array="16"/>
         </Struct>
 
+        <Struct name="ReqGnssEphStopDataReq" description="Request GNSS EPH data stop">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+        </Struct>
+
+        <Struct name="RespGnssEphStopDataReq" description="Response to GNSS EPH data stop request">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="req_status" type="INT32" sequence="2" description="status of GNSS EPH data stop request"/>
+         </Struct>
+
+        <Struct name="ReqGnssEphStartDataReq" description="Request GNSS EPH data start">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="periodicity_in_ms" type="UINT16" sequence="2" description="Time between consecutive notifications in ms"/>
+            <Field name="eph2_enable" type="INT8" sequence="3" description="0 = disable eph2, 1 = enable eph2"/>
+        </Struct>
+
+        <Struct name="RespGnssEphStartDataReq" description="Response to GNSS EPH data start request">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="req_status" type="INT32" sequence="2" description="status of GNSS EPH data start request"/>
+         </Struct>
+
+        <Struct name="GnssEphData" description="GNSS Eph1/Eph2 data">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="gps_fix_time" type="UINT32" sequence="2" description="GPS time"/>
+            <Field name="gps_sys_time" type="UINT32" sequence="3" description="GPS System time"/>
+            <Field name="obc_time" type="UINT64" sequence="4" description="OBC time"/>
+            <Field name="gps_position_ecef" type="UINT32" sequence="5" description="GPS position" array="3"/>
+            <Field name="gps_velocity_ecef" type="UINT32" sequence="6" description="GPS velocity" array="3"/>
+            <Field name="gps_validity_flag_pos_vel" type="UINT32" sequence="7" description="GPS validity flag"/>
+            <Field name="adcs_time" type="UINT64" sequence="8" description="Orbit time"/>
+            <Field name="position_wrt_eci" type="UINT64" sequence="9" description="Position" array="3"/>
+            <Field name="velocity_wrt_eci" type="UINT64" sequence="10" description="Position" array="3"/>
+            <Field name="position_wrt_ecef" type="UINT64" sequence="11" description="Position" array="3"/>
+            <Field name="velocity_wrt_ecef" type="UINT64" sequence="12" description="Position" array="3"/>
+            <Field name="body_rate" type="UINT32" sequence="13" description="Body rate" array="3"/>
+            <Field name="attitude" type="UINT32" sequence="14" description="RPY WRT LVLH" array="3"/>
+            <Field name="adcs_pos" type="UINT32" sequence="15" description="Lat, Lon, Altitude (ADCS)" array="3"/>
+            <Field name="nadir_vector_body" type="UINT32" sequence="16" description="Nadir vector" array="3"/>
+            <Field name="gd_nadir_vector_body" type="UINT32" sequence="17" description="GD Nadir Vector Body" array="3"/>
+            <Field name="beta_angle" type="UINT32" sequence="18" description="Beta Angle"/>
+            <Field name="validity_flags" type="UINT16" sequence="19" description="1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity"/>
+        </Struct>
+    
         <Struct name="AntarisApiCallbackFuncList" description="Callback-functions registration structure for channel creation" consumed_by="Application">
             <Field name="start_sequence" type="StartSequence_Fptr" sequence="1" description="callback handler for start-sequence"/>
             <Field name="shutdown_app" type="ShutdownApp_Fptr" sequence="2" description="callback handler for shutdown-app"/>
@@ -157,6 +199,9 @@
             <Field name="process_response_stage_file_download" type="ProcessResponseStageFileDownload_Fptr" sequence="6" description="callback handler for stage file download response"/>
             <Field name="process_response_payload_power_control" type="ProcessResponsePayloadPowerControl_Fptr" sequence="7" description="callback handler for payload power control response"/>
             <Field name="req_payload_metrics" type="ProcessReqPayloadMetrics_Fptr" sequence="8" description="callback handler for request payload stats from PC"/>
+            <Field name="gnss_eph_stop_response" type="ProcessRespGnssEphStopDataReq_Fptr" sequence="9" description="callback handler for GNSS EPH data stop response"/>
+            <Field name="gnss_eph_start_response" type="ProcessRespGnssEphStartDataReq_Fptr" sequence="10" description="callback handler for GNSS EPH data start response"/>
+            <Field name="gnss_eph_data" type="ProcessGnssEphData_Fptr" sequence="11" description="callback handler for GNSS EPH data"/>
         </Struct>
 
         <Struct name="AntarisCorrelationId" description="Wrapper structure for correlation-id">
@@ -201,6 +246,18 @@
 
         <FunctionPtr name="ProcessReqPayloadMetrics_Fptr" description="payload stats callback" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
             <Parameter variable_name="req_payload_metrics" type="ReqPayloadMetricsParams *" description="request payload stats params"/>
+        </FunctionPtr>
+        
+        <FunctionPtr name="ProcessRespGnssEphStopDataReq_Fptr" description="Callback for GNSS EPS stop data request" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="gnss_eph_stop_response" type="RespGnssEphStopDataReq *" description="request GNSS EPH stop"/>
+        </FunctionPtr>
+
+        <FunctionPtr name="ProcessRespGnssEphStartDataReq_Fptr" description="Callback for GNSS EPS start data response" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="gnss_eph_start_response" type="RespGnssEphStartDataReq *" description="response GNSS EPH data start"/>
+        </FunctionPtr>
+
+        <FunctionPtr name="ProcessGnssEphData_Fptr" description="Callback for GNSS EPS data" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="gnss_eph_data" type="GnssEphData *" description="GNSS EPH data"/>
         </FunctionPtr>
     </Callbacks>
 
@@ -267,6 +324,18 @@
                         return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
             <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
             <Parameter variable_name="response_payload_metrics_params" type="PayloadMetricsResponse *" description="Payload stats response parameters"/>
+        </Function>
+
+        <Function name="api_pa_pc_gnss_eph_stop_req" description="API to request to stop GNSS EPS"
+                        return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
+            <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
+            <Parameter variable_name="req_gnss_eph_stop" type="ReqGnssEphStopDataReq *" description="gnss eph stop response parameters"/>
+        </Function>
+
+        <Function name="api_pa_pc_gnss_eph_start_req" description="API to request to start GNSS EPS"
+                        return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
+            <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
+            <Parameter variable_name="req_gnss_eph_start" type="ReqGnssEphStartDataReq *" description="gnss eph start response parameters"/>
         </Function>
 
     </Functions>

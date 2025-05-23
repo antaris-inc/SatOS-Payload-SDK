@@ -136,7 +136,7 @@ class SequenceHandler(Stoppable, threading.Thread):
 
 
 class ChannelClient:
-    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb):
+    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb):
         self._channel = None
         self._cond = threading.Condition()
         self._next_cid = 0
@@ -154,6 +154,9 @@ class ChannelClient:
             'RespStageFileDownload': self._handle_response,
             'RespPayloadPowerControl': self._handle_response,
             'ReqPayloadMetrics':self._handle_payload_metrics,
+            'RespGnssEphStopDataReq':self._handle_response,
+            'RespGnssEphStartDataReq': self._handle_response,
+            'GnssEphData': gnss_eph_data_cb
         }
 
     def _get_next_cid(self):
@@ -184,6 +187,50 @@ class ChannelClient:
             resp = api_client.api_pa_pc_get_current_location(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
                 logger.error("get_current_location request failed")
+                return None
+
+            resp_cond = threading.Condition()
+            resp_cond.acquire()
+
+            self._responses[params.correlation_id] = [resp_cond, None]
+
+        # wait for response trigger
+        resp_cond.wait()
+
+        with self._cond:
+            resp = self._responses[params.correlation_id][1]
+            del self._responses[params.correlation_id]
+
+        return resp
+
+    def gnss_eph_stop_data_req(self):
+        with self._cond:
+            params = api_types.ReqGnssEphStopDataReq(self._get_next_cid())
+            resp = api_client.api_pa_pc_gnss_eph_stop_req(self._channel, params)
+            if resp != api_types.AntarisReturnCode.An_SUCCESS:
+                logger.error("gnss_eph_stop_data_req request failed")
+                return None
+
+            resp_cond = threading.Condition()
+            resp_cond.acquire()
+
+            self._responses[params.correlation_id] = [resp_cond, None]
+
+        # wait for response trigger
+        resp_cond.wait()
+
+        with self._cond:
+            resp = self._responses[params.correlation_id][1]
+            del self._responses[params.correlation_id]
+
+        return resp
+    
+    def gnss_eph_start_data_req(self, periodicity_in_ms, eph2_enable):
+        with self._cond:
+            params = api_types.ReqGnssEphStartDataReq(self._get_next_cid(), periodicity_in_ms, eph2_enable)
+            resp = api_client.api_pa_pc_gnss_eph_start_req(self._channel, params)
+            if resp != api_types.AntarisReturnCode.An_SUCCESS:
+                logger.error("gnss_eph_start_data_req request failed")
                 return None
 
             resp_cond = threading.Condition()
@@ -292,6 +339,9 @@ class PayloadApplication(Stoppable):
 
         # default health check; can be overridden
         self.health_check_handler_func = lambda: True
+        
+        # default gnss data handler; can be overridden
+        self.gnss_eph_data_handler = lambda: True
 
         # abstracts access to channel APIs for sequences
         self.channel_client = None
@@ -310,6 +360,11 @@ class PayloadApplication(Stoppable):
     def set_health_check(self, health_check_handler_func):
         self.health_check_handler_func = health_check_handler_func
 
+    # Provided function should expect no arguments and return True or False
+    # to represent gnss eph data handling, respectively
+    def set_gnss_eph_data_cb(self, gnss_eph_data_handler):
+        self.gnss_eph_data_handler = gnss_eph_data_handler
+
     #TODO(bcwaldon): actually do something with the provided params
     def _handle_health_check(self, params):
         try:
@@ -327,7 +382,7 @@ class PayloadApplication(Stoppable):
         logger.info("payload app starting")
 
         if not self.channel_client:
-            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics)
+            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb)
         
         self.channel_client._connect()
 
@@ -419,3 +474,16 @@ class PayloadApplication(Stoppable):
             logger.error("sequence_done request failed: resp=%d" % resp)
 
         return api_types.AntarisReturnCode.An_SUCCESS
+
+    def _set_gnss_eph_data_cb(self, params):
+        logger.info("Handling GNSS EPH data")
+        try:
+            hv = self.gnss_eph_data_handler(params)
+        except:
+            logger.exception("Handling GNSS EPH data failed")
+            hv = False
+
+        if hv:
+            return api_types.AntarisReturnCode.An_SUCCESS
+        else:
+            return api_types.AntarisReturnCode.An_GENERIC_FAILURE

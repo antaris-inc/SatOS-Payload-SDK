@@ -266,6 +266,99 @@ struct CmdSequenceDoneParamsDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CmdSequenceDoneParamsDefaultTypeInternal _CmdSequenceDoneParams_default_instance_;
+constexpr ReqGnssEphStopDataReq::ReqGnssEphStopDataReq(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : correlation_id_(0){}
+struct ReqGnssEphStopDataReqDefaultTypeInternal {
+  constexpr ReqGnssEphStopDataReqDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~ReqGnssEphStopDataReqDefaultTypeInternal() {}
+  union {
+    ReqGnssEphStopDataReq _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ReqGnssEphStopDataReqDefaultTypeInternal _ReqGnssEphStopDataReq_default_instance_;
+constexpr RespGnssEphStopDataReq::RespGnssEphStopDataReq(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : correlation_id_(0)
+  , req_status_(0){}
+struct RespGnssEphStopDataReqDefaultTypeInternal {
+  constexpr RespGnssEphStopDataReqDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~RespGnssEphStopDataReqDefaultTypeInternal() {}
+  union {
+    RespGnssEphStopDataReq _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT RespGnssEphStopDataReqDefaultTypeInternal _RespGnssEphStopDataReq_default_instance_;
+constexpr ReqGnssEphStartDataReq::ReqGnssEphStartDataReq(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : correlation_id_(0)
+  , periodicity_in_ms_(0)
+  , eph2_enable_(0){}
+struct ReqGnssEphStartDataReqDefaultTypeInternal {
+  constexpr ReqGnssEphStartDataReqDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~ReqGnssEphStartDataReqDefaultTypeInternal() {}
+  union {
+    ReqGnssEphStartDataReq _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ReqGnssEphStartDataReqDefaultTypeInternal _ReqGnssEphStartDataReq_default_instance_;
+constexpr RespGnssEphStartDataReq::RespGnssEphStartDataReq(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : correlation_id_(0)
+  , req_status_(0){}
+struct RespGnssEphStartDataReqDefaultTypeInternal {
+  constexpr RespGnssEphStartDataReqDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~RespGnssEphStartDataReqDefaultTypeInternal() {}
+  union {
+    RespGnssEphStartDataReq _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT RespGnssEphStartDataReqDefaultTypeInternal _RespGnssEphStartDataReq_default_instance_;
+constexpr GnssEphData::GnssEphData(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : gps_position_ecef_()
+  , _gps_position_ecef_cached_byte_size_(0)
+  , gps_velocity_ecef_()
+  , _gps_velocity_ecef_cached_byte_size_(0)
+  , position_wrt_eci_()
+  , _position_wrt_eci_cached_byte_size_(0)
+  , velocity_wrt_eci_()
+  , _velocity_wrt_eci_cached_byte_size_(0)
+  , position_wrt_ecef_()
+  , _position_wrt_ecef_cached_byte_size_(0)
+  , velocity_wrt_ecef_()
+  , _velocity_wrt_ecef_cached_byte_size_(0)
+  , body_rate_()
+  , _body_rate_cached_byte_size_(0)
+  , attitude_()
+  , _attitude_cached_byte_size_(0)
+  , adcs_pos_()
+  , _adcs_pos_cached_byte_size_(0)
+  , nadir_vector_body_()
+  , _nadir_vector_body_cached_byte_size_(0)
+  , gd_nadir_vector_body_()
+  , _gd_nadir_vector_body_cached_byte_size_(0)
+  , correlation_id_(0)
+  , gps_fix_time_(0)
+  , obc_time_(int64_t{0})
+  , gps_sys_time_(0)
+  , gps_validity_flag_pos_vel_(0)
+  , adcs_time_(int64_t{0})
+  , beta_angle_(0)
+  , validity_flags_(0){}
+struct GnssEphDataDefaultTypeInternal {
+  constexpr GnssEphDataDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~GnssEphDataDefaultTypeInternal() {}
+  union {
+    GnssEphData _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT GnssEphDataDefaultTypeInternal _GnssEphData_default_instance_;
 constexpr AntarisCorrelationId::AntarisCorrelationId(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : correlation_id_(0){}
@@ -292,7 +385,7 @@ struct AntarisReturnTypeDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AntarisReturnTypeDefaultTypeInternal _AntarisReturnType_default_instance_;
 }  // namespace antaris_api_peer_to_peer
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[20];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[25];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[1];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto = nullptr;
 
@@ -457,6 +550,63 @@ const uint32_t TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto::offsets[]
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::CmdSequenceDoneParams, sequence_id_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqGnssEphStopDataReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqGnssEphStopDataReq, correlation_id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGnssEphStopDataReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGnssEphStopDataReq, correlation_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGnssEphStopDataReq, req_status_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqGnssEphStartDataReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqGnssEphStartDataReq, correlation_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqGnssEphStartDataReq, periodicity_in_ms_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::ReqGnssEphStartDataReq, eph2_enable_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGnssEphStartDataReq, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGnssEphStartDataReq, correlation_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespGnssEphStartDataReq, req_status_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, correlation_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, gps_fix_time_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, gps_sys_time_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, obc_time_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, gps_position_ecef_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, gps_velocity_ecef_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, gps_validity_flag_pos_vel_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, adcs_time_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, position_wrt_eci_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, velocity_wrt_eci_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, position_wrt_ecef_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, velocity_wrt_ecef_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, body_rate_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, attitude_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, adcs_pos_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, nadir_vector_body_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, gd_nadir_vector_body_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, beta_angle_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::GnssEphData, validity_flags_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::AntarisCorrelationId, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -490,8 +640,13 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 135, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqPayloadMetricsParams)},
   { 142, -1, -1, sizeof(::antaris_api_peer_to_peer::PayloadMetricsResponse)},
   { 152, -1, -1, sizeof(::antaris_api_peer_to_peer::CmdSequenceDoneParams)},
-  { 159, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisCorrelationId)},
-  { 166, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisReturnType)},
+  { 159, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGnssEphStopDataReq)},
+  { 166, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGnssEphStopDataReq)},
+  { 174, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGnssEphStartDataReq)},
+  { 183, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGnssEphStartDataReq)},
+  { 191, -1, -1, sizeof(::antaris_api_peer_to_peer::GnssEphData)},
+  { 216, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisCorrelationId)},
+  { 223, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisReturnType)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -513,6 +668,11 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_ReqPayloadMetricsParams_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_PayloadMetricsResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_CmdSequenceDoneParams_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_ReqGnssEphStopDataReq_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_RespGnssEphStopDataReq_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_ReqGnssEphStartDataReq_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_RespGnssEphStartDataReq_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_GnssEphData_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_AntarisCorrelationId_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_AntarisReturnType_default_instance_),
 };
@@ -562,7 +722,26 @@ const char descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[
   "\n\014used_counter\030\003 \001(\005\022=\n\007metrics\030\004 \003(\0132,."
   "antaris_api_peer_to_peer.PayloadMetricsI"
   "nfo\",\n\025CmdSequenceDoneParams\022\023\n\013sequence"
-  "_id\030\001 \001(\t\".\n\024AntarisCorrelationId\022\026\n\016cor"
+  "_id\030\001 \001(\t\"/\n\025ReqGnssEphStopDataReq\022\026\n\016co"
+  "rrelation_id\030\001 \001(\005\"D\n\026RespGnssEphStopDat"
+  "aReq\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nreq_stat"
+  "us\030\002 \001(\005\"`\n\026ReqGnssEphStartDataReq\022\026\n\016co"
+  "rrelation_id\030\001 \001(\005\022\031\n\021periodicity_in_ms\030"
+  "\002 \001(\005\022\023\n\013eph2_enable\030\003 \001(\005\"E\n\027RespGnssEp"
+  "hStartDataReq\022\026\n\016correlation_id\030\001 \001(\005\022\022\n"
+  "\nreq_status\030\002 \001(\005\"\325\003\n\013GnssEphData\022\026\n\016cor"
+  "relation_id\030\001 \001(\005\022\024\n\014gps_fix_time\030\002 \001(\005\022"
+  "\024\n\014gps_sys_time\030\003 \001(\005\022\020\n\010obc_time\030\004 \001(\003\022"
+  "\031\n\021gps_position_ecef\030\005 \003(\005\022\031\n\021gps_veloci"
+  "ty_ecef\030\006 \003(\005\022!\n\031gps_validity_flag_pos_v"
+  "el\030\007 \001(\005\022\021\n\tadcs_time\030\010 \001(\003\022\030\n\020position_"
+  "wrt_eci\030\t \003(\003\022\030\n\020velocity_wrt_eci\030\n \003(\003\022"
+  "\031\n\021position_wrt_ecef\030\013 \003(\003\022\031\n\021velocity_w"
+  "rt_ecef\030\014 \003(\003\022\021\n\tbody_rate\030\r \003(\005\022\020\n\010atti"
+  "tude\030\016 \003(\005\022\020\n\010adcs_pos\030\017 \003(\005\022\031\n\021nadir_ve"
+  "ctor_body\030\020 \003(\005\022\034\n\024gd_nadir_vector_body\030"
+  "\021 \003(\005\022\022\n\nbeta_angle\030\022 \001(\005\022\026\n\016validity_fl"
+  "ags\030\023 \001(\005\".\n\024AntarisCorrelationId\022\026\n\016cor"
   "relation_id\030\001 \001(\005\"U\n\021AntarisReturnType\022@"
   "\n\013return_code\030\001 \001(\0162+.antaris_api_peer_t"
   "o_peer.AntarisReturnCode*\354\001\n\021AntarisRetu"
@@ -571,7 +750,7 @@ const char descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[
   "\377\377\377\377\377\377\377\001\022 \n\023An_OUT_OF_RESOURCES\020\375\377\377\377\377\377\377\377"
   "\377\001\022\035\n\020An_NOT_PERMITTED\020\374\377\377\377\377\377\377\377\377\001\022\036\n\021An_"
   "INVALID_PARAMS\020\373\377\377\377\377\377\377\377\377\001\022$\n\027An_INCOMPAT"
-  "IBLE_VERSION\020\372\377\377\377\377\377\377\377\377\0012\235\010\n\035AntarisapiAp"
+  "IBLE_VERSION\020\372\377\377\377\377\377\377\377\377\0012\232\013\n\035AntarisapiAp"
   "plicationCallback\022p\n\020PA_StartSequence\022-."
   "antaris_api_peer_to_peer.StartSequencePa"
   "rams\032+.antaris_api_peer_to_peer.AntarisR"
@@ -597,38 +776,54 @@ const char descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[
   "er_to_peer.AntarisReturnType\"\000\022\177\n\033PA_Pro"
   "cessReqPayloadMetrics\0221.antaris_api_peer"
   "_to_peer.ReqPayloadMetricsParams\032+.antar"
-  "is_api_peer_to_peer.AntarisReturnType\"\0002"
-  "\361\007\n\033AntarisapiPayloadController\022i\n\013PC_re"
-  "gister\022+.antaris_api_peer_to_peer.ReqReg"
-  "isterParams\032+.antaris_api_peer_to_peer.A"
-  "ntarisReturnType\"\000\022\177\n\027PC_get_current_loc"
-  "ation\0225.antaris_api_peer_to_peer.ReqGetC"
-  "urrentLocationParams\032+.antaris_api_peer_"
-  "to_peer.AntarisReturnType\"\000\022}\n\026PC_stage_"
-  "file_download\0224.antaris_api_peer_to_peer"
-  ".ReqStageFileDownloadParams\032+.antaris_ap"
-  "i_peer_to_peer.AntarisReturnType\"\000\022r\n\020PC"
-  "_sequence_done\022/.antaris_api_peer_to_pee"
-  "r.CmdSequenceDoneParams\032+.antaris_api_pe"
-  "er_to_peer.AntarisReturnType\"\000\022\201\001\n\030PC_pa"
-  "yload_power_control\0226.antaris_api_peer_t"
-  "o_peer.ReqPayloadPowerControlParams\032+.an"
-  "taris_api_peer_to_peer.AntarisReturnType"
-  "\"\000\022z\n\030PC_response_health_check\022/.antaris"
-  "_api_peer_to_peer.RespHealthCheckParams\032"
-  "+.antaris_api_peer_to_peer.AntarisReturn"
-  "Type\"\000\022s\n\024PC_response_shutdown\022,.antaris"
-  "_api_peer_to_peer.RespShutdownParams\032+.a"
-  "ntaris_api_peer_to_peer.AntarisReturnTyp"
-  "e\"\000\022~\n\033PC_response_payload_metrics\0220.ant"
-  "aris_api_peer_to_peer.PayloadMetricsResp"
-  "onse\032+.antaris_api_peer_to_peer.AntarisR"
-  "eturnType\"\000b\006proto3"
+  "is_api_peer_to_peer.AntarisReturnType\"\000\022"
+  "\203\001\n PA_ProcessRespGnssEphStopDataReq\0220.a"
+  "ntaris_api_peer_to_peer.RespGnssEphStopD"
+  "ataReq\032+.antaris_api_peer_to_peer.Antari"
+  "sReturnType\"\000\022\205\001\n!PA_ProcessRespGnssEphS"
+  "tartDataReq\0221.antaris_api_peer_to_peer.R"
+  "espGnssEphStartDataReq\032+.antaris_api_pee"
+  "r_to_peer.AntarisReturnType\"\000\022m\n\025PA_Proc"
+  "essGnssEphData\022%.antaris_api_peer_to_pee"
+  "r.GnssEphData\032+.antaris_api_peer_to_peer"
+  ".AntarisReturnType\"\0002\343\t\n\033AntarisapiPaylo"
+  "adController\022i\n\013PC_register\022+.antaris_ap"
+  "i_peer_to_peer.ReqRegisterParams\032+.antar"
+  "is_api_peer_to_peer.AntarisReturnType\"\000\022"
+  "\177\n\027PC_get_current_location\0225.antaris_api"
+  "_peer_to_peer.ReqGetCurrentLocationParam"
+  "s\032+.antaris_api_peer_to_peer.AntarisRetu"
+  "rnType\"\000\022}\n\026PC_stage_file_download\0224.ant"
+  "aris_api_peer_to_peer.ReqStageFileDownlo"
+  "adParams\032+.antaris_api_peer_to_peer.Anta"
+  "risReturnType\"\000\022r\n\020PC_sequence_done\022/.an"
+  "taris_api_peer_to_peer.CmdSequenceDonePa"
+  "rams\032+.antaris_api_peer_to_peer.AntarisR"
+  "eturnType\"\000\022\201\001\n\030PC_payload_power_control"
+  "\0226.antaris_api_peer_to_peer.ReqPayloadPo"
+  "werControlParams\032+.antaris_api_peer_to_p"
+  "eer.AntarisReturnType\"\000\022z\n\030PC_response_h"
+  "ealth_check\022/.antaris_api_peer_to_peer.R"
+  "espHealthCheckParams\032+.antaris_api_peer_"
+  "to_peer.AntarisReturnType\"\000\022s\n\024PC_respon"
+  "se_shutdown\022,.antaris_api_peer_to_peer.R"
+  "espShutdownParams\032+.antaris_api_peer_to_"
+  "peer.AntarisReturnType\"\000\022~\n\033PC_response_"
+  "payload_metrics\0220.antaris_api_peer_to_pe"
+  "er.PayloadMetricsResponse\032+.antaris_api_"
+  "peer_to_peer.AntarisReturnType\"\000\022v\n\024PC_g"
+  "nss_eph_stop_req\022/.antaris_api_peer_to_p"
+  "eer.ReqGnssEphStopDataReq\032+.antaris_api_"
+  "peer_to_peer.AntarisReturnType\"\000\022x\n\025PC_g"
+  "nss_eph_start_req\0220.antaris_api_peer_to_"
+  "peer.ReqGnssEphStartDataReq\032+.antaris_ap"
+  "i_peer_to_peer.AntarisReturnType\"\000b\006prot"
+  "o3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto = {
-  false, false, 4219, descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, "defs/gen/proto/antaris_api.proto", 
-  &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once, nullptr, 0, 20,
+  false, false, 5602, descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, "defs/gen/proto/antaris_api.proto", 
+  &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once, nullptr, 0, 25,
   schemas, file_default_instances, TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto::offsets,
   file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, file_level_enum_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, file_level_service_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto,
 };
@@ -5017,6 +5212,1630 @@ void CmdSequenceDoneParams::InternalSwap(CmdSequenceDoneParams* other) {
 
 // ===================================================================
 
+class ReqGnssEphStopDataReq::_Internal {
+ public:
+};
+
+ReqGnssEphStopDataReq::ReqGnssEphStopDataReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:antaris_api_peer_to_peer.ReqGnssEphStopDataReq)
+}
+ReqGnssEphStopDataReq::ReqGnssEphStopDataReq(const ReqGnssEphStopDataReq& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  correlation_id_ = from.correlation_id_;
+  // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.ReqGnssEphStopDataReq)
+}
+
+inline void ReqGnssEphStopDataReq::SharedCtor() {
+correlation_id_ = 0;
+}
+
+ReqGnssEphStopDataReq::~ReqGnssEphStopDataReq() {
+  // @@protoc_insertion_point(destructor:antaris_api_peer_to_peer.ReqGnssEphStopDataReq)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void ReqGnssEphStopDataReq::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void ReqGnssEphStopDataReq::ArenaDtor(void* object) {
+  ReqGnssEphStopDataReq* _this = reinterpret_cast< ReqGnssEphStopDataReq* >(object);
+  (void)_this;
+}
+void ReqGnssEphStopDataReq::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void ReqGnssEphStopDataReq::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void ReqGnssEphStopDataReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:antaris_api_peer_to_peer.ReqGnssEphStopDataReq)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  correlation_id_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ReqGnssEphStopDataReq::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 correlation_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* ReqGnssEphStopDataReq::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:antaris_api_peer_to_peer.ReqGnssEphStopDataReq)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:antaris_api_peer_to_peer.ReqGnssEphStopDataReq)
+  return target;
+}
+
+size_t ReqGnssEphStopDataReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:antaris_api_peer_to_peer.ReqGnssEphStopDataReq)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ReqGnssEphStopDataReq::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ReqGnssEphStopDataReq::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ReqGnssEphStopDataReq::GetClassData() const { return &_class_data_; }
+
+void ReqGnssEphStopDataReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<ReqGnssEphStopDataReq *>(to)->MergeFrom(
+      static_cast<const ReqGnssEphStopDataReq &>(from));
+}
+
+
+void ReqGnssEphStopDataReq::MergeFrom(const ReqGnssEphStopDataReq& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:antaris_api_peer_to_peer.ReqGnssEphStopDataReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_correlation_id() != 0) {
+    _internal_set_correlation_id(from._internal_correlation_id());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ReqGnssEphStopDataReq::CopyFrom(const ReqGnssEphStopDataReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:antaris_api_peer_to_peer.ReqGnssEphStopDataReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ReqGnssEphStopDataReq::IsInitialized() const {
+  return true;
+}
+
+void ReqGnssEphStopDataReq::InternalSwap(ReqGnssEphStopDataReq* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  swap(correlation_id_, other->correlation_id_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ReqGnssEphStopDataReq::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[18]);
+}
+
+// ===================================================================
+
+class RespGnssEphStopDataReq::_Internal {
+ public:
+};
+
+RespGnssEphStopDataReq::RespGnssEphStopDataReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:antaris_api_peer_to_peer.RespGnssEphStopDataReq)
+}
+RespGnssEphStopDataReq::RespGnssEphStopDataReq(const RespGnssEphStopDataReq& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&correlation_id_, &from.correlation_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&req_status_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+  // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.RespGnssEphStopDataReq)
+}
+
+inline void RespGnssEphStopDataReq::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&req_status_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+}
+
+RespGnssEphStopDataReq::~RespGnssEphStopDataReq() {
+  // @@protoc_insertion_point(destructor:antaris_api_peer_to_peer.RespGnssEphStopDataReq)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void RespGnssEphStopDataReq::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void RespGnssEphStopDataReq::ArenaDtor(void* object) {
+  RespGnssEphStopDataReq* _this = reinterpret_cast< RespGnssEphStopDataReq* >(object);
+  (void)_this;
+}
+void RespGnssEphStopDataReq::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void RespGnssEphStopDataReq::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void RespGnssEphStopDataReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:antaris_api_peer_to_peer.RespGnssEphStopDataReq)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&correlation_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&req_status_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RespGnssEphStopDataReq::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 correlation_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 req_status = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          req_status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RespGnssEphStopDataReq::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:antaris_api_peer_to_peer.RespGnssEphStopDataReq)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
+  }
+
+  // int32 req_status = 2;
+  if (this->_internal_req_status() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_req_status(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:antaris_api_peer_to_peer.RespGnssEphStopDataReq)
+  return target;
+}
+
+size_t RespGnssEphStopDataReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:antaris_api_peer_to_peer.RespGnssEphStopDataReq)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  // int32 req_status = 2;
+  if (this->_internal_req_status() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_req_status());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RespGnssEphStopDataReq::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    RespGnssEphStopDataReq::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RespGnssEphStopDataReq::GetClassData() const { return &_class_data_; }
+
+void RespGnssEphStopDataReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<RespGnssEphStopDataReq *>(to)->MergeFrom(
+      static_cast<const RespGnssEphStopDataReq &>(from));
+}
+
+
+void RespGnssEphStopDataReq::MergeFrom(const RespGnssEphStopDataReq& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:antaris_api_peer_to_peer.RespGnssEphStopDataReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_correlation_id() != 0) {
+    _internal_set_correlation_id(from._internal_correlation_id());
+  }
+  if (from._internal_req_status() != 0) {
+    _internal_set_req_status(from._internal_req_status());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RespGnssEphStopDataReq::CopyFrom(const RespGnssEphStopDataReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:antaris_api_peer_to_peer.RespGnssEphStopDataReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RespGnssEphStopDataReq::IsInitialized() const {
+  return true;
+}
+
+void RespGnssEphStopDataReq::InternalSwap(RespGnssEphStopDataReq* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(RespGnssEphStopDataReq, req_status_)
+      + sizeof(RespGnssEphStopDataReq::req_status_)
+      - PROTOBUF_FIELD_OFFSET(RespGnssEphStopDataReq, correlation_id_)>(
+          reinterpret_cast<char*>(&correlation_id_),
+          reinterpret_cast<char*>(&other->correlation_id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RespGnssEphStopDataReq::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[19]);
+}
+
+// ===================================================================
+
+class ReqGnssEphStartDataReq::_Internal {
+ public:
+};
+
+ReqGnssEphStartDataReq::ReqGnssEphStartDataReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:antaris_api_peer_to_peer.ReqGnssEphStartDataReq)
+}
+ReqGnssEphStartDataReq::ReqGnssEphStartDataReq(const ReqGnssEphStartDataReq& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&correlation_id_, &from.correlation_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&eph2_enable_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(eph2_enable_));
+  // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.ReqGnssEphStartDataReq)
+}
+
+inline void ReqGnssEphStartDataReq::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&eph2_enable_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(eph2_enable_));
+}
+
+ReqGnssEphStartDataReq::~ReqGnssEphStartDataReq() {
+  // @@protoc_insertion_point(destructor:antaris_api_peer_to_peer.ReqGnssEphStartDataReq)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void ReqGnssEphStartDataReq::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void ReqGnssEphStartDataReq::ArenaDtor(void* object) {
+  ReqGnssEphStartDataReq* _this = reinterpret_cast< ReqGnssEphStartDataReq* >(object);
+  (void)_this;
+}
+void ReqGnssEphStartDataReq::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void ReqGnssEphStartDataReq::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void ReqGnssEphStartDataReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:antaris_api_peer_to_peer.ReqGnssEphStartDataReq)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&correlation_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&eph2_enable_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(eph2_enable_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ReqGnssEphStartDataReq::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 correlation_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 periodicity_in_ms = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          periodicity_in_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 eph2_enable = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          eph2_enable_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* ReqGnssEphStartDataReq::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:antaris_api_peer_to_peer.ReqGnssEphStartDataReq)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
+  }
+
+  // int32 periodicity_in_ms = 2;
+  if (this->_internal_periodicity_in_ms() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_periodicity_in_ms(), target);
+  }
+
+  // int32 eph2_enable = 3;
+  if (this->_internal_eph2_enable() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_eph2_enable(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:antaris_api_peer_to_peer.ReqGnssEphStartDataReq)
+  return target;
+}
+
+size_t ReqGnssEphStartDataReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:antaris_api_peer_to_peer.ReqGnssEphStartDataReq)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  // int32 periodicity_in_ms = 2;
+  if (this->_internal_periodicity_in_ms() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_periodicity_in_ms());
+  }
+
+  // int32 eph2_enable = 3;
+  if (this->_internal_eph2_enable() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_eph2_enable());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ReqGnssEphStartDataReq::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    ReqGnssEphStartDataReq::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ReqGnssEphStartDataReq::GetClassData() const { return &_class_data_; }
+
+void ReqGnssEphStartDataReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<ReqGnssEphStartDataReq *>(to)->MergeFrom(
+      static_cast<const ReqGnssEphStartDataReq &>(from));
+}
+
+
+void ReqGnssEphStartDataReq::MergeFrom(const ReqGnssEphStartDataReq& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:antaris_api_peer_to_peer.ReqGnssEphStartDataReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_correlation_id() != 0) {
+    _internal_set_correlation_id(from._internal_correlation_id());
+  }
+  if (from._internal_periodicity_in_ms() != 0) {
+    _internal_set_periodicity_in_ms(from._internal_periodicity_in_ms());
+  }
+  if (from._internal_eph2_enable() != 0) {
+    _internal_set_eph2_enable(from._internal_eph2_enable());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ReqGnssEphStartDataReq::CopyFrom(const ReqGnssEphStartDataReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:antaris_api_peer_to_peer.ReqGnssEphStartDataReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ReqGnssEphStartDataReq::IsInitialized() const {
+  return true;
+}
+
+void ReqGnssEphStartDataReq::InternalSwap(ReqGnssEphStartDataReq* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(ReqGnssEphStartDataReq, eph2_enable_)
+      + sizeof(ReqGnssEphStartDataReq::eph2_enable_)
+      - PROTOBUF_FIELD_OFFSET(ReqGnssEphStartDataReq, correlation_id_)>(
+          reinterpret_cast<char*>(&correlation_id_),
+          reinterpret_cast<char*>(&other->correlation_id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ReqGnssEphStartDataReq::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[20]);
+}
+
+// ===================================================================
+
+class RespGnssEphStartDataReq::_Internal {
+ public:
+};
+
+RespGnssEphStartDataReq::RespGnssEphStartDataReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:antaris_api_peer_to_peer.RespGnssEphStartDataReq)
+}
+RespGnssEphStartDataReq::RespGnssEphStartDataReq(const RespGnssEphStartDataReq& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&correlation_id_, &from.correlation_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&req_status_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+  // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.RespGnssEphStartDataReq)
+}
+
+inline void RespGnssEphStartDataReq::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&req_status_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+}
+
+RespGnssEphStartDataReq::~RespGnssEphStartDataReq() {
+  // @@protoc_insertion_point(destructor:antaris_api_peer_to_peer.RespGnssEphStartDataReq)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void RespGnssEphStartDataReq::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void RespGnssEphStartDataReq::ArenaDtor(void* object) {
+  RespGnssEphStartDataReq* _this = reinterpret_cast< RespGnssEphStartDataReq* >(object);
+  (void)_this;
+}
+void RespGnssEphStartDataReq::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void RespGnssEphStartDataReq::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void RespGnssEphStartDataReq::Clear() {
+// @@protoc_insertion_point(message_clear_start:antaris_api_peer_to_peer.RespGnssEphStartDataReq)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&correlation_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&req_status_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RespGnssEphStartDataReq::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 correlation_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 req_status = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          req_status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RespGnssEphStartDataReq::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:antaris_api_peer_to_peer.RespGnssEphStartDataReq)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
+  }
+
+  // int32 req_status = 2;
+  if (this->_internal_req_status() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_req_status(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:antaris_api_peer_to_peer.RespGnssEphStartDataReq)
+  return target;
+}
+
+size_t RespGnssEphStartDataReq::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:antaris_api_peer_to_peer.RespGnssEphStartDataReq)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  // int32 req_status = 2;
+  if (this->_internal_req_status() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_req_status());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RespGnssEphStartDataReq::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    RespGnssEphStartDataReq::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RespGnssEphStartDataReq::GetClassData() const { return &_class_data_; }
+
+void RespGnssEphStartDataReq::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<RespGnssEphStartDataReq *>(to)->MergeFrom(
+      static_cast<const RespGnssEphStartDataReq &>(from));
+}
+
+
+void RespGnssEphStartDataReq::MergeFrom(const RespGnssEphStartDataReq& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:antaris_api_peer_to_peer.RespGnssEphStartDataReq)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_correlation_id() != 0) {
+    _internal_set_correlation_id(from._internal_correlation_id());
+  }
+  if (from._internal_req_status() != 0) {
+    _internal_set_req_status(from._internal_req_status());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RespGnssEphStartDataReq::CopyFrom(const RespGnssEphStartDataReq& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:antaris_api_peer_to_peer.RespGnssEphStartDataReq)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RespGnssEphStartDataReq::IsInitialized() const {
+  return true;
+}
+
+void RespGnssEphStartDataReq::InternalSwap(RespGnssEphStartDataReq* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(RespGnssEphStartDataReq, req_status_)
+      + sizeof(RespGnssEphStartDataReq::req_status_)
+      - PROTOBUF_FIELD_OFFSET(RespGnssEphStartDataReq, correlation_id_)>(
+          reinterpret_cast<char*>(&correlation_id_),
+          reinterpret_cast<char*>(&other->correlation_id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RespGnssEphStartDataReq::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[21]);
+}
+
+// ===================================================================
+
+class GnssEphData::_Internal {
+ public:
+};
+
+GnssEphData::GnssEphData(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
+  gps_position_ecef_(arena),
+  gps_velocity_ecef_(arena),
+  position_wrt_eci_(arena),
+  velocity_wrt_eci_(arena),
+  position_wrt_ecef_(arena),
+  velocity_wrt_ecef_(arena),
+  body_rate_(arena),
+  attitude_(arena),
+  adcs_pos_(arena),
+  nadir_vector_body_(arena),
+  gd_nadir_vector_body_(arena) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:antaris_api_peer_to_peer.GnssEphData)
+}
+GnssEphData::GnssEphData(const GnssEphData& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      gps_position_ecef_(from.gps_position_ecef_),
+      gps_velocity_ecef_(from.gps_velocity_ecef_),
+      position_wrt_eci_(from.position_wrt_eci_),
+      velocity_wrt_eci_(from.velocity_wrt_eci_),
+      position_wrt_ecef_(from.position_wrt_ecef_),
+      velocity_wrt_ecef_(from.velocity_wrt_ecef_),
+      body_rate_(from.body_rate_),
+      attitude_(from.attitude_),
+      adcs_pos_(from.adcs_pos_),
+      nadir_vector_body_(from.nadir_vector_body_),
+      gd_nadir_vector_body_(from.gd_nadir_vector_body_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&correlation_id_, &from.correlation_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&validity_flags_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(validity_flags_));
+  // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.GnssEphData)
+}
+
+inline void GnssEphData::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&validity_flags_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(validity_flags_));
+}
+
+GnssEphData::~GnssEphData() {
+  // @@protoc_insertion_point(destructor:antaris_api_peer_to_peer.GnssEphData)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void GnssEphData::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void GnssEphData::ArenaDtor(void* object) {
+  GnssEphData* _this = reinterpret_cast< GnssEphData* >(object);
+  (void)_this;
+}
+void GnssEphData::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void GnssEphData::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void GnssEphData::Clear() {
+// @@protoc_insertion_point(message_clear_start:antaris_api_peer_to_peer.GnssEphData)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  gps_position_ecef_.Clear();
+  gps_velocity_ecef_.Clear();
+  position_wrt_eci_.Clear();
+  velocity_wrt_eci_.Clear();
+  position_wrt_ecef_.Clear();
+  velocity_wrt_ecef_.Clear();
+  body_rate_.Clear();
+  attitude_.Clear();
+  adcs_pos_.Clear();
+  nadir_vector_body_.Clear();
+  gd_nadir_vector_body_.Clear();
+  ::memset(&correlation_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&validity_flags_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(validity_flags_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* GnssEphData::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 correlation_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 gps_fix_time = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          gps_fix_time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 gps_sys_time = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          gps_sys_time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 obc_time = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          obc_time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated int32 gps_position_ecef = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_gps_position_ecef(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 40) {
+          _internal_add_gps_position_ecef(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated int32 gps_velocity_ecef = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_gps_velocity_ecef(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 48) {
+          _internal_add_gps_velocity_ecef(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 gps_validity_flag_pos_vel = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          gps_validity_flag_pos_vel_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 adcs_time = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
+          adcs_time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated int64 position_wrt_eci = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 74)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt64Parser(_internal_mutable_position_wrt_eci(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 72) {
+          _internal_add_position_wrt_eci(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated int64 velocity_wrt_eci = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt64Parser(_internal_mutable_velocity_wrt_eci(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 80) {
+          _internal_add_velocity_wrt_eci(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated int64 position_wrt_ecef = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 90)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt64Parser(_internal_mutable_position_wrt_ecef(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 88) {
+          _internal_add_position_wrt_ecef(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated int64 velocity_wrt_ecef = 12;
+      case 12:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 98)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt64Parser(_internal_mutable_velocity_wrt_ecef(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 96) {
+          _internal_add_velocity_wrt_ecef(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated int32 body_rate = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 106)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_body_rate(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 104) {
+          _internal_add_body_rate(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated int32 attitude = 14;
+      case 14:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 114)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_attitude(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 112) {
+          _internal_add_attitude(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated int32 adcs_pos = 15;
+      case 15:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 122)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_adcs_pos(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 120) {
+          _internal_add_adcs_pos(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated int32 nadir_vector_body = 16;
+      case 16:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 130)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_nadir_vector_body(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 128) {
+          _internal_add_nadir_vector_body(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated int32 gd_nadir_vector_body = 17;
+      case 17:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 138)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_gd_nadir_vector_body(), ptr, ctx);
+          CHK_(ptr);
+        } else if (static_cast<uint8_t>(tag) == 136) {
+          _internal_add_gd_nadir_vector_body(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 beta_angle = 18;
+      case 18:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 144)) {
+          beta_angle_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 validity_flags = 19;
+      case 19:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 152)) {
+          validity_flags_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* GnssEphData::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:antaris_api_peer_to_peer.GnssEphData)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
+  }
+
+  // int32 gps_fix_time = 2;
+  if (this->_internal_gps_fix_time() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_gps_fix_time(), target);
+  }
+
+  // int32 gps_sys_time = 3;
+  if (this->_internal_gps_sys_time() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_gps_sys_time(), target);
+  }
+
+  // int64 obc_time = 4;
+  if (this->_internal_obc_time() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(4, this->_internal_obc_time(), target);
+  }
+
+  // repeated int32 gps_position_ecef = 5;
+  {
+    int byte_size = _gps_position_ecef_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteInt32Packed(
+          5, _internal_gps_position_ecef(), byte_size, target);
+    }
+  }
+
+  // repeated int32 gps_velocity_ecef = 6;
+  {
+    int byte_size = _gps_velocity_ecef_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteInt32Packed(
+          6, _internal_gps_velocity_ecef(), byte_size, target);
+    }
+  }
+
+  // int32 gps_validity_flag_pos_vel = 7;
+  if (this->_internal_gps_validity_flag_pos_vel() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(7, this->_internal_gps_validity_flag_pos_vel(), target);
+  }
+
+  // int64 adcs_time = 8;
+  if (this->_internal_adcs_time() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(8, this->_internal_adcs_time(), target);
+  }
+
+  // repeated int64 position_wrt_eci = 9;
+  {
+    int byte_size = _position_wrt_eci_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteInt64Packed(
+          9, _internal_position_wrt_eci(), byte_size, target);
+    }
+  }
+
+  // repeated int64 velocity_wrt_eci = 10;
+  {
+    int byte_size = _velocity_wrt_eci_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteInt64Packed(
+          10, _internal_velocity_wrt_eci(), byte_size, target);
+    }
+  }
+
+  // repeated int64 position_wrt_ecef = 11;
+  {
+    int byte_size = _position_wrt_ecef_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteInt64Packed(
+          11, _internal_position_wrt_ecef(), byte_size, target);
+    }
+  }
+
+  // repeated int64 velocity_wrt_ecef = 12;
+  {
+    int byte_size = _velocity_wrt_ecef_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteInt64Packed(
+          12, _internal_velocity_wrt_ecef(), byte_size, target);
+    }
+  }
+
+  // repeated int32 body_rate = 13;
+  {
+    int byte_size = _body_rate_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteInt32Packed(
+          13, _internal_body_rate(), byte_size, target);
+    }
+  }
+
+  // repeated int32 attitude = 14;
+  {
+    int byte_size = _attitude_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteInt32Packed(
+          14, _internal_attitude(), byte_size, target);
+    }
+  }
+
+  // repeated int32 adcs_pos = 15;
+  {
+    int byte_size = _adcs_pos_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteInt32Packed(
+          15, _internal_adcs_pos(), byte_size, target);
+    }
+  }
+
+  // repeated int32 nadir_vector_body = 16;
+  {
+    int byte_size = _nadir_vector_body_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteInt32Packed(
+          16, _internal_nadir_vector_body(), byte_size, target);
+    }
+  }
+
+  // repeated int32 gd_nadir_vector_body = 17;
+  {
+    int byte_size = _gd_nadir_vector_body_cached_byte_size_.load(std::memory_order_relaxed);
+    if (byte_size > 0) {
+      target = stream->WriteInt32Packed(
+          17, _internal_gd_nadir_vector_body(), byte_size, target);
+    }
+  }
+
+  // int32 beta_angle = 18;
+  if (this->_internal_beta_angle() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(18, this->_internal_beta_angle(), target);
+  }
+
+  // int32 validity_flags = 19;
+  if (this->_internal_validity_flags() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(19, this->_internal_validity_flags(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:antaris_api_peer_to_peer.GnssEphData)
+  return target;
+}
+
+size_t GnssEphData::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:antaris_api_peer_to_peer.GnssEphData)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated int32 gps_position_ecef = 5;
+  {
+    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      Int32Size(this->gps_position_ecef_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<int32_t>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _gps_position_ecef_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
+
+  // repeated int32 gps_velocity_ecef = 6;
+  {
+    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      Int32Size(this->gps_velocity_ecef_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<int32_t>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _gps_velocity_ecef_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
+
+  // repeated int64 position_wrt_eci = 9;
+  {
+    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      Int64Size(this->position_wrt_eci_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<int32_t>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _position_wrt_eci_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
+
+  // repeated int64 velocity_wrt_eci = 10;
+  {
+    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      Int64Size(this->velocity_wrt_eci_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<int32_t>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _velocity_wrt_eci_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
+
+  // repeated int64 position_wrt_ecef = 11;
+  {
+    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      Int64Size(this->position_wrt_ecef_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<int32_t>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _position_wrt_ecef_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
+
+  // repeated int64 velocity_wrt_ecef = 12;
+  {
+    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      Int64Size(this->velocity_wrt_ecef_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<int32_t>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _velocity_wrt_ecef_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
+
+  // repeated int32 body_rate = 13;
+  {
+    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      Int32Size(this->body_rate_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<int32_t>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _body_rate_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
+
+  // repeated int32 attitude = 14;
+  {
+    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      Int32Size(this->attitude_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<int32_t>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _attitude_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
+
+  // repeated int32 adcs_pos = 15;
+  {
+    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      Int32Size(this->adcs_pos_);
+    if (data_size > 0) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<int32_t>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _adcs_pos_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
+
+  // repeated int32 nadir_vector_body = 16;
+  {
+    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      Int32Size(this->nadir_vector_body_);
+    if (data_size > 0) {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<int32_t>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _nadir_vector_body_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
+
+  // repeated int32 gd_nadir_vector_body = 17;
+  {
+    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      Int32Size(this->gd_nadir_vector_body_);
+    if (data_size > 0) {
+      total_size += 2 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+            static_cast<int32_t>(data_size));
+    }
+    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
+    _gd_nadir_vector_body_cached_byte_size_.store(cached_size,
+                                    std::memory_order_relaxed);
+    total_size += data_size;
+  }
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  // int32 gps_fix_time = 2;
+  if (this->_internal_gps_fix_time() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_gps_fix_time());
+  }
+
+  // int64 obc_time = 4;
+  if (this->_internal_obc_time() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64SizePlusOne(this->_internal_obc_time());
+  }
+
+  // int32 gps_sys_time = 3;
+  if (this->_internal_gps_sys_time() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_gps_sys_time());
+  }
+
+  // int32 gps_validity_flag_pos_vel = 7;
+  if (this->_internal_gps_validity_flag_pos_vel() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_gps_validity_flag_pos_vel());
+  }
+
+  // int64 adcs_time = 8;
+  if (this->_internal_adcs_time() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64SizePlusOne(this->_internal_adcs_time());
+  }
+
+  // int32 beta_angle = 18;
+  if (this->_internal_beta_angle() != 0) {
+    total_size += 2 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_beta_angle());
+  }
+
+  // int32 validity_flags = 19;
+  if (this->_internal_validity_flags() != 0) {
+    total_size += 2 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_validity_flags());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData GnssEphData::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    GnssEphData::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GnssEphData::GetClassData() const { return &_class_data_; }
+
+void GnssEphData::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<GnssEphData *>(to)->MergeFrom(
+      static_cast<const GnssEphData &>(from));
+}
+
+
+void GnssEphData::MergeFrom(const GnssEphData& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:antaris_api_peer_to_peer.GnssEphData)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  gps_position_ecef_.MergeFrom(from.gps_position_ecef_);
+  gps_velocity_ecef_.MergeFrom(from.gps_velocity_ecef_);
+  position_wrt_eci_.MergeFrom(from.position_wrt_eci_);
+  velocity_wrt_eci_.MergeFrom(from.velocity_wrt_eci_);
+  position_wrt_ecef_.MergeFrom(from.position_wrt_ecef_);
+  velocity_wrt_ecef_.MergeFrom(from.velocity_wrt_ecef_);
+  body_rate_.MergeFrom(from.body_rate_);
+  attitude_.MergeFrom(from.attitude_);
+  adcs_pos_.MergeFrom(from.adcs_pos_);
+  nadir_vector_body_.MergeFrom(from.nadir_vector_body_);
+  gd_nadir_vector_body_.MergeFrom(from.gd_nadir_vector_body_);
+  if (from._internal_correlation_id() != 0) {
+    _internal_set_correlation_id(from._internal_correlation_id());
+  }
+  if (from._internal_gps_fix_time() != 0) {
+    _internal_set_gps_fix_time(from._internal_gps_fix_time());
+  }
+  if (from._internal_obc_time() != 0) {
+    _internal_set_obc_time(from._internal_obc_time());
+  }
+  if (from._internal_gps_sys_time() != 0) {
+    _internal_set_gps_sys_time(from._internal_gps_sys_time());
+  }
+  if (from._internal_gps_validity_flag_pos_vel() != 0) {
+    _internal_set_gps_validity_flag_pos_vel(from._internal_gps_validity_flag_pos_vel());
+  }
+  if (from._internal_adcs_time() != 0) {
+    _internal_set_adcs_time(from._internal_adcs_time());
+  }
+  if (from._internal_beta_angle() != 0) {
+    _internal_set_beta_angle(from._internal_beta_angle());
+  }
+  if (from._internal_validity_flags() != 0) {
+    _internal_set_validity_flags(from._internal_validity_flags());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void GnssEphData::CopyFrom(const GnssEphData& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:antaris_api_peer_to_peer.GnssEphData)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool GnssEphData::IsInitialized() const {
+  return true;
+}
+
+void GnssEphData::InternalSwap(GnssEphData* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  gps_position_ecef_.InternalSwap(&other->gps_position_ecef_);
+  gps_velocity_ecef_.InternalSwap(&other->gps_velocity_ecef_);
+  position_wrt_eci_.InternalSwap(&other->position_wrt_eci_);
+  velocity_wrt_eci_.InternalSwap(&other->velocity_wrt_eci_);
+  position_wrt_ecef_.InternalSwap(&other->position_wrt_ecef_);
+  velocity_wrt_ecef_.InternalSwap(&other->velocity_wrt_ecef_);
+  body_rate_.InternalSwap(&other->body_rate_);
+  attitude_.InternalSwap(&other->attitude_);
+  adcs_pos_.InternalSwap(&other->adcs_pos_);
+  nadir_vector_body_.InternalSwap(&other->nadir_vector_body_);
+  gd_nadir_vector_body_.InternalSwap(&other->gd_nadir_vector_body_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(GnssEphData, validity_flags_)
+      + sizeof(GnssEphData::validity_flags_)
+      - PROTOBUF_FIELD_OFFSET(GnssEphData, correlation_id_)>(
+          reinterpret_cast<char*>(&correlation_id_),
+          reinterpret_cast<char*>(&other->correlation_id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata GnssEphData::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[22]);
+}
+
+// ===================================================================
+
 class AntarisCorrelationId::_Internal {
  public:
 };
@@ -5190,7 +7009,7 @@ void AntarisCorrelationId::InternalSwap(AntarisCorrelationId* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AntarisCorrelationId::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[18]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[23]);
 }
 
 // ===================================================================
@@ -5371,7 +7190,7 @@ void AntarisReturnType::InternalSwap(AntarisReturnType* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AntarisReturnType::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[19]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[24]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -5430,6 +7249,21 @@ template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::PayloadMetricsResponse*
 }
 template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::CmdSequenceDoneParams* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::CmdSequenceDoneParams >(Arena* arena) {
   return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::CmdSequenceDoneParams >(arena);
+}
+template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::RespGnssEphStopDataReq* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::RespGnssEphStopDataReq >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::RespGnssEphStopDataReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::RespGnssEphStartDataReq* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::RespGnssEphStartDataReq >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::RespGnssEphStartDataReq >(arena);
+}
+template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::GnssEphData* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::GnssEphData >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::GnssEphData >(arena);
 }
 template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::AntarisCorrelationId* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::AntarisCorrelationId >(Arena* arena) {
   return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::AntarisCorrelationId >(arena);
