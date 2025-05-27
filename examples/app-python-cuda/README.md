@@ -11,7 +11,7 @@ Place that downloaded zip file in this directory.
 Build the app using the following command:
 
 ```
-docker build -t satos-payload-example-app-python .
+docker build -t satos-payload-example-app-python-cuda .
 ```
 
 Next, we can run the application in a container. The command below assumes that `$CONFIG` is set to the name of the config file (zip) you downloaded from Antaris Cloud Platform. The file must be located in your current working directory. The below command mount the host cuda inside the container and grant the container gpu access if available:
