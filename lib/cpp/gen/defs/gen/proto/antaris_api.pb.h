@@ -5128,13 +5128,13 @@ class GetEpsVoltage final :
   void _internal_set_correlation_id(int32_t value);
   public:
 
-  // int32 eps_voltage = 2;
+  // float eps_voltage = 2;
   void clear_eps_voltage();
-  int32_t eps_voltage() const;
-  void set_eps_voltage(int32_t value);
+  float eps_voltage() const;
+  void set_eps_voltage(float value);
   private:
-  int32_t _internal_eps_voltage() const;
-  void _internal_set_eps_voltage(int32_t value);
+  float _internal_eps_voltage() const;
+  void _internal_set_eps_voltage(float value);
   public:
 
   // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.GetEpsVoltage)
@@ -5145,7 +5145,7 @@ class GetEpsVoltage final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   int32_t correlation_id_;
-  int32_t eps_voltage_;
+  float eps_voltage_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
 };
@@ -7853,22 +7853,22 @@ inline void GetEpsVoltage::set_correlation_id(int32_t value) {
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.GetEpsVoltage.correlation_id)
 }
 
-// int32 eps_voltage = 2;
+// float eps_voltage = 2;
 inline void GetEpsVoltage::clear_eps_voltage() {
   eps_voltage_ = 0;
 }
-inline int32_t GetEpsVoltage::_internal_eps_voltage() const {
+inline float GetEpsVoltage::_internal_eps_voltage() const {
   return eps_voltage_;
 }
-inline int32_t GetEpsVoltage::eps_voltage() const {
+inline float GetEpsVoltage::eps_voltage() const {
   // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.GetEpsVoltage.eps_voltage)
   return _internal_eps_voltage();
 }
-inline void GetEpsVoltage::_internal_set_eps_voltage(int32_t value) {
+inline void GetEpsVoltage::_internal_set_eps_voltage(float value) {
   
   eps_voltage_ = value;
 }
-inline void GetEpsVoltage::set_eps_voltage(int32_t value) {
+inline void GetEpsVoltage::set_eps_voltage(float value) {
   _internal_set_eps_voltage(value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.GetEpsVoltage.eps_voltage)
 }

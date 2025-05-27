@@ -625,7 +625,7 @@ void peer_to_app_RespGetEpsVoltageStartReq(const void *ptr_src_peer, void *ptr_d
 /// @brief get EPS voltage1
 struct GetEpsVoltage {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
-    UINT32                                          eps_voltage;                                     ///< @var EPS voltage
+    FLOAT                                           eps_voltage;                                     ///< @var EPS voltage
 };
 
 void displayGetEpsVoltage(const void *obj);

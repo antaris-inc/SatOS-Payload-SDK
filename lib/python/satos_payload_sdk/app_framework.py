@@ -253,7 +253,7 @@ class ChannelClient:
     def get_eps_voltage_stop_req(self):
         with self._cond:
             params = api_types.ReqGetEpsVoltageStopReq(self._get_next_cid())
-            resp = api_client.api_pa_pc_get_eps_voltage_stop_req(self._channel, params)
+            resp = api_client.api_pa_pc_get_eps_voltage_stop_req(self._channel)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
                 logger.error("api_pa_pc_get_eps_voltage_stop_req request failed")
                 return None

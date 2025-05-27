@@ -83,8 +83,9 @@ class Controller:
         return True
     
     def get_eps_voltage_handler(self, ctx):
-        logger.info(f"EPS voltage data received : {ctx}")
+        logger.info(f"EPS voltage data received : {float(ctx.eps_voltage):.2f}")
         return True
+    
     def handle_hello_world(self, ctx):
         logger.info("Handling sequence: hello, world!")
 
