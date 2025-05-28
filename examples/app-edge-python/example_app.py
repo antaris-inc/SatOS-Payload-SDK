@@ -28,11 +28,6 @@ from numba import cuda
 import numpy as np
 
 
-g_GPIO_ERROR = -1
-g_Uart_Baudrate = 9600
-g_FileDownloadDir = "/opt/antaris/outbound/"    # path for staged file download
-g_StageFileName = "SampleFile.txt"              # name of staged file
-
 logger = logging.getLogger()
 
 # Try to import CuPy and check for GPU
