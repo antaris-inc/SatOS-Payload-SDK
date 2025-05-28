@@ -142,6 +142,128 @@ Expected async response from AC: ``ResponseStageFileDownload``
 
   * ``0`` if request succeeded, otherwise non-zero value indicating failure. Success here does NOT mean the file has been downlinked. It simply represents the downlink request has been accepted, and the file will be downlinked at a later time.
 
+GetGnssEphData
+^^^^^^^^^^^^^^
+
+Request to get GNSS EPH1/EPH2 data periodically or one-time. Callback is received to application based on time period set.
+
+Parameters:
+
+* ``U16 CorrelationId``
+* ``U8  Enable_EPH2``
+
+  * Request Enable_Eph2 with a value of ``1``, or disable with value of ``0`` 
+* ``U32 Periodicity_in_MS``
+
+  * Set it to ``0`` if onetime GNSS EPS data needed, or set with expected periodicty in milliseconds
+
+Expected periodic callback from AC: ``ResponseGnssEphData``
+
+* ``U16 CorrelationId``
+
+  * Will match what was sent in request
+
+* ``U32 GPS_Fix_Time``   
+                
+  * GPS time
+      
+* ``U32 GPS_Sys_Time``               
+    
+  * GPS System time
+        
+* ``U64 OBC_Time``                   
+    	
+	* OBC time
+        
+* ``U32 GPS_Position_ECEF[3]``       
+    
+	* GPS position
+   
+* ``U32 GPS_Velocity_ECEF[3]``       
+    
+	* GPS velocity
+    
+* ``U32 GPS_Validity_flag_pos_vel``  
+    
+	* GPS validity flag
+    
+* ``U64 ADCS_Time``            
+    
+	* Orbit time
+    
+* ``U64 Position_WRT_ECI[3]``        
+    
+	* Position
+    
+* ``U64 Velocity_wrt_ECI[3]``        
+    
+	* Position
+    
+* ``U64 Position_wrt_ECEF[3]``       
+    
+	* Position
+    
+* ``U64 Velocity_wrt_ECEF[3]``       
+    
+	* Position
+    
+* ``U32 Body_Rate[3]``               
+    
+	* Body rate
+    
+* ``U32 Attitude[3]``                
+    
+	* RPY WRT LVLH
+    
+* ``U32 ADCS_POS[3]``                
+    
+	* Lat, Lon, Altitude (ADCS)
+    
+* ``U32 Nadir_Vector_Body[3]``       
+    
+	* Nadir vector
+    
+* ``U32 GD_Nadir_Vector_Body[3]``    
+    
+	* GD Nadir Vector Body
+    
+* ``U32 Beta_Angle``                 
+    
+	* Beta Angle
+    
+* ``U16 Validity_Flags``             
+    
+ 	* ``1-bit flags`` : Time Validity,
+    			            Position and Velocity ECI Validity, 
+                      Position and Velocity ECEF Validity, 
+                      Rate Validity, 
+                      Attitude Validity,
+                      Lat-Lon-Altitude Validity,
+                      Nadir Vector Validity,
+                      GD Nadir Vector Validity,
+                      Beta Angle Validity
+
+GetEpsVoltage
+^^^^^^^^^^^^^
+
+Request to get EPS voltage data periodically or one-time. Callback is received to application based on time period set.
+
+Parameters:
+
+* ``U16 CorrelationId``
+* ``U32 Periodicity_in_MS``
+
+  * Set it to ``0`` if onetime EPS voltage info needed, or set with expected periodicty in milliseconds
+
+Expected periodic callback from AC: ``ResponseEpsVoltage``
+
+* ``U16 CorrelationId``
+
+  * Will match what was sent in request
+
+* ``FLOAT EPS_Voltage``   
+                
+  * EPS instanteneous voltage
 
 Application Controller Requests
 ===============================

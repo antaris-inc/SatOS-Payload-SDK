@@ -223,7 +223,7 @@ message RespGetEpsVoltageStartReq {
 
 message GetEpsVoltage {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
-    int32                           eps_voltage      = 2; // EPS voltage
+    float                           eps_voltage      = 2; // EPS voltage
 }
 message AntarisCorrelationId {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks

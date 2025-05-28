@@ -211,7 +211,7 @@
 
         <Struct name="GetEpsVoltage" description="get EPS voltage1">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
-            <Field name="eps_voltage" type="UINT32" sequence="2" description="EPS voltage"/>
+            <Field name="eps_voltage" type="FLOAT" sequence="2" description="EPS voltage"/>
         </Struct>
 
         <Struct name="AntarisApiCallbackFuncList" description="Callback-functions registration structure for channel creation" consumed_by="Application">
