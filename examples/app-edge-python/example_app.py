@@ -58,12 +58,6 @@ class Controller:
         logger.info("Calling run_cuda now...")
         self.run_cuda("hello_world")
 
-    def handle_hello_friend(self, ctx):
-        name = ctx.params
-        logger.info(f"Handling sequence: hello, {name}!")
-        logger.info("Calling run_cuda now...")
-        self.run_cuda(f"hello_{name}")
-
     def run_cuda(self, tag):
         if not GPU_AVAILABLE:
             logger.info(f"[{tag}] No CUDA device available. Skipping CUDA demo.")
@@ -85,8 +79,6 @@ class Controller:
         if idx < arr.size:
             arr[idx] = 10.0
         
-    # The sample program assumes 2 GPIO pins are connected back-to-back. 
-    # This sequence toggles level of 'Write Pin' and then reads level of 'Read Pin'
     
 def new():
     ctl = Controller()
@@ -94,33 +86,10 @@ def new():
     app = app_framework.PayloadApplication()
     app.set_health_check(ctl.is_healthy)
 
-    # Sample function to add stats counters and names
-    set_payload_values(app)
 
     # Note : SatOS-Payload-SDK supports sequence upto 16 characters long
     app.mount_sequence("HelloWorld", ctl.handle_hello_world)
-    app.mount_sequence("HelloFriend", ctl.handle_hello_friend)
     return app
-
-def set_payload_values(payload_app):
-    payload_metrics = payload_app.payload_metrics
-    # Set used_counter
-    payload_metrics.used_counter = 5  # Example value
-
-    # Set counter values
-    for i in range(payload_metrics.used_counter):
-        payload_metrics.metrics[i].counter = i + 1 # Example value
-
-    # Set counter_name values
-    for i in range(payload_metrics.used_counter):
-        payload_metrics.metrics[i].names = f"Counter {i}"  # Example value
-    
-    # Change counter name
-    payload_metrics.define_counter(1, "MetricName_1")
-    # Increment counter
-    payload_metrics.inc_counter(1)
-
-    return
 
 if __name__ == '__main__':
     DEBUG = os.environ.get('DEBUG')
