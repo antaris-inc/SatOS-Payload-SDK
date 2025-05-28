@@ -1,4 +1,4 @@
-# Example Python SatOS Application for Edge Server
+# SatOS application using CUDA Library and Python.
 
 This directory contains an example Payload Application using the Python.
 This is not production-ready code, but it is useful for learning how the platform functions.
