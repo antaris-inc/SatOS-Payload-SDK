@@ -29,4 +29,4 @@ You may now use the Antaris Cloud Platform to submit payload sequences. For exam
 no parameters and you will see it reflected in the container logs.
 
 The sequences supported by the example are described below:
-* `HelloWorld`: takes no parameters and simply logs "hello, world!"
+* `HelloWorld`: takes no parameters and simply logs "hello, world from gpu with thread and block index !"
