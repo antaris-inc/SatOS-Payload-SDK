@@ -541,7 +541,7 @@ class PayloadApplication(Stoppable):
             return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
     def _set_get_eps_voltage_cb(self, params):
-        logger.info("Handling GNSS EPH data")
+        logger.info("Handling EPS voltage data")
         try:
             hv = self.get_eps_voltage_handler(params)
         except:
