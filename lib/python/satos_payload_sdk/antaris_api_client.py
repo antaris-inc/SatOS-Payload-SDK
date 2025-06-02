@@ -63,7 +63,7 @@ class AntarisChannel:
         self.process_cb_gnss_eph_data = callback_func_list['GnssEphData']
         self.process_response_get_eps_voltage_stop = callback_func_list['RespGetEpsVoltageStopReq']
         self.process_response_get_eps_voltage_start = callback_func_list['RespGetEpsVoltageStartReq']
-        self.process_get_eps_voltage = callback_func_list['GetEpsVoltage']
+        self.process_cb_get_eps_voltage = callback_func_list['GetEpsVoltage']
         try :
             # Read config info
             jsonfile = open(g_CONFIG_JSON_FILE, 'r')
@@ -180,9 +180,9 @@ class PCToAppService(antaris_api_pb2_grpc.AntarisapiApplicationCallbackServicer)
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
 
     def PA_ProcessGetEpsVoltage(self, request, context):
-        if self.channel.process_get_eps_voltage:
+        if self.channel.process_cb_get_eps_voltage:
             app_request = api_types.peer_to_app_GetEpsVoltage(request)
-            app_ret = self.channel.process_get_eps_voltage(app_request)
+            app_ret = self.channel.process_cb_get_eps_voltage(app_request)
             return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
         else:
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)

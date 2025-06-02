@@ -1602,7 +1602,7 @@ displayGetEpsVoltage(const void *obj)
     printf("correlation_id ==>\n");
     displayUINT16((void *)&p->correlation_id);
     printf("eps_voltage ==>\n");
-    displayUINT32((void *)&p->eps_voltage);
+    displayFLOAT((void *)&p->eps_voltage);
 
 }
 
@@ -1613,13 +1613,13 @@ app_to_peer_GetEpsVoltage(const void *ptr_src_app, void *ptr_dst_peer)
     ::antaris_api_peer_to_peer::GetEpsVoltage *dst = (::antaris_api_peer_to_peer::GetEpsVoltage *)ptr_dst_peer;
 
     UINT32 __tmp_correlation_id;
-    UINT32 __tmp_eps_voltage;
+    FLOAT __tmp_eps_voltage;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
     dst->set_correlation_id(__tmp_correlation_id);
 
-    app_to_peer_UINT32(&src->eps_voltage, &__tmp_eps_voltage); // eps_voltage
+    app_to_peer_FLOAT(&src->eps_voltage, &__tmp_eps_voltage); // eps_voltage
 
     dst->set_eps_voltage(__tmp_eps_voltage);
 

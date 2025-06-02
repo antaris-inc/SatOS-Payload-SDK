@@ -862,7 +862,7 @@ const char descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[
   "in_ms\030\002 \001(\005\"G\n\031RespGetEpsVoltageStartReq"
   "\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nreq_status\030\002"
   " \001(\005\"<\n\rGetEpsVoltage\022\026\n\016correlation_id\030"
-  "\001 \001(\005\022\023\n\013eps_voltage\030\002 \001(\005\".\n\024AntarisCor"
+  "\001 \001(\005\022\023\n\013eps_voltage\030\002 \001(\002\".\n\024AntarisCor"
   "relationId\022\026\n\016correlation_id\030\001 \001(\005\"U\n\021An"
   "tarisReturnType\022@\n\013return_code\030\001 \001(\0162+.a"
   "ntaris_api_peer_to_peer.AntarisReturnCod"
@@ -7863,11 +7863,11 @@ const char* GetEpsVoltage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
         } else
           goto handle_unusual;
         continue;
-      // int32 eps_voltage = 2;
+      // float eps_voltage = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
-          eps_voltage_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
-          CHK_(ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 21)) {
+          eps_voltage_ = ::PROTOBUF_NAMESPACE_ID::internal::UnalignedLoad<float>(ptr);
+          ptr += sizeof(float);
         } else
           goto handle_unusual;
         continue;
@@ -7906,10 +7906,14 @@ uint8_t* GetEpsVoltage::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
   }
 
-  // int32 eps_voltage = 2;
-  if (this->_internal_eps_voltage() != 0) {
+  // float eps_voltage = 2;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_eps_voltage = this->_internal_eps_voltage();
+  uint32_t raw_eps_voltage;
+  memcpy(&raw_eps_voltage, &tmp_eps_voltage, sizeof(tmp_eps_voltage));
+  if (raw_eps_voltage != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_eps_voltage(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteFloatToArray(2, this->_internal_eps_voltage(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -7933,9 +7937,13 @@ size_t GetEpsVoltage::ByteSizeLong() const {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
   }
 
-  // int32 eps_voltage = 2;
-  if (this->_internal_eps_voltage() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_eps_voltage());
+  // float eps_voltage = 2;
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_eps_voltage = this->_internal_eps_voltage();
+  uint32_t raw_eps_voltage;
+  memcpy(&raw_eps_voltage, &tmp_eps_voltage, sizeof(tmp_eps_voltage));
+  if (raw_eps_voltage != 0) {
+    total_size += 1 + 4;
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -7963,7 +7971,11 @@ void GetEpsVoltage::MergeFrom(const GetEpsVoltage& from) {
   if (from._internal_correlation_id() != 0) {
     _internal_set_correlation_id(from._internal_correlation_id());
   }
-  if (from._internal_eps_voltage() != 0) {
+  static_assert(sizeof(uint32_t) == sizeof(float), "Code assumes uint32_t and float are the same size.");
+  float tmp_eps_voltage = from._internal_eps_voltage();
+  uint32_t raw_eps_voltage;
+  memcpy(&raw_eps_voltage, &tmp_eps_voltage, sizeof(tmp_eps_voltage));
+  if (raw_eps_voltage != 0) {
     _internal_set_eps_voltage(from._internal_eps_voltage());
   }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
