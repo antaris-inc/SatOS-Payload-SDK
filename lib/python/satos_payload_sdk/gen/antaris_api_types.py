@@ -988,6 +988,234 @@ def peer_to_app_GetEpsVoltage(peer_struct):
 def app_to_peer_GetEpsVoltage(app_struct):
     return antaris_api_pb2.GetEpsVoltage(correlation_id = app_struct.correlation_id, eps_voltage = app_struct.eps_voltage)
 
+## @class: StartSesThermMgmntReq
+## @brief: Start SES thermal management
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: hardware_id                                     :    0:SESA, 1:SESB                                  
+## @param: duration                                        :    duration in ms                                  
+## @param: lower_threshold                                 :    lower temp threshold                            
+## @param: upper_threshold                                 :    upper temp threshold                            
+class StartSesThermMgmntReq:
+    def __init__(self, correlation_id, hardware_id, duration, lower_threshold, upper_threshold):
+        self.correlation_id = correlation_id
+        self.hardware_id = hardware_id
+        self.duration = duration
+        self.lower_threshold = lower_threshold
+        self.upper_threshold = upper_threshold
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "hardware_id:\n"
+        ret_str += str(self.hardware_id) + "\n"
+        ret_str += "duration:\n"
+        ret_str += str(self.duration) + "\n"
+        ret_str += "lower_threshold:\n"
+        ret_str += str(self.lower_threshold) + "\n"
+        ret_str += "upper_threshold:\n"
+        ret_str += str(self.upper_threshold) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_StartSesThermMgmntReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    hardware_id = peer_struct.hardware_id
+    duration = peer_struct.duration
+    lower_threshold = peer_struct.lower_threshold
+    upper_threshold = peer_struct.upper_threshold
+    return StartSesThermMgmntReq(correlation_id, hardware_id, duration, lower_threshold, upper_threshold)
+
+def app_to_peer_StartSesThermMgmntReq(app_struct):
+    return antaris_api_pb2.StartSesThermMgmntReq(correlation_id = app_struct.correlation_id, hardware_id = app_struct.hardware_id, duration = app_struct.duration, lower_threshold = app_struct.lower_threshold, upper_threshold = app_struct.upper_threshold)
+
+## @class: RespStartSesThermMgmntReq
+## @brief: Response to Start SES thermal management
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: req_status                                      :    0: success, 1: fail                             
+class RespStartSesThermMgmntReq:
+    def __init__(self, correlation_id, req_status):
+        self.correlation_id = correlation_id
+        self.req_status = req_status
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "req_status:\n"
+        ret_str += str(self.req_status) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_RespStartSesThermMgmntReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    req_status = peer_struct.req_status
+    return RespStartSesThermMgmntReq(correlation_id, req_status)
+
+def app_to_peer_RespStartSesThermMgmntReq(app_struct):
+    return antaris_api_pb2.RespStartSesThermMgmntReq(correlation_id = app_struct.correlation_id, req_status = app_struct.req_status)
+
+## @class: StopSesThermMgmntReq
+## @brief: Stop SES thermal management
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: hardware_id                                     :    0:SESA, 1:SESB                                  
+class StopSesThermMgmntReq:
+    def __init__(self, correlation_id, hardware_id):
+        self.correlation_id = correlation_id
+        self.hardware_id = hardware_id
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "hardware_id:\n"
+        ret_str += str(self.hardware_id) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_StopSesThermMgmntReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    hardware_id = peer_struct.hardware_id
+    return StopSesThermMgmntReq(correlation_id, hardware_id)
+
+def app_to_peer_StopSesThermMgmntReq(app_struct):
+    return antaris_api_pb2.StopSesThermMgmntReq(correlation_id = app_struct.correlation_id, hardware_id = app_struct.hardware_id)
+
+## @class: RespStopSesThermMgmntReq
+## @brief: Response to Stop SES thermal management
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: req_status                                      :    0: success, 1: fail                             
+class RespStopSesThermMgmntReq:
+    def __init__(self, correlation_id, req_status):
+        self.correlation_id = correlation_id
+        self.req_status = req_status
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "req_status:\n"
+        ret_str += str(self.req_status) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_RespStopSesThermMgmntReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    req_status = peer_struct.req_status
+    return RespStopSesThermMgmntReq(correlation_id, req_status)
+
+def app_to_peer_RespStopSesThermMgmntReq(app_struct):
+    return antaris_api_pb2.RespStopSesThermMgmntReq(correlation_id = app_struct.correlation_id, req_status = app_struct.req_status)
+
+## @class: SesTempReq
+## @brief: Request SES temperature
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: hardware_id                                     :    0:SESA, 1:SESB                                  
+class SesTempReq:
+    def __init__(self, correlation_id, hardware_id):
+        self.correlation_id = correlation_id
+        self.hardware_id = hardware_id
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "hardware_id:\n"
+        ret_str += str(self.hardware_id) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_SesTempReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    hardware_id = peer_struct.hardware_id
+    return SesTempReq(correlation_id, hardware_id)
+
+def app_to_peer_SesTempReq(app_struct):
+    return antaris_api_pb2.SesTempReq(correlation_id = app_struct.correlation_id, hardware_id = app_struct.hardware_id)
+
+## @class: RespSesTempReq
+## @brief: Response to SES temperature request
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: temp                                            :    in Celsius                                      
+## @param: heater_pwr_status                               :    0:OFF, 1:ON                                     
+class RespSesTempReq:
+    def __init__(self, correlation_id, temp, heater_pwr_status):
+        self.correlation_id = correlation_id
+        self.temp = temp
+        self.heater_pwr_status = heater_pwr_status
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "temp:\n"
+        ret_str += str(self.temp) + "\n"
+        ret_str += "heater_pwr_status:\n"
+        ret_str += str(self.heater_pwr_status) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_RespSesTempReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    temp = peer_struct.temp
+    heater_pwr_status = peer_struct.heater_pwr_status
+    return RespSesTempReq(correlation_id, temp, heater_pwr_status)
+
+def app_to_peer_RespSesTempReq(app_struct):
+    return antaris_api_pb2.RespSesTempReq(correlation_id = app_struct.correlation_id, temp = app_struct.temp, heater_pwr_status = app_struct.heater_pwr_status)
+
+## @class: SesThermalStatusNtf
+## @brief: SES thermal notification from PC
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: heater_pwr_status                               :    0:OFF, 1:ON                                     
+## @param: temp                                            :    in Celsius                                      
+class SesThermalStatusNtf:
+    def __init__(self, correlation_id, heater_pwr_status, temp):
+        self.correlation_id = correlation_id
+        self.heater_pwr_status = heater_pwr_status
+        self.temp = temp
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "heater_pwr_status:\n"
+        ret_str += str(self.heater_pwr_status) + "\n"
+        ret_str += "temp:\n"
+        ret_str += str(self.temp) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_SesThermalStatusNtf(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    heater_pwr_status = peer_struct.heater_pwr_status
+    temp = peer_struct.temp
+    return SesThermalStatusNtf(correlation_id, heater_pwr_status, temp)
+
+def app_to_peer_SesThermalStatusNtf(app_struct):
+    return antaris_api_pb2.SesThermalStatusNtf(correlation_id = app_struct.correlation_id, heater_pwr_status = app_struct.heater_pwr_status, temp = app_struct.temp)
+
 ## @class: AntarisApiCallbackFuncList
 ## @brief: Callback-functions registration structure for channel creation
 ## @param: start_sequence                                  :    callback handler for start-sequence             
@@ -1004,8 +1232,12 @@ def app_to_peer_GetEpsVoltage(app_struct):
 ## @param: process_response_get_eps_voltage_stop           :    callback handler for get EPS voltage data stop  
 ## @param: process_response_get_eps_voltage_start          :    callback handler for get EPS voltage data start 
 ## @param: process_cb_get_eps_voltage                      :    callback handler for EPS voltage data           
+## @param: process_response_start_ses_therm_mgmnt_req      :    callback handler for start SES thermal management req response
+## @param: process_response_stop_ses_therm_mgmnt_req       :    callback handler for stop SES thermal management req response
+## @param: process_response_ses_temp_req                   :    callback handler for SES temperature req response
+## @param: process_cb_ses_thrml_ntf                        :    callback handler for SES thermal nofirication   
 class AntarisApiCallbackFuncList:
-    def __init__(self, start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage):
+    def __init__(self, start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req, process_cb_ses_thrml_ntf):
         self.start_sequence = start_sequence
         self.shutdown_app = shutdown_app
         self.process_health_check = process_health_check
@@ -1020,6 +1252,10 @@ class AntarisApiCallbackFuncList:
         self.process_response_get_eps_voltage_stop = process_response_get_eps_voltage_stop
         self.process_response_get_eps_voltage_start = process_response_get_eps_voltage_start
         self.process_cb_get_eps_voltage = process_cb_get_eps_voltage
+        self.process_response_start_ses_therm_mgmnt_req = process_response_start_ses_therm_mgmnt_req
+        self.process_response_stop_ses_therm_mgmnt_req = process_response_stop_ses_therm_mgmnt_req
+        self.process_response_ses_temp_req = process_response_ses_temp_req
+        self.process_cb_ses_thrml_ntf = process_cb_ses_thrml_ntf
 
     def __str__(self):
         ret_str = ""
@@ -1051,6 +1287,14 @@ class AntarisApiCallbackFuncList:
         ret_str += str(self.process_response_get_eps_voltage_start) + "\n"
         ret_str += "process_cb_get_eps_voltage:\n"
         ret_str += str(self.process_cb_get_eps_voltage) + "\n"
+        ret_str += "process_response_start_ses_therm_mgmnt_req:\n"
+        ret_str += str(self.process_response_start_ses_therm_mgmnt_req) + "\n"
+        ret_str += "process_response_stop_ses_therm_mgmnt_req:\n"
+        ret_str += str(self.process_response_stop_ses_therm_mgmnt_req) + "\n"
+        ret_str += "process_response_ses_temp_req:\n"
+        ret_str += str(self.process_response_ses_temp_req) + "\n"
+        ret_str += "process_cb_ses_thrml_ntf:\n"
+        ret_str += str(self.process_cb_ses_thrml_ntf) + "\n"
 
         return ret_str
 
@@ -1072,10 +1316,14 @@ def peer_to_app_AntarisApiCallbackFuncList(peer_struct):
     process_response_get_eps_voltage_stop = peer_struct.process_response_get_eps_voltage_stop
     process_response_get_eps_voltage_start = peer_struct.process_response_get_eps_voltage_start
     process_cb_get_eps_voltage = peer_struct.process_cb_get_eps_voltage
-    return AntarisApiCallbackFuncList(start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage)
+    process_response_start_ses_therm_mgmnt_req = peer_struct.process_response_start_ses_therm_mgmnt_req
+    process_response_stop_ses_therm_mgmnt_req = peer_struct.process_response_stop_ses_therm_mgmnt_req
+    process_response_ses_temp_req = peer_struct.process_response_ses_temp_req
+    process_cb_ses_thrml_ntf = peer_struct.process_cb_ses_thrml_ntf
+    return AntarisApiCallbackFuncList(start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req, process_cb_ses_thrml_ntf)
 
 def app_to_peer_AntarisApiCallbackFuncList(app_struct):
-    return antaris_api_pb2.AntarisApiCallbackFuncList(start_sequence = app_struct.start_sequence, shutdown_app = app_struct.shutdown_app, process_health_check = app_struct.process_health_check, process_response_register = app_struct.process_response_register, process_response_get_current_location = app_struct.process_response_get_current_location, process_response_stage_file_download = app_struct.process_response_stage_file_download, process_response_payload_power_control = app_struct.process_response_payload_power_control, req_payload_metrics = app_struct.req_payload_metrics, process_response_gnss_eph_stop = app_struct.process_response_gnss_eph_stop, process_response_gnss_eph_start = app_struct.process_response_gnss_eph_start, process_cb_gnss_eph_data = app_struct.process_cb_gnss_eph_data, process_response_get_eps_voltage_stop = app_struct.process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start = app_struct.process_response_get_eps_voltage_start, process_cb_get_eps_voltage = app_struct.process_cb_get_eps_voltage)
+    return antaris_api_pb2.AntarisApiCallbackFuncList(start_sequence = app_struct.start_sequence, shutdown_app = app_struct.shutdown_app, process_health_check = app_struct.process_health_check, process_response_register = app_struct.process_response_register, process_response_get_current_location = app_struct.process_response_get_current_location, process_response_stage_file_download = app_struct.process_response_stage_file_download, process_response_payload_power_control = app_struct.process_response_payload_power_control, req_payload_metrics = app_struct.req_payload_metrics, process_response_gnss_eph_stop = app_struct.process_response_gnss_eph_stop, process_response_gnss_eph_start = app_struct.process_response_gnss_eph_start, process_cb_gnss_eph_data = app_struct.process_cb_gnss_eph_data, process_response_get_eps_voltage_stop = app_struct.process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start = app_struct.process_response_get_eps_voltage_start, process_cb_get_eps_voltage = app_struct.process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req = app_struct.process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req = app_struct.process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req = app_struct.process_response_ses_temp_req, process_cb_ses_thrml_ntf = app_struct.process_cb_ses_thrml_ntf)
 
 ## @class: AntarisReturnType
 ## @brief: Wrapper structure for AntarisReturnCode

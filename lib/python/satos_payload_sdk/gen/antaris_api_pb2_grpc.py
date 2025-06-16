@@ -104,6 +104,26 @@ class AntarisapiApplicationCallbackStub(object):
                 request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.GetEpsVoltage.SerializeToString,
                 response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 _registered_method=True)
+        self.PA_ProcessRespStartSesThermMgmntReq = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespStartSesThermMgmntReq',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespStartSesThermMgmntReq.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
+        self.PA_ProcessRespStopSesThermMgmntReq = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespStopSesThermMgmntReq',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespStopSesThermMgmntReq.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
+        self.PA_ProcessRespSesTempReq = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespSesTempReq',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespSesTempReq.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
+        self.PA_ProcessSesThrmlNtf = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessSesThrmlNtf',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.SesThermalStatusNtf.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
 
 
 class AntarisapiApplicationCallbackServicer(object):
@@ -193,6 +213,30 @@ class AntarisapiApplicationCallbackServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def PA_ProcessRespStartSesThermMgmntReq(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def PA_ProcessRespStopSesThermMgmntReq(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def PA_ProcessRespSesTempReq(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def PA_ProcessSesThrmlNtf(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AntarisapiApplicationCallbackServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -264,6 +308,26 @@ def add_AntarisapiApplicationCallbackServicer_to_server(servicer, server):
             'PA_ProcessGetEpsVoltage': grpc.unary_unary_rpc_method_handler(
                     servicer.PA_ProcessGetEpsVoltage,
                     request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.GetEpsVoltage.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PA_ProcessRespStartSesThermMgmntReq': grpc.unary_unary_rpc_method_handler(
+                    servicer.PA_ProcessRespStartSesThermMgmntReq,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespStartSesThermMgmntReq.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PA_ProcessRespStopSesThermMgmntReq': grpc.unary_unary_rpc_method_handler(
+                    servicer.PA_ProcessRespStopSesThermMgmntReq,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespStopSesThermMgmntReq.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PA_ProcessRespSesTempReq': grpc.unary_unary_rpc_method_handler(
+                    servicer.PA_ProcessRespSesTempReq,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespSesTempReq.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PA_ProcessSesThrmlNtf': grpc.unary_unary_rpc_method_handler(
+                    servicer.PA_ProcessSesThrmlNtf,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.SesThermalStatusNtf.FromString,
                     response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
     }
@@ -655,6 +719,114 @@ class AntarisapiApplicationCallback(object):
             metadata,
             _registered_method=True)
 
+    @staticmethod
+    def PA_ProcessRespStartSesThermMgmntReq(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespStartSesThermMgmntReq',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespStartSesThermMgmntReq.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PA_ProcessRespStopSesThermMgmntReq(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespStopSesThermMgmntReq',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespStopSesThermMgmntReq.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PA_ProcessRespSesTempReq(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespSesTempReq',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespSesTempReq.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PA_ProcessSesThrmlNtf(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessSesThrmlNtf',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.SesThermalStatusNtf.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
 
 class AntarisapiPayloadControllerStub(object):
     """Missing associated documentation comment in .proto file."""
@@ -723,6 +895,21 @@ class AntarisapiPayloadControllerStub(object):
         self.PC_get_eps_voltage_start_req = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_get_eps_voltage_start_req',
                 request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGetEpsVoltageStartReq.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
+        self.PC_start_ses_therm_mgmnt_req = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_start_ses_therm_mgmnt_req',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.StartSesThermMgmntReq.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
+        self.PC_stop_ses_therm_mgmnt_req = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_stop_ses_therm_mgmnt_req',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.StopSesThermMgmntReq.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
+        self.PC_ses_temp_req = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_ses_temp_req',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.SesTempReq.SerializeToString,
                 response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 _registered_method=True)
 
@@ -802,6 +989,24 @@ class AntarisapiPayloadControllerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def PC_start_ses_therm_mgmnt_req(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def PC_stop_ses_therm_mgmnt_req(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def PC_ses_temp_req(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AntarisapiPayloadControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -863,6 +1068,21 @@ def add_AntarisapiPayloadControllerServicer_to_server(servicer, server):
             'PC_get_eps_voltage_start_req': grpc.unary_unary_rpc_method_handler(
                     servicer.PC_get_eps_voltage_start_req,
                     request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGetEpsVoltageStartReq.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PC_start_ses_therm_mgmnt_req': grpc.unary_unary_rpc_method_handler(
+                    servicer.PC_start_ses_therm_mgmnt_req,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.StartSesThermMgmntReq.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PC_stop_ses_therm_mgmnt_req': grpc.unary_unary_rpc_method_handler(
+                    servicer.PC_stop_ses_therm_mgmnt_req,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.StopSesThermMgmntReq.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PC_ses_temp_req': grpc.unary_unary_rpc_method_handler(
+                    servicer.PC_ses_temp_req,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.SesTempReq.FromString,
                     response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
     }
@@ -1189,6 +1409,87 @@ class AntarisapiPayloadController(object):
             target,
             '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_get_eps_voltage_start_req',
             satos__payload__sdk_dot_gen_dot_antaris__api__pb2.ReqGetEpsVoltageStartReq.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PC_start_ses_therm_mgmnt_req(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_start_ses_therm_mgmnt_req',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.StartSesThermMgmntReq.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PC_stop_ses_therm_mgmnt_req(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_stop_ses_therm_mgmnt_req',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.StopSesThermMgmntReq.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PC_ses_temp_req(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_ses_temp_req',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.SesTempReq.SerializeToString,
             satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options,
             channel_credentials,

@@ -214,6 +214,45 @@
             <Field name="eps_voltage" type="FLOAT" sequence="2" description="EPS voltage"/>
         </Struct>
 
+        <Struct name="StartSesThermMgmntReq" description="Start SES thermal management">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="hardware_id" type="UINT8" sequence="2" description="0:SESA, 1:SESB"/>
+            <Field name="duration" type="UINT32" sequence="3" description="duration in ms"/>
+            <Field name="lower_threshold" type="UINT8" sequence="4" description="lower temp threshold"/>
+            <Field name="upper_threshold" type="UINT8" sequence="5" description="upper temp threshold"/>
+        </Struct>
+
+        <Struct name="RespStartSesThermMgmntReq" description="Response to Start SES thermal management">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="req_status" type="UINT8" sequence="2" description="0: success, 1: fail"/>
+        </Struct>
+
+        <Struct name="StopSesThermMgmntReq" description="Stop SES thermal management">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="hardware_id" type="UINT8" sequence="2" description="0:SESA, 1:SESB"/>
+        </Struct>
+
+        <Struct name="RespStopSesThermMgmntReq" description="Response to Stop SES thermal management">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="req_status" type="UINT8" sequence="2" description="0: success, 1: fail"/>
+        </Struct>
+
+        <Struct name="SesTempReq" description="Request SES temperature">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="hardware_id" type="UINT8" sequence="2" description="0:SESA, 1:SESB"/>
+        </Struct>
+
+        <Struct name="RespSesTempReq" description="Response to SES temperature request">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="temp" type="UINT8" sequence="2" description="in Celsius"/>
+            <Field name="heater_pwr_status" type="UINT8" sequence="3" description="0:OFF, 1:ON"/>
+        </Struct>
+
+        <Struct name="SesThermalStatusNtf" description="SES thermal notification from PC">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="heater_pwr_status" type="UINT8" sequence="2" description="0:OFF, 1:ON"/>
+            <Field name="temp" type="UINT8" sequence="3" description="in Celsius"/>
+        </Struct>
         <Struct name="AntarisApiCallbackFuncList" description="Callback-functions registration structure for channel creation" consumed_by="Application">
             <Field name="start_sequence" type="StartSequence_Fptr" sequence="1" description="callback handler for start-sequence"/>
             <Field name="shutdown_app" type="ShutdownApp_Fptr" sequence="2" description="callback handler for shutdown-app"/>
@@ -226,9 +265,13 @@
             <Field name="process_response_gnss_eph_stop" type="ProcessRespGnssEphStopDataReq_Fptr" sequence="9" description="callback handler for GNSS EPH data stop response"/>
             <Field name="process_response_gnss_eph_start" type="ProcessRespGnssEphStartDataReq_Fptr" sequence="10" description="callback handler for GNSS EPH data start response"/>
             <Field name="process_cb_gnss_eph_data" type="ProcessGnssEphData_Fptr" sequence="11" description="callback handler for GNSS EPH data"/>
-            <Field name="process_response_get_eps_voltage_stop" type="ProcessRespGetEpsVoltageStopReq_Fptr" sequence="9" description="callback handler for get EPS voltage data stop"/>
-            <Field name="process_response_get_eps_voltage_start" type="ProcessRespGetEpsVoltageStartReq_Fptr" sequence="10" description="callback handler for get EPS voltage data start"/>
+            <Field name="process_response_get_eps_voltage_stop" type="ProcessRespGetEpsVoltageStopReq_Fptr" sequence="12" description="callback handler for get EPS voltage data stop"/>
+            <Field name="process_response_get_eps_voltage_start" type="ProcessRespGetEpsVoltageStartReq_Fptr" sequence="13" description="callback handler for get EPS voltage data start"/>
             <Field name="process_cb_get_eps_voltage" type="ProcessGetEpsVoltage_Fptr" sequence="11" description="callback handler for EPS voltage data"/>
+            <Field name="process_response_start_ses_therm_mgmnt_req" type="ProcessRespStartSesThermMgmntReq_Fptr" sequence="14" description="callback handler for start SES thermal management req response"/>
+            <Field name="process_response_stop_ses_therm_mgmnt_req" type="ProcessRespStopSesThermMgmntReq_Fptr" sequence="15" description="callback handler for stop SES thermal management req response"/>
+            <Field name="process_response_ses_temp_req" type="ProcessRespSesTempReq_Fptr" sequence="16" description="callback handler for SES temperature req response"/>
+            <Field name="process_cb_ses_thrml_ntf" type="ProcessSesThrmlNtf_Fptr" sequence="17" description="callback handler for SES thermal nofirication"/>
         </Struct>
 
         <Struct name="AntarisCorrelationId" description="Wrapper structure for correlation-id">
@@ -296,6 +339,21 @@
 
         <FunctionPtr name="ProcessGetEpsVoltage_Fptr" description="Callback for GNSS EPS data" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
             <Parameter variable_name="get_eps_voltage" type="GetEpsVoltage *" description="get EPS voltage data"/>
+        </FunctionPtr>
+        <FunctionPtr name="ProcessRespStartSesThermMgmntReq_Fptr" description="callback handler for start SES thermal management req response" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="start_ses_therm_mgmnt_response" type="RespStartSesThermMgmntReq *" description="response to thermal management start req"/>
+        </FunctionPtr>
+
+        <FunctionPtr name="ProcessRespStopSesThermMgmntReq_Fptr" description="callback handler for stop SES thermal management req response" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="stop_ses_therm_mgmnt_response" type="RespStopSesThermMgmntReq *" description="response to thermal management stop req"/>
+        </FunctionPtr>
+
+        <FunctionPtr name="ProcessRespSesTempReq_Fptr" description="callback handler for SES temperature req response" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="ses_temp_req_response" type="RespSesTempReq *" description="response to SES temperature req"/>
+        </FunctionPtr>
+
+        <FunctionPtr name="ProcessSesThrmlNtf_Fptr" description="Callback request to SES thermal notifictaion" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="ses_thrml_ntf" type="SesThermalStatusNtf *" description="SES thermal notifictaion parameters"/>
         </FunctionPtr>
     </Callbacks>
 
@@ -386,6 +444,24 @@
                         return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
             <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
             <Parameter variable_name="req_get_eps_voltage_start" type="ReqGetEpsVoltageStartReq *" description="get EPS voltage start response parameters"/>
+        </Function>
+
+        <Function name="api_pa_pc_start_ses_therm_mgmnt_req" description="API to request to start SES thermal management"
+                        return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
+            <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
+            <Parameter variable_name="req_start_ses_therm_mgmnt" type="StartSesThermMgmntReq *" description="start SES thermal management response parameters"/>
+        </Function>
+
+        <Function name="api_pa_pc_stop_ses_therm_mgmnt_req" description="API to request to stop SES thermal management"
+                        return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
+            <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
+            <Parameter variable_name="req_stop_ses_therm_mgmnt" type="StopSesThermMgmntReq *" description="stop SES thermal management response parameters"/>
+        </Function>
+
+        <Function name="api_pa_pc_ses_temp_req" description="API to request to SES temperature"
+                        return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
+            <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
+            <Parameter variable_name="req_ses_temp" type="SesTempReq *" description="SES temperature response parameters"/>
         </Function>
 
     </Functions>

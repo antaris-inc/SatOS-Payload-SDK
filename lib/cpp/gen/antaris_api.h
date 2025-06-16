@@ -151,6 +151,27 @@ typedef struct RespGetEpsVoltageStartReq RespGetEpsVoltageStartReq;
 struct GetEpsVoltage;
 typedef struct GetEpsVoltage GetEpsVoltage;
 
+struct StartSesThermMgmntReq;
+typedef struct StartSesThermMgmntReq StartSesThermMgmntReq;
+
+struct RespStartSesThermMgmntReq;
+typedef struct RespStartSesThermMgmntReq RespStartSesThermMgmntReq;
+
+struct StopSesThermMgmntReq;
+typedef struct StopSesThermMgmntReq StopSesThermMgmntReq;
+
+struct RespStopSesThermMgmntReq;
+typedef struct RespStopSesThermMgmntReq RespStopSesThermMgmntReq;
+
+struct SesTempReq;
+typedef struct SesTempReq SesTempReq;
+
+struct RespSesTempReq;
+typedef struct RespSesTempReq RespSesTempReq;
+
+struct SesThermalStatusNtf;
+typedef struct SesThermalStatusNtf SesThermalStatusNtf;
+
 struct AntarisApiCallbackFuncList;
 typedef struct AntarisApiCallbackFuncList AntarisApiCallbackFuncList;
 
@@ -303,6 +324,46 @@ typedef AntarisReturnCode
 );
 static inline void
 displayProcessGetEpsVoltage_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessRespStartSesThermMgmntReq_Fptr
+/// @typedef callback handler for start SES thermal management req response
+
+typedef AntarisReturnCode
+(*ProcessRespStartSesThermMgmntReq_Fptr)
+(
+    RespStartSesThermMgmntReq *      ///< @param response to thermal management start req
+);
+static inline void
+displayProcessRespStartSesThermMgmntReq_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessRespStopSesThermMgmntReq_Fptr
+/// @typedef callback handler for stop SES thermal management req response
+
+typedef AntarisReturnCode
+(*ProcessRespStopSesThermMgmntReq_Fptr)
+(
+    RespStopSesThermMgmntReq *       ///< @param response to thermal management stop req
+);
+static inline void
+displayProcessRespStopSesThermMgmntReq_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessRespSesTempReq_Fptr
+/// @typedef callback handler for SES temperature req response
+
+typedef AntarisReturnCode
+(*ProcessRespSesTempReq_Fptr)
+(
+    RespSesTempReq *                 ///< @param response to SES temperature req
+);
+static inline void
+displayProcessRespSesTempReq_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessSesThrmlNtf_Fptr
+/// @typedef Callback request to SES thermal notifictaion
+
+typedef AntarisReturnCode
+(*ProcessSesThrmlNtf_Fptr)
+(
+    SesThermalStatusNtf *            ///< @param SES thermal notifictaion parameters
+);
+static inline void
+displayProcessSesThrmlNtf_Fptr(void *obj) { printf("%p\n", obj); }
 
 // >>>> Data Types <<<<<
 
@@ -632,6 +693,88 @@ void displayGetEpsVoltage(const void *obj);
 void app_to_peer_GetEpsVoltage(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_GetEpsVoltage(const void *ptr_src_peer, void *ptr_dst_app);
 
+/// @struct StartSesThermMgmntReq
+/// @brief Start SES thermal management
+struct StartSesThermMgmntReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           hardware_id;                                     ///< @var 0:SESA, 1:SESB
+    UINT32                                          duration;                                        ///< @var duration in ms
+    UINT8                                           lower_threshold;                                 ///< @var lower temp threshold
+    UINT8                                           upper_threshold;                                 ///< @var upper temp threshold
+};
+
+void displayStartSesThermMgmntReq(const void *obj);
+void app_to_peer_StartSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_StartSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespStartSesThermMgmntReq
+/// @brief Response to Start SES thermal management
+struct RespStartSesThermMgmntReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           req_status;                                      ///< @var 0: success, 1: fail
+};
+
+void displayRespStartSesThermMgmntReq(const void *obj);
+void app_to_peer_RespStartSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespStartSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct StopSesThermMgmntReq
+/// @brief Stop SES thermal management
+struct StopSesThermMgmntReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           hardware_id;                                     ///< @var 0:SESA, 1:SESB
+};
+
+void displayStopSesThermMgmntReq(const void *obj);
+void app_to_peer_StopSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_StopSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespStopSesThermMgmntReq
+/// @brief Response to Stop SES thermal management
+struct RespStopSesThermMgmntReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           req_status;                                      ///< @var 0: success, 1: fail
+};
+
+void displayRespStopSesThermMgmntReq(const void *obj);
+void app_to_peer_RespStopSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespStopSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct SesTempReq
+/// @brief Request SES temperature
+struct SesTempReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           hardware_id;                                     ///< @var 0:SESA, 1:SESB
+};
+
+void displaySesTempReq(const void *obj);
+void app_to_peer_SesTempReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_SesTempReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespSesTempReq
+/// @brief Response to SES temperature request
+struct RespSesTempReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           temp;                                            ///< @var in Celsius
+    UINT8                                           heater_pwr_status;                               ///< @var 0:OFF, 1:ON
+};
+
+void displayRespSesTempReq(const void *obj);
+void app_to_peer_RespSesTempReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespSesTempReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct SesThermalStatusNtf
+/// @brief SES thermal notification from PC
+struct SesThermalStatusNtf {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           heater_pwr_status;                               ///< @var 0:OFF, 1:ON
+    UINT8                                           temp;                                            ///< @var in Celsius
+};
+
+void displaySesThermalStatusNtf(const void *obj);
+void app_to_peer_SesThermalStatusNtf(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_SesThermalStatusNtf(const void *ptr_src_peer, void *ptr_dst_app);
+
 /// @struct AntarisApiCallbackFuncList
 /// @brief Callback-functions registration structure for channel creation
 struct AntarisApiCallbackFuncList {
@@ -649,6 +792,10 @@ struct AntarisApiCallbackFuncList {
     ProcessRespGetEpsVoltageStopReq_Fptr            process_response_get_eps_voltage_stop;           ///< @var callback handler for get EPS voltage data stop
     ProcessRespGetEpsVoltageStartReq_Fptr           process_response_get_eps_voltage_start;          ///< @var callback handler for get EPS voltage data start
     ProcessGetEpsVoltage_Fptr                       process_cb_get_eps_voltage;                      ///< @var callback handler for EPS voltage data
+    ProcessRespStartSesThermMgmntReq_Fptr           process_response_start_ses_therm_mgmnt_req;      ///< @var callback handler for start SES thermal management req response
+    ProcessRespStopSesThermMgmntReq_Fptr            process_response_stop_ses_therm_mgmnt_req;       ///< @var callback handler for stop SES thermal management req response
+    ProcessRespSesTempReq_Fptr                      process_response_ses_temp_req;                   ///< @var callback handler for SES temperature req response
+    ProcessSesThrmlNtf_Fptr                         process_cb_ses_thrml_ntf;                        ///< @var callback handler for SES thermal nofirication
 };
 
 void displayAntarisApiCallbackFuncList(const void *obj);
@@ -804,6 +951,33 @@ api_pa_pc_get_eps_voltage_start_req
 (
     AntarisChannel                  channel,                         ///< @param channel context for API execution
     ReqGetEpsVoltageStartReq *      req_get_eps_voltage_start        ///< @param get EPS voltage start response parameters
+);
+
+/// @brief Function api_pa_pc_start_ses_therm_mgmnt_req
+/// @fn API to request to start SES thermal management
+AntarisReturnCode
+api_pa_pc_start_ses_therm_mgmnt_req
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    StartSesThermMgmntReq *         req_start_ses_therm_mgmnt        ///< @param start SES thermal management response parameters
+);
+
+/// @brief Function api_pa_pc_stop_ses_therm_mgmnt_req
+/// @fn API to request to stop SES thermal management
+AntarisReturnCode
+api_pa_pc_stop_ses_therm_mgmnt_req
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    StopSesThermMgmntReq *          req_stop_ses_therm_mgmnt         ///< @param stop SES thermal management response parameters
+);
+
+/// @brief Function api_pa_pc_ses_temp_req
+/// @fn API to request to SES temperature
+AntarisReturnCode
+api_pa_pc_ses_temp_req
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    SesTempReq *                    req_ses_temp                     ///< @param SES temperature response parameters
 );
 
 

@@ -64,6 +64,10 @@ class AntarisChannel:
         self.process_response_get_eps_voltage_stop = callback_func_list['RespGetEpsVoltageStopReq']
         self.process_response_get_eps_voltage_start = callback_func_list['RespGetEpsVoltageStartReq']
         self.process_cb_get_eps_voltage = callback_func_list['GetEpsVoltage']
+        self.process_response_start_ses_therm_mgmnt_req = callback_func_list['RespStartSesThrmlMgmntReq']
+        self.process_response_stop_ses_therm_mgmnt_req = callback_func_list['RespStopSesThrmlMgmntReq']
+        self.process_response_ses_temp_req = callback_func_list['RespSesTempReq']
+        self.process_cb_ses_thrml_ntf = callback_func_list['SesThrmlStsNtf']
         try :
             # Read config info
             jsonfile = open(g_CONFIG_JSON_FILE, 'r')
@@ -187,6 +191,37 @@ class PCToAppService(antaris_api_pb2_grpc.AntarisapiApplicationCallbackServicer)
         else:
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
 
+    def PA_ProcessRespStartSesThermMgmntReq(self, request, context):
+        if self.channel.process_response_start_ses_therm_mgmnt_req:
+            app_request = api_types.peer_to_app_StartSesThermMgmntReq(request)
+            app_ret = self.channel.process_response_start_ses_therm_mgmnt_req(app_request)
+            return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
+        else:
+            return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
+
+    def PA_ProcessRespStopSesThermMgmntReq(self, request, context):
+        if self.channel.process_response_stop_ses_therm_mgmnt_req:
+            app_request = api_types.peer_to_app_StopSesThermMgmntReq(request)
+            app_ret = self.channel.process_response_stop_ses_therm_mgmnt_req(app_request)
+            return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
+        else:
+            return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
+
+    def PA_ProcessRespSesTempReq(self, request, context):
+        if self.channel.process_response_ses_temp_req:
+            app_request = api_types.peer_to_app_SesTempReq(request)
+            app_ret = self.channel.process_response_ses_temp_req(app_request)
+            return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
+        else:
+            return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
+        
+    def PA_ProcessSesTempNtf(self, request, context):
+        if self.channel.process_cb_ses_thrml_ntf:
+            app_request = api_types.peer_to_app_SesThrmlStsNtf(request)
+            app_ret = self.channel.process_cb_ses_thrml_ntf(app_request)
+            return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
+        else:
+            return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
 def api_pa_pc_create_channel_common(secure, callback_func_list):
     global g_SERVER_CERT_FILE
     global g_CLIENT_CERT_FILE
@@ -468,6 +503,41 @@ def api_pa_pc_get_eps_voltage_start_req(channel, req_get_eps_voltage_start):
     peer_params = api_types.app_to_peer_ReqGetEpsVoltageStartReq(req_get_eps_voltage_start)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
     peer_ret = channel.grpc_client_handle.PC_get_eps_voltage_start_req(peer_params , metadata=metadata)
+    if (api_debug):
+        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+
+    return peer_ret.return_code
+
+def api_pa_pc_start_ses_therm_mgmnt_req(channel, req_start_ses_therm_mgmnt):
+    print("api_pa_pc_start_ses_therm_mgmnt_req")
+
+    peer_params = api_types.app_to_peer_StartSesThermMgmntReq(req_start_ses_therm_mgmnt)
+    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = channel.grpc_client_handle.PC_start_ses_therm_mgmnt_req(peer_params , metadata=metadata)
+
+    if (api_debug):
+        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+
+    return peer_ret.return_code
+
+def api_pa_pc_stop_ses_therm_mgmnt_req(channel, req_stop_ses_therm_mgmnt):
+    print("api_pa_pc_stop_ses_therm_mgmnt_req")
+
+    peer_params = api_types.app_to_peer_StopSesThermMgmntReq(req_stop_ses_therm_mgmnt)
+    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = channel.grpc_client_handle.PC_stop_ses_therm_mgmnt_req(peer_params , metadata=metadata)
+
+    if (api_debug):
+        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+
+    return peer_ret.return_code
+
+def api_pa_pc_ses_temp_req(channel, req_ses_temp):
+    print("api_pa_pc_ses_temp_req")
+
+    peer_params = api_types.app_to_peer_SesTempReq(req_ses_temp)
+    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = channel.grpc_client_handle.PC_ses_temp_req(peer_params , metadata=metadata)
 
     if (api_debug):
         print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))

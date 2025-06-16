@@ -41,6 +41,9 @@ typedef enum {
     e_app2PC_GnssEphStopReq,
     e_app2PC_GetEpsVoltageStartReq,
     e_app2PC_GetEpsVoltageStopReq,
+    e_app2PC_StartSesThermMgmntReq,
+    e_app2PC_StopSesThermMgmntReq,
+    e_app2PC_SesTempReq,
     e_app2PC_MaxRequest
 } AppToPCCallbackId_e;
 
@@ -65,6 +68,9 @@ typedef union {
     ReqGetEpsVoltageStartReq        get_eps_voltage_start;
     ReqGetEpsVoltageStopReq         get_eps_voltage_stop;
     GetEpsVoltage                   get_eps_voltage;
+    StartSesThermMgmntReq           start_ses_therm_mgmnt;
+    StopSesThermMgmntReq            stop_ses_therm_mgmnt;
+    SesTempReq                      ses_temp_req;
     AntarisAppSdkVersion_t          sdk_version;
 } AppToPCCallbackParams_t;
 
@@ -97,6 +103,10 @@ typedef enum {
     e_PC2App_GetEpsVoltage,
     e_PC2App_respGetEpsVoltageStartReq,
     e_PC2App_respGetEpsVoltageStopReq,
+    e_PC2App_respStartSesThermMgmntReq,
+    e_PC2App_respStopSesThermMgmntReq,
+    e_PC2App_respSesTempReq,
+    e_PC2App_SesThrmlNtf,
     e_PC2App_MaxRequest,
 } PCToAppApiId_e;
 
@@ -115,6 +125,10 @@ typedef union {
     GetEpsVoltage                       get_eps_voltage;
     RespGetEpsVoltageStartReq           get_eps_voltage_start;
     RespGetEpsVoltageStopReq            get_eps_voltage_stop;
+    RespStartSesThermMgmntReq           start_ses_therm_mgmnt;
+    RespStopSesThermMgmntReq            stop_ses_therm_mgmnt;
+    RespSesTempReq                      ses_temp;
+    SesThermalStatusNtf                 ses_thermal_ntf;
 } PCToAppApiParams_t;
 
 PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port, INT8 *client_ssl_addr, UINT32 ssl_flag);

@@ -648,6 +648,66 @@ Status AppCallbackServiceImpl::PA_ProcessGetEpsVoltage(::grpc::ServerContext* co
     return Status::OK;
 }
 
+Status AppCallbackServiceImpl::PA_ProcessRespStartSesThermMgmntReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::StartSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    StartSesThermMgmntReq app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_cb_get_eps_voltage) {
+        peer_to_app_StartSesThermMgmntReq((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_response_start_ses_therm_mgmnt_req(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessRespStopSesThermMgmntReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::StopSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    StopSesThermMgmntReq app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_cb_get_eps_voltage) {
+        peer_to_app_StopSesThermMgmntReq((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_response_stop_ses_therm_mgmnt_req(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessRespSesTempReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SesTempReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    SesTempReq app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_cb_get_eps_voltage) {
+        peer_to_app_SesTempReq((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_response_ses_temp_req(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessSesThermalNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::GnssEphData* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    GnssEphData app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_cb_ses_thrml_ntf) {
+        peer_to_app_SesThrmlStsNtf((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_cb_ses_thrml_ntf(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
 void *start_callback_server(void *thread_param)
 {
     AntarisInternalClientChannelContext_t *ctx = (AntarisInternalClientChannelContext_t *)thread_param;

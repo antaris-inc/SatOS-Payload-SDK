@@ -202,6 +202,7 @@ message GnssEphData {
     int32                           beta_angle       = 18; // Beta Angle
     int32                           validity_flags   = 19; // 1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity
 }
+
 message ReqGetEpsVoltageStopReq {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
 }
@@ -225,6 +226,47 @@ message GetEpsVoltage {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     float                           eps_voltage      = 2; // EPS voltage
 }
+
+message StartSesThermMgmntReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           hardware_id      = 2; // 0:SESA, 1:SESB
+    int32                           duration         = 3; // duration in ms
+    int32                           lower_threshold  = 4; // lower temp threshold
+    int32                           upper_threshold  = 5; // upper temp threshold
+}
+
+message RespStartSesThermMgmntReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           req_status       = 2; // 0: success, 1: fail
+}
+
+message StopSesThermMgmntReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           hardware_id      = 2; // 0:SESA, 1:SESB
+}
+
+message RespStopSesThermMgmntReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           req_status       = 2; // 0: success, 1: fail
+}
+
+message SesTempReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           hardware_id      = 2; // 0:SESA, 1:SESB
+}
+
+message RespSesTempReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           temp             = 2; // in Celsius
+    int32                           heater_pwr_status = 3; // 0:OFF, 1:ON
+}
+
+message SesThermalStatusNtf {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           heater_pwr_status = 2; // 0:OFF, 1:ON
+    int32                           temp             = 3; // in Celsius
+}
+
 message AntarisCorrelationId {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
 }
@@ -248,6 +290,10 @@ service AntarisapiApplicationCallback {
     rpc PA_ProcessRespGetEpsVoltageStopReq(RespGetEpsVoltageStopReq) returns (AntarisReturnType) {}
     rpc PA_ProcessRespGetEpsVoltageStartReq(RespGetEpsVoltageStartReq) returns (AntarisReturnType) {}
     rpc PA_ProcessGetEpsVoltage(GetEpsVoltage) returns (AntarisReturnType) {}
+    rpc PA_ProcessRespStartSesThermMgmntReq(RespStartSesThermMgmntReq) returns (AntarisReturnType) {}
+    rpc PA_ProcessRespStopSesThermMgmntReq(RespStopSesThermMgmntReq) returns (AntarisReturnType) {}
+    rpc PA_ProcessRespSesTempReq(RespSesTempReq) returns (AntarisReturnType) {}
+    rpc PA_ProcessSesThrmlNtf(SesThermalStatusNtf) returns (AntarisReturnType) {}
 }
 
 service AntarisapiPayloadController {
@@ -263,5 +309,8 @@ service AntarisapiPayloadController {
     rpc PC_gnss_eph_start_req(ReqGnssEphStartDataReq) returns (AntarisReturnType) {}
     rpc PC_get_eps_voltage_stop_req(ReqGetEpsVoltageStopReq) returns (AntarisReturnType) {}
     rpc PC_get_eps_voltage_start_req(ReqGetEpsVoltageStartReq) returns (AntarisReturnType) {}
+    rpc PC_start_ses_therm_mgmnt_req(StartSesThermMgmntReq) returns (AntarisReturnType) {}
+    rpc PC_stop_ses_therm_mgmnt_req(StopSesThermMgmntReq) returns (AntarisReturnType) {}
+    rpc PC_ses_temp_req(SesTempReq) returns (AntarisReturnType) {}
 }
 

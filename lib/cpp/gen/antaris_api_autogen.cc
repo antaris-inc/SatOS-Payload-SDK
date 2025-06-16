@@ -1638,6 +1638,361 @@ peer_to_app_GetEpsVoltage(const void *ptr_src_peer, void *ptr_dst_app)
 }
 
 void
+displayStartSesThermMgmntReq(const void *obj)
+{
+    StartSesThermMgmntReq *p = (StartSesThermMgmntReq *)obj;
+
+    printf("StartSesThermMgmntReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("hardware_id ==>\n");
+    displayUINT8((void *)&p->hardware_id);
+    printf("duration ==>\n");
+    displayUINT32((void *)&p->duration);
+    printf("lower_threshold ==>\n");
+    displayUINT8((void *)&p->lower_threshold);
+    printf("upper_threshold ==>\n");
+    displayUINT8((void *)&p->upper_threshold);
+
+}
+
+void
+app_to_peer_StartSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    StartSesThermMgmntReq *src = (StartSesThermMgmntReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::StartSesThermMgmntReq *dst = (::antaris_api_peer_to_peer::StartSesThermMgmntReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_hardware_id;
+    UINT32 __tmp_duration;
+    UINT32 __tmp_lower_threshold;
+    UINT32 __tmp_upper_threshold;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->hardware_id, &__tmp_hardware_id); // hardware_id
+
+    dst->set_hardware_id(__tmp_hardware_id);
+
+    app_to_peer_UINT32(&src->duration, &__tmp_duration); // duration
+
+    dst->set_duration(__tmp_duration);
+
+    app_to_peer_UINT8(&src->lower_threshold, &__tmp_lower_threshold); // lower_threshold
+
+    dst->set_lower_threshold(__tmp_lower_threshold);
+
+    app_to_peer_UINT8(&src->upper_threshold, &__tmp_upper_threshold); // upper_threshold
+
+    dst->set_upper_threshold(__tmp_upper_threshold);
+
+
+}
+
+void
+peer_to_app_StartSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    StartSesThermMgmntReq *dst = (StartSesThermMgmntReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::StartSesThermMgmntReq *src = (::antaris_api_peer_to_peer::StartSesThermMgmntReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->hardware_id = src->hardware_id();
+    dst->duration = src->duration();
+    dst->lower_threshold = src->lower_threshold();
+    dst->upper_threshold = src->upper_threshold();
+
+}
+
+void
+displayRespStartSesThermMgmntReq(const void *obj)
+{
+    RespStartSesThermMgmntReq *p = (RespStartSesThermMgmntReq *)obj;
+
+    printf("RespStartSesThermMgmntReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("req_status ==>\n");
+    displayUINT8((void *)&p->req_status);
+
+}
+
+void
+app_to_peer_RespStartSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    RespStartSesThermMgmntReq *src = (RespStartSesThermMgmntReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq *dst = (::antaris_api_peer_to_peer::RespStartSesThermMgmntReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_req_status;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->req_status, &__tmp_req_status); // req_status
+
+    dst->set_req_status(__tmp_req_status);
+
+
+}
+
+void
+peer_to_app_RespStartSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    RespStartSesThermMgmntReq *dst = (RespStartSesThermMgmntReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq *src = (::antaris_api_peer_to_peer::RespStartSesThermMgmntReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->req_status = src->req_status();
+
+}
+
+void
+displayStopSesThermMgmntReq(const void *obj)
+{
+    StopSesThermMgmntReq *p = (StopSesThermMgmntReq *)obj;
+
+    printf("StopSesThermMgmntReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("hardware_id ==>\n");
+    displayUINT8((void *)&p->hardware_id);
+
+}
+
+void
+app_to_peer_StopSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    StopSesThermMgmntReq *src = (StopSesThermMgmntReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::StopSesThermMgmntReq *dst = (::antaris_api_peer_to_peer::StopSesThermMgmntReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_hardware_id;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->hardware_id, &__tmp_hardware_id); // hardware_id
+
+    dst->set_hardware_id(__tmp_hardware_id);
+
+
+}
+
+void
+peer_to_app_StopSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    StopSesThermMgmntReq *dst = (StopSesThermMgmntReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::StopSesThermMgmntReq *src = (::antaris_api_peer_to_peer::StopSesThermMgmntReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->hardware_id = src->hardware_id();
+
+}
+
+void
+displayRespStopSesThermMgmntReq(const void *obj)
+{
+    RespStopSesThermMgmntReq *p = (RespStopSesThermMgmntReq *)obj;
+
+    printf("RespStopSesThermMgmntReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("req_status ==>\n");
+    displayUINT8((void *)&p->req_status);
+
+}
+
+void
+app_to_peer_RespStopSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    RespStopSesThermMgmntReq *src = (RespStopSesThermMgmntReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq *dst = (::antaris_api_peer_to_peer::RespStopSesThermMgmntReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_req_status;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->req_status, &__tmp_req_status); // req_status
+
+    dst->set_req_status(__tmp_req_status);
+
+
+}
+
+void
+peer_to_app_RespStopSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    RespStopSesThermMgmntReq *dst = (RespStopSesThermMgmntReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq *src = (::antaris_api_peer_to_peer::RespStopSesThermMgmntReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->req_status = src->req_status();
+
+}
+
+void
+displaySesTempReq(const void *obj)
+{
+    SesTempReq *p = (SesTempReq *)obj;
+
+    printf("SesTempReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("hardware_id ==>\n");
+    displayUINT8((void *)&p->hardware_id);
+
+}
+
+void
+app_to_peer_SesTempReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    SesTempReq *src = (SesTempReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::SesTempReq *dst = (::antaris_api_peer_to_peer::SesTempReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_hardware_id;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->hardware_id, &__tmp_hardware_id); // hardware_id
+
+    dst->set_hardware_id(__tmp_hardware_id);
+
+
+}
+
+void
+peer_to_app_SesTempReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    SesTempReq *dst = (SesTempReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::SesTempReq *src = (::antaris_api_peer_to_peer::SesTempReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->hardware_id = src->hardware_id();
+
+}
+
+void
+displayRespSesTempReq(const void *obj)
+{
+    RespSesTempReq *p = (RespSesTempReq *)obj;
+
+    printf("RespSesTempReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("temp ==>\n");
+    displayUINT8((void *)&p->temp);
+    printf("heater_pwr_status ==>\n");
+    displayUINT8((void *)&p->heater_pwr_status);
+
+}
+
+void
+app_to_peer_RespSesTempReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    RespSesTempReq *src = (RespSesTempReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::RespSesTempReq *dst = (::antaris_api_peer_to_peer::RespSesTempReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_temp;
+    UINT32 __tmp_heater_pwr_status;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->temp, &__tmp_temp); // temp
+
+    dst->set_temp(__tmp_temp);
+
+    app_to_peer_UINT8(&src->heater_pwr_status, &__tmp_heater_pwr_status); // heater_pwr_status
+
+    dst->set_heater_pwr_status(__tmp_heater_pwr_status);
+
+
+}
+
+void
+peer_to_app_RespSesTempReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    RespSesTempReq *dst = (RespSesTempReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::RespSesTempReq *src = (::antaris_api_peer_to_peer::RespSesTempReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->temp = src->temp();
+    dst->heater_pwr_status = src->heater_pwr_status();
+
+}
+
+void
+displaySesThermalStatusNtf(const void *obj)
+{
+    SesThermalStatusNtf *p = (SesThermalStatusNtf *)obj;
+
+    printf("SesThermalStatusNtf %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("heater_pwr_status ==>\n");
+    displayUINT8((void *)&p->heater_pwr_status);
+    printf("temp ==>\n");
+    displayUINT8((void *)&p->temp);
+
+}
+
+void
+app_to_peer_SesThermalStatusNtf(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    SesThermalStatusNtf *src = (SesThermalStatusNtf *)ptr_src_app;
+    ::antaris_api_peer_to_peer::SesThermalStatusNtf *dst = (::antaris_api_peer_to_peer::SesThermalStatusNtf *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_heater_pwr_status;
+    UINT32 __tmp_temp;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->heater_pwr_status, &__tmp_heater_pwr_status); // heater_pwr_status
+
+    dst->set_heater_pwr_status(__tmp_heater_pwr_status);
+
+    app_to_peer_UINT8(&src->temp, &__tmp_temp); // temp
+
+    dst->set_temp(__tmp_temp);
+
+
+}
+
+void
+peer_to_app_SesThermalStatusNtf(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    SesThermalStatusNtf *dst = (SesThermalStatusNtf *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::SesThermalStatusNtf *src = (::antaris_api_peer_to_peer::SesThermalStatusNtf *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->heater_pwr_status = src->heater_pwr_status();
+    dst->temp = src->temp();
+
+}
+
+void
 displayAntarisApiCallbackFuncList(const void *obj)
 {
     AntarisApiCallbackFuncList *p = (AntarisApiCallbackFuncList *)obj;
@@ -1672,6 +2027,14 @@ displayAntarisApiCallbackFuncList(const void *obj)
     displayProcessRespGetEpsVoltageStartReq_Fptr((void *)&p->process_response_get_eps_voltage_start);
     printf("process_cb_get_eps_voltage ==>\n");
     displayProcessGetEpsVoltage_Fptr((void *)&p->process_cb_get_eps_voltage);
+    printf("process_response_start_ses_therm_mgmnt_req ==>\n");
+    displayProcessRespStartSesThermMgmntReq_Fptr((void *)&p->process_response_start_ses_therm_mgmnt_req);
+    printf("process_response_stop_ses_therm_mgmnt_req ==>\n");
+    displayProcessRespStopSesThermMgmntReq_Fptr((void *)&p->process_response_stop_ses_therm_mgmnt_req);
+    printf("process_response_ses_temp_req ==>\n");
+    displayProcessRespSesTempReq_Fptr((void *)&p->process_response_ses_temp_req);
+    printf("process_cb_ses_thrml_ntf ==>\n");
+    displayProcessSesThrmlNtf_Fptr((void *)&p->process_cb_ses_thrml_ntf);
 
 }
 
