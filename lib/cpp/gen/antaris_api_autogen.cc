@@ -1887,11 +1887,11 @@ peer_to_app_SesTempReq(const void *ptr_src_peer, void *ptr_dst_app)
 }
 
 void
-displayRespSesTempReq(const void *obj)
+displayRespSesTempReqParams(const void *obj)
 {
-    RespSesTempReq *p = (RespSesTempReq *)obj;
+    RespSesTempReqParams *p = (RespSesTempReqParams *)obj;
 
-    printf("RespSesTempReq %p =>\n", obj);
+    printf("RespSesTempReqParams %p =>\n", obj);
 
     printf("correlation_id ==>\n");
     displayUINT16((void *)&p->correlation_id);
@@ -1903,10 +1903,10 @@ displayRespSesTempReq(const void *obj)
 }
 
 void
-app_to_peer_RespSesTempReq(const void *ptr_src_app, void *ptr_dst_peer)
+app_to_peer_RespSesTempReqParams(const void *ptr_src_app, void *ptr_dst_peer)
 {
-    RespSesTempReq *src = (RespSesTempReq *)ptr_src_app;
-    ::antaris_api_peer_to_peer::RespSesTempReq *dst = (::antaris_api_peer_to_peer::RespSesTempReq *)ptr_dst_peer;
+    RespSesTempReqParams *src = (RespSesTempReqParams *)ptr_src_app;
+    ::antaris_api_peer_to_peer::RespSesTempReqParams *dst = (::antaris_api_peer_to_peer::RespSesTempReqParams *)ptr_dst_peer;
 
     UINT32 __tmp_correlation_id;
     UINT32 __tmp_temp;
@@ -1928,10 +1928,10 @@ app_to_peer_RespSesTempReq(const void *ptr_src_app, void *ptr_dst_peer)
 }
 
 void
-peer_to_app_RespSesTempReq(const void *ptr_src_peer, void *ptr_dst_app)
+peer_to_app_RespSesTempReqParams(const void *ptr_src_peer, void *ptr_dst_app)
 {
-    RespSesTempReq *dst = (RespSesTempReq *)ptr_dst_app;
-    ::antaris_api_peer_to_peer::RespSesTempReq *src = (::antaris_api_peer_to_peer::RespSesTempReq *)ptr_src_peer;
+    RespSesTempReqParams *dst = (RespSesTempReqParams *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::RespSesTempReqParams *src = (::antaris_api_peer_to_peer::RespSesTempReqParams *)ptr_src_peer;
 
     dst->correlation_id = src->correlation_id();
     dst->temp = src->temp();

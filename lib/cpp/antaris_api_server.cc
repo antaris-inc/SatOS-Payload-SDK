@@ -435,7 +435,7 @@ class AppToPCClient {
         std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
         context.set_deadline(deadline);
 
-        app_to_peer_StartSesThermMgmntReq(req_params, &cb_req);
+        app_to_peer_RespStartSesThermMgmntReq(req_params, &cb_req);
 
         cb_status = app_grpc_handle_->PA_ProcessRespStartSesThermMgmntReq(&context, cb_req, &cb_response);
 
@@ -463,7 +463,7 @@ class AppToPCClient {
         std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
         context.set_deadline(deadline);
 
-        app_to_peer_StopSesThermMgmntReq(req_params, &cb_req);
+        app_to_peer_RespStopSesThermMgmntReq(req_params, &cb_req);
 
         cb_status = app_grpc_handle_->PA_ProcessRespStopSesThermMgmntReq(&context, cb_req, &cb_response);
 
@@ -478,9 +478,9 @@ class AppToPCClient {
         }
     }
 
-    AntarisReturnCode InvokeProcessRespSesTempReq(RespSesTempReq *req_params)
+    AntarisReturnCode InvokeProcessRespSesTempReq(RespSesTempReqParams *req_params)
     {
-        antaris_api_peer_to_peer::RespSesTempReq cb_req;
+        antaris_api_peer_to_peer::RespSesTempReqParams cb_req;
         antaris_api_peer_to_peer::AntarisReturnType cb_response;
         Status cb_status;
         // Context for the client. It could be used to convey extra information to
@@ -491,7 +491,7 @@ class AppToPCClient {
         std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
         context.set_deadline(deadline);
 
-        app_to_peer_SesTempReq(req_params, &cb_req);
+        peer_to_app_RespSesTempReqParams(req_params, &cb_req);
 
         cb_status = app_grpc_handle_->PA_ProcessRespSesTempReq(&context, cb_req, &cb_response);
 
@@ -519,7 +519,7 @@ class AppToPCClient {
         std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
         context.set_deadline(deadline);
 
-        app_to_peer_SesThermalStatusNtf(req_params, &cb_req);
+        peer_to_app_SesThermalStatusNtf(req_params, &cb_req);
 
         cb_status = app_grpc_handle_->PA_ProcessSesThrmlNtf(&context, cb_req, &cb_response);
 
@@ -787,6 +787,7 @@ done:
 
         return Status::OK;
     }
+
     Status PC_get_eps_voltage_stop_req(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
     {
         AppToPCCallbackParams_t api_request = {0};
@@ -818,6 +819,55 @@ done:
 
         return Status::OK;
     }
+
+    Status PC_start_ses_therm_mgmnt_req(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::StartSesThermMgmntReq *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
+    {
+        AppToPCCallbackParams_t api_request = {0};
+        AntarisReturnType api_response = {return_code : An_SUCCESS};
+        cookie_t cookie;
+        cookie = decodeCookie(context);
+
+        peer_to_app_StartSesThermMgmntReq(request, &api_request);
+
+        user_callbacks_(user_cb_ctx_, cookie, e_app2PC_StartSesThermMgmntReq, &api_request, &api_response.return_code);
+
+        app_to_peer_AntarisReturnType(&api_response, response);
+
+        return Status::OK;
+    }
+
+    Status PC_stop_ses_therm_mgmnt_req(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::StopSesThermMgmntReq *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
+    {
+        AppToPCCallbackParams_t api_request = {0};
+        AntarisReturnType api_response = {return_code : An_SUCCESS};
+        cookie_t cookie;
+        cookie = decodeCookie(context);
+
+        peer_to_app_StopSesThermMgmntReq(request, &api_request);
+
+        user_callbacks_(user_cb_ctx_, cookie, e_app2PC_StopSesThermMgmntReq, &api_request, &api_response.return_code);
+
+        app_to_peer_AntarisReturnType(&api_response, response);
+
+        return Status::OK;
+    }
+
+    Status PC_ses_temp_req(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::SesTempReq *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
+    {
+        AppToPCCallbackParams_t api_request = {0};
+        AntarisReturnType api_response = {return_code : An_SUCCESS};
+        cookie_t cookie;
+        cookie = decodeCookie(context);
+
+        peer_to_app_SesTempReq(request, &api_request);
+
+        user_callbacks_(user_cb_ctx_, cookie, e_app2PC_SesTempReq, &api_request, &api_response.return_code);
+
+        app_to_peer_AntarisReturnType(&api_response, response);
+
+        return Status::OK;
+    }
+
 private:
     static void LaunchGrpcServer(AppToPCApiService *ctx, UINT32 ssl_flag) {
         grpc::EnableDefaultHealthCheckService(true);

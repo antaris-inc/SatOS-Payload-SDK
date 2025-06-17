@@ -127,7 +127,7 @@ typedef union {
     RespGetEpsVoltageStopReq            get_eps_voltage_stop;
     RespStartSesThermMgmntReq           start_ses_therm_mgmnt;
     RespStopSesThermMgmntReq            stop_ses_therm_mgmnt;
-    RespSesTempReq                      ses_temp;
+    RespSesTempReqParams                ses_temp;
     SesThermalStatusNtf                 ses_thermal_ntf;
 } PCToAppApiParams_t;
 

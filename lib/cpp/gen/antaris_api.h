@@ -166,8 +166,8 @@ typedef struct RespStopSesThermMgmntReq RespStopSesThermMgmntReq;
 struct SesTempReq;
 typedef struct SesTempReq SesTempReq;
 
-struct RespSesTempReq;
-typedef struct RespSesTempReq RespSesTempReq;
+struct RespSesTempReqParams;
+typedef struct RespSesTempReqParams RespSesTempReqParams;
 
 struct SesThermalStatusNtf;
 typedef struct SesThermalStatusNtf SesThermalStatusNtf;
@@ -350,7 +350,7 @@ displayProcessRespStopSesThermMgmntReq_Fptr(void *obj) { printf("%p\n", obj); }
 typedef AntarisReturnCode
 (*ProcessRespSesTempReq_Fptr)
 (
-    RespSesTempReq *                 ///< @param response to SES temperature req
+    RespSesTempReqParams *           ///< @param response to SES temperature req
 );
 static inline void
 displayProcessRespSesTempReq_Fptr(void *obj) { printf("%p\n", obj); }
@@ -751,17 +751,17 @@ void displaySesTempReq(const void *obj);
 void app_to_peer_SesTempReq(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_SesTempReq(const void *ptr_src_peer, void *ptr_dst_app);
 
-/// @struct RespSesTempReq
+/// @struct RespSesTempReqParams
 /// @brief Response to SES temperature request
-struct RespSesTempReq {
+struct RespSesTempReqParams {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     UINT8                                           temp;                                            ///< @var in Celsius
     UINT8                                           heater_pwr_status;                               ///< @var 0:OFF, 1:ON
 };
 
-void displayRespSesTempReq(const void *obj);
-void app_to_peer_RespSesTempReq(const void *ptr_src_app, void *ptr_dst_peer);
-void peer_to_app_RespSesTempReq(const void *ptr_src_peer, void *ptr_dst_app);
+void displayRespSesTempReqParams(const void *obj);
+void app_to_peer_RespSesTempReqParams(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespSesTempReqParams(const void *ptr_src_peer, void *ptr_dst_app);
 
 /// @struct SesThermalStatusNtf
 /// @brief SES thermal notification from PC

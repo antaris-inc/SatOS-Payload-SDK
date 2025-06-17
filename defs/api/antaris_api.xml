@@ -242,7 +242,7 @@
             <Field name="hardware_id" type="UINT8" sequence="2" description="0:SESA, 1:SESB"/>
         </Struct>
 
-        <Struct name="RespSesTempReq" description="Response to SES temperature request">
+        <Struct name="RespSesTempReqParams" description="Response to SES temperature request">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="temp" type="UINT8" sequence="2" description="in Celsius"/>
             <Field name="heater_pwr_status" type="UINT8" sequence="3" description="0:OFF, 1:ON"/>
@@ -349,7 +349,7 @@
         </FunctionPtr>
 
         <FunctionPtr name="ProcessRespSesTempReq_Fptr" description="callback handler for SES temperature req response" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
-            <Parameter variable_name="ses_temp_req_response" type="RespSesTempReq *" description="response to SES temperature req"/>
+            <Parameter variable_name="ses_temp_req_response" type="RespSesTempReqParams *" description="response to SES temperature req"/>
         </FunctionPtr>
 
         <FunctionPtr name="ProcessSesThrmlNtf_Fptr" description="Callback request to SES thermal notifictaion" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">

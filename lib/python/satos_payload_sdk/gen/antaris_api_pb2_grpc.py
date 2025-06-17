@@ -116,7 +116,7 @@ class AntarisapiApplicationCallbackStub(object):
                 _registered_method=True)
         self.PA_ProcessRespSesTempReq = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespSesTempReq',
-                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespSesTempReq.SerializeToString,
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespSesTempReqParams.SerializeToString,
                 response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 _registered_method=True)
         self.PA_ProcessSesThrmlNtf = channel.unary_unary(
@@ -322,7 +322,7 @@ def add_AntarisapiApplicationCallbackServicer_to_server(servicer, server):
             ),
             'PA_ProcessRespSesTempReq': grpc.unary_unary_rpc_method_handler(
                     servicer.PA_ProcessRespSesTempReq,
-                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespSesTempReq.FromString,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespSesTempReqParams.FromString,
                     response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
             'PA_ProcessSesThrmlNtf': grpc.unary_unary_rpc_method_handler(
@@ -788,7 +788,7 @@ class AntarisapiApplicationCallback(object):
             request,
             target,
             '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespSesTempReq',
-            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespSesTempReq.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespSesTempReqParams.SerializeToString,
             satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options,
             channel_credentials,

@@ -189,11 +189,11 @@ class AntarisapiApplicationCallback final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPA_ProcessRespStopSesThermMgmntReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPA_ProcessRespStopSesThermMgmntReqRaw(context, request, cq));
     }
-    virtual ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> AsyncPA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq& request, ::grpc::CompletionQueue* cq) {
+    virtual ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> AsyncPA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(AsyncPA_ProcessRespSesTempReqRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq& request, ::grpc::CompletionQueue* cq) {
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPA_ProcessRespSesTempReqRaw(context, request, cq));
     }
     virtual ::grpc::Status PA_ProcessSesThrmlNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) = 0;
@@ -238,8 +238,8 @@ class AntarisapiApplicationCallback final {
       virtual void PA_ProcessRespStartSesThermMgmntReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void PA_ProcessRespStopSesThermMgmntReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) = 0;
       virtual void PA_ProcessRespStopSesThermMgmntReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void PA_ProcessSesThrmlNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) = 0;
       virtual void PA_ProcessSesThrmlNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
@@ -279,8 +279,8 @@ class AntarisapiApplicationCallback final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessRespStartSesThermMgmntReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessRespStopSesThermMgmntReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessRespStopSesThermMgmntReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessRespSesTempReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessRespSesTempReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessRespSesTempReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessRespSesTempReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessSesThrmlNtfRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessSesThrmlNtfRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf& request, ::grpc::CompletionQueue* cq) = 0;
   };
@@ -399,11 +399,11 @@ class AntarisapiApplicationCallback final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPA_ProcessRespStopSesThermMgmntReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPA_ProcessRespStopSesThermMgmntReqRaw(context, request, cq));
     }
-    ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> AsyncPA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq& request, ::grpc::CompletionQueue* cq) {
+    ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> AsyncPA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(AsyncPA_ProcessRespSesTempReqRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq& request, ::grpc::CompletionQueue* cq) {
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPA_ProcessRespSesTempReqRaw(context, request, cq));
     }
     ::grpc::Status PA_ProcessSesThrmlNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) override;
@@ -448,8 +448,8 @@ class AntarisapiApplicationCallback final {
       void PA_ProcessRespStartSesThermMgmntReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
       void PA_ProcessRespStopSesThermMgmntReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) override;
       void PA_ProcessRespStopSesThermMgmntReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) override;
-      void PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) override;
+      void PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
       void PA_ProcessSesThrmlNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) override;
       void PA_ProcessSesThrmlNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
@@ -495,8 +495,8 @@ class AntarisapiApplicationCallback final {
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessRespStartSesThermMgmntReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessRespStopSesThermMgmntReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessRespStopSesThermMgmntReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessRespSesTempReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessRespSesTempReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessRespSesTempReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessRespSesTempReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessSesThrmlNtfRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessSesThrmlNtfRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_PA_StartSequence_;
@@ -540,7 +540,7 @@ class AntarisapiApplicationCallback final {
     virtual ::grpc::Status PA_ProcessGetEpsVoltage(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::GetEpsVoltage* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     virtual ::grpc::Status PA_ProcessRespStartSesThermMgmntReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     virtual ::grpc::Status PA_ProcessRespStopSesThermMgmntReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
-    virtual ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+    virtual ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     virtual ::grpc::Status PA_ProcessSesThrmlNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
   };
   template <class BaseClass>
@@ -875,11 +875,11 @@ class AntarisapiApplicationCallback final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSesTempReq* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+    ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSesTempReqParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestPA_ProcessRespSesTempReq(::grpc::ServerContext* context, ::antaris_api_peer_to_peer::RespSesTempReq* request, ::grpc::ServerAsyncResponseWriter< ::antaris_api_peer_to_peer::AntarisReturnType>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestPA_ProcessRespSesTempReq(::grpc::ServerContext* context, ::antaris_api_peer_to_peer::RespSesTempReqParams* request, ::grpc::ServerAsyncResponseWriter< ::antaris_api_peer_to_peer::AntarisReturnType>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(16, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -1343,25 +1343,25 @@ class AntarisapiApplicationCallback final {
    public:
     WithCallbackMethod_PA_ProcessRespSesTempReq() {
       ::grpc::Service::MarkMethodCallback(16,
-          new ::grpc::internal::CallbackUnaryHandler< ::antaris_api_peer_to_peer::RespSesTempReq, ::antaris_api_peer_to_peer::AntarisReturnType>(
+          new ::grpc::internal::CallbackUnaryHandler< ::antaris_api_peer_to_peer::RespSesTempReqParams, ::antaris_api_peer_to_peer::AntarisReturnType>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::antaris_api_peer_to_peer::RespSesTempReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) { return this->PA_ProcessRespSesTempReq(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) { return this->PA_ProcessRespSesTempReq(context, request, response); }));}
     void SetMessageAllocatorFor_PA_ProcessRespSesTempReq(
-        ::grpc::MessageAllocator< ::antaris_api_peer_to_peer::RespSesTempReq, ::antaris_api_peer_to_peer::AntarisReturnType>* allocator) {
+        ::grpc::MessageAllocator< ::antaris_api_peer_to_peer::RespSesTempReqParams, ::antaris_api_peer_to_peer::AntarisReturnType>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(16);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::antaris_api_peer_to_peer::RespSesTempReq, ::antaris_api_peer_to_peer::AntarisReturnType>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::antaris_api_peer_to_peer::RespSesTempReqParams, ::antaris_api_peer_to_peer::AntarisReturnType>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_PA_ProcessRespSesTempReq() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSesTempReq* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+    ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSesTempReqParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* PA_ProcessRespSesTempReq(
-      ::grpc::CallbackServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSesTempReq* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSesTempReqParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_PA_ProcessSesThrmlNtf : public BaseClass {
@@ -1676,7 +1676,7 @@ class AntarisapiApplicationCallback final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSesTempReq* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+    ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSesTempReqParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -2030,7 +2030,7 @@ class AntarisapiApplicationCallback final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSesTempReq* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+    ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSesTempReqParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -2425,7 +2425,7 @@ class AntarisapiApplicationCallback final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSesTempReq* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+    ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSesTempReqParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -2894,10 +2894,10 @@ class AntarisapiApplicationCallback final {
     WithStreamedUnaryMethod_PA_ProcessRespSesTempReq() {
       ::grpc::Service::MarkMethodStreamed(16,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::antaris_api_peer_to_peer::RespSesTempReq, ::antaris_api_peer_to_peer::AntarisReturnType>(
+          ::antaris_api_peer_to_peer::RespSesTempReqParams, ::antaris_api_peer_to_peer::AntarisReturnType>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::antaris_api_peer_to_peer::RespSesTempReq, ::antaris_api_peer_to_peer::AntarisReturnType>* streamer) {
+                     ::antaris_api_peer_to_peer::RespSesTempReqParams, ::antaris_api_peer_to_peer::AntarisReturnType>* streamer) {
                        return this->StreamedPA_ProcessRespSesTempReq(context,
                          streamer);
                   }));
@@ -2906,12 +2906,12 @@ class AntarisapiApplicationCallback final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSesTempReq* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+    ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSesTempReqParams* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedPA_ProcessRespSesTempReq(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::antaris_api_peer_to_peer::RespSesTempReq,::antaris_api_peer_to_peer::AntarisReturnType>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedPA_ProcessRespSesTempReq(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::antaris_api_peer_to_peer::RespSesTempReqParams,::antaris_api_peer_to_peer::AntarisReturnType>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_PA_ProcessSesThrmlNtf : public BaseClass {

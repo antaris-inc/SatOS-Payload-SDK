@@ -255,7 +255,7 @@ message SesTempReq {
     int32                           hardware_id      = 2; // 0:SESA, 1:SESB
 }
 
-message RespSesTempReq {
+message RespSesTempReqParams {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     int32                           temp             = 2; // in Celsius
     int32                           heater_pwr_status = 3; // 0:OFF, 1:ON
@@ -292,7 +292,7 @@ service AntarisapiApplicationCallback {
     rpc PA_ProcessGetEpsVoltage(GetEpsVoltage) returns (AntarisReturnType) {}
     rpc PA_ProcessRespStartSesThermMgmntReq(RespStartSesThermMgmntReq) returns (AntarisReturnType) {}
     rpc PA_ProcessRespStopSesThermMgmntReq(RespStopSesThermMgmntReq) returns (AntarisReturnType) {}
-    rpc PA_ProcessRespSesTempReq(RespSesTempReq) returns (AntarisReturnType) {}
+    rpc PA_ProcessRespSesTempReq(RespSesTempReqParams) returns (AntarisReturnType) {}
     rpc PA_ProcessSesThrmlNtf(SesThermalStatusNtf) returns (AntarisReturnType) {}
 }
 
