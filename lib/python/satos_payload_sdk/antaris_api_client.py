@@ -208,9 +208,7 @@ class PCToAppService(antaris_api_pb2_grpc.AntarisapiApplicationCallbackServicer)
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
 
     def PA_ProcessRespSesTempReq(self, request, context):
-        print("Rahul PA_ProcessRespSesTempReq")
         if self.channel.process_response_ses_temp_req:
-            print("Rahul right data ")
             app_request = api_types.peer_to_app_RespSesTempReqParams(request)
             app_ret = self.channel.process_response_ses_temp_req(app_request)
             return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
@@ -516,7 +514,6 @@ def api_pa_pc_start_ses_therm_mgmnt_req(channel, req_start_ses_therm_mgmnt):
     peer_params = api_types.app_to_peer_StartSesThermMgmntReq(req_start_ses_therm_mgmnt)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
     peer_ret = channel.grpc_client_handle.PC_start_ses_therm_mgmnt_req(peer_params , metadata=metadata)
-    print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
     
     if (api_debug):
         print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))

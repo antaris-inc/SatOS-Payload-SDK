@@ -286,21 +286,12 @@ class ChannelClient:
 
             resp_cond = threading.Condition()
             resp_cond.acquire()
-            print(f"correlation id = {params.correlation_id}")
 
             self._responses[params.correlation_id] = [resp_cond, None]
 
-            # To print the entire structure
-            print(f"self._responses[{params.correlation_id}] = {self._responses[params.correlation_id]}")
-
-            # Optional: print individual elements for clarity
-            print(f"  Condition Object: {self._responses[params.correlation_id][0]}")
-            print(f"  Response Value : {self._responses[params.correlation_id][1]}")
-
-
         # wait for response trigger
         resp_cond.wait()
-        print("Rahul got response")
+
         with self._cond:
             resp = self._responses[params.correlation_id][1]
             del self._responses[params.correlation_id]
@@ -314,23 +305,14 @@ class ChannelClient:
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
                 logger.error("api_pa_pc_start_ses_therm_mgmnt_req request failed")
                 return None
-            print("In threading ")
+
             resp_cond = threading.Condition()
             resp_cond.acquire()
-            print(f"correlation id = {params.correlation_id}")
 
             self._responses[params.correlation_id] = [resp_cond, None]
 
-            # To print the entire structure
-            print(f"self._responses[{params.correlation_id}] = {self._responses[params.correlation_id]}")
-
-            # Optional: print individual elements for clarity
-            print(f"  Condition Object: {self._responses[params.correlation_id][0]}")
-            print(f"  Response Value : {self._responses[params.correlation_id][1]}")
-
-        # wait for response trigger
+         # wait for response trigger
         resp_cond.wait()
-        print("Rahul got response")
 
         with self._cond:
             resp = self._responses[params.correlation_id][1]
@@ -361,7 +343,6 @@ class ChannelClient:
         return resp
 
     def ses_temp_req(self, hardware_id):
-        print("Rahul inside ses_temp_req")
         with self._cond:
             params = api_types.SesTempReq(self._get_next_cid(), hardware_id)
             resp = api_client.api_pa_pc_ses_temp_req(self._channel, params)
@@ -371,21 +352,12 @@ class ChannelClient:
 
             resp_cond = threading.Condition()
             resp_cond.acquire()
-            print(f"correlation id = {params.correlation_id}")
 
             self._responses[params.correlation_id] = [resp_cond, None]
 
-            # To print the entire structure
-            print(f"self._responses[{params.correlation_id}] = {self._responses[params.correlation_id]}")
-
-            # Optional: print individual elements for clarity
-            print(f"  Condition Object: {self._responses[params.correlation_id][0]}")
-            print(f"  Response Value : {self._responses[params.correlation_id][1]}")
-
-
         # wait for response trigger
         resp_cond.wait()
-        print(f"Rahul received response {params.correlation_id}")
+
         with self._cond:
             resp = self._responses[params.correlation_id][1]
             del self._responses[params.correlation_id]
@@ -454,7 +426,6 @@ class ChannelClient:
             logger.error("sequence_done request failed: resp=%d" % resp)
 
     def _handle_response(self, params):
-        print("Rahul handling response")
         with self._cond:
             if not params.correlation_id in self._responses:
                 return
@@ -522,9 +493,7 @@ class PayloadApplication(Stoppable):
         self.payload_metrics = PayloadMetrics()
         
     def mount_sequence(self, sequence_id, sequence_handler_func):
-        print(f"Rahul calling {sequence_id} and {sequence_handler_func}")
         self.sequence_handler_func_idx[sequence_id] = sequence_handler_func
-        print(f"the function = {self.sequence_handler_func_idx[sequence_id]}")
 
     # Provided function should expect no arguments and return True or False
     # to represent health check success or failure, respectively
@@ -599,7 +568,6 @@ class PayloadApplication(Stoppable):
         self.stopped()
 
     def start_sequence(self, seq_id, seq_params, seq_deadline):
-        print(f"Rahul function {self.sequence_handler_func_idx[seq_id]}")
         try:
             handler_func = self.sequence_handler_func_idx[seq_id]
         except KeyError:

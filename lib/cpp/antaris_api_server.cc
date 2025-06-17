@@ -491,7 +491,7 @@ class AppToPCClient {
         std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
         context.set_deadline(deadline);
 
-        peer_to_app_RespSesTempReqParams(req_params, &cb_req);
+        app_to_peer_RespSesTempReqParams(req_params, &cb_req);
 
         cb_status = app_grpc_handle_->PA_ProcessRespSesTempReq(&context, cb_req, &cb_response);
 

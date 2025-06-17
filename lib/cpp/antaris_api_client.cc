@@ -766,9 +766,8 @@ Status AppCallbackServiceImpl::PA_ProcessRespSesTempReq(::grpc::ServerContext* c
 {
     RespSesTempReqParams app_request;
     AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
-    printf("Rahul called cpp \n");
+
     if (client_channel_ctx_->callbacks.process_response_ses_temp_req) {
-        printf("Rahul inside for this \n");
         peer_to_app_RespSesTempReqParams((void *)request, &app_request);
         app_ret = client_channel_ctx_->callbacks.process_response_ses_temp_req(&app_request);
     }
