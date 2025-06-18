@@ -135,6 +135,37 @@ class Controller:
         else:
             logger.info("Incorrect parameters. Parameter can be 'stop' or 'start'")
 
+    def handle_ses_therm_mgmnt(self, ctx):
+        hardware_id = 0   # 0:SESA , 1:SESB
+        duration = 2000   # millisecond
+        upper_threshold = 25 # in celsius
+        lower_threshold = 20 # in celsius
+
+        if ctx.params.lower() == "stop":
+            logger.info("Sending stop SES thermal management request")
+            resp = ctx.client.stop_ses_therm_mgmnt_req(hardware_id)
+            if (resp == 0):
+                logger.info("stop SES thermal management request success")
+            else:
+                logger.info("stop SES thermal management request failed")
+        elif ctx.params.lower() == "start":
+            logger.info("Sending start SES thermal management request")
+            resp = ctx.client.start_ses_therm_mgmnt_req(hardware_id, duration, upper_threshold, lower_threshold)
+            if (resp == 0):
+                logger.info("start SES thermal management request success")
+            else:
+                logger.info("start SES thermal management request failed")
+
+    def handle_ses_temp_req(self, ctx):
+        hardware_id = 0   # 0:SESA , 1:SESB
+        resp = ctx.ses_temp_req(hardware_id)
+        logger.info(f"Current temperature = {resp.temp}")
+        logger.info(f"Heater power status = {resp.heater_pwr_status}") # 0:OFF, 1:ON
+
+    def ses_thermal_status_ntf(self, ctx):
+        logger.info(f"Hardware IS = {ctx.hardware_id}") # 0:SAS-A 1: SAS-B
+        logger.info(f"Current temperature = {ctx.temp}")
+        logger.info(f"Heater power status = {ctx.heater_pwr_status}") # 0:OFF, 1:ON
     def handle_power_control(self, ctx):
         logger.info("Handling payload power")
         power_state = ctx.params                    # 0 = power off, 1 = power on
@@ -288,6 +319,7 @@ def new():
     app.set_health_check(ctl.is_healthy)
     app.set_gnss_eph_data_cb(ctl.gnss_eph_data_handler)
     app.set_get_eps_voltage_cb(ctl.get_eps_voltage_handler)
+    app.set_ses_thermal_status_ntf(ctl.ses_thermal_status_ntf)
 
     # Sample function to add stats counters and names
     set_payload_values(app)
@@ -303,6 +335,8 @@ def new():
     app.mount_sequence("TestCANBus", ctl.handle_test_can_bus)
     app.mount_sequence("GetGnssEphData", ctl.handle_gnss_data)
     app.mount_sequence("GetEpsVoltage", ctl.handle_eps_voltage)
+    app.mount_sequence("SesThermMgmnt", ctl.handle_ses_therm_mgmnt)
+    app.mount_sequence("SesTempReq", ctl.handle_ses_temp_req)
     return app
 
 def set_payload_values(payload_app):

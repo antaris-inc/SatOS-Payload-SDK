@@ -36,6 +36,10 @@ static const char* AntarisapiApplicationCallback_method_names[] = {
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespGetEpsVoltageStopReq",
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespGetEpsVoltageStartReq",
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessGetEpsVoltage",
+  "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespStartSesThermMgmntReq",
+  "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespStopSesThermMgmntReq",
+  "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespSesTempReq",
+  "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessSesThrmlNtf",
 };
 
 std::unique_ptr< AntarisapiApplicationCallback::Stub> AntarisapiApplicationCallback::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -59,6 +63,10 @@ AntarisapiApplicationCallback::Stub::Stub(const std::shared_ptr< ::grpc::Channel
   , rpcmethod_PA_ProcessRespGetEpsVoltageStopReq_(AntarisapiApplicationCallback_method_names[11], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PA_ProcessRespGetEpsVoltageStartReq_(AntarisapiApplicationCallback_method_names[12], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PA_ProcessGetEpsVoltage_(AntarisapiApplicationCallback_method_names[13], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PA_ProcessRespStartSesThermMgmntReq_(AntarisapiApplicationCallback_method_names[14], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PA_ProcessRespStopSesThermMgmntReq_(AntarisapiApplicationCallback_method_names[15], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PA_ProcessRespSesTempReq_(AntarisapiApplicationCallback_method_names[16], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PA_ProcessSesThrmlNtf_(AntarisapiApplicationCallback_method_names[17], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status AntarisapiApplicationCallback::Stub::PA_StartSequence(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::StartSequenceParams& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
@@ -383,6 +391,98 @@ void AntarisapiApplicationCallback::Stub::async::PA_ProcessGetEpsVoltage(::grpc:
   return result;
 }
 
+::grpc::Status AntarisapiApplicationCallback::Stub::PA_ProcessRespStartSesThermMgmntReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PA_ProcessRespStartSesThermMgmntReq_, context, request, response);
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessRespStartSesThermMgmntReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessRespStartSesThermMgmntReq_, context, request, response, std::move(f));
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessRespStartSesThermMgmntReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessRespStartSesThermMgmntReq_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::PrepareAsyncPA_ProcessRespStartSesThermMgmntReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PA_ProcessRespStartSesThermMgmntReq_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::AsyncPA_ProcessRespStartSesThermMgmntReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPA_ProcessRespStartSesThermMgmntReqRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AntarisapiApplicationCallback::Stub::PA_ProcessRespStopSesThermMgmntReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PA_ProcessRespStopSesThermMgmntReq_, context, request, response);
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessRespStopSesThermMgmntReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessRespStopSesThermMgmntReq_, context, request, response, std::move(f));
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessRespStopSesThermMgmntReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessRespStopSesThermMgmntReq_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::PrepareAsyncPA_ProcessRespStopSesThermMgmntReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PA_ProcessRespStopSesThermMgmntReq_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::AsyncPA_ProcessRespStopSesThermMgmntReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPA_ProcessRespStopSesThermMgmntReqRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AntarisapiApplicationCallback::Stub::PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::RespSesTempReqParams, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PA_ProcessRespSesTempReq_, context, request, response);
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::RespSesTempReqParams, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessRespSesTempReq_, context, request, response, std::move(f));
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessRespSesTempReq(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessRespSesTempReq_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::PrepareAsyncPA_ProcessRespSesTempReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::RespSesTempReqParams, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PA_ProcessRespSesTempReq_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::AsyncPA_ProcessRespSesTempReqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPA_ProcessRespSesTempReqRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AntarisapiApplicationCallback::Stub::PA_ProcessSesThrmlNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::SesThermalStatusNtf, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PA_ProcessSesThrmlNtf_, context, request, response);
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessSesThrmlNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::SesThermalStatusNtf, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessSesThrmlNtf_, context, request, response, std::move(f));
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessSesThrmlNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessSesThrmlNtf_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::PrepareAsyncPA_ProcessSesThrmlNtfRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::SesThermalStatusNtf, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PA_ProcessSesThrmlNtf_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::AsyncPA_ProcessSesThrmlNtfRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPA_ProcessSesThrmlNtfRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 AntarisapiApplicationCallback::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       AntarisapiApplicationCallback_method_names[0],
@@ -524,6 +624,46 @@ AntarisapiApplicationCallback::Service::Service() {
              ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
                return service->PA_ProcessGetEpsVoltage(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiApplicationCallback_method_names[14],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiApplicationCallback::Service, ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiApplicationCallback::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PA_ProcessRespStartSesThermMgmntReq(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiApplicationCallback_method_names[15],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiApplicationCallback::Service, ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiApplicationCallback::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PA_ProcessRespStopSesThermMgmntReq(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiApplicationCallback_method_names[16],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiApplicationCallback::Service, ::antaris_api_peer_to_peer::RespSesTempReqParams, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiApplicationCallback::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::RespSesTempReqParams* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PA_ProcessRespSesTempReq(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiApplicationCallback_method_names[17],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiApplicationCallback::Service, ::antaris_api_peer_to_peer::SesThermalStatusNtf, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiApplicationCallback::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::SesThermalStatusNtf* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PA_ProcessSesThrmlNtf(ctx, req, resp);
+             }, this)));
 }
 
 AntarisapiApplicationCallback::Service::~Service() {
@@ -627,6 +767,34 @@ AntarisapiApplicationCallback::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
+::grpc::Status AntarisapiApplicationCallback::Service::PA_ProcessRespStartSesThermMgmntReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AntarisapiApplicationCallback::Service::PA_ProcessRespStopSesThermMgmntReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AntarisapiApplicationCallback::Service::PA_ProcessRespSesTempReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AntarisapiApplicationCallback::Service::PA_ProcessSesThrmlNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
 
 static const char* AntarisapiPayloadController_method_names[] = {
   "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_register",
@@ -641,6 +809,9 @@ static const char* AntarisapiPayloadController_method_names[] = {
   "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_gnss_eph_start_req",
   "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_get_eps_voltage_stop_req",
   "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_get_eps_voltage_start_req",
+  "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_start_ses_therm_mgmnt_req",
+  "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_stop_ses_therm_mgmnt_req",
+  "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_ses_temp_req",
 };
 
 std::unique_ptr< AntarisapiPayloadController::Stub> AntarisapiPayloadController::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -662,6 +833,9 @@ AntarisapiPayloadController::Stub::Stub(const std::shared_ptr< ::grpc::ChannelIn
   , rpcmethod_PC_gnss_eph_start_req_(AntarisapiPayloadController_method_names[9], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PC_get_eps_voltage_stop_req_(AntarisapiPayloadController_method_names[10], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PC_get_eps_voltage_start_req_(AntarisapiPayloadController_method_names[11], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PC_start_ses_therm_mgmnt_req_(AntarisapiPayloadController_method_names[12], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PC_stop_ses_therm_mgmnt_req_(AntarisapiPayloadController_method_names[13], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PC_ses_temp_req_(AntarisapiPayloadController_method_names[14], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status AntarisapiPayloadController::Stub::PC_register(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqRegisterParams& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
@@ -940,6 +1114,75 @@ void AntarisapiPayloadController::Stub::async::PC_get_eps_voltage_start_req(::gr
   return result;
 }
 
+::grpc::Status AntarisapiPayloadController::Stub::PC_start_ses_therm_mgmnt_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::StartSesThermMgmntReq& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::StartSesThermMgmntReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PC_start_ses_therm_mgmnt_req_, context, request, response);
+}
+
+void AntarisapiPayloadController::Stub::async::PC_start_ses_therm_mgmnt_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::StartSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::StartSesThermMgmntReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PC_start_ses_therm_mgmnt_req_, context, request, response, std::move(f));
+}
+
+void AntarisapiPayloadController::Stub::async::PC_start_ses_therm_mgmnt_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::StartSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PC_start_ses_therm_mgmnt_req_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiPayloadController::Stub::PrepareAsyncPC_start_ses_therm_mgmnt_reqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::StartSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::StartSesThermMgmntReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PC_start_ses_therm_mgmnt_req_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiPayloadController::Stub::AsyncPC_start_ses_therm_mgmnt_reqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::StartSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPC_start_ses_therm_mgmnt_reqRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AntarisapiPayloadController::Stub::PC_stop_ses_therm_mgmnt_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::StopSesThermMgmntReq& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::StopSesThermMgmntReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PC_stop_ses_therm_mgmnt_req_, context, request, response);
+}
+
+void AntarisapiPayloadController::Stub::async::PC_stop_ses_therm_mgmnt_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::StopSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::StopSesThermMgmntReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PC_stop_ses_therm_mgmnt_req_, context, request, response, std::move(f));
+}
+
+void AntarisapiPayloadController::Stub::async::PC_stop_ses_therm_mgmnt_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::StopSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PC_stop_ses_therm_mgmnt_req_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiPayloadController::Stub::PrepareAsyncPC_stop_ses_therm_mgmnt_reqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::StopSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::StopSesThermMgmntReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PC_stop_ses_therm_mgmnt_req_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiPayloadController::Stub::AsyncPC_stop_ses_therm_mgmnt_reqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::StopSesThermMgmntReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPC_stop_ses_therm_mgmnt_reqRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status AntarisapiPayloadController::Stub::PC_ses_temp_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesTempReq& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::SesTempReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PC_ses_temp_req_, context, request, response);
+}
+
+void AntarisapiPayloadController::Stub::async::PC_ses_temp_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesTempReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::SesTempReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PC_ses_temp_req_, context, request, response, std::move(f));
+}
+
+void AntarisapiPayloadController::Stub::async::PC_ses_temp_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesTempReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PC_ses_temp_req_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiPayloadController::Stub::PrepareAsyncPC_ses_temp_reqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesTempReq& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::SesTempReq, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PC_ses_temp_req_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiPayloadController::Stub::AsyncPC_ses_temp_reqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesTempReq& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPC_ses_temp_reqRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 AntarisapiPayloadController::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       AntarisapiPayloadController_method_names[0],
@@ -1061,6 +1304,36 @@ AntarisapiPayloadController::Service::Service() {
              ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
                return service->PC_get_eps_voltage_start_req(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiPayloadController_method_names[12],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiPayloadController::Service, ::antaris_api_peer_to_peer::StartSesThermMgmntReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiPayloadController::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::StartSesThermMgmntReq* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PC_start_ses_therm_mgmnt_req(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiPayloadController_method_names[13],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiPayloadController::Service, ::antaris_api_peer_to_peer::StopSesThermMgmntReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiPayloadController::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::StopSesThermMgmntReq* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PC_stop_ses_therm_mgmnt_req(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiPayloadController_method_names[14],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiPayloadController::Service, ::antaris_api_peer_to_peer::SesTempReq, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiPayloadController::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::SesTempReq* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PC_ses_temp_req(ctx, req, resp);
+             }, this)));
 }
 
 AntarisapiPayloadController::Service::~Service() {
@@ -1144,6 +1417,27 @@ AntarisapiPayloadController::Service::~Service() {
 }
 
 ::grpc::Status AntarisapiPayloadController::Service::PC_get_eps_voltage_start_req(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AntarisapiPayloadController::Service::PC_start_ses_therm_mgmnt_req(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::StartSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AntarisapiPayloadController::Service::PC_stop_ses_therm_mgmnt_req(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::StopSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AntarisapiPayloadController::Service::PC_ses_temp_req(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SesTempReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
   (void) context;
   (void) request;
   (void) response;

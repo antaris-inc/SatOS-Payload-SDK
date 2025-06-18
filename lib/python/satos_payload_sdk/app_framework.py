@@ -136,7 +136,7 @@ class SequenceHandler(Stoppable, threading.Thread):
 
 
 class ChannelClient:
-    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb):
+    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb, ses_thermal_ntf_cb):
         self._channel = None
         self._cond = threading.Condition()
         self._next_cid = 0
@@ -159,7 +159,11 @@ class ChannelClient:
             'GnssEphData': gnss_eph_data_cb,
             'RespGetEpsVoltageStopReq':self._handle_response,
             'RespGetEpsVoltageStartReq': self._handle_response,
-            'GetEpsVoltage': get_eps_voltage_cb
+            'GetEpsVoltage': get_eps_voltage_cb,
+            'RespStartSesThermMgmntReq': self._handle_response,
+            'RespStopSesThermMgmntReq': self._handle_response,
+            'RespSesTempReq': self._handle_response,
+            'SesThrmlStsNtf': ses_thermal_ntf_cb
         }
 
     def _get_next_cid(self):
@@ -278,6 +282,94 @@ class ChannelClient:
             resp = api_client.api_pa_pc_get_eps_voltage_start_req(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
                 logger.error("api_pa_pc_get_eps_voltage_start_req request failed")
+                return None
+
+            resp_cond = threading.Condition()
+            resp_cond.acquire()
+
+            self._responses[params.correlation_id] = [resp_cond, None]
+
+        # wait for response trigger
+        resp_cond.wait()
+
+        with self._cond:
+            resp = self._responses[params.correlation_id][1]
+            del self._responses[params.correlation_id]
+
+        return resp
+
+    def start_ses_therm_mgmnt_req(self, hardware_id, duration, lower_threshold, upper_threshold):
+        with self._cond:
+            params = api_types.StartSesThermMgmntReq(self._get_next_cid(), hardware_id, duration, lower_threshold, upper_threshold)
+            resp = api_client.api_pa_pc_start_ses_therm_mgmnt_req(self._channel, params)
+            if resp != api_types.AntarisReturnCode.An_SUCCESS:
+                logger.error("api_pa_pc_start_ses_therm_mgmnt_req request failed")
+                return None
+
+            resp_cond = threading.Condition()
+            resp_cond.acquire()
+
+            self._responses[params.correlation_id] = [resp_cond, None]
+
+         # wait for response trigger
+        resp_cond.wait()
+
+        with self._cond:
+            resp = self._responses[params.correlation_id][1]
+            del self._responses[params.correlation_id]
+
+        return resp
+    
+    def stop_ses_therm_mgmnt_req(self, hardware_id):
+        with self._cond:
+            params = api_types.StopSesThermMgmntReq(self._get_next_cid(), hardware_id)
+            resp = api_client.api_pa_pc_stop_ses_therm_mgmnt_req(self._channel, params)
+            if resp != api_types.AntarisReturnCode.An_SUCCESS:
+                logger.error("api_pa_pc_stop_ses_therm_mgmnt_req request failed")
+                return None
+
+            resp_cond = threading.Condition()
+            resp_cond.acquire()
+
+            self._responses[params.correlation_id] = [resp_cond, None]
+
+        # wait for response trigger
+        resp_cond.wait()
+
+        with self._cond:
+            resp = self._responses[params.correlation_id][1]
+            del self._responses[params.correlation_id]
+
+        return resp
+
+    def ses_temp_req(self, hardware_id):
+        with self._cond:
+            params = api_types.SesTempReq(self._get_next_cid(), hardware_id)
+            resp = api_client.api_pa_pc_ses_temp_req(self._channel, params)
+            if resp != api_types.AntarisReturnCode.An_SUCCESS:
+                logger.error("api_pa_pc_ses_temp_req request failed")
+                return None
+
+            resp_cond = threading.Condition()
+            resp_cond.acquire()
+
+            self._responses[params.correlation_id] = [resp_cond, None]
+
+        # wait for response trigger
+        resp_cond.wait()
+
+        with self._cond:
+            resp = self._responses[params.correlation_id][1]
+            del self._responses[params.correlation_id]
+
+        return resp
+    
+    def ses_thermal_ntf_cb(self, hardware_id):
+        with self._cond:
+            params = api_types.SesTempReq(self._get_next_cid(), hardware_id)
+            resp = api_client.api_pa_pc_ses_temp_req(self._channel, params)
+            if resp != api_types.AntarisReturnCode.An_SUCCESS:
+                logger.error("api_pa_pc_ses_temp_req request failed")
                 return None
 
             resp_cond = threading.Condition()
@@ -417,6 +509,10 @@ class PayloadApplication(Stoppable):
     def set_get_eps_voltage_cb(self, get_eps_voltage_handler):
         self.get_eps_voltage_handler = get_eps_voltage_handler
 
+    # Provided function should expect no arguments and return True or False
+    # to represent SES thermal status notification, respectively
+    def set_ses_thermal_status_ntf(self, ses_thermal_status_ntf):
+        self.ses_thermal_status_ntf = ses_thermal_status_ntf
     #TODO(bcwaldon): actually do something with the provided params
     def _handle_health_check(self, params):
         try:
@@ -434,7 +530,7 @@ class PayloadApplication(Stoppable):
         logger.info("payload app starting")
 
         if not self.channel_client:
-            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb, self._set_get_eps_voltage_cb)
+            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb, self._set_get_eps_voltage_cb, self._set_ses_thermal_status_ntf)
         
         self.channel_client._connect()
 
@@ -544,6 +640,19 @@ class PayloadApplication(Stoppable):
         logger.info("Handling EPS voltage data")
         try:
             hv = self.get_eps_voltage_handler(params)
+        except:
+            logger.exception("Handling get EPS voltage failed")
+            hv = False
+
+        if hv:
+            return api_types.AntarisReturnCode.An_SUCCESS
+        else:
+            return api_types.AntarisReturnCode.An_GENERIC_FAILURE
+
+    def _set_ses_thermal_status_ntf(self, params):
+        logger.info("Handling SES thermal notification")
+        try:
+            hv = self.ses_thermal_status_ntf(params)
         except:
             logger.exception("Handling get EPS voltage failed")
             hv = False
