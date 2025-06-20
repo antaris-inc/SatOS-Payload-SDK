@@ -168,26 +168,55 @@
             <Field name="req_status" type="INT32" sequence="2" description="status of GNSS EPH data start request"/>
          </Struct>
 
+        <Struct name="GpsEphemerisData" description="GNSS Eph1/Eph2 data">
+            <Field name="gps_fix_time" type="UINT32" sequence="1" description="GPS time"/>
+            <Field name="gps_sys_time" type="UINT32" sequence="2" description="GPS System time"/>
+            <Field name="obc_time" type="UINT64" sequence="3" description="OBC time"/>
+            <Field name="gps_position_ecef" type="UINT32" sequence="4" description="GPS position" array="3"/>
+            <Field name="gps_velocity_ecef" type="UINT32" sequence="5" description="GPS velocity" array="3"/>
+            <Field name="gps_validity_flag_pos_vel" type="UINT32" sequence="6" description="GPS validity flag"/>
+        </Struct>
+
+        <Struct name="AdcsEphemerisData" description="ADCS EPH data">
+            <Field name="orbit_time" type="DOUBLE" sequence="1" description="ADCS Orbit Propagator/System Time"/>
+            <Field name="eci_position_x" type="DOUBLE" sequence="2" description="ECI Position X (km)"/>
+            <Field name="eci_position_y" type="DOUBLE" sequence="3" description="ECI Position Y (km)"/>
+            <Field name="eci_position_z" type="DOUBLE" sequence="4" description="ECI Position Z (km)"/>
+            <Field name="eci_velocity_x" type="DOUBLE" sequence="5" description="ECI Velocity X (km/s)"/>
+            <Field name="eci_velocity_y" type="DOUBLE" sequence="6" description="ECI Velocity Y (km/s)"/>
+            <Field name="eci_velocity_z" type="DOUBLE" sequence="7" description="ECI Velocity Z (km/s)"/>
+            <Field name="ecef_position_x" type="DOUBLE" sequence="8" description="ECEF Position X (km)"/>
+            <Field name="ecef_position_y" type="DOUBLE" sequence="9" description="ECEF Position Y (km)"/>
+            <Field name="ecef_position_z" type="DOUBLE" sequence="10" description="ECEF Position Z (km)"/> 
+            <Field name="ecef_velocity_x" type="DOUBLE" sequence="11" description="ECEF Velocity X (km/s)"/> 
+            <Field name="ecef_velocity_y" type="DOUBLE" sequence="12" description="ECEF Velocity Y (km/s)"/>
+            <Field name="ecef_velocity_z" type="DOUBLE" sequence="13" description="ECEF Velocity Z (km/s)"/> 
+            <Field name="ang_rate_x" type="DOUBLE" sequence="14" description="X axis Angular rate (deg/s)"/> 
+            <Field name="ang_rate_y" type="DOUBLE" sequence="15" description="Y axis Angular rate (deg/s)"/> 
+            <Field name="ang_rate_z" type="DOUBLE" sequence="16" description="Z axis Angular rate (deg/s)"/> 
+            <Field name="att_quat_1" type="DOUBLE" sequence="17" description="Attitude Quaternion 1"/> 
+            <Field name="att_quat_2" type="DOUBLE" sequence="20" description="Attitude Quaternion 2"/> 
+            <Field name="att_quat_3" type="DOUBLE" sequence="21" description="Attitude Quaternion 3"/> 
+            <Field name="att_quat_4" type="DOUBLE" sequence="22" description="Attitude Quaternion 4"/> 
+            <Field name="latitude" type="FLOAT" sequence="23" description="Latitude (deg)"/> 
+            <Field name="longitude" type="FLOAT" sequence="24" description="Longitude (deg)"/> 
+            <Field name="altitude" type="FLOAT" sequence="25" description="Altitude (km)"/> 
+            <Field name="nadir_vector_x" type="FLOAT" sequence="26" description="X Nadir Vector"/> 
+            <Field name="nadir_vector_y" type="FLOAT" sequence="27" description="Y Nadir Vector"/> 
+            <Field name="nadir_vector_z" type="FLOAT" sequence="28" description="Z Nadir Vector"/> 
+            <Field name="gd_nadir_vector_x" type="FLOAT" sequence="29" description="X Geodetic Nadir Vector"/> 
+            <Field name="gd_nadir_vector_y" type="FLOAT" sequence="30" description="Y Geodetic Nadir Vector"/> 
+            <Field name="gd_nadir_vector_z" type="FLOAT" sequence="31" description="Z Geodetic Nadir Vector"/> 
+            <Field name="beta_angle" type="FLOAT" sequence="32" description="Beta Angle (deg)"/> 
+            <Field name="validity_flags" type="UINT16" sequence="33" description="1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity"/> 
+        </Struct>
+
         <Struct name="GnssEphData" description="GNSS Eph1/Eph2 data">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
-            <Field name="gps_fix_time" type="UINT32" sequence="2" description="GPS time"/>
-            <Field name="gps_sys_time" type="UINT32" sequence="3" description="GPS System time"/>
-            <Field name="obc_time" type="UINT64" sequence="4" description="OBC time"/>
-            <Field name="gps_position_ecef" type="UINT32" sequence="5" description="GPS position" array="3"/>
-            <Field name="gps_velocity_ecef" type="UINT32" sequence="6" description="GPS velocity" array="3"/>
-            <Field name="gps_validity_flag_pos_vel" type="UINT32" sequence="7" description="GPS validity flag"/>
-            <Field name="adcs_time" type="UINT64" sequence="8" description="Orbit time"/>
-            <Field name="position_wrt_eci" type="UINT64" sequence="9" description="Position" array="3"/>
-            <Field name="velocity_wrt_eci" type="UINT64" sequence="10" description="Position" array="3"/>
-            <Field name="position_wrt_ecef" type="UINT64" sequence="11" description="Position" array="3"/>
-            <Field name="velocity_wrt_ecef" type="UINT64" sequence="12" description="Position" array="3"/>
-            <Field name="body_rate" type="UINT32" sequence="13" description="Body rate" array="3"/>
-            <Field name="attitude" type="UINT32" sequence="14" description="RPY WRT LVLH" array="3"/>
-            <Field name="adcs_pos" type="UINT32" sequence="15" description="Lat, Lon, Altitude (ADCS)" array="3"/>
-            <Field name="nadir_vector_body" type="UINT32" sequence="16" description="Nadir vector" array="3"/>
-            <Field name="gd_nadir_vector_body" type="UINT32" sequence="17" description="GD Nadir Vector Body" array="3"/>
-            <Field name="beta_angle" type="UINT32" sequence="18" description="Beta Angle"/>
-            <Field name="validity_flags" type="UINT16" sequence="19" description="1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity"/>
+            <Field name="adcs_eph_data" type="AdcsEphemerisData" sequence="2" description="ADCS data"/>
+            <Field name="gps_eph_data" type="GpsEphemerisData" sequence="3" description="GPS data"/>
+            <Field name="adcs_timeout_flag" type="UINT8" sequence="4" description="ADCS flag"/>
+            <Field name="gps_timeout_flag" type="UINT8" sequence="5" description="GPS flag"/>
         </Struct>
     
         <Struct name="ReqGetEpsVoltageStopReq" description="Stop request get-eps-voltage">

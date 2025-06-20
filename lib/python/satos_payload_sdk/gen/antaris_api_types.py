@@ -734,53 +734,25 @@ def peer_to_app_RespGnssEphStartDataReq(peer_struct):
 def app_to_peer_RespGnssEphStartDataReq(app_struct):
     return antaris_api_pb2.RespGnssEphStartDataReq(correlation_id = app_struct.correlation_id, req_status = app_struct.req_status)
 
-## @class: GnssEphData
+## @class: GpsEphemerisData
 ## @brief: GNSS Eph1/Eph2 data
-## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
 ## @param: gps_fix_time                                    :    GPS time                                        
 ## @param: gps_sys_time                                    :    GPS System time                                 
 ## @param: obc_time                                        :    OBC time                                        
 ## @param: gps_position_ecef                               :    GPS position                                    
 ## @param: gps_velocity_ecef                               :    GPS velocity                                    
 ## @param: gps_validity_flag_pos_vel                       :    GPS validity flag                               
-## @param: adcs_time                                       :    Orbit time                                      
-## @param: position_wrt_eci                                :    Position                                        
-## @param: velocity_wrt_eci                                :    Position                                        
-## @param: position_wrt_ecef                               :    Position                                        
-## @param: velocity_wrt_ecef                               :    Position                                        
-## @param: body_rate                                       :    Body rate                                       
-## @param: attitude                                        :    RPY WRT LVLH                                    
-## @param: adcs_pos                                        :    Lat, Lon, Altitude (ADCS)                       
-## @param: nadir_vector_body                               :    Nadir vector                                    
-## @param: gd_nadir_vector_body                            :    GD Nadir Vector Body                            
-## @param: beta_angle                                      :    Beta Angle                                      
-## @param: validity_flags                                  :    1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity
-class GnssEphData:
-    def __init__(self, correlation_id, gps_fix_time, gps_sys_time, obc_time, gps_position_ecef, gps_velocity_ecef, gps_validity_flag_pos_vel, adcs_time, position_wrt_eci, velocity_wrt_eci, position_wrt_ecef, velocity_wrt_ecef, body_rate, attitude, adcs_pos, nadir_vector_body, gd_nadir_vector_body, beta_angle, validity_flags):
-        self.correlation_id = correlation_id
+class GpsEphemerisData:
+    def __init__(self, gps_fix_time, gps_sys_time, obc_time, gps_position_ecef, gps_velocity_ecef, gps_validity_flag_pos_vel):
         self.gps_fix_time = gps_fix_time
         self.gps_sys_time = gps_sys_time
         self.obc_time = obc_time
         self.gps_position_ecef = gps_position_ecef
         self.gps_velocity_ecef = gps_velocity_ecef
         self.gps_validity_flag_pos_vel = gps_validity_flag_pos_vel
-        self.adcs_time = adcs_time
-        self.position_wrt_eci = position_wrt_eci
-        self.velocity_wrt_eci = velocity_wrt_eci
-        self.position_wrt_ecef = position_wrt_ecef
-        self.velocity_wrt_ecef = velocity_wrt_ecef
-        self.body_rate = body_rate
-        self.attitude = attitude
-        self.adcs_pos = adcs_pos
-        self.nadir_vector_body = nadir_vector_body
-        self.gd_nadir_vector_body = gd_nadir_vector_body
-        self.beta_angle = beta_angle
-        self.validity_flags = validity_flags
 
     def __str__(self):
         ret_str = ""
-        ret_str += "correlation_id:\n"
-        ret_str += str(self.correlation_id) + "\n"
         ret_str += "gps_fix_time:\n"
         ret_str += str(self.gps_fix_time) + "\n"
         ret_str += "gps_sys_time:\n"
@@ -793,26 +765,151 @@ class GnssEphData:
         ret_str += str(self.gps_velocity_ecef) + "\n"
         ret_str += "gps_validity_flag_pos_vel:\n"
         ret_str += str(self.gps_validity_flag_pos_vel) + "\n"
-        ret_str += "adcs_time:\n"
-        ret_str += str(self.adcs_time) + "\n"
-        ret_str += "position_wrt_eci:\n"
-        ret_str += str(self.position_wrt_eci) + "\n"
-        ret_str += "velocity_wrt_eci:\n"
-        ret_str += str(self.velocity_wrt_eci) + "\n"
-        ret_str += "position_wrt_ecef:\n"
-        ret_str += str(self.position_wrt_ecef) + "\n"
-        ret_str += "velocity_wrt_ecef:\n"
-        ret_str += str(self.velocity_wrt_ecef) + "\n"
-        ret_str += "body_rate:\n"
-        ret_str += str(self.body_rate) + "\n"
-        ret_str += "attitude:\n"
-        ret_str += str(self.attitude) + "\n"
-        ret_str += "adcs_pos:\n"
-        ret_str += str(self.adcs_pos) + "\n"
-        ret_str += "nadir_vector_body:\n"
-        ret_str += str(self.nadir_vector_body) + "\n"
-        ret_str += "gd_nadir_vector_body:\n"
-        ret_str += str(self.gd_nadir_vector_body) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_GpsEphemerisData(peer_struct):
+    gps_fix_time = peer_struct.gps_fix_time
+    gps_sys_time = peer_struct.gps_sys_time
+    obc_time = peer_struct.obc_time
+    gps_position_ecef = peer_struct.gps_position_ecef
+    gps_velocity_ecef = peer_struct.gps_velocity_ecef
+    gps_validity_flag_pos_vel = peer_struct.gps_validity_flag_pos_vel
+    return GpsEphemerisData(gps_fix_time, gps_sys_time, obc_time, gps_position_ecef, gps_velocity_ecef, gps_validity_flag_pos_vel)
+
+def app_to_peer_GpsEphemerisData(app_struct):
+    return antaris_api_pb2.GpsEphemerisData(gps_fix_time = app_struct.gps_fix_time, gps_sys_time = app_struct.gps_sys_time, obc_time = app_struct.obc_time, gps_position_ecef = app_struct.gps_position_ecef, gps_velocity_ecef = app_struct.gps_velocity_ecef, gps_validity_flag_pos_vel = app_struct.gps_validity_flag_pos_vel)
+
+## @class: AdcsEphemerisData
+## @brief: ADCS EPH data
+## @param: orbit_time                                      :    ADCS Orbit Propagator/System Time               
+## @param: eci_position_x                                  :    ECI Position X (km)                             
+## @param: eci_position_y                                  :    ECI Position Y (km)                             
+## @param: eci_position_z                                  :    ECI Position Z (km)                             
+## @param: eci_velocity_x                                  :    ECI Velocity X (km/s)                           
+## @param: eci_velocity_y                                  :    ECI Velocity Y (km/s)                           
+## @param: eci_velocity_z                                  :    ECI Velocity Z (km/s)                           
+## @param: ecef_position_x                                 :    ECEF Position X (km)                            
+## @param: ecef_position_y                                 :    ECEF Position Y (km)                            
+## @param: ecef_position_z                                 :    ECEF Position Z (km)                            
+## @param: ecef_velocity_x                                 :    ECEF Velocity X (km/s)                          
+## @param: ecef_velocity_y                                 :    ECEF Velocity Y (km/s)                          
+## @param: ecef_velocity_z                                 :    ECEF Velocity Z (km/s)                          
+## @param: ang_rate_x                                      :    X axis Angular rate (deg/s)                     
+## @param: ang_rate_y                                      :    Y axis Angular rate (deg/s)                     
+## @param: ang_rate_z                                      :    Z axis Angular rate (deg/s)                     
+## @param: att_quat_1                                      :    Attitude Quaternion 1                           
+## @param: att_quat_2                                      :    Attitude Quaternion 2                           
+## @param: att_quat_3                                      :    Attitude Quaternion 3                           
+## @param: att_quat_4                                      :    Attitude Quaternion 4                           
+## @param: latitude                                        :    Latitude (deg)                                  
+## @param: longitude                                       :    Longitude (deg)                                 
+## @param: altitude                                        :    Altitude (km)                                   
+## @param: nadir_vector_x                                  :    X Nadir Vector                                  
+## @param: nadir_vector_y                                  :    Y Nadir Vector                                  
+## @param: nadir_vector_z                                  :    Z Nadir Vector                                  
+## @param: gd_nadir_vector_x                               :    X Geodetic Nadir Vector                         
+## @param: gd_nadir_vector_y                               :    Y Geodetic Nadir Vector                         
+## @param: gd_nadir_vector_z                               :    Z Geodetic Nadir Vector                         
+## @param: beta_angle                                      :    Beta Angle (deg)                                
+## @param: validity_flags                                  :    1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity
+class AdcsEphemerisData:
+    def __init__(self, orbit_time, eci_position_x, eci_position_y, eci_position_z, eci_velocity_x, eci_velocity_y, eci_velocity_z, ecef_position_x, ecef_position_y, ecef_position_z, ecef_velocity_x, ecef_velocity_y, ecef_velocity_z, ang_rate_x, ang_rate_y, ang_rate_z, att_quat_1, att_quat_2, att_quat_3, att_quat_4, latitude, longitude, altitude, nadir_vector_x, nadir_vector_y, nadir_vector_z, gd_nadir_vector_x, gd_nadir_vector_y, gd_nadir_vector_z, beta_angle, validity_flags):
+        self.orbit_time = orbit_time
+        self.eci_position_x = eci_position_x
+        self.eci_position_y = eci_position_y
+        self.eci_position_z = eci_position_z
+        self.eci_velocity_x = eci_velocity_x
+        self.eci_velocity_y = eci_velocity_y
+        self.eci_velocity_z = eci_velocity_z
+        self.ecef_position_x = ecef_position_x
+        self.ecef_position_y = ecef_position_y
+        self.ecef_position_z = ecef_position_z
+        self.ecef_velocity_x = ecef_velocity_x
+        self.ecef_velocity_y = ecef_velocity_y
+        self.ecef_velocity_z = ecef_velocity_z
+        self.ang_rate_x = ang_rate_x
+        self.ang_rate_y = ang_rate_y
+        self.ang_rate_z = ang_rate_z
+        self.att_quat_1 = att_quat_1
+        self.att_quat_2 = att_quat_2
+        self.att_quat_3 = att_quat_3
+        self.att_quat_4 = att_quat_4
+        self.latitude = latitude
+        self.longitude = longitude
+        self.altitude = altitude
+        self.nadir_vector_x = nadir_vector_x
+        self.nadir_vector_y = nadir_vector_y
+        self.nadir_vector_z = nadir_vector_z
+        self.gd_nadir_vector_x = gd_nadir_vector_x
+        self.gd_nadir_vector_y = gd_nadir_vector_y
+        self.gd_nadir_vector_z = gd_nadir_vector_z
+        self.beta_angle = beta_angle
+        self.validity_flags = validity_flags
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "orbit_time:\n"
+        ret_str += str(self.orbit_time) + "\n"
+        ret_str += "eci_position_x:\n"
+        ret_str += str(self.eci_position_x) + "\n"
+        ret_str += "eci_position_y:\n"
+        ret_str += str(self.eci_position_y) + "\n"
+        ret_str += "eci_position_z:\n"
+        ret_str += str(self.eci_position_z) + "\n"
+        ret_str += "eci_velocity_x:\n"
+        ret_str += str(self.eci_velocity_x) + "\n"
+        ret_str += "eci_velocity_y:\n"
+        ret_str += str(self.eci_velocity_y) + "\n"
+        ret_str += "eci_velocity_z:\n"
+        ret_str += str(self.eci_velocity_z) + "\n"
+        ret_str += "ecef_position_x:\n"
+        ret_str += str(self.ecef_position_x) + "\n"
+        ret_str += "ecef_position_y:\n"
+        ret_str += str(self.ecef_position_y) + "\n"
+        ret_str += "ecef_position_z:\n"
+        ret_str += str(self.ecef_position_z) + "\n"
+        ret_str += "ecef_velocity_x:\n"
+        ret_str += str(self.ecef_velocity_x) + "\n"
+        ret_str += "ecef_velocity_y:\n"
+        ret_str += str(self.ecef_velocity_y) + "\n"
+        ret_str += "ecef_velocity_z:\n"
+        ret_str += str(self.ecef_velocity_z) + "\n"
+        ret_str += "ang_rate_x:\n"
+        ret_str += str(self.ang_rate_x) + "\n"
+        ret_str += "ang_rate_y:\n"
+        ret_str += str(self.ang_rate_y) + "\n"
+        ret_str += "ang_rate_z:\n"
+        ret_str += str(self.ang_rate_z) + "\n"
+        ret_str += "att_quat_1:\n"
+        ret_str += str(self.att_quat_1) + "\n"
+        ret_str += "att_quat_2:\n"
+        ret_str += str(self.att_quat_2) + "\n"
+        ret_str += "att_quat_3:\n"
+        ret_str += str(self.att_quat_3) + "\n"
+        ret_str += "att_quat_4:\n"
+        ret_str += str(self.att_quat_4) + "\n"
+        ret_str += "latitude:\n"
+        ret_str += str(self.latitude) + "\n"
+        ret_str += "longitude:\n"
+        ret_str += str(self.longitude) + "\n"
+        ret_str += "altitude:\n"
+        ret_str += str(self.altitude) + "\n"
+        ret_str += "nadir_vector_x:\n"
+        ret_str += str(self.nadir_vector_x) + "\n"
+        ret_str += "nadir_vector_y:\n"
+        ret_str += str(self.nadir_vector_y) + "\n"
+        ret_str += "nadir_vector_z:\n"
+        ret_str += str(self.nadir_vector_z) + "\n"
+        ret_str += "gd_nadir_vector_x:\n"
+        ret_str += str(self.gd_nadir_vector_x) + "\n"
+        ret_str += "gd_nadir_vector_y:\n"
+        ret_str += str(self.gd_nadir_vector_y) + "\n"
+        ret_str += "gd_nadir_vector_z:\n"
+        ret_str += str(self.gd_nadir_vector_z) + "\n"
         ret_str += "beta_angle:\n"
         ret_str += str(self.beta_angle) + "\n"
         ret_str += "validity_flags:\n"
@@ -823,30 +920,86 @@ class GnssEphData:
     def display(self):
         print(str(self))
 
-def peer_to_app_GnssEphData(peer_struct):
-    correlation_id = peer_struct.correlation_id
-    gps_fix_time = peer_struct.gps_fix_time
-    gps_sys_time = peer_struct.gps_sys_time
-    obc_time = peer_struct.obc_time
-    gps_position_ecef = peer_struct.gps_position_ecef
-    gps_velocity_ecef = peer_struct.gps_velocity_ecef
-    gps_validity_flag_pos_vel = peer_struct.gps_validity_flag_pos_vel
-    adcs_time = peer_struct.adcs_time
-    position_wrt_eci = peer_struct.position_wrt_eci
-    velocity_wrt_eci = peer_struct.velocity_wrt_eci
-    position_wrt_ecef = peer_struct.position_wrt_ecef
-    velocity_wrt_ecef = peer_struct.velocity_wrt_ecef
-    body_rate = peer_struct.body_rate
-    attitude = peer_struct.attitude
-    adcs_pos = peer_struct.adcs_pos
-    nadir_vector_body = peer_struct.nadir_vector_body
-    gd_nadir_vector_body = peer_struct.gd_nadir_vector_body
+def peer_to_app_AdcsEphemerisData(peer_struct):
+    orbit_time = peer_struct.orbit_time
+    eci_position_x = peer_struct.eci_position_x
+    eci_position_y = peer_struct.eci_position_y
+    eci_position_z = peer_struct.eci_position_z
+    eci_velocity_x = peer_struct.eci_velocity_x
+    eci_velocity_y = peer_struct.eci_velocity_y
+    eci_velocity_z = peer_struct.eci_velocity_z
+    ecef_position_x = peer_struct.ecef_position_x
+    ecef_position_y = peer_struct.ecef_position_y
+    ecef_position_z = peer_struct.ecef_position_z
+    ecef_velocity_x = peer_struct.ecef_velocity_x
+    ecef_velocity_y = peer_struct.ecef_velocity_y
+    ecef_velocity_z = peer_struct.ecef_velocity_z
+    ang_rate_x = peer_struct.ang_rate_x
+    ang_rate_y = peer_struct.ang_rate_y
+    ang_rate_z = peer_struct.ang_rate_z
+    att_quat_1 = peer_struct.att_quat_1
+    att_quat_2 = peer_struct.att_quat_2
+    att_quat_3 = peer_struct.att_quat_3
+    att_quat_4 = peer_struct.att_quat_4
+    latitude = peer_struct.latitude
+    longitude = peer_struct.longitude
+    altitude = peer_struct.altitude
+    nadir_vector_x = peer_struct.nadir_vector_x
+    nadir_vector_y = peer_struct.nadir_vector_y
+    nadir_vector_z = peer_struct.nadir_vector_z
+    gd_nadir_vector_x = peer_struct.gd_nadir_vector_x
+    gd_nadir_vector_y = peer_struct.gd_nadir_vector_y
+    gd_nadir_vector_z = peer_struct.gd_nadir_vector_z
     beta_angle = peer_struct.beta_angle
     validity_flags = peer_struct.validity_flags
-    return GnssEphData(correlation_id, gps_fix_time, gps_sys_time, obc_time, gps_position_ecef, gps_velocity_ecef, gps_validity_flag_pos_vel, adcs_time, position_wrt_eci, velocity_wrt_eci, position_wrt_ecef, velocity_wrt_ecef, body_rate, attitude, adcs_pos, nadir_vector_body, gd_nadir_vector_body, beta_angle, validity_flags)
+    return AdcsEphemerisData(orbit_time, eci_position_x, eci_position_y, eci_position_z, eci_velocity_x, eci_velocity_y, eci_velocity_z, ecef_position_x, ecef_position_y, ecef_position_z, ecef_velocity_x, ecef_velocity_y, ecef_velocity_z, ang_rate_x, ang_rate_y, ang_rate_z, att_quat_1, att_quat_2, att_quat_3, att_quat_4, latitude, longitude, altitude, nadir_vector_x, nadir_vector_y, nadir_vector_z, gd_nadir_vector_x, gd_nadir_vector_y, gd_nadir_vector_z, beta_angle, validity_flags)
+
+def app_to_peer_AdcsEphemerisData(app_struct):
+    return antaris_api_pb2.AdcsEphemerisData(orbit_time = app_struct.orbit_time, eci_position_x = app_struct.eci_position_x, eci_position_y = app_struct.eci_position_y, eci_position_z = app_struct.eci_position_z, eci_velocity_x = app_struct.eci_velocity_x, eci_velocity_y = app_struct.eci_velocity_y, eci_velocity_z = app_struct.eci_velocity_z, ecef_position_x = app_struct.ecef_position_x, ecef_position_y = app_struct.ecef_position_y, ecef_position_z = app_struct.ecef_position_z, ecef_velocity_x = app_struct.ecef_velocity_x, ecef_velocity_y = app_struct.ecef_velocity_y, ecef_velocity_z = app_struct.ecef_velocity_z, ang_rate_x = app_struct.ang_rate_x, ang_rate_y = app_struct.ang_rate_y, ang_rate_z = app_struct.ang_rate_z, att_quat_1 = app_struct.att_quat_1, att_quat_2 = app_struct.att_quat_2, att_quat_3 = app_struct.att_quat_3, att_quat_4 = app_struct.att_quat_4, latitude = app_struct.latitude, longitude = app_struct.longitude, altitude = app_struct.altitude, nadir_vector_x = app_struct.nadir_vector_x, nadir_vector_y = app_struct.nadir_vector_y, nadir_vector_z = app_struct.nadir_vector_z, gd_nadir_vector_x = app_struct.gd_nadir_vector_x, gd_nadir_vector_y = app_struct.gd_nadir_vector_y, gd_nadir_vector_z = app_struct.gd_nadir_vector_z, beta_angle = app_struct.beta_angle, validity_flags = app_struct.validity_flags)
+
+## @class: GnssEphData
+## @brief: GNSS Eph1/Eph2 data
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: adcs_eph_data                                   :    ADCS data                                       
+## @param: gps_eph_data                                    :    GPS data                                        
+## @param: adcs_timeout_flag                               :    ADCS flag                                       
+## @param: gps_timeout_flag                                :    GPS flag                                        
+class GnssEphData:
+    def __init__(self, correlation_id, adcs_eph_data, gps_eph_data, adcs_timeout_flag, gps_timeout_flag):
+        self.correlation_id = correlation_id
+        self.adcs_eph_data = adcs_eph_data
+        self.gps_eph_data = gps_eph_data
+        self.adcs_timeout_flag = adcs_timeout_flag
+        self.gps_timeout_flag = gps_timeout_flag
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "adcs_eph_data:\n"
+        ret_str += str(self.adcs_eph_data) + "\n"
+        ret_str += "gps_eph_data:\n"
+        ret_str += str(self.gps_eph_data) + "\n"
+        ret_str += "adcs_timeout_flag:\n"
+        ret_str += str(self.adcs_timeout_flag) + "\n"
+        ret_str += "gps_timeout_flag:\n"
+        ret_str += str(self.gps_timeout_flag) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_GnssEphData(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    adcs_eph_data = peer_struct.adcs_eph_data
+    gps_eph_data = peer_struct.gps_eph_data
+    adcs_timeout_flag = peer_struct.adcs_timeout_flag
+    gps_timeout_flag = peer_struct.gps_timeout_flag
+    return GnssEphData(correlation_id, adcs_eph_data, gps_eph_data, adcs_timeout_flag, gps_timeout_flag)
 
 def app_to_peer_GnssEphData(app_struct):
-    return antaris_api_pb2.GnssEphData(correlation_id = app_struct.correlation_id, gps_fix_time = app_struct.gps_fix_time, gps_sys_time = app_struct.gps_sys_time, obc_time = app_struct.obc_time, gps_position_ecef = app_struct.gps_position_ecef, gps_velocity_ecef = app_struct.gps_velocity_ecef, gps_validity_flag_pos_vel = app_struct.gps_validity_flag_pos_vel, adcs_time = app_struct.adcs_time, position_wrt_eci = app_struct.position_wrt_eci, velocity_wrt_eci = app_struct.velocity_wrt_eci, position_wrt_ecef = app_struct.position_wrt_ecef, velocity_wrt_ecef = app_struct.velocity_wrt_ecef, body_rate = app_struct.body_rate, attitude = app_struct.attitude, adcs_pos = app_struct.adcs_pos, nadir_vector_body = app_struct.nadir_vector_body, gd_nadir_vector_body = app_struct.gd_nadir_vector_body, beta_angle = app_struct.beta_angle, validity_flags = app_struct.validity_flags)
+    return antaris_api_pb2.GnssEphData(correlation_id = app_struct.correlation_id, adcs_eph_data = app_struct.adcs_eph_data, gps_eph_data = app_struct.gps_eph_data, adcs_timeout_flag = app_struct.adcs_timeout_flag, gps_timeout_flag = app_struct.gps_timeout_flag)
 
 ## @class: ReqGetEpsVoltageStopReq
 ## @brief: Stop request get-eps-voltage
