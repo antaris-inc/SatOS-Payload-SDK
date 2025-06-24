@@ -326,7 +326,7 @@ constexpr GpsEphemerisData::GpsEphemerisData(
   , _gps_velocity_ecef_cached_byte_size_(0)
   , gps_fix_time_(0)
   , gps_sys_time_(0)
-  , obc_time_(int64_t{0})
+  , obc_time_(0)
   , gps_validity_flag_pos_vel_(0){}
 struct GpsEphemerisDataDefaultTypeInternal {
   constexpr GpsEphemerisDataDefaultTypeInternal()
@@ -1090,7 +1090,7 @@ const char descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[
   "hStartDataReq\022\026\n\016correlation_id\030\001 \001(\005\022\022\n"
   "\nreq_status\030\002 \001(\005\"\251\001\n\020GpsEphemerisData\022\024"
   "\n\014gps_fix_time\030\001 \001(\005\022\024\n\014gps_sys_time\030\002 \001"
-  "(\005\022\020\n\010obc_time\030\003 \001(\003\022\031\n\021gps_position_ece"
+  "(\005\022\020\n\010obc_time\030\003 \001(\005\022\031\n\021gps_position_ece"
   "f\030\004 \003(\005\022\031\n\021gps_velocity_ecef\030\005 \003(\005\022!\n\031gp"
   "s_validity_flag_pos_vel\030\006 \001(\005\"\325\005\n\021AdcsEp"
   "hemerisData\022\022\n\norbit_time\030\001 \001(\001\022\026\n\016eci_p"
@@ -6574,10 +6574,10 @@ const char* GpsEphemerisData::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPA
         } else
           goto handle_unusual;
         continue;
-      // int64 obc_time = 3;
+      // int32 obc_time = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
-          obc_time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          obc_time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -6653,10 +6653,10 @@ uint8_t* GpsEphemerisData::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_gps_sys_time(), target);
   }
 
-  // int64 obc_time = 3;
+  // int32 obc_time = 3;
   if (this->_internal_obc_time() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(3, this->_internal_obc_time(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_obc_time(), target);
   }
 
   // repeated int32 gps_position_ecef = 4;
@@ -6739,9 +6739,9 @@ size_t GpsEphemerisData::ByteSizeLong() const {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_gps_sys_time());
   }
 
-  // int64 obc_time = 3;
+  // int32 obc_time = 3;
   if (this->_internal_obc_time() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64SizePlusOne(this->_internal_obc_time());
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_obc_time());
   }
 
   // int32 gps_validity_flag_pos_vel = 6;

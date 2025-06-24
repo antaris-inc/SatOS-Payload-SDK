@@ -4106,13 +4106,13 @@ class GpsEphemerisData final :
   void _internal_set_gps_sys_time(int32_t value);
   public:
 
-  // int64 obc_time = 3;
+  // int32 obc_time = 3;
   void clear_obc_time();
-  int64_t obc_time() const;
-  void set_obc_time(int64_t value);
+  int32_t obc_time() const;
+  void set_obc_time(int32_t value);
   private:
-  int64_t _internal_obc_time() const;
-  void _internal_set_obc_time(int64_t value);
+  int32_t _internal_obc_time() const;
+  void _internal_set_obc_time(int32_t value);
   public:
 
   // int32 gps_validity_flag_pos_vel = 6;
@@ -4137,7 +4137,7 @@ class GpsEphemerisData final :
   mutable std::atomic<int> _gps_velocity_ecef_cached_byte_size_;
   int32_t gps_fix_time_;
   int32_t gps_sys_time_;
-  int64_t obc_time_;
+  int32_t obc_time_;
   int32_t gps_validity_flag_pos_vel_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
@@ -8641,22 +8641,22 @@ inline void GpsEphemerisData::set_gps_sys_time(int32_t value) {
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.GpsEphemerisData.gps_sys_time)
 }
 
-// int64 obc_time = 3;
+// int32 obc_time = 3;
 inline void GpsEphemerisData::clear_obc_time() {
-  obc_time_ = int64_t{0};
+  obc_time_ = 0;
 }
-inline int64_t GpsEphemerisData::_internal_obc_time() const {
+inline int32_t GpsEphemerisData::_internal_obc_time() const {
   return obc_time_;
 }
-inline int64_t GpsEphemerisData::obc_time() const {
+inline int32_t GpsEphemerisData::obc_time() const {
   // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.GpsEphemerisData.obc_time)
   return _internal_obc_time();
 }
-inline void GpsEphemerisData::_internal_set_obc_time(int64_t value) {
+inline void GpsEphemerisData::_internal_set_obc_time(int32_t value) {
   
   obc_time_ = value;
 }
-inline void GpsEphemerisData::set_obc_time(int64_t value) {
+inline void GpsEphemerisData::set_obc_time(int32_t value) {
   _internal_set_obc_time(value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.GpsEphemerisData.obc_time)
 }

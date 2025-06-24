@@ -336,6 +336,9 @@ class CPPField(PARSER_INTF.Field):
             # targetFile.write("{}string {}(&src->{}[0]);\n".format(gIndent, self.get_peer_local_tmp_varname(), self.name))
             pass # copy strings directly without using a tmp local
         else:
+            if appint_type_to_peerint_type(self.type) == "UINT32":
+                targetFile.write("{}{} {} = 0;\n".format(gIndent, appint_type_to_peerint_type(self.type), self.get_peer_local_tmp_varname()))
+            else:
             targetFile.write("{}{} {};\n".format(gIndent, appint_type_to_peerint_type(self.type), self.get_peer_local_tmp_varname()))
 
 class CPPStruct(PARSER_INTF.Struct):

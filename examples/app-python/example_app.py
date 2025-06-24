@@ -34,9 +34,7 @@ ADCS_start_success = 0
 ADCS_start_reconfigured = 1
 ADCS_start_failed = 2
 
-
 logger = logging.getLogger()
-
 
 class Controller:
 
@@ -65,11 +63,11 @@ class Controller:
             logger.info(f"gps_fix_time: {gnss_data.gps_eph_data.gps_fix_time}")
             logger.info(f"gps_sys_time: {gnss_data.gps_eph_data.gps_sys_time}")
             logger.info(f"obc_time: {gnss_data.gps_eph_data.obc_time}")
-            for i in {1,2,3}:
+            for i in {0,1,2}:
                 logger.info(f"gps_position_ecef: {gnss_data.gps_eph_data.gps_position_ecef[i]}")
-            for i in {1,2,3}:
+            for i in {0,1,2}:
                 logger.info(f"gps_velocity_ecef: {gnss_data.gps_eph_data.gps_velocity_ecef[i]}")
-            logger.info(f"gps_validity_flag_pos_vel: {gnss_data.gps_validity_flag_pos_vel}")
+            logger.info(f"gps_validity_flag_pos_vel: {gnss_data.gps_eph_data.gps_validity_flag_pos_vel}")
 
         elif gnss_data.adcs_timeout_flag == 1:    
             logger.info(f"ADCS Orbit Propagator/System Time = {gnss_data.adcs_eph_data.orbit_time}") 
@@ -104,7 +102,7 @@ class Controller:
             logger.info(f"Beta Angle (deg) = {gnss_data.adcs_eph_data.beta_angle}")
             # Print each bit's meaning
             for i, name in enumerate(fields):
-                bit_value = (gnss_data.validity_flags >> i) & 1
+                bit_value = (gnss_data.adcs_eph_data.validity_flags >> i) & 1
                 print(f"{name}: {bit_value}")
         return True
     
@@ -144,7 +142,7 @@ class Controller:
                 logger.info("GNSS EPH data start request failed")
         else:
             logger.info("Incorrect parameters. Parameter can be 'stop' or 'start'")
-
+        
     def handle_eps_voltage(self, ctx):
         periodicity_in_ms = 2000   # Periodicity = 0 indicates one time GNSS EPH data. Max is 1 minute
         if ctx.params.lower() == "stop":
@@ -271,7 +269,6 @@ class Controller:
 
         # Close the serial port
         ser.close()
-
 
     def handle_stage_filedownload(self, ctx):
         logger.info("Staging file for download")

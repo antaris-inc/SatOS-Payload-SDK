@@ -622,7 +622,7 @@ void peer_to_app_RespGnssEphStartDataReq(const void *ptr_src_peer, void *ptr_dst
 struct GpsEphemerisData {
     UINT32                                          gps_fix_time;                                    ///< @var GPS time
     UINT32                                          gps_sys_time;                                    ///< @var GPS System time
-    UINT64                                          obc_time;                                        ///< @var OBC time
+    UINT32                                          obc_time;                                        ///< @var OBC time
     UINT32                                          gps_position_ecef[3];                            ///< @var GPS position
     UINT32                                          gps_velocity_ecef[3];                            ///< @var GPS velocity
     UINT32                                          gps_validity_flag_pos_vel;                       ///< @var GPS validity flag
