@@ -40,6 +40,7 @@ FilePriorities = {
     'FILE_DL_PRIORITY_HIGH': 2,
     'FILE_DL_PRIORITY_IMMEDIATE': 3,
 }
+
 logger = logging.getLogger()
 
 class Controller:

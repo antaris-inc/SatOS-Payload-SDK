@@ -93,6 +93,7 @@ message RespGetCurrentLocationParams {
 message ReqStageFileDownloadParams {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     string                          file_path        = 2; // File path relative to outbound mount-point
+    int32                           file_priority    = 3; // File priority
 }
 
 message RespStageFileDownloadParams {
