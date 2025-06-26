@@ -133,6 +133,15 @@ typedef struct ReqGnssEphStartDataReq ReqGnssEphStartDataReq;
 struct RespGnssEphStartDataReq;
 typedef struct RespGnssEphStartDataReq RespGnssEphStartDataReq;
 
+struct OBC_time;
+typedef struct OBC_time OBC_time;
+
+struct GpsEphemerisData;
+typedef struct GpsEphemerisData GpsEphemerisData;
+
+struct AdcsEphemerisData;
+typedef struct AdcsEphemerisData AdcsEphemerisData;
+
 struct GnssEphData;
 typedef struct GnssEphData GnssEphData;
 
@@ -611,28 +620,84 @@ void displayRespGnssEphStartDataReq(const void *obj);
 void app_to_peer_RespGnssEphStartDataReq(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_RespGnssEphStartDataReq(const void *ptr_src_peer, void *ptr_dst_app);
 
+/// @struct OBC_time
+/// @brief OBC time
+struct OBC_time {
+    UINT8                                           hour;                                            ///< @var hour
+    UINT8                                           minute;                                          ///< @var Minute
+    UINT16                                          millisecond;                                     ///< @var millisecond
+    UINT8                                           date;                                            ///< @var date
+    UINT8                                           month;                                           ///< @var month
+    UINT16                                          year;                                            ///< @var year
+};
+
+void displayOBC_time(const void *obj);
+void app_to_peer_OBC_time(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_OBC_time(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct GpsEphemerisData
+/// @brief GNSS Eph1/Eph2 data
+struct GpsEphemerisData {
+    UINT32                                          gps_fix_time;                                    ///< @var GPS time
+    UINT64                                          gps_sys_time;                                    ///< @var GPS System time
+    OBC_time                                        obc_time;                                        ///< @var OBC time
+    UINT32                                          gps_position_ecef[3];                            ///< @var GPS position
+    UINT32                                          gps_velocity_ecef[3];                            ///< @var GPS velocity
+    UINT32                                          gps_validity_flag_pos_vel;                       ///< @var GPS validity flag
+};
+
+void displayGpsEphemerisData(const void *obj);
+void app_to_peer_GpsEphemerisData(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_GpsEphemerisData(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct AdcsEphemerisData
+/// @brief ADCS EPH data
+struct AdcsEphemerisData {
+    DOUBLE                                          orbit_time;                                      ///< @var ADCS Orbit Propagator/System Time
+    DOUBLE                                          eci_position_x;                                  ///< @var ECI Position X (km)
+    DOUBLE                                          eci_position_y;                                  ///< @var ECI Position Y (km)
+    DOUBLE                                          eci_position_z;                                  ///< @var ECI Position Z (km)
+    DOUBLE                                          eci_velocity_x;                                  ///< @var ECI Velocity X (km/s)
+    DOUBLE                                          eci_velocity_y;                                  ///< @var ECI Velocity Y (km/s)
+    DOUBLE                                          eci_velocity_z;                                  ///< @var ECI Velocity Z (km/s)
+    DOUBLE                                          ecef_position_x;                                 ///< @var ECEF Position X (km)
+    DOUBLE                                          ecef_position_y;                                 ///< @var ECEF Position Y (km)
+    DOUBLE                                          ecef_position_z;                                 ///< @var ECEF Position Z (km)
+    DOUBLE                                          ecef_velocity_x;                                 ///< @var ECEF Velocity X (km/s)
+    DOUBLE                                          ecef_velocity_y;                                 ///< @var ECEF Velocity Y (km/s)
+    DOUBLE                                          ecef_velocity_z;                                 ///< @var ECEF Velocity Z (km/s)
+    DOUBLE                                          ang_rate_x;                                      ///< @var X axis Angular rate (deg/s)
+    DOUBLE                                          ang_rate_y;                                      ///< @var Y axis Angular rate (deg/s)
+    DOUBLE                                          ang_rate_z;                                      ///< @var Z axis Angular rate (deg/s)
+    DOUBLE                                          att_quat_1;                                      ///< @var Attitude Quaternion 1
+    DOUBLE                                          att_quat_2;                                      ///< @var Attitude Quaternion 2
+    DOUBLE                                          att_quat_3;                                      ///< @var Attitude Quaternion 3
+    DOUBLE                                          att_quat_4;                                      ///< @var Attitude Quaternion 4
+    FLOAT                                           latitude;                                        ///< @var Latitude (deg)
+    FLOAT                                           longitude;                                       ///< @var Longitude (deg)
+    FLOAT                                           altitude;                                        ///< @var Altitude (km)
+    FLOAT                                           nadir_vector_x;                                  ///< @var X Nadir Vector
+    FLOAT                                           nadir_vector_y;                                  ///< @var Y Nadir Vector
+    FLOAT                                           nadir_vector_z;                                  ///< @var Z Nadir Vector
+    FLOAT                                           gd_nadir_vector_x;                               ///< @var X Geodetic Nadir Vector
+    FLOAT                                           gd_nadir_vector_y;                               ///< @var Y Geodetic Nadir Vector
+    FLOAT                                           gd_nadir_vector_z;                               ///< @var Z Geodetic Nadir Vector
+    FLOAT                                           beta_angle;                                      ///< @var Beta Angle (deg)
+    UINT16                                          validity_flags;                                  ///< @var 1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity
+};
+
+void displayAdcsEphemerisData(const void *obj);
+void app_to_peer_AdcsEphemerisData(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_AdcsEphemerisData(const void *ptr_src_peer, void *ptr_dst_app);
+
 /// @struct GnssEphData
 /// @brief GNSS Eph1/Eph2 data
 struct GnssEphData {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
-    UINT32                                          gps_fix_time;                                    ///< @var GPS time
-    UINT32                                          gps_sys_time;                                    ///< @var GPS System time
-    UINT64                                          obc_time;                                        ///< @var OBC time
-    UINT32                                          gps_position_ecef[3];                            ///< @var GPS position
-    UINT32                                          gps_velocity_ecef[3];                            ///< @var GPS velocity
-    UINT32                                          gps_validity_flag_pos_vel;                       ///< @var GPS validity flag
-    UINT64                                          adcs_time;                                       ///< @var Orbit time
-    UINT64                                          position_wrt_eci[3];                             ///< @var Position
-    UINT64                                          velocity_wrt_eci[3];                             ///< @var Position
-    UINT64                                          position_wrt_ecef[3];                            ///< @var Position
-    UINT64                                          velocity_wrt_ecef[3];                            ///< @var Position
-    UINT32                                          body_rate[3];                                    ///< @var Body rate
-    UINT32                                          attitude[3];                                     ///< @var RPY WRT LVLH
-    UINT32                                          adcs_pos[3];                                     ///< @var Lat, Lon, Altitude (ADCS)
-    UINT32                                          nadir_vector_body[3];                            ///< @var Nadir vector
-    UINT32                                          gd_nadir_vector_body[3];                         ///< @var GD Nadir Vector Body
-    UINT32                                          beta_angle;                                      ///< @var Beta Angle
-    UINT16                                          validity_flags;                                  ///< @var 1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity
+    AdcsEphemerisData                               adcs_eph_data;                                   ///< @var ADCS data
+    GpsEphemerisData                                gps_eph_data;                                    ///< @var GPS data
+    UINT8                                           adcs_timeout_flag;                               ///< @var ADCS flag
+    UINT8                                           gps_timeout_flag;                                ///< @var GPS flag
 };
 
 void displayGnssEphData(const void *obj);

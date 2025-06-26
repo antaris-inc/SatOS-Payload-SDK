@@ -181,26 +181,64 @@ message RespGnssEphStartDataReq {
     int32                           req_status       = 2; // status of GNSS EPH data start request
 }
 
+message OBC_time {
+    int32                           hour             = 1; // hour
+    int32                           minute           = 2; // Minute
+    int32                           millisecond      = 3; // millisecond
+    int32                           date             = 4; // date
+    int32                           month            = 5; // month
+    int32                           year             = 6; // year
+}
+
+message GpsEphemerisData {
+    int32                           gps_fix_time     = 1; // GPS time
+    int64                           gps_sys_time     = 2; // GPS System time
+    OBC_time                        obc_time         = 3; // OBC time
+    repeated int32                  gps_position_ecef = 4; // GPS position
+    repeated int32                  gps_velocity_ecef = 5; // GPS velocity
+    int32                           gps_validity_flag_pos_vel = 6; // GPS validity flag
+}
+
+message AdcsEphemerisData {
+    double                          orbit_time       = 1; // ADCS Orbit Propagator/System Time
+    double                          eci_position_x   = 2; // ECI Position X (km)
+    double                          eci_position_y   = 3; // ECI Position Y (km)
+    double                          eci_position_z   = 4; // ECI Position Z (km)
+    double                          eci_velocity_x   = 5; // ECI Velocity X (km/s)
+    double                          eci_velocity_y   = 6; // ECI Velocity Y (km/s)
+    double                          eci_velocity_z   = 7; // ECI Velocity Z (km/s)
+    double                          ecef_position_x  = 8; // ECEF Position X (km)
+    double                          ecef_position_y  = 9; // ECEF Position Y (km)
+    double                          ecef_position_z  = 10; // ECEF Position Z (km)
+    double                          ecef_velocity_x  = 11; // ECEF Velocity X (km/s)
+    double                          ecef_velocity_y  = 12; // ECEF Velocity Y (km/s)
+    double                          ecef_velocity_z  = 13; // ECEF Velocity Z (km/s)
+    double                          ang_rate_x       = 14; // X axis Angular rate (deg/s)
+    double                          ang_rate_y       = 15; // Y axis Angular rate (deg/s)
+    double                          ang_rate_z       = 16; // Z axis Angular rate (deg/s)
+    double                          att_quat_1       = 17; // Attitude Quaternion 1
+    double                          att_quat_2       = 20; // Attitude Quaternion 2
+    double                          att_quat_3       = 21; // Attitude Quaternion 3
+    double                          att_quat_4       = 22; // Attitude Quaternion 4
+    float                           latitude         = 23; // Latitude (deg)
+    float                           longitude        = 24; // Longitude (deg)
+    float                           altitude         = 25; // Altitude (km)
+    float                           nadir_vector_x   = 26; // X Nadir Vector
+    float                           nadir_vector_y   = 27; // Y Nadir Vector
+    float                           nadir_vector_z   = 28; // Z Nadir Vector
+    float                           gd_nadir_vector_x = 29; // X Geodetic Nadir Vector
+    float                           gd_nadir_vector_y = 30; // Y Geodetic Nadir Vector
+    float                           gd_nadir_vector_z = 31; // Z Geodetic Nadir Vector
+    float                           beta_angle       = 32; // Beta Angle (deg)
+    int32                           validity_flags   = 33; // 1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity
+}
+
 message GnssEphData {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
-    int32                           gps_fix_time     = 2; // GPS time
-    int32                           gps_sys_time     = 3; // GPS System time
-    int64                           obc_time         = 4; // OBC time
-    repeated int32                  gps_position_ecef = 5; // GPS position
-    repeated int32                  gps_velocity_ecef = 6; // GPS velocity
-    int32                           gps_validity_flag_pos_vel = 7; // GPS validity flag
-    int64                           adcs_time        = 8; // Orbit time
-    repeated int64                  position_wrt_eci = 9; // Position
-    repeated int64                  velocity_wrt_eci = 10; // Position
-    repeated int64                  position_wrt_ecef = 11; // Position
-    repeated int64                  velocity_wrt_ecef = 12; // Position
-    repeated int32                  body_rate        = 13; // Body rate
-    repeated int32                  attitude         = 14; // RPY WRT LVLH
-    repeated int32                  adcs_pos         = 15; // Lat, Lon, Altitude (ADCS)
-    repeated int32                  nadir_vector_body = 16; // Nadir vector
-    repeated int32                  gd_nadir_vector_body = 17; // GD Nadir Vector Body
-    int32                           beta_angle       = 18; // Beta Angle
-    int32                           validity_flags   = 19; // 1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity
+    AdcsEphemerisData               adcs_eph_data    = 2; // ADCS data
+    GpsEphemerisData                gps_eph_data     = 3; // GPS data
+    int32                           adcs_timeout_flag = 4; // ADCS flag
+    int32                           gps_timeout_flag = 5; // GPS flag
 }
 
 message ReqGetEpsVoltageStopReq {

@@ -34,9 +34,7 @@ ADCS_start_success = 0
 ADCS_start_reconfigured = 1
 ADCS_start_failed = 2
 
-
 logger = logging.getLogger()
-
 
 class Controller:
 
@@ -50,36 +48,69 @@ class Controller:
         # List of field names mapped to each bit position
         fields = [
             "Time Validity",
-            "ECI Pos/Vel Validity",
-            "ECEF Pos/Vel Validity",
-            "Rate Validity",
-            "Attitude Validity",
+            "ECI Position Validity",
+            "ECI Velocity Validity",
+            "ECEF Position Validity",
+            "ECEF Velocity Validity",
+            "Angular Rate Validity",
+            "Attitude Quaternion Validity",
             "Lat-Lon-Altitude Validity",
             "Nadir Vector Validity",
-            "GD Nadir Vector Validity",
+            "Geodetric Nadir Vector Validity",
             "Beta Angle Validity"
         ]
-        logger.info(f"gps_fix_time: {gnss_data.gps_fix_time}")
-        logger.info(f"gps_sys_time: {gnss_data.gps_sys_time}")
-        logger.info(f"obc_time: {gnss_data.obc_time}")
-        logger.info(f"gps_position_ecef: {gnss_data.gps_position_ecef}")
-        logger.info(f"gps_velocity_ecef: {gnss_data.gps_velocity_ecef}")
-        logger.info(f"gps_validity_flag_pos_vel: {gnss_data.gps_validity_flag_pos_vel}")
-        logger.info(f"adcs_time: {gnss_data.adcs_time}")
-        logger.info(f"position_wrt_eci: {gnss_data.position_wrt_eci}")
-        logger.info(f"velocity_wrt_eci: {gnss_data.velocity_wrt_eci}")
-        logger.info(f"position_wrt_ecef: {gnss_data.position_wrt_ecef}")
-        logger.info(f"velocity_wrt_ecef: {gnss_data.velocity_wrt_ecef}")
-        logger.info(f"body_rate: {gnss_data.body_rate}")
-        logger.info(f"attitude: {gnss_data.attitude}")
-        logger.info(f"adcs_pos: {gnss_data.adcs_pos}")
-        logger.info(f"nadir_vector_body: {gnss_data.nadir_vector_body}")
-        logger.info(f"gd_nadir_vector_body: {gnss_data.gd_nadir_vector_body}")
-        logger.info(f"beta_angle: {gnss_data.beta_angle}")
-        # Print each bit's meaning
-        for i, name in enumerate(fields):
-            bit_value = (gnss_data.validity_flags >> i) & 1
-            print(f"{name}: {bit_value}")
+        if gnss_data.gps_timeout_flag == 1:
+            logger.info(f"gps_fix_time: {gnss_data.gps_eph_data.gps_fix_time}")
+            logger.info(f"gps_sys_time: {gnss_data.gps_eph_data.gps_sys_time}")
+            obc = gnss_data.gps_eph_data.obc_time
+            obc_formatted = (
+                f"{obc.hour:02d}:{obc.minute:02d}:{obc.millisecond // 1000:02d}."
+                f"{obc.millisecond % 1000:03d} "
+                f"Date: {obc.date:02d}/{obc.month:02d}/{obc.year}"
+            )
+            logger.info(f"obc_time : {obc_formatted}")
+
+            for i in {0,1,2}:
+                logger.info(f"gps_position_ecef: {gnss_data.gps_eph_data.gps_position_ecef[i]}")
+            for i in {0,1,2}:
+                logger.info(f"gps_velocity_ecef: {gnss_data.gps_eph_data.gps_velocity_ecef[i]}")
+                logger.info(f"gps_validity_flag_pos_vel: {gnss_data.gps_eph_data.gps_validity_flag_pos_vel}")
+
+        elif gnss_data.adcs_timeout_flag == 1:    
+            logger.info(f"ADCS Orbit Propagator/System Time = {gnss_data.adcs_eph_data.orbit_time}") 
+            logger.info(f"ECI Position X (km) = {gnss_data.adcs_eph_data.eci_position_x}") 
+            logger.info(f"ECI Position Y (km) = {gnss_data.adcs_eph_data.eci_position_y}") 
+            logger.info(f"ECI Position Z (km) = {gnss_data.adcs_eph_data.eci_position_z}") 
+            logger.info(f"ECI Velocity X (km/s) = {gnss_data.adcs_eph_data.eci_velocity_x}") 
+            logger.info(f"ECI Velocity Y (km/s) = {gnss_data.adcs_eph_data.eci_velocity_y}") 
+            logger.info(f"ECI Velocity Z (km/s) = {gnss_data.adcs_eph_data.eci_velocity_z}") 
+            logger.info(f"ECEF Position X (km) = {gnss_data.adcs_eph_data.ecef_position_x}")
+            logger.info(f"ECEF Position Y (km) = {gnss_data.adcs_eph_data.ecef_position_y}")
+            logger.info(f"ECEF Position Z (km) = {gnss_data.adcs_eph_data.ecef_position_z}")
+            logger.info(f"ECEF Velocity X (km/s) = {gnss_data.adcs_eph_data.ecef_velocity_x}")
+            logger.info(f"ECEF Velocity Y (km/s) = {gnss_data.adcs_eph_data.ecef_velocity_y}")
+            logger.info(f"ECEF Velocity Z (km/s) = {gnss_data.adcs_eph_data.ecef_velocity_z}")
+            logger.info(f"X axis Angular rate (deg/s) = {gnss_data.adcs_eph_data.ang_rate_x}")
+            logger.info(f"Y axis Angular rate (deg/s) = {gnss_data.adcs_eph_data.ang_rate_y}")
+            logger.info(f"Z axis Angular rate (deg/s) = {gnss_data.adcs_eph_data.ang_rate_z}")
+            logger.info(f"Attitude Quaternion 1 = {gnss_data.adcs_eph_data.att_quat_1}")
+            logger.info(f"Attitude Quaternion 2 = {gnss_data.adcs_eph_data.att_quat_2}")
+            logger.info(f"Attitude Quaternion 3 = {gnss_data.adcs_eph_data.att_quat_3}")
+            logger.info(f"Attitude Quaternion 4 = {gnss_data.adcs_eph_data.att_quat_4}")
+            logger.info(f"Latitude (deg) = {gnss_data.adcs_eph_data.latitude}")
+            logger.info(f"Longitude (deg) = {gnss_data.adcs_eph_data.longitude}")
+            logger.info(f"Altitude (km) = {gnss_data.adcs_eph_data.altitude}")
+            logger.info(f"X Nadir Vector = {gnss_data.adcs_eph_data.nadir_vector_x}") 
+            logger.info(f"Y Nadir Vector = {gnss_data.adcs_eph_data.nadir_vector_y}") 
+            logger.info(f"Z Nadir Vector = {gnss_data.adcs_eph_data.nadir_vector_z}") 
+            logger.info(f"X Geodetic Nadir Vector = {gnss_data.adcs_eph_data.gd_nadir_vector_x}")
+            logger.info(f"Y Geodetic Nadir Vector = {gnss_data.adcs_eph_data.gd_nadir_vector_y}")
+            logger.info(f"Z Geodetic Nadir Vector = {gnss_data.adcs_eph_data.gd_nadir_vector_z}")
+            logger.info(f"Beta Angle (deg) = {gnss_data.adcs_eph_data.beta_angle}")
+            # Print each bit's meaning
+            for i, name in enumerate(fields):
+                bit_value = (gnss_data.adcs_eph_data.validity_flags >> i) & 1
+                print(f"{name}: {bit_value}")
         return True
     
     def get_eps_voltage_handler(self, ctx):
@@ -166,6 +197,7 @@ class Controller:
         logger.info(f"Hardware IS = {ctx.hardware_id}") # 0:SAS-A 1: SAS-B
         logger.info(f"Current temperature = {ctx.temp}")
         logger.info(f"Heater power status = {ctx.heater_pwr_status}") # 0:OFF, 1:ON
+
     def handle_power_control(self, ctx):
         logger.info("Handling payload power")
         power_state = ctx.params                    # 0 = power off, 1 = power on
@@ -244,7 +276,6 @@ class Controller:
 
         # Close the serial port
         ser.close()
-
 
     def handle_stage_filedownload(self, ctx):
         logger.info("Staging file for download")
