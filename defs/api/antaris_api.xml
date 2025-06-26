@@ -80,6 +80,7 @@
         <Struct name="ReqStageFileDownloadParams" description="Request parameters to stage file download">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="file_path" type="INT8" sequence="2" description="File path relative to outbound mount-point" array="256"/>
+            <Field name="file_priority" type="INT8" sequence="3" description="File priority"/>
         </Struct>
 
         <Struct name="RespStageFileDownloadParams" description="Response parameters for stage file download reqeust">

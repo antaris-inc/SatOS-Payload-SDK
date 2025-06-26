@@ -34,6 +34,12 @@ ADCS_start_success = 0
 ADCS_start_reconfigured = 1
 ADCS_start_failed = 2
 
+FilePriorities = {
+    'FILE_DL_PRIORITY_LOW': 0,
+    'FILE_DL_PRIORITY_NORMAL': 1,
+    'FILE_DL_PRIORITY_HIGH': 2,
+    'FILE_DL_PRIORITY_IMMEDIATE': 3,
+}
 logger = logging.getLogger()
 
 class Controller:
@@ -285,7 +291,7 @@ class Controller:
             file.write("Testing file download with payload")
         
         # Files must be present in "/opt/antaris/outbound/" before staging them for download
-        resp = ctx.client.stage_file_download(g_StageFileName)
+        resp = ctx.client.stage_file_download(g_StageFileName, FilePriorities['FILE_DL_PRIORITY_HIGH'])
 
     def handle_test_can_bus(self, ctx):
         logger.info("Test CAN bus")
