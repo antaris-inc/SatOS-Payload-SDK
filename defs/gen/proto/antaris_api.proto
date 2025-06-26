@@ -181,10 +181,19 @@ message RespGnssEphStartDataReq {
     int32                           req_status       = 2; // status of GNSS EPH data start request
 }
 
+message OBC_time {
+    int32                           hour             = 1; // hour
+    int32                           minute           = 2; // Minute
+    int32                           millisecond      = 3; // millisecond
+    int32                           date             = 4; // date
+    int32                           month            = 5; // month
+    int32                           year             = 6; // year
+}
+
 message GpsEphemerisData {
     int32                           gps_fix_time     = 1; // GPS time
-    int32                           gps_sys_time     = 2; // GPS System time
-    int32                           obc_time         = 3; // OBC time
+    int64                           gps_sys_time     = 2; // GPS System time
+    OBC_time                        obc_time         = 3; // OBC time
     repeated int32                  gps_position_ecef = 4; // GPS position
     repeated int32                  gps_velocity_ecef = 5; // GPS velocity
     int32                           gps_validity_flag_pos_vel = 6; // GPS validity flag

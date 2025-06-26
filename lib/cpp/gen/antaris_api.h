@@ -133,6 +133,9 @@ typedef struct ReqGnssEphStartDataReq ReqGnssEphStartDataReq;
 struct RespGnssEphStartDataReq;
 typedef struct RespGnssEphStartDataReq RespGnssEphStartDataReq;
 
+struct OBC_time;
+typedef struct OBC_time OBC_time;
+
 struct GpsEphemerisData;
 typedef struct GpsEphemerisData GpsEphemerisData;
 
@@ -617,12 +620,27 @@ void displayRespGnssEphStartDataReq(const void *obj);
 void app_to_peer_RespGnssEphStartDataReq(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_RespGnssEphStartDataReq(const void *ptr_src_peer, void *ptr_dst_app);
 
+/// @struct OBC_time
+/// @brief OBC time
+struct OBC_time {
+    UINT8                                           hour;                                            ///< @var hour
+    UINT8                                           minute;                                          ///< @var Minute
+    UINT16                                          millisecond;                                     ///< @var millisecond
+    UINT8                                           date;                                            ///< @var date
+    UINT8                                           month;                                           ///< @var month
+    UINT16                                          year;                                            ///< @var year
+};
+
+void displayOBC_time(const void *obj);
+void app_to_peer_OBC_time(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_OBC_time(const void *ptr_src_peer, void *ptr_dst_app);
+
 /// @struct GpsEphemerisData
 /// @brief GNSS Eph1/Eph2 data
 struct GpsEphemerisData {
     UINT32                                          gps_fix_time;                                    ///< @var GPS time
-    UINT32                                          gps_sys_time;                                    ///< @var GPS System time
-    UINT32                                          obc_time;                                        ///< @var OBC time
+    UINT64                                          gps_sys_time;                                    ///< @var GPS System time
+    OBC_time                                        obc_time;                                        ///< @var OBC time
     UINT32                                          gps_position_ecef[3];                            ///< @var GPS position
     UINT32                                          gps_velocity_ecef[3];                            ///< @var GPS velocity
     UINT32                                          gps_validity_flag_pos_vel;                       ///< @var GPS validity flag

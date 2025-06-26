@@ -47,7 +47,7 @@ struct TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[39]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[40]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -82,6 +82,9 @@ extern GpsEphemerisDataDefaultTypeInternal _GpsEphemerisData_default_instance_;
 class HealthCheckParams;
 struct HealthCheckParamsDefaultTypeInternal;
 extern HealthCheckParamsDefaultTypeInternal _HealthCheckParams_default_instance_;
+class OBC_time;
+struct OBC_timeDefaultTypeInternal;
+extern OBC_timeDefaultTypeInternal _OBC_time_default_instance_;
 class PayloadMetricsInfo;
 struct PayloadMetricsInfoDefaultTypeInternal;
 extern PayloadMetricsInfoDefaultTypeInternal _PayloadMetricsInfo_default_instance_;
@@ -183,6 +186,7 @@ template<> ::antaris_api_peer_to_peer::GetEpsVoltage* Arena::CreateMaybeMessage<
 template<> ::antaris_api_peer_to_peer::GnssEphData* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::GnssEphData>(Arena*);
 template<> ::antaris_api_peer_to_peer::GpsEphemerisData* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::GpsEphemerisData>(Arena*);
 template<> ::antaris_api_peer_to_peer::HealthCheckParams* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::HealthCheckParams>(Arena*);
+template<> ::antaris_api_peer_to_peer::OBC_time* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::OBC_time>(Arena*);
 template<> ::antaris_api_peer_to_peer::PayloadMetricsInfo* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::PayloadMetricsInfo>(Arena*);
 template<> ::antaris_api_peer_to_peer::PayloadMetricsResponse* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::PayloadMetricsResponse>(Arena*);
 template<> ::antaris_api_peer_to_peer::ReqGetCurrentLocationParams* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::ReqGetCurrentLocationParams>(Arena*);
@@ -3915,6 +3919,207 @@ class RespGnssEphStartDataReq final :
 };
 // -------------------------------------------------------------------
 
+class OBC_time final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:antaris_api_peer_to_peer.OBC_time) */ {
+ public:
+  inline OBC_time() : OBC_time(nullptr) {}
+  ~OBC_time() override;
+  explicit constexpr OBC_time(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  OBC_time(const OBC_time& from);
+  OBC_time(OBC_time&& from) noexcept
+    : OBC_time() {
+    *this = ::std::move(from);
+  }
+
+  inline OBC_time& operator=(const OBC_time& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline OBC_time& operator=(OBC_time&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const OBC_time& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const OBC_time* internal_default_instance() {
+    return reinterpret_cast<const OBC_time*>(
+               &_OBC_time_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    22;
+
+  friend void swap(OBC_time& a, OBC_time& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(OBC_time* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(OBC_time* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  OBC_time* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<OBC_time>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const OBC_time& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const OBC_time& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(OBC_time* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "antaris_api_peer_to_peer.OBC_time";
+  }
+  protected:
+  explicit OBC_time(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kHourFieldNumber = 1,
+    kMinuteFieldNumber = 2,
+    kMillisecondFieldNumber = 3,
+    kDateFieldNumber = 4,
+    kMonthFieldNumber = 5,
+    kYearFieldNumber = 6,
+  };
+  // int32 hour = 1;
+  void clear_hour();
+  int32_t hour() const;
+  void set_hour(int32_t value);
+  private:
+  int32_t _internal_hour() const;
+  void _internal_set_hour(int32_t value);
+  public:
+
+  // int32 minute = 2;
+  void clear_minute();
+  int32_t minute() const;
+  void set_minute(int32_t value);
+  private:
+  int32_t _internal_minute() const;
+  void _internal_set_minute(int32_t value);
+  public:
+
+  // int32 millisecond = 3;
+  void clear_millisecond();
+  int32_t millisecond() const;
+  void set_millisecond(int32_t value);
+  private:
+  int32_t _internal_millisecond() const;
+  void _internal_set_millisecond(int32_t value);
+  public:
+
+  // int32 date = 4;
+  void clear_date();
+  int32_t date() const;
+  void set_date(int32_t value);
+  private:
+  int32_t _internal_date() const;
+  void _internal_set_date(int32_t value);
+  public:
+
+  // int32 month = 5;
+  void clear_month();
+  int32_t month() const;
+  void set_month(int32_t value);
+  private:
+  int32_t _internal_month() const;
+  void _internal_set_month(int32_t value);
+  public:
+
+  // int32 year = 6;
+  void clear_year();
+  int32_t year() const;
+  void set_year(int32_t value);
+  private:
+  int32_t _internal_year() const;
+  void _internal_set_year(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.OBC_time)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  int32_t hour_;
+  int32_t minute_;
+  int32_t millisecond_;
+  int32_t date_;
+  int32_t month_;
+  int32_t year_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
+};
+// -------------------------------------------------------------------
+
 class GpsEphemerisData final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:antaris_api_peer_to_peer.GpsEphemerisData) */ {
  public:
@@ -3963,7 +4168,7 @@ class GpsEphemerisData final :
                &_GpsEphemerisData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    23;
 
   friend void swap(GpsEphemerisData& a, GpsEphemerisData& b) {
     a.Swap(&b);
@@ -4039,9 +4244,9 @@ class GpsEphemerisData final :
   enum : int {
     kGpsPositionEcefFieldNumber = 4,
     kGpsVelocityEcefFieldNumber = 5,
-    kGpsFixTimeFieldNumber = 1,
-    kGpsSysTimeFieldNumber = 2,
     kObcTimeFieldNumber = 3,
+    kGpsSysTimeFieldNumber = 2,
+    kGpsFixTimeFieldNumber = 1,
     kGpsValidityFlagPosVelFieldNumber = 6,
   };
   // repeated int32 gps_position_ecef = 4;
@@ -4088,6 +4293,33 @@ class GpsEphemerisData final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
       mutable_gps_velocity_ecef();
 
+  // .antaris_api_peer_to_peer.OBC_time obc_time = 3;
+  bool has_obc_time() const;
+  private:
+  bool _internal_has_obc_time() const;
+  public:
+  void clear_obc_time();
+  const ::antaris_api_peer_to_peer::OBC_time& obc_time() const;
+  PROTOBUF_NODISCARD ::antaris_api_peer_to_peer::OBC_time* release_obc_time();
+  ::antaris_api_peer_to_peer::OBC_time* mutable_obc_time();
+  void set_allocated_obc_time(::antaris_api_peer_to_peer::OBC_time* obc_time);
+  private:
+  const ::antaris_api_peer_to_peer::OBC_time& _internal_obc_time() const;
+  ::antaris_api_peer_to_peer::OBC_time* _internal_mutable_obc_time();
+  public:
+  void unsafe_arena_set_allocated_obc_time(
+      ::antaris_api_peer_to_peer::OBC_time* obc_time);
+  ::antaris_api_peer_to_peer::OBC_time* unsafe_arena_release_obc_time();
+
+  // int64 gps_sys_time = 2;
+  void clear_gps_sys_time();
+  int64_t gps_sys_time() const;
+  void set_gps_sys_time(int64_t value);
+  private:
+  int64_t _internal_gps_sys_time() const;
+  void _internal_set_gps_sys_time(int64_t value);
+  public:
+
   // int32 gps_fix_time = 1;
   void clear_gps_fix_time();
   int32_t gps_fix_time() const;
@@ -4095,24 +4327,6 @@ class GpsEphemerisData final :
   private:
   int32_t _internal_gps_fix_time() const;
   void _internal_set_gps_fix_time(int32_t value);
-  public:
-
-  // int32 gps_sys_time = 2;
-  void clear_gps_sys_time();
-  int32_t gps_sys_time() const;
-  void set_gps_sys_time(int32_t value);
-  private:
-  int32_t _internal_gps_sys_time() const;
-  void _internal_set_gps_sys_time(int32_t value);
-  public:
-
-  // int32 obc_time = 3;
-  void clear_obc_time();
-  int32_t obc_time() const;
-  void set_obc_time(int32_t value);
-  private:
-  int32_t _internal_obc_time() const;
-  void _internal_set_obc_time(int32_t value);
   public:
 
   // int32 gps_validity_flag_pos_vel = 6;
@@ -4135,9 +4349,9 @@ class GpsEphemerisData final :
   mutable std::atomic<int> _gps_position_ecef_cached_byte_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t > gps_velocity_ecef_;
   mutable std::atomic<int> _gps_velocity_ecef_cached_byte_size_;
+  ::antaris_api_peer_to_peer::OBC_time* obc_time_;
+  int64_t gps_sys_time_;
   int32_t gps_fix_time_;
-  int32_t gps_sys_time_;
-  int32_t obc_time_;
   int32_t gps_validity_flag_pos_vel_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
@@ -4192,7 +4406,7 @@ class AdcsEphemerisData final :
                &_AdcsEphemerisData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    24;
 
   friend void swap(AdcsEphemerisData& a, AdcsEphemerisData& b) {
     a.Swap(&b);
@@ -4668,7 +4882,7 @@ class GnssEphData final :
                &_GnssEphData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    25;
 
   friend void swap(GnssEphData& a, GnssEphData& b) {
     a.Swap(&b);
@@ -4876,7 +5090,7 @@ class ReqGetEpsVoltageStopReq final :
                &_ReqGetEpsVoltageStopReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    26;
 
   friend void swap(ReqGetEpsVoltageStopReq& a, ReqGetEpsVoltageStopReq& b) {
     a.Swap(&b);
@@ -5022,7 +5236,7 @@ class RespGetEpsVoltageStopReq final :
                &_RespGetEpsVoltageStopReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    27;
 
   friend void swap(RespGetEpsVoltageStopReq& a, RespGetEpsVoltageStopReq& b) {
     a.Swap(&b);
@@ -5179,7 +5393,7 @@ class ReqGetEpsVoltageStartReq final :
                &_ReqGetEpsVoltageStartReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    28;
 
   friend void swap(ReqGetEpsVoltageStartReq& a, ReqGetEpsVoltageStartReq& b) {
     a.Swap(&b);
@@ -5336,7 +5550,7 @@ class RespGetEpsVoltageStartReq final :
                &_RespGetEpsVoltageStartReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    29;
 
   friend void swap(RespGetEpsVoltageStartReq& a, RespGetEpsVoltageStartReq& b) {
     a.Swap(&b);
@@ -5493,7 +5707,7 @@ class GetEpsVoltage final :
                &_GetEpsVoltage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    30;
 
   friend void swap(GetEpsVoltage& a, GetEpsVoltage& b) {
     a.Swap(&b);
@@ -5650,7 +5864,7 @@ class StartSesThermMgmntReq final :
                &_StartSesThermMgmntReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    31;
 
   friend void swap(StartSesThermMgmntReq& a, StartSesThermMgmntReq& b) {
     a.Swap(&b);
@@ -5840,7 +6054,7 @@ class RespStartSesThermMgmntReq final :
                &_RespStartSesThermMgmntReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    32;
 
   friend void swap(RespStartSesThermMgmntReq& a, RespStartSesThermMgmntReq& b) {
     a.Swap(&b);
@@ -5997,7 +6211,7 @@ class StopSesThermMgmntReq final :
                &_StopSesThermMgmntReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    33;
 
   friend void swap(StopSesThermMgmntReq& a, StopSesThermMgmntReq& b) {
     a.Swap(&b);
@@ -6154,7 +6368,7 @@ class RespStopSesThermMgmntReq final :
                &_RespStopSesThermMgmntReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    34;
 
   friend void swap(RespStopSesThermMgmntReq& a, RespStopSesThermMgmntReq& b) {
     a.Swap(&b);
@@ -6311,7 +6525,7 @@ class SesTempReq final :
                &_SesTempReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    35;
 
   friend void swap(SesTempReq& a, SesTempReq& b) {
     a.Swap(&b);
@@ -6468,7 +6682,7 @@ class RespSesTempReqParams final :
                &_RespSesTempReqParams_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    36;
 
   friend void swap(RespSesTempReqParams& a, RespSesTempReqParams& b) {
     a.Swap(&b);
@@ -6636,7 +6850,7 @@ class SesThermalStatusNtf final :
                &_SesThermalStatusNtf_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    37;
 
   friend void swap(SesThermalStatusNtf& a, SesThermalStatusNtf& b) {
     a.Swap(&b);
@@ -6804,7 +7018,7 @@ class AntarisCorrelationId final :
                &_AntarisCorrelationId_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    38;
 
   friend void swap(AntarisCorrelationId& a, AntarisCorrelationId& b) {
     a.Swap(&b);
@@ -6950,7 +7164,7 @@ class AntarisReturnType final :
                &_AntarisReturnType_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    39;
 
   friend void swap(AntarisReturnType& a, AntarisReturnType& b) {
     a.Swap(&b);
@@ -8599,6 +8813,130 @@ inline void RespGnssEphStartDataReq::set_req_status(int32_t value) {
 
 // -------------------------------------------------------------------
 
+// OBC_time
+
+// int32 hour = 1;
+inline void OBC_time::clear_hour() {
+  hour_ = 0;
+}
+inline int32_t OBC_time::_internal_hour() const {
+  return hour_;
+}
+inline int32_t OBC_time::hour() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.OBC_time.hour)
+  return _internal_hour();
+}
+inline void OBC_time::_internal_set_hour(int32_t value) {
+  
+  hour_ = value;
+}
+inline void OBC_time::set_hour(int32_t value) {
+  _internal_set_hour(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.OBC_time.hour)
+}
+
+// int32 minute = 2;
+inline void OBC_time::clear_minute() {
+  minute_ = 0;
+}
+inline int32_t OBC_time::_internal_minute() const {
+  return minute_;
+}
+inline int32_t OBC_time::minute() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.OBC_time.minute)
+  return _internal_minute();
+}
+inline void OBC_time::_internal_set_minute(int32_t value) {
+  
+  minute_ = value;
+}
+inline void OBC_time::set_minute(int32_t value) {
+  _internal_set_minute(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.OBC_time.minute)
+}
+
+// int32 millisecond = 3;
+inline void OBC_time::clear_millisecond() {
+  millisecond_ = 0;
+}
+inline int32_t OBC_time::_internal_millisecond() const {
+  return millisecond_;
+}
+inline int32_t OBC_time::millisecond() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.OBC_time.millisecond)
+  return _internal_millisecond();
+}
+inline void OBC_time::_internal_set_millisecond(int32_t value) {
+  
+  millisecond_ = value;
+}
+inline void OBC_time::set_millisecond(int32_t value) {
+  _internal_set_millisecond(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.OBC_time.millisecond)
+}
+
+// int32 date = 4;
+inline void OBC_time::clear_date() {
+  date_ = 0;
+}
+inline int32_t OBC_time::_internal_date() const {
+  return date_;
+}
+inline int32_t OBC_time::date() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.OBC_time.date)
+  return _internal_date();
+}
+inline void OBC_time::_internal_set_date(int32_t value) {
+  
+  date_ = value;
+}
+inline void OBC_time::set_date(int32_t value) {
+  _internal_set_date(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.OBC_time.date)
+}
+
+// int32 month = 5;
+inline void OBC_time::clear_month() {
+  month_ = 0;
+}
+inline int32_t OBC_time::_internal_month() const {
+  return month_;
+}
+inline int32_t OBC_time::month() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.OBC_time.month)
+  return _internal_month();
+}
+inline void OBC_time::_internal_set_month(int32_t value) {
+  
+  month_ = value;
+}
+inline void OBC_time::set_month(int32_t value) {
+  _internal_set_month(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.OBC_time.month)
+}
+
+// int32 year = 6;
+inline void OBC_time::clear_year() {
+  year_ = 0;
+}
+inline int32_t OBC_time::_internal_year() const {
+  return year_;
+}
+inline int32_t OBC_time::year() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.OBC_time.year)
+  return _internal_year();
+}
+inline void OBC_time::_internal_set_year(int32_t value) {
+  
+  year_ = value;
+}
+inline void OBC_time::set_year(int32_t value) {
+  _internal_set_year(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.OBC_time.year)
+}
+
+// -------------------------------------------------------------------
+
 // GpsEphemerisData
 
 // int32 gps_fix_time = 1;
@@ -8621,44 +8959,114 @@ inline void GpsEphemerisData::set_gps_fix_time(int32_t value) {
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.GpsEphemerisData.gps_fix_time)
 }
 
-// int32 gps_sys_time = 2;
+// int64 gps_sys_time = 2;
 inline void GpsEphemerisData::clear_gps_sys_time() {
-  gps_sys_time_ = 0;
+  gps_sys_time_ = int64_t{0};
 }
-inline int32_t GpsEphemerisData::_internal_gps_sys_time() const {
+inline int64_t GpsEphemerisData::_internal_gps_sys_time() const {
   return gps_sys_time_;
 }
-inline int32_t GpsEphemerisData::gps_sys_time() const {
+inline int64_t GpsEphemerisData::gps_sys_time() const {
   // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.GpsEphemerisData.gps_sys_time)
   return _internal_gps_sys_time();
 }
-inline void GpsEphemerisData::_internal_set_gps_sys_time(int32_t value) {
+inline void GpsEphemerisData::_internal_set_gps_sys_time(int64_t value) {
   
   gps_sys_time_ = value;
 }
-inline void GpsEphemerisData::set_gps_sys_time(int32_t value) {
+inline void GpsEphemerisData::set_gps_sys_time(int64_t value) {
   _internal_set_gps_sys_time(value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.GpsEphemerisData.gps_sys_time)
 }
 
-// int32 obc_time = 3;
+// .antaris_api_peer_to_peer.OBC_time obc_time = 3;
+inline bool GpsEphemerisData::_internal_has_obc_time() const {
+  return this != internal_default_instance() && obc_time_ != nullptr;
+}
+inline bool GpsEphemerisData::has_obc_time() const {
+  return _internal_has_obc_time();
+}
 inline void GpsEphemerisData::clear_obc_time() {
-  obc_time_ = 0;
+  if (GetArenaForAllocation() == nullptr && obc_time_ != nullptr) {
+    delete obc_time_;
+  }
+  obc_time_ = nullptr;
 }
-inline int32_t GpsEphemerisData::_internal_obc_time() const {
-  return obc_time_;
+inline const ::antaris_api_peer_to_peer::OBC_time& GpsEphemerisData::_internal_obc_time() const {
+  const ::antaris_api_peer_to_peer::OBC_time* p = obc_time_;
+  return p != nullptr ? *p : reinterpret_cast<const ::antaris_api_peer_to_peer::OBC_time&>(
+      ::antaris_api_peer_to_peer::_OBC_time_default_instance_);
 }
-inline int32_t GpsEphemerisData::obc_time() const {
+inline const ::antaris_api_peer_to_peer::OBC_time& GpsEphemerisData::obc_time() const {
   // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.GpsEphemerisData.obc_time)
   return _internal_obc_time();
 }
-inline void GpsEphemerisData::_internal_set_obc_time(int32_t value) {
-  
-  obc_time_ = value;
+inline void GpsEphemerisData::unsafe_arena_set_allocated_obc_time(
+    ::antaris_api_peer_to_peer::OBC_time* obc_time) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(obc_time_);
+  }
+  obc_time_ = obc_time;
+  if (obc_time) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:antaris_api_peer_to_peer.GpsEphemerisData.obc_time)
 }
-inline void GpsEphemerisData::set_obc_time(int32_t value) {
-  _internal_set_obc_time(value);
-  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.GpsEphemerisData.obc_time)
+inline ::antaris_api_peer_to_peer::OBC_time* GpsEphemerisData::release_obc_time() {
+  
+  ::antaris_api_peer_to_peer::OBC_time* temp = obc_time_;
+  obc_time_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::antaris_api_peer_to_peer::OBC_time* GpsEphemerisData::unsafe_arena_release_obc_time() {
+  // @@protoc_insertion_point(field_release:antaris_api_peer_to_peer.GpsEphemerisData.obc_time)
+  
+  ::antaris_api_peer_to_peer::OBC_time* temp = obc_time_;
+  obc_time_ = nullptr;
+  return temp;
+}
+inline ::antaris_api_peer_to_peer::OBC_time* GpsEphemerisData::_internal_mutable_obc_time() {
+  
+  if (obc_time_ == nullptr) {
+    auto* p = CreateMaybeMessage<::antaris_api_peer_to_peer::OBC_time>(GetArenaForAllocation());
+    obc_time_ = p;
+  }
+  return obc_time_;
+}
+inline ::antaris_api_peer_to_peer::OBC_time* GpsEphemerisData::mutable_obc_time() {
+  ::antaris_api_peer_to_peer::OBC_time* _msg = _internal_mutable_obc_time();
+  // @@protoc_insertion_point(field_mutable:antaris_api_peer_to_peer.GpsEphemerisData.obc_time)
+  return _msg;
+}
+inline void GpsEphemerisData::set_allocated_obc_time(::antaris_api_peer_to_peer::OBC_time* obc_time) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete obc_time_;
+  }
+  if (obc_time) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::antaris_api_peer_to_peer::OBC_time>::GetOwningArena(obc_time);
+    if (message_arena != submessage_arena) {
+      obc_time = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, obc_time, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  obc_time_ = obc_time;
+  // @@protoc_insertion_point(field_set_allocated:antaris_api_peer_to_peer.GpsEphemerisData.obc_time)
 }
 
 // repeated int32 gps_position_ecef = 4;
@@ -10302,6 +10710,8 @@ inline void AntarisReturnType::set_return_code(::antaris_api_peer_to_peer::Antar
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

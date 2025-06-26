@@ -168,10 +168,18 @@
             <Field name="req_status" type="INT32" sequence="2" description="status of GNSS EPH data start request"/>
          </Struct>
 
+        <Struct name="OBC_time" description="OBC time">
+            <Field name="hour" type="UINT8" sequence="1" description="hour"/>
+            <Field name="minute" type="UINT8" sequence="2" description="Minute"/>
+            <Field name="millisecond" type="UINT16" sequence="3" description="millisecond"/>
+            <Field name="date" type="UINT8" sequence="4" description="date"/>
+            <Field name="month" type="UINT8" sequence="5" description="month"/>
+            <Field name="year" type="UINT16" sequence="6" description="year"/>
+        </Struct>
         <Struct name="GpsEphemerisData" description="GNSS Eph1/Eph2 data">
             <Field name="gps_fix_time" type="UINT32" sequence="1" description="GPS time"/>
-            <Field name="gps_sys_time" type="UINT32" sequence="2" description="GPS System time"/>
-            <Field name="obc_time" type="UINT32" sequence="3" description="OBC time"/>
+            <Field name="gps_sys_time" type="UINT64" sequence="2" description="GPS System time"/>
+            <Field name="obc_time" type="OBC_time" sequence="3" description="OBC time"/>
             <Field name="gps_position_ecef" type="UINT32" sequence="4" description="GPS position" array="3"/>
             <Field name="gps_velocity_ecef" type="UINT32" sequence="5" description="GPS velocity" array="3"/>
             <Field name="gps_validity_flag_pos_vel" type="UINT32" sequence="6" description="GPS validity flag"/>

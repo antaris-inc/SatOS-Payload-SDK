@@ -62,12 +62,19 @@ class Controller:
         if gnss_data.gps_timeout_flag == 1:
             logger.info(f"gps_fix_time: {gnss_data.gps_eph_data.gps_fix_time}")
             logger.info(f"gps_sys_time: {gnss_data.gps_eph_data.gps_sys_time}")
-            logger.info(f"obc_time: {gnss_data.gps_eph_data.obc_time}")
+            obc = gnss_data.gps_eph_data.obc_time
+            obc_formatted = (
+                f"{obc.hour:02d}:{obc.minute:02d}:{obc.millisecond // 1000:02d}."
+                f"{obc.millisecond % 1000:03d} "
+                f"Date: {obc.date:02d}/{obc.month:02d}/{obc.year}"
+            )
+            logger.info(f"obc_time : {obc_formatted}")
+
             for i in {0,1,2}:
                 logger.info(f"gps_position_ecef: {gnss_data.gps_eph_data.gps_position_ecef[i]}")
             for i in {0,1,2}:
                 logger.info(f"gps_velocity_ecef: {gnss_data.gps_eph_data.gps_velocity_ecef[i]}")
-            logger.info(f"gps_validity_flag_pos_vel: {gnss_data.gps_eph_data.gps_validity_flag_pos_vel}")
+                logger.info(f"gps_validity_flag_pos_vel: {gnss_data.gps_eph_data.gps_validity_flag_pos_vel}")
 
         elif gnss_data.adcs_timeout_flag == 1:    
             logger.info(f"ADCS Orbit Propagator/System Time = {gnss_data.adcs_eph_data.orbit_time}") 
@@ -142,7 +149,7 @@ class Controller:
                 logger.info("GNSS EPH data start request failed")
         else:
             logger.info("Incorrect parameters. Parameter can be 'stop' or 'start'")
-        
+
     def handle_eps_voltage(self, ctx):
         periodicity_in_ms = 2000   # Periodicity = 0 indicates one time GNSS EPH data. Max is 1 minute
         if ctx.params.lower() == "stop":

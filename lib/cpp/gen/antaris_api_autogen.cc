@@ -1141,6 +1141,83 @@ peer_to_app_RespGnssEphStartDataReq(const void *ptr_src_peer, void *ptr_dst_app)
 }
 
 void
+displayOBC_time(const void *obj)
+{
+    OBC_time *p = (OBC_time *)obj;
+
+    printf("OBC_time %p =>\n", obj);
+
+    printf("hour ==>\n");
+    displayUINT8((void *)&p->hour);
+    printf("minute ==>\n");
+    displayUINT8((void *)&p->minute);
+    printf("millisecond ==>\n");
+    displayUINT16((void *)&p->millisecond);
+    printf("date ==>\n");
+    displayUINT8((void *)&p->date);
+    printf("month ==>\n");
+    displayUINT8((void *)&p->month);
+    printf("year ==>\n");
+    displayUINT16((void *)&p->year);
+
+}
+
+void
+app_to_peer_OBC_time(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    OBC_time *src = (OBC_time *)ptr_src_app;
+    ::antaris_api_peer_to_peer::OBC_time *dst = (::antaris_api_peer_to_peer::OBC_time *)ptr_dst_peer;
+
+    UINT32 __tmp_hour = 0;
+    UINT32 __tmp_minute = 0;
+    UINT32 __tmp_millisecond = 0;
+    UINT32 __tmp_date = 0;
+    UINT32 __tmp_month = 0;
+    UINT32 __tmp_year = 0;
+
+    app_to_peer_UINT8(&src->hour, &__tmp_hour); // hour
+
+    dst->set_hour(__tmp_hour);
+
+    app_to_peer_UINT8(&src->minute, &__tmp_minute); // minute
+
+    dst->set_minute(__tmp_minute);
+
+    app_to_peer_UINT16(&src->millisecond, &__tmp_millisecond); // millisecond
+
+    dst->set_millisecond(__tmp_millisecond);
+
+    app_to_peer_UINT8(&src->date, &__tmp_date); // date
+
+    dst->set_date(__tmp_date);
+
+    app_to_peer_UINT8(&src->month, &__tmp_month); // month
+
+    dst->set_month(__tmp_month);
+
+    app_to_peer_UINT16(&src->year, &__tmp_year); // year
+
+    dst->set_year(__tmp_year);
+
+
+}
+
+void
+peer_to_app_OBC_time(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    OBC_time *dst = (OBC_time *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::OBC_time *src = (::antaris_api_peer_to_peer::OBC_time *)ptr_src_peer;
+
+    dst->hour = src->hour();
+    dst->minute = src->minute();
+    dst->millisecond = src->millisecond();
+    dst->date = src->date();
+    dst->month = src->month();
+    dst->year = src->year();
+
+}
+
+void
 displayGpsEphemerisData(const void *obj)
 {
     GpsEphemerisData *p = (GpsEphemerisData *)obj;
@@ -1150,9 +1227,9 @@ displayGpsEphemerisData(const void *obj)
     printf("gps_fix_time ==>\n");
     displayUINT32((void *)&p->gps_fix_time);
     printf("gps_sys_time ==>\n");
-    displayUINT32((void *)&p->gps_sys_time);
+    displayUINT64((void *)&p->gps_sys_time);
     printf("obc_time ==>\n");
-    displayUINT32((void *)&p->obc_time);
+    displayOBC_time((void *)&p->obc_time);
     printf("gps_position_ecef ==>\n");
     for (int i = 0; i < 3; i++) {
         displayUINT32((void *)&p->gps_position_ecef[i]);
@@ -1175,8 +1252,8 @@ app_to_peer_GpsEphemerisData(const void *ptr_src_app, void *ptr_dst_peer)
     ::antaris_api_peer_to_peer::GpsEphemerisData *dst = (::antaris_api_peer_to_peer::GpsEphemerisData *)ptr_dst_peer;
 
     UINT32 __tmp_gps_fix_time = 0;
-    UINT32 __tmp_gps_sys_time = 0;
-    UINT32 __tmp_obc_time = 0;
+    UINT64 __tmp_gps_sys_time;
+    OBC_time __tmp_obc_time;
     UINT32 __tmp_gps_position_ecef = 0;
     UINT32 __tmp_gps_velocity_ecef = 0;
     UINT32 __tmp_gps_validity_flag_pos_vel = 0;
@@ -1185,13 +1262,11 @@ app_to_peer_GpsEphemerisData(const void *ptr_src_app, void *ptr_dst_peer)
 
     dst->set_gps_fix_time(__tmp_gps_fix_time);
 
-    app_to_peer_UINT32(&src->gps_sys_time, &__tmp_gps_sys_time); // gps_sys_time
+    app_to_peer_UINT64(&src->gps_sys_time, &__tmp_gps_sys_time); // gps_sys_time
 
     dst->set_gps_sys_time(__tmp_gps_sys_time);
 
-    app_to_peer_UINT32(&src->obc_time, &__tmp_obc_time); // obc_time
-
-    dst->set_obc_time(__tmp_obc_time);
+    app_to_peer_OBC_time(&src->obc_time, dst->mutable_obc_time()); // obc_time
 
     for (int i = 0; i < 3; i++) { // gps_position_ecef
         UINT32 converted_value;
@@ -1218,7 +1293,8 @@ peer_to_app_GpsEphemerisData(const void *ptr_src_peer, void *ptr_dst_app)
 
     dst->gps_fix_time = src->gps_fix_time();
     dst->gps_sys_time = src->gps_sys_time();
-    dst->obc_time = src->obc_time();
+    OBC_time *mutable_obc_time = &dst->obc_time;
+    peer_to_app_OBC_time(&src->obc_time(), mutable_obc_time);
     for (int i = 1; i < 3; i++) { // gps_position_ecef
         UINT32 src_info = src->gps_position_ecef(i);
         UINT32 *dst_info = &dst->gps_position_ecef[i];

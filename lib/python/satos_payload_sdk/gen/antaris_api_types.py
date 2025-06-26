@@ -734,6 +734,55 @@ def peer_to_app_RespGnssEphStartDataReq(peer_struct):
 def app_to_peer_RespGnssEphStartDataReq(app_struct):
     return antaris_api_pb2.RespGnssEphStartDataReq(correlation_id = app_struct.correlation_id, req_status = app_struct.req_status)
 
+## @class: OBC_time
+## @brief: OBC time
+## @param: hour                                            :    hour                                            
+## @param: minute                                          :    Minute                                          
+## @param: millisecond                                     :    millisecond                                     
+## @param: date                                            :    date                                            
+## @param: month                                           :    month                                           
+## @param: year                                            :    year                                            
+class OBC_time:
+    def __init__(self, hour, minute, millisecond, date, month, year):
+        self.hour = hour
+        self.minute = minute
+        self.millisecond = millisecond
+        self.date = date
+        self.month = month
+        self.year = year
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "hour:\n"
+        ret_str += str(self.hour) + "\n"
+        ret_str += "minute:\n"
+        ret_str += str(self.minute) + "\n"
+        ret_str += "millisecond:\n"
+        ret_str += str(self.millisecond) + "\n"
+        ret_str += "date:\n"
+        ret_str += str(self.date) + "\n"
+        ret_str += "month:\n"
+        ret_str += str(self.month) + "\n"
+        ret_str += "year:\n"
+        ret_str += str(self.year) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_OBC_time(peer_struct):
+    hour = peer_struct.hour
+    minute = peer_struct.minute
+    millisecond = peer_struct.millisecond
+    date = peer_struct.date
+    month = peer_struct.month
+    year = peer_struct.year
+    return OBC_time(hour, minute, millisecond, date, month, year)
+
+def app_to_peer_OBC_time(app_struct):
+    return antaris_api_pb2.OBC_time(hour = app_struct.hour, minute = app_struct.minute, millisecond = app_struct.millisecond, date = app_struct.date, month = app_struct.month, year = app_struct.year)
+
 ## @class: GpsEphemerisData
 ## @brief: GNSS Eph1/Eph2 data
 ## @param: gps_fix_time                                    :    GPS time                                        
