@@ -502,7 +502,7 @@ public:
 
     Status PA_ProcessRespSesTempReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams* request,  ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
-    Status PA_ProcessSesThermalNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request,  ::antaris_api_peer_to_peer::AntarisReturnType* response);
+    Status PA_ProcessSesThrmlNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request,  ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
 public:
 
