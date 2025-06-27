@@ -232,9 +232,9 @@ class CPPField(PARSER_INTF.Field):
 
         if self.array == "":
             if type_cast == "":
-            targetFile.write("{}{}(&src->{}, &{}); // {}\n\n".format(gIndent, get_app_to_peer_fn_for_type(self.type), self.name, tmpVarName, self.name))
-            targetFile.write("{}dst->set_{}({}{});\n\n".format(gIndent, self.name, type_cast, tmpVarName))
-        else:
+                targetFile.write("{}{}(&src->{}, &{}); // {}\n\n".format(gIndent, get_app_to_peer_fn_for_type(self.type), self.name, tmpVarName, self.name))
+                targetFile.write("{}dst->set_{}({}{});\n\n".format(gIndent, self.name, type_cast, tmpVarName))
+            else:
                 if is_enum_type(self.type):
                     targetFile.write("{}{}(&src->{}, &{}); // {}\n\n".format(gIndent, get_app_to_peer_fn_for_type(self.type), self.name, tmpVarName, self.name))
                     targetFile.write("{}dst->set_{}({}{});\n\n".format(gIndent, self.name, type_cast, tmpVarName))
@@ -286,7 +286,7 @@ class CPPField(PARSER_INTF.Field):
 
         if self.array == "":
             if type_cast == "":
-            targetFile.write("{}dst->{} = {}src->{}();\n".format(gIndent, self.name, type_cast, self.name))
+                targetFile.write("{}dst->{} = {}src->{}();\n".format(gIndent, self.name, type_cast, self.name))
             else:
                 if is_enum_type(self.type):
                     targetFile.write("{}dst->{} = {}src->{}();\n".format(gIndent, self.name, type_cast, self.name))
@@ -339,7 +339,7 @@ class CPPField(PARSER_INTF.Field):
             if appint_type_to_peerint_type(self.type) == "UINT32":
                 targetFile.write("{}{} {} = 0;\n".format(gIndent, appint_type_to_peerint_type(self.type), self.get_peer_local_tmp_varname()))
             else:
-            targetFile.write("{}{} {};\n".format(gIndent, appint_type_to_peerint_type(self.type), self.get_peer_local_tmp_varname()))
+                targetFile.write("{}{} {};\n".format(gIndent, appint_type_to_peerint_type(self.type), self.get_peer_local_tmp_varname()))
 
 class CPPStruct(PARSER_INTF.Struct):
     def __init__(self, xmlMetaData, xmlElement, namespace):
