@@ -28,6 +28,12 @@ logger = logging.getLogger("satos_payload_sdk")
 DO_NOTHING_ON_HEALTH_CHECK_FAILURE = 0
 REBOOT_ON_HEALTH_CHECK_FAILURE = 1
 
+FilePriorities = {
+    'FILE_DL_PRIORITY_LOW': 0,
+    'FILE_DL_PRIORITY_NORMAL': 1,
+    'FILE_DL_PRIORITY_HIGH': 2,
+    'FILE_DL_PRIORITY_IMMEDIATE': 3,
+}
 
 class Stoppable:
     def __init__(self):
