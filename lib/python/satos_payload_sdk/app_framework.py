@@ -391,9 +391,10 @@ class ChannelClient:
             del self._responses[params.correlation_id]
 
         return resp
-    def stage_file_download(self, loc):
+
+    def stage_file_download(self, filename, file_priority):
         with self._cond:
-            params = api_types.ReqStageFileDownloadParams(self._get_next_cid(), loc)
+            params = api_types.ReqStageFileDownloadParams(self._get_next_cid(), filename, file_priority)
             resp = api_client.api_pa_pc_stage_file_download(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
                 logger.error("stage_file_download request failed")

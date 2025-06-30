@@ -289,7 +289,7 @@ class Controller:
         # 'FILE_DL_PRIORITY_NORMAL': 1,
         # 'FILE_DL_PRIORITY_HIGH': 2,
         # 'FILE_DL_PRIORITY_IMMEDIATE': 3,
-        resp = ctx.client.stage_file_download(g_StageFileName, ctx.client.FilePriorities['FILE_DL_PRIORITY_HIGH'])
+        resp = ctx.client.stage_file_download(g_StageFileName, app_framework.FilePriorities['FILE_DL_PRIORITY_HIGH'])
 
     def handle_test_can_bus(self, ctx):
         logger.info("Test CAN bus")
