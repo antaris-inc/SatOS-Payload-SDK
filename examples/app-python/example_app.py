@@ -24,6 +24,7 @@ import serial
 from satos_payload_sdk import app_framework
 from satos_payload_sdk import antaris_api_gpio as api_gpio
 from satos_payload_sdk import antaris_api_can as api_can
+import satos_payload_sdk.gen.antaris_api_types as api_types
 
 g_GPIO_ERROR = -1
 g_Uart_Baudrate = 9600
@@ -289,7 +290,11 @@ class Controller:
         # 'FILE_DL_PRIORITY_NORMAL': 1,
         # 'FILE_DL_PRIORITY_HIGH': 2,
         # 'FILE_DL_PRIORITY_IMMEDIATE': 3,
-        resp = ctx.client.stage_file_download(g_StageFileName, app_framework.FilePriorities['FILE_DL_PRIORITY_HIGH'])
+        resp = ctx.client.stage_file_download(g_StageFileName, api_types.FilePriorities.FILE_DL_PRIORITY_NORMAL)
+        if resp == ValueError:
+            print("Error in staging file")
+        else:
+            print("File successfully staged ")
 
     def handle_test_can_bus(self, ctx):
         logger.info("Test CAN bus")

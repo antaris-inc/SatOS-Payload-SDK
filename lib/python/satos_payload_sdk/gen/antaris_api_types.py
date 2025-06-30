@@ -60,6 +60,18 @@ class AntarisReturnCode:
 
 
 
+# ENUM: FilePriorities - File priority
+class FilePriorities:
+    FILE_DL_PRIORITY_LOW = 0 # low priority
+    FILE_DL_PRIORITY_NORMAL = 1 # normal priority
+    FILE_DL_PRIORITY_HIGH = 2 # high priority
+    FILE_DL_PRIORITY_IMMEDIATE = 3 # highest priority
+
+
+    reverse_dict = {0 : "FILE_DL_PRIORITY_LOW", 1 : "FILE_DL_PRIORITY_NORMAL", 2 : "FILE_DL_PRIORITY_HIGH", 3 : "FILE_DL_PRIORITY_IMMEDIATE"}
+
+
+
 ## @class: ReqRegisterParams
 ## @brief: Request parameters for registering with Payload Controller
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
