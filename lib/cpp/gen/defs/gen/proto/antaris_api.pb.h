@@ -1274,6 +1274,7 @@ class ReqStageFileDownloadParams final :
   enum : int {
     kFilePathFieldNumber = 2,
     kCorrelationIdFieldNumber = 1,
+    kFilePriorityFieldNumber = 3,
   };
   // string file_path = 2;
   void clear_file_path();
@@ -1298,6 +1299,14 @@ class ReqStageFileDownloadParams final :
   void _internal_set_correlation_id(int32_t value);
   public:
 
+  // int32 file_priority = 3;
+  void clear_file_priority();
+  int32_t file_priority() const;
+  void set_file_priority(int32_t value);
+  private:
+  int32_t _internal_file_priority() const;
+  void _internal_set_file_priority(int32_t value);
+  public:
   // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.ReqStageFileDownloadParams)
  private:
   class _Internal;
@@ -1307,6 +1316,7 @@ class ReqStageFileDownloadParams final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr file_path_;
   int32_t correlation_id_;
+  int32_t file_priority_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
 };
@@ -7841,6 +7851,26 @@ inline void ReqStageFileDownloadParams::set_allocated_file_path(std::string* fil
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:antaris_api_peer_to_peer.ReqStageFileDownloadParams.file_path)
+}
+
+// int32 file_priority = 3;
+inline void ReqStageFileDownloadParams::clear_file_priority() {
+  file_priority_ = 0;
+}
+inline int32_t ReqStageFileDownloadParams::_internal_file_priority() const {
+  return file_priority_;
+}
+inline int32_t ReqStageFileDownloadParams::file_priority() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.ReqStageFileDownloadParams.file_priority)
+  return _internal_file_priority();
+}
+inline void ReqStageFileDownloadParams::_internal_set_file_priority(int32_t value) {
+  
+  file_priority_ = value;
+}
+inline void ReqStageFileDownloadParams::set_file_priority(int32_t value) {
+  _internal_set_file_priority(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ReqStageFileDownloadParams.file_priority)
 }
 
 // -------------------------------------------------------------------

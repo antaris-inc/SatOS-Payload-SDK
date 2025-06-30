@@ -303,6 +303,8 @@ displayReqStageFileDownloadParams(const void *obj)
         displayINT8((void *)&p->file_path[i]);
     }
 
+    printf("file_priority ==>\n");
+    displayINT8((void *)&p->file_priority);
 
 }
 
@@ -313,12 +315,17 @@ app_to_peer_ReqStageFileDownloadParams(const void *ptr_src_app, void *ptr_dst_pe
     ::antaris_api_peer_to_peer::ReqStageFileDownloadParams *dst = (::antaris_api_peer_to_peer::ReqStageFileDownloadParams *)ptr_dst_peer;
 
     UINT32 __tmp_correlation_id = 0;
+    INT32 __tmp_file_priority;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
     dst->set_correlation_id(__tmp_correlation_id);
 
     dst->set_file_path(&src->file_path[0]);
+
+    app_to_peer_INT8(&src->file_priority, &__tmp_file_priority); // file_priority
+
+    dst->set_file_priority(__tmp_file_priority);
 
 
 }
@@ -336,6 +343,7 @@ peer_to_app_ReqStageFileDownloadParams(const void *ptr_src_peer, void *ptr_dst_a
         return;
     }
     strncpy(&dst->file_path[0], src->file_path().c_str(), 256);
+    dst->file_priority = src->file_priority();
 
 }
 
