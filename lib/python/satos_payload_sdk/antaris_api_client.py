@@ -485,10 +485,10 @@ def api_pa_pc_gnss_eph_start_req(channel, req_gnss_eph_start):
 
     return peer_ret.return_code
 
-def api_pa_pc_get_eps_voltage_stop_req(channel):
+def api_pa_pc_get_eps_voltage_stop_req(channel, req_get_eps_voltage_stop):
     print("api_pa_pc_get_eps_voltage_stop_req")
 
-    peer_params = api_types.app_to_peer_ReqGetEpsVoltageStopReq()
+    peer_params = api_types.app_to_peer_ReqGetEpsVoltageStopReq(req_get_eps_voltage_stop)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
     peer_ret = channel.grpc_client_handle.PC_get_eps_voltage_stop_req(peer_params , metadata=metadata)
 

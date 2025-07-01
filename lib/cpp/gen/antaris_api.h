@@ -70,6 +70,19 @@ void displayAntarisReturnCode(void *obj);
 void app_to_peer_AntarisReturnCode(void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_AntarisReturnCode(void *ptr_src_peer, void *ptr_dst_app);
 
+/// @enum FilePriorities
+/// @brief File priority
+typedef enum FilePriorities {
+    FILE_DL_PRIORITY_LOW             = 0,                               ///< low priority
+    FILE_DL_PRIORITY_NORMAL          = 1,                               ///< normal priority
+    FILE_DL_PRIORITY_HIGH            = 2,                               ///< high priority
+    FILE_DL_PRIORITY_IMMEDIATE       = 3,                               ///< highest priority
+} FilePriorities;
+
+void displayFilePriorities(void *obj);
+void app_to_peer_FilePriorities(void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_FilePriorities(void *ptr_src_peer, void *ptr_dst_app);
+
 struct ReqRegisterParams;
 typedef struct ReqRegisterParams ReqRegisterParams;
 
@@ -432,6 +445,7 @@ void peer_to_app_RespGetCurrentLocationParams(const void *ptr_src_peer, void *pt
 struct ReqStageFileDownloadParams {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     INT8                                            file_path[256];                                  ///< @var File path relative to outbound mount-point
+    FilePriorities                                  file_priority;                                   ///< @var File priority
 };
 
 void displayReqStageFileDownloadParams(const void *obj);

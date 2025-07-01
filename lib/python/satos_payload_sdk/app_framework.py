@@ -28,7 +28,6 @@ logger = logging.getLogger("satos_payload_sdk")
 DO_NOTHING_ON_HEALTH_CHECK_FAILURE = 0
 REBOOT_ON_HEALTH_CHECK_FAILURE = 1
 
-
 class Stoppable:
     def __init__(self):
         super().__init__()
@@ -257,7 +256,7 @@ class ChannelClient:
     def get_eps_voltage_stop_req(self):
         with self._cond:
             params = api_types.ReqGetEpsVoltageStopReq(self._get_next_cid())
-            resp = api_client.api_pa_pc_get_eps_voltage_stop_req(self._channel)
+            resp = api_client.api_pa_pc_get_eps_voltage_stop_req(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
                 logger.error("api_pa_pc_get_eps_voltage_stop_req request failed")
                 return None
@@ -385,9 +384,13 @@ class ChannelClient:
             del self._responses[params.correlation_id]
 
         return resp
-    def stage_file_download(self, loc):
+
+    def stage_file_download(self, filename, file_priority):
         with self._cond:
-            params = api_types.ReqStageFileDownloadParams(self._get_next_cid(), loc)
+            if (file_priority < api_types.FilePriorities.FILE_DL_PRIORITY_LOW) or (file_priority > api_types.FilePriorities.FILE_DL_PRIORITY_IMMEDIATE):
+                return ValueError("Invalid file priority")
+
+            params = api_types.ReqStageFileDownloadParams(self._get_next_cid(), filename, file_priority)
             resp = api_client.api_pa_pc_stage_file_download(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
                 logger.error("stage_file_download request failed")

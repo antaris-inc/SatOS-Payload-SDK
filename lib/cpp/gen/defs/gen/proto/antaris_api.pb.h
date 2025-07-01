@@ -250,6 +250,33 @@ inline bool AntarisReturnCode_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<AntarisReturnCode>(
     AntarisReturnCode_descriptor(), name, value);
 }
+enum FilePriorities : int {
+  FILE_DL_PRIORITY_LOW = 0,
+  FILE_DL_PRIORITY_NORMAL = 1,
+  FILE_DL_PRIORITY_HIGH = 2,
+  FILE_DL_PRIORITY_IMMEDIATE = 3,
+  FilePriorities_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  FilePriorities_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool FilePriorities_IsValid(int value);
+constexpr FilePriorities FilePriorities_MIN = FILE_DL_PRIORITY_LOW;
+constexpr FilePriorities FilePriorities_MAX = FILE_DL_PRIORITY_IMMEDIATE;
+constexpr int FilePriorities_ARRAYSIZE = FilePriorities_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* FilePriorities_descriptor();
+template<typename T>
+inline const std::string& FilePriorities_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, FilePriorities>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function FilePriorities_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    FilePriorities_descriptor(), enum_t_value);
+}
+inline bool FilePriorities_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, FilePriorities* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<FilePriorities>(
+    FilePriorities_descriptor(), name, value);
+}
 // ===================================================================
 
 class AntarisSdkVersion final :
@@ -1274,6 +1301,7 @@ class ReqStageFileDownloadParams final :
   enum : int {
     kFilePathFieldNumber = 2,
     kCorrelationIdFieldNumber = 1,
+    kFilePriorityFieldNumber = 3,
   };
   // string file_path = 2;
   void clear_file_path();
@@ -1298,6 +1326,15 @@ class ReqStageFileDownloadParams final :
   void _internal_set_correlation_id(int32_t value);
   public:
 
+  // .antaris_api_peer_to_peer.FilePriorities file_priority = 3;
+  void clear_file_priority();
+  ::antaris_api_peer_to_peer::FilePriorities file_priority() const;
+  void set_file_priority(::antaris_api_peer_to_peer::FilePriorities value);
+  private:
+  ::antaris_api_peer_to_peer::FilePriorities _internal_file_priority() const;
+  void _internal_set_file_priority(::antaris_api_peer_to_peer::FilePriorities value);
+  public:
+
   // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.ReqStageFileDownloadParams)
  private:
   class _Internal;
@@ -1307,6 +1344,7 @@ class ReqStageFileDownloadParams final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr file_path_;
   int32_t correlation_id_;
+  int file_priority_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
 };
@@ -7843,6 +7881,26 @@ inline void ReqStageFileDownloadParams::set_allocated_file_path(std::string* fil
   // @@protoc_insertion_point(field_set_allocated:antaris_api_peer_to_peer.ReqStageFileDownloadParams.file_path)
 }
 
+// .antaris_api_peer_to_peer.FilePriorities file_priority = 3;
+inline void ReqStageFileDownloadParams::clear_file_priority() {
+  file_priority_ = 0;
+}
+inline ::antaris_api_peer_to_peer::FilePriorities ReqStageFileDownloadParams::_internal_file_priority() const {
+  return static_cast< ::antaris_api_peer_to_peer::FilePriorities >(file_priority_);
+}
+inline ::antaris_api_peer_to_peer::FilePriorities ReqStageFileDownloadParams::file_priority() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.ReqStageFileDownloadParams.file_priority)
+  return _internal_file_priority();
+}
+inline void ReqStageFileDownloadParams::_internal_set_file_priority(::antaris_api_peer_to_peer::FilePriorities value) {
+  
+  file_priority_ = value;
+}
+inline void ReqStageFileDownloadParams::set_file_priority(::antaris_api_peer_to_peer::FilePriorities value) {
+  _internal_set_file_priority(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ReqStageFileDownloadParams.file_priority)
+}
+
 // -------------------------------------------------------------------
 
 // RespStageFileDownloadParams
@@ -10799,6 +10857,11 @@ template <> struct is_proto_enum< ::antaris_api_peer_to_peer::AntarisReturnCode>
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::antaris_api_peer_to_peer::AntarisReturnCode>() {
   return ::antaris_api_peer_to_peer::AntarisReturnCode_descriptor();
+}
+template <> struct is_proto_enum< ::antaris_api_peer_to_peer::FilePriorities> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::antaris_api_peer_to_peer::FilePriorities>() {
+  return ::antaris_api_peer_to_peer::FilePriorities_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE
