@@ -164,7 +164,7 @@ static void handle_LogLocation(mythreadState_t *mythread)
 void handle_Eps_Voltage_Request(mythreadState_t *mythread){
     AntarisReturnCode ret;
     char *seq_params_lower = (char *)malloc(strlen(mythread->seq_params) + 1);
-    UINT16 periodicity_in_ms = 2000;   // Periodicity = 0 indicates one time GNSS EPH data. Max is 1 minute
+    UINT16 periodicity_in_ms = 2000;   // Periodicity = 0 indicates one time EPS voltage data frequency. Max is 1 minute.
     for(int i = 0;mythread->seq_params[i] != '\0';i++){
         seq_params_lower[i] = tolower(mythread->seq_params[i]);
     }
