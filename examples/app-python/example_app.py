@@ -118,7 +118,7 @@ class Controller:
         else:
             logger.info("Incorrect parameters. Parameter can be 'stop' or 'start'")
 
-    def handle_eps_voltage(self, ctx):
+    def handle_eps_voltage_request(self, ctx):
         periodicity_in_ms = 2000   # Periodicity = 0 indicates one time GNSS EPH data. Max is 1 minute
         if ctx.params.lower() == "stop":
             logger.info("Sending Get Eps Voltage stop request")
