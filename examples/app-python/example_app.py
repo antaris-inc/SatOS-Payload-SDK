@@ -118,17 +118,17 @@ class Controller:
         else:
             logger.info("Incorrect parameters. Parameter can be 'stop' or 'start'")
 
-    def handle_eps_voltage_request(self, ctx):
+    def handle_eps_voltage_telemetry_request(self, ctx):
         periodicity_in_ms = 2000   # Periodicity = 0 indicates one time EPS voltage data frequency. Max is 1 minute.
         if ctx.params.lower() == "stop":
-            logger.info("Sending Get Eps Voltage stop request")
+            logger.info("Sending Get Eps Voltage telemetry stop request")
             resp = ctx.client.get_eps_voltage_stop_req()
             if (resp == 0):
-                logger.info("Get Eps Voltage stop request success")
+                logger.info("Get Eps Voltage telemetry stop request success")
             else:
-                logger.info("Get Eps Voltage stop request failed")
+                logger.info("Get Eps Voltage telemetry stop request failed")
         elif ctx.params.lower() == "start":
-            logger.info("Sending Get Eps Voltage start request")
+            logger.info("Sending Get Eps Voltage telemetry start request")
             resp = ctx.client.get_eps_voltage_start_req(periodicity_in_ms)
             logger.info(f"Current voltage = {resp}")
         else:
@@ -301,7 +301,7 @@ def new():
     app.mount_sequence("PowerControl", ctl.handle_power_control)
     app.mount_sequence("TestCANBus", ctl.handle_test_can_bus)
     app.mount_sequence("GetGnssEphData", ctl.handle_gnss_data)
-    app.mount_sequence("GetEpsVoltage", ctl.handle_eps_voltage)
+    app.mount_sequence("GetEpsVoltage", ctl.handle_eps_voltage_telemetry_request)
     return app
 
 def set_payload_values(payload_app):

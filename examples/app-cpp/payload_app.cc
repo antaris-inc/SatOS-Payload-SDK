@@ -42,8 +42,8 @@
 #define StageFile_Sequence_IDX          4
 #define TestCANBus_Sequence_ID          "TestCANBus"
 #define TestCANBus_Sequence_IDX         5
-#define EpsVoltage_ID                   "EpsVoltage"
-#define EpsVoltage_IDX                  6
+#define EpsVoltageTelemetry_ID          "EpsVoltageTelemetry"
+#define EpsVoltageTelemetry_IDX         6
 #define SEQUENCE_ID_MAX                 7
 
 #define APP_STATE_ACTIVE                0  // Application State : Good (0), Error (non-Zero)
@@ -161,7 +161,7 @@ static void handle_LogLocation(mythreadState_t *mythread)
     return;
 }
 
-void handle_Eps_Voltage_Request(mythreadState_t *mythread){
+void handle_Eps_Voltage_Telemetry_Request(mythreadState_t *mythread){
     AntarisReturnCode ret;
     char *seq_params_lower = (char *)malloc(strlen(mythread->seq_params) + 1);
     UINT16 periodicity_in_ms = 2000;   // Periodicity = 0 indicates one time EPS voltage data frequency. Max is 1 minute.
@@ -170,29 +170,29 @@ void handle_Eps_Voltage_Request(mythreadState_t *mythread){
     }
     seq_params_lower[strlen(mythread->seq_params)] = '\0';
     if(strcmp(seq_params_lower, "stop") == 0){
-        printf("\n Sending Get Eps Voltage stop request \n");
+        printf("\n Sending Get Eps Voltage telemetry stop request \n");
 
         ReqGetEpsVoltageStopReq req_get_eps_voltage_stop_req = {0};
         req_get_eps_voltage_stop_req.correlation_id = mythread->correlation_id;
         ret = api_pa_pc_get_eps_voltage_stop_req(channel,&req_get_eps_voltage_stop_req);
         if(ret == An_SUCCESS){
-            printf("Get Eps Voltage stop request success, ret %d\n",ret);
+            printf("Get Eps Voltage telemetry stop request success, ret %d\n",ret);
         }
         else{
-            fprintf(stderr, " Get Eps Voltage stop request failed, ret %d\n", ret);
+            fprintf(stderr, " Get Eps Voltage telemetry stop request failed, ret %d\n", ret);
         }
     }
     else if(strcmp(seq_params_lower, "start") == 0){
-        printf("\n Sending Get Eps Voltage start request \n");
+        printf("\n Sending Get Eps Voltage telemetry start request \n");
         ReqGetEpsVoltageStartReq req_get_eps_voltage_start_req = {0};
         req_get_eps_voltage_start_req.correlation_id = mythread->correlation_id;
         req_get_eps_voltage_start_req.periodicity_in_ms = periodicity_in_ms;
         ret = api_pa_pc_get_eps_voltage_start_req(channel,&req_get_eps_voltage_start_req);
         if(ret == An_SUCCESS){
-            printf("Get Eps Voltage start request success, ret %d\n",ret);
+            printf("Get Eps Voltage telemetry start request success, ret %d\n",ret);
         }
         else{
-            fprintf(stderr, " Get Eps Voltage start request failed, ret %d\n", ret);
+            fprintf(stderr, " Get Eps Voltage telemetry start request failed, ret %d\n", ret);
         }
     }
     else{
@@ -496,9 +496,9 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
         printf("\t => %d\n", TestCANBus_Sequence_IDX);
         return TestCANBus_Sequence_IDX;
     }
-    else if (strcmp(sequence_string, EpsVoltage_ID) == 0) {
-        printf("\t => %d\n", EpsVoltage_IDX);
-        return EpsVoltage_IDX;
+    else if (strcmp(sequence_string, EpsVoltageTelemetry_ID) == 0) {
+        printf("\t => %d\n", EpsVoltageTelemetry_IDX);
+        return EpsVoltageTelemetry_IDX;
     }
 
     printf("Unknown sequence, returning -1\n");
@@ -730,7 +730,7 @@ int main(int argc, char *argv[])
     payload_sequences_fsms[TestGPIO_Sequence_IDX] = fsmThreadCreate(channel, 1, TestGPIO_Sequence_ID, handle_TestGPIO);
     payload_sequences_fsms[StageFile_Sequence_IDX] = fsmThreadCreate(channel, 1, StageFile_Sequence_ID, handle_StageFile);
     payload_sequences_fsms[TestCANBus_Sequence_IDX] = fsmThreadCreate(channel, 1, TestCANBus_Sequence_ID, handle_TestCANBus);
-    payload_sequences_fsms[EpsVoltage_IDX] = fsmThreadCreate(channel, 1, EpsVoltage_ID, handle_Eps_Voltage);
+    payload_sequences_fsms[EpsVoltageTelemetry_IDX] = fsmThreadCreate(channel, 1, EpsVoltageTelemetry_ID, handle_Eps_Voltage_Telemetry_Request);
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure
@@ -773,8 +773,8 @@ int main(int argc, char *argv[])
     if (strcmp(payload_sequences_fsms[StageFile_Sequence_IDX]->state, "NOT_STARTED") != 0) {
         pthread_join(payload_sequences_fsms[StageFile_Sequence_IDX]->thread_id, &exit_status);
     }
-    if (strcmp(payload_sequences_fsms[EpsVoltage_IDX]->state, "NOT_STARTED") != 0) {
-        pthread_join(payload_sequences_fsms[EpsVoltage_IDX]->thread_id, &exit_status);
+    if (strcmp(payload_sequences_fsms[EpsVoltageTelemetry_IDX]->state, "NOT_STARTED") != 0) {
+        pthread_join(payload_sequences_fsms[EpsVoltageTelemetry_IDX]->thread_id, &exit_status);
     }
 
     printf("Cleaning up sequence resources\n");
@@ -784,7 +784,7 @@ int main(int argc, char *argv[])
     fsmThreadCleanup(payload_sequences_fsms[LogLocation_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[TestGPIO_Sequence_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[StageFile_Sequence_IDX]);
-    fsmThreadCleanup(payload_sequences_fsms[EpsVoltage_IDX]);
+    fsmThreadCleanup(payload_sequences_fsms[EpsVoltageTelemetry_IDX]);
 
     // Delete Channel
     api_pa_pc_delete_channel(channel);
