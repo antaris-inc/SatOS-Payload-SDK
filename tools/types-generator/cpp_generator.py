@@ -11,6 +11,14 @@ gCommentLine = "/"*75
 gCommentStart = "///"
 gIndent = " "*4
 
+enum_types = []  # This will hold strings like "AntarisReturnCode", "PowerStatus", etc.
+
+def register_enum_type(enum_name):
+    if enum_name not in enum_types:
+        enum_types.append(enum_name)
+
+def is_enum_type(a_type):
+    return a_type in enum_types
 def get_display_fn_for_type(a_type):
     return "display{}".format(a_type)
 
@@ -154,6 +162,7 @@ class CPPEnum(PARSER_INTF.Enum):
 
         for x in self.xml_enum_values:
             self.enum_values.append(CPPEnumValue(xmlMetaData, x))
+            register_enum_type(self.name)
 
     def declaration_file_start(self, targetFile):
         targetFile.write("/// @enum {}\n/// @brief {}\n".format(self.name, self.description))
@@ -222,8 +231,15 @@ class CPPField(PARSER_INTF.Field):
             type_cast = "({}{})".format(namespace, self.type)
 
         if self.array == "":
-            targetFile.write("{}{}(&src->{}, &{}); // {}\n\n".format(gIndent, get_app_to_peer_fn_for_type(self.type), self.name, tmpVarName, self.name))
-            targetFile.write("{}dst->set_{}({}{});\n\n".format(gIndent, self.name, type_cast, tmpVarName))
+            if type_cast == "":
+                targetFile.write("{}{}(&src->{}, &{}); // {}\n\n".format(gIndent, get_app_to_peer_fn_for_type(self.type), self.name, tmpVarName, self.name))
+                targetFile.write("{}dst->set_{}({}{});\n\n".format(gIndent, self.name, type_cast, tmpVarName))
+            else:
+                if is_enum_type(self.type):
+                    targetFile.write("{}{}(&src->{}, &{}); // {}\n\n".format(gIndent, get_app_to_peer_fn_for_type(self.type), self.name, tmpVarName, self.name))
+                    targetFile.write("{}dst->set_{}({}{});\n\n".format(gIndent, self.name, type_cast, tmpVarName))
+                else:
+                    targetFile.write("{}{}(&src->{}, dst->mutable_{}()); // {}\n\n".format(gIndent, get_app_to_peer_fn_for_type(self.type), self.name, self.name, self.name))
         else:
             if self.type in ("UINT32", "UINT64", "INT32"):
                 # Open for-loop
@@ -269,7 +285,16 @@ class CPPField(PARSER_INTF.Field):
             type_cast = "({})".format(self.type)
 
         if self.array == "":
-            targetFile.write("{}dst->{} = {}src->{}();\n".format(gIndent, self.name, type_cast, self.name))
+            if type_cast == "":
+                targetFile.write("{}dst->{} = {}src->{}();\n".format(gIndent, self.name, type_cast, self.name))
+            else:
+                if is_enum_type(self.type):
+                    targetFile.write("{}dst->{} = {}src->{}();\n".format(gIndent, self.name, type_cast, self.name))
+                else:
+                    targetFile.write("{}{} *mutable_{} = &dst->{};\n".format(
+                    gIndent, appint_type_to_peerint_type(self.type), self.name, self.name))
+                    targetFile.write("{}{}(&src->{}(), mutable_{});\n".format(
+                    gIndent, get_peer_to_app_fn_for_type(self.type), self.name, self.name))
         else:
             if self.type == "UINT32":
                 targetFile.write("{}for (int i = 1; i < {}; i++) {} // {}\n".format(gIndent, self.array_xml, "{", self.name))
@@ -311,7 +336,10 @@ class CPPField(PARSER_INTF.Field):
             # targetFile.write("{}string {}(&src->{}[0]);\n".format(gIndent, self.get_peer_local_tmp_varname(), self.name))
             pass # copy strings directly without using a tmp local
         else:
-            targetFile.write("{}{} {};\n".format(gIndent, appint_type_to_peerint_type(self.type), self.get_peer_local_tmp_varname()))
+            if appint_type_to_peerint_type(self.type) == "UINT32":
+                targetFile.write("{}{} {} = 0;\n".format(gIndent, appint_type_to_peerint_type(self.type), self.get_peer_local_tmp_varname()))
+            else:
+                targetFile.write("{}{} {};\n".format(gIndent, appint_type_to_peerint_type(self.type), self.get_peer_local_tmp_varname()))
 
 class CPPStruct(PARSER_INTF.Struct):
     def __init__(self, xmlMetaData, xmlElement, namespace):

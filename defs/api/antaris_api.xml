@@ -43,6 +43,13 @@
             <EnumValue name="An_INCOMPATIBLE_VERSION" value="-6" description="Incompatible version of SDK invocation"/>
         </Enum>
 
+        <Enum name="FilePriorities" description="File priority">
+            <EnumValue name="FILE_DL_PRIORITY_LOW" value="0" description="low priority"/>
+            <EnumValue name="FILE_DL_PRIORITY_NORMAL" value="1" description="normal priority"/>
+            <EnumValue name="FILE_DL_PRIORITY_HIGH" value="2" description="high priority"/>
+            <EnumValue name="FILE_DL_PRIORITY_IMMEDIATE" value="3" description="highest priority"/>
+        </Enum>
+
         <Struct name="AntarisSdkVersion" description="SDK version specification" consumed_by="Peer">
             <Field name="major" type="UINT16" sequence="1" description="major revision number"/>
             <Field name="minor" type="UINT16" sequence="2" description="minor revision number"/>
@@ -80,6 +87,7 @@
         <Struct name="ReqStageFileDownloadParams" description="Request parameters to stage file download">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="file_path" type="INT8" sequence="2" description="File path relative to outbound mount-point" array="256"/>
+            <Field name="file_priority" type="FilePriorities" sequence="3" description="File priority"/>
         </Struct>
 
         <Struct name="RespStageFileDownloadParams" description="Response parameters for stage file download reqeust">
@@ -168,26 +176,63 @@
             <Field name="req_status" type="INT32" sequence="2" description="status of GNSS EPH data start request"/>
          </Struct>
 
+        <Struct name="OBC_time" description="OBC time">
+            <Field name="hour" type="UINT8" sequence="1" description="hour"/>
+            <Field name="minute" type="UINT8" sequence="2" description="Minute"/>
+            <Field name="millisecond" type="UINT16" sequence="3" description="millisecond"/>
+            <Field name="date" type="UINT8" sequence="4" description="date"/>
+            <Field name="month" type="UINT8" sequence="5" description="month"/>
+            <Field name="year" type="UINT16" sequence="6" description="year"/>
+        </Struct>
+        <Struct name="GpsEphemerisData" description="GNSS Eph1/Eph2 data">
+            <Field name="gps_fix_time" type="UINT32" sequence="1" description="GPS time"/>
+            <Field name="gps_sys_time" type="UINT64" sequence="2" description="GPS System time"/>
+            <Field name="obc_time" type="OBC_time" sequence="3" description="OBC time"/>
+            <Field name="gps_position_ecef" type="UINT32" sequence="4" description="GPS position" array="3"/>
+            <Field name="gps_velocity_ecef" type="UINT32" sequence="5" description="GPS velocity" array="3"/>
+            <Field name="gps_validity_flag_pos_vel" type="UINT32" sequence="6" description="GPS validity flag"/>
+        </Struct>
+
+        <Struct name="AdcsEphemerisData" description="ADCS EPH data">
+            <Field name="orbit_time" type="DOUBLE" sequence="1" description="ADCS Orbit Propagator/System Time"/>
+            <Field name="eci_position_x" type="DOUBLE" sequence="2" description="ECI Position X (km)"/>
+            <Field name="eci_position_y" type="DOUBLE" sequence="3" description="ECI Position Y (km)"/>
+            <Field name="eci_position_z" type="DOUBLE" sequence="4" description="ECI Position Z (km)"/>
+            <Field name="eci_velocity_x" type="DOUBLE" sequence="5" description="ECI Velocity X (km/s)"/>
+            <Field name="eci_velocity_y" type="DOUBLE" sequence="6" description="ECI Velocity Y (km/s)"/>
+            <Field name="eci_velocity_z" type="DOUBLE" sequence="7" description="ECI Velocity Z (km/s)"/>
+            <Field name="ecef_position_x" type="DOUBLE" sequence="8" description="ECEF Position X (km)"/>
+            <Field name="ecef_position_y" type="DOUBLE" sequence="9" description="ECEF Position Y (km)"/>
+            <Field name="ecef_position_z" type="DOUBLE" sequence="10" description="ECEF Position Z (km)"/> 
+            <Field name="ecef_velocity_x" type="DOUBLE" sequence="11" description="ECEF Velocity X (km/s)"/> 
+            <Field name="ecef_velocity_y" type="DOUBLE" sequence="12" description="ECEF Velocity Y (km/s)"/>
+            <Field name="ecef_velocity_z" type="DOUBLE" sequence="13" description="ECEF Velocity Z (km/s)"/> 
+            <Field name="ang_rate_x" type="DOUBLE" sequence="14" description="X axis Angular rate (deg/s)"/> 
+            <Field name="ang_rate_y" type="DOUBLE" sequence="15" description="Y axis Angular rate (deg/s)"/> 
+            <Field name="ang_rate_z" type="DOUBLE" sequence="16" description="Z axis Angular rate (deg/s)"/> 
+            <Field name="att_quat_1" type="DOUBLE" sequence="17" description="Attitude Quaternion 1"/> 
+            <Field name="att_quat_2" type="DOUBLE" sequence="20" description="Attitude Quaternion 2"/> 
+            <Field name="att_quat_3" type="DOUBLE" sequence="21" description="Attitude Quaternion 3"/> 
+            <Field name="att_quat_4" type="DOUBLE" sequence="22" description="Attitude Quaternion 4"/> 
+            <Field name="latitude" type="FLOAT" sequence="23" description="Latitude (deg)"/> 
+            <Field name="longitude" type="FLOAT" sequence="24" description="Longitude (deg)"/> 
+            <Field name="altitude" type="FLOAT" sequence="25" description="Altitude (km)"/> 
+            <Field name="nadir_vector_x" type="FLOAT" sequence="26" description="X Nadir Vector"/> 
+            <Field name="nadir_vector_y" type="FLOAT" sequence="27" description="Y Nadir Vector"/> 
+            <Field name="nadir_vector_z" type="FLOAT" sequence="28" description="Z Nadir Vector"/> 
+            <Field name="gd_nadir_vector_x" type="FLOAT" sequence="29" description="X Geodetic Nadir Vector"/> 
+            <Field name="gd_nadir_vector_y" type="FLOAT" sequence="30" description="Y Geodetic Nadir Vector"/> 
+            <Field name="gd_nadir_vector_z" type="FLOAT" sequence="31" description="Z Geodetic Nadir Vector"/> 
+            <Field name="beta_angle" type="FLOAT" sequence="32" description="Beta Angle (deg)"/> 
+            <Field name="validity_flags" type="UINT16" sequence="33" description="1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity"/> 
+        </Struct>
+
         <Struct name="GnssEphData" description="GNSS Eph1/Eph2 data">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
-            <Field name="gps_fix_time" type="UINT32" sequence="2" description="GPS time"/>
-            <Field name="gps_sys_time" type="UINT32" sequence="3" description="GPS System time"/>
-            <Field name="obc_time" type="UINT64" sequence="4" description="OBC time"/>
-            <Field name="gps_position_ecef" type="UINT32" sequence="5" description="GPS position" array="3"/>
-            <Field name="gps_velocity_ecef" type="UINT32" sequence="6" description="GPS velocity" array="3"/>
-            <Field name="gps_validity_flag_pos_vel" type="UINT32" sequence="7" description="GPS validity flag"/>
-            <Field name="adcs_time" type="UINT64" sequence="8" description="Orbit time"/>
-            <Field name="position_wrt_eci" type="UINT64" sequence="9" description="Position" array="3"/>
-            <Field name="velocity_wrt_eci" type="UINT64" sequence="10" description="Position" array="3"/>
-            <Field name="position_wrt_ecef" type="UINT64" sequence="11" description="Position" array="3"/>
-            <Field name="velocity_wrt_ecef" type="UINT64" sequence="12" description="Position" array="3"/>
-            <Field name="body_rate" type="UINT32" sequence="13" description="Body rate" array="3"/>
-            <Field name="attitude" type="UINT32" sequence="14" description="RPY WRT LVLH" array="3"/>
-            <Field name="adcs_pos" type="UINT32" sequence="15" description="Lat, Lon, Altitude (ADCS)" array="3"/>
-            <Field name="nadir_vector_body" type="UINT32" sequence="16" description="Nadir vector" array="3"/>
-            <Field name="gd_nadir_vector_body" type="UINT32" sequence="17" description="GD Nadir Vector Body" array="3"/>
-            <Field name="beta_angle" type="UINT32" sequence="18" description="Beta Angle"/>
-            <Field name="validity_flags" type="UINT16" sequence="19" description="1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity"/>
+            <Field name="adcs_eph_data" type="AdcsEphemerisData" sequence="2" description="ADCS data"/>
+            <Field name="gps_eph_data" type="GpsEphemerisData" sequence="3" description="GPS data"/>
+            <Field name="adcs_timeout_flag" type="UINT8" sequence="4" description="ADCS flag"/>
+            <Field name="gps_timeout_flag" type="UINT8" sequence="5" description="GPS flag"/>
         </Struct>
     
         <Struct name="ReqGetEpsVoltageStopReq" description="Stop request get-eps-voltage">
@@ -211,9 +256,48 @@
 
         <Struct name="GetEpsVoltage" description="get EPS voltage1">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
-            <Field name="eps_voltage" type="UINT32" sequence="2" description="EPS voltage"/>
+            <Field name="eps_voltage" type="FLOAT" sequence="2" description="EPS voltage"/>
         </Struct>
 
+        <Struct name="StartSesThermMgmntReq" description="Start SES thermal management">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="hardware_id" type="UINT8" sequence="2" description="0:SESA, 1:SESB"/>
+            <Field name="duration" type="UINT32" sequence="3" description="duration in ms"/>
+            <Field name="lower_threshold" type="UINT8" sequence="4" description="lower temp threshold"/>
+            <Field name="upper_threshold" type="UINT8" sequence="5" description="upper temp threshold"/>
+        </Struct>
+
+        <Struct name="RespStartSesThermMgmntReq" description="Response to Start SES thermal management">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="req_status" type="UINT8" sequence="2" description="0: success, 1: fail"/>
+        </Struct>
+
+        <Struct name="StopSesThermMgmntReq" description="Stop SES thermal management">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="hardware_id" type="UINT8" sequence="2" description="0:SESA, 1:SESB"/>
+        </Struct>
+
+        <Struct name="RespStopSesThermMgmntReq" description="Response to Stop SES thermal management">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="req_status" type="UINT8" sequence="2" description="0: success, 1: fail"/>
+        </Struct>
+
+        <Struct name="SesTempReq" description="Request SES temperature">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="hardware_id" type="UINT8" sequence="2" description="0:SESA, 1:SESB"/>
+        </Struct>
+
+        <Struct name="RespSesTempReqParams" description="Response to SES temperature request">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="temp" type="UINT8" sequence="2" description="in Celsius"/>
+            <Field name="heater_pwr_status" type="UINT8" sequence="3" description="0:OFF, 1:ON"/>
+        </Struct>
+
+        <Struct name="SesThermalStatusNtf" description="SES thermal notification from PC">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="heater_pwr_status" type="UINT8" sequence="2" description="0:OFF, 1:ON"/>
+            <Field name="temp" type="UINT8" sequence="3" description="in Celsius"/>
+        </Struct>
         <Struct name="AntarisApiCallbackFuncList" description="Callback-functions registration structure for channel creation" consumed_by="Application">
             <Field name="start_sequence" type="StartSequence_Fptr" sequence="1" description="callback handler for start-sequence"/>
             <Field name="shutdown_app" type="ShutdownApp_Fptr" sequence="2" description="callback handler for shutdown-app"/>
@@ -226,9 +310,13 @@
             <Field name="process_response_gnss_eph_stop" type="ProcessRespGnssEphStopDataReq_Fptr" sequence="9" description="callback handler for GNSS EPH data stop response"/>
             <Field name="process_response_gnss_eph_start" type="ProcessRespGnssEphStartDataReq_Fptr" sequence="10" description="callback handler for GNSS EPH data start response"/>
             <Field name="process_cb_gnss_eph_data" type="ProcessGnssEphData_Fptr" sequence="11" description="callback handler for GNSS EPH data"/>
-            <Field name="process_response_get_eps_voltage_stop" type="ProcessRespGetEpsVoltageStopReq_Fptr" sequence="9" description="callback handler for get EPS voltage data stop"/>
-            <Field name="process_response_get_eps_voltage_start" type="ProcessRespGetEpsVoltageStartReq_Fptr" sequence="10" description="callback handler for get EPS voltage data start"/>
+            <Field name="process_response_get_eps_voltage_stop" type="ProcessRespGetEpsVoltageStopReq_Fptr" sequence="12" description="callback handler for get EPS voltage data stop"/>
+            <Field name="process_response_get_eps_voltage_start" type="ProcessRespGetEpsVoltageStartReq_Fptr" sequence="13" description="callback handler for get EPS voltage data start"/>
             <Field name="process_cb_get_eps_voltage" type="ProcessGetEpsVoltage_Fptr" sequence="11" description="callback handler for EPS voltage data"/>
+            <Field name="process_response_start_ses_therm_mgmnt_req" type="ProcessRespStartSesThermMgmntReq_Fptr" sequence="14" description="callback handler for start SES thermal management req response"/>
+            <Field name="process_response_stop_ses_therm_mgmnt_req" type="ProcessRespStopSesThermMgmntReq_Fptr" sequence="15" description="callback handler for stop SES thermal management req response"/>
+            <Field name="process_response_ses_temp_req" type="ProcessRespSesTempReq_Fptr" sequence="16" description="callback handler for SES temperature req response"/>
+            <Field name="process_cb_ses_thrml_ntf" type="ProcessSesThrmlNtf_Fptr" sequence="17" description="callback handler for SES thermal nofirication"/>
         </Struct>
 
         <Struct name="AntarisCorrelationId" description="Wrapper structure for correlation-id">
@@ -296,6 +384,21 @@
 
         <FunctionPtr name="ProcessGetEpsVoltage_Fptr" description="Callback for GNSS EPS data" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
             <Parameter variable_name="get_eps_voltage" type="GetEpsVoltage *" description="get EPS voltage data"/>
+        </FunctionPtr>
+        <FunctionPtr name="ProcessRespStartSesThermMgmntReq_Fptr" description="callback handler for start SES thermal management req response" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="start_ses_therm_mgmnt_response" type="RespStartSesThermMgmntReq *" description="response to thermal management start req"/>
+        </FunctionPtr>
+
+        <FunctionPtr name="ProcessRespStopSesThermMgmntReq_Fptr" description="callback handler for stop SES thermal management req response" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="stop_ses_therm_mgmnt_response" type="RespStopSesThermMgmntReq *" description="response to thermal management stop req"/>
+        </FunctionPtr>
+
+        <FunctionPtr name="ProcessRespSesTempReq_Fptr" description="callback handler for SES temperature req response" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="ses_temp_req_response" type="RespSesTempReqParams *" description="response to SES temperature req"/>
+        </FunctionPtr>
+
+        <FunctionPtr name="ProcessSesThrmlNtf_Fptr" description="Callback request to SES thermal notifictaion" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="ses_thrml_ntf" type="SesThermalStatusNtf *" description="SES thermal notifictaion parameters"/>
         </FunctionPtr>
     </Callbacks>
 
@@ -386,6 +489,24 @@
                         return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
             <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
             <Parameter variable_name="req_get_eps_voltage_start" type="ReqGetEpsVoltageStartReq *" description="get EPS voltage start response parameters"/>
+        </Function>
+
+        <Function name="api_pa_pc_start_ses_therm_mgmnt_req" description="API to request to start SES thermal management"
+                        return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
+            <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
+            <Parameter variable_name="req_start_ses_therm_mgmnt" type="StartSesThermMgmntReq *" description="start SES thermal management response parameters"/>
+        </Function>
+
+        <Function name="api_pa_pc_stop_ses_therm_mgmnt_req" description="API to request to stop SES thermal management"
+                        return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
+            <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
+            <Parameter variable_name="req_stop_ses_therm_mgmnt" type="StopSesThermMgmntReq *" description="stop SES thermal management response parameters"/>
+        </Function>
+
+        <Function name="api_pa_pc_ses_temp_req" description="API to request to SES temperature"
+                        return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
+            <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
+            <Parameter variable_name="req_ses_temp" type="SesTempReq *" description="SES temperature response parameters"/>
         </Function>
 
     </Functions>

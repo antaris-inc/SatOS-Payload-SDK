@@ -285,7 +285,7 @@ class PCServiceClient {
         return tmp_return;
   }
 
-  AntarisReturnCode Invoke_PC_GNSS_EPH_Stop_req(ReqGnssEphStopDataReq *req_params) {
+  AntarisReturnCode Invoke_PC_gnss_eph_stop_req(ReqGnssEphStopDataReq *req_params) {
     antaris_api_peer_to_peer::ReqGnssEphStopDataReq pc_req;
     antaris_api_peer_to_peer::AntarisReturnType pc_response;
     Status pc_status;
@@ -310,7 +310,7 @@ class PCServiceClient {
     return tmp_return;
   }
 
-  AntarisReturnCode Invoke_PC_GNSS_EPH_Start_req(ReqGnssEphStartDataReq *req_params) {
+  AntarisReturnCode Invoke_PC_gnss_eph_start_req(ReqGnssEphStartDataReq *req_params) {
     antaris_api_peer_to_peer::ReqGnssEphStartDataReq pc_req;
     antaris_api_peer_to_peer::AntarisReturnType pc_response;
     Status pc_status;
@@ -335,7 +335,7 @@ class PCServiceClient {
     return tmp_return;
   }
 
-  AntarisReturnCode Invoke_PC_GET_EPS_VOLTAGE_Stop_req(ReqGetEpsVoltageStopReq *req_params) {
+  AntarisReturnCode Invoke_PC_get_eps_voltage_stop_req(ReqGetEpsVoltageStopReq *req_params) {
     antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq pc_req;
     antaris_api_peer_to_peer::AntarisReturnType pc_response;
     Status pc_status;
@@ -360,7 +360,7 @@ class PCServiceClient {
     return tmp_return;
   }
 
-  AntarisReturnCode Invoke_PC_GET_EPS_VOLTAGE_Start_req(ReqGetEpsVoltageStartReq *req_params) {
+  AntarisReturnCode Invoke_PC_get_eps_voltage_start_req(ReqGetEpsVoltageStartReq *req_params) {
     antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq pc_req;
     antaris_api_peer_to_peer::AntarisReturnType pc_response;
     Status pc_status;
@@ -372,6 +372,80 @@ class PCServiceClient {
     context.AddMetadata(COOKIE_STR, this->cookie_str);
 
     pc_status = stub_->PC_get_eps_voltage_start_req(&context, pc_req, &pc_response);
+
+    AntarisReturnCode tmp_return;
+
+    // Act upon its status.
+    if (pc_status.ok()) {
+         tmp_return = (AntarisReturnCode)(pc_response.return_code());
+    } else {
+        tmp_return = An_GENERIC_FAILURE;
+    }
+
+    return tmp_return;
+  }
+  AntarisReturnCode Invoke_PC_start_ses_therm_mgmnt_req(StartSesThermMgmntReq *req_params) {
+    antaris_api_peer_to_peer::StartSesThermMgmntReq pc_req;
+    antaris_api_peer_to_peer::AntarisReturnType pc_response;
+    Status pc_status;
+    // Context for the client. It could be used to convey extra information to
+    // the server and/or tweak certain RPC behaviors.
+    ClientContext context;
+
+    app_to_peer_StartSesThermMgmntReq(req_params, &pc_req);
+    context.AddMetadata(COOKIE_STR, this->cookie_str);
+
+    pc_status = stub_->PC_start_ses_therm_mgmnt_req(&context, pc_req, &pc_response);
+
+    AntarisReturnCode tmp_return;
+
+    // Act upon its status.
+    if (pc_status.ok()) {
+         tmp_return = (AntarisReturnCode)(pc_response.return_code());
+    } else {
+        tmp_return = An_GENERIC_FAILURE;
+    }
+
+    return tmp_return;
+  }
+
+  AntarisReturnCode Invoke_PC_stop_ses_therm_mgmnt_req(StopSesThermMgmntReq *req_params) {
+    antaris_api_peer_to_peer::StopSesThermMgmntReq pc_req;
+    antaris_api_peer_to_peer::AntarisReturnType pc_response;
+    Status pc_status;
+    // Context for the client. It could be used to convey extra information to
+    // the server and/or tweak certain RPC behaviors.
+    ClientContext context;
+
+    app_to_peer_StopSesThermMgmntReq(req_params, &pc_req);
+    context.AddMetadata(COOKIE_STR, this->cookie_str);
+
+    pc_status = stub_->PC_stop_ses_therm_mgmnt_req(&context, pc_req, &pc_response);
+
+    AntarisReturnCode tmp_return;
+
+    // Act upon its status.
+    if (pc_status.ok()) {
+         tmp_return = (AntarisReturnCode)(pc_response.return_code());
+    } else {
+        tmp_return = An_GENERIC_FAILURE;
+    }
+
+    return tmp_return;
+  }
+
+  AntarisReturnCode Invoke_PC_ses_temp_req(SesTempReq *req_params) {
+    antaris_api_peer_to_peer::SesTempReq pc_req;
+    antaris_api_peer_to_peer::AntarisReturnType pc_response;
+    Status pc_status;
+    // Context for the client. It could be used to convey extra information to
+    // the server and/or tweak certain RPC behaviors.
+    ClientContext context;
+
+    app_to_peer_SesTempReq(req_params, &pc_req);
+    context.AddMetadata(COOKIE_STR, this->cookie_str);
+
+    pc_status = stub_->PC_ses_temp_req(&context, pc_req, &pc_response);
 
     AntarisReturnCode tmp_return;
 
@@ -415,11 +489,21 @@ public:
     Status PA_ProcessRespGnssEphStartDataReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGnssEphStartDataReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
     Status PA_ProcessGnssEphData(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::GnssEphData* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
     Status PA_ProcessRespGetEpsVoltageStopReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
     Status PA_ProcessRespGetEpsVoltageStartReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
     Status PA_ProcessGetEpsVoltage(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::GetEpsVoltage* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
+    Status PA_ProcessRespStartSesThermMgmntReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq* request,  ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
+    Status PA_ProcessRespStopSesThermMgmntReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq* request,  ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
+    Status PA_ProcessRespSesTempReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams* request,  ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
+    Status PA_ProcessSesThrmlNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request,  ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
 public:
 
     void set_client_channel_ctx(AntarisInternalClientChannelContext_t *ctx) {
@@ -641,6 +725,66 @@ Status AppCallbackServiceImpl::PA_ProcessGetEpsVoltage(::grpc::ServerContext* co
     if (client_channel_ctx_->callbacks.process_cb_get_eps_voltage) {
         peer_to_app_GetEpsVoltage((void *)request, &app_request);
         app_ret = client_channel_ctx_->callbacks.process_cb_get_eps_voltage(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessRespStartSesThermMgmntReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    RespStartSesThermMgmntReq app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_response_start_ses_therm_mgmnt_req) {
+        peer_to_app_RespStartSesThermMgmntReq((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_response_start_ses_therm_mgmnt_req(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessRespStopSesThermMgmntReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    RespStopSesThermMgmntReq app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_response_stop_ses_therm_mgmnt_req) {
+        peer_to_app_RespStopSesThermMgmntReq((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_response_stop_ses_therm_mgmnt_req(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessRespSesTempReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams * request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    RespSesTempReqParams app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+
+    if (client_channel_ctx_->callbacks.process_response_ses_temp_req) {
+        peer_to_app_RespSesTempReqParams((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_response_ses_temp_req(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessSesThrmlNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    SesThermalStatusNtf app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_cb_ses_thrml_ntf) {
+        peer_to_app_SesThermalStatusNtf((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_cb_ses_thrml_ntf(&app_request);
     }
 
     response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
@@ -1040,7 +1184,26 @@ AntarisReturnCode api_pa_pc_gnss_eph_stop_req(AntarisChannel channel, ReqGnssEph
         displayPayloadMetricsResponse(req_gnss_eph_stop_req);
     }
 
-    return channel_ctx->pc_service_handle->Invoke_PC_GNSS_EPH_Stop_req(req_gnss_eph_stop_req);
+    return channel_ctx->pc_service_handle->Invoke_PC_gnss_eph_stop_req(req_gnss_eph_stop_req);
+}
+
+AntarisReturnCode api_pa_pc_gnss_eph_start_req(AntarisChannel channel, ReqGnssEphStartDataReq *req_gnss_eph_start_req)
+{
+    AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
+    AntarisReturnCode ret = An_SUCCESS;
+
+    printf("api_pa_pc_gnss_eph_start_req\n");
+
+    if (!channel_ctx || !channel_ctx->pc_service_handle || !req_gnss_eph_start_req) {
+        ret = An_GENERIC_FAILURE;
+        return ret;
+    }
+
+    if (api_debug) {
+        displayPayloadMetricsResponse(req_gnss_eph_start_req);
+    }
+
+    return channel_ctx->pc_service_handle->Invoke_PC_gnss_eph_start_req(req_gnss_eph_start_req);
 }
 
 AntarisReturnCode api_pa_pc_get_eps_voltage_stop_req(AntarisChannel channel, ReqGetEpsVoltageStopReq *req_get_eps_voltage_stop_req)
@@ -1059,7 +1222,83 @@ AntarisReturnCode api_pa_pc_get_eps_voltage_stop_req(AntarisChannel channel, Req
         displayPayloadMetricsResponse(req_get_eps_voltage_stop_req);
     }
 
-    return channel_ctx->pc_service_handle->Invoke_PC_GET_EPS_VOLTAGE_Stop_req(req_get_eps_voltage_stop_req);
+    return channel_ctx->pc_service_handle->Invoke_PC_get_eps_voltage_stop_req(req_get_eps_voltage_stop_req);
+}
+
+AntarisReturnCode api_pa_pc_get_eps_voltage_start_req(AntarisChannel channel, ReqGetEpsVoltageStartReq *req_get_eps_voltage_start_req)
+{
+    AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
+    AntarisReturnCode ret = An_SUCCESS;
+
+    printf("api_pa_pc_get_eps_voltage_start_req\n");
+
+    if (!channel_ctx || !channel_ctx->pc_service_handle || !req_get_eps_voltage_start_req) {
+        ret = An_GENERIC_FAILURE;
+        return ret;
+    }
+
+    if (api_debug) {
+        displayPayloadMetricsResponse(req_get_eps_voltage_start_req);
+    }
+
+    return channel_ctx->pc_service_handle->Invoke_PC_get_eps_voltage_start_req(req_get_eps_voltage_start_req);
+}
+
+AntarisReturnCode api_pa_pc_start_ses_therm_mgmnt_req(AntarisChannel channel, StartSesThermMgmntReq *req_start_ses_therm_mgmnt_req)
+{
+    AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
+    AntarisReturnCode ret = An_SUCCESS;
+
+    printf("api_pa_pc_start_ses_therm_mgmnt_req\n");
+
+    if (!channel_ctx || !channel_ctx->pc_service_handle || !req_start_ses_therm_mgmnt_req) {
+        ret = An_GENERIC_FAILURE;
+        return ret;
+    }
+
+    if (api_debug) {
+        displayPayloadMetricsResponse(req_start_ses_therm_mgmnt_req);
+    }
+
+    return channel_ctx->pc_service_handle->Invoke_PC_start_ses_therm_mgmnt_req(req_start_ses_therm_mgmnt_req);
+}
+
+AntarisReturnCode api_pa_pc_stop_ses_therm_mgmnt_req(AntarisChannel channel, StopSesThermMgmntReq *req_stop_ses_therm_mgmnt_req)
+{
+    AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
+    AntarisReturnCode ret = An_SUCCESS;
+
+    printf("api_pa_pc_stop_ses_therm_mgmnt_req\n");
+
+    if (!channel_ctx || !channel_ctx->pc_service_handle || !req_stop_ses_therm_mgmnt_req) {
+        ret = An_GENERIC_FAILURE;
+        return ret;
+    }
+
+    if (api_debug) {
+        displayPayloadMetricsResponse(req_stop_ses_therm_mgmnt_req);
+    }
+
+    return channel_ctx->pc_service_handle->Invoke_PC_stop_ses_therm_mgmnt_req(req_stop_ses_therm_mgmnt_req);
+}
+
+AntarisReturnCode api_pa_pc_ses_temp_req(AntarisChannel channel, SesTempReq *ses_temp_req)
+{
+    AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
+    AntarisReturnCode ret = An_SUCCESS;
+
+    printf("SesTempReq\n");
+
+    if (!channel_ctx || !channel_ctx->pc_service_handle || !ses_temp_req) {
+        ret = An_GENERIC_FAILURE;
+        return ret;
+    }
+
+    if (api_debug) {
+        displayPayloadMetricsResponse(ses_temp_req);
+    }
+
+    return channel_ctx->pc_service_handle->Invoke_PC_ses_temp_req(ses_temp_req);
 }
 
 } // extern C

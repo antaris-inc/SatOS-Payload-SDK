@@ -68,8 +68,8 @@ app_to_peer_ReqRegisterParams(const void *ptr_src_app, void *ptr_dst_peer)
     ReqRegisterParams *src = (ReqRegisterParams *)ptr_src_app;
     ::antaris_api_peer_to_peer::ReqRegisterParams *dst = (::antaris_api_peer_to_peer::ReqRegisterParams *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
-    UINT32 __tmp_health_check_fail_action;
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_health_check_fail_action = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -118,7 +118,7 @@ app_to_peer_RespRegisterParams(const void *ptr_src_app, void *ptr_dst_peer)
     RespRegisterParams *src = (RespRegisterParams *)ptr_src_app;
     ::antaris_api_peer_to_peer::RespRegisterParams *dst = (::antaris_api_peer_to_peer::RespRegisterParams *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
     INT32 __tmp_req_status;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
@@ -169,7 +169,7 @@ app_to_peer_ReqGetCurrentLocationParams(const void *ptr_src_app, void *ptr_dst_p
     ReqGetCurrentLocationParams *src = (ReqGetCurrentLocationParams *)ptr_src_app;
     ::antaris_api_peer_to_peer::ReqGetCurrentLocationParams *dst = (::antaris_api_peer_to_peer::ReqGetCurrentLocationParams *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -222,7 +222,7 @@ app_to_peer_RespGetCurrentLocationParams(const void *ptr_src_app, void *ptr_dst_
     RespGetCurrentLocationParams *src = (RespGetCurrentLocationParams *)ptr_src_app;
     ::antaris_api_peer_to_peer::RespGetCurrentLocationParams *dst = (::antaris_api_peer_to_peer::RespGetCurrentLocationParams *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
     INT32 __tmp_req_status;
     DOUBLE __tmp_latitude;
     DOUBLE __tmp_longitude;
@@ -303,6 +303,8 @@ displayReqStageFileDownloadParams(const void *obj)
         displayINT8((void *)&p->file_path[i]);
     }
 
+    printf("file_priority ==>\n");
+    displayFilePriorities((void *)&p->file_priority);
 
 }
 
@@ -312,13 +314,18 @@ app_to_peer_ReqStageFileDownloadParams(const void *ptr_src_app, void *ptr_dst_pe
     ReqStageFileDownloadParams *src = (ReqStageFileDownloadParams *)ptr_src_app;
     ::antaris_api_peer_to_peer::ReqStageFileDownloadParams *dst = (::antaris_api_peer_to_peer::ReqStageFileDownloadParams *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
+    FilePriorities __tmp_file_priority;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
     dst->set_correlation_id(__tmp_correlation_id);
 
     dst->set_file_path(&src->file_path[0]);
+
+    app_to_peer_FilePriorities(&src->file_priority, &__tmp_file_priority); // file_priority
+
+    dst->set_file_priority((::antaris_api_peer_to_peer::FilePriorities)__tmp_file_priority);
 
 
 }
@@ -336,6 +343,7 @@ peer_to_app_ReqStageFileDownloadParams(const void *ptr_src_peer, void *ptr_dst_a
         return;
     }
     strncpy(&dst->file_path[0], src->file_path().c_str(), 256);
+    dst->file_priority = (FilePriorities)src->file_priority();
 
 }
 
@@ -359,7 +367,7 @@ app_to_peer_RespStageFileDownloadParams(const void *ptr_src_app, void *ptr_dst_p
     RespStageFileDownloadParams *src = (RespStageFileDownloadParams *)ptr_src_app;
     ::antaris_api_peer_to_peer::RespStageFileDownloadParams *dst = (::antaris_api_peer_to_peer::RespStageFileDownloadParams *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
     INT32 __tmp_req_status;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
@@ -404,8 +412,8 @@ app_to_peer_ReqPayloadPowerControlParams(const void *ptr_src_app, void *ptr_dst_
     ReqPayloadPowerControlParams *src = (ReqPayloadPowerControlParams *)ptr_src_app;
     ::antaris_api_peer_to_peer::ReqPayloadPowerControlParams *dst = (::antaris_api_peer_to_peer::ReqPayloadPowerControlParams *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
-    UINT32 __tmp_power_operation;
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_power_operation = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -449,7 +457,7 @@ app_to_peer_RespPayloadPowerControlParams(const void *ptr_src_app, void *ptr_dst
     RespPayloadPowerControlParams *src = (RespPayloadPowerControlParams *)ptr_src_app;
     ::antaris_api_peer_to_peer::RespPayloadPowerControlParams *dst = (::antaris_api_peer_to_peer::RespPayloadPowerControlParams *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
     INT32 __tmp_req_status;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
@@ -494,7 +502,7 @@ app_to_peer_RespShutdownParams(const void *ptr_src_app, void *ptr_dst_peer)
     RespShutdownParams *src = (RespShutdownParams *)ptr_src_app;
     ::antaris_api_peer_to_peer::RespShutdownParams *dst = (::antaris_api_peer_to_peer::RespShutdownParams *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
     INT32 __tmp_req_status;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
@@ -543,10 +551,10 @@ app_to_peer_RespHealthCheckParams(const void *ptr_src_app, void *ptr_dst_peer)
     RespHealthCheckParams *src = (RespHealthCheckParams *)ptr_src_app;
     ::antaris_api_peer_to_peer::RespHealthCheckParams *dst = (::antaris_api_peer_to_peer::RespHealthCheckParams *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
-    UINT32 __tmp_application_state;
-    UINT32 __tmp_reqs_to_pc_in_err_cnt;
-    UINT32 __tmp_resps_to_pc_in_err_cnt;
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_application_state = 0;
+    UINT32 __tmp_reqs_to_pc_in_err_cnt = 0;
+    UINT32 __tmp_resps_to_pc_in_err_cnt = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -610,7 +618,7 @@ app_to_peer_StartSequenceParams(const void *ptr_src_app, void *ptr_dst_peer)
     StartSequenceParams *src = (StartSequenceParams *)ptr_src_app;
     ::antaris_api_peer_to_peer::StartSequenceParams *dst = (::antaris_api_peer_to_peer::StartSequenceParams *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
     UINT64 __tmp_scheduled_deadline;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
@@ -671,8 +679,8 @@ app_to_peer_ShutdownParams(const void *ptr_src_app, void *ptr_dst_peer)
     ShutdownParams *src = (ShutdownParams *)ptr_src_app;
     ::antaris_api_peer_to_peer::ShutdownParams *dst = (::antaris_api_peer_to_peer::ShutdownParams *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
-    UINT32 __tmp_grace_time;
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_grace_time = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -720,10 +728,10 @@ app_to_peer_HealthCheckParams(const void *ptr_src_app, void *ptr_dst_peer)
     HealthCheckParams *src = (HealthCheckParams *)ptr_src_app;
     ::antaris_api_peer_to_peer::HealthCheckParams *dst = (::antaris_api_peer_to_peer::HealthCheckParams *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
-    UINT32 __tmp_application_state;
-    UINT32 __tmp_reqs_to_pc_in_err_cnt;
-    UINT32 __tmp_resps_to_pc_in_err_cnt;
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_application_state = 0;
+    UINT32 __tmp_reqs_to_pc_in_err_cnt = 0;
+    UINT32 __tmp_resps_to_pc_in_err_cnt = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -780,7 +788,7 @@ app_to_peer_PayloadMetricsInfo(const void *ptr_src_app, void *ptr_dst_peer)
     PayloadMetricsInfo *src = (PayloadMetricsInfo *)ptr_src_app;
     ::antaris_api_peer_to_peer::PayloadMetricsInfo *dst = (::antaris_api_peer_to_peer::PayloadMetricsInfo *)ptr_dst_peer;
 
-    UINT32 __tmp_counter;
+    UINT32 __tmp_counter = 0;
 
     app_to_peer_UINT32(&src->counter, &__tmp_counter); // counter
 
@@ -825,7 +833,7 @@ app_to_peer_ReqPayloadMetricsParams(const void *ptr_src_app, void *ptr_dst_peer)
     ReqPayloadMetricsParams *src = (ReqPayloadMetricsParams *)ptr_src_app;
     ::antaris_api_peer_to_peer::ReqPayloadMetricsParams *dst = (::antaris_api_peer_to_peer::ReqPayloadMetricsParams *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -871,9 +879,9 @@ app_to_peer_PayloadMetricsResponse(const void *ptr_src_app, void *ptr_dst_peer)
     PayloadMetricsResponse *src = (PayloadMetricsResponse *)ptr_src_app;
     ::antaris_api_peer_to_peer::PayloadMetricsResponse *dst = (::antaris_api_peer_to_peer::PayloadMetricsResponse *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
     UINT64 __tmp_timestamp;
-    UINT32 __tmp_used_counter;
+    UINT32 __tmp_used_counter = 0;
     PayloadMetricsInfo __tmp_metrics;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
@@ -978,7 +986,7 @@ app_to_peer_ReqGnssEphStopDataReq(const void *ptr_src_app, void *ptr_dst_peer)
     ReqGnssEphStopDataReq *src = (ReqGnssEphStopDataReq *)ptr_src_app;
     ::antaris_api_peer_to_peer::ReqGnssEphStopDataReq *dst = (::antaris_api_peer_to_peer::ReqGnssEphStopDataReq *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -1017,7 +1025,7 @@ app_to_peer_RespGnssEphStopDataReq(const void *ptr_src_app, void *ptr_dst_peer)
     RespGnssEphStopDataReq *src = (RespGnssEphStopDataReq *)ptr_src_app;
     ::antaris_api_peer_to_peer::RespGnssEphStopDataReq *dst = (::antaris_api_peer_to_peer::RespGnssEphStopDataReq *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
     INT32 __tmp_req_status;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
@@ -1064,8 +1072,8 @@ app_to_peer_ReqGnssEphStartDataReq(const void *ptr_src_app, void *ptr_dst_peer)
     ReqGnssEphStartDataReq *src = (ReqGnssEphStartDataReq *)ptr_src_app;
     ::antaris_api_peer_to_peer::ReqGnssEphStartDataReq *dst = (::antaris_api_peer_to_peer::ReqGnssEphStartDataReq *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
-    UINT32 __tmp_periodicity_in_ms;
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_periodicity_in_ms = 0;
     INT32 __tmp_eph2_enable;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
@@ -1115,7 +1123,7 @@ app_to_peer_RespGnssEphStartDataReq(const void *ptr_src_app, void *ptr_dst_peer)
     RespGnssEphStartDataReq *src = (RespGnssEphStartDataReq *)ptr_src_app;
     ::antaris_api_peer_to_peer::RespGnssEphStartDataReq *dst = (::antaris_api_peer_to_peer::RespGnssEphStartDataReq *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
     INT32 __tmp_req_status;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
@@ -1141,20 +1149,95 @@ peer_to_app_RespGnssEphStartDataReq(const void *ptr_src_peer, void *ptr_dst_app)
 }
 
 void
-displayGnssEphData(const void *obj)
+displayOBC_time(const void *obj)
 {
-    GnssEphData *p = (GnssEphData *)obj;
+    OBC_time *p = (OBC_time *)obj;
 
-    printf("GnssEphData %p =>\n", obj);
+    printf("OBC_time %p =>\n", obj);
 
-    printf("correlation_id ==>\n");
-    displayUINT16((void *)&p->correlation_id);
+    printf("hour ==>\n");
+    displayUINT8((void *)&p->hour);
+    printf("minute ==>\n");
+    displayUINT8((void *)&p->minute);
+    printf("millisecond ==>\n");
+    displayUINT16((void *)&p->millisecond);
+    printf("date ==>\n");
+    displayUINT8((void *)&p->date);
+    printf("month ==>\n");
+    displayUINT8((void *)&p->month);
+    printf("year ==>\n");
+    displayUINT16((void *)&p->year);
+
+}
+
+void
+app_to_peer_OBC_time(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    OBC_time *src = (OBC_time *)ptr_src_app;
+    ::antaris_api_peer_to_peer::OBC_time *dst = (::antaris_api_peer_to_peer::OBC_time *)ptr_dst_peer;
+
+    UINT32 __tmp_hour = 0;
+    UINT32 __tmp_minute = 0;
+    UINT32 __tmp_millisecond = 0;
+    UINT32 __tmp_date = 0;
+    UINT32 __tmp_month = 0;
+    UINT32 __tmp_year = 0;
+
+    app_to_peer_UINT8(&src->hour, &__tmp_hour); // hour
+
+    dst->set_hour(__tmp_hour);
+
+    app_to_peer_UINT8(&src->minute, &__tmp_minute); // minute
+
+    dst->set_minute(__tmp_minute);
+
+    app_to_peer_UINT16(&src->millisecond, &__tmp_millisecond); // millisecond
+
+    dst->set_millisecond(__tmp_millisecond);
+
+    app_to_peer_UINT8(&src->date, &__tmp_date); // date
+
+    dst->set_date(__tmp_date);
+
+    app_to_peer_UINT8(&src->month, &__tmp_month); // month
+
+    dst->set_month(__tmp_month);
+
+    app_to_peer_UINT16(&src->year, &__tmp_year); // year
+
+    dst->set_year(__tmp_year);
+
+
+}
+
+void
+peer_to_app_OBC_time(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    OBC_time *dst = (OBC_time *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::OBC_time *src = (::antaris_api_peer_to_peer::OBC_time *)ptr_src_peer;
+
+    dst->hour = src->hour();
+    dst->minute = src->minute();
+    dst->millisecond = src->millisecond();
+    dst->date = src->date();
+    dst->month = src->month();
+    dst->year = src->year();
+
+}
+
+void
+displayGpsEphemerisData(const void *obj)
+{
+    GpsEphemerisData *p = (GpsEphemerisData *)obj;
+
+    printf("GpsEphemerisData %p =>\n", obj);
+
     printf("gps_fix_time ==>\n");
     displayUINT32((void *)&p->gps_fix_time);
     printf("gps_sys_time ==>\n");
-    displayUINT32((void *)&p->gps_sys_time);
+    displayUINT64((void *)&p->gps_sys_time);
     printf("obc_time ==>\n");
-    displayUINT64((void *)&p->obc_time);
+    displayOBC_time((void *)&p->obc_time);
     printf("gps_position_ecef ==>\n");
     for (int i = 0; i < 3; i++) {
         displayUINT32((void *)&p->gps_position_ecef[i]);
@@ -1167,101 +1250,31 @@ displayGnssEphData(const void *obj)
 
     printf("gps_validity_flag_pos_vel ==>\n");
     displayUINT32((void *)&p->gps_validity_flag_pos_vel);
-    printf("adcs_time ==>\n");
-    displayUINT64((void *)&p->adcs_time);
-    printf("position_wrt_eci ==>\n");
-    for (int i = 0; i < 3; i++) {
-        displayUINT64((void *)&p->position_wrt_eci[i]);
-    }
-
-    printf("velocity_wrt_eci ==>\n");
-    for (int i = 0; i < 3; i++) {
-        displayUINT64((void *)&p->velocity_wrt_eci[i]);
-    }
-
-    printf("position_wrt_ecef ==>\n");
-    for (int i = 0; i < 3; i++) {
-        displayUINT64((void *)&p->position_wrt_ecef[i]);
-    }
-
-    printf("velocity_wrt_ecef ==>\n");
-    for (int i = 0; i < 3; i++) {
-        displayUINT64((void *)&p->velocity_wrt_ecef[i]);
-    }
-
-    printf("body_rate ==>\n");
-    for (int i = 0; i < 3; i++) {
-        displayUINT32((void *)&p->body_rate[i]);
-    }
-
-    printf("attitude ==>\n");
-    for (int i = 0; i < 3; i++) {
-        displayUINT32((void *)&p->attitude[i]);
-    }
-
-    printf("adcs_pos ==>\n");
-    for (int i = 0; i < 3; i++) {
-        displayUINT32((void *)&p->adcs_pos[i]);
-    }
-
-    printf("nadir_vector_body ==>\n");
-    for (int i = 0; i < 3; i++) {
-        displayUINT32((void *)&p->nadir_vector_body[i]);
-    }
-
-    printf("gd_nadir_vector_body ==>\n");
-    for (int i = 0; i < 3; i++) {
-        displayUINT32((void *)&p->gd_nadir_vector_body[i]);
-    }
-
-    printf("beta_angle ==>\n");
-    displayUINT32((void *)&p->beta_angle);
-    printf("validity_flags ==>\n");
-    displayUINT16((void *)&p->validity_flags);
 
 }
 
 void
-app_to_peer_GnssEphData(const void *ptr_src_app, void *ptr_dst_peer)
+app_to_peer_GpsEphemerisData(const void *ptr_src_app, void *ptr_dst_peer)
 {
-    GnssEphData *src = (GnssEphData *)ptr_src_app;
-    ::antaris_api_peer_to_peer::GnssEphData *dst = (::antaris_api_peer_to_peer::GnssEphData *)ptr_dst_peer;
+    GpsEphemerisData *src = (GpsEphemerisData *)ptr_src_app;
+    ::antaris_api_peer_to_peer::GpsEphemerisData *dst = (::antaris_api_peer_to_peer::GpsEphemerisData *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
-    UINT32 __tmp_gps_fix_time;
-    UINT32 __tmp_gps_sys_time;
-    UINT64 __tmp_obc_time;
-    UINT32 __tmp_gps_position_ecef;
-    UINT32 __tmp_gps_velocity_ecef;
-    UINT32 __tmp_gps_validity_flag_pos_vel;
-    UINT64 __tmp_adcs_time;
-    UINT64 __tmp_position_wrt_eci;
-    UINT64 __tmp_velocity_wrt_eci;
-    UINT64 __tmp_position_wrt_ecef;
-    UINT64 __tmp_velocity_wrt_ecef;
-    UINT32 __tmp_body_rate;
-    UINT32 __tmp_attitude;
-    UINT32 __tmp_adcs_pos;
-    UINT32 __tmp_nadir_vector_body;
-    UINT32 __tmp_gd_nadir_vector_body;
-    UINT32 __tmp_beta_angle;
-    UINT32 __tmp_validity_flags;
-
-    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
-
-    dst->set_correlation_id(__tmp_correlation_id);
+    UINT32 __tmp_gps_fix_time = 0;
+    UINT64 __tmp_gps_sys_time;
+    OBC_time __tmp_obc_time;
+    UINT32 __tmp_gps_position_ecef = 0;
+    UINT32 __tmp_gps_velocity_ecef = 0;
+    UINT32 __tmp_gps_validity_flag_pos_vel = 0;
 
     app_to_peer_UINT32(&src->gps_fix_time, &__tmp_gps_fix_time); // gps_fix_time
 
     dst->set_gps_fix_time(__tmp_gps_fix_time);
 
-    app_to_peer_UINT32(&src->gps_sys_time, &__tmp_gps_sys_time); // gps_sys_time
+    app_to_peer_UINT64(&src->gps_sys_time, &__tmp_gps_sys_time); // gps_sys_time
 
     dst->set_gps_sys_time(__tmp_gps_sys_time);
 
-    app_to_peer_UINT64(&src->obc_time, &__tmp_obc_time); // obc_time
-
-    dst->set_obc_time(__tmp_obc_time);
+    app_to_peer_OBC_time(&src->obc_time, dst->mutable_obc_time()); // obc_time
 
     for (int i = 0; i < 3; i++) { // gps_position_ecef
         UINT32 converted_value;
@@ -1277,76 +1290,19 @@ app_to_peer_GnssEphData(const void *ptr_src_app, void *ptr_dst_peer)
 
     dst->set_gps_validity_flag_pos_vel(__tmp_gps_validity_flag_pos_vel);
 
-    app_to_peer_UINT64(&src->adcs_time, &__tmp_adcs_time); // adcs_time
-
-    dst->set_adcs_time(__tmp_adcs_time);
-
-    for (int i = 0; i < 3; i++) { // position_wrt_eci
-        UINT64 converted_value;
-        app_to_peer_UINT64(&src->position_wrt_eci[i], &converted_value);
-        dst->add_position_wrt_eci(converted_value);
-    }
-    for (int i = 0; i < 3; i++) { // velocity_wrt_eci
-        UINT64 converted_value;
-        app_to_peer_UINT64(&src->velocity_wrt_eci[i], &converted_value);
-        dst->add_velocity_wrt_eci(converted_value);
-    }
-    for (int i = 0; i < 3; i++) { // position_wrt_ecef
-        UINT64 converted_value;
-        app_to_peer_UINT64(&src->position_wrt_ecef[i], &converted_value);
-        dst->add_position_wrt_ecef(converted_value);
-    }
-    for (int i = 0; i < 3; i++) { // velocity_wrt_ecef
-        UINT64 converted_value;
-        app_to_peer_UINT64(&src->velocity_wrt_ecef[i], &converted_value);
-        dst->add_velocity_wrt_ecef(converted_value);
-    }
-    for (int i = 0; i < 3; i++) { // body_rate
-        UINT32 converted_value;
-        app_to_peer_UINT32(&src->body_rate[i], &converted_value);
-        dst->add_body_rate(converted_value);
-    }
-    for (int i = 0; i < 3; i++) { // attitude
-        UINT32 converted_value;
-        app_to_peer_UINT32(&src->attitude[i], &converted_value);
-        dst->add_attitude(converted_value);
-    }
-    for (int i = 0; i < 3; i++) { // adcs_pos
-        UINT32 converted_value;
-        app_to_peer_UINT32(&src->adcs_pos[i], &converted_value);
-        dst->add_adcs_pos(converted_value);
-    }
-    for (int i = 0; i < 3; i++) { // nadir_vector_body
-        UINT32 converted_value;
-        app_to_peer_UINT32(&src->nadir_vector_body[i], &converted_value);
-        dst->add_nadir_vector_body(converted_value);
-    }
-    for (int i = 0; i < 3; i++) { // gd_nadir_vector_body
-        UINT32 converted_value;
-        app_to_peer_UINT32(&src->gd_nadir_vector_body[i], &converted_value);
-        dst->add_gd_nadir_vector_body(converted_value);
-    }
-    app_to_peer_UINT32(&src->beta_angle, &__tmp_beta_angle); // beta_angle
-
-    dst->set_beta_angle(__tmp_beta_angle);
-
-    app_to_peer_UINT16(&src->validity_flags, &__tmp_validity_flags); // validity_flags
-
-    dst->set_validity_flags(__tmp_validity_flags);
-
 
 }
 
 void
-peer_to_app_GnssEphData(const void *ptr_src_peer, void *ptr_dst_app)
+peer_to_app_GpsEphemerisData(const void *ptr_src_peer, void *ptr_dst_app)
 {
-    GnssEphData *dst = (GnssEphData *)ptr_dst_app;
-    ::antaris_api_peer_to_peer::GnssEphData *src = (::antaris_api_peer_to_peer::GnssEphData *)ptr_src_peer;
+    GpsEphemerisData *dst = (GpsEphemerisData *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::GpsEphemerisData *src = (::antaris_api_peer_to_peer::GpsEphemerisData *)ptr_src_peer;
 
-    dst->correlation_id = src->correlation_id();
     dst->gps_fix_time = src->gps_fix_time();
     dst->gps_sys_time = src->gps_sys_time();
-    dst->obc_time = src->obc_time();
+    OBC_time *mutable_obc_time = &dst->obc_time;
+    peer_to_app_OBC_time(&src->obc_time(), mutable_obc_time);
     for (int i = 1; i < 3; i++) { // gps_position_ecef
         UINT32 src_info = src->gps_position_ecef(i);
         UINT32 *dst_info = &dst->gps_position_ecef[i];
@@ -1360,63 +1316,350 @@ peer_to_app_GnssEphData(const void *ptr_src_peer, void *ptr_dst_app)
         peer_to_app_UINT32(&src_info, dst_info);
     }
     dst->gps_validity_flag_pos_vel = src->gps_validity_flag_pos_vel();
-    dst->adcs_time = src->adcs_time();
-    for (int i = 1; i < 3; i++) { // position_wrt_eci
-        UINT64 src_info = src->position_wrt_eci(i);
-        UINT64 *dst_info = &dst->position_wrt_eci[i];
 
-        peer_to_app_UINT64(&src_info, dst_info);
-    }
-    for (int i = 1; i < 3; i++) { // velocity_wrt_eci
-        UINT64 src_info = src->velocity_wrt_eci(i);
-        UINT64 *dst_info = &dst->velocity_wrt_eci[i];
+}
 
-        peer_to_app_UINT64(&src_info, dst_info);
-    }
-    for (int i = 1; i < 3; i++) { // position_wrt_ecef
-        UINT64 src_info = src->position_wrt_ecef(i);
-        UINT64 *dst_info = &dst->position_wrt_ecef[i];
+void
+displayAdcsEphemerisData(const void *obj)
+{
+    AdcsEphemerisData *p = (AdcsEphemerisData *)obj;
 
-        peer_to_app_UINT64(&src_info, dst_info);
-    }
-    for (int i = 1; i < 3; i++) { // velocity_wrt_ecef
-        UINT64 src_info = src->velocity_wrt_ecef(i);
-        UINT64 *dst_info = &dst->velocity_wrt_ecef[i];
+    printf("AdcsEphemerisData %p =>\n", obj);
 
-        peer_to_app_UINT64(&src_info, dst_info);
-    }
-    for (int i = 1; i < 3; i++) { // body_rate
-        UINT32 src_info = src->body_rate(i);
-        UINT32 *dst_info = &dst->body_rate[i];
+    printf("orbit_time ==>\n");
+    displayDOUBLE((void *)&p->orbit_time);
+    printf("eci_position_x ==>\n");
+    displayDOUBLE((void *)&p->eci_position_x);
+    printf("eci_position_y ==>\n");
+    displayDOUBLE((void *)&p->eci_position_y);
+    printf("eci_position_z ==>\n");
+    displayDOUBLE((void *)&p->eci_position_z);
+    printf("eci_velocity_x ==>\n");
+    displayDOUBLE((void *)&p->eci_velocity_x);
+    printf("eci_velocity_y ==>\n");
+    displayDOUBLE((void *)&p->eci_velocity_y);
+    printf("eci_velocity_z ==>\n");
+    displayDOUBLE((void *)&p->eci_velocity_z);
+    printf("ecef_position_x ==>\n");
+    displayDOUBLE((void *)&p->ecef_position_x);
+    printf("ecef_position_y ==>\n");
+    displayDOUBLE((void *)&p->ecef_position_y);
+    printf("ecef_position_z ==>\n");
+    displayDOUBLE((void *)&p->ecef_position_z);
+    printf("ecef_velocity_x ==>\n");
+    displayDOUBLE((void *)&p->ecef_velocity_x);
+    printf("ecef_velocity_y ==>\n");
+    displayDOUBLE((void *)&p->ecef_velocity_y);
+    printf("ecef_velocity_z ==>\n");
+    displayDOUBLE((void *)&p->ecef_velocity_z);
+    printf("ang_rate_x ==>\n");
+    displayDOUBLE((void *)&p->ang_rate_x);
+    printf("ang_rate_y ==>\n");
+    displayDOUBLE((void *)&p->ang_rate_y);
+    printf("ang_rate_z ==>\n");
+    displayDOUBLE((void *)&p->ang_rate_z);
+    printf("att_quat_1 ==>\n");
+    displayDOUBLE((void *)&p->att_quat_1);
+    printf("att_quat_2 ==>\n");
+    displayDOUBLE((void *)&p->att_quat_2);
+    printf("att_quat_3 ==>\n");
+    displayDOUBLE((void *)&p->att_quat_3);
+    printf("att_quat_4 ==>\n");
+    displayDOUBLE((void *)&p->att_quat_4);
+    printf("latitude ==>\n");
+    displayFLOAT((void *)&p->latitude);
+    printf("longitude ==>\n");
+    displayFLOAT((void *)&p->longitude);
+    printf("altitude ==>\n");
+    displayFLOAT((void *)&p->altitude);
+    printf("nadir_vector_x ==>\n");
+    displayFLOAT((void *)&p->nadir_vector_x);
+    printf("nadir_vector_y ==>\n");
+    displayFLOAT((void *)&p->nadir_vector_y);
+    printf("nadir_vector_z ==>\n");
+    displayFLOAT((void *)&p->nadir_vector_z);
+    printf("gd_nadir_vector_x ==>\n");
+    displayFLOAT((void *)&p->gd_nadir_vector_x);
+    printf("gd_nadir_vector_y ==>\n");
+    displayFLOAT((void *)&p->gd_nadir_vector_y);
+    printf("gd_nadir_vector_z ==>\n");
+    displayFLOAT((void *)&p->gd_nadir_vector_z);
+    printf("beta_angle ==>\n");
+    displayFLOAT((void *)&p->beta_angle);
+    printf("validity_flags ==>\n");
+    displayUINT16((void *)&p->validity_flags);
 
-        peer_to_app_UINT32(&src_info, dst_info);
-    }
-    for (int i = 1; i < 3; i++) { // attitude
-        UINT32 src_info = src->attitude(i);
-        UINT32 *dst_info = &dst->attitude[i];
+}
 
-        peer_to_app_UINT32(&src_info, dst_info);
-    }
-    for (int i = 1; i < 3; i++) { // adcs_pos
-        UINT32 src_info = src->adcs_pos(i);
-        UINT32 *dst_info = &dst->adcs_pos[i];
+void
+app_to_peer_AdcsEphemerisData(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    AdcsEphemerisData *src = (AdcsEphemerisData *)ptr_src_app;
+    ::antaris_api_peer_to_peer::AdcsEphemerisData *dst = (::antaris_api_peer_to_peer::AdcsEphemerisData *)ptr_dst_peer;
 
-        peer_to_app_UINT32(&src_info, dst_info);
-    }
-    for (int i = 1; i < 3; i++) { // nadir_vector_body
-        UINT32 src_info = src->nadir_vector_body(i);
-        UINT32 *dst_info = &dst->nadir_vector_body[i];
+    DOUBLE __tmp_orbit_time;
+    DOUBLE __tmp_eci_position_x;
+    DOUBLE __tmp_eci_position_y;
+    DOUBLE __tmp_eci_position_z;
+    DOUBLE __tmp_eci_velocity_x;
+    DOUBLE __tmp_eci_velocity_y;
+    DOUBLE __tmp_eci_velocity_z;
+    DOUBLE __tmp_ecef_position_x;
+    DOUBLE __tmp_ecef_position_y;
+    DOUBLE __tmp_ecef_position_z;
+    DOUBLE __tmp_ecef_velocity_x;
+    DOUBLE __tmp_ecef_velocity_y;
+    DOUBLE __tmp_ecef_velocity_z;
+    DOUBLE __tmp_ang_rate_x;
+    DOUBLE __tmp_ang_rate_y;
+    DOUBLE __tmp_ang_rate_z;
+    DOUBLE __tmp_att_quat_1;
+    DOUBLE __tmp_att_quat_2;
+    DOUBLE __tmp_att_quat_3;
+    DOUBLE __tmp_att_quat_4;
+    FLOAT __tmp_latitude;
+    FLOAT __tmp_longitude;
+    FLOAT __tmp_altitude;
+    FLOAT __tmp_nadir_vector_x;
+    FLOAT __tmp_nadir_vector_y;
+    FLOAT __tmp_nadir_vector_z;
+    FLOAT __tmp_gd_nadir_vector_x;
+    FLOAT __tmp_gd_nadir_vector_y;
+    FLOAT __tmp_gd_nadir_vector_z;
+    FLOAT __tmp_beta_angle;
+    UINT32 __tmp_validity_flags = 0;
 
-        peer_to_app_UINT32(&src_info, dst_info);
-    }
-    for (int i = 1; i < 3; i++) { // gd_nadir_vector_body
-        UINT32 src_info = src->gd_nadir_vector_body(i);
-        UINT32 *dst_info = &dst->gd_nadir_vector_body[i];
+    app_to_peer_DOUBLE(&src->orbit_time, &__tmp_orbit_time); // orbit_time
 
-        peer_to_app_UINT32(&src_info, dst_info);
-    }
+    dst->set_orbit_time(__tmp_orbit_time);
+
+    app_to_peer_DOUBLE(&src->eci_position_x, &__tmp_eci_position_x); // eci_position_x
+
+    dst->set_eci_position_x(__tmp_eci_position_x);
+
+    app_to_peer_DOUBLE(&src->eci_position_y, &__tmp_eci_position_y); // eci_position_y
+
+    dst->set_eci_position_y(__tmp_eci_position_y);
+
+    app_to_peer_DOUBLE(&src->eci_position_z, &__tmp_eci_position_z); // eci_position_z
+
+    dst->set_eci_position_z(__tmp_eci_position_z);
+
+    app_to_peer_DOUBLE(&src->eci_velocity_x, &__tmp_eci_velocity_x); // eci_velocity_x
+
+    dst->set_eci_velocity_x(__tmp_eci_velocity_x);
+
+    app_to_peer_DOUBLE(&src->eci_velocity_y, &__tmp_eci_velocity_y); // eci_velocity_y
+
+    dst->set_eci_velocity_y(__tmp_eci_velocity_y);
+
+    app_to_peer_DOUBLE(&src->eci_velocity_z, &__tmp_eci_velocity_z); // eci_velocity_z
+
+    dst->set_eci_velocity_z(__tmp_eci_velocity_z);
+
+    app_to_peer_DOUBLE(&src->ecef_position_x, &__tmp_ecef_position_x); // ecef_position_x
+
+    dst->set_ecef_position_x(__tmp_ecef_position_x);
+
+    app_to_peer_DOUBLE(&src->ecef_position_y, &__tmp_ecef_position_y); // ecef_position_y
+
+    dst->set_ecef_position_y(__tmp_ecef_position_y);
+
+    app_to_peer_DOUBLE(&src->ecef_position_z, &__tmp_ecef_position_z); // ecef_position_z
+
+    dst->set_ecef_position_z(__tmp_ecef_position_z);
+
+    app_to_peer_DOUBLE(&src->ecef_velocity_x, &__tmp_ecef_velocity_x); // ecef_velocity_x
+
+    dst->set_ecef_velocity_x(__tmp_ecef_velocity_x);
+
+    app_to_peer_DOUBLE(&src->ecef_velocity_y, &__tmp_ecef_velocity_y); // ecef_velocity_y
+
+    dst->set_ecef_velocity_y(__tmp_ecef_velocity_y);
+
+    app_to_peer_DOUBLE(&src->ecef_velocity_z, &__tmp_ecef_velocity_z); // ecef_velocity_z
+
+    dst->set_ecef_velocity_z(__tmp_ecef_velocity_z);
+
+    app_to_peer_DOUBLE(&src->ang_rate_x, &__tmp_ang_rate_x); // ang_rate_x
+
+    dst->set_ang_rate_x(__tmp_ang_rate_x);
+
+    app_to_peer_DOUBLE(&src->ang_rate_y, &__tmp_ang_rate_y); // ang_rate_y
+
+    dst->set_ang_rate_y(__tmp_ang_rate_y);
+
+    app_to_peer_DOUBLE(&src->ang_rate_z, &__tmp_ang_rate_z); // ang_rate_z
+
+    dst->set_ang_rate_z(__tmp_ang_rate_z);
+
+    app_to_peer_DOUBLE(&src->att_quat_1, &__tmp_att_quat_1); // att_quat_1
+
+    dst->set_att_quat_1(__tmp_att_quat_1);
+
+    app_to_peer_DOUBLE(&src->att_quat_2, &__tmp_att_quat_2); // att_quat_2
+
+    dst->set_att_quat_2(__tmp_att_quat_2);
+
+    app_to_peer_DOUBLE(&src->att_quat_3, &__tmp_att_quat_3); // att_quat_3
+
+    dst->set_att_quat_3(__tmp_att_quat_3);
+
+    app_to_peer_DOUBLE(&src->att_quat_4, &__tmp_att_quat_4); // att_quat_4
+
+    dst->set_att_quat_4(__tmp_att_quat_4);
+
+    app_to_peer_FLOAT(&src->latitude, &__tmp_latitude); // latitude
+
+    dst->set_latitude(__tmp_latitude);
+
+    app_to_peer_FLOAT(&src->longitude, &__tmp_longitude); // longitude
+
+    dst->set_longitude(__tmp_longitude);
+
+    app_to_peer_FLOAT(&src->altitude, &__tmp_altitude); // altitude
+
+    dst->set_altitude(__tmp_altitude);
+
+    app_to_peer_FLOAT(&src->nadir_vector_x, &__tmp_nadir_vector_x); // nadir_vector_x
+
+    dst->set_nadir_vector_x(__tmp_nadir_vector_x);
+
+    app_to_peer_FLOAT(&src->nadir_vector_y, &__tmp_nadir_vector_y); // nadir_vector_y
+
+    dst->set_nadir_vector_y(__tmp_nadir_vector_y);
+
+    app_to_peer_FLOAT(&src->nadir_vector_z, &__tmp_nadir_vector_z); // nadir_vector_z
+
+    dst->set_nadir_vector_z(__tmp_nadir_vector_z);
+
+    app_to_peer_FLOAT(&src->gd_nadir_vector_x, &__tmp_gd_nadir_vector_x); // gd_nadir_vector_x
+
+    dst->set_gd_nadir_vector_x(__tmp_gd_nadir_vector_x);
+
+    app_to_peer_FLOAT(&src->gd_nadir_vector_y, &__tmp_gd_nadir_vector_y); // gd_nadir_vector_y
+
+    dst->set_gd_nadir_vector_y(__tmp_gd_nadir_vector_y);
+
+    app_to_peer_FLOAT(&src->gd_nadir_vector_z, &__tmp_gd_nadir_vector_z); // gd_nadir_vector_z
+
+    dst->set_gd_nadir_vector_z(__tmp_gd_nadir_vector_z);
+
+    app_to_peer_FLOAT(&src->beta_angle, &__tmp_beta_angle); // beta_angle
+
+    dst->set_beta_angle(__tmp_beta_angle);
+
+    app_to_peer_UINT16(&src->validity_flags, &__tmp_validity_flags); // validity_flags
+
+    dst->set_validity_flags(__tmp_validity_flags);
+
+
+}
+
+void
+peer_to_app_AdcsEphemerisData(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    AdcsEphemerisData *dst = (AdcsEphemerisData *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::AdcsEphemerisData *src = (::antaris_api_peer_to_peer::AdcsEphemerisData *)ptr_src_peer;
+
+    dst->orbit_time = src->orbit_time();
+    dst->eci_position_x = src->eci_position_x();
+    dst->eci_position_y = src->eci_position_y();
+    dst->eci_position_z = src->eci_position_z();
+    dst->eci_velocity_x = src->eci_velocity_x();
+    dst->eci_velocity_y = src->eci_velocity_y();
+    dst->eci_velocity_z = src->eci_velocity_z();
+    dst->ecef_position_x = src->ecef_position_x();
+    dst->ecef_position_y = src->ecef_position_y();
+    dst->ecef_position_z = src->ecef_position_z();
+    dst->ecef_velocity_x = src->ecef_velocity_x();
+    dst->ecef_velocity_y = src->ecef_velocity_y();
+    dst->ecef_velocity_z = src->ecef_velocity_z();
+    dst->ang_rate_x = src->ang_rate_x();
+    dst->ang_rate_y = src->ang_rate_y();
+    dst->ang_rate_z = src->ang_rate_z();
+    dst->att_quat_1 = src->att_quat_1();
+    dst->att_quat_2 = src->att_quat_2();
+    dst->att_quat_3 = src->att_quat_3();
+    dst->att_quat_4 = src->att_quat_4();
+    dst->latitude = src->latitude();
+    dst->longitude = src->longitude();
+    dst->altitude = src->altitude();
+    dst->nadir_vector_x = src->nadir_vector_x();
+    dst->nadir_vector_y = src->nadir_vector_y();
+    dst->nadir_vector_z = src->nadir_vector_z();
+    dst->gd_nadir_vector_x = src->gd_nadir_vector_x();
+    dst->gd_nadir_vector_y = src->gd_nadir_vector_y();
+    dst->gd_nadir_vector_z = src->gd_nadir_vector_z();
     dst->beta_angle = src->beta_angle();
     dst->validity_flags = src->validity_flags();
+
+}
+
+void
+displayGnssEphData(const void *obj)
+{
+    GnssEphData *p = (GnssEphData *)obj;
+
+    printf("GnssEphData %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("adcs_eph_data ==>\n");
+    displayAdcsEphemerisData((void *)&p->adcs_eph_data);
+    printf("gps_eph_data ==>\n");
+    displayGpsEphemerisData((void *)&p->gps_eph_data);
+    printf("adcs_timeout_flag ==>\n");
+    displayUINT8((void *)&p->adcs_timeout_flag);
+    printf("gps_timeout_flag ==>\n");
+    displayUINT8((void *)&p->gps_timeout_flag);
+
+}
+
+void
+app_to_peer_GnssEphData(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    GnssEphData *src = (GnssEphData *)ptr_src_app;
+    ::antaris_api_peer_to_peer::GnssEphData *dst = (::antaris_api_peer_to_peer::GnssEphData *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    AdcsEphemerisData __tmp_adcs_eph_data;
+    GpsEphemerisData __tmp_gps_eph_data;
+    UINT32 __tmp_adcs_timeout_flag = 0;
+    UINT32 __tmp_gps_timeout_flag = 0;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_AdcsEphemerisData(&src->adcs_eph_data, dst->mutable_adcs_eph_data()); // adcs_eph_data
+
+    app_to_peer_GpsEphemerisData(&src->gps_eph_data, dst->mutable_gps_eph_data()); // gps_eph_data
+
+    app_to_peer_UINT8(&src->adcs_timeout_flag, &__tmp_adcs_timeout_flag); // adcs_timeout_flag
+
+    dst->set_adcs_timeout_flag(__tmp_adcs_timeout_flag);
+
+    app_to_peer_UINT8(&src->gps_timeout_flag, &__tmp_gps_timeout_flag); // gps_timeout_flag
+
+    dst->set_gps_timeout_flag(__tmp_gps_timeout_flag);
+
+
+}
+
+void
+peer_to_app_GnssEphData(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    GnssEphData *dst = (GnssEphData *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::GnssEphData *src = (::antaris_api_peer_to_peer::GnssEphData *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    AdcsEphemerisData *mutable_adcs_eph_data = &dst->adcs_eph_data;
+    peer_to_app_AdcsEphemerisData(&src->adcs_eph_data(), mutable_adcs_eph_data);
+    GpsEphemerisData *mutable_gps_eph_data = &dst->gps_eph_data;
+    peer_to_app_GpsEphemerisData(&src->gps_eph_data(), mutable_gps_eph_data);
+    dst->adcs_timeout_flag = src->adcs_timeout_flag();
+    dst->gps_timeout_flag = src->gps_timeout_flag();
 
 }
 
@@ -1438,7 +1681,7 @@ app_to_peer_ReqGetEpsVoltageStopReq(const void *ptr_src_app, void *ptr_dst_peer)
     ReqGetEpsVoltageStopReq *src = (ReqGetEpsVoltageStopReq *)ptr_src_app;
     ::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq *dst = (::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -1477,7 +1720,7 @@ app_to_peer_RespGetEpsVoltageStopReq(const void *ptr_src_app, void *ptr_dst_peer
     RespGetEpsVoltageStopReq *src = (RespGetEpsVoltageStopReq *)ptr_src_app;
     ::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq *dst = (::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
     INT32 __tmp_req_status;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
@@ -1522,8 +1765,8 @@ app_to_peer_ReqGetEpsVoltageStartReq(const void *ptr_src_app, void *ptr_dst_peer
     ReqGetEpsVoltageStartReq *src = (ReqGetEpsVoltageStartReq *)ptr_src_app;
     ::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq *dst = (::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
-    UINT32 __tmp_periodicity_in_ms;
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_periodicity_in_ms = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -1567,7 +1810,7 @@ app_to_peer_RespGetEpsVoltageStartReq(const void *ptr_src_app, void *ptr_dst_pee
     RespGetEpsVoltageStartReq *src = (RespGetEpsVoltageStartReq *)ptr_src_app;
     ::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq *dst = (::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
+    UINT32 __tmp_correlation_id = 0;
     INT32 __tmp_req_status;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
@@ -1602,7 +1845,7 @@ displayGetEpsVoltage(const void *obj)
     printf("correlation_id ==>\n");
     displayUINT16((void *)&p->correlation_id);
     printf("eps_voltage ==>\n");
-    displayUINT32((void *)&p->eps_voltage);
+    displayFLOAT((void *)&p->eps_voltage);
 
 }
 
@@ -1612,14 +1855,14 @@ app_to_peer_GetEpsVoltage(const void *ptr_src_app, void *ptr_dst_peer)
     GetEpsVoltage *src = (GetEpsVoltage *)ptr_src_app;
     ::antaris_api_peer_to_peer::GetEpsVoltage *dst = (::antaris_api_peer_to_peer::GetEpsVoltage *)ptr_dst_peer;
 
-    UINT32 __tmp_correlation_id;
-    UINT32 __tmp_eps_voltage;
+    UINT32 __tmp_correlation_id = 0;
+    FLOAT __tmp_eps_voltage;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
     dst->set_correlation_id(__tmp_correlation_id);
 
-    app_to_peer_UINT32(&src->eps_voltage, &__tmp_eps_voltage); // eps_voltage
+    app_to_peer_FLOAT(&src->eps_voltage, &__tmp_eps_voltage); // eps_voltage
 
     dst->set_eps_voltage(__tmp_eps_voltage);
 
@@ -1634,6 +1877,361 @@ peer_to_app_GetEpsVoltage(const void *ptr_src_peer, void *ptr_dst_app)
 
     dst->correlation_id = src->correlation_id();
     dst->eps_voltage = src->eps_voltage();
+
+}
+
+void
+displayStartSesThermMgmntReq(const void *obj)
+{
+    StartSesThermMgmntReq *p = (StartSesThermMgmntReq *)obj;
+
+    printf("StartSesThermMgmntReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("hardware_id ==>\n");
+    displayUINT8((void *)&p->hardware_id);
+    printf("duration ==>\n");
+    displayUINT32((void *)&p->duration);
+    printf("lower_threshold ==>\n");
+    displayUINT8((void *)&p->lower_threshold);
+    printf("upper_threshold ==>\n");
+    displayUINT8((void *)&p->upper_threshold);
+
+}
+
+void
+app_to_peer_StartSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    StartSesThermMgmntReq *src = (StartSesThermMgmntReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::StartSesThermMgmntReq *dst = (::antaris_api_peer_to_peer::StartSesThermMgmntReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_hardware_id = 0;
+    UINT32 __tmp_duration = 0;
+    UINT32 __tmp_lower_threshold = 0;
+    UINT32 __tmp_upper_threshold = 0;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->hardware_id, &__tmp_hardware_id); // hardware_id
+
+    dst->set_hardware_id(__tmp_hardware_id);
+
+    app_to_peer_UINT32(&src->duration, &__tmp_duration); // duration
+
+    dst->set_duration(__tmp_duration);
+
+    app_to_peer_UINT8(&src->lower_threshold, &__tmp_lower_threshold); // lower_threshold
+
+    dst->set_lower_threshold(__tmp_lower_threshold);
+
+    app_to_peer_UINT8(&src->upper_threshold, &__tmp_upper_threshold); // upper_threshold
+
+    dst->set_upper_threshold(__tmp_upper_threshold);
+
+
+}
+
+void
+peer_to_app_StartSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    StartSesThermMgmntReq *dst = (StartSesThermMgmntReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::StartSesThermMgmntReq *src = (::antaris_api_peer_to_peer::StartSesThermMgmntReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->hardware_id = src->hardware_id();
+    dst->duration = src->duration();
+    dst->lower_threshold = src->lower_threshold();
+    dst->upper_threshold = src->upper_threshold();
+
+}
+
+void
+displayRespStartSesThermMgmntReq(const void *obj)
+{
+    RespStartSesThermMgmntReq *p = (RespStartSesThermMgmntReq *)obj;
+
+    printf("RespStartSesThermMgmntReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("req_status ==>\n");
+    displayUINT8((void *)&p->req_status);
+
+}
+
+void
+app_to_peer_RespStartSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    RespStartSesThermMgmntReq *src = (RespStartSesThermMgmntReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq *dst = (::antaris_api_peer_to_peer::RespStartSesThermMgmntReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_req_status = 0;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->req_status, &__tmp_req_status); // req_status
+
+    dst->set_req_status(__tmp_req_status);
+
+
+}
+
+void
+peer_to_app_RespStartSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    RespStartSesThermMgmntReq *dst = (RespStartSesThermMgmntReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::RespStartSesThermMgmntReq *src = (::antaris_api_peer_to_peer::RespStartSesThermMgmntReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->req_status = src->req_status();
+
+}
+
+void
+displayStopSesThermMgmntReq(const void *obj)
+{
+    StopSesThermMgmntReq *p = (StopSesThermMgmntReq *)obj;
+
+    printf("StopSesThermMgmntReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("hardware_id ==>\n");
+    displayUINT8((void *)&p->hardware_id);
+
+}
+
+void
+app_to_peer_StopSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    StopSesThermMgmntReq *src = (StopSesThermMgmntReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::StopSesThermMgmntReq *dst = (::antaris_api_peer_to_peer::StopSesThermMgmntReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_hardware_id = 0;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->hardware_id, &__tmp_hardware_id); // hardware_id
+
+    dst->set_hardware_id(__tmp_hardware_id);
+
+
+}
+
+void
+peer_to_app_StopSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    StopSesThermMgmntReq *dst = (StopSesThermMgmntReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::StopSesThermMgmntReq *src = (::antaris_api_peer_to_peer::StopSesThermMgmntReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->hardware_id = src->hardware_id();
+
+}
+
+void
+displayRespStopSesThermMgmntReq(const void *obj)
+{
+    RespStopSesThermMgmntReq *p = (RespStopSesThermMgmntReq *)obj;
+
+    printf("RespStopSesThermMgmntReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("req_status ==>\n");
+    displayUINT8((void *)&p->req_status);
+
+}
+
+void
+app_to_peer_RespStopSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    RespStopSesThermMgmntReq *src = (RespStopSesThermMgmntReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq *dst = (::antaris_api_peer_to_peer::RespStopSesThermMgmntReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_req_status = 0;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->req_status, &__tmp_req_status); // req_status
+
+    dst->set_req_status(__tmp_req_status);
+
+
+}
+
+void
+peer_to_app_RespStopSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    RespStopSesThermMgmntReq *dst = (RespStopSesThermMgmntReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::RespStopSesThermMgmntReq *src = (::antaris_api_peer_to_peer::RespStopSesThermMgmntReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->req_status = src->req_status();
+
+}
+
+void
+displaySesTempReq(const void *obj)
+{
+    SesTempReq *p = (SesTempReq *)obj;
+
+    printf("SesTempReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("hardware_id ==>\n");
+    displayUINT8((void *)&p->hardware_id);
+
+}
+
+void
+app_to_peer_SesTempReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    SesTempReq *src = (SesTempReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::SesTempReq *dst = (::antaris_api_peer_to_peer::SesTempReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_hardware_id = 0;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->hardware_id, &__tmp_hardware_id); // hardware_id
+
+    dst->set_hardware_id(__tmp_hardware_id);
+
+
+}
+
+void
+peer_to_app_SesTempReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    SesTempReq *dst = (SesTempReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::SesTempReq *src = (::antaris_api_peer_to_peer::SesTempReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->hardware_id = src->hardware_id();
+
+}
+
+void
+displayRespSesTempReqParams(const void *obj)
+{
+    RespSesTempReqParams *p = (RespSesTempReqParams *)obj;
+
+    printf("RespSesTempReqParams %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("temp ==>\n");
+    displayUINT8((void *)&p->temp);
+    printf("heater_pwr_status ==>\n");
+    displayUINT8((void *)&p->heater_pwr_status);
+
+}
+
+void
+app_to_peer_RespSesTempReqParams(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    RespSesTempReqParams *src = (RespSesTempReqParams *)ptr_src_app;
+    ::antaris_api_peer_to_peer::RespSesTempReqParams *dst = (::antaris_api_peer_to_peer::RespSesTempReqParams *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_temp = 0;
+    UINT32 __tmp_heater_pwr_status = 0;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->temp, &__tmp_temp); // temp
+
+    dst->set_temp(__tmp_temp);
+
+    app_to_peer_UINT8(&src->heater_pwr_status, &__tmp_heater_pwr_status); // heater_pwr_status
+
+    dst->set_heater_pwr_status(__tmp_heater_pwr_status);
+
+
+}
+
+void
+peer_to_app_RespSesTempReqParams(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    RespSesTempReqParams *dst = (RespSesTempReqParams *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::RespSesTempReqParams *src = (::antaris_api_peer_to_peer::RespSesTempReqParams *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->temp = src->temp();
+    dst->heater_pwr_status = src->heater_pwr_status();
+
+}
+
+void
+displaySesThermalStatusNtf(const void *obj)
+{
+    SesThermalStatusNtf *p = (SesThermalStatusNtf *)obj;
+
+    printf("SesThermalStatusNtf %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("heater_pwr_status ==>\n");
+    displayUINT8((void *)&p->heater_pwr_status);
+    printf("temp ==>\n");
+    displayUINT8((void *)&p->temp);
+
+}
+
+void
+app_to_peer_SesThermalStatusNtf(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    SesThermalStatusNtf *src = (SesThermalStatusNtf *)ptr_src_app;
+    ::antaris_api_peer_to_peer::SesThermalStatusNtf *dst = (::antaris_api_peer_to_peer::SesThermalStatusNtf *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_heater_pwr_status = 0;
+    UINT32 __tmp_temp = 0;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->heater_pwr_status, &__tmp_heater_pwr_status); // heater_pwr_status
+
+    dst->set_heater_pwr_status(__tmp_heater_pwr_status);
+
+    app_to_peer_UINT8(&src->temp, &__tmp_temp); // temp
+
+    dst->set_temp(__tmp_temp);
+
+
+}
+
+void
+peer_to_app_SesThermalStatusNtf(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    SesThermalStatusNtf *dst = (SesThermalStatusNtf *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::SesThermalStatusNtf *src = (::antaris_api_peer_to_peer::SesThermalStatusNtf *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->heater_pwr_status = src->heater_pwr_status();
+    dst->temp = src->temp();
 
 }
 
@@ -1672,6 +2270,14 @@ displayAntarisApiCallbackFuncList(const void *obj)
     displayProcessRespGetEpsVoltageStartReq_Fptr((void *)&p->process_response_get_eps_voltage_start);
     printf("process_cb_get_eps_voltage ==>\n");
     displayProcessGetEpsVoltage_Fptr((void *)&p->process_cb_get_eps_voltage);
+    printf("process_response_start_ses_therm_mgmnt_req ==>\n");
+    displayProcessRespStartSesThermMgmntReq_Fptr((void *)&p->process_response_start_ses_therm_mgmnt_req);
+    printf("process_response_stop_ses_therm_mgmnt_req ==>\n");
+    displayProcessRespStopSesThermMgmntReq_Fptr((void *)&p->process_response_stop_ses_therm_mgmnt_req);
+    printf("process_response_ses_temp_req ==>\n");
+    displayProcessRespSesTempReq_Fptr((void *)&p->process_response_ses_temp_req);
+    printf("process_cb_ses_thrml_ntf ==>\n");
+    displayProcessSesThrmlNtf_Fptr((void *)&p->process_cb_ses_thrml_ntf);
 
 }
 
@@ -1752,6 +2358,22 @@ app_to_peer_AntarisReturnCode(void *ptr_src_app, void *ptr_dst_peer)
 {
     AntarisReturnCode *src = (AntarisReturnCode *)ptr_src_app;
     AntarisReturnCode *dst = (AntarisReturnCode *)ptr_dst_peer;
+
+    *dst = *src;
+
+}
+
+void
+displayFilePriorities(void *obj)
+{
+    printf("%s => %d\n", "FilePriorities", *(INT32 *)obj);
+}
+
+void
+app_to_peer_FilePriorities(void *ptr_src_app, void *ptr_dst_peer)
+{
+    FilePriorities *src = (FilePriorities *)ptr_src_app;
+    FilePriorities *dst = (FilePriorities *)ptr_dst_peer;
 
     *dst = *src;
 

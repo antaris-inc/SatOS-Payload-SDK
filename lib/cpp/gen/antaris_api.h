@@ -70,6 +70,19 @@ void displayAntarisReturnCode(void *obj);
 void app_to_peer_AntarisReturnCode(void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_AntarisReturnCode(void *ptr_src_peer, void *ptr_dst_app);
 
+/// @enum FilePriorities
+/// @brief File priority
+typedef enum FilePriorities {
+    FILE_DL_PRIORITY_LOW             = 0,                               ///< low priority
+    FILE_DL_PRIORITY_NORMAL          = 1,                               ///< normal priority
+    FILE_DL_PRIORITY_HIGH            = 2,                               ///< high priority
+    FILE_DL_PRIORITY_IMMEDIATE       = 3,                               ///< highest priority
+} FilePriorities;
+
+void displayFilePriorities(void *obj);
+void app_to_peer_FilePriorities(void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_FilePriorities(void *ptr_src_peer, void *ptr_dst_app);
+
 struct ReqRegisterParams;
 typedef struct ReqRegisterParams ReqRegisterParams;
 
@@ -133,6 +146,15 @@ typedef struct ReqGnssEphStartDataReq ReqGnssEphStartDataReq;
 struct RespGnssEphStartDataReq;
 typedef struct RespGnssEphStartDataReq RespGnssEphStartDataReq;
 
+struct OBC_time;
+typedef struct OBC_time OBC_time;
+
+struct GpsEphemerisData;
+typedef struct GpsEphemerisData GpsEphemerisData;
+
+struct AdcsEphemerisData;
+typedef struct AdcsEphemerisData AdcsEphemerisData;
+
 struct GnssEphData;
 typedef struct GnssEphData GnssEphData;
 
@@ -150,6 +172,27 @@ typedef struct RespGetEpsVoltageStartReq RespGetEpsVoltageStartReq;
 
 struct GetEpsVoltage;
 typedef struct GetEpsVoltage GetEpsVoltage;
+
+struct StartSesThermMgmntReq;
+typedef struct StartSesThermMgmntReq StartSesThermMgmntReq;
+
+struct RespStartSesThermMgmntReq;
+typedef struct RespStartSesThermMgmntReq RespStartSesThermMgmntReq;
+
+struct StopSesThermMgmntReq;
+typedef struct StopSesThermMgmntReq StopSesThermMgmntReq;
+
+struct RespStopSesThermMgmntReq;
+typedef struct RespStopSesThermMgmntReq RespStopSesThermMgmntReq;
+
+struct SesTempReq;
+typedef struct SesTempReq SesTempReq;
+
+struct RespSesTempReqParams;
+typedef struct RespSesTempReqParams RespSesTempReqParams;
+
+struct SesThermalStatusNtf;
+typedef struct SesThermalStatusNtf SesThermalStatusNtf;
 
 struct AntarisApiCallbackFuncList;
 typedef struct AntarisApiCallbackFuncList AntarisApiCallbackFuncList;
@@ -303,6 +346,46 @@ typedef AntarisReturnCode
 );
 static inline void
 displayProcessGetEpsVoltage_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessRespStartSesThermMgmntReq_Fptr
+/// @typedef callback handler for start SES thermal management req response
+
+typedef AntarisReturnCode
+(*ProcessRespStartSesThermMgmntReq_Fptr)
+(
+    RespStartSesThermMgmntReq *      ///< @param response to thermal management start req
+);
+static inline void
+displayProcessRespStartSesThermMgmntReq_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessRespStopSesThermMgmntReq_Fptr
+/// @typedef callback handler for stop SES thermal management req response
+
+typedef AntarisReturnCode
+(*ProcessRespStopSesThermMgmntReq_Fptr)
+(
+    RespStopSesThermMgmntReq *       ///< @param response to thermal management stop req
+);
+static inline void
+displayProcessRespStopSesThermMgmntReq_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessRespSesTempReq_Fptr
+/// @typedef callback handler for SES temperature req response
+
+typedef AntarisReturnCode
+(*ProcessRespSesTempReq_Fptr)
+(
+    RespSesTempReqParams *           ///< @param response to SES temperature req
+);
+static inline void
+displayProcessRespSesTempReq_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessSesThrmlNtf_Fptr
+/// @typedef Callback request to SES thermal notifictaion
+
+typedef AntarisReturnCode
+(*ProcessSesThrmlNtf_Fptr)
+(
+    SesThermalStatusNtf *            ///< @param SES thermal notifictaion parameters
+);
+static inline void
+displayProcessSesThrmlNtf_Fptr(void *obj) { printf("%p\n", obj); }
 
 // >>>> Data Types <<<<<
 
@@ -362,6 +445,7 @@ void peer_to_app_RespGetCurrentLocationParams(const void *ptr_src_peer, void *pt
 struct ReqStageFileDownloadParams {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     INT8                                            file_path[256];                                  ///< @var File path relative to outbound mount-point
+    FilePriorities                                  file_priority;                                   ///< @var File priority
 };
 
 void displayReqStageFileDownloadParams(const void *obj);
@@ -550,28 +634,84 @@ void displayRespGnssEphStartDataReq(const void *obj);
 void app_to_peer_RespGnssEphStartDataReq(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_RespGnssEphStartDataReq(const void *ptr_src_peer, void *ptr_dst_app);
 
+/// @struct OBC_time
+/// @brief OBC time
+struct OBC_time {
+    UINT8                                           hour;                                            ///< @var hour
+    UINT8                                           minute;                                          ///< @var Minute
+    UINT16                                          millisecond;                                     ///< @var millisecond
+    UINT8                                           date;                                            ///< @var date
+    UINT8                                           month;                                           ///< @var month
+    UINT16                                          year;                                            ///< @var year
+};
+
+void displayOBC_time(const void *obj);
+void app_to_peer_OBC_time(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_OBC_time(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct GpsEphemerisData
+/// @brief GNSS Eph1/Eph2 data
+struct GpsEphemerisData {
+    UINT32                                          gps_fix_time;                                    ///< @var GPS time
+    UINT64                                          gps_sys_time;                                    ///< @var GPS System time
+    OBC_time                                        obc_time;                                        ///< @var OBC time
+    UINT32                                          gps_position_ecef[3];                            ///< @var GPS position
+    UINT32                                          gps_velocity_ecef[3];                            ///< @var GPS velocity
+    UINT32                                          gps_validity_flag_pos_vel;                       ///< @var GPS validity flag
+};
+
+void displayGpsEphemerisData(const void *obj);
+void app_to_peer_GpsEphemerisData(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_GpsEphemerisData(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct AdcsEphemerisData
+/// @brief ADCS EPH data
+struct AdcsEphemerisData {
+    DOUBLE                                          orbit_time;                                      ///< @var ADCS Orbit Propagator/System Time
+    DOUBLE                                          eci_position_x;                                  ///< @var ECI Position X (km)
+    DOUBLE                                          eci_position_y;                                  ///< @var ECI Position Y (km)
+    DOUBLE                                          eci_position_z;                                  ///< @var ECI Position Z (km)
+    DOUBLE                                          eci_velocity_x;                                  ///< @var ECI Velocity X (km/s)
+    DOUBLE                                          eci_velocity_y;                                  ///< @var ECI Velocity Y (km/s)
+    DOUBLE                                          eci_velocity_z;                                  ///< @var ECI Velocity Z (km/s)
+    DOUBLE                                          ecef_position_x;                                 ///< @var ECEF Position X (km)
+    DOUBLE                                          ecef_position_y;                                 ///< @var ECEF Position Y (km)
+    DOUBLE                                          ecef_position_z;                                 ///< @var ECEF Position Z (km)
+    DOUBLE                                          ecef_velocity_x;                                 ///< @var ECEF Velocity X (km/s)
+    DOUBLE                                          ecef_velocity_y;                                 ///< @var ECEF Velocity Y (km/s)
+    DOUBLE                                          ecef_velocity_z;                                 ///< @var ECEF Velocity Z (km/s)
+    DOUBLE                                          ang_rate_x;                                      ///< @var X axis Angular rate (deg/s)
+    DOUBLE                                          ang_rate_y;                                      ///< @var Y axis Angular rate (deg/s)
+    DOUBLE                                          ang_rate_z;                                      ///< @var Z axis Angular rate (deg/s)
+    DOUBLE                                          att_quat_1;                                      ///< @var Attitude Quaternion 1
+    DOUBLE                                          att_quat_2;                                      ///< @var Attitude Quaternion 2
+    DOUBLE                                          att_quat_3;                                      ///< @var Attitude Quaternion 3
+    DOUBLE                                          att_quat_4;                                      ///< @var Attitude Quaternion 4
+    FLOAT                                           latitude;                                        ///< @var Latitude (deg)
+    FLOAT                                           longitude;                                       ///< @var Longitude (deg)
+    FLOAT                                           altitude;                                        ///< @var Altitude (km)
+    FLOAT                                           nadir_vector_x;                                  ///< @var X Nadir Vector
+    FLOAT                                           nadir_vector_y;                                  ///< @var Y Nadir Vector
+    FLOAT                                           nadir_vector_z;                                  ///< @var Z Nadir Vector
+    FLOAT                                           gd_nadir_vector_x;                               ///< @var X Geodetic Nadir Vector
+    FLOAT                                           gd_nadir_vector_y;                               ///< @var Y Geodetic Nadir Vector
+    FLOAT                                           gd_nadir_vector_z;                               ///< @var Z Geodetic Nadir Vector
+    FLOAT                                           beta_angle;                                      ///< @var Beta Angle (deg)
+    UINT16                                          validity_flags;                                  ///< @var 1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity
+};
+
+void displayAdcsEphemerisData(const void *obj);
+void app_to_peer_AdcsEphemerisData(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_AdcsEphemerisData(const void *ptr_src_peer, void *ptr_dst_app);
+
 /// @struct GnssEphData
 /// @brief GNSS Eph1/Eph2 data
 struct GnssEphData {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
-    UINT32                                          gps_fix_time;                                    ///< @var GPS time
-    UINT32                                          gps_sys_time;                                    ///< @var GPS System time
-    UINT64                                          obc_time;                                        ///< @var OBC time
-    UINT32                                          gps_position_ecef[3];                            ///< @var GPS position
-    UINT32                                          gps_velocity_ecef[3];                            ///< @var GPS velocity
-    UINT32                                          gps_validity_flag_pos_vel;                       ///< @var GPS validity flag
-    UINT64                                          adcs_time;                                       ///< @var Orbit time
-    UINT64                                          position_wrt_eci[3];                             ///< @var Position
-    UINT64                                          velocity_wrt_eci[3];                             ///< @var Position
-    UINT64                                          position_wrt_ecef[3];                            ///< @var Position
-    UINT64                                          velocity_wrt_ecef[3];                            ///< @var Position
-    UINT32                                          body_rate[3];                                    ///< @var Body rate
-    UINT32                                          attitude[3];                                     ///< @var RPY WRT LVLH
-    UINT32                                          adcs_pos[3];                                     ///< @var Lat, Lon, Altitude (ADCS)
-    UINT32                                          nadir_vector_body[3];                            ///< @var Nadir vector
-    UINT32                                          gd_nadir_vector_body[3];                         ///< @var GD Nadir Vector Body
-    UINT32                                          beta_angle;                                      ///< @var Beta Angle
-    UINT16                                          validity_flags;                                  ///< @var 1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity
+    AdcsEphemerisData                               adcs_eph_data;                                   ///< @var ADCS data
+    GpsEphemerisData                                gps_eph_data;                                    ///< @var GPS data
+    UINT8                                           adcs_timeout_flag;                               ///< @var ADCS flag
+    UINT8                                           gps_timeout_flag;                                ///< @var GPS flag
 };
 
 void displayGnssEphData(const void *obj);
@@ -625,12 +765,94 @@ void peer_to_app_RespGetEpsVoltageStartReq(const void *ptr_src_peer, void *ptr_d
 /// @brief get EPS voltage1
 struct GetEpsVoltage {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
-    UINT32                                          eps_voltage;                                     ///< @var EPS voltage
+    FLOAT                                           eps_voltage;                                     ///< @var EPS voltage
 };
 
 void displayGetEpsVoltage(const void *obj);
 void app_to_peer_GetEpsVoltage(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_GetEpsVoltage(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct StartSesThermMgmntReq
+/// @brief Start SES thermal management
+struct StartSesThermMgmntReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           hardware_id;                                     ///< @var 0:SESA, 1:SESB
+    UINT32                                          duration;                                        ///< @var duration in ms
+    UINT8                                           lower_threshold;                                 ///< @var lower temp threshold
+    UINT8                                           upper_threshold;                                 ///< @var upper temp threshold
+};
+
+void displayStartSesThermMgmntReq(const void *obj);
+void app_to_peer_StartSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_StartSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespStartSesThermMgmntReq
+/// @brief Response to Start SES thermal management
+struct RespStartSesThermMgmntReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           req_status;                                      ///< @var 0: success, 1: fail
+};
+
+void displayRespStartSesThermMgmntReq(const void *obj);
+void app_to_peer_RespStartSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespStartSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct StopSesThermMgmntReq
+/// @brief Stop SES thermal management
+struct StopSesThermMgmntReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           hardware_id;                                     ///< @var 0:SESA, 1:SESB
+};
+
+void displayStopSesThermMgmntReq(const void *obj);
+void app_to_peer_StopSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_StopSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespStopSesThermMgmntReq
+/// @brief Response to Stop SES thermal management
+struct RespStopSesThermMgmntReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           req_status;                                      ///< @var 0: success, 1: fail
+};
+
+void displayRespStopSesThermMgmntReq(const void *obj);
+void app_to_peer_RespStopSesThermMgmntReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespStopSesThermMgmntReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct SesTempReq
+/// @brief Request SES temperature
+struct SesTempReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           hardware_id;                                     ///< @var 0:SESA, 1:SESB
+};
+
+void displaySesTempReq(const void *obj);
+void app_to_peer_SesTempReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_SesTempReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespSesTempReqParams
+/// @brief Response to SES temperature request
+struct RespSesTempReqParams {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           temp;                                            ///< @var in Celsius
+    UINT8                                           heater_pwr_status;                               ///< @var 0:OFF, 1:ON
+};
+
+void displayRespSesTempReqParams(const void *obj);
+void app_to_peer_RespSesTempReqParams(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespSesTempReqParams(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct SesThermalStatusNtf
+/// @brief SES thermal notification from PC
+struct SesThermalStatusNtf {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           heater_pwr_status;                               ///< @var 0:OFF, 1:ON
+    UINT8                                           temp;                                            ///< @var in Celsius
+};
+
+void displaySesThermalStatusNtf(const void *obj);
+void app_to_peer_SesThermalStatusNtf(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_SesThermalStatusNtf(const void *ptr_src_peer, void *ptr_dst_app);
 
 /// @struct AntarisApiCallbackFuncList
 /// @brief Callback-functions registration structure for channel creation
@@ -649,6 +871,10 @@ struct AntarisApiCallbackFuncList {
     ProcessRespGetEpsVoltageStopReq_Fptr            process_response_get_eps_voltage_stop;           ///< @var callback handler for get EPS voltage data stop
     ProcessRespGetEpsVoltageStartReq_Fptr           process_response_get_eps_voltage_start;          ///< @var callback handler for get EPS voltage data start
     ProcessGetEpsVoltage_Fptr                       process_cb_get_eps_voltage;                      ///< @var callback handler for EPS voltage data
+    ProcessRespStartSesThermMgmntReq_Fptr           process_response_start_ses_therm_mgmnt_req;      ///< @var callback handler for start SES thermal management req response
+    ProcessRespStopSesThermMgmntReq_Fptr            process_response_stop_ses_therm_mgmnt_req;       ///< @var callback handler for stop SES thermal management req response
+    ProcessRespSesTempReq_Fptr                      process_response_ses_temp_req;                   ///< @var callback handler for SES temperature req response
+    ProcessSesThrmlNtf_Fptr                         process_cb_ses_thrml_ntf;                        ///< @var callback handler for SES thermal nofirication
 };
 
 void displayAntarisApiCallbackFuncList(const void *obj);
@@ -804,6 +1030,33 @@ api_pa_pc_get_eps_voltage_start_req
 (
     AntarisChannel                  channel,                         ///< @param channel context for API execution
     ReqGetEpsVoltageStartReq *      req_get_eps_voltage_start        ///< @param get EPS voltage start response parameters
+);
+
+/// @brief Function api_pa_pc_start_ses_therm_mgmnt_req
+/// @fn API to request to start SES thermal management
+AntarisReturnCode
+api_pa_pc_start_ses_therm_mgmnt_req
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    StartSesThermMgmntReq *         req_start_ses_therm_mgmnt        ///< @param start SES thermal management response parameters
+);
+
+/// @brief Function api_pa_pc_stop_ses_therm_mgmnt_req
+/// @fn API to request to stop SES thermal management
+AntarisReturnCode
+api_pa_pc_stop_ses_therm_mgmnt_req
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    StopSesThermMgmntReq *          req_stop_ses_therm_mgmnt         ///< @param stop SES thermal management response parameters
+);
+
+/// @brief Function api_pa_pc_ses_temp_req
+/// @fn API to request to SES temperature
+AntarisReturnCode
+api_pa_pc_ses_temp_req
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    SesTempReq *                    req_ses_temp                     ///< @param SES temperature response parameters
 );
 
 

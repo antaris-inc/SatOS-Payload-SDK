@@ -131,6 +131,7 @@ void displayDOUBLE(void *obj)
 }
 
 void app_to_peer_INT8(void *ptr_src_app, void *ptr_dst_peer);
+void app_to_peer_UINT8(void *ptr_src_app, void *ptr_dst_peer);
 void app_to_peer_UINT16(void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_UINT16(void *ptr_src_peer, void *ptr_dst_app);
 void app_to_peer_UINT32(void *ptr_src_app, void *ptr_dst_peer);

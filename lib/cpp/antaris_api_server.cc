@@ -422,6 +422,117 @@ class AppToPCClient {
             return An_GENERIC_FAILURE;
         }
     }
+    AntarisReturnCode InvokeProcessRespStartSesThermMgmntReq(RespStartSesThermMgmntReq *req_params)
+    {
+        antaris_api_peer_to_peer::RespStartSesThermMgmntReq cb_req;
+        antaris_api_peer_to_peer::AntarisReturnType cb_response;
+        Status cb_status;
+        // Context for the client. It could be used to convey extra information to
+        // the server and/or tweak certain RPC behaviors.
+        ClientContext context;
+
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
+
+        app_to_peer_RespStartSesThermMgmntReq(req_params, &cb_req);
+
+        cb_status = app_grpc_handle_->PA_ProcessRespStartSesThermMgmntReq(&context, cb_req, &cb_response);
+
+        // Act upon its status.
+        if (cb_status.ok())
+        {
+            return (AntarisReturnCode)(cb_response.return_code());
+        }
+        else
+        {
+            return An_GENERIC_FAILURE;
+        }
+    }
+
+    AntarisReturnCode InvokeProcessRespStopSesThermMgmntReq(RespStopSesThermMgmntReq *req_params)
+    {
+        antaris_api_peer_to_peer::RespStopSesThermMgmntReq cb_req;
+        antaris_api_peer_to_peer::AntarisReturnType cb_response;
+        Status cb_status;
+        // Context for the client. It could be used to convey extra information to
+        // the server and/or tweak certain RPC behaviors.
+        ClientContext context;
+
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
+
+        app_to_peer_RespStopSesThermMgmntReq(req_params, &cb_req);
+
+        cb_status = app_grpc_handle_->PA_ProcessRespStopSesThermMgmntReq(&context, cb_req, &cb_response);
+
+        // Act upon its status.
+        if (cb_status.ok())
+        {
+            return (AntarisReturnCode)(cb_response.return_code());
+        }
+        else
+        {
+            return An_GENERIC_FAILURE;
+        }
+    }
+
+    AntarisReturnCode InvokeProcessRespSesTempReq(RespSesTempReqParams *req_params)
+    {
+        antaris_api_peer_to_peer::RespSesTempReqParams cb_req;
+        antaris_api_peer_to_peer::AntarisReturnType cb_response;
+        Status cb_status;
+        // Context for the client. It could be used to convey extra information to
+        // the server and/or tweak certain RPC behaviors.
+        ClientContext context;
+
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
+
+        app_to_peer_RespSesTempReqParams(req_params, &cb_req);
+
+        cb_status = app_grpc_handle_->PA_ProcessRespSesTempReq(&context, cb_req, &cb_response);
+
+        // Act upon its status.
+        if (cb_status.ok())
+        {
+            return (AntarisReturnCode)(cb_response.return_code());
+        }
+        else
+        {
+            return An_GENERIC_FAILURE;
+        }
+    }
+
+    AntarisReturnCode InvokeProcessSesThrmlNtf(SesThermalStatusNtf *req_params)
+    {
+        antaris_api_peer_to_peer::SesThermalStatusNtf cb_req;
+        antaris_api_peer_to_peer::AntarisReturnType cb_response;
+        Status cb_status;
+        // Context for the client. It could be used to convey extra information to
+        // the server and/or tweak certain RPC behaviors.
+        ClientContext context;
+
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
+
+        peer_to_app_SesThermalStatusNtf(req_params, &cb_req);
+
+        cb_status = app_grpc_handle_->PA_ProcessSesThrmlNtf(&context, cb_req, &cb_response);
+
+        // Act upon its status.
+        if (cb_status.ok())
+        {
+            return (AntarisReturnCode)(cb_response.return_code());
+        }
+        else
+        {
+            return An_GENERIC_FAILURE;
+        }
+    }
  private:
   std::unique_ptr<antaris_api_peer_to_peer::AntarisapiApplicationCallback::Stub> app_grpc_handle_;
   std::uint32_t appId;
@@ -676,6 +787,7 @@ done:
 
         return Status::OK;
     }
+
     Status PC_get_eps_voltage_stop_req(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
     {
         AppToPCCallbackParams_t api_request = {0};
@@ -707,6 +819,55 @@ done:
 
         return Status::OK;
     }
+
+    Status PC_start_ses_therm_mgmnt_req(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::StartSesThermMgmntReq *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
+    {
+        AppToPCCallbackParams_t api_request = {0};
+        AntarisReturnType api_response = {return_code : An_SUCCESS};
+        cookie_t cookie;
+        cookie = decodeCookie(context);
+
+        peer_to_app_StartSesThermMgmntReq(request, &api_request);
+
+        user_callbacks_(user_cb_ctx_, cookie, e_app2PC_StartSesThermMgmntReq, &api_request, &api_response.return_code);
+
+        app_to_peer_AntarisReturnType(&api_response, response);
+
+        return Status::OK;
+    }
+
+    Status PC_stop_ses_therm_mgmnt_req(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::StopSesThermMgmntReq *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
+    {
+        AppToPCCallbackParams_t api_request = {0};
+        AntarisReturnType api_response = {return_code : An_SUCCESS};
+        cookie_t cookie;
+        cookie = decodeCookie(context);
+
+        peer_to_app_StopSesThermMgmntReq(request, &api_request);
+
+        user_callbacks_(user_cb_ctx_, cookie, e_app2PC_StopSesThermMgmntReq, &api_request, &api_response.return_code);
+
+        app_to_peer_AntarisReturnType(&api_response, response);
+
+        return Status::OK;
+    }
+
+    Status PC_ses_temp_req(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::SesTempReq *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
+    {
+        AppToPCCallbackParams_t api_request = {0};
+        AntarisReturnType api_response = {return_code : An_SUCCESS};
+        cookie_t cookie;
+        cookie = decodeCookie(context);
+
+        peer_to_app_SesTempReq(request, &api_request);
+
+        user_callbacks_(user_cb_ctx_, cookie, e_app2PC_SesTempReq, &api_request, &api_response.return_code);
+
+        app_to_peer_AntarisReturnType(&api_response, response);
+
+        return Status::OK;
+    }
+
 private:
     static void LaunchGrpcServer(AppToPCApiService *ctx, UINT32 ssl_flag) {
         grpc::EnableDefaultHealthCheckService(true);
@@ -990,6 +1151,22 @@ AntarisReturnCode an_pc_pa_invoke_api(PCToAppClientContext ctx, PCToAppApiId_e a
 
     case e_PC2App_respGetEpsVoltageStopReq:
         ret = internal_ctx->client_api_handle->InvokeProcessRespGetEpsVoltageStopReq(&api_params->get_eps_voltage_stop);
+        break;
+
+    case e_PC2App_respStartSesThermMgmntReq:
+        ret = internal_ctx->client_api_handle->InvokeProcessRespStartSesThermMgmntReq(&api_params->start_ses_therm_mgmnt);
+        break;
+
+    case e_PC2App_respStopSesThermMgmntReq:
+        ret = internal_ctx->client_api_handle->InvokeProcessRespStopSesThermMgmntReq(&api_params->stop_ses_therm_mgmnt);
+        break;
+
+    case e_PC2App_respSesTempReq:
+        ret = internal_ctx->client_api_handle->InvokeProcessRespSesTempReq(&api_params->ses_temp);
+        break;
+
+    case e_PC2App_SesThrmlNtf:
+        ret = internal_ctx->client_api_handle->InvokeProcessSesThrmlNtf(&api_params->ses_thermal_ntf);
         break;
     } // switch api_id
 

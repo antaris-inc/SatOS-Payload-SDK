@@ -60,6 +60,18 @@ class AntarisReturnCode:
 
 
 
+# ENUM: FilePriorities - File priority
+class FilePriorities:
+    FILE_DL_PRIORITY_LOW = 0 # low priority
+    FILE_DL_PRIORITY_NORMAL = 1 # normal priority
+    FILE_DL_PRIORITY_HIGH = 2 # high priority
+    FILE_DL_PRIORITY_IMMEDIATE = 3 # highest priority
+
+
+    reverse_dict = {0 : "FILE_DL_PRIORITY_LOW", 1 : "FILE_DL_PRIORITY_NORMAL", 2 : "FILE_DL_PRIORITY_HIGH", 3 : "FILE_DL_PRIORITY_IMMEDIATE"}
+
+
+
 ## @class: ReqRegisterParams
 ## @brief: Request parameters for registering with Payload Controller
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
@@ -215,10 +227,12 @@ def app_to_peer_RespGetCurrentLocationParams(app_struct):
 ## @brief: Request parameters to stage file download
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
 ## @param: file_path                                       :    File path relative to outbound mount-point      
+## @param: file_priority                                   :    File priority                                   
 class ReqStageFileDownloadParams:
-    def __init__(self, correlation_id, file_path):
+    def __init__(self, correlation_id, file_path, file_priority):
         self.correlation_id = correlation_id
         self.file_path = file_path
+        self.file_priority = file_priority
 
     def __str__(self):
         ret_str = ""
@@ -226,6 +240,8 @@ class ReqStageFileDownloadParams:
         ret_str += str(self.correlation_id) + "\n"
         ret_str += "file_path:\n"
         ret_str += str(self.file_path) + "\n"
+        ret_str += "file_priority:\n"
+        ret_str += str(self.file_priority) + "\n"
 
         return ret_str
 
@@ -235,10 +251,11 @@ class ReqStageFileDownloadParams:
 def peer_to_app_ReqStageFileDownloadParams(peer_struct):
     correlation_id = peer_struct.correlation_id
     file_path = peer_struct.file_path
-    return ReqStageFileDownloadParams(correlation_id, file_path)
+    file_priority = peer_struct.file_priority
+    return ReqStageFileDownloadParams(correlation_id, file_path, file_priority)
 
 def app_to_peer_ReqStageFileDownloadParams(app_struct):
-    return antaris_api_pb2.ReqStageFileDownloadParams(correlation_id = app_struct.correlation_id, file_path = app_struct.file_path)
+    return antaris_api_pb2.ReqStageFileDownloadParams(correlation_id = app_struct.correlation_id, file_path = app_struct.file_path, file_priority = app_struct.file_priority)
 
 ## @class: RespStageFileDownloadParams
 ## @brief: Response parameters for stage file download reqeust
@@ -734,53 +751,74 @@ def peer_to_app_RespGnssEphStartDataReq(peer_struct):
 def app_to_peer_RespGnssEphStartDataReq(app_struct):
     return antaris_api_pb2.RespGnssEphStartDataReq(correlation_id = app_struct.correlation_id, req_status = app_struct.req_status)
 
-## @class: GnssEphData
+## @class: OBC_time
+## @brief: OBC time
+## @param: hour                                            :    hour                                            
+## @param: minute                                          :    Minute                                          
+## @param: millisecond                                     :    millisecond                                     
+## @param: date                                            :    date                                            
+## @param: month                                           :    month                                           
+## @param: year                                            :    year                                            
+class OBC_time:
+    def __init__(self, hour, minute, millisecond, date, month, year):
+        self.hour = hour
+        self.minute = minute
+        self.millisecond = millisecond
+        self.date = date
+        self.month = month
+        self.year = year
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "hour:\n"
+        ret_str += str(self.hour) + "\n"
+        ret_str += "minute:\n"
+        ret_str += str(self.minute) + "\n"
+        ret_str += "millisecond:\n"
+        ret_str += str(self.millisecond) + "\n"
+        ret_str += "date:\n"
+        ret_str += str(self.date) + "\n"
+        ret_str += "month:\n"
+        ret_str += str(self.month) + "\n"
+        ret_str += "year:\n"
+        ret_str += str(self.year) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_OBC_time(peer_struct):
+    hour = peer_struct.hour
+    minute = peer_struct.minute
+    millisecond = peer_struct.millisecond
+    date = peer_struct.date
+    month = peer_struct.month
+    year = peer_struct.year
+    return OBC_time(hour, minute, millisecond, date, month, year)
+
+def app_to_peer_OBC_time(app_struct):
+    return antaris_api_pb2.OBC_time(hour = app_struct.hour, minute = app_struct.minute, millisecond = app_struct.millisecond, date = app_struct.date, month = app_struct.month, year = app_struct.year)
+
+## @class: GpsEphemerisData
 ## @brief: GNSS Eph1/Eph2 data
-## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
 ## @param: gps_fix_time                                    :    GPS time                                        
 ## @param: gps_sys_time                                    :    GPS System time                                 
 ## @param: obc_time                                        :    OBC time                                        
 ## @param: gps_position_ecef                               :    GPS position                                    
 ## @param: gps_velocity_ecef                               :    GPS velocity                                    
 ## @param: gps_validity_flag_pos_vel                       :    GPS validity flag                               
-## @param: adcs_time                                       :    Orbit time                                      
-## @param: position_wrt_eci                                :    Position                                        
-## @param: velocity_wrt_eci                                :    Position                                        
-## @param: position_wrt_ecef                               :    Position                                        
-## @param: velocity_wrt_ecef                               :    Position                                        
-## @param: body_rate                                       :    Body rate                                       
-## @param: attitude                                        :    RPY WRT LVLH                                    
-## @param: adcs_pos                                        :    Lat, Lon, Altitude (ADCS)                       
-## @param: nadir_vector_body                               :    Nadir vector                                    
-## @param: gd_nadir_vector_body                            :    GD Nadir Vector Body                            
-## @param: beta_angle                                      :    Beta Angle                                      
-## @param: validity_flags                                  :    1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity
-class GnssEphData:
-    def __init__(self, correlation_id, gps_fix_time, gps_sys_time, obc_time, gps_position_ecef, gps_velocity_ecef, gps_validity_flag_pos_vel, adcs_time, position_wrt_eci, velocity_wrt_eci, position_wrt_ecef, velocity_wrt_ecef, body_rate, attitude, adcs_pos, nadir_vector_body, gd_nadir_vector_body, beta_angle, validity_flags):
-        self.correlation_id = correlation_id
+class GpsEphemerisData:
+    def __init__(self, gps_fix_time, gps_sys_time, obc_time, gps_position_ecef, gps_velocity_ecef, gps_validity_flag_pos_vel):
         self.gps_fix_time = gps_fix_time
         self.gps_sys_time = gps_sys_time
         self.obc_time = obc_time
         self.gps_position_ecef = gps_position_ecef
         self.gps_velocity_ecef = gps_velocity_ecef
         self.gps_validity_flag_pos_vel = gps_validity_flag_pos_vel
-        self.adcs_time = adcs_time
-        self.position_wrt_eci = position_wrt_eci
-        self.velocity_wrt_eci = velocity_wrt_eci
-        self.position_wrt_ecef = position_wrt_ecef
-        self.velocity_wrt_ecef = velocity_wrt_ecef
-        self.body_rate = body_rate
-        self.attitude = attitude
-        self.adcs_pos = adcs_pos
-        self.nadir_vector_body = nadir_vector_body
-        self.gd_nadir_vector_body = gd_nadir_vector_body
-        self.beta_angle = beta_angle
-        self.validity_flags = validity_flags
 
     def __str__(self):
         ret_str = ""
-        ret_str += "correlation_id:\n"
-        ret_str += str(self.correlation_id) + "\n"
         ret_str += "gps_fix_time:\n"
         ret_str += str(self.gps_fix_time) + "\n"
         ret_str += "gps_sys_time:\n"
@@ -793,26 +831,151 @@ class GnssEphData:
         ret_str += str(self.gps_velocity_ecef) + "\n"
         ret_str += "gps_validity_flag_pos_vel:\n"
         ret_str += str(self.gps_validity_flag_pos_vel) + "\n"
-        ret_str += "adcs_time:\n"
-        ret_str += str(self.adcs_time) + "\n"
-        ret_str += "position_wrt_eci:\n"
-        ret_str += str(self.position_wrt_eci) + "\n"
-        ret_str += "velocity_wrt_eci:\n"
-        ret_str += str(self.velocity_wrt_eci) + "\n"
-        ret_str += "position_wrt_ecef:\n"
-        ret_str += str(self.position_wrt_ecef) + "\n"
-        ret_str += "velocity_wrt_ecef:\n"
-        ret_str += str(self.velocity_wrt_ecef) + "\n"
-        ret_str += "body_rate:\n"
-        ret_str += str(self.body_rate) + "\n"
-        ret_str += "attitude:\n"
-        ret_str += str(self.attitude) + "\n"
-        ret_str += "adcs_pos:\n"
-        ret_str += str(self.adcs_pos) + "\n"
-        ret_str += "nadir_vector_body:\n"
-        ret_str += str(self.nadir_vector_body) + "\n"
-        ret_str += "gd_nadir_vector_body:\n"
-        ret_str += str(self.gd_nadir_vector_body) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_GpsEphemerisData(peer_struct):
+    gps_fix_time = peer_struct.gps_fix_time
+    gps_sys_time = peer_struct.gps_sys_time
+    obc_time = peer_struct.obc_time
+    gps_position_ecef = peer_struct.gps_position_ecef
+    gps_velocity_ecef = peer_struct.gps_velocity_ecef
+    gps_validity_flag_pos_vel = peer_struct.gps_validity_flag_pos_vel
+    return GpsEphemerisData(gps_fix_time, gps_sys_time, obc_time, gps_position_ecef, gps_velocity_ecef, gps_validity_flag_pos_vel)
+
+def app_to_peer_GpsEphemerisData(app_struct):
+    return antaris_api_pb2.GpsEphemerisData(gps_fix_time = app_struct.gps_fix_time, gps_sys_time = app_struct.gps_sys_time, obc_time = app_struct.obc_time, gps_position_ecef = app_struct.gps_position_ecef, gps_velocity_ecef = app_struct.gps_velocity_ecef, gps_validity_flag_pos_vel = app_struct.gps_validity_flag_pos_vel)
+
+## @class: AdcsEphemerisData
+## @brief: ADCS EPH data
+## @param: orbit_time                                      :    ADCS Orbit Propagator/System Time               
+## @param: eci_position_x                                  :    ECI Position X (km)                             
+## @param: eci_position_y                                  :    ECI Position Y (km)                             
+## @param: eci_position_z                                  :    ECI Position Z (km)                             
+## @param: eci_velocity_x                                  :    ECI Velocity X (km/s)                           
+## @param: eci_velocity_y                                  :    ECI Velocity Y (km/s)                           
+## @param: eci_velocity_z                                  :    ECI Velocity Z (km/s)                           
+## @param: ecef_position_x                                 :    ECEF Position X (km)                            
+## @param: ecef_position_y                                 :    ECEF Position Y (km)                            
+## @param: ecef_position_z                                 :    ECEF Position Z (km)                            
+## @param: ecef_velocity_x                                 :    ECEF Velocity X (km/s)                          
+## @param: ecef_velocity_y                                 :    ECEF Velocity Y (km/s)                          
+## @param: ecef_velocity_z                                 :    ECEF Velocity Z (km/s)                          
+## @param: ang_rate_x                                      :    X axis Angular rate (deg/s)                     
+## @param: ang_rate_y                                      :    Y axis Angular rate (deg/s)                     
+## @param: ang_rate_z                                      :    Z axis Angular rate (deg/s)                     
+## @param: att_quat_1                                      :    Attitude Quaternion 1                           
+## @param: att_quat_2                                      :    Attitude Quaternion 2                           
+## @param: att_quat_3                                      :    Attitude Quaternion 3                           
+## @param: att_quat_4                                      :    Attitude Quaternion 4                           
+## @param: latitude                                        :    Latitude (deg)                                  
+## @param: longitude                                       :    Longitude (deg)                                 
+## @param: altitude                                        :    Altitude (km)                                   
+## @param: nadir_vector_x                                  :    X Nadir Vector                                  
+## @param: nadir_vector_y                                  :    Y Nadir Vector                                  
+## @param: nadir_vector_z                                  :    Z Nadir Vector                                  
+## @param: gd_nadir_vector_x                               :    X Geodetic Nadir Vector                         
+## @param: gd_nadir_vector_y                               :    Y Geodetic Nadir Vector                         
+## @param: gd_nadir_vector_z                               :    Z Geodetic Nadir Vector                         
+## @param: beta_angle                                      :    Beta Angle (deg)                                
+## @param: validity_flags                                  :    1-bit flags = Time Validity,Position and Velocity ECI Validity, Position and Velocity ECEF Validity, Rate Validity, Attitude Validity,Lat-Lon-Altitude Validity,Nadir Vector Validity,GD Nadir Vector Validity,Beta Angle Validity
+class AdcsEphemerisData:
+    def __init__(self, orbit_time, eci_position_x, eci_position_y, eci_position_z, eci_velocity_x, eci_velocity_y, eci_velocity_z, ecef_position_x, ecef_position_y, ecef_position_z, ecef_velocity_x, ecef_velocity_y, ecef_velocity_z, ang_rate_x, ang_rate_y, ang_rate_z, att_quat_1, att_quat_2, att_quat_3, att_quat_4, latitude, longitude, altitude, nadir_vector_x, nadir_vector_y, nadir_vector_z, gd_nadir_vector_x, gd_nadir_vector_y, gd_nadir_vector_z, beta_angle, validity_flags):
+        self.orbit_time = orbit_time
+        self.eci_position_x = eci_position_x
+        self.eci_position_y = eci_position_y
+        self.eci_position_z = eci_position_z
+        self.eci_velocity_x = eci_velocity_x
+        self.eci_velocity_y = eci_velocity_y
+        self.eci_velocity_z = eci_velocity_z
+        self.ecef_position_x = ecef_position_x
+        self.ecef_position_y = ecef_position_y
+        self.ecef_position_z = ecef_position_z
+        self.ecef_velocity_x = ecef_velocity_x
+        self.ecef_velocity_y = ecef_velocity_y
+        self.ecef_velocity_z = ecef_velocity_z
+        self.ang_rate_x = ang_rate_x
+        self.ang_rate_y = ang_rate_y
+        self.ang_rate_z = ang_rate_z
+        self.att_quat_1 = att_quat_1
+        self.att_quat_2 = att_quat_2
+        self.att_quat_3 = att_quat_3
+        self.att_quat_4 = att_quat_4
+        self.latitude = latitude
+        self.longitude = longitude
+        self.altitude = altitude
+        self.nadir_vector_x = nadir_vector_x
+        self.nadir_vector_y = nadir_vector_y
+        self.nadir_vector_z = nadir_vector_z
+        self.gd_nadir_vector_x = gd_nadir_vector_x
+        self.gd_nadir_vector_y = gd_nadir_vector_y
+        self.gd_nadir_vector_z = gd_nadir_vector_z
+        self.beta_angle = beta_angle
+        self.validity_flags = validity_flags
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "orbit_time:\n"
+        ret_str += str(self.orbit_time) + "\n"
+        ret_str += "eci_position_x:\n"
+        ret_str += str(self.eci_position_x) + "\n"
+        ret_str += "eci_position_y:\n"
+        ret_str += str(self.eci_position_y) + "\n"
+        ret_str += "eci_position_z:\n"
+        ret_str += str(self.eci_position_z) + "\n"
+        ret_str += "eci_velocity_x:\n"
+        ret_str += str(self.eci_velocity_x) + "\n"
+        ret_str += "eci_velocity_y:\n"
+        ret_str += str(self.eci_velocity_y) + "\n"
+        ret_str += "eci_velocity_z:\n"
+        ret_str += str(self.eci_velocity_z) + "\n"
+        ret_str += "ecef_position_x:\n"
+        ret_str += str(self.ecef_position_x) + "\n"
+        ret_str += "ecef_position_y:\n"
+        ret_str += str(self.ecef_position_y) + "\n"
+        ret_str += "ecef_position_z:\n"
+        ret_str += str(self.ecef_position_z) + "\n"
+        ret_str += "ecef_velocity_x:\n"
+        ret_str += str(self.ecef_velocity_x) + "\n"
+        ret_str += "ecef_velocity_y:\n"
+        ret_str += str(self.ecef_velocity_y) + "\n"
+        ret_str += "ecef_velocity_z:\n"
+        ret_str += str(self.ecef_velocity_z) + "\n"
+        ret_str += "ang_rate_x:\n"
+        ret_str += str(self.ang_rate_x) + "\n"
+        ret_str += "ang_rate_y:\n"
+        ret_str += str(self.ang_rate_y) + "\n"
+        ret_str += "ang_rate_z:\n"
+        ret_str += str(self.ang_rate_z) + "\n"
+        ret_str += "att_quat_1:\n"
+        ret_str += str(self.att_quat_1) + "\n"
+        ret_str += "att_quat_2:\n"
+        ret_str += str(self.att_quat_2) + "\n"
+        ret_str += "att_quat_3:\n"
+        ret_str += str(self.att_quat_3) + "\n"
+        ret_str += "att_quat_4:\n"
+        ret_str += str(self.att_quat_4) + "\n"
+        ret_str += "latitude:\n"
+        ret_str += str(self.latitude) + "\n"
+        ret_str += "longitude:\n"
+        ret_str += str(self.longitude) + "\n"
+        ret_str += "altitude:\n"
+        ret_str += str(self.altitude) + "\n"
+        ret_str += "nadir_vector_x:\n"
+        ret_str += str(self.nadir_vector_x) + "\n"
+        ret_str += "nadir_vector_y:\n"
+        ret_str += str(self.nadir_vector_y) + "\n"
+        ret_str += "nadir_vector_z:\n"
+        ret_str += str(self.nadir_vector_z) + "\n"
+        ret_str += "gd_nadir_vector_x:\n"
+        ret_str += str(self.gd_nadir_vector_x) + "\n"
+        ret_str += "gd_nadir_vector_y:\n"
+        ret_str += str(self.gd_nadir_vector_y) + "\n"
+        ret_str += "gd_nadir_vector_z:\n"
+        ret_str += str(self.gd_nadir_vector_z) + "\n"
         ret_str += "beta_angle:\n"
         ret_str += str(self.beta_angle) + "\n"
         ret_str += "validity_flags:\n"
@@ -823,30 +986,86 @@ class GnssEphData:
     def display(self):
         print(str(self))
 
-def peer_to_app_GnssEphData(peer_struct):
-    correlation_id = peer_struct.correlation_id
-    gps_fix_time = peer_struct.gps_fix_time
-    gps_sys_time = peer_struct.gps_sys_time
-    obc_time = peer_struct.obc_time
-    gps_position_ecef = peer_struct.gps_position_ecef
-    gps_velocity_ecef = peer_struct.gps_velocity_ecef
-    gps_validity_flag_pos_vel = peer_struct.gps_validity_flag_pos_vel
-    adcs_time = peer_struct.adcs_time
-    position_wrt_eci = peer_struct.position_wrt_eci
-    velocity_wrt_eci = peer_struct.velocity_wrt_eci
-    position_wrt_ecef = peer_struct.position_wrt_ecef
-    velocity_wrt_ecef = peer_struct.velocity_wrt_ecef
-    body_rate = peer_struct.body_rate
-    attitude = peer_struct.attitude
-    adcs_pos = peer_struct.adcs_pos
-    nadir_vector_body = peer_struct.nadir_vector_body
-    gd_nadir_vector_body = peer_struct.gd_nadir_vector_body
+def peer_to_app_AdcsEphemerisData(peer_struct):
+    orbit_time = peer_struct.orbit_time
+    eci_position_x = peer_struct.eci_position_x
+    eci_position_y = peer_struct.eci_position_y
+    eci_position_z = peer_struct.eci_position_z
+    eci_velocity_x = peer_struct.eci_velocity_x
+    eci_velocity_y = peer_struct.eci_velocity_y
+    eci_velocity_z = peer_struct.eci_velocity_z
+    ecef_position_x = peer_struct.ecef_position_x
+    ecef_position_y = peer_struct.ecef_position_y
+    ecef_position_z = peer_struct.ecef_position_z
+    ecef_velocity_x = peer_struct.ecef_velocity_x
+    ecef_velocity_y = peer_struct.ecef_velocity_y
+    ecef_velocity_z = peer_struct.ecef_velocity_z
+    ang_rate_x = peer_struct.ang_rate_x
+    ang_rate_y = peer_struct.ang_rate_y
+    ang_rate_z = peer_struct.ang_rate_z
+    att_quat_1 = peer_struct.att_quat_1
+    att_quat_2 = peer_struct.att_quat_2
+    att_quat_3 = peer_struct.att_quat_3
+    att_quat_4 = peer_struct.att_quat_4
+    latitude = peer_struct.latitude
+    longitude = peer_struct.longitude
+    altitude = peer_struct.altitude
+    nadir_vector_x = peer_struct.nadir_vector_x
+    nadir_vector_y = peer_struct.nadir_vector_y
+    nadir_vector_z = peer_struct.nadir_vector_z
+    gd_nadir_vector_x = peer_struct.gd_nadir_vector_x
+    gd_nadir_vector_y = peer_struct.gd_nadir_vector_y
+    gd_nadir_vector_z = peer_struct.gd_nadir_vector_z
     beta_angle = peer_struct.beta_angle
     validity_flags = peer_struct.validity_flags
-    return GnssEphData(correlation_id, gps_fix_time, gps_sys_time, obc_time, gps_position_ecef, gps_velocity_ecef, gps_validity_flag_pos_vel, adcs_time, position_wrt_eci, velocity_wrt_eci, position_wrt_ecef, velocity_wrt_ecef, body_rate, attitude, adcs_pos, nadir_vector_body, gd_nadir_vector_body, beta_angle, validity_flags)
+    return AdcsEphemerisData(orbit_time, eci_position_x, eci_position_y, eci_position_z, eci_velocity_x, eci_velocity_y, eci_velocity_z, ecef_position_x, ecef_position_y, ecef_position_z, ecef_velocity_x, ecef_velocity_y, ecef_velocity_z, ang_rate_x, ang_rate_y, ang_rate_z, att_quat_1, att_quat_2, att_quat_3, att_quat_4, latitude, longitude, altitude, nadir_vector_x, nadir_vector_y, nadir_vector_z, gd_nadir_vector_x, gd_nadir_vector_y, gd_nadir_vector_z, beta_angle, validity_flags)
+
+def app_to_peer_AdcsEphemerisData(app_struct):
+    return antaris_api_pb2.AdcsEphemerisData(orbit_time = app_struct.orbit_time, eci_position_x = app_struct.eci_position_x, eci_position_y = app_struct.eci_position_y, eci_position_z = app_struct.eci_position_z, eci_velocity_x = app_struct.eci_velocity_x, eci_velocity_y = app_struct.eci_velocity_y, eci_velocity_z = app_struct.eci_velocity_z, ecef_position_x = app_struct.ecef_position_x, ecef_position_y = app_struct.ecef_position_y, ecef_position_z = app_struct.ecef_position_z, ecef_velocity_x = app_struct.ecef_velocity_x, ecef_velocity_y = app_struct.ecef_velocity_y, ecef_velocity_z = app_struct.ecef_velocity_z, ang_rate_x = app_struct.ang_rate_x, ang_rate_y = app_struct.ang_rate_y, ang_rate_z = app_struct.ang_rate_z, att_quat_1 = app_struct.att_quat_1, att_quat_2 = app_struct.att_quat_2, att_quat_3 = app_struct.att_quat_3, att_quat_4 = app_struct.att_quat_4, latitude = app_struct.latitude, longitude = app_struct.longitude, altitude = app_struct.altitude, nadir_vector_x = app_struct.nadir_vector_x, nadir_vector_y = app_struct.nadir_vector_y, nadir_vector_z = app_struct.nadir_vector_z, gd_nadir_vector_x = app_struct.gd_nadir_vector_x, gd_nadir_vector_y = app_struct.gd_nadir_vector_y, gd_nadir_vector_z = app_struct.gd_nadir_vector_z, beta_angle = app_struct.beta_angle, validity_flags = app_struct.validity_flags)
+
+## @class: GnssEphData
+## @brief: GNSS Eph1/Eph2 data
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: adcs_eph_data                                   :    ADCS data                                       
+## @param: gps_eph_data                                    :    GPS data                                        
+## @param: adcs_timeout_flag                               :    ADCS flag                                       
+## @param: gps_timeout_flag                                :    GPS flag                                        
+class GnssEphData:
+    def __init__(self, correlation_id, adcs_eph_data, gps_eph_data, adcs_timeout_flag, gps_timeout_flag):
+        self.correlation_id = correlation_id
+        self.adcs_eph_data = adcs_eph_data
+        self.gps_eph_data = gps_eph_data
+        self.adcs_timeout_flag = adcs_timeout_flag
+        self.gps_timeout_flag = gps_timeout_flag
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "adcs_eph_data:\n"
+        ret_str += str(self.adcs_eph_data) + "\n"
+        ret_str += "gps_eph_data:\n"
+        ret_str += str(self.gps_eph_data) + "\n"
+        ret_str += "adcs_timeout_flag:\n"
+        ret_str += str(self.adcs_timeout_flag) + "\n"
+        ret_str += "gps_timeout_flag:\n"
+        ret_str += str(self.gps_timeout_flag) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_GnssEphData(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    adcs_eph_data = peer_struct.adcs_eph_data
+    gps_eph_data = peer_struct.gps_eph_data
+    adcs_timeout_flag = peer_struct.adcs_timeout_flag
+    gps_timeout_flag = peer_struct.gps_timeout_flag
+    return GnssEphData(correlation_id, adcs_eph_data, gps_eph_data, adcs_timeout_flag, gps_timeout_flag)
 
 def app_to_peer_GnssEphData(app_struct):
-    return antaris_api_pb2.GnssEphData(correlation_id = app_struct.correlation_id, gps_fix_time = app_struct.gps_fix_time, gps_sys_time = app_struct.gps_sys_time, obc_time = app_struct.obc_time, gps_position_ecef = app_struct.gps_position_ecef, gps_velocity_ecef = app_struct.gps_velocity_ecef, gps_validity_flag_pos_vel = app_struct.gps_validity_flag_pos_vel, adcs_time = app_struct.adcs_time, position_wrt_eci = app_struct.position_wrt_eci, velocity_wrt_eci = app_struct.velocity_wrt_eci, position_wrt_ecef = app_struct.position_wrt_ecef, velocity_wrt_ecef = app_struct.velocity_wrt_ecef, body_rate = app_struct.body_rate, attitude = app_struct.attitude, adcs_pos = app_struct.adcs_pos, nadir_vector_body = app_struct.nadir_vector_body, gd_nadir_vector_body = app_struct.gd_nadir_vector_body, beta_angle = app_struct.beta_angle, validity_flags = app_struct.validity_flags)
+    return antaris_api_pb2.GnssEphData(correlation_id = app_struct.correlation_id, adcs_eph_data = app_struct.adcs_eph_data, gps_eph_data = app_struct.gps_eph_data, adcs_timeout_flag = app_struct.adcs_timeout_flag, gps_timeout_flag = app_struct.gps_timeout_flag)
 
 ## @class: ReqGetEpsVoltageStopReq
 ## @brief: Stop request get-eps-voltage
@@ -988,6 +1207,234 @@ def peer_to_app_GetEpsVoltage(peer_struct):
 def app_to_peer_GetEpsVoltage(app_struct):
     return antaris_api_pb2.GetEpsVoltage(correlation_id = app_struct.correlation_id, eps_voltage = app_struct.eps_voltage)
 
+## @class: StartSesThermMgmntReq
+## @brief: Start SES thermal management
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: hardware_id                                     :    0:SESA, 1:SESB                                  
+## @param: duration                                        :    duration in ms                                  
+## @param: lower_threshold                                 :    lower temp threshold                            
+## @param: upper_threshold                                 :    upper temp threshold                            
+class StartSesThermMgmntReq:
+    def __init__(self, correlation_id, hardware_id, duration, lower_threshold, upper_threshold):
+        self.correlation_id = correlation_id
+        self.hardware_id = hardware_id
+        self.duration = duration
+        self.lower_threshold = lower_threshold
+        self.upper_threshold = upper_threshold
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "hardware_id:\n"
+        ret_str += str(self.hardware_id) + "\n"
+        ret_str += "duration:\n"
+        ret_str += str(self.duration) + "\n"
+        ret_str += "lower_threshold:\n"
+        ret_str += str(self.lower_threshold) + "\n"
+        ret_str += "upper_threshold:\n"
+        ret_str += str(self.upper_threshold) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_StartSesThermMgmntReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    hardware_id = peer_struct.hardware_id
+    duration = peer_struct.duration
+    lower_threshold = peer_struct.lower_threshold
+    upper_threshold = peer_struct.upper_threshold
+    return StartSesThermMgmntReq(correlation_id, hardware_id, duration, lower_threshold, upper_threshold)
+
+def app_to_peer_StartSesThermMgmntReq(app_struct):
+    return antaris_api_pb2.StartSesThermMgmntReq(correlation_id = app_struct.correlation_id, hardware_id = app_struct.hardware_id, duration = app_struct.duration, lower_threshold = app_struct.lower_threshold, upper_threshold = app_struct.upper_threshold)
+
+## @class: RespStartSesThermMgmntReq
+## @brief: Response to Start SES thermal management
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: req_status                                      :    0: success, 1: fail                             
+class RespStartSesThermMgmntReq:
+    def __init__(self, correlation_id, req_status):
+        self.correlation_id = correlation_id
+        self.req_status = req_status
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "req_status:\n"
+        ret_str += str(self.req_status) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_RespStartSesThermMgmntReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    req_status = peer_struct.req_status
+    return RespStartSesThermMgmntReq(correlation_id, req_status)
+
+def app_to_peer_RespStartSesThermMgmntReq(app_struct):
+    return antaris_api_pb2.RespStartSesThermMgmntReq(correlation_id = app_struct.correlation_id, req_status = app_struct.req_status)
+
+## @class: StopSesThermMgmntReq
+## @brief: Stop SES thermal management
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: hardware_id                                     :    0:SESA, 1:SESB                                  
+class StopSesThermMgmntReq:
+    def __init__(self, correlation_id, hardware_id):
+        self.correlation_id = correlation_id
+        self.hardware_id = hardware_id
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "hardware_id:\n"
+        ret_str += str(self.hardware_id) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_StopSesThermMgmntReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    hardware_id = peer_struct.hardware_id
+    return StopSesThermMgmntReq(correlation_id, hardware_id)
+
+def app_to_peer_StopSesThermMgmntReq(app_struct):
+    return antaris_api_pb2.StopSesThermMgmntReq(correlation_id = app_struct.correlation_id, hardware_id = app_struct.hardware_id)
+
+## @class: RespStopSesThermMgmntReq
+## @brief: Response to Stop SES thermal management
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: req_status                                      :    0: success, 1: fail                             
+class RespStopSesThermMgmntReq:
+    def __init__(self, correlation_id, req_status):
+        self.correlation_id = correlation_id
+        self.req_status = req_status
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "req_status:\n"
+        ret_str += str(self.req_status) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_RespStopSesThermMgmntReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    req_status = peer_struct.req_status
+    return RespStopSesThermMgmntReq(correlation_id, req_status)
+
+def app_to_peer_RespStopSesThermMgmntReq(app_struct):
+    return antaris_api_pb2.RespStopSesThermMgmntReq(correlation_id = app_struct.correlation_id, req_status = app_struct.req_status)
+
+## @class: SesTempReq
+## @brief: Request SES temperature
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: hardware_id                                     :    0:SESA, 1:SESB                                  
+class SesTempReq:
+    def __init__(self, correlation_id, hardware_id):
+        self.correlation_id = correlation_id
+        self.hardware_id = hardware_id
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "hardware_id:\n"
+        ret_str += str(self.hardware_id) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_SesTempReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    hardware_id = peer_struct.hardware_id
+    return SesTempReq(correlation_id, hardware_id)
+
+def app_to_peer_SesTempReq(app_struct):
+    return antaris_api_pb2.SesTempReq(correlation_id = app_struct.correlation_id, hardware_id = app_struct.hardware_id)
+
+## @class: RespSesTempReqParams
+## @brief: Response to SES temperature request
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: temp                                            :    in Celsius                                      
+## @param: heater_pwr_status                               :    0:OFF, 1:ON                                     
+class RespSesTempReqParams:
+    def __init__(self, correlation_id, temp, heater_pwr_status):
+        self.correlation_id = correlation_id
+        self.temp = temp
+        self.heater_pwr_status = heater_pwr_status
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "temp:\n"
+        ret_str += str(self.temp) + "\n"
+        ret_str += "heater_pwr_status:\n"
+        ret_str += str(self.heater_pwr_status) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_RespSesTempReqParams(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    temp = peer_struct.temp
+    heater_pwr_status = peer_struct.heater_pwr_status
+    return RespSesTempReqParams(correlation_id, temp, heater_pwr_status)
+
+def app_to_peer_RespSesTempReqParams(app_struct):
+    return antaris_api_pb2.RespSesTempReqParams(correlation_id = app_struct.correlation_id, temp = app_struct.temp, heater_pwr_status = app_struct.heater_pwr_status)
+
+## @class: SesThermalStatusNtf
+## @brief: SES thermal notification from PC
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: heater_pwr_status                               :    0:OFF, 1:ON                                     
+## @param: temp                                            :    in Celsius                                      
+class SesThermalStatusNtf:
+    def __init__(self, correlation_id, heater_pwr_status, temp):
+        self.correlation_id = correlation_id
+        self.heater_pwr_status = heater_pwr_status
+        self.temp = temp
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "heater_pwr_status:\n"
+        ret_str += str(self.heater_pwr_status) + "\n"
+        ret_str += "temp:\n"
+        ret_str += str(self.temp) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_SesThermalStatusNtf(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    heater_pwr_status = peer_struct.heater_pwr_status
+    temp = peer_struct.temp
+    return SesThermalStatusNtf(correlation_id, heater_pwr_status, temp)
+
+def app_to_peer_SesThermalStatusNtf(app_struct):
+    return antaris_api_pb2.SesThermalStatusNtf(correlation_id = app_struct.correlation_id, heater_pwr_status = app_struct.heater_pwr_status, temp = app_struct.temp)
+
 ## @class: AntarisApiCallbackFuncList
 ## @brief: Callback-functions registration structure for channel creation
 ## @param: start_sequence                                  :    callback handler for start-sequence             
@@ -1004,8 +1451,12 @@ def app_to_peer_GetEpsVoltage(app_struct):
 ## @param: process_response_get_eps_voltage_stop           :    callback handler for get EPS voltage data stop  
 ## @param: process_response_get_eps_voltage_start          :    callback handler for get EPS voltage data start 
 ## @param: process_cb_get_eps_voltage                      :    callback handler for EPS voltage data           
+## @param: process_response_start_ses_therm_mgmnt_req      :    callback handler for start SES thermal management req response
+## @param: process_response_stop_ses_therm_mgmnt_req       :    callback handler for stop SES thermal management req response
+## @param: process_response_ses_temp_req                   :    callback handler for SES temperature req response
+## @param: process_cb_ses_thrml_ntf                        :    callback handler for SES thermal nofirication   
 class AntarisApiCallbackFuncList:
-    def __init__(self, start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage):
+    def __init__(self, start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req, process_cb_ses_thrml_ntf):
         self.start_sequence = start_sequence
         self.shutdown_app = shutdown_app
         self.process_health_check = process_health_check
@@ -1020,6 +1471,10 @@ class AntarisApiCallbackFuncList:
         self.process_response_get_eps_voltage_stop = process_response_get_eps_voltage_stop
         self.process_response_get_eps_voltage_start = process_response_get_eps_voltage_start
         self.process_cb_get_eps_voltage = process_cb_get_eps_voltage
+        self.process_response_start_ses_therm_mgmnt_req = process_response_start_ses_therm_mgmnt_req
+        self.process_response_stop_ses_therm_mgmnt_req = process_response_stop_ses_therm_mgmnt_req
+        self.process_response_ses_temp_req = process_response_ses_temp_req
+        self.process_cb_ses_thrml_ntf = process_cb_ses_thrml_ntf
 
     def __str__(self):
         ret_str = ""
@@ -1051,6 +1506,14 @@ class AntarisApiCallbackFuncList:
         ret_str += str(self.process_response_get_eps_voltage_start) + "\n"
         ret_str += "process_cb_get_eps_voltage:\n"
         ret_str += str(self.process_cb_get_eps_voltage) + "\n"
+        ret_str += "process_response_start_ses_therm_mgmnt_req:\n"
+        ret_str += str(self.process_response_start_ses_therm_mgmnt_req) + "\n"
+        ret_str += "process_response_stop_ses_therm_mgmnt_req:\n"
+        ret_str += str(self.process_response_stop_ses_therm_mgmnt_req) + "\n"
+        ret_str += "process_response_ses_temp_req:\n"
+        ret_str += str(self.process_response_ses_temp_req) + "\n"
+        ret_str += "process_cb_ses_thrml_ntf:\n"
+        ret_str += str(self.process_cb_ses_thrml_ntf) + "\n"
 
         return ret_str
 
@@ -1072,10 +1535,14 @@ def peer_to_app_AntarisApiCallbackFuncList(peer_struct):
     process_response_get_eps_voltage_stop = peer_struct.process_response_get_eps_voltage_stop
     process_response_get_eps_voltage_start = peer_struct.process_response_get_eps_voltage_start
     process_cb_get_eps_voltage = peer_struct.process_cb_get_eps_voltage
-    return AntarisApiCallbackFuncList(start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage)
+    process_response_start_ses_therm_mgmnt_req = peer_struct.process_response_start_ses_therm_mgmnt_req
+    process_response_stop_ses_therm_mgmnt_req = peer_struct.process_response_stop_ses_therm_mgmnt_req
+    process_response_ses_temp_req = peer_struct.process_response_ses_temp_req
+    process_cb_ses_thrml_ntf = peer_struct.process_cb_ses_thrml_ntf
+    return AntarisApiCallbackFuncList(start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req, process_cb_ses_thrml_ntf)
 
 def app_to_peer_AntarisApiCallbackFuncList(app_struct):
-    return antaris_api_pb2.AntarisApiCallbackFuncList(start_sequence = app_struct.start_sequence, shutdown_app = app_struct.shutdown_app, process_health_check = app_struct.process_health_check, process_response_register = app_struct.process_response_register, process_response_get_current_location = app_struct.process_response_get_current_location, process_response_stage_file_download = app_struct.process_response_stage_file_download, process_response_payload_power_control = app_struct.process_response_payload_power_control, req_payload_metrics = app_struct.req_payload_metrics, process_response_gnss_eph_stop = app_struct.process_response_gnss_eph_stop, process_response_gnss_eph_start = app_struct.process_response_gnss_eph_start, process_cb_gnss_eph_data = app_struct.process_cb_gnss_eph_data, process_response_get_eps_voltage_stop = app_struct.process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start = app_struct.process_response_get_eps_voltage_start, process_cb_get_eps_voltage = app_struct.process_cb_get_eps_voltage)
+    return antaris_api_pb2.AntarisApiCallbackFuncList(start_sequence = app_struct.start_sequence, shutdown_app = app_struct.shutdown_app, process_health_check = app_struct.process_health_check, process_response_register = app_struct.process_response_register, process_response_get_current_location = app_struct.process_response_get_current_location, process_response_stage_file_download = app_struct.process_response_stage_file_download, process_response_payload_power_control = app_struct.process_response_payload_power_control, req_payload_metrics = app_struct.req_payload_metrics, process_response_gnss_eph_stop = app_struct.process_response_gnss_eph_stop, process_response_gnss_eph_start = app_struct.process_response_gnss_eph_start, process_cb_gnss_eph_data = app_struct.process_cb_gnss_eph_data, process_response_get_eps_voltage_stop = app_struct.process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start = app_struct.process_response_get_eps_voltage_start, process_cb_get_eps_voltage = app_struct.process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req = app_struct.process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req = app_struct.process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req = app_struct.process_response_ses_temp_req, process_cb_ses_thrml_ntf = app_struct.process_cb_ses_thrml_ntf)
 
 ## @class: AntarisReturnType
 ## @brief: Wrapper structure for AntarisReturnCode
