@@ -156,14 +156,17 @@ class Controller:
         if ctx.params.lower() == "stop":
             logger.info("Sending Get Eps Voltage telemetry stop request")
             resp = ctx.client.get_eps_voltage_stop_req()
-            if (resp == 0):
+            if (resp.req_status >= 0):
                 logger.info("Get Eps Voltage telemetry stop request success")
             else:
                 logger.info("Get Eps Voltage telemetry stop request failed")
         elif ctx.params.lower() == "start":
             logger.info("Sending Get Eps Voltage telemetry start request")
             resp = ctx.client.get_eps_voltage_start_req(periodicity_in_ms)
-            logger.info(f"Current voltage = {resp}")
+            if (resp.req_status >= 0):
+                logger.info("Get Eps Voltage telemetry start request success")
+            else:
+                logger.info("Get Eps Voltage telemetry start request failed")
         else:
             logger.info("Incorrect parameters. Parameter can be 'stop' or 'start'")
 
