@@ -301,6 +301,8 @@ void handle_StageFile(mythreadState_t *mythread)
 
     printf("Info: Downloading file = %s \n", download_file_params.file_path);
 
+    download_file_params.file_priority = FILE_DL_PRIORITY_NORMAL;
+    download_file_params.radio_id = FTM_SDR_XBAND;
     // Staging file
     ret = api_pa_pc_stage_file_download(channel, &download_file_params);
 

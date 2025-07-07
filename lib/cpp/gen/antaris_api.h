@@ -83,6 +83,17 @@ void displayFilePriorities(void *obj);
 void app_to_peer_FilePriorities(void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_FilePriorities(void *ptr_src_peer, void *ptr_dst_app);
 
+/// @enum FtmRadioType
+/// @brief File priority
+typedef enum FtmRadioType {
+    FTM_SDR_SBAND                    = 0,                               ///< S-band file downlink
+    FTM_SDR_XBAND                    = 1,                               ///< X-band file downlink
+} FtmRadioType;
+
+void displayFtmRadioType(void *obj);
+void app_to_peer_FtmRadioType(void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_FtmRadioType(void *ptr_src_peer, void *ptr_dst_app);
+
 struct ReqRegisterParams;
 typedef struct ReqRegisterParams ReqRegisterParams;
 
@@ -446,6 +457,7 @@ struct ReqStageFileDownloadParams {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     INT8                                            file_path[256];                                  ///< @var File path relative to outbound mount-point
     FilePriorities                                  file_priority;                                   ///< @var File priority
+    FtmRadioType                                    radio_id;                                        ///< @var Radio Type for FTM downlink 
 };
 
 void displayReqStageFileDownloadParams(const void *obj);

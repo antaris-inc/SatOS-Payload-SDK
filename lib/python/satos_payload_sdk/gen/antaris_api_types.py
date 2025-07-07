@@ -72,6 +72,16 @@ class FilePriorities:
 
 
 
+# ENUM: FtmRadioType - File priority
+class FtmRadioType:
+    FTM_SDR_SBAND = 0 # S-band file downlink
+    FTM_SDR_XBAND = 1 # X-band file downlink
+
+
+    reverse_dict = {0 : "FTM_SDR_SBAND", 1 : "FTM_SDR_XBAND"}
+
+
+
 ## @class: ReqRegisterParams
 ## @brief: Request parameters for registering with Payload Controller
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
@@ -228,11 +238,13 @@ def app_to_peer_RespGetCurrentLocationParams(app_struct):
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
 ## @param: file_path                                       :    File path relative to outbound mount-point      
 ## @param: file_priority                                   :    File priority                                   
+## @param: radio_id                                        :    Radio Type for FTM downlink                     
 class ReqStageFileDownloadParams:
-    def __init__(self, correlation_id, file_path, file_priority):
+    def __init__(self, correlation_id, file_path, file_priority, radio_id):
         self.correlation_id = correlation_id
         self.file_path = file_path
         self.file_priority = file_priority
+        self.radio_id = radio_id
 
     def __str__(self):
         ret_str = ""
@@ -242,6 +254,8 @@ class ReqStageFileDownloadParams:
         ret_str += str(self.file_path) + "\n"
         ret_str += "file_priority:\n"
         ret_str += str(self.file_priority) + "\n"
+        ret_str += "radio_id:\n"
+        ret_str += str(self.radio_id) + "\n"
 
         return ret_str
 
@@ -252,10 +266,11 @@ def peer_to_app_ReqStageFileDownloadParams(peer_struct):
     correlation_id = peer_struct.correlation_id
     file_path = peer_struct.file_path
     file_priority = peer_struct.file_priority
-    return ReqStageFileDownloadParams(correlation_id, file_path, file_priority)
+    radio_id = peer_struct.radio_id
+    return ReqStageFileDownloadParams(correlation_id, file_path, file_priority, radio_id)
 
 def app_to_peer_ReqStageFileDownloadParams(app_struct):
-    return antaris_api_pb2.ReqStageFileDownloadParams(correlation_id = app_struct.correlation_id, file_path = app_struct.file_path, file_priority = app_struct.file_priority)
+    return antaris_api_pb2.ReqStageFileDownloadParams(correlation_id = app_struct.correlation_id, file_path = app_struct.file_path, file_priority = app_struct.file_priority, radio_id = app_struct.radio_id)
 
 ## @class: RespStageFileDownloadParams
 ## @brief: Response parameters for stage file download reqeust

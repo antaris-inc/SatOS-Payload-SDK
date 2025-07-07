@@ -50,6 +50,11 @@
             <EnumValue name="FILE_DL_PRIORITY_IMMEDIATE" value="3" description="highest priority"/>
         </Enum>
 
+        <Enum name="FtmRadioType" description="File priority">
+            <EnumValue name="FTM_SDR_SBAND" value="0" description="S-band file downlink"/>
+            <EnumValue name="FTM_SDR_XBAND" value="1" description="X-band file downlink"/>
+        </Enum>
+
         <Struct name="AntarisSdkVersion" description="SDK version specification" consumed_by="Peer">
             <Field name="major" type="UINT16" sequence="1" description="major revision number"/>
             <Field name="minor" type="UINT16" sequence="2" description="minor revision number"/>
@@ -88,6 +93,7 @@
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="file_path" type="INT8" sequence="2" description="File path relative to outbound mount-point" array="256"/>
             <Field name="file_priority" type="FilePriorities" sequence="3" description="File priority"/>
+            <Field name="radio_id" type="FtmRadioType" sequence="4" description="Radio Type for FTM downlink "/>
         </Struct>
 
         <Struct name="RespStageFileDownloadParams" description="Response parameters for stage file download reqeust">

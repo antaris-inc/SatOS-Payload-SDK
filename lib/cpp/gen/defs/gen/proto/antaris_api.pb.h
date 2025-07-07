@@ -277,6 +277,31 @@ inline bool FilePriorities_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<FilePriorities>(
     FilePriorities_descriptor(), name, value);
 }
+enum FtmRadioType : int {
+  FTM_SDR_SBAND = 0,
+  FTM_SDR_XBAND = 1,
+  FtmRadioType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  FtmRadioType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool FtmRadioType_IsValid(int value);
+constexpr FtmRadioType FtmRadioType_MIN = FTM_SDR_SBAND;
+constexpr FtmRadioType FtmRadioType_MAX = FTM_SDR_XBAND;
+constexpr int FtmRadioType_ARRAYSIZE = FtmRadioType_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* FtmRadioType_descriptor();
+template<typename T>
+inline const std::string& FtmRadioType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, FtmRadioType>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function FtmRadioType_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    FtmRadioType_descriptor(), enum_t_value);
+}
+inline bool FtmRadioType_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, FtmRadioType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<FtmRadioType>(
+    FtmRadioType_descriptor(), name, value);
+}
 // ===================================================================
 
 class AntarisSdkVersion final :
@@ -1302,6 +1327,7 @@ class ReqStageFileDownloadParams final :
     kFilePathFieldNumber = 2,
     kCorrelationIdFieldNumber = 1,
     kFilePriorityFieldNumber = 3,
+    kRadioIdFieldNumber = 4,
   };
   // string file_path = 2;
   void clear_file_path();
@@ -1335,6 +1361,15 @@ class ReqStageFileDownloadParams final :
   void _internal_set_file_priority(::antaris_api_peer_to_peer::FilePriorities value);
   public:
 
+  // .antaris_api_peer_to_peer.FtmRadioType radio_id = 4;
+  void clear_radio_id();
+  ::antaris_api_peer_to_peer::FtmRadioType radio_id() const;
+  void set_radio_id(::antaris_api_peer_to_peer::FtmRadioType value);
+  private:
+  ::antaris_api_peer_to_peer::FtmRadioType _internal_radio_id() const;
+  void _internal_set_radio_id(::antaris_api_peer_to_peer::FtmRadioType value);
+  public:
+
   // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.ReqStageFileDownloadParams)
  private:
   class _Internal;
@@ -1345,6 +1380,7 @@ class ReqStageFileDownloadParams final :
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr file_path_;
   int32_t correlation_id_;
   int file_priority_;
+  int radio_id_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
 };
@@ -7901,6 +7937,26 @@ inline void ReqStageFileDownloadParams::set_file_priority(::antaris_api_peer_to_
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ReqStageFileDownloadParams.file_priority)
 }
 
+// .antaris_api_peer_to_peer.FtmRadioType radio_id = 4;
+inline void ReqStageFileDownloadParams::clear_radio_id() {
+  radio_id_ = 0;
+}
+inline ::antaris_api_peer_to_peer::FtmRadioType ReqStageFileDownloadParams::_internal_radio_id() const {
+  return static_cast< ::antaris_api_peer_to_peer::FtmRadioType >(radio_id_);
+}
+inline ::antaris_api_peer_to_peer::FtmRadioType ReqStageFileDownloadParams::radio_id() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.ReqStageFileDownloadParams.radio_id)
+  return _internal_radio_id();
+}
+inline void ReqStageFileDownloadParams::_internal_set_radio_id(::antaris_api_peer_to_peer::FtmRadioType value) {
+  
+  radio_id_ = value;
+}
+inline void ReqStageFileDownloadParams::set_radio_id(::antaris_api_peer_to_peer::FtmRadioType value) {
+  _internal_set_radio_id(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ReqStageFileDownloadParams.radio_id)
+}
+
 // -------------------------------------------------------------------
 
 // RespStageFileDownloadParams
@@ -10862,6 +10918,11 @@ template <> struct is_proto_enum< ::antaris_api_peer_to_peer::FilePriorities> : 
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::antaris_api_peer_to_peer::FilePriorities>() {
   return ::antaris_api_peer_to_peer::FilePriorities_descriptor();
+}
+template <> struct is_proto_enum< ::antaris_api_peer_to_peer::FtmRadioType> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::antaris_api_peer_to_peer::FtmRadioType>() {
+  return ::antaris_api_peer_to_peer::FtmRadioType_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE
