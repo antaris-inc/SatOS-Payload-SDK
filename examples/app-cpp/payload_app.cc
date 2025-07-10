@@ -38,7 +38,7 @@
 #define LogLocation_IDX                 2
 #define TestGPIO_Sequence_ID            "TestGPIO"
 #define TestGPIO_Sequence_IDX           3
-#define StageFile_Sequence_ID           "StageFile"
+#define StageFile_Sequence_ID           "GetEpsVoltage"
 #define StageFile_Sequence_IDX          4
 #define TestCANBus_Sequence_ID          "TestCANBus"
 #define TestCANBus_Sequence_IDX         5
@@ -281,14 +281,14 @@ void handle_StageFile(mythreadState_t *mythread)
     
     printf("\n Handling sequence: StageFile! \n");
 
-    filename_size = strnlen(STAGE_FILE_DOWNLOAD_DIR, MAX_FILE_OR_PROP_LEN_NAME) + strnlen(STAGE_FILE_NAME, MAX_FILE_OR_PROP_LEN_NAME);
+    filename_size = strnlen(STAGE_FILE_NAME, MAX_FILE_OR_PROP_LEN_NAME);
 
     if (filename_size > MAX_FILE_OR_PROP_LEN_NAME) {
         printf("Error: Stagefile path can not be greater than %d \n", MAX_FILE_OR_PROP_LEN_NAME);
         goto exit_sequence;
     }
 
-    sprintf(download_file_params.file_path, "%s%s", STAGE_FILE_DOWNLOAD_DIR, STAGE_FILE_NAME);
+    sprintf(download_file_params.file_path, "%s", STAGE_FILE_NAME);
     
     // Adding dummy data in file
     fp = fopen(download_file_params.file_path, "w");
@@ -302,7 +302,7 @@ void handle_StageFile(mythreadState_t *mythread)
     printf("Info: Downloading file = %s \n", download_file_params.file_path);
 
     download_file_params.file_priority = FILE_DL_PRIORITY_NORMAL;
-    download_file_params.radio_id = FTM_SDR_XBAND;
+    download_file_params.file_dl_band = FTM_SDR_XBAND;
     // Staging file
     ret = api_pa_pc_stage_file_download(channel, &download_file_params);
 
