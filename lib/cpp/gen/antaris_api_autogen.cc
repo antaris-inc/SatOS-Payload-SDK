@@ -305,8 +305,8 @@ displayReqStageFileDownloadParams(const void *obj)
 
     printf("file_priority ==>\n");
     displayFilePriorities((void *)&p->file_priority);
-    printf("radio_id ==>\n");
-    displayFtmRadioType((void *)&p->radio_id);
+    printf("file_dl_band ==>\n");
+    displayFileDlRadioType((void *)&p->file_dl_band);
 
 }
 
@@ -318,7 +318,7 @@ app_to_peer_ReqStageFileDownloadParams(const void *ptr_src_app, void *ptr_dst_pe
 
     UINT32 __tmp_correlation_id = 0;
     FilePriorities __tmp_file_priority;
-    FtmRadioType __tmp_radio_id;
+    FileDlRadioType __tmp_file_dl_band;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -330,9 +330,9 @@ app_to_peer_ReqStageFileDownloadParams(const void *ptr_src_app, void *ptr_dst_pe
 
     dst->set_file_priority((::antaris_api_peer_to_peer::FilePriorities)__tmp_file_priority);
 
-    app_to_peer_FtmRadioType(&src->radio_id, &__tmp_radio_id); // radio_id
+    app_to_peer_FileDlRadioType(&src->file_dl_band, &__tmp_file_dl_band); // file_dl_band
 
-    dst->set_radio_id((::antaris_api_peer_to_peer::FtmRadioType)__tmp_radio_id);
+    dst->set_file_dl_band((::antaris_api_peer_to_peer::FileDlRadioType)__tmp_file_dl_band);
 
 
 }
@@ -351,7 +351,7 @@ peer_to_app_ReqStageFileDownloadParams(const void *ptr_src_peer, void *ptr_dst_a
     }
     strncpy(&dst->file_path[0], src->file_path().c_str(), 256);
     dst->file_priority = (FilePriorities)src->file_priority();
-    dst->radio_id = (FtmRadioType)src->radio_id();
+    dst->file_dl_band = (FileDlRadioType)src->file_dl_band();
 
 }
 
@@ -2388,16 +2388,16 @@ app_to_peer_FilePriorities(void *ptr_src_app, void *ptr_dst_peer)
 }
 
 void
-displayFtmRadioType(void *obj)
+displayFileDlRadioType(void *obj)
 {
-    printf("%s => %d\n", "FtmRadioType", *(INT32 *)obj);
+    printf("%s => %d\n", "FileDlRadioType", *(INT32 *)obj);
 }
 
 void
-app_to_peer_FtmRadioType(void *ptr_src_app, void *ptr_dst_peer)
+app_to_peer_FileDlRadioType(void *ptr_src_app, void *ptr_dst_peer)
 {
-    FtmRadioType *src = (FtmRadioType *)ptr_src_app;
-    FtmRadioType *dst = (FtmRadioType *)ptr_dst_peer;
+    FileDlRadioType *src = (FileDlRadioType *)ptr_src_app;
+    FileDlRadioType *dst = (FileDlRadioType *)ptr_dst_peer;
 
     *dst = *src;
 
