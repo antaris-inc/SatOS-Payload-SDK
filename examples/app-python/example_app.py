@@ -156,14 +156,17 @@ class Controller:
         if ctx.params.lower() == "stop":
             logger.info("Sending Get Eps Voltage telemetry stop request")
             resp = ctx.client.get_eps_voltage_stop_req()
-            if (resp == 0):
+            if (resp.req_status >= 0):
                 logger.info("Get Eps Voltage telemetry stop request success")
             else:
                 logger.info("Get Eps Voltage telemetry stop request failed")
         elif ctx.params.lower() == "start":
             logger.info("Sending Get Eps Voltage telemetry start request")
             resp = ctx.client.get_eps_voltage_start_req(periodicity_in_ms)
-            logger.info(f"Current voltage = {resp}")
+            if (resp.req_status >= 0):
+                logger.info("Get Eps Voltage telemetry start request success")
+            else:
+                logger.info("Get Eps Voltage telemetry start request failed")
         else:
             logger.info("Incorrect parameters. Parameter can be 'stop' or 'start'")
 
@@ -290,7 +293,7 @@ class Controller:
         # 'FILE_DL_PRIORITY_NORMAL': 1,
         # 'FILE_DL_PRIORITY_HIGH': 2,
         # 'FILE_DL_PRIORITY_IMMEDIATE': 3,
-        resp = ctx.client.stage_file_download(g_StageFileName, api_types.FilePriorities.FILE_DL_PRIORITY_NORMAL)
+        resp = ctx.client.stage_file_download(g_StageFileName, api_types.FilePriorities.FILE_DL_PRIORITY_NORMAL, api_types.FileDlRadioType.file_dl_band)
         if resp == ValueError:
             print("Error in staging file")
         else:
