@@ -40,7 +40,7 @@
 #define TestGPIO_Sequence_IDX           3
 #define StageFile_Sequence_ID           "GetEpsVoltage"
 #define StageFile_Sequence_IDX          4
-#define TestCANBus_Sequence_ID          "TestCANBus"
+#define TestCANBus_Sequence_ID          "StageFile"
 #define TestCANBus_Sequence_IDX         5
 #define EpsVoltageTelemetry_ID          "EpsVoltageTelemetry"
 #define EpsVoltageTelemetry_IDX         6
