@@ -42,9 +42,11 @@
 #define StageFile_Sequence_IDX          4
 #define TestCANBus_Sequence_ID          "TestCANBus"
 #define TestCANBus_Sequence_IDX         5
-#define EpsVoltageTelemetry_ID          "EpsVoltageTelemetry"
+#define EpsVoltageTelemetry_ID          "EpsVoltageTm"
 #define EpsVoltageTelemetry_IDX         6
-#define SEQUENCE_ID_MAX                 7
+#define GnssDataTelemetry_ID            "GnssDataTm"
+#define GnssDataTelemetry_IDX           7
+#define SEQUENCE_ID_MAX                 8
 
 #define APP_STATE_ACTIVE                0  // Application State : Good (0), Error (non-Zero)
 
@@ -198,6 +200,50 @@ void handle_Eps_Voltage_Telemetry_Request(mythreadState_t *mythread){
     else{
         printf("Incorrect parameters. Parameter can be 'stop' or 'start'");
     }
+}
+
+void handle_gnss_data_Telemetry_Request(mythreadState_t *mythread){
+    AntarisReturnCode ret;
+    char *seq_params_lower = (char *)malloc(strlen(mythread->seq_params) + 1);
+    UINT16 periodicity_in_ms = 2000;    // Periodicity = 0 indicates one time GNSS EPH data. Max is 1 minute
+    INT8 eph2_enable = 1;
+
+    for(int i = 0;mythread->seq_params[i] != '\0';i++){
+        seq_params_lower[i] = tolower(mythread->seq_params[i]);
+    }
+    seq_params_lower[strlen(mythread->seq_params)] = '\0';
+    if(strcmp(seq_params_lower, "stop") == 0){
+        printf("\n Sending GNSS EPH data Telemetry stop request \n");
+
+        ReqGnssEphStopDataReq req_gnss_eph_stop_data_request = {0};
+        req_gnss_eph_stop_data_request.correlation_id = mythread->correlation_id;
+        ret = api_pa_pc_gnss_eph_stop_req(channel,&req_gnss_eph_stop_data_request);
+        if(ret == An_SUCCESS){
+            printf("GNSS EPH data Telemetry stop request success, ret %d\n",ret);
+        }
+        else{
+            fprintf(stderr, " GNSS EPH data Telemety stop request failed, ret %d\n", ret);
+        }
+    }
+    else if(strcmp(seq_params_lower, "start") == 0){
+        printf("\n Sending GNSS EPH data Telemetry start request \n");
+        ReqGnssEphStartDataReq req_gnss_eph_start_data_request = {0};
+        req_gnss_eph_start_data_request.correlation_id = mythread->correlation_id;
+        req_gnss_eph_start_data_request.periodicity_in_ms - periodicity_in_ms;
+        req_gnss_eph_start_data_request.eph2_enable = eph2_enable;
+        ret = api_pa_pc_gnss_eph_start_req(channel,&req_gnss_eph_start_data_request);
+        if(ret == An_SUCCESS){
+            printf("GNSS EPH data Telemetry start request success, ret %d\n",ret);
+        }
+        else{
+            fprintf(stderr, " GNSS EPH data Telemetry start request failed, ret %d\n", ret);
+        }
+    }
+    else{
+        printf("Incorrect parameters. Parameter can be 'stop' or 'start'");
+    }
+
+
 }
 
 void handle_TestGPIO(mythreadState_t *mythread)
@@ -500,6 +546,11 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
         printf("\t => %d\n", EpsVoltageTelemetry_IDX);
         return EpsVoltageTelemetry_IDX;
     }
+    else if (strcmp(sequence_string, GnssDataTelemetry_ID) == 0) {
+        printf("\t => %d\n", GnssDataTelemetry_IDX);
+        return GnssDataTelemetry_IDX;
+    }
+
 
     printf("Unknown sequence, returning -1\n");
     return -1;
@@ -647,6 +698,86 @@ AntarisReturnCode process_response_get_eps_voltage(GetEpsVoltage *get_eps_voltag
     return An_SUCCESS;
 }
 
+AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
+{
+    printf("process_response_gnss_eph_data\n");
+    if (debug) {
+        displayGnssEphData(gnss_eph_data);
+    }
+
+    const char *fields[] = {
+    "Time Validity",
+    "ECI Position Validity",
+    "ECI Velocity Validity",
+    "ECEF Position Validity",
+    "ECEF Velocity Validity",
+    "Angular Rate Validity",
+    "Attitude Quaternion Validity",
+    "Lat-Lon-Altitude Validity",
+    "Nadir Vector Validity",
+    "Geodetric Nadir Vector Validity",
+    "Beta Angle Validity"
+};
+
+    if(gnss_eph_data->gps_timeout_flag == 1){
+        printf("gps_fix_time: %d",gnss_eph_data->gps_eph_data.gps_fix_time);
+        printf("gps_sys_time: %d",gnss_eph_data->gps_eph_data.gps_sys_time);
+        OBC_time obc = gnss_eph_data->gps_eph_data.obc_time;
+        printf("obc_time : %02d:%02d:%02d.%03d Date: %02d/%02d/%d\n",
+               obc.hour, obc.minute, obc.millisecond / 1000,
+               obc.millisecond % 1000, obc.date, obc.month, obc.year);
+        for(int i = 0; i<3; i++){
+            printf("gps_position_ecef: %d\n",gnss_eph_data->gps_eph_data.gps_position_ecef[i]);
+        }
+
+        for(int i = 0; i<3; i++){
+            printf("gps_velocity_ecef: %d\n",gnss_eph_data->gps_eph_data.gps_velocity_ecef[i]);
+           
+        }
+        printf("gps_validity_flag_pos_vel: %d\n",gnss_eph_data->gps_eph_data.gps_validity_flag_pos_vel);
+    }
+    else if(gnss_eph_data->adcs_timeout_flag == 1){
+        printf("ADCS Orbit Propagator/System Time = %f\n",gnss_eph_data->adcs_eph_data.orbit_time);
+        printf("ECI Position X (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_x);
+        printf("ECI Position Y (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_y);
+        printf("ECI Position Z (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_z);
+        printf("ECI Velocity X (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_x);
+        printf("ECI Velocity Y (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_y);
+        printf("ECI Velocity Z (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_z);
+        printf("ECEF Position X (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_x);
+        printf("ECEF Position Y (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_y);
+        printf("ECEF Position Z (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_z);
+        printf("ECEF Velocity X (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_x);
+        printf("ECEF Velocity Y (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_y);
+        printf("ECEF Velocity Z (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_z);
+        printf("X axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_x);
+        printf("Y axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_y);
+        printf("Z axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_z);
+        printf("Attitude Quaternion 1 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_1);
+        printf("Attitude Quaternion 2 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_2);
+        printf("Attitude Quaternion 3 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_3);
+        printf("Attitude Quaternion 4 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_4);
+        printf("Latitude (deg) = %f\n",gnss_eph_data->adcs_eph_data.latitude);
+        printf("Longitude (deg) = %f\n",gnss_eph_data->adcs_eph_data.longitude);
+        printf("Altitude (km) %f\n",gnss_eph_data->adcs_eph_data.altitude);
+        printf("X Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_x);
+        printf("Y Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_y);
+        printf("Z Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_z);
+        printf("X Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_x);
+        printf("Y Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_y);
+        printf("Z Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_z);
+        printf("Beta Angle (deg) %f\n",gnss_eph_data->adcs_eph_data.beta_angle);
+        for (int i = 0; i < sizeof(fields)/sizeof(fields[0]); i++) {
+            int bit_value = (gnss_eph_data->adcs_eph_data.validity_flags >> i) & 1;
+            printf("%s: %d\n", fields[i], bit_value);
+
+        }
+    }
+    // #<Payload Application Business Logic>
+    wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
+    return An_SUCCESS;
+}
+
 AntarisReturnCode process_response_register(RespRegisterParams *resp_register_param)
 {
     printf("process_response_register\n");
@@ -712,6 +843,7 @@ int main(int argc, char *argv[])
             process_response_stage_file_download : process_response_stage_file_download,
             process_response_payload_power_control : process_response_payload_power_control,
             req_payload_metrics: process_req_payload_metrics,
+            process_cb_gnss_eph_data : process_response_gnss_eph_data,
             process_cb_get_eps_voltage: process_response_get_eps_voltage,
     };
 
@@ -731,6 +863,7 @@ int main(int argc, char *argv[])
     payload_sequences_fsms[StageFile_Sequence_IDX] = fsmThreadCreate(channel, 1, StageFile_Sequence_ID, handle_StageFile);
     payload_sequences_fsms[TestCANBus_Sequence_IDX] = fsmThreadCreate(channel, 1, TestCANBus_Sequence_ID, handle_TestCANBus);
     payload_sequences_fsms[EpsVoltageTelemetry_IDX] = fsmThreadCreate(channel, 1, EpsVoltageTelemetry_ID, handle_Eps_Voltage_Telemetry_Request);
+    payload_sequences_fsms[GnssDataTelemetry_IDX] = fsmThreadCreate(channel, 1, GnssDataTelemetry_ID, handle_gnss_data_Telemetry_Request);
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure
@@ -776,6 +909,9 @@ int main(int argc, char *argv[])
     if (strcmp(payload_sequences_fsms[EpsVoltageTelemetry_IDX]->state, "NOT_STARTED") != 0) {
         pthread_join(payload_sequences_fsms[EpsVoltageTelemetry_IDX]->thread_id, &exit_status);
     }
+    if (strcmp(payload_sequences_fsms[GnssDataTelemetry_IDX]->state, "NOT_STARTED") != 0) {
+        pthread_join(payload_sequences_fsms[GnssDataTelemetry_IDX]->thread_id, &exit_status);
+    }
 
     printf("Cleaning up sequence resources\n");
 
@@ -785,6 +921,7 @@ int main(int argc, char *argv[])
     fsmThreadCleanup(payload_sequences_fsms[TestGPIO_Sequence_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[StageFile_Sequence_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[EpsVoltageTelemetry_IDX]);
+    fsmThreadCleanup(payload_sequences_fsms[GnssDataTelemetry_IDX]);
 
     // Delete Channel
     api_pa_pc_delete_channel(channel);
