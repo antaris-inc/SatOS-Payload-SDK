@@ -19,6 +19,9 @@
 import time, sys, json
 
 import pylibftdi as ftdi
+import lib.hwlib.gpio.edge as api_hwlib_gpio_edge
+import lib.hwlib.gpio.ftdi as api_hwlib_gpio_ftdi
+import lib.hwlib.gpio.qa7 as api_hwlib_gpio_qa7
 
 g_JSON_Key_IO_Access = "IO_Access"
 g_JSON_Key_GPIO = "GPIO"
@@ -30,6 +33,8 @@ g_JSON_Key_UART = "UART"
 g_JSON_Key_Device_Count = "UART_PORT_COUNT"
 g_JSON_Key_Device_Path = "Device_Path_"
 g_JSON_Key_Interrupt_Pin = "GPIO_Interrupt"
+adapter_type = "FTDI"  # for now
+api_hwlib_gpio = None
 
 # Define error code
 g_GPIO_ERROR = -1
@@ -60,14 +65,14 @@ def api_pa_pc_get_gpio_info():
     i = 0
     for i in range(int(g_total_gpio_pins)):
         key = g_JSON_Key_GPIO_Pin+str(i)
-        pin[i] = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][key]
+        pin[i] = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][adapter_type][key]
 
     interrupt_pin = api_pa_pc_get_io_interrupt_pin()
     gpio = GPIO(g_total_gpio_pins, pin, interrupt_pin)
     return gpio    
 
 def api_pa_pc_get_gpio_pin_count():
-    g_total_gpio_pins = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_GPIO_Pin_Count]
+    g_total_gpio_pins = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][adapter_type][g_JSON_Key_GPIO_Pin_Count]
     return g_total_gpio_pins
 
 def verify_gpio_pin(input_pin):
@@ -76,18 +81,19 @@ def verify_gpio_pin(input_pin):
 
     for i in range(int(g_total_gpio_pins)):
         key = g_JSON_Key_GPIO_Pin+str(i)
-        value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][key]
+        value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][adapter_type][key]
         if int(input_pin) == int(value):
             status = g_GPIO_AVAILABLE
     return status
 
 def api_pa_pc_get_gpio_port():
-    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_GPIO_Port]
+    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][adapter_type]
+    [g_JSON_Key_GPIO_Port]
     return value
 
 def api_pa_pc_get_gpio_pins_number(index):
     key = g_JSON_Key_GPIO_Pin+str(index)
-    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][key]
+    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][adapter_type][key]
     return value
 
 def api_pa_pc_get_uart_dev():
@@ -104,7 +110,7 @@ def api_pa_pc_get_uart_dev():
     return uart
 
 def api_pa_pc_get_io_interrupt_pin():
-    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_Interrupt_Pin]
+    value = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][adapter_type][g_JSON_Key_Interrupt_Pin]
     return value
 
 def api_pa_pc_read_gpio(pin):
@@ -112,42 +118,46 @@ def api_pa_pc_read_gpio(pin):
     if status == g_GPIO_ERROR:
         return g_GPIO_ERROR
     
-    adapter_type = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_Adapter_Type]
-
-    if adapter_type != "FTDI":
-        print("Only FTDI devices are supported")
+    if adapter_type not in ("FTDI", "EDGE", "QA7"):
+        print("Only FTDI, EDGE and QA7 devices  are supported")
         return g_GPIO_ERROR
     
     port = api_pa_pc_get_gpio_port()
+    
+    if adapter_type == "FTDI":
+        api_hwlib_gpio = api_hwlib_gpio_ftdi
+    elif adapter_type == "EDGE":
+        api_hwlib_gpio = api_hwlib_gpio_edge
+    elif adapter_type == "QA7":
+        api_hwlib_gpio = api_hwlib_gpio_qa7
 
-    op = api_read_gpio(port, pin)
+    op = api_hwlib_gpio.api_read_gpio(port, pin)
     
     return op
 
-def api_read_gpio(port, pin):
-    try:
-        DeviceName = ftdi.Driver().list_devices()[0][2]  # Assumptioon: single FTDI device connected.
-        if not DeviceName:
-            print("FTDI device not connected")
-            return g_GPIO_ERROR 
-    except Exception as e:
-        print("FTDI device not connected")
-        return g_GPIO_ERROR 
+# def api_read_gpio(port, pin):
+#     try:
+#         DeviceName = ftdi.Driver().list_devices()[0][2]  # Assumptioon: single FTDI device connected.
+#         if not DeviceName:
+#             print("FTDI device not connected")
+#             return g_GPIO_ERROR 
+#     except Exception as e:
+#         print("FTDI device not connected")
+#         return g_GPIO_ERROR 
 
-    Device = ftdi.BitBangDevice(device_id=DeviceName, interface_select=int(port))
-    op = (Device.port >> int(pin)) & g_MASK_BIT_0
-    Device.close()
-    return op
+#     Device = ftdi.BitBangDevice(device_id=DeviceName, interface_select=int(port))
+#     op = (Device.port >> int(pin)) & g_MASK_BIT_0
+#     Device.close()
+#     return op
 
 def api_pa_pc_write_gpio(pin, value):
     status = verify_gpio_pin(pin)
     if status == g_GPIO_ERROR:
         return g_GPIO_ERROR
 
-    adapter_type = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_Adapter_Type]
 
-    if adapter_type != "FTDI":
-        print("Only FTDI devices are supported")
+    if adapter_type not in ("FTDI", "EDGE", "QA7"):
+        print("Only FTDI, EDGE and QA7 devices  are supported")
         return g_GPIO_ERROR
     
     port = api_pa_pc_get_gpio_port()

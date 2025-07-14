@@ -13,22 +13,49 @@
     },
     "IO_Access": {
         "GPIO": {
-            "ADAPTER_TYPE" : "FTDI",
-            "GPIO_PIN_COUNT": "2",
-            "GPIO_Port" : "0",
-            "GPIO_PIN_0": "5",
-            "GPIO_PIN_1": "6",
-            "GPIO_Interrupt": "0"
-        },
+            "FTDI" : {
+                "GPIO_PIN_COUNT": "2",
+                "GPIO_Port" : "0",
+                "GPIO_PIN_0": "5",
+                "GPIO_PIN_1": "6",
+                "GPIO_Interrupt": "0"
+            },
+            "EDGE" : {
+                "GPIO_PIN_COUNT": "2",
+                "GPIO_Port" : "0",
+                "GPIO_PIN_0": "5",
+                "GPIO_PIN_1": "6",
+                "GPIO_Interrupt": "0"
+            },
+            "QA7" : {
+                "GPIO_PIN_COUNT": "2",
+                "GPIO_Port" : "0",
+                "GPIO_PIN_0": "5",
+                "GPIO_PIN_1": "6",
+                "GPIO_Interrupt": "0"
+            }
+    },
         "UART": {
             "UART_PORT_COUNT": "2",
             "Device_Path_0": "/dev/ttyUSB0",
             "Device_Path_1": "/dev/ttyUSB1"
         },
         "CAN": {
+            "EDGE": {
             "CAN_PORT_COUNT": "1",
             "CAN_Bus_Path_0": "can1",
             "CAN_Bus_Path_1": "can0"
+            },
+            "FTDI" : {
+            "CAN_PORT_COUNT": "1",
+            "CAN_Bus_Path_0": "can1",
+            "CAN_Bus_Path_1": "can0"
+            },
+            "QA7" : {
+            "CAN_PORT_COUNT": "1",
+            "CAN_Bus_Path_0": "can1",
+            "CAN_Bus_Path_1": "can0"
+            }
         }
     },
     "Network" : {
