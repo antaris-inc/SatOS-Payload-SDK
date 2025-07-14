@@ -229,7 +229,7 @@ void handle_gnss_data_Telemetry_Request(mythreadState_t *mythread){
         printf("\n Sending GNSS EPH data Telemetry start request \n");
         ReqGnssEphStartDataReq req_gnss_eph_start_data_request = {0};
         req_gnss_eph_start_data_request.correlation_id = mythread->correlation_id;
-        req_gnss_eph_start_data_request.periodicity_in_ms - periodicity_in_ms;
+        req_gnss_eph_start_data_request.periodicity_in_ms = periodicity_in_ms;
         req_gnss_eph_start_data_request.eph2_enable = eph2_enable;
         ret = api_pa_pc_gnss_eph_start_req(channel,&req_gnss_eph_start_data_request);
         if(ret == An_SUCCESS){
