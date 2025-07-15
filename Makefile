@@ -99,6 +99,7 @@ gen:
 CPP_OBJS = \
     ${VENDOR_LIB_DIR}/cJSON/src/cJSON.o \
     ${CPP_LIB_DIR}/antaris_api_gpio.o \
+	${CPP_LIB_DIR}/antaris_api_parser.o \
     ${OUTPUT_GEN_DIR}/antaris_api_autogen.o \
     ${OUTPUT_GRPC_CPP_DIR}/antaris_api.grpc.pb.o \
     ${OUTPUT_GRPC_CPP_DIR}/antaris_api.pb.o \
@@ -106,6 +107,7 @@ CPP_OBJS = \
     ${CPP_LIB_DIR}/antaris_sdk_environment.o \
     ${CPP_LIB_DIR}/antaris_api_client.o \
     ${CPP_LIB_DIR}/antaris_can_api.o \
+	${CPP_LIB_DIR}/antaris_api_i2c.o \
     ${CPP_LIB_DIR}/antaris_api_server.o \
     ${CPP_LIB_DIR}/antaris_api_pyfunctions.o
 

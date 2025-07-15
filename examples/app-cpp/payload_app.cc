@@ -26,6 +26,7 @@
 #include "antaris_api_pyfunctions.h"
 #include "antaris_can_api.h"
 #include "antaris_api_parser.h"
+#include "antaris_api_i2c.h"
 
 #define MAX_STR_LEN 256
 #define SEQ_PARAMS_LEN 64
@@ -269,6 +270,8 @@ void handle_TestGPIO(mythreadState_t *mythread)
     }
     printf("Total gpio pins = %d \n", gpio_info.pin_count);
 
+    api_gpio.api_pa_pc_init_gpio_lib();
+
     while (i < gpio_info.pin_count) {
         // Read initial value of GPIO pins.
         // Assume GPIO pins are in loopback mode, their value must be same.
@@ -319,6 +322,7 @@ void handle_TestGPIO(mythreadState_t *mythread)
     } 
     
     printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+    api_gpio.api_pa_pc_deinit_gpio_lib();
     
 }
 
@@ -467,7 +471,46 @@ exit_sequence:
 
 void handle_TestI2CBus(mythreadState_t *mythread)
 {
+    AntarisReturnCode ret;
+    AntarisApiI2C api_i2c;
+    AntarisApiParser api_parser;
+    i2c_s i2c_info;
+    int i = 0;
+    uint8_t read, write = 1;
+    uint16_t address = 0xA;
+    uint16_t index = 1;
 
+    printf("\n Handling sequence: TestGPIO! \n");
+
+    ret = api_parser.api_pa_pc_get_i2c_dev(&i2c_info);
+
+    if (ret != An_SUCCESS) {
+        printf("Error: json file is not configured properly. Kindly check configurations done in ACP \n");
+        return;
+    }
+    printf("Total gpio pins = %d \n", i2c_info.port_count);
+    api_i2c.api_pa_pc_init_i2c_lib();
+    if (i2c_info.port_count> 0) {
+        api_i2c.api_pa_pc_read_i2c_bus(i2c_info.dev[0], address, index, &read);
+        
+        printf("I2c read = %d \n", read);
+                   
+        api_i2c.api_pa_pc_write_i2c_bus(i2c_info.dev[0], address, index, &write);
+    }
+
+    // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], TestI2CBUS_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } 
+    
+    printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+    api_i2c.api_pa_pc_deinit_i2c_lib();
 }
 
 // Table of Sequence_id : FsmThread

@@ -56,6 +56,10 @@
 #define JSON_Key_CAN              ("CAN")
 #define JSON_Key_CAN_Port_Count   ("CAN_PORT_COUNT")
 #define JSON_Key_CAN_Bus_Path     ("CAN_Bus_Path_")
+#define JSON_Key_I2C              ("I2C")
+#define JSON_Key_I2C_Adapter_Type ("ADAPTER_TYPE")
+#define JSON_Key_I2C_Device_Count ("I2C_PORT_COUNT")
+#define JSON_Key_I2C_Device_Path  ("I2C_Bus_Path_")
 // common types needed by API
 typedef void * AntarisChannel;
 

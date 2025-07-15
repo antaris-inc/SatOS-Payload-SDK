@@ -198,41 +198,156 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_gpio_adapter_type(char *adapte
     if (p_cJson == NULL)
     {
         printf("Error: Failed to read the config.json\n");
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
+        return An_GENERIC_FAILURE;
     }
 
     key_io_access = cJSON_GetObjectItemCaseSensitive(p_cJson, JSON_Key_IO_Access);
     if (key_io_access == NULL) {
         printf("Error: %s key absent in config.json \n", JSON_Key_IO_Access);
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
+        return An_GENERIC_FAILURE;
     }
         
     key_gpio = cJSON_GetObjectItemCaseSensitive(key_io_access, JSON_Key_GPIO);
     if (key_gpio == NULL) {
         printf("Error: %s key absent in config.json \n", JSON_Key_GPIO);
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
+        return An_GENERIC_FAILURE;
     }
         
     // Check adapter type
     pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_Adapter_Type);
     if (pJsonStr == NULL) {
         printf("Error: %s key absent in config.json \n", JSON_Key_Adapter_Type);
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
+        return An_GENERIC_FAILURE;
     }
     if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
         printf("Error: %s value is not a string \n", JSON_Key_Adapter_Type);
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
+        return An_GENERIC_FAILURE;
     }
     adapter = cJSON_GetStringValue(pJsonStr);
-    if ((*sadaptertr == 0) || (str == NULL) || (adapter(str) > sizeof(int8_t)))
+    if ((*adapter == 0) || (adapter == NULL))
     {
         printf("Failed to read gpio count the json, GPIO support not added \n");
-        ret = An_GENERIC_FAILURE;
+        return An_GENERIC_FAILURE;
+    }
+    return An_SUCCESS;
+}
+
+AntarisReturnCode AntarisApiParser::api_pa_pc_get_i2c_dev(i2c_s *i2c_info)
+{
+    AntarisReturnCode ret = An_SUCCESS;
+    cJSON *p_cJson = nullptr;
+    cJSON *key_io_access = nullptr;
+    cJSON *key_i2c = nullptr;
+    cJSON *pJsonStr = nullptr;
+    char *str = nullptr;
+    char key[32] = {'\0'};
+
+    read_config_json(&p_cJson);
+
+    if (!p_cJson) {
+        std::cerr << "Error: Failed to read the config.json\n";
+        ret = An_INVALID_PARAMS;
         goto cleanup_and_exit;
     }
+
+    key_io_access = cJSON_GetObjectItemCaseSensitive(p_cJson, JSON_Key_IO_Access);
+    if (!key_io_access) {
+        std::cerr << "Error: " << JSON_Key_IO_Access << " key absent in config.json\n";
+        ret = An_INVALID_PARAMS;
+        goto cleanup_and_exit;
+    }
+
+    key_i2c = cJSON_GetObjectItemCaseSensitive(key_io_access, JSON_Key_I2C);
+    if (!key_i2c) {
+        std::cerr << "Error: " << JSON_Key_I2C << " key absent in config.json\n";
+        ret = An_INVALID_PARAMS;
+        goto cleanup_and_exit;
+    }
+
+    // Get CAN port count
+    pJsonStr = cJSON_GetObjectItem(key_i2c, JSON_Key_I2C_Port_Count);
+    if (!pJsonStr || !cJSON_IsString(pJsonStr)) {
+        std::cerr << "Error: " << JSON_Key_I2C_Port_Count << " value is not a valid string\n";
+        ret = An_INVALID_PARAMS;
+        goto cleanup_and_exit;
+    }
+
+    str = cJSON_GetStringValue(pJsonStr);
+    if (!str || strlen(str) > sizeof(int8_t)) {
+        std::cerr << "Failed to read CAN count in JSON, CAN support not added\n";
+        ret = An_INVALID_PARAMS;
+        goto cleanup_and_exit;
+    }
+
+    i2c_info->i2c_port_count = (*str) - '0';
+
+    // Get CAN port names
+    for (int i = 0; i < i2c_info->i2c_port_count; i++) {
+        sprintf(key, "%s%d", JSON_Key_I2C_Bus_Path, i);
+        pJsonStr = cJSON_GetObjectItem(key_i2c, key);
+        if (!pJsonStr || !cJSON_IsString(pJsonStr)) {
+            std::cerr << "Error: " << key << " value is not a valid string\n";
+            ret = An_INVALID_PARAMS;
+            goto cleanup_and_exit;
+        }
+
+        memset(i2c_info->i2c_dev[i], 0, MAX_DEV_NAME_LENGTH);
+        strncpy(i2c_info->i2c_dev[i], cJSON_GetStringValue(pJsonStr), MAX_DEV_NAME_LENGTH - 2);
+        i2c_info->i2c_dev[i][MAX_DEV_NAME_LENGTH - 1] = '\0';
+    }
+
+cleanup_and_exit:
+    if (p_cJson) {
+        cJSON_Delete(p_cJson);
+    }
+
+    return ret;
+}
+
+AntarisReturnCode AntarisApiParser::api_pa_pc_get_i2c_adapter(char *adapter)
+{
+    AntarisReturnCode ret = An_SUCCESS;
+    cJSON *p_cJson = NULL;
+    cJSON *key_io_access = NULL;
+    cJSON *key_gpio = NULL;
+    cJSON *pJsonStr = NULL;
+    char *str = NULL;
+    char key[32] = {'\0'};
+
+    read_config_json(&p_cJson);
+    if (p_cJson == NULL)
+    {
+        printf("Error: Failed to read the config.json\n");
+        return An_GENERIC_FAILURE;
+    }
+
+    key_io_access = cJSON_GetObjectItemCaseSensitive(p_cJson, JSON_Key_IO_Access);
+    if (key_io_access == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_IO_Access);
+        return An_GENERIC_FAILURE;
+    }
+        
+    key_gpio = cJSON_GetObjectItemCaseSensitive(key_io_access, JSON_Key_I2C);
+    if (key_gpio == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_I2C);
+        return An_GENERIC_FAILURE;
+    }
+        
+    // Check adapter type
+    pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_I2C_Adapter_Type);
+    if (pJsonStr == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_I2C_Adapter_Type);
+        return An_GENERIC_FAILURE;
+    }
+    if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
+        printf("Error: %s value is not a string \n", JSON_Key_I2C_Adapter_Type);
+        return An_GENERIC_FAILURE;
+    }
+    adapter = cJSON_GetStringValue(pJsonStr);
+    if ((*adapter == 0) || (adapter == NULL))
+    {
+        printf("Failed to read gpio count the json, GPIO support not added \n");
+        return An_GENERIC_FAILURE;
+    }
+    return An_SUCCESS;
 }

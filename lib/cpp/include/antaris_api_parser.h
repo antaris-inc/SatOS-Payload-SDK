@@ -16,6 +16,9 @@ class AntarisApiParser {
     public:
         AntarisReturnCode api_pa_pc_get_gpio_info(gpio_s *gpio);
         AntarisReturnCode api_pa_pc_get_gpio_adapter_type(char *adapter);
+
+        AntarisReturnCode api_pa_pc_get_i2c_dev(i2c_s *i2c_info);
+        AntarisReturnCode api_pa_pc_get_i2c_adapter(char *adapter);
         
     private:
 };

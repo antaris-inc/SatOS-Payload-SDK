@@ -29,6 +29,7 @@
 #include <chrono>
 #include <thread>
 #include <future>
+#include <dlfcn.h>
 
 #include "Python.h"
 
@@ -36,10 +37,15 @@
 #include "antaris_api.h"
 #include "antaris_api_internal.h"
 #include "antaris_sdk_environment.h"
-#include "an_pa_pc_qa5.h"
+#include "antaris_api_parser.h"
 
 #define GENERIC_ERROR -1
 #define TIMEOUT_PYFINALIZE 5
+
+typedef int (*read_pin_t)(int port, int pin_number);
+typedef int (*write_pin_t)(int port, int pin_number, int value);
+typedef int (*init_qa7_lib_t)(void);
+typedef int (*deinit_qa7_lib_t)(void);
 
 AntarisReturnCode init_satos_lib()
 {
@@ -93,8 +99,9 @@ AntarisReturnCode AntarisApiGPIO::verify_gpio_pin(int8_t pin_number)
 {
     gpio_s gpio_info;
     int i = 0;
+    AntarisApiParser api_parser;
 
-    api_pa_pc_get_gpio_info(&gpio_info);
+    api_parser.api_pa_pc_get_gpio_info(&gpio_info);
 
     while (i < gpio_info.pin_count) {
         if (gpio_info.pins[i] == pin_number) {
@@ -126,7 +133,7 @@ int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number)
 
     if (strcmp(adapter_type, "QA7") == 0) {
         int value = 0;
-        read_pin(gpio_port, pin_number);
+        read_qa7_pin(gpio_port, pin_number);
         return value;
     }
     pName = PyUnicode_DecodeFSDefault(PYTHON_GPIO_MODULE);
@@ -183,8 +190,8 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_write_gpio(int8_t gpio_port, int8_t 
     api_parser.api_pa_pc_get_gpio_adapter_type(adapter_type);
 
     if (strcmp(adapter_type, "QA7") == 0) {
-        write_pin(gpio_port, pin_number, value);
-        return value;
+        write_qa7_pin(gpio_port, pin_number, value);
+        return An_SUCCESS;
     }
 
     pName = PyUnicode_DecodeFSDefault(PYTHON_GPIO_MODULE);
@@ -229,7 +236,34 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_init_gpio_lib()
     api_parser.api_pa_pc_get_gpio_adapter_type(adapter_type);
 
     if (strcmp(adapter_type, "QA7") == 0) {
-        return init_qa7_lib();
+        void *handle;
+        init_qa7_lib_t init_func;
+    
+        // Load the shared library
+        handle = dlopen("/opt/antaris/lib/libqa7bus.so", RTLD_LAZY);
+        if (!handle) {
+            fprintf(stderr, "dlopen failed: %s\n", dlerror());
+            return An_GENERIC_FAILURE;
+        }
+    
+        // Clear any previous error
+        dlerror();
+    
+        // Lookup the symbol
+        *(void **) (&init_func) = dlsym(handle, "init_qa7_lib");
+        char *error = dlerror();
+        if (error) {
+            fprintf(stderr, "dlsym failed: %s\n", error);
+            dlclose(handle);
+            return An_GENERIC_FAILURE;
+        }
+    
+        // Call the function
+        int status = init_func();
+        printf("init_qa7_lib returned: %d\n", status);
+    
+        // Cleanup
+        dlclose(handle);
     }
     return An_SUCCESS;
 }
@@ -242,7 +276,98 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_deinit_gpio_lib()
     api_parser.api_pa_pc_get_gpio_adapter_type(adapter_type);
 
     if (strcmp(adapter_type, "QA7") == 0) {
-        return deinit_qa7_lib();
+        void *handle;
+        deinit_qa7_lib_t deinit_func;
+    
+        // Load the shared library
+        handle = dlopen("/opt/antaris/lib/libqa7bus.so", RTLD_LAZY);
+        if (!handle) {
+            fprintf(stderr, "dlopen failed: %s\n", dlerror());
+            return An_GENERIC_FAILURE;
+        }
+    
+        // Clear any previous error
+        dlerror();
+    
+        // Lookup the symbol
+        *(void **) (&deinit_func) = dlsym(handle, "deinit_qa7_lib");
+        char *error = dlerror();
+        if (error) {
+            fprintf(stderr, "dlsym failed: %s\n", error);
+            dlclose(handle);
+            return An_GENERIC_FAILURE;
+        }
+    
+        // Call the function
+        int status = deinit_func();
+        printf("init_qa7_lib returned: %d\n", status);
+    
+        // Cleanup
+        dlclose(handle);
     }
     return An_SUCCESS;
+}
+
+int8_t AntarisApiGPIO::read_qa7_pin(int8_t gpio_port, int8_t pin_number)
+{
+    void *handle;
+    read_pin_t read_pin_func;
+    int8_t value;
+
+    // Load the shared library
+    handle = dlopen("/opt/antaris/lib/libqa7bus.so", RTLD_LAZY);
+    if (!handle) {
+        fprintf(stderr, "dlopen failed: %s\n", dlerror());
+        return 1;
+    }
+
+    // Clear any existing errors
+    dlerror();
+
+    // Get the symbol
+    *(void **) (&read_pin_func) = dlsym(handle, "read_pin");
+    char *error = dlerror();
+    if (error) {
+        fprintf(stderr, "dlsym failed: %s\n", error);
+        dlclose(handle);
+        return 1;
+    }
+
+    value = (int8_t) read_pin_func(gpio_port, pin_number);
+
+    dlclose(handle);
+    return value;
+}
+
+int8_t AntarisApiGPIO::write_qa7_pin(int8_t gpio_port, int8_t pin_number, int8_t value)
+{
+    void *handle;
+    write_pin_t write_pin_func;
+    int8_t result;
+
+    // Load the shared library
+    handle = dlopen("/opt/antaris/lib/libqa7bus.so", RTLD_LAZY);
+    if (!handle) {
+        fprintf(stderr, "dlopen failed: %s\n", dlerror());
+        return 1;
+    }
+
+    // Clear any previous error
+    dlerror();
+
+    // Lookup symbol
+    *(void **) (&write_pin_func) = dlsym(handle, "write_pin");
+    char *error = dlerror();
+    if (error) {
+        fprintf(stderr, "dlsym failed: %s\n", error);
+        dlclose(handle);
+        return 1;
+    }
+
+    result = (int8_t) write_pin_func(gpio_port, pin_number, value);
+    printf("Result from write_pin(0, 2, 1): %d\n", result);
+
+    // Done
+    dlclose(handle);
+    return result;
 }
