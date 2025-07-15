@@ -43,6 +43,7 @@
 #define CLIENT_SSL_KEY_FILE             "/opt/antaris/app/client.key"
 
 #define ENABLED                         '1'   // 0 => no-ssl certificate, 1=> ssl certificate needed
+#define JSON_Adapter_type                    ("FTDI")
 
 #define JSON_Key_GPIO_Pin_Count   ("GPIO_PIN_COUNT")
 #define JSON_Key_IO_Access        ("IO_Access")

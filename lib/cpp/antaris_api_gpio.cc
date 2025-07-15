@@ -47,6 +47,7 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio)
     cJSON *key_io_access = NULL;
     cJSON *key_gpio = NULL;
     cJSON *pJsonStr = NULL;
+    cJSON *Adapter_type = NULL;
     char *str = NULL;
     char key[32] = {'\0'};
 
@@ -76,30 +77,43 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio)
         ret = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
     }
+
+    Adapter_type = cJSON_GetObjectItemCaseSensitive(key_gpio, JSON_Adapter_type);
+    if (Adapter_type == NULL) {
+        printf("Error: %s Adapter is absent in config.json /n", JSON_Adapter_type);
+        ret = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
+    }
+
+    if(cJSON_IsString( Adapter_type) == cJSON_Invalid) {
+        printf("Error: %s value is not a string \n", JSON_Adapter_type);
+        ret = An_GENERIC_FAILURE;
+        goto cleanup_and_exit;
+    }
         
     // Check adapter type
-    pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_Adapter_Type);
-    if (pJsonStr == NULL) {
-        printf("Error: %s key absent in config.json \n", JSON_Key_Adapter_Type);
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-    if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
-        printf("Error: %s value is not a string \n", JSON_Key_Adapter_Type);
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-    str = cJSON_GetStringValue(pJsonStr);
+    // pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_Adapter_Type);
+    // if (pJsonStr == NULL) {
+    //     printf("Error: %s key absent in config.json \n", JSON_Key_Adapter_Type);
+    //     ret = An_GENERIC_FAILURE;
+    //     goto cleanup_and_exit;
+    // }
+    // if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
+    //     printf("Error: %s value is not a string \n", JSON_Key_Adapter_Type);
+    //     ret = An_GENERIC_FAILURE;
+    //     goto cleanup_and_exit;
+    // }
+    str = cJSON_GetStringValue(Adapter_type);
     if ((str == NULL) ||
-        ((strncmp(str, "FTDI", 4) != 0)))
+        ((strncmp(str, "FTDI", 4) != 0)) || strncmp(str, "EDGE", 4) || strncmp(str, "QA7",3))
     {
-        printf("Only FTDI devices are supported");
+        printf("Only FTDI, EDGE and QA7 devices are supported");
         ret = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
     }
     
     // get GPIO pin count
-    pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_GPIO_Pin_Count);
+    pJsonStr = cJSON_GetObjectItem(Adapter_type, JSON_Key_GPIO_Pin_Count);
     if (pJsonStr == NULL) {
         printf("Error: %s key absent in config.json \n", JSON_Key_GPIO_Pin_Count);
         ret = An_GENERIC_FAILURE;
@@ -127,7 +141,7 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio)
     }
 
     // Get GPIO port
-    pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_GPIO_Port);
+    pJsonStr = cJSON_GetObjectItem(Adapter_type, JSON_Key_GPIO_Port);
     if (pJsonStr == NULL) {
         printf("Error: %s key absent in config.json \n", JSON_Key_GPIO_Port);
         ret = An_GENERIC_FAILURE;
@@ -158,7 +172,7 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio)
     for (int i = 0; i < gpio->pin_count; i++)
     {
         sprintf(key, "%s%d", JSON_Key_GPIO_Pin, i);
-        pJsonStr = cJSON_GetObjectItem(key_gpio, key);
+        pJsonStr = cJSON_GetObjectItem(Adapter_type, key);
         if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
             printf("Error: %s value is not a string \n", key);
             ret = An_GENERIC_FAILURE;
@@ -181,7 +195,7 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio)
     }
 
     // get Interrupt pin, it is optional, hence not returning upon failure
-    pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_Interrupt_Pin);
+    pJsonStr = cJSON_GetObjectItem(Adapter_type, JSON_Key_Interrupt_Pin);
     if (cJSON_IsString(pJsonStr) != cJSON_Invalid) {
         str = cJSON_GetStringValue(pJsonStr);
         if ((*str != 0) && (str == NULL)) {
@@ -299,7 +313,7 @@ int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number)
         return An_GENERIC_FAILURE;
     }
     
-    pArgs = PyTuple_Pack(2, PyLong_FromLong((long) gpio_port), PyLong_FromLong((long) pin_number)); // Pass arguments
+    pArgs = PyTuple_Pack(1, PyLong_FromLong((long) pin_number)); // Pass arguments
     pValue = PyObject_CallObject(pFunction, pArgs);                  // Call the function
     result = PyLong_AsLong(pValue);                                       // Convert the result to a C++ type
     exit_status = (int) result;
@@ -346,7 +360,7 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_write_gpio(int8_t gpio_port, int8_t 
         return An_GENERIC_FAILURE;
     }
     
-    pArgs = PyTuple_Pack(3, PyLong_FromLong((long) gpio_port), PyLong_FromLong((long) pin_number), PyLong_FromLong((long) value));                            // Pass arguments
+    pArgs = PyTuple_Pack(2, PyLong_FromLong((long) pin_number), PyLong_FromLong((long) value));                            // Pass arguments
     pValue = PyObject_CallObject(pFunction, pArgs);            // Call the function
     pystatus = PyLong_AsLong(pValue);                          // Convert the result to a C++ type
 

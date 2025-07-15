@@ -32,8 +32,8 @@
 
 #define PYTHON_SCRIPT              "lib.antaris.tools.antaris_api_gpio"
 #define PYTHON_GPIO_MODULE         "antaris_api_gpio"
-#define PYTHON_GPIO_READ_FUNCTION  "api_read_gpio"
-#define PYTHON_GPIO_WRITE_FUNCTION "api_write_gpio"
+#define PYTHON_GPIO_READ_FUNCTION  "api_pa_pc_read_gpio"
+#define PYTHON_GPIO_WRITE_FUNCTION "api_pa_pc_write_gpio"
 
 #define TRUE        1
 #define FALSE       0
