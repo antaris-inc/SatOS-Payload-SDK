@@ -57,6 +57,8 @@ class AntarisApiGPIO {
         int8_t api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number);
 
         AntarisReturnCode api_pa_pc_write_gpio(int8_t gpio_port, int8_t pin_number, int8_t value);
+        AntarisReturnCode api_pa_pc_init_gpio_lib();
+        AntarisReturnCode api_pa_pc_deinit_gpio_lib();
         
     private:
         AntarisReturnCode verify_gpio_pin(int8_t pin_number);
