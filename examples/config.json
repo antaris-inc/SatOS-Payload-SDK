@@ -62,5 +62,6 @@
         "Run_Proxy" : "1",
         "Proxy_IP" : "127.0.0.1",
         "Proxy_Port" : "1051"
-    }
+    },
+    "QA7_LIB" : "/opt/antaris/lib/libQA7Bus.so"
 }

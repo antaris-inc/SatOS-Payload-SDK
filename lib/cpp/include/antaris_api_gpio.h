@@ -17,6 +17,9 @@
 // This file assumes that, config.json file is present at /opt/antaris/app
 // location. The sample file is checked-in in conf directory
 
+#ifndef  __ANTARIS_API_GPIO_H__
+#define  __ANTARIS_API_GPIO_H__
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -71,3 +74,4 @@ class AntarisApiGPIO {
 AntarisReturnCode init_satos_lib();
 
 void with_timeout_deinit_satos_lib();
+#endif // __ANTARIS_API_GPIO_H__

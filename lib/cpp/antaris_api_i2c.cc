@@ -8,19 +8,34 @@ typedef int (*deinit_qa7_lib_t)(void);
 typedef unsigned int (*read_i2c_t)(unsigned short, unsigned char, unsigned short, unsigned char *);
 typedef unsigned int (*write_i2c_t)(unsigned short, unsigned char, unsigned short, unsigned char *);
 
+extern char qa7_lib[32];
+char i2c_adapter_type[32] = {0};
+
 AntarisReturnCode AntarisApiI2C::api_pa_pc_init_i2c_lib()
 {
-    char adapter_type[32] = {0};
     AntarisApiParser api_parser;
+    AntarisReturnCode ret;
 
-    api_parser.api_pa_pc_get_i2c_adapter(adapter_type);
+    ret = api_parser.api_pa_pc_get_i2c_adapter(i2c_adapter_type);
 
-    if (strcmp(adapter_type, "QA7") == 0) {
+    if (ret != An_SUCCESS) {
+        printf("Error: json file is not configured properly. Kindly check configurations done in ACP \n");
+        return An_GENERIC_FAILURE;
+    }
+
+    if (strcmp(i2c_adapter_type, "QA7") == 0) {
         void *handle;
         init_qa7_lib_t init_func;
     
+        if (qa7_lib[0] != 0) {
+            if (api_parser.api_pa_pc_get_qa7_lib() != An_SUCCESS) {
+                printf("Error in fetching qA7 lib \n");
+                return An_GENERIC_FAILURE;
+            }
+        }
+
         // Load the shared library
-        handle = dlopen("/opt/antaris/lib/libqa7bus.so", RTLD_LAZY);
+        handle = dlopen(qa7_lib, RTLD_LAZY);
         if (!handle) {
             fprintf(stderr, "dlopen failed: %s\n", dlerror());
             return An_GENERIC_FAILURE;
@@ -30,7 +45,7 @@ AntarisReturnCode AntarisApiI2C::api_pa_pc_init_i2c_lib()
         dlerror();
     
         // Lookup the symbol
-        *(void **) (&init_func) = dlsym(handle, "init_qa7_lib");
+        *(void **) (&init_func) = dlsym(handle, QA7_INIT_FUNCTION);
         char *error = dlerror();
         if (error) {
             fprintf(stderr, "dlsym failed: %s\n", error);
@@ -50,17 +65,14 @@ AntarisReturnCode AntarisApiI2C::api_pa_pc_init_i2c_lib()
 
 AntarisReturnCode AntarisApiI2C::api_pa_pc_deinit_i2c_lib()
 {
-    char adapter_type[32] = {0};
     AntarisApiParser api_parser;
 
-    api_parser.api_pa_pc_get_i2c_adapter(adapter_type);
-
-    if (strcmp(adapter_type, "QA7") == 0) {
+    if (strcmp(i2c_adapter_type, "QA7") == 0) {
         void *handle;
         deinit_qa7_lib_t deinit_func;
     
         // Load the shared library
-        handle = dlopen("/opt/antaris/lib/libqa7bus.so", RTLD_LAZY);
+        handle = dlopen(qa7_lib, RTLD_LAZY);
         if (!handle) {
             fprintf(stderr, "dlopen failed: %s\n", dlerror());
             return An_GENERIC_FAILURE;
@@ -70,7 +82,7 @@ AntarisReturnCode AntarisApiI2C::api_pa_pc_deinit_i2c_lib()
         dlerror();
     
         // Lookup the symbol
-        *(void **) (&deinit_func) = dlsym(handle, "deinit_qa7_lib");
+        *(void **) (&deinit_func) = dlsym(handle, QA7_DEINIT_FUNCTION);
         char *error = dlerror();
         if (error) {
             fprintf(stderr, "dlsym failed: %s\n", error);
@@ -84,101 +96,97 @@ AntarisReturnCode AntarisApiI2C::api_pa_pc_deinit_i2c_lib()
     
         // Cleanup
         dlclose(handle);
+        memset(qa7_lib, 0, sizeof(qa7_lib));
     }
+    memset(i2c_adapter_type, 0, sizeof(i2c_adapter_type));
     return An_SUCCESS;
 }
 
-int8_t AntarisApiI2C::api_pa_pc_read_i2c_bus(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
+AntarisReturnCode AntarisApiI2C::api_pa_pc_read_i2c_bus(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
 {
-    char adapter_type[32] = {0};
     AntarisApiParser api_parser;
+    AntarisReturnCode ret = An_SUCCESS;
 
-    api_parser.api_pa_pc_get_i2c_adapter(adapter_type);
-
-    if (strcmp(adapter_type, "QA7") == 0) {
-        read_qa7_i2c(i2c_dev, i2c_address, index, data);
+    if (strcmp(i2c_adapter_type, "QA7") == 0) {
+        ret = read_qa7_i2c(i2c_dev, i2c_address, index, data);
     }
-    return An_SUCCESS;
+    return ret;
 }
 
-int8_t AntarisApiI2C::read_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
+AntarisReturnCode AntarisApiI2C::read_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
 {
     void *handle;
     read_i2c_t read_i2c_func;
 
     // Open the shared object file
-    handle = dlopen("./libqa7bus.so", RTLD_LAZY);
+    handle = dlopen(qa7_lib, RTLD_LAZY);
     if (!handle) {
         fprintf(stderr, "dlopen failed: %s\n", dlerror());
-        return 1;
+        return An_GENERIC_FAILURE;
     }
 
     // Clear any existing errors
     dlerror();
 
     // Load the function symbol
-    *(void **) (&read_i2c_func) = dlsym(handle, "read_i2c");
+    *(void **) (&read_i2c_func) = dlsym(handle, QA7_I2C_READ_FUNCTION);
     char *error = dlerror();
     if (error) {
         fprintf(stderr, "dlsym failed: %s\n", error);
         dlclose(handle);
-        return 1;
+        return An_GENERIC_FAILURE;
     }
 
     // Call the dynamically loaded function
-    unsigned char data = 0;
     unsigned int result = read_i2c_func(i2c_dev, i2c_address, index, data);
 
     if (result) {
-        printf("read_i2c() successful, data = 0x%02X\n", data);
+        printf("read_i2c() successful, data = 0x%02X\n", *data);
     } else {
         printf("read_i2c() failed\n");
     }
 
     dlclose(handle);
-    return 0;
-}
-
-
-AntarisReturnCode AntarisApiI2C::api_pa_pc_write_i2c_bus(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
-{
-    char adapter_type[32] = {0};
-    AntarisApiParser api_parser;
-
-    api_parser.api_pa_pc_get_i2c_adapter(adapter_type);
-
-    if (strcmp(adapter_type, "QA7") == 0) {
-        write_qa7_i2c(i2c_dev, i2c_address, index, data);
-    }
     return An_SUCCESS;
 }
 
-int8_t AntarisApiI2C::write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
+AntarisReturnCode AntarisApiI2C::api_pa_pc_write_i2c_bus(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
+{
+    AntarisApiParser api_parser;
+    AntarisReturnCode ret = An_SUCCESS;
+
+    if (strcmp(i2c_adapter_type, "QA7") == 0) {
+        ret = write_qa7_i2c(i2c_dev, i2c_address, index, data);
+    }
+    return ret;
+}
+
+AntarisReturnCode AntarisApiI2C::write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
 {
     void *handle;
     write_i2c_t write_i2c;
 
     // Load the shared library
-    handle = dlopen("./libqa7bus.so", RTLD_LAZY);
+    handle = dlopen(qa7_lib, RTLD_LAZY);
     if (!handle) {
         fprintf(stderr, "dlopen failed: %s\n", dlerror());
-        return 1;
+        return An_GENERIC_FAILURE;
     }
 
     // Load the symbol
-    *(void **)(&write_i2c) = dlsym(handle, "write_i2c");
+    *(void **)(&write_i2c) = dlsym(handle, QA7_I2C_WRITE_FUNCTION);
     char *error = dlerror();
     if (error) {
         fprintf(stderr, "dlsym error: %s\n", error);
         dlclose(handle);
-        return 1;
+        return An_GENERIC_FAILURE;
     }
 
     // Call the function
-    unsigned int result = write_i2c(i2c_dev, i2c_address, index, p_data);
+    unsigned int result = write_i2c(i2c_dev, i2c_address, index, data);
     printf("write_i2c result: %u\n", result);
 
     // Cleanup
     dlclose(handle);
-    return 0;
+    return An_SUCCESS;
 }

@@ -21,6 +21,8 @@
 
 #define GENERIC_ERROR -1
 
+char qa7_lib[32] = {0};
+
 AntarisReturnCode AntarisApiParser::api_pa_pc_get_gpio_info(gpio_s *gpio)
 {
     AntarisReturnCode ret = An_SUCCESS;
@@ -290,10 +292,7 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_i2c_dev(i2c_s *i2c_info)
             ret = An_INVALID_PARAMS;
             goto cleanup_and_exit;
         }
-
-        memset(i2c_info->i2c_dev[i], 0, MAX_DEV_NAME_LENGTH);
-        strncpy(i2c_info->i2c_dev[i], cJSON_GetStringValue(pJsonStr), MAX_DEV_NAME_LENGTH - 2);
-        i2c_info->i2c_dev[i][MAX_DEV_NAME_LENGTH - 1] = '\0';
+        i2c_info->i2c_dev[i] = (int8_t)pJsonStr->valueint;
     }
 
 cleanup_and_exit:
@@ -349,5 +348,43 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_i2c_adapter(char *adapter)
         printf("Failed to read gpio count the json, GPIO support not added \n");
         return An_GENERIC_FAILURE;
     }
+    return An_SUCCESS;
+}
+
+AntarisReturnCode AntarisApiParser::api_pa_pc_get_qa7_lib()
+{
+    AntarisReturnCode ret = An_SUCCESS;
+    cJSON *p_cJson = NULL;
+    cJSON *key_io_access = NULL;
+    cJSON *key_gpio = NULL;
+    cJSON *pJsonStr = NULL;
+    char *str = NULL;
+    char key[32] = {'\0'};
+    char *adapter;
+
+    read_config_json(&p_cJson);
+    if (p_cJson == NULL)
+    {
+        printf("Error: Failed to read the config.json\n");
+        return An_GENERIC_FAILURE;
+    }
+
+    pJsonStr = cJSON_GetObjectItemCaseSensitive(p_cJson, JSON_Key_QA7_LIB);
+    if (pJsonStr == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_QA7_LIB);
+        return An_GENERIC_FAILURE;
+    }
+        
+    if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
+        printf("Error: %s value is not a string \n", JSON_Key_QA7_LIB);
+        return An_GENERIC_FAILURE;
+    }
+    adapter = cJSON_GetStringValue(pJsonStr);
+    if ((*adapter == 0) || (adapter == NULL))
+    {
+        printf("Failed to read gpio count the json, GPIO support not added \n");
+        return An_GENERIC_FAILURE;
+    }
+    strcpy(qa7_lib, adapter);
     return An_SUCCESS;
 }

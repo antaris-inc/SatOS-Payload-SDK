@@ -270,7 +270,12 @@ void handle_TestGPIO(mythreadState_t *mythread)
     }
     printf("Total gpio pins = %d \n", gpio_info.pin_count);
 
-    api_gpio.api_pa_pc_init_gpio_lib();
+    ret = api_gpio.api_pa_pc_init_gpio_lib();
+
+    if (ret != An_SUCCESS) {
+        printf("Error: Unable to initialize GPIO Lib \n");
+        return;
+    }
 
     while (i < gpio_info.pin_count) {
         // Read initial value of GPIO pins.
@@ -488,14 +493,29 @@ void handle_TestI2CBus(mythreadState_t *mythread)
         printf("Error: json file is not configured properly. Kindly check configurations done in ACP \n");
         return;
     }
-    printf("Total gpio pins = %d \n", i2c_info.port_count);
-    api_i2c.api_pa_pc_init_i2c_lib();
-    if (i2c_info.port_count> 0) {
-        api_i2c.api_pa_pc_read_i2c_bus(i2c_info.dev[0], address, index, &read);
+    printf("Total i2c ports = %d \n", i2c_info.i2c_port_count);
+
+    ret = api_i2c.api_pa_pc_init_i2c_lib();
+
+    if (ret != An_SUCCESS) {
+        printf("Error: Init I2C failed \n");
+        return;
+    }
+
+    if (i2c_info.i2c_port_count> 0) {
+        ret = api_i2c.api_pa_pc_read_i2c_bus(i2c_info.i2c_dev[0], address, index, &read);
+        if (ret != An_SUCCESS) {
+            printf("Error: Read I2C failed \n");
+            return;
+        }
         
         printf("I2c read = %d \n", read);
                    
-        api_i2c.api_pa_pc_write_i2c_bus(i2c_info.dev[0], address, index, &write);
+        ret = api_i2c.api_pa_pc_write_i2c_bus(i2c_info.i2c_dev[0], address, index, &write);
+        if (ret != An_SUCCESS) {
+            printf("Error: Write I2C failed \n");
+            return;
+        }
     }
 
     // Tell PC that current sequence is done

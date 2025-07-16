@@ -44,22 +44,6 @@
 
 #define ENABLED                         '1'   // 0 => no-ssl certificate, 1=> ssl certificate needed
 
-#define JSON_Key_GPIO_Pin_Count   ("GPIO_PIN_COUNT")
-#define JSON_Key_IO_Access        ("IO_Access")
-#define JSON_Key_GPIO             ("GPIO")
-#define JSON_Key_Adapter_Type     ("ADAPTER_TYPE")
-#define JSON_Key_GPIO_Port        ("GPIO_Port")
-#define JSON_Key_GPIO_Pin         ("GPIO_PIN_")
-#define JSON_Key_UART             ("UART")
-#define JSON_Key_Device_Path      ("Device_Path")
-#define JSON_Key_Interrupt_Pin    ("GPIO_Interrupt")
-#define JSON_Key_CAN              ("CAN")
-#define JSON_Key_CAN_Port_Count   ("CAN_PORT_COUNT")
-#define JSON_Key_CAN_Bus_Path     ("CAN_Bus_Path_")
-#define JSON_Key_I2C              ("I2C")
-#define JSON_Key_I2C_Adapter_Type ("ADAPTER_TYPE")
-#define JSON_Key_I2C_Device_Count ("I2C_PORT_COUNT")
-#define JSON_Key_I2C_Device_Path  ("I2C_Bus_Path_")
 // common types needed by API
 typedef void * AntarisChannel;
 
