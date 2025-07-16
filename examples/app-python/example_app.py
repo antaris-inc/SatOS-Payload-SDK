@@ -24,6 +24,8 @@ import serial
 from satos_payload_sdk import app_framework
 from satos_payload_sdk import antaris_api_gpio as api_gpio
 from satos_payload_sdk import antaris_api_can as api_can
+from satos_payload_sdk import antaris_api_parser as api_parser
+from satos_payload_sdk import antaris_api_i2c as api_i2c
 import satos_payload_sdk.gen.antaris_api_types as api_types
 
 g_GPIO_ERROR = -1
@@ -208,7 +210,7 @@ class Controller:
     # The sample program assumes 2 GPIO pins are connected back-to-back. 
     # This sequence toggles level of 'Write Pin' and then reads level of 'Read Pin'
     def handle_test_gpio(self, ctx):
-        gpio_info = api_gpio.api_pa_pc_get_gpio_info()
+        gpio_info = api_parser.api_pa_pc_get_gpio_info()
 
         logger.info("Total gpio pins = %d", int(gpio_info.pin_count))
 
@@ -247,6 +249,9 @@ class Controller:
                     logger.error("Error in pin no %d", int(readPin))
                     return
             i += 1
+        # De-init library
+        api_gpio.init_gpio_lib()
+        return 
 
     # Sequence to test UART loopback. The sample program assumes Tx and Rx are connected in loopback mode.
     def handle_uart_loopback(self, ctx):
@@ -350,6 +355,41 @@ class Controller:
         
         logger.info("Completed reading")
 
+        return 
+    
+    def handle_test_i2c_bus(self, ctx):
+        logger.info("Test I2C bus")
+
+        # Check number of i2c bus 
+        i2cInfo = api_parser.api_pa_pc_get_i2c_dev()
+        logger.info("Total I2C bus ports = %d", int(i2cInfo.i2c_port_count))
+
+        # Get i2c devide details
+        channel = i2cInfo.i2c_dev[0]
+        logger.info("Starting CAN receiver port %s", channel)
+
+        #init i2c
+
+        # Read data from i2c bus
+        ret = api_i2c.init_i2c_lib()
+        if ret == False:
+            logger.info("I2C library init failed")
+            return
+
+        # Write data to i2c bus
+        baseAddr = 0xA0
+        index= 0
+        data = 1
+        api_i2c.api_pa_pc_write_i2c_data(i2cInfo.i2c_dev[0], baseAddr, index, data)
+
+        time.sleep(1)
+
+        api_i2c.api_pa_pc_read_i2c(i2cInfo.i2c_dev[0], baseAddr, index, data)
+
+        logger.info(f"Data received = {data}")
+
+        api_i2c.deinit_i2c_lib()
+        
         return 
     
 def new():

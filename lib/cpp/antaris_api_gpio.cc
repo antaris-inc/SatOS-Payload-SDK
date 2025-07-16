@@ -47,6 +47,7 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio)
     cJSON *key_io_access = NULL;
     cJSON *key_gpio = NULL;
     cJSON *pJsonStr = NULL;
+    cJSON *Adapter_type = NULL;
     char *str = NULL;
     char key[32] = {'\0'};
 
@@ -76,24 +77,37 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio)
         ret = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
     }
-        
-    // Check adapter type
+
     pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_Adapter_Type);
     if (pJsonStr == NULL) {
         printf("Error: %s key absent in config.json \n", JSON_Key_Adapter_Type);
         ret = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
     }
+
     if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
         printf("Error: %s value is not a string \n", JSON_Key_Adapter_Type);
         ret = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
     }
+        
+    // Check adapter type
+    // pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_Adapter_Type);
+    // if (pJsonStr == NULL) {
+    //     printf("Error: %s key absent in config.json \n", JSON_Key_Adapter_Type);
+    //     ret = An_GENERIC_FAILURE;
+    //     goto cleanup_and_exit;
+    // }
+    // if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
+    //     printf("Error: %s value is not a string \n", JSON_Key_Adapter_Type);
+    //     ret = An_GENERIC_FAILURE;
+    //     goto cleanup_and_exit;
+    // }
     str = cJSON_GetStringValue(pJsonStr);
     if ((str == NULL) ||
-        ((strncmp(str, "FTDI", 4) != 0)))
+        ((strncmp(str, "FTDI", 4) != 0)) || strncmp(str, "EDGE", 4) || strncmp(str, "QA7",3))
     {
-        printf("Only FTDI devices are supported");
+        printf("Only FTDI, EDGE and QA7 devices are supported");
         ret = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
     }
@@ -299,7 +313,7 @@ int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number)
         return An_GENERIC_FAILURE;
     }
     
-    pArgs = PyTuple_Pack(2, PyLong_FromLong((long) gpio_port), PyLong_FromLong((long) pin_number)); // Pass arguments
+    pArgs = PyTuple_Pack(1, PyLong_FromLong((long) pin_number)); // Pass arguments
     pValue = PyObject_CallObject(pFunction, pArgs);                  // Call the function
     result = PyLong_AsLong(pValue);                                       // Convert the result to a C++ type
     exit_status = (int) result;
@@ -346,7 +360,7 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_write_gpio(int8_t gpio_port, int8_t 
         return An_GENERIC_FAILURE;
     }
     
-    pArgs = PyTuple_Pack(3, PyLong_FromLong((long) gpio_port), PyLong_FromLong((long) pin_number), PyLong_FromLong((long) value));                            // Pass arguments
+    pArgs = PyTuple_Pack(2, PyLong_FromLong((long) pin_number), PyLong_FromLong((long) value));                            // Pass arguments
     pValue = PyObject_CallObject(pFunction, pArgs);            // Call the function
     pystatus = PyLong_AsLong(pValue);                          // Convert the result to a C++ type
 
