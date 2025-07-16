@@ -210,7 +210,7 @@ class Controller:
     # The sample program assumes 2 GPIO pins are connected back-to-back. 
     # This sequence toggles level of 'Write Pin' and then reads level of 'Read Pin'
     def handle_test_gpio(self, ctx):
-        gpio_info = api_gpio.api_pa_pc_get_gpio_info()
+        gpio_info = api_parser.api_pa_pc_get_gpio_info()
 
         logger.info("Total gpio pins = %d", int(gpio_info.pin_count))
 
@@ -251,7 +251,7 @@ class Controller:
                     return
             i += 1
         # De-init library
-        api_gpio.init_gpio_lib()
+        api_gpio.deinit_gpio_lib()
         return 
     
     # Sequence to test UART loopback. The sample program assumes Tx and Rx are connected in loopback mode.

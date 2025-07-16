@@ -20,6 +20,8 @@ g_JSON_Key_I2C_Adapter_Type = "ADAPTER_TYPE"
 g_JSON_Key_I2C_Device_Count = "I2C_PORT_COUNT"
 g_JSON_Key_I2C_Device_Path = "I2C_Bus_Path_"
 
+g_JSON_Key_QA7_LIB  = "QA7_LIB"
+
 
 # Define error code
 g_PARSER_ERROR = -1
@@ -102,3 +104,7 @@ def api_pa_pc_get_io_interrupt_pin():
 def api_pa_pc_get_gpio_adapter():
     gpio_adapter = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_Adapter_Type]
     return gpio_adapter
+
+def api_pa_pc_get_qa7_lib():
+    qa7_lib = jsfile_data[g_JSON_Key_QA7_LIB]
+    return qa7_lib

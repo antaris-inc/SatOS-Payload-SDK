@@ -41,10 +41,10 @@ g_MASK_BYTE = 0xFF
 # Read config info
 jsonfile = open('/opt/antaris/app/config.json', 'r')
 
+qa7lib = 0
+
 # returns JSON object as a dictionary
 jsfile_data = json.load(jsonfile)
-
-qa7lib = ctypes.CDLL('/opt/antaris/lib/libQA7bus.so')
 
 class UART:
     def __init__(self, port_count, uart_dev):
@@ -74,8 +74,8 @@ def api_pa_pc_read_gpio(pin):
     adapter_type = api_parser.api_pa_pc_get_gpio_adapter()
 
     if adapter_type == "QA7":
-        qa7lib.read_pin.argtypes = [ctypes.c_int, ctypes.int]
-        qa7lib.read_pin.restype = ctypes.c_int32
+        qa7lib.read_pin.argtypes = [ctypes.c_int, ctypes.c_int]
+        qa7lib.read_pin.restype = ctypes.c_int8
         qa7lib.read_pin(port, pin)
     elif adapter_type != "FTDI":
         print("Only FTDI devices are supported")
@@ -108,8 +108,8 @@ def api_pa_pc_write_gpio(pin, value):
     adapter_type = api_parser.api_pa_pc_get_gpio_adapter()
 
     if adapter_type == "QA7":
-        qa7lib.write_pin.argtypes = [ctypes.c_int, ctypes.int, ctypes.int]
-        qa7lib.write_pin.restype = ctypes.c_int32
+        qa7lib.write_pin.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int]
+        qa7lib.write_pin.restype = ctypes.c_int8
         qa7lib.write_pin(port, pin, value)
     elif adapter_type != "FTDI":
         print("Only FTDI devices are supported")
@@ -147,7 +147,14 @@ def init_gpio_lib():
     adapter_type = api_parser.api_pa_pc_get_gpio_adapter()
 
     if adapter_type == "QA7":
-        qa7lib.init_qa7_lib()
+        if qa7lib == 0:
+            qa7_lib_path = api_parser.api_pa_pc_get_qa7_lib()
+            qa7lib = ctypes.CDLL(qa7_lib_path)
+            qa7lib.init_qa7_lib.restype = ctypes.c_int8
+            if qa7lib.init_qa7_lib() == True:
+                return True
+            else:
+                return False
     else:
         return True
     
@@ -155,7 +162,13 @@ def deinit_gpio_lib():
     adapter_type = api_parser.api_pa_pc_get_gpio_adapter()
 
     if adapter_type == "QA7":
-        qa7lib.deinit_qa7_lib()
+        qa7lib.deinit_qa7_lib.restype = ctypes.c_int8
+        if qa7lib.deinit_qa7_lib() == True:
+            qa7lib = 0
+            return True
+        else:
+            qa7lib = 0
+            return False
     else:
         return True
     
