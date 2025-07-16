@@ -65,6 +65,7 @@ def api_pa_pc_get_uart_dev():
     return uart
 
 def api_pa_pc_read_gpio(pin):
+    global qa7lib
     status = api_parser.verify_gpio_pin(pin)
     if status == g_GPIO_ERROR:
         return g_GPIO_ERROR
@@ -101,6 +102,7 @@ def api_read_gpio(port, pin):
     return op
 
 def api_pa_pc_write_gpio(pin, value):
+    global qa7lib
     status = api_parser.verify_gpio_pin(pin)
     if status == g_GPIO_ERROR:
         return g_GPIO_ERROR
@@ -144,11 +146,13 @@ def api_write_gpio(port, pin, value):
     return op
 
 def init_gpio_lib():
+    global qa7lib
     adapter_type = api_parser.api_pa_pc_get_gpio_adapter()
 
     if adapter_type == "QA7":
         if qa7lib == 0:
             qa7_lib_path = api_parser.api_pa_pc_get_qa7_lib()
+            print(f"qa7 lib = {qa7_lib_path}")
             qa7lib = ctypes.CDLL(qa7_lib_path)
             qa7lib.init_qa7_lib.restype = ctypes.c_int8
             if qa7lib.init_qa7_lib() == True:
@@ -159,6 +163,7 @@ def init_gpio_lib():
         return True
     
 def deinit_gpio_lib():
+    global qa7lib
     adapter_type = api_parser.api_pa_pc_get_gpio_adapter()
 
     if adapter_type == "QA7":

@@ -23,11 +23,11 @@ AntarisReturnCode AntarisApiI2C::api_pa_pc_init_i2c_lib()
         return An_GENERIC_FAILURE;
     }
 
-    if (strcmp(i2c_adapter_type, "QA7") == 0) {
+    if ((strncmp(i2c_adapter_type, "QA7", 2) == 0)) {
         void *handle;
         init_qa7_lib_t init_func;
     
-        if (qa7_lib[0] != 0) {
+        if (qa7_lib[0] == 0) {
             if (api_parser.api_pa_pc_get_qa7_lib() != An_SUCCESS) {
                 printf("Error in fetching qA7 lib \n");
                 return An_GENERIC_FAILURE;
@@ -67,7 +67,7 @@ AntarisReturnCode AntarisApiI2C::api_pa_pc_deinit_i2c_lib()
 {
     AntarisApiParser api_parser;
 
-    if (strcmp(i2c_adapter_type, "QA7") == 0) {
+    if ((strncmp(i2c_adapter_type, "QA7", 2) == 0)) {
         void *handle;
         deinit_qa7_lib_t deinit_func;
     
@@ -107,7 +107,7 @@ AntarisReturnCode AntarisApiI2C::api_pa_pc_read_i2c_bus(uint16_t i2c_dev, uint8_
     AntarisApiParser api_parser;
     AntarisReturnCode ret = An_SUCCESS;
 
-    if (strcmp(i2c_adapter_type, "QA7") == 0) {
+    if ((strncmp(i2c_adapter_type, "QA7", 2) == 0)) {
         ret = read_qa7_i2c(i2c_dev, i2c_address, index, data);
     }
     return ret;
@@ -155,7 +155,7 @@ AntarisReturnCode AntarisApiI2C::api_pa_pc_write_i2c_bus(uint16_t i2c_dev, uint8
     AntarisApiParser api_parser;
     AntarisReturnCode ret = An_SUCCESS;
 
-    if (strcmp(i2c_adapter_type, "QA7") == 0) {
+    if ((strncmp(i2c_adapter_type, "QA7", 2) == 0)) {
         ret = write_qa7_i2c(i2c_dev, i2c_address, index, data);
     }
     return ret;

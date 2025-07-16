@@ -73,10 +73,9 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_gpio_info(gpio_s *gpio)
         goto cleanup_and_exit;
     }
     str = cJSON_GetStringValue(pJsonStr);
-    if ((str == NULL) ||
-        ((strncmp(str, "FTDI", 4) != 0)))
+    if (str == NULL)
     {
-        printf("Only FTDI devices are supported");
+        printf("Adapter type not specified");
         ret = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
     }
@@ -194,7 +193,6 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_gpio_adapter_type(char *adapte
     cJSON *key_gpio = NULL;
     cJSON *pJsonStr = NULL;
     char *str = NULL;
-    char key[32] = {'\0'};
 
     read_config_json(&p_cJson);
     if (p_cJson == NULL)
@@ -225,12 +223,14 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_gpio_adapter_type(char *adapte
         printf("Error: %s value is not a string \n", JSON_Key_Adapter_Type);
         return An_GENERIC_FAILURE;
     }
-    adapter = cJSON_GetStringValue(pJsonStr);
-    if ((*adapter == 0) || (adapter == NULL))
+    str = cJSON_GetStringValue(pJsonStr);
+    if ((*str == 0) || (str == NULL))
     {
         printf("Failed to read gpio count the json, GPIO support not added \n");
         return An_GENERIC_FAILURE;
     }
+    memcpy(adapter, str, 32);
+    printf("Inside parser adapter = %s \n", adapter);
     return An_SUCCESS;
 }
 
@@ -242,7 +242,6 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_i2c_dev(i2c_s *i2c_info)
     cJSON *key_i2c = nullptr;
     cJSON *pJsonStr = nullptr;
     char *str = nullptr;
-    char key[32] = {'\0'};
 
     read_config_json(&p_cJson);
 
@@ -311,7 +310,6 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_i2c_adapter(char *adapter)
     cJSON *key_gpio = NULL;
     cJSON *pJsonStr = NULL;
     char *str = NULL;
-    char key[32] = {'\0'};
 
     read_config_json(&p_cJson);
     if (p_cJson == NULL)
@@ -342,12 +340,13 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_i2c_adapter(char *adapter)
         printf("Error: %s value is not a string \n", JSON_Key_I2C_Adapter_Type);
         return An_GENERIC_FAILURE;
     }
-    adapter = cJSON_GetStringValue(pJsonStr);
-    if ((*adapter == 0) || (adapter == NULL))
+    str = cJSON_GetStringValue(pJsonStr);
+    if ((*str == 0) || (str == NULL))
     {
         printf("Failed to read gpio count the json, GPIO support not added \n");
         return An_GENERIC_FAILURE;
     }
+    memcpy(adapter, str, 32);
     return An_SUCCESS;
 }
 
@@ -359,8 +358,6 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_qa7_lib()
     cJSON *key_gpio = NULL;
     cJSON *pJsonStr = NULL;
     char *str = NULL;
-    char key[32] = {'\0'};
-    char *adapter;
 
     read_config_json(&p_cJson);
     if (p_cJson == NULL)
@@ -379,12 +376,12 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_qa7_lib()
         printf("Error: %s value is not a string \n", JSON_Key_QA7_LIB);
         return An_GENERIC_FAILURE;
     }
-    adapter = cJSON_GetStringValue(pJsonStr);
-    if ((*adapter == 0) || (adapter == NULL))
+    str = cJSON_GetStringValue(pJsonStr);
+    if ((*str == 0) || (str == NULL))
     {
         printf("Failed to read gpio count the json, GPIO support not added \n");
         return An_GENERIC_FAILURE;
     }
-    strcpy(qa7_lib, adapter);
+    memcpy(qa7_lib, str, 32);
     return An_SUCCESS;
 }

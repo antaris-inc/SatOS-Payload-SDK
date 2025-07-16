@@ -115,6 +115,7 @@ AntarisReturnCode AntarisApiGPIO::verify_gpio_pin(int8_t pin_number)
 
     return An_GENERIC_FAILURE; 
 }
+
 int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number)
 {
     int exit_status = An_GENERIC_FAILURE;
@@ -131,7 +132,7 @@ int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number)
         return An_GENERIC_FAILURE;
     }
 
-    if (strcmp(gpio_adapter_type, "QA7") == 0) {
+    if ((strncmp(gpio_adapter_type, "QA7", 2) == 0)) {
         int8_t value = 0;
         value = read_qa7_pin(gpio_port, pin_number);
         return value;
@@ -186,7 +187,7 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_write_gpio(int8_t gpio_port, int8_t 
         return An_GENERIC_FAILURE;
     }
 
-    if (strcmp(gpio_adapter_type, "QA7") == 0) {
+    if ((strncmp(gpio_adapter_type, "QA7", 2) == 0)) {
         int8_t op = FALSE;
         op = write_qa7_pin(gpio_port, pin_number, value);
         if (op == FALSE) {
@@ -240,18 +241,19 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_init_gpio_lib()
         printf("Error: json file is not configured properly. Kindly check configurations done in ACP \n");
         return An_GENERIC_FAILURE;
     }
+    printf("Adapter type = %s \n", gpio_adapter_type);
 
-    if (strcmp(gpio_adapter_type, "QA7") == 0) {
+    if ((strncmp(gpio_adapter_type, "QA7", 2) == 0)) {
         void *handle;
         init_qa7_lib_t init_func;
-    
-        if (qa7_lib[0] != 0) {
+        if (qa7_lib[0] == 0) {
             if (api_parser.api_pa_pc_get_qa7_lib() != An_SUCCESS) {
                 printf("Error in fetching qA7 lib \n");
                 return An_GENERIC_FAILURE;
             }
         }
-
+        printf("qa7 lib %s \n", qa7_lib);
+        
         // Load the shared library
         handle = dlopen(qa7_lib, RTLD_LAZY);
         if (!handle) {
@@ -273,7 +275,6 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_init_gpio_lib()
     
         // Call the function
         int status = init_func();
-        printf("init_qa7_lib returned: %d\n", status);
     
         // Cleanup
         dlclose(handle);
@@ -285,7 +286,7 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_deinit_gpio_lib()
 {
     AntarisApiParser api_parser;
 
-    if (strcmp(gpio_adapter_type, "QA7") == 0) {
+    if ((strncmp(gpio_adapter_type, "QA7", 2) == 0)) {
         void *handle;
         deinit_qa7_lib_t deinit_func;
     
@@ -310,7 +311,6 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_deinit_gpio_lib()
     
         // Call the function
         int status = deinit_func();
-        printf("init_qa7_lib returned: %d\n", status);
     
         // Cleanup
         dlclose(handle);
@@ -379,7 +379,6 @@ int8_t AntarisApiGPIO::write_qa7_pin(int8_t gpio_port, int8_t pin_number, int8_t
     }
 
     result = (int8_t) write_pin_func(gpio_port, pin_number, value);
-    printf("Result from write_pin(0, 2, 1): %d\n", result);
 
     // Done
     dlclose(handle);

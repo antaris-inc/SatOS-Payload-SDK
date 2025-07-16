@@ -6,6 +6,7 @@ from satos_payload_sdk import antaris_api_parser as api_parser
 qa7lib = 0
 
 def init_i2c_lib():
+    global qa7lib
     adapter_type = api_parser.api_pa_pc_get_i2c_adapter()
     if adapter_type == "QA7":
         if qa7lib == 0:
@@ -21,6 +22,7 @@ def init_i2c_lib():
         return False
 
 def deinit_i2c_lib(adapter_type):
+    global qa7lib
     adapter_type = api_parser.api_pa_pc_get_i2c_adapter()
 
     if adapter_type == "QA7":
@@ -35,8 +37,7 @@ def deinit_i2c_lib(adapter_type):
         return False
 
 def api_pa_pc_write_i2c_data(port, baseAddr, index, data):
-    # Call a function with parameters and return value
-
+    global qa7lib
     adapter_type = api_parser.api_pa_pc_get_i2c_adapter()
 
     if adapter_type == "QA7":
@@ -50,6 +51,7 @@ def api_pa_pc_write_i2c_data(port, baseAddr, index, data):
         return False
     
 def api_pa_pc_read_i2c_data(port, baseAddr, index, data):
+    global qa7lib
     adapter_type = api_parser.api_pa_pc_get_i2c_adapter()
 
     if adapter_type == "QA7":
