@@ -270,8 +270,6 @@ void handle_TestGPIO(mythreadState_t *mythread)
     }
     printf("Total gpio pins = %d \n", gpio_info.pin_count);
 
-    ret = api_gpio.api_pa_pc_init_gpio_lib();
-
     if (ret != An_SUCCESS) {
         printf("Error: Unable to initialize GPIO Lib \n");
         return;
@@ -327,8 +325,7 @@ void handle_TestGPIO(mythreadState_t *mythread)
     } 
     
     printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
-    api_gpio.api_pa_pc_deinit_gpio_lib();
-    
+   
 }
 
 void handle_StageFile(mythreadState_t *mythread)

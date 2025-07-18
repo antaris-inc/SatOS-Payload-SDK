@@ -55,9 +55,6 @@ typedef struct gpio {
 
 class AntarisApiGPIO {
     public:
-        AntarisReturnCode api_pa_pc_init_gpio_lib();
-        AntarisReturnCode api_pa_pc_deinit_gpio_lib();
-
         AntarisReturnCode api_pa_pc_get_gpio_info(gpio_s *gpio);
 
         int8_t api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number);
