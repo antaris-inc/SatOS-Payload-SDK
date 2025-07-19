@@ -22,6 +22,8 @@
 #define GENERIC_ERROR -1
 
 char qa7_lib[32] = {0};
+extern char gpio_adapter_type[32];
+extern char i2c_adapter_type[32];
 
 AntarisReturnCode AntarisApiParser::api_pa_pc_get_gpio_info(gpio_s *gpio)
 {
@@ -96,7 +98,7 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_gpio_info(gpio_s *gpio)
     str = cJSON_GetStringValue(pJsonStr);
     if ((*str == 0) || (str == NULL) || (strlen(str) > sizeof(int8_t)))
     {
-        printf("Failed to read gpio count the json, GPIO support not added \n");
+        printf("1 Failed to read gpio count the json, GPIO support not added \n");
         ret = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
     }
@@ -124,7 +126,7 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_gpio_info(gpio_s *gpio)
     str = cJSON_GetStringValue(pJsonStr);
     if ((*str == 0) || (str == NULL) || (strlen(str) > sizeof(int8_t)))
     {
-        printf("Failed to read gpio port the json, GPIO support not added \n");
+        printf("2 Failed to read gpio port the json, GPIO support not added \n");
         ret = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
     }
@@ -164,6 +166,7 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_gpio_info(gpio_s *gpio)
 
     // get Interrupt pin, it is optional, hence not returning upon failure
     pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_Interrupt_Pin);
+    printf("rahul int %d \n", pJsonStr->valueint);
     if (cJSON_IsString(pJsonStr) != cJSON_Invalid) {
         str = cJSON_GetStringValue(pJsonStr);
         if ((*str != 0) && (str == NULL)) {
@@ -179,6 +182,14 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_gpio_info(gpio_s *gpio)
         printf("Error: %s value is not a string, ignoring Interrupt pin \n", JSON_Key_Interrupt_Pin);
     }
 
+    ret = api_pa_pc_get_gpio_adapter_type(gpio_adapter_type);
+
+    if (ret != An_SUCCESS) {
+        printf("Error: json file is not configured properly. Kindly check configurations done in ACP \n");
+        return An_GENERIC_FAILURE;
+    }
+
+    api_pa_pc_get_qa7_lib();
 cleanup_and_exit:
     cJSON_Delete(p_cJson);
 
@@ -226,7 +237,7 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_gpio_adapter_type(char *adapte
     str = cJSON_GetStringValue(pJsonStr);
     if ((*str == 0) || (str == NULL))
     {
-        printf("Failed to read gpio count the json, GPIO support not added \n");
+        printf("3 Failed to read gpio count the json, GPIO support not added \n");
         return An_GENERIC_FAILURE;
     }
     memcpy(adapter, str, 32);
@@ -242,6 +253,7 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_i2c_dev(i2c_s *i2c_info)
     cJSON *key_i2c = nullptr;
     cJSON *pJsonStr = nullptr;
     char *str = nullptr;
+    char key[32] = {'\0'};
 
     read_config_json(&p_cJson);
 
@@ -275,7 +287,7 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_i2c_dev(i2c_s *i2c_info)
 
     str = cJSON_GetStringValue(pJsonStr);
     if (!str || strlen(str) > sizeof(int8_t)) {
-        std::cerr << "Failed to read CAN count in JSON, CAN support not added\n";
+        std::cerr << "4 Failed to read CAN count in JSON, CAN support not added\n";
         ret = An_INVALID_PARAMS;
         goto cleanup_and_exit;
     }
@@ -294,6 +306,14 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_i2c_dev(i2c_s *i2c_info)
         i2c_info->i2c_dev[i] = (int8_t)pJsonStr->valueint;
     }
 
+    ret = api_pa_pc_get_i2c_adapter(i2c_adapter_type);
+
+    if (ret != An_SUCCESS) {
+        printf("Error: json file is not configured properly. Kindly check configurations done in ACP \n");
+        return An_GENERIC_FAILURE;
+    }
+    
+    api_pa_pc_get_qa7_lib();
 cleanup_and_exit:
     if (p_cJson) {
         cJSON_Delete(p_cJson);

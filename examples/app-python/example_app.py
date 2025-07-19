@@ -214,7 +214,6 @@ class Controller:
 
         logger.info("Total gpio pins = %d", int(gpio_info.pin_count))
 
-        api_gpio.init_gpio_lib()
         i = 0
         # Read initial value of GPIO pins.
         # As GPIO pins are back-to-back connected, their value must be same.
@@ -250,8 +249,6 @@ class Controller:
                     logger.error("Error in pin no %d", int(readPin))
                     return
             i += 1
-        # De-init library
-        api_gpio.deinit_gpio_lib()
         return 
     
     # Sequence to test UART loopback. The sample program assumes Tx and Rx are connected in loopback mode.

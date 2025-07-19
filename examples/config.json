@@ -13,7 +13,7 @@
     },
     "IO_Access": {
         "GPIO": {
-            "ADAPTER_TYPE" : "FTDI",
+            "ADAPTER_TYPE" : "QA7",
             "GPIO_PIN_COUNT": "2",
             "GPIO_Port" : "0",
             "GPIO_PIN_0": "5",

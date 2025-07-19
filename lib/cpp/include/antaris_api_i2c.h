@@ -21,9 +21,6 @@ typedef struct i2c {
 
 class AntarisApiI2C {
     public:
-        AntarisReturnCode api_pa_pc_init_i2c_lib();
-        AntarisReturnCode api_pa_pc_deinit_i2c_lib();
-
         AntarisReturnCode api_pa_pc_read_i2c_bus(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data);
         AntarisReturnCode read_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data);
 

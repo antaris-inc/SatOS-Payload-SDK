@@ -75,6 +75,8 @@ def api_pa_pc_read_gpio(pin):
     adapter_type = api_parser.api_pa_pc_get_gpio_adapter()
 
     if adapter_type == "QA7":
+        if qa7lib == 0:
+            qa7lib = api_parser.api_pa_pc_get_qa7_lib()
         qa7lib.read_pin.argtypes = [ctypes.c_int, ctypes.c_int]
         qa7lib.read_pin.restype = ctypes.c_int8
         qa7lib.read_pin(port, pin)
@@ -110,6 +112,8 @@ def api_pa_pc_write_gpio(pin, value):
     adapter_type = api_parser.api_pa_pc_get_gpio_adapter()
 
     if adapter_type == "QA7":
+        if qa7lib == 0:
+            qa7lib = api_parser.api_pa_pc_get_qa7_lib()
         qa7lib.write_pin.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int]
         qa7lib.write_pin.restype = ctypes.c_int8
         qa7lib.write_pin(port, pin, value)
@@ -145,38 +149,6 @@ def api_write_gpio(port, pin, value):
     Device.close()
     return op
 
-def init_gpio_lib():
-    global qa7lib
-    adapter_type = api_parser.api_pa_pc_get_gpio_adapter()
-
-    if adapter_type == "QA7":
-        if qa7lib == 0:
-            qa7_lib_path = api_parser.api_pa_pc_get_qa7_lib()
-            print(f"qa7 lib = {qa7_lib_path}")
-            qa7lib = ctypes.CDLL(qa7_lib_path)
-            qa7lib.init_qa7_lib.restype = ctypes.c_int8
-            if qa7lib.init_qa7_lib() == True:
-                return True
-            else:
-                return False
-    else:
-        return True
-    
-def deinit_gpio_lib():
-    global qa7lib
-    adapter_type = api_parser.api_pa_pc_get_gpio_adapter()
-
-    if adapter_type == "QA7":
-        qa7lib.deinit_qa7_lib.restype = ctypes.c_int8
-        if qa7lib.deinit_qa7_lib() == True:
-            qa7lib = 0
-            return True
-        else:
-            qa7lib = 0
-            return False
-    else:
-        return True
-    
 # Main function is added for standalone testing of GPIO, if needed
 if __name__ == "__main__":
     output = g_GPIO_ERROR

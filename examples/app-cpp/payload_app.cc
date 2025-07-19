@@ -479,7 +479,7 @@ void handle_TestI2CBus(mythreadState_t *mythread)
     i2c_s i2c_info;
     int i = 0;
     uint8_t read, write = 1;
-    uint16_t address = 0xA;
+    uint16_t address = 0xA0;
     uint16_t index = 1;
 
     printf("\n Handling sequence: TestGPIO! \n");
@@ -491,13 +491,6 @@ void handle_TestI2CBus(mythreadState_t *mythread)
         return;
     }
     printf("Total i2c ports = %d \n", i2c_info.i2c_port_count);
-
-    ret = api_i2c.api_pa_pc_init_i2c_lib();
-
-    if (ret != An_SUCCESS) {
-        printf("Error: Init I2C failed \n");
-        return;
-    }
 
     if (i2c_info.i2c_port_count> 0) {
         ret = api_i2c.api_pa_pc_read_i2c_bus(i2c_info.i2c_dev[0], address, index, &read);
@@ -527,7 +520,6 @@ void handle_TestI2CBus(mythreadState_t *mythread)
     } 
     
     printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
-    api_i2c.api_pa_pc_deinit_i2c_lib();
 }
 
 // Table of Sequence_id : FsmThread
