@@ -373,8 +373,8 @@ def new():
     app.mount_sequence("StageFile",ctl.handle_stage_filedownload)
     app.mount_sequence("PowerControl", ctl.handle_power_control)
     app.mount_sequence("TestCANBus", ctl.handle_test_can_bus)
-    app.mount_sequence("GetGnssEphData", ctl.handle_gnss_data)
-    app.mount_sequence("GetEpsVoltage", ctl.handle_eps_voltage_telemetry_request)
+    app.mount_sequence("GnssDataTm", ctl.handle_gnss_data)
+    app.mount_sequence("EpsVoltageTm", ctl.handle_eps_voltage_telemetry_request)
     app.mount_sequence("SesThermMgmnt", ctl.handle_ses_therm_mgmnt)
     app.mount_sequence("SesTempReq", ctl.handle_ses_temp_req)
     return app
