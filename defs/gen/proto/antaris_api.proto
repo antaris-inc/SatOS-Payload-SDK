@@ -63,6 +63,11 @@ enum FilePriorities {
     FILE_DL_PRIORITY_IMMEDIATE       = 3; // highest priority
 }
 
+enum FileDlRadioType {
+    FILE_DL_SBAND                    = 0; // S-band file downlink
+    FILE_DL_XBAND                    = 1; // X-band file downlink
+}
+
 message AntarisSdkVersion {
     int32                           major            = 1; // major revision number
     int32                           minor            = 2; // minor revision number
@@ -101,6 +106,7 @@ message ReqStageFileDownloadParams {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     string                          file_path        = 2; // File path relative to outbound mount-point
     FilePriorities                  file_priority    = 3; // File priority
+    FileDlRadioType                 file_dl_band     = 4; // Radio Type for file downlink 
 }
 
 message RespStageFileDownloadParams {
