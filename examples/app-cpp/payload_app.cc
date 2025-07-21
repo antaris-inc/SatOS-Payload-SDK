@@ -607,20 +607,15 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
         printf("\t => %d\n", EpsVoltageTelemetry_IDX);
         return EpsVoltageTelemetry_IDX;
     }
-<<<<<<< HEAD
     else if (strcmp(sequence_string, GnssDataTelemetry_ID) == 0) {
         printf("\t => %d\n", GnssDataTelemetry_IDX);
         return GnssDataTelemetry_IDX;
     }
-
-
-=======
     else if (strcmp(sequence_string, TestI2CBUS_ID) == 0) {
         printf("\t => %d\n", TestI2CBUS_IDX);
         return TestI2CBUS_IDX;
     }
     
->>>>>>> b4cc3a6 (Added I2C and GPIO support)
     printf("Unknown sequence, returning -1\n");
     return -1;
 }
@@ -932,11 +927,8 @@ int main(int argc, char *argv[])
     payload_sequences_fsms[StageFile_Sequence_IDX] = fsmThreadCreate(channel, 1, StageFile_Sequence_ID, handle_StageFile);
     payload_sequences_fsms[TestCANBus_Sequence_IDX] = fsmThreadCreate(channel, 1, TestCANBus_Sequence_ID, handle_TestCANBus);
     payload_sequences_fsms[EpsVoltageTelemetry_IDX] = fsmThreadCreate(channel, 1, EpsVoltageTelemetry_ID, handle_Eps_Voltage_Telemetry_Request);
-<<<<<<< HEAD
     payload_sequences_fsms[GnssDataTelemetry_IDX] = fsmThreadCreate(channel, 1, GnssDataTelemetry_ID, handle_gnss_data_Telemetry_Request);
-=======
     payload_sequences_fsms[TestI2CBUS_IDX] = fsmThreadCreate(channel, 1, TestI2CBUS_ID, handle_TestI2CBus);
->>>>>>> b4cc3a6 (Added I2C and GPIO support)
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure
@@ -982,17 +974,13 @@ int main(int argc, char *argv[])
     if (strcmp(payload_sequences_fsms[EpsVoltageTelemetry_IDX]->state, "NOT_STARTED") != 0) {
         pthread_join(payload_sequences_fsms[EpsVoltageTelemetry_IDX]->thread_id, &exit_status);
     }
-<<<<<<< HEAD
     if (strcmp(payload_sequences_fsms[GnssDataTelemetry_IDX]->state, "NOT_STARTED") != 0) {
         pthread_join(payload_sequences_fsms[GnssDataTelemetry_IDX]->thread_id, &exit_status);
     }
-
-=======
     if (strcmp(payload_sequences_fsms[TestI2CBUS_IDX]->state, "NOT_STARTED") != 0) {
         pthread_join(payload_sequences_fsms[TestI2CBUS_IDX]->thread_id, &exit_status);
     }
     
->>>>>>> b4cc3a6 (Added I2C and GPIO support)
     printf("Cleaning up sequence resources\n");
 
     fsmThreadCleanup(payload_sequences_fsms[HelloWorld_IDX]);
@@ -1001,11 +989,8 @@ int main(int argc, char *argv[])
     fsmThreadCleanup(payload_sequences_fsms[TestGPIO_Sequence_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[StageFile_Sequence_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[EpsVoltageTelemetry_IDX]);
-<<<<<<< HEAD
     fsmThreadCleanup(payload_sequences_fsms[GnssDataTelemetry_IDX]);
-=======
     fsmThreadCleanup(payload_sequences_fsms[TestI2CBUS_IDX]);
->>>>>>> b4cc3a6 (Added I2C and GPIO support)
 
     // Delete Channel
     api_pa_pc_delete_channel(channel);
