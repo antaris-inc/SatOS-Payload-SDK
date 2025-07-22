@@ -29,6 +29,7 @@
 #include <chrono>
 #include <thread>
 #include <future>
+#include <dlfcn.h>
 
 #include "Python.h"
 
@@ -36,172 +37,18 @@
 #include "antaris_api.h"
 #include "antaris_api_internal.h"
 #include "antaris_sdk_environment.h"
+#include "antaris_api_parser.h"
 
 #define GENERIC_ERROR -1
 #define TIMEOUT_PYFINALIZE 5
 
-AntarisReturnCode AntarisApiGPIO::api_pa_pc_get_gpio_info(gpio_s *gpio)
-{
-    AntarisReturnCode ret = An_SUCCESS;
-    cJSON *p_cJson = NULL;
-    cJSON *key_io_access = NULL;
-    cJSON *key_gpio = NULL;
-    cJSON *pJsonStr = NULL;
-    char *str = NULL;
-    char key[32] = {'\0'};
+typedef int (*read_pin_t)(int port, int pin_number);
+typedef int (*write_pin_t)(int port, int pin_number, int value);
+typedef int (*init_qa7_lib_t)(void);
+typedef int (*deinit_qa7_lib_t)(void);
 
-    memset(gpio->pins, -1, sizeof(gpio->pins));
-    gpio->gpio_port = -1;
-    gpio->pin_count = -1;
-    gpio->interrupt_pin = -1;
-
-    read_config_json(&p_cJson);
-    if (p_cJson == NULL)
-    {
-        printf("Error: Failed to read the config.json\n");
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-
-    key_io_access = cJSON_GetObjectItemCaseSensitive(p_cJson, JSON_Key_IO_Access);
-    if (key_io_access == NULL) {
-        printf("Error: %s key absent in config.json \n", JSON_Key_IO_Access);
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-        
-    key_gpio = cJSON_GetObjectItemCaseSensitive(key_io_access, JSON_Key_GPIO);
-    if (key_gpio == NULL) {
-        printf("Error: %s key absent in config.json \n", JSON_Key_GPIO);
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-        
-    // Check adapter type
-    pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_Adapter_Type);
-    if (pJsonStr == NULL) {
-        printf("Error: %s key absent in config.json \n", JSON_Key_Adapter_Type);
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-    if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
-        printf("Error: %s value is not a string \n", JSON_Key_Adapter_Type);
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-    str = cJSON_GetStringValue(pJsonStr);
-    if ((str == NULL) ||
-        ((strncmp(str, "FTDI", 4) != 0)))
-    {
-        printf("Only FTDI devices are supported");
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-    
-    // get GPIO pin count
-    pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_GPIO_Pin_Count);
-    if (pJsonStr == NULL) {
-        printf("Error: %s key absent in config.json \n", JSON_Key_GPIO_Pin_Count);
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-    if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
-        printf("Error: %s value is not a string \n", JSON_Key_GPIO_Pin_Count);
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-
-    str = cJSON_GetStringValue(pJsonStr);
-    if ((*str == 0) || (str == NULL) || (strlen(str) > sizeof(int8_t)))
-    {
-        printf("Failed to read gpio count the json, GPIO support not added \n");
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-    gpio->pin_count = *str - '0';
-    if (gpio->pin_count > MAX_GPIO_PIN_COUNT) {
-        printf("Error: GPIO pin count canot be greater than %d \n", MAX_GPIO_PIN_COUNT);
-        gpio->pin_count = 0;
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-
-    // Get GPIO port
-    pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_GPIO_Port);
-    if (pJsonStr == NULL) {
-        printf("Error: %s key absent in config.json \n", JSON_Key_GPIO_Port);
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-    if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
-        printf("Error: %s value is not a string \n", JSON_Key_GPIO_Port);
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-
-    str = cJSON_GetStringValue(pJsonStr);
-    if ((*str == 0) || (str == NULL) || (strlen(str) > sizeof(int8_t)))
-    {
-        printf("Failed to read gpio port the json, GPIO support not added \n");
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-    gpio->gpio_port = *str - '0';
-    if (gpio->gpio_port > MAX_GPIO_PORT_NUMBER) {
-        printf("Error: GPIO port canot be greater than %d \n", MAX_GPIO_PORT_NUMBER);
-        gpio->gpio_port = -1;
-        ret = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-
-    // get GPIO pins
-    for (int i = 0; i < gpio->pin_count; i++)
-    {
-        sprintf(key, "%s%d", JSON_Key_GPIO_Pin, i);
-        pJsonStr = cJSON_GetObjectItem(key_gpio, key);
-        if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
-            printf("Error: %s value is not a string \n", key);
-            ret = An_GENERIC_FAILURE;
-            goto cleanup_and_exit;
-        }
-
-        str = cJSON_GetStringValue(pJsonStr);
-        if ((*str == 0) || (str == NULL) || (strlen(str) > sizeof(int8_t))) {
-            printf("Error: Failed to read gpio pin number %d the json \n", i);
-            ret = An_GENERIC_FAILURE;
-            goto cleanup_and_exit;
-        }
-        gpio->pins[i] = *str - '0';
-        if ((gpio->pins[i] < MIN_GPIO_PIN_NUMBER) ||
-            (gpio->pins[i] > MAX_GPIO_PIN_NUMBER)) {
-            printf("Error: GPIO pin number is %d. It should be in range of %d to %d \n", gpio->pins[i], MIN_GPIO_PIN_NUMBER, MAX_GPIO_PIN_NUMBER);
-            ret = An_GENERIC_FAILURE;
-            goto cleanup_and_exit;
-        }
-    }
-
-    // get Interrupt pin, it is optional, hence not returning upon failure
-    pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_Interrupt_Pin);
-    if (cJSON_IsString(pJsonStr) != cJSON_Invalid) {
-        str = cJSON_GetStringValue(pJsonStr);
-        if ((*str != 0) && (str == NULL)) {
-            gpio->interrupt_pin = *str - '0';
-            if ((gpio->interrupt_pin < MIN_GPIO_PIN_NUMBER) ||
-                (gpio->interrupt_pin > MAX_GPIO_PIN_NUMBER)) {
-                printf("Error: Interrupt pin number is %d. It should be in range of %d to %d \n", gpio->interrupt_pin, MIN_GPIO_PIN_NUMBER, MAX_GPIO_PIN_NUMBER);
-                ret = An_GENERIC_FAILURE;
-                goto cleanup_and_exit;
-            }
-        }
-    } else {
-        printf("Error: %s value is not a string, ignoring Interrupt pin \n", JSON_Key_Interrupt_Pin);
-    }
-
-cleanup_and_exit:
-    cJSON_Delete(p_cJson);
-
-    return ret;
-}
+extern char qa7_lib[32];
+char gpio_adapter_type[32] = {0};
 
 AntarisReturnCode init_satos_lib()
 {
@@ -255,8 +102,9 @@ AntarisReturnCode AntarisApiGPIO::verify_gpio_pin(int8_t pin_number)
 {
     gpio_s gpio_info;
     int i = 0;
+    AntarisApiParser api_parser;
 
-    api_pa_pc_get_gpio_info(&gpio_info);
+    api_parser.api_pa_pc_get_gpio_info(&gpio_info);
 
     while (i < gpio_info.pin_count) {
         if (gpio_info.pins[i] == pin_number) {
@@ -267,6 +115,7 @@ AntarisReturnCode AntarisApiGPIO::verify_gpio_pin(int8_t pin_number)
 
     return An_GENERIC_FAILURE; 
 }
+
 int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number)
 {
     int exit_status = An_GENERIC_FAILURE;
@@ -276,12 +125,18 @@ int8_t AntarisApiGPIO::api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number)
     PyObject *pFunction = NULL;
     PyObject *pArgs = NULL;
     PyObject *pValue = NULL;
-    
+    AntarisApiParser api_parser;
+
     if (An_GENERIC_FAILURE == verify_gpio_pin(pin_number) ) {
         printf("Error: Wrong configuration for GPIO pin %d \n", pin_number);
         return An_GENERIC_FAILURE;
     }
 
+    if ((strncmp(gpio_adapter_type, "QA7", 2) == 0)) {
+        int8_t value = 0;
+        value = read_qa7_pin(gpio_port, pin_number);
+        return value;
+    }
     pName = PyUnicode_DecodeFSDefault(PYTHON_GPIO_MODULE);
     pModule = PyImport_Import(pName);
 
@@ -325,9 +180,20 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_write_gpio(int8_t gpio_port, int8_t 
     PyObject *pArgs = NULL;
     PyObject *pValue = NULL;
 
+    AntarisApiParser api_parser;
+
     if (An_GENERIC_FAILURE == verify_gpio_pin(pin_number) ) {
         printf("Error: Wrong configuration for GPIO pin %d \n", pin_number);
         return An_GENERIC_FAILURE;
+    }
+
+    if ((strncmp(gpio_adapter_type, "QA7", 2) == 0)) {
+        int8_t op = FALSE;
+        op = write_qa7_pin(gpio_port, pin_number, value);
+        if (op == FALSE) {
+            return An_GENERIC_FAILURE;
+        } 
+        return An_SUCCESS;
     }
 
     pName = PyUnicode_DecodeFSDefault(PYTHON_GPIO_MODULE);
@@ -362,4 +228,67 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_write_gpio(int8_t gpio_port, int8_t 
     }
 
     return An_SUCCESS;
+}
+
+int8_t AntarisApiGPIO::read_qa7_pin(int8_t gpio_port, int8_t pin_number)
+{
+    void *handle;
+    read_pin_t read_pin_func;
+    int8_t value;
+
+    // Load the shared library
+    handle = dlopen(qa7_lib, RTLD_LAZY);
+    if (!handle) {
+        fprintf(stderr, "dlopen failed: %s\n", dlerror());
+        return 1;
+    }
+
+    // Clear any existing errors
+    dlerror();
+
+    // Get the symbol
+    *(void **) (&read_pin_func) = dlsym(handle, QA7_READ_PIN_FUNCTION);
+    char *error = dlerror();
+    if (error) {
+        fprintf(stderr, "dlsym failed: %s\n", error);
+        dlclose(handle);
+        return 1;
+    }
+
+    value = (int8_t) read_pin_func(gpio_port, pin_number);
+
+    dlclose(handle);
+    return value;
+}
+
+int8_t AntarisApiGPIO::write_qa7_pin(int8_t gpio_port, int8_t pin_number, int8_t value)
+{
+    void *handle;
+    write_pin_t write_pin_func;
+    int8_t result;
+
+    // Load the shared library
+    handle = dlopen(qa7_lib, RTLD_LAZY);
+    if (!handle) {
+        fprintf(stderr, "dlopen failed: %s\n", dlerror());
+        return 1;
+    }
+
+    // Clear any previous error
+    dlerror();
+
+    // Lookup symbol
+    *(void **) (&write_pin_func) = dlsym(handle, QA7_WRITE_PIN_FUNCTION);
+    char *error = dlerror();
+    if (error) {
+        fprintf(stderr, "dlsym failed: %s\n", error);
+        dlclose(handle);
+        return 1;
+    }
+
+    result = (int8_t) write_pin_func(gpio_port, pin_number, value);
+
+    // Done
+    dlclose(handle);
+    return result;
 }

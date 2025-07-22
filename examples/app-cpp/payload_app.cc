@@ -25,6 +25,8 @@
 #include "antaris_api_gpio.h"
 #include "antaris_api_pyfunctions.h"
 #include "antaris_can_api.h"
+#include "antaris_api_parser.h"
+#include "antaris_api_i2c.h"
 
 #define MAX_STR_LEN 256
 #define SEQ_PARAMS_LEN 64
@@ -46,7 +48,9 @@
 #define EpsVoltageTelemetry_IDX         6
 #define GnssDataTelemetry_ID            "GnssDataTm"
 #define GnssDataTelemetry_IDX           7
-#define SEQUENCE_ID_MAX                 8
+#define TestI2CBUS_ID                   "TestI2CBus"
+#define TestI2CBUS_IDX                  8
+#define SEQUENCE_ID_MAX                 9
 
 #define APP_STATE_ACTIVE                0  // Application State : Good (0), Error (non-Zero)
 
@@ -250,6 +254,7 @@ void handle_TestGPIO(mythreadState_t *mythread)
 {
     AntarisReturnCode ret;
     AntarisApiGPIO api_gpio;
+    AntarisApiParser api_parser;
     gpio_s gpio_info;
     int i = 0;
     int8_t readPin, writePin, val;
@@ -257,13 +262,18 @@ void handle_TestGPIO(mythreadState_t *mythread)
 
     printf("\n Handling sequence: TestGPIO! \n");
 
-    ret = api_gpio.api_pa_pc_get_gpio_info(&gpio_info);
+    ret = api_parser.api_pa_pc_get_gpio_info(&gpio_info);
 
     if (ret != An_SUCCESS) {
         printf("Error: json file is not configured properly. Kindly check configurations done in ACP \n");
         return;
     }
     printf("Total gpio pins = %d \n", gpio_info.pin_count);
+
+    if (ret != An_SUCCESS) {
+        printf("Error: Unable to initialize GPIO Lib \n");
+        return;
+    }
 
     while (i < gpio_info.pin_count) {
         // Read initial value of GPIO pins.
@@ -315,7 +325,7 @@ void handle_TestGPIO(mythreadState_t *mythread)
     } 
     
     printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
-    
+   
 }
 
 void handle_StageFile(mythreadState_t *mythread)
@@ -461,6 +471,57 @@ exit_sequence:
     
 }
 
+void handle_TestI2CBus(mythreadState_t *mythread)
+{
+    AntarisReturnCode ret;
+    AntarisApiI2C api_i2c;
+    AntarisApiParser api_parser;
+    i2c_s i2c_info;
+    int i = 0;
+    uint8_t read, write = 1;
+    uint16_t address = 0xA0;
+    uint16_t index = 1;
+
+    printf("\n Handling sequence: TestI2CBus! \n");
+
+    ret = api_parser.api_pa_pc_get_i2c_dev(&i2c_info);
+
+    if (ret != An_SUCCESS) {
+        printf("Error: json file is not configured properly. Kindly check configurations done in ACP \n");
+        return;
+    }
+    printf("Total i2c ports = %d \n", i2c_info.i2c_port_count);
+
+    if (i2c_info.i2c_port_count> 0) {
+        ret = api_i2c.api_pa_pc_read_i2c_bus(i2c_info.i2c_dev[0], address, index, &read);
+        if (ret != An_SUCCESS) {
+            printf("Error: Read I2C failed \n");
+            return;
+        }
+        
+        printf("I2c read = %d \n", read);
+                   
+        ret = api_i2c.api_pa_pc_write_i2c_bus(i2c_info.i2c_dev[0], address, index, &write);
+        if (ret != An_SUCCESS) {
+            printf("Error: Write I2C failed \n");
+            return;
+        }
+    }
+
+    // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], TestI2CBUS_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } 
+    
+    printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+}
+
 // Table of Sequence_id : FsmThread
 mythreadState_t *payload_sequences_fsms[SEQUENCE_ID_MAX];
 unsigned int current_sequence_idx = HelloWorld_IDX;
@@ -541,17 +602,17 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
     } else if (strcmp(sequence_string, TestCANBus_Sequence_ID) == 0) {
         printf("\t => %d\n", TestCANBus_Sequence_IDX);
         return TestCANBus_Sequence_IDX;
-    }
-    else if (strcmp(sequence_string, EpsVoltageTelemetry_ID) == 0) {
+    } else if (strcmp(sequence_string, EpsVoltageTelemetry_ID) == 0) {
         printf("\t => %d\n", EpsVoltageTelemetry_IDX);
         return EpsVoltageTelemetry_IDX;
-    }
-    else if (strcmp(sequence_string, GnssDataTelemetry_ID) == 0) {
+    } else if (strcmp(sequence_string, GnssDataTelemetry_ID) == 0) {
         printf("\t => %d\n", GnssDataTelemetry_IDX);
         return GnssDataTelemetry_IDX;
+    } else if (strcmp(sequence_string, TestI2CBUS_ID) == 0) {
+        printf("\t => %d\n", TestI2CBUS_IDX);
+        return TestI2CBUS_IDX;
     }
-
-
+    
     printf("Unknown sequence, returning -1\n");
     return -1;
 }
@@ -630,6 +691,7 @@ AntarisReturnCode process_req_payload_metrics(ReqPayloadMetricsParams *payload_m
 
     return An_SUCCESS;
 }
+
 AntarisReturnCode shutdown_app(ShutdownParams *shutdown_param)
 {
     if (shutdown_param == NULL){
@@ -706,20 +768,20 @@ AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
     }
 
     const char *fields[] = {
-    "Time Validity",
-    "ECI Position Validity",
-    "ECI Velocity Validity",
-    "ECEF Position Validity",
-    "ECEF Velocity Validity",
-    "Angular Rate Validity",
-    "Attitude Quaternion Validity",
-    "Lat-Lon-Altitude Validity",
-    "Nadir Vector Validity",
-    "Geodetric Nadir Vector Validity",
-    "Beta Angle Validity"
-};
+        "Time Validity",
+        "ECI Position Validity",
+        "ECI Velocity Validity",
+        "ECEF Position Validity",
+        "ECEF Velocity Validity",
+        "Angular Rate Validity",
+        "Attitude Quaternion Validity",
+        "Lat-Lon-Altitude Validity",
+        "Nadir Vector Validity",
+        "Geodetric Nadir Vector Validity",
+        "Beta Angle Validity"
+    };
 
-    if(gnss_eph_data->gps_timeout_flag == 1){
+    if(gnss_eph_data->gps_timeout_flag == 1) {
         printf("gps_fix_time: %d",gnss_eph_data->gps_eph_data.gps_fix_time);
         printf("gps_sys_time: %d",gnss_eph_data->gps_eph_data.gps_sys_time);
         OBC_time obc = gnss_eph_data->gps_eph_data.obc_time;
@@ -735,8 +797,7 @@ AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
            
         }
         printf("gps_validity_flag_pos_vel: %d\n",gnss_eph_data->gps_eph_data.gps_validity_flag_pos_vel);
-    }
-    else if(gnss_eph_data->adcs_timeout_flag == 1){
+    } else if(gnss_eph_data->adcs_timeout_flag == 1) {
         printf("ADCS Orbit Propagator/System Time = %f\n",gnss_eph_data->adcs_eph_data.orbit_time);
         printf("ECI Position X (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_x);
         printf("ECI Position Y (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_y);
@@ -864,6 +925,7 @@ int main(int argc, char *argv[])
     payload_sequences_fsms[TestCANBus_Sequence_IDX] = fsmThreadCreate(channel, 1, TestCANBus_Sequence_ID, handle_TestCANBus);
     payload_sequences_fsms[EpsVoltageTelemetry_IDX] = fsmThreadCreate(channel, 1, EpsVoltageTelemetry_ID, handle_Eps_Voltage_Telemetry_Request);
     payload_sequences_fsms[GnssDataTelemetry_IDX] = fsmThreadCreate(channel, 1, GnssDataTelemetry_ID, handle_gnss_data_Telemetry_Request);
+    payload_sequences_fsms[TestI2CBUS_IDX] = fsmThreadCreate(channel, 1, TestI2CBUS_ID, handle_TestI2CBus);
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure
@@ -909,10 +971,15 @@ int main(int argc, char *argv[])
     if (strcmp(payload_sequences_fsms[EpsVoltageTelemetry_IDX]->state, "NOT_STARTED") != 0) {
         pthread_join(payload_sequences_fsms[EpsVoltageTelemetry_IDX]->thread_id, &exit_status);
     }
+
     if (strcmp(payload_sequences_fsms[GnssDataTelemetry_IDX]->state, "NOT_STARTED") != 0) {
         pthread_join(payload_sequences_fsms[GnssDataTelemetry_IDX]->thread_id, &exit_status);
     }
-
+    
+    if (strcmp(payload_sequences_fsms[TestI2CBUS_IDX]->state, "NOT_STARTED") != 0) {
+        pthread_join(payload_sequences_fsms[TestI2CBUS_IDX]->thread_id, &exit_status);
+    }
+    
     printf("Cleaning up sequence resources\n");
 
     fsmThreadCleanup(payload_sequences_fsms[HelloWorld_IDX]);
@@ -922,6 +989,7 @@ int main(int argc, char *argv[])
     fsmThreadCleanup(payload_sequences_fsms[StageFile_Sequence_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[EpsVoltageTelemetry_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[GnssDataTelemetry_IDX]);
+    fsmThreadCleanup(payload_sequences_fsms[TestI2CBUS_IDX]);
 
     // Delete Channel
     api_pa_pc_delete_channel(channel);
