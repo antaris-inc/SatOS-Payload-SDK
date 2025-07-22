@@ -21,13 +21,13 @@
             "GPIO_Interrupt": "0"
         },
         "UART": {
-            "ADAPTER_TYPE": "QA7", 
+            "ADAPTER_TYPE": "FTDI", 
             "UART_PORT_COUNT": "2",
             "Device_Path_0": "/dev/ttyUSB0",
             "Device_Path_1": "/dev/ttyUSB1"
         },
         "CAN": {
-            "ADAPTER_TYPE": "QA7",
+            "ADAPTER_TYPE": "FTDI",
             "CAN_PORT_COUNT": "1",
             "CAN_Bus_Path_0": "can1",
             "CAN_Bus_Path_1": "can0"
