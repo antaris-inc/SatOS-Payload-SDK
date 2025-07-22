@@ -482,7 +482,7 @@ void handle_TestI2CBus(mythreadState_t *mythread)
     uint16_t address = 0xA0;
     uint16_t index = 1;
 
-    printf("\n Handling sequence: TestGPIO! \n");
+    printf("\n Handling sequence: TestI2CBus! \n");
 
     ret = api_parser.api_pa_pc_get_i2c_dev(&i2c_info);
 
@@ -602,16 +602,13 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
     } else if (strcmp(sequence_string, TestCANBus_Sequence_ID) == 0) {
         printf("\t => %d\n", TestCANBus_Sequence_IDX);
         return TestCANBus_Sequence_IDX;
-    }
-    else if (strcmp(sequence_string, EpsVoltageTelemetry_ID) == 0) {
+    } else if (strcmp(sequence_string, EpsVoltageTelemetry_ID) == 0) {
         printf("\t => %d\n", EpsVoltageTelemetry_IDX);
         return EpsVoltageTelemetry_IDX;
-    }
-    else if (strcmp(sequence_string, GnssDataTelemetry_ID) == 0) {
+    } else if (strcmp(sequence_string, GnssDataTelemetry_ID) == 0) {
         printf("\t => %d\n", GnssDataTelemetry_IDX);
         return GnssDataTelemetry_IDX;
-    }
-    else if (strcmp(sequence_string, TestI2CBUS_ID) == 0) {
+    } else if (strcmp(sequence_string, TestI2CBUS_ID) == 0) {
         printf("\t => %d\n", TestI2CBUS_IDX);
         return TestI2CBUS_IDX;
     }
@@ -694,6 +691,7 @@ AntarisReturnCode process_req_payload_metrics(ReqPayloadMetricsParams *payload_m
 
     return An_SUCCESS;
 }
+
 AntarisReturnCode shutdown_app(ShutdownParams *shutdown_param)
 {
     if (shutdown_param == NULL){
@@ -770,20 +768,20 @@ AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
     }
 
     const char *fields[] = {
-    "Time Validity",
-    "ECI Position Validity",
-    "ECI Velocity Validity",
-    "ECEF Position Validity",
-    "ECEF Velocity Validity",
-    "Angular Rate Validity",
-    "Attitude Quaternion Validity",
-    "Lat-Lon-Altitude Validity",
-    "Nadir Vector Validity",
-    "Geodetric Nadir Vector Validity",
-    "Beta Angle Validity"
-};
+        "Time Validity",
+        "ECI Position Validity",
+        "ECI Velocity Validity",
+        "ECEF Position Validity",
+        "ECEF Velocity Validity",
+        "Angular Rate Validity",
+        "Attitude Quaternion Validity",
+        "Lat-Lon-Altitude Validity",
+        "Nadir Vector Validity",
+        "Geodetric Nadir Vector Validity",
+        "Beta Angle Validity"
+    };
 
-    if(gnss_eph_data->gps_timeout_flag == 1){
+    if(gnss_eph_data->gps_timeout_flag == 1) {
         printf("gps_fix_time: %d",gnss_eph_data->gps_eph_data.gps_fix_time);
         printf("gps_sys_time: %d",gnss_eph_data->gps_eph_data.gps_sys_time);
         OBC_time obc = gnss_eph_data->gps_eph_data.obc_time;
@@ -799,8 +797,7 @@ AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
            
         }
         printf("gps_validity_flag_pos_vel: %d\n",gnss_eph_data->gps_eph_data.gps_validity_flag_pos_vel);
-    }
-    else if(gnss_eph_data->adcs_timeout_flag == 1){
+    } else if(gnss_eph_data->adcs_timeout_flag == 1) {
         printf("ADCS Orbit Propagator/System Time = %f\n",gnss_eph_data->adcs_eph_data.orbit_time);
         printf("ECI Position X (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_x);
         printf("ECI Position Y (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_y);
@@ -974,9 +971,11 @@ int main(int argc, char *argv[])
     if (strcmp(payload_sequences_fsms[EpsVoltageTelemetry_IDX]->state, "NOT_STARTED") != 0) {
         pthread_join(payload_sequences_fsms[EpsVoltageTelemetry_IDX]->thread_id, &exit_status);
     }
+
     if (strcmp(payload_sequences_fsms[GnssDataTelemetry_IDX]->state, "NOT_STARTED") != 0) {
         pthread_join(payload_sequences_fsms[GnssDataTelemetry_IDX]->thread_id, &exit_status);
     }
+    
     if (strcmp(payload_sequences_fsms[TestI2CBUS_IDX]->state, "NOT_STARTED") != 0) {
         pthread_join(payload_sequences_fsms[TestI2CBUS_IDX]->thread_id, &exit_status);
     }
