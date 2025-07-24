@@ -76,10 +76,11 @@ def api_pa_pc_read_gpio(pin):
 
     if adapter_type == "QA7":
         if qa7lib == 0:
-            qa7lib = api_parser.api_pa_pc_get_qa7_lib()
+            qa7lib_path = api_parser.api_pa_pc_get_qa7_lib()
+            qa7lib = ctypes.CDLL(qa7lib_path)
         qa7lib.read_pin.argtypes = [ctypes.c_int, ctypes.c_int]
         qa7lib.read_pin.restype = ctypes.c_int8
-        op = qa7lib.read_pin(port, pin)
+        op = qa7lib.read_pin(int(port), int(pin))
     elif adapter_type == "FTDI":
         print("Only FTDI devices are supported")
         op = api_read_gpio(port, pin)
@@ -113,10 +114,11 @@ def api_pa_pc_write_gpio(pin, value):
 
     if adapter_type == "QA7":
         if qa7lib == 0:
-            qa7lib = api_parser.api_pa_pc_get_qa7_lib()
+            qa7lib_path = api_parser.api_pa_pc_get_qa7_lib()
+            qa7lib = ctypes.CDLL(qa7lib_path)
         qa7lib.write_pin.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int]
         qa7lib.write_pin.restype = ctypes.c_int8
-        qa7lib.write_pin(port, pin, value)
+        qa7lib.write_pin(int(port), int(pin), int(value))
     elif adapter_type != "FTDI":
         print("Only FTDI devices are supported")
         return g_GPIO_ERROR
