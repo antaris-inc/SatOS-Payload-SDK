@@ -8,6 +8,7 @@
 #include "antaris_can_api.h"
 #include "antaris_api_common.h"
 #include "antaris_sdk_environment.h"
+#include "antaris_api_parser.h"
 
 const int GPIO_ERROR = -1;
 
