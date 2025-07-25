@@ -120,13 +120,14 @@ def api_pa_pc_write_gpio(pin, value):
             qa7lib = ctypes.CDLL(qa7lib_path)
         qa7lib.write_pin.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int]
         qa7lib.write_pin.restype = ctypes.c_int8
-        qa7lib.write_pin(int(port), int(pin), int(value))
-    elif adapter_type != "FTDI":
+        op = qa7lib.write_pin(int(port), int(pin), int(value))
+    elif adapter_type == "FTDI":
         print("Only FTDI devices are supported")
+        op = api_write_gpio(port, pin, value)
+    else:
+        print("Device not supported")
         return g_GPIO_ERROR
-    
-    op = api_write_gpio(port, pin, value)
-    
+   
     return op
 
 def api_write_gpio(port, pin, value):
