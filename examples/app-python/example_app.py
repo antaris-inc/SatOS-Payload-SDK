@@ -37,6 +37,8 @@ ADCS_start_success = 0
 ADCS_start_reconfigured = 1
 ADCS_start_failed = 2
 
+Request_success = 0
+
 logger = logging.getLogger()
 
 class Controller:
@@ -137,7 +139,7 @@ class Controller:
         if ctx.params.lower() == "stop":
             logger.info("Sending GNSS EPH data stop request")
             resp = ctx.client.gnss_eph_stop_data_req()
-            if (resp == True):
+            if (resp.req_status == Request_success):
                 logger.info("GNSS EPH data stop request success")
             else:
                 logger.info("GNSS EPH data stop request failed")
@@ -158,7 +160,7 @@ class Controller:
         if ctx.params.lower() == "stop":
             logger.info("Sending Get Eps Voltage telemetry stop request")
             resp = ctx.client.get_eps_voltage_stop_req()
-            if (resp == 0):
+            if (resp.req_status == Request_success):
                 logger.info("Get Eps Voltage telemetry stop request success")
             else:
                 logger.info("Get Eps Voltage telemetry stop request failed")
@@ -178,14 +180,14 @@ class Controller:
         if ctx.params.lower() == "stop":
             logger.info("Sending stop SES thermal management request")
             resp = ctx.client.stop_ses_therm_mgmnt_req(hardware_id)
-            if (resp == 0):
+            if (resp.req_status == Request_success):
                 logger.info("stop SES thermal management request success")
             else:
                 logger.info("stop SES thermal management request failed")
         elif ctx.params.lower() == "start":
             logger.info("Sending start SES thermal management request")
             resp = ctx.client.start_ses_therm_mgmnt_req(hardware_id, duration, upper_threshold, lower_threshold)
-            if (resp == 0):
+            if (resp.req_status == Request_success):
                 logger.info("start SES thermal management request success")
             else:
                 logger.info("start SES thermal management request failed")
