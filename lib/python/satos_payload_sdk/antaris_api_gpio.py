@@ -110,6 +110,8 @@ def api_pa_pc_write_gpio(pin, value):
     if status == g_GPIO_ERROR:
         return g_GPIO_ERROR
 
+    port = api_parser.api_pa_pc_get_gpio_port()
+    
     adapter_type = api_parser.api_pa_pc_get_gpio_adapter()
 
     if adapter_type == "QA7":
@@ -123,7 +125,6 @@ def api_pa_pc_write_gpio(pin, value):
         print("Only FTDI devices are supported")
         return g_GPIO_ERROR
     
-    port = api_parser.api_pa_pc_get_gpio_port()
     op = api_write_gpio(port, pin, value)
     
     return op
