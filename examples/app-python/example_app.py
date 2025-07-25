@@ -366,14 +366,6 @@ class Controller:
         channel = i2cInfo.i2c_dev[0]
         logger.info("Starting CAN receiver port %s", channel)
 
-        #init i2c
-
-        # Read data from i2c bus
-        ret = api_i2c.init_i2c_lib()
-        if ret == False:
-            logger.info("I2C library init failed")
-            return
-
         # Write data to i2c bus
         baseAddr = 0xA0
         index= 0
@@ -382,6 +374,7 @@ class Controller:
 
         time.sleep(1)
 
+        # Read data from i2c bus
         api_i2c.api_pa_pc_read_i2c(i2cInfo.i2c_dev[0], baseAddr, index, data)
 
         logger.info(f"Data received = {data}")
