@@ -969,6 +969,117 @@ peer_to_app_CmdSequenceDoneParams(const void *ptr_src_peer, void *ptr_dst_app)
 }
 
 void
+displayPaSatOsMsg(const void *obj)
+{
+    PaSatOsMsg *p = (PaSatOsMsg *)obj;
+
+    printf("PaSatOsMsg %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("command_id ==>\n");
+    displayUINT16((void *)&p->command_id);
+    printf("payload_data ==>\n");
+    for (int i = 0; i < 1020; i++) {
+        displayINT8((void *)&p->payload_data[i]);
+    }
+
+
+}
+
+void
+app_to_peer_PaSatOsMsg(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    PaSatOsMsg *src = (PaSatOsMsg *)ptr_src_app;
+    ::antaris_api_peer_to_peer::PaSatOsMsg *dst = (::antaris_api_peer_to_peer::PaSatOsMsg *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_command_id = 0;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT16(&src->command_id, &__tmp_command_id); // command_id
+
+    dst->set_command_id(__tmp_command_id);
+
+    dst->set_payload_data(&src->payload_data[0]);
+
+
+}
+
+void
+peer_to_app_PaSatOsMsg(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    PaSatOsMsg *dst = (PaSatOsMsg *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::PaSatOsMsg *src = (::antaris_api_peer_to_peer::PaSatOsMsg *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->command_id = src->command_id();
+    size_t payload_data_length = strnlen(src->payload_data().c_str(), 1020);
+    if ( payload_data_length >= 1020 ) {
+        printf("Error:  payload_data_length should be less than 1020 \n");
+        return;
+    }
+    strncpy(&dst->payload_data[0], src->payload_data().c_str(), 1020);
+
+}
+
+void
+displayRespPaSatOsMsg(const void *obj)
+{
+    RespPaSatOsMsg *p = (RespPaSatOsMsg *)obj;
+
+    printf("RespPaSatOsMsg %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("command_id ==>\n");
+    displayUINT16((void *)&p->command_id);
+    printf("req_status ==>\n");
+    displayINT32((void *)&p->req_status);
+
+}
+
+void
+app_to_peer_RespPaSatOsMsg(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    RespPaSatOsMsg *src = (RespPaSatOsMsg *)ptr_src_app;
+    ::antaris_api_peer_to_peer::RespPaSatOsMsg *dst = (::antaris_api_peer_to_peer::RespPaSatOsMsg *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_command_id = 0;
+    INT32 __tmp_req_status;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT16(&src->command_id, &__tmp_command_id); // command_id
+
+    dst->set_command_id(__tmp_command_id);
+
+    app_to_peer_INT32(&src->req_status, &__tmp_req_status); // req_status
+
+    dst->set_req_status(__tmp_req_status);
+
+
+}
+
+void
+peer_to_app_RespPaSatOsMsg(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    RespPaSatOsMsg *dst = (RespPaSatOsMsg *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::RespPaSatOsMsg *src = (::antaris_api_peer_to_peer::RespPaSatOsMsg *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->command_id = src->command_id();
+    dst->req_status = src->req_status();
+
+}
+
+void
 displayReqGnssEphStopDataReq(const void *obj)
 {
     ReqGnssEphStopDataReq *p = (ReqGnssEphStopDataReq *)obj;
@@ -2278,6 +2389,8 @@ displayAntarisApiCallbackFuncList(const void *obj)
     displayProcessRespSesTempReq_Fptr((void *)&p->process_response_ses_temp_req);
     printf("process_cb_ses_thrml_ntf ==>\n");
     displayProcessSesThrmlNtf_Fptr((void *)&p->process_cb_ses_thrml_ntf);
+    printf("process_pa_satos_msg_response ==>\n");
+    displayProcessRespPaSatOsMsg_Fptr((void *)&p->process_pa_satos_msg_response);
 
 }
 

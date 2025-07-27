@@ -390,6 +390,18 @@ class Controller:
         
         return 
 
+    def handle_pa_satos_message(self, ctx):
+        command = 0x12  # UINT16 command ID
+        payload_data = bytes([0x12, 0x34, 0x56])  # Can be up to 1020 bytes
+
+        resp = ctx.client.pa_satos_message(command, payload_data)
+        if (resp == 0):
+            logger.info("Command successfully send to satOS")
+        else:
+            logger.info("failed to send command to satOS")
+
+        return
+
 def new():
     ctl = Controller()
 
@@ -416,6 +428,7 @@ def new():
     app.mount_sequence("SesThermMgmnt", ctl.handle_ses_therm_mgmnt)
     app.mount_sequence("SesTempReq", ctl.handle_ses_temp_req)
     app.mount_sequence("TestI2CBus", ctl.handle_test_i2c_bus)
+    app.mount_sequence("PaSatOsMsg", ctl.handle_pa_satos_message)
     return app
 
 def set_payload_values(payload_app):

@@ -134,6 +134,12 @@ typedef struct PayloadMetricsResponse PayloadMetricsResponse;
 struct CmdSequenceDoneParams;
 typedef struct CmdSequenceDoneParams CmdSequenceDoneParams;
 
+struct PaSatOsMsg;
+typedef struct PaSatOsMsg PaSatOsMsg;
+
+struct RespPaSatOsMsg;
+typedef struct RespPaSatOsMsg RespPaSatOsMsg;
+
 struct ReqGnssEphStopDataReq;
 typedef struct ReqGnssEphStopDataReq ReqGnssEphStopDataReq;
 
@@ -386,6 +392,16 @@ typedef AntarisReturnCode
 );
 static inline void
 displayProcessSesThrmlNtf_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessRespPaSatOsMsg_Fptr
+/// @typedef Callback for PA SatOS message request
+
+typedef AntarisReturnCode
+(*ProcessRespPaSatOsMsg_Fptr)
+(
+    RespPaSatOsMsg *                 ///< @param response PA to SatOS command response
+);
+static inline void
+displayProcessRespPaSatOsMsg_Fptr(void *obj) { printf("%p\n", obj); }
 
 // >>>> Data Types <<<<<
 
@@ -589,6 +605,30 @@ struct CmdSequenceDoneParams {
 void displayCmdSequenceDoneParams(const void *obj);
 void app_to_peer_CmdSequenceDoneParams(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_CmdSequenceDoneParams(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct PaSatOsMsg
+/// @brief To send message to SatOS from PA
+struct PaSatOsMsg {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT16                                          command_id;                                      ///< @var command id
+    INT8                                            payload_data[1020];                              ///< @var payload data for sending for SatOS, string
+};
+
+void displayPaSatOsMsg(const void *obj);
+void app_to_peer_PaSatOsMsg(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_PaSatOsMsg(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespPaSatOsMsg
+/// @brief To send acknowledge to PA from SatOS
+struct RespPaSatOsMsg {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT16                                          command_id;                                      ///< @var command id
+    INT32                                           req_status;                                      ///< @var status of PA SatOS Message request
+};
+
+void displayRespPaSatOsMsg(const void *obj);
+void app_to_peer_RespPaSatOsMsg(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespPaSatOsMsg(const void *ptr_src_peer, void *ptr_dst_app);
 
 /// @struct ReqGnssEphStopDataReq
 /// @brief Request GNSS EPH data stop
@@ -875,6 +915,7 @@ struct AntarisApiCallbackFuncList {
     ProcessRespStopSesThermMgmntReq_Fptr            process_response_stop_ses_therm_mgmnt_req;       ///< @var callback handler for stop SES thermal management req response
     ProcessRespSesTempReq_Fptr                      process_response_ses_temp_req;                   ///< @var callback handler for SES temperature req response
     ProcessSesThrmlNtf_Fptr                         process_cb_ses_thrml_ntf;                        ///< @var callback handler for SES thermal nofirication
+    ProcessRespPaSatOsMsg_Fptr                      process_pa_satos_msg_response;                   ///< @var callback handler for PA to satOS command response
 };
 
 void displayAntarisApiCallbackFuncList(const void *obj);
@@ -1057,6 +1098,15 @@ api_pa_pc_ses_temp_req
 (
     AntarisChannel                  channel,                         ///< @param channel context for API execution
     SesTempReq *                    req_ses_temp                     ///< @param SES temperature response parameters
+);
+
+/// @brief Function api_pa_pc_pa_satos_message
+/// @fn API to respond to SatOS message request
+AntarisReturnCode
+api_pa_pc_pa_satos_message
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    PaSatOsMsg *                    pa_satos_msg                     ///< @param Message to SatOS from PA
 );
 
 

@@ -384,6 +384,7 @@ class PCServiceClient {
 
     return tmp_return;
   }
+
   AntarisReturnCode Invoke_PC_start_ses_therm_mgmnt_req(StartSesThermMgmntReq *req_params) {
     antaris_api_peer_to_peer::StartSesThermMgmntReq pc_req;
     antaris_api_peer_to_peer::AntarisReturnType pc_response;
@@ -458,6 +459,32 @@ class PCServiceClient {
 
     return tmp_return;
   }
+
+  AntarisReturnCode Invoke_PC_pa_satos_message(PaSatOsMsg *req_params) {
+    antaris_api_peer_to_peer::PaSatOsMsg pc_req;
+    antaris_api_peer_to_peer::AntarisReturnType pc_response;
+    Status pc_status;
+    // Context for the client. It could be used to convey extra information to
+    // the server and/or tweak certain RPC behaviors.
+    ClientContext context;
+
+    app_to_peer_PaSatOsMsg(req_params, &pc_req);
+    context.AddMetadata(COOKIE_STR, this->cookie_str);
+
+    pc_status = stub_->PC_pa_satos_message(&context, pc_req, &pc_response);
+
+    AntarisReturnCode tmp_return;
+
+    // Act upon its status.
+    if (pc_status.ok()) {
+         tmp_return = (AntarisReturnCode)(pc_response.return_code());
+    } else {
+        tmp_return = An_GENERIC_FAILURE;
+    }
+
+    return tmp_return;
+  }
+
  private:
   std::unique_ptr<antaris_api_peer_to_peer::AntarisapiPayloadController::Stub> stub_;
   char cookie_str[COOKIE_LEN+1];
@@ -503,6 +530,8 @@ public:
     Status PA_ProcessRespSesTempReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams* request,  ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
     Status PA_ProcessSesThrmlNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request,  ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
+    Status PA_ProcessRespPaSatOsMsg(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
 public:
 
@@ -785,6 +814,21 @@ Status AppCallbackServiceImpl::PA_ProcessSesThrmlNtf(::grpc::ServerContext* cont
     if (client_channel_ctx_->callbacks.process_cb_ses_thrml_ntf) {
         peer_to_app_SesThermalStatusNtf((void *)request, &app_request);
         app_ret = client_channel_ctx_->callbacks.process_cb_ses_thrml_ntf(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessRespPaSatOsMsg(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    RespPaSatOsMsg app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_pa_satos_msg_response) {
+        peer_to_app_RespPaSatOsMsg((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_pa_satos_msg_response(&app_request);
     }
 
     response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));

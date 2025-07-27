@@ -124,6 +124,11 @@ class AntarisapiApplicationCallbackStub(object):
                 request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.SesThermalStatusNtf.SerializeToString,
                 response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 _registered_method=True)
+        self.PA_ProcessRespPaSatOsMsg = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespPaSatOsMsg',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespPaSatOsMsg.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
 
 
 class AntarisapiApplicationCallbackServicer(object):
@@ -237,6 +242,12 @@ class AntarisapiApplicationCallbackServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def PA_ProcessRespPaSatOsMsg(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AntarisapiApplicationCallbackServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -328,6 +339,11 @@ def add_AntarisapiApplicationCallbackServicer_to_server(servicer, server):
             'PA_ProcessSesThrmlNtf': grpc.unary_unary_rpc_method_handler(
                     servicer.PA_ProcessSesThrmlNtf,
                     request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.SesThermalStatusNtf.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PA_ProcessRespPaSatOsMsg': grpc.unary_unary_rpc_method_handler(
+                    servicer.PA_ProcessRespPaSatOsMsg,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespPaSatOsMsg.FromString,
                     response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
     }
@@ -827,6 +843,33 @@ class AntarisapiApplicationCallback(object):
             metadata,
             _registered_method=True)
 
+    @staticmethod
+    def PA_ProcessRespPaSatOsMsg(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespPaSatOsMsg',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespPaSatOsMsg.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
 
 class AntarisapiPayloadControllerStub(object):
     """Missing associated documentation comment in .proto file."""
@@ -910,6 +953,11 @@ class AntarisapiPayloadControllerStub(object):
         self.PC_ses_temp_req = channel.unary_unary(
                 '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_ses_temp_req',
                 request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.SesTempReq.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
+        self.PC_pa_satos_message = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_pa_satos_message',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.PaSatOsMsg.SerializeToString,
                 response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 _registered_method=True)
 
@@ -1007,6 +1055,12 @@ class AntarisapiPayloadControllerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def PC_pa_satos_message(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AntarisapiPayloadControllerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -1083,6 +1137,11 @@ def add_AntarisapiPayloadControllerServicer_to_server(servicer, server):
             'PC_ses_temp_req': grpc.unary_unary_rpc_method_handler(
                     servicer.PC_ses_temp_req,
                     request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.SesTempReq.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PC_pa_satos_message': grpc.unary_unary_rpc_method_handler(
+                    servicer.PC_pa_satos_message,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.PaSatOsMsg.FromString,
                     response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
     }
@@ -1490,6 +1549,33 @@ class AntarisapiPayloadController(object):
             target,
             '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_ses_temp_req',
             satos__payload__sdk_dot_gen_dot_antaris__api__pb2.SesTempReq.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PC_pa_satos_message(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_pa_satos_message',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.PaSatOsMsg.SerializeToString,
             satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options,
             channel_credentials,
