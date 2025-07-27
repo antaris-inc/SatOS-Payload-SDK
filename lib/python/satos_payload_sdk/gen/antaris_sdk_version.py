@@ -11,7 +11,7 @@ This is an auto-generated file. Any manual changes to this file will neither be 
 ANTARIS_SDK_BUILD_USER="uid=0(root) gid=0(root) groups=0(root)"
 
 
-ANTARIS_SDK_BUILD_TIME="Sat Jul 19 13:25:25 UTC 2025"
+ANTARIS_SDK_BUILD_TIME="Sat Jul 26 17:05:41 UTC 2025"
 
 
 ANTARIS_PA_PC_SDK_VERSION='1.1.1'

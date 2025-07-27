@@ -49,6 +49,7 @@ typedef int (*deinit_qa7_lib_t)(void);
 
 extern char qa7_lib[32];
 char gpio_adapter_type[32] = {0};
+void *qa7handle = NULL;
 
 AntarisReturnCode init_satos_lib()
 {
@@ -230,65 +231,121 @@ AntarisReturnCode AntarisApiGPIO::api_pa_pc_write_gpio(int8_t gpio_port, int8_t 
     return An_SUCCESS;
 }
 
-int8_t AntarisApiGPIO::read_qa7_pin(int8_t gpio_port, int8_t pin_number)
+// Method definition outside class
+AntarisReturnCode AntarisApiGPIO::api_pa_pc_init_gpio_lib()
 {
-    void *handle;
-    read_pin_t read_pin_func;
-    int8_t value;
+    AntarisReturnCode ret = An_SUCCESS;
+    if ((strncmp(gpio_adapter_type, "QA7", 2) == 0)) {
+        ret = init_qa7_lib();
+    }
+    return ret;
+}
 
-    // Load the shared library
-    handle = dlopen(qa7_lib, RTLD_LAZY);
-    if (!handle) {
-        fprintf(stderr, "dlopen failed: %s\n", dlerror());
-        return 1;
+AntarisReturnCode AntarisApiGPIO::init_qa7_lib() 
+{
+    init_qa7_lib_t init_qa7_func;
+    if (qa7handle == NULL) {
+        qa7handle = dlopen(qa7_lib, RTLD_LAZY);
+        if (!qa7handle) {
+            fprintf(stderr, "dlopen failed: %s\n", dlerror());
+            return An_GENERIC_FAILURE;
+        }
     }
 
     // Clear any existing errors
     dlerror();
 
-    // Get the symbol
-    *(void **) (&read_pin_func) = dlsym(handle, QA7_READ_PIN_FUNCTION);
+    *(void **) (&init_qa7_func) = dlsym(qa7handle, QA7_INIT_FUNCTION);
     char *error = dlerror();
     if (error) {
         fprintf(stderr, "dlsym failed: %s\n", error);
-        dlclose(handle);
-        return 1;
+        dlclose(qa7handle);
+        return An_GENERIC_FAILURE;
+    }
+
+    init_qa7_func();
+
+    return (qa7handle != NULL) ? An_SUCCESS : An_GENERIC_FAILURE;
+}
+
+AntarisReturnCode AntarisApiGPIO::api_pa_pc_deinit_gpio_lib()
+{
+    AntarisReturnCode ret = An_SUCCESS;
+    if ((strncmp(gpio_adapter_type, "QA7", 2) == 0)) {
+        ret = deinit_qa7_lib();
+    }
+    return ret;
+}
+
+AntarisReturnCode AntarisApiGPIO::deinit_qa7_lib() 
+{
+    deinit_qa7_lib_t deinit_qa7_func;
+    *(void **) (&deinit_qa7_func) = dlsym(qa7handle, QA7_DEINIT_FUNCTION);
+    char *error = dlerror();
+    if (error) {
+        fprintf(stderr, "dlsym failed: %s\n", error);
+        dlclose(qa7handle);
+        return An_GENERIC_FAILURE;
+    }
+
+    deinit_qa7_func();
+
+    if (qa7handle != NULL) {
+        dlclose(qa7handle);
+    }
+    
+    qa7handle = NULL;
+    return An_SUCCESS;
+}
+
+int8_t AntarisApiGPIO::read_qa7_pin(int8_t gpio_port, int8_t pin_number)
+{
+    read_pin_t read_pin_func;
+    int8_t value;
+
+    // Load the shared library
+    if (qa7handle == NULL) {
+        if (init_qa7_lib() != An_SUCCESS) {
+            return -1;
+        }
+    }
+
+    // Get the symbol
+    *(void **) (&read_pin_func) = dlsym(qa7handle, QA7_READ_PIN_FUNCTION);
+    char *error = dlerror();
+    if (error) {
+        fprintf(stderr, "dlsym failed: %s\n", error);
+        dlclose(qa7handle);
+        return -1;
     }
 
     value = (int8_t) read_pin_func(gpio_port, pin_number);
 
-    dlclose(handle);
     return value;
 }
 
 int8_t AntarisApiGPIO::write_qa7_pin(int8_t gpio_port, int8_t pin_number, int8_t value)
 {
-    void *handle;
     write_pin_t write_pin_func;
     int8_t result;
 
     // Load the shared library
-    handle = dlopen(qa7_lib, RTLD_LAZY);
-    if (!handle) {
-        fprintf(stderr, "dlopen failed: %s\n", dlerror());
-        return 1;
+    if (qa7handle == NULL) {
+        if (init_qa7_lib() != An_SUCCESS) {
+            return -1;
+        }
     }
 
-    // Clear any previous error
-    dlerror();
-
     // Lookup symbol
-    *(void **) (&write_pin_func) = dlsym(handle, QA7_WRITE_PIN_FUNCTION);
+    *(void **) (&write_pin_func) = dlsym(qa7handle, QA7_WRITE_PIN_FUNCTION);
     char *error = dlerror();
     if (error) {
         fprintf(stderr, "dlsym failed: %s\n", error);
-        dlclose(handle);
-        return 1;
+        dlclose(qa7handle);
+        return -1;
     }
 
     result = (int8_t) write_pin_func(gpio_port, pin_number, value);
 
-    // Done
-    dlclose(handle);
     return result;
 }
