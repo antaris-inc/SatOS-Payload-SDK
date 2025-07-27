@@ -215,7 +215,7 @@ class Controller:
         gpio_info = api_parser.api_pa_pc_get_gpio_info()
 
         logger.info("Total gpio pins = %d", int(gpio_info.pin_count))
-
+        api_gpio.api_pa_pc_init_gpio_lib()
         i = 0
         # Read initial value of GPIO pins.
         # As GPIO pins are back-to-back connected, their value must be same.
@@ -242,6 +242,8 @@ class Controller:
                 else:
                     logger.error("error in pin no %d ", int(writePin))
                     return 
+                
+                logger.info("Reading from pin no. %d", int(readPin))
                 # As Read and Write pins are back-to-back connected, 
                 # Reading value of Read pin to confirm GPIO success/failure
                 val = api_gpio.api_pa_pc_read_gpio(int(readPin))
@@ -251,6 +253,8 @@ class Controller:
                     logger.error("Error in pin no %d", int(readPin))
                     return
             i += 1
+        
+        api_gpio.api_pa_pc_deinit_gpio_lib()
         return 
     
     # Sequence to test UART loopback. The sample program assumes Tx and Rx are connected in loopback mode.
@@ -368,6 +372,7 @@ class Controller:
         channel = i2cInfo.i2c_dev[0]
         logger.info("Starting CAN receiver port %s", channel)
 
+        api_i2c.api_pa_pc_init_i2c_lib()
         # Write data to i2c bus
         baseAddr = 0xA0
         index= 0
@@ -381,7 +386,7 @@ class Controller:
 
         logger.info(f"Data received = {data}")
 
-        api_i2c.deinit_i2c_lib()
+        api_i2c.api_pa_pc_deinit_i2c_lib()
         
         return 
 

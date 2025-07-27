@@ -10,6 +10,73 @@ typedef unsigned int (*write_i2c_t)(unsigned short, unsigned char, unsigned shor
 
 extern char qa7_lib[32];
 char i2c_adapter_type[32] = {0};
+extern void *qa7handle;
+
+// Method definition outside class
+AntarisReturnCode AntarisApiI2C::api_pa_pc_init_i2c_lib()
+{
+    AntarisReturnCode ret = An_SUCCESS;
+    if ((strncmp(i2c_adapter_type, "QA7", 2) == 0)) {
+        ret = init_qa7_lib();
+    }
+    return ret;
+}
+
+AntarisReturnCode AntarisApiI2C::init_qa7_lib() 
+{
+    init_qa7_lib_t init_qa7_func;
+    if (qa7handle == NULL) {
+        qa7handle = dlopen(qa7_lib, RTLD_LAZY);
+        if (!qa7handle) {
+            fprintf(stderr, "dlopen failed: %s\n", dlerror());
+            return An_GENERIC_FAILURE;
+        }
+    }
+
+    // Clear any existing errors
+    dlerror();
+
+    *(void **) (&init_qa7_func) = dlsym(qa7handle, QA7_INIT_FUNCTION);
+    char *error = dlerror();
+    if (error) {
+        fprintf(stderr, "dlsym failed: %s\n", error);
+        dlclose(qa7handle);
+        return An_GENERIC_FAILURE;
+    }
+
+    init_qa7_func();
+
+    return (qa7handle != NULL) ? An_SUCCESS : An_GENERIC_FAILURE;
+}
+
+AntarisReturnCode AntarisApiI2C::api_pa_pc_deinit_i2c_lib()
+{
+    AntarisReturnCode ret = An_SUCCESS;
+    if ((strncmp(i2c_adapter_type, "QA7", 2) == 0)) {
+        ret = deinit_qa7_lib();
+    }
+    return ret;
+}
+
+AntarisReturnCode AntarisApiI2C::deinit_qa7_lib() 
+{
+    deinit_qa7_lib_t deinit_qa7_func;
+    *(void **) (&deinit_qa7_func) = dlsym(qa7handle, QA7_DEINIT_FUNCTION);
+    char *error = dlerror();
+    if (error) {
+        fprintf(stderr, "dlsym failed: %s\n", error);
+        dlclose(qa7handle);
+        return An_GENERIC_FAILURE;
+    }
+
+    deinit_qa7_func();
+
+    if (qa7handle != NULL) {
+        dlclose(qa7handle);
+    }
+    qa7handle = NULL;
+    return An_SUCCESS;
+}
 
 AntarisReturnCode AntarisApiI2C::api_pa_pc_read_i2c_bus(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
 {
@@ -24,25 +91,21 @@ AntarisReturnCode AntarisApiI2C::api_pa_pc_read_i2c_bus(uint16_t i2c_dev, uint8_
 
 AntarisReturnCode AntarisApiI2C::read_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
 {
-    void *handle;
     read_i2c_t read_i2c_func;
 
-    // Open the shared object file
-    handle = dlopen(qa7_lib, RTLD_LAZY);
-    if (!handle) {
-        fprintf(stderr, "dlopen failed: %s\n", dlerror());
-        return An_GENERIC_FAILURE;
+    // Load the shared library
+    if (qa7handle == NULL) {
+        if (init_qa7_lib() != An_SUCCESS) {
+            return An_GENERIC_FAILURE;
+        }
     }
 
-    // Clear any existing errors
-    dlerror();
-
     // Load the function symbol
-    *(void **) (&read_i2c_func) = dlsym(handle, QA7_I2C_READ_FUNCTION);
+    *(void **) (&read_i2c_func) = dlsym(qa7handle, QA7_I2C_READ_FUNCTION);
     char *error = dlerror();
     if (error) {
         fprintf(stderr, "dlsym failed: %s\n", error);
-        dlclose(handle);
+        dlclose(qa7handle);
         return An_GENERIC_FAILURE;
     }
 
@@ -55,7 +118,7 @@ AntarisReturnCode AntarisApiI2C::read_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_addr
         printf("read_i2c() failed\n");
     }
 
-    dlclose(handle);
+    dlclose(qa7handle);
     return An_SUCCESS;
 }
 
@@ -72,22 +135,21 @@ AntarisReturnCode AntarisApiI2C::api_pa_pc_write_i2c_bus(uint16_t i2c_dev, uint8
 
 AntarisReturnCode AntarisApiI2C::write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
 {
-    void *handle;
     write_i2c_t write_i2c;
 
     // Load the shared library
-    handle = dlopen(qa7_lib, RTLD_LAZY);
-    if (!handle) {
-        fprintf(stderr, "dlopen failed: %s\n", dlerror());
-        return An_GENERIC_FAILURE;
+    if (qa7handle == NULL) {
+        if (init_qa7_lib() != An_SUCCESS) {
+            return An_GENERIC_FAILURE;
+        }
     }
 
     // Load the symbol
-    *(void **)(&write_i2c) = dlsym(handle, QA7_I2C_WRITE_FUNCTION);
+    *(void **)(&write_i2c) = dlsym(qa7handle, QA7_I2C_WRITE_FUNCTION);
     char *error = dlerror();
     if (error) {
         fprintf(stderr, "dlsym error: %s\n", error);
-        dlclose(handle);
+        dlclose(qa7handle);
         return An_GENERIC_FAILURE;
     }
 
@@ -95,7 +157,5 @@ AntarisReturnCode AntarisApiI2C::write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_add
     unsigned int result = write_i2c(i2c_dev, i2c_address, index, data);
     printf("write_i2c result: %u\n", result);
 
-    // Cleanup
-    dlclose(handle);
     return An_SUCCESS;
 }

@@ -275,6 +275,12 @@ void handle_TestGPIO(mythreadState_t *mythread)
         return;
     }
 
+    ret = api_gpio.api_pa_pc_init_gpio_lib();
+    if (ret != An_SUCCESS) {
+        printf("Error: Init GPIO lib failed \n");
+        return;
+    }
+
     while (i < gpio_info.pin_count) {
         // Read initial value of GPIO pins.
         // Assume GPIO pins are in loopback mode, their value must be same.
@@ -291,7 +297,7 @@ void handle_TestGPIO(mythreadState_t *mythread)
                    
         // Toggle the value
         val = val ^ 1; 
-        
+
         // Writing value to WritePin.
         ret = api_gpio.api_pa_pc_write_gpio(gpio_info.gpio_port, writePin, val);
         if (ret == GPIO_ERROR) {
@@ -325,7 +331,7 @@ void handle_TestGPIO(mythreadState_t *mythread)
     } 
     
     printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
-   
+    api_gpio.api_pa_pc_deinit_gpio_lib();
 }
 
 void handle_StageFile(mythreadState_t *mythread)
@@ -492,6 +498,12 @@ void handle_TestI2CBus(mythreadState_t *mythread)
     }
     printf("Total i2c ports = %d \n", i2c_info.i2c_port_count);
 
+    ret = api_i2c.api_pa_pc_init_i2c_lib();
+    if (ret != An_SUCCESS) {
+        printf("Error: Init I2C lib failed \n");
+        return;
+    }
+
     if (i2c_info.i2c_port_count> 0) {
         ret = api_i2c.api_pa_pc_read_i2c_bus(i2c_info.i2c_dev[0], address, index, &read);
         if (ret != An_SUCCESS) {
@@ -518,6 +530,7 @@ void handle_TestI2CBus(mythreadState_t *mythread)
         fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
         _exit(-1);
     } 
+    api_i2c.api_pa_pc_deinit_i2c_lib();
     
     printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
 }
