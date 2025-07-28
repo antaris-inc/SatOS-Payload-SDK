@@ -325,12 +325,12 @@
             <Field name="process_cb_gnss_eph_data" type="ProcessGnssEphData_Fptr" sequence="11" description="callback handler for GNSS EPH data"/>
             <Field name="process_response_get_eps_voltage_stop" type="ProcessRespGetEpsVoltageStopReq_Fptr" sequence="12" description="callback handler for get EPS voltage data stop"/>
             <Field name="process_response_get_eps_voltage_start" type="ProcessRespGetEpsVoltageStartReq_Fptr" sequence="13" description="callback handler for get EPS voltage data start"/>
-            <Field name="process_cb_get_eps_voltage" type="ProcessGetEpsVoltage_Fptr" sequence="11" description="callback handler for EPS voltage data"/>
-            <Field name="process_response_start_ses_therm_mgmnt_req" type="ProcessRespStartSesThermMgmntReq_Fptr" sequence="14" description="callback handler for start SES thermal management req response"/>
-            <Field name="process_response_stop_ses_therm_mgmnt_req" type="ProcessRespStopSesThermMgmntReq_Fptr" sequence="15" description="callback handler for stop SES thermal management req response"/>
-            <Field name="process_response_ses_temp_req" type="ProcessRespSesTempReq_Fptr" sequence="16" description="callback handler for SES temperature req response"/>
-            <Field name="process_cb_ses_thrml_ntf" type="ProcessSesThrmlNtf_Fptr" sequence="17" description="callback handler for SES thermal nofirication"/>
-            <Field name="process_pa_satos_msg_response" type="ProcessRespPaSatOsMsg_Fptr" sequence="18" description="callback handler for PA to satOS command response"/>
+            <Field name="process_cb_get_eps_voltage" type="ProcessGetEpsVoltage_Fptr" sequence="14" description="callback handler for EPS voltage data"/>
+            <Field name="process_response_start_ses_therm_mgmnt_req" type="ProcessRespStartSesThermMgmntReq_Fptr" sequence="15" description="callback handler for start SES thermal management req response"/>
+            <Field name="process_response_stop_ses_therm_mgmnt_req" type="ProcessRespStopSesThermMgmntReq_Fptr" sequence="16" description="callback handler for stop SES thermal management req response"/>
+            <Field name="process_response_ses_temp_req" type="ProcessRespSesTempReq_Fptr" sequence="17" description="callback handler for SES temperature req response"/>
+            <Field name="process_cb_ses_thrml_ntf" type="ProcessSesThrmlNtf_Fptr" sequence="18" description="callback handler for SES thermal nofirication"/>
+            <Field name="process_pa_satos_msg_response" type="ProcessRespPaSatOsMsg_Fptr" sequence="19" description="callback handler for PA to satOS command response"/>
         </Struct>
 
         <Struct name="AntarisCorrelationId" description="Wrapper structure for correlation-id">

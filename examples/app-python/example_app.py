@@ -391,14 +391,11 @@ class Controller:
         return 
 
     def handle_pa_satos_message(self, ctx):
-        command = 0x12  # UINT16 command ID
+        command = 1  # UINT16 command ID
         payload_data = bytes([0x12, 0x34, 0x56])  # Can be up to 1020 bytes
 
         resp = ctx.client.pa_satos_message(command, payload_data)
-        if (resp == 0):
-            logger.info("Command successfully send to satOS")
-        else:
-            logger.info("failed to send command to satOS")
+        print(f"Command id = {resp.command_id} , status = {resp.req_status}")
 
         return
 

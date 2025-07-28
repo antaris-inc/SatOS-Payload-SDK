@@ -426,7 +426,7 @@ class ChannelClient:
     def pa_satos_message(self, command, payload_data):
         with self._cond:
             params = api_types.PaSatOsMsg(self._get_next_cid(), command, payload_data)
-            resp = api_client.api_pa_pc_pa_satos_message(self._channel, command, payload_data)
+            resp = api_client.api_pa_pc_pa_satos_message(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
                 logger.error("api_pa_pc_pa_satos_message request failed")
                 return None
