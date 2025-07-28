@@ -156,6 +156,18 @@
             <Field name="sequence_id" type="INT8" sequence="1" description="sequence id that has completed execution. MUST agree with StartSequenceParams.sequence-id." array="16"/>
         </Struct>
 
+        <Struct name="PaSatOsMsg" description="To send message to SatOS from PA">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="command_id" type="UINT16" sequence="2" description="command id"/>
+            <Field name="payload_data" type="INT8" sequence="3" description="payload data for sending for SatOS, string" array="1020"/>
+        </Struct>
+
+        <Struct name="RespPaSatOsMsg" description="To send acknowledge to PA from SatOS">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="command_id" type="UINT16" sequence="2" description="command id"/>
+            <Field name="req_status" type="INT32" sequence="3" description="status of PA SatOS Message request"/>
+        </Struct>
+
         <Struct name="ReqGnssEphStopDataReq" description="Request GNSS EPH data stop">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
         </Struct>
@@ -298,6 +310,7 @@
             <Field name="heater_pwr_status" type="UINT8" sequence="2" description="0:OFF, 1:ON"/>
             <Field name="temp" type="UINT8" sequence="3" description="in Celsius"/>
         </Struct>
+
         <Struct name="AntarisApiCallbackFuncList" description="Callback-functions registration structure for channel creation" consumed_by="Application">
             <Field name="start_sequence" type="StartSequence_Fptr" sequence="1" description="callback handler for start-sequence"/>
             <Field name="shutdown_app" type="ShutdownApp_Fptr" sequence="2" description="callback handler for shutdown-app"/>
@@ -312,11 +325,12 @@
             <Field name="process_cb_gnss_eph_data" type="ProcessGnssEphData_Fptr" sequence="11" description="callback handler for GNSS EPH data"/>
             <Field name="process_response_get_eps_voltage_stop" type="ProcessRespGetEpsVoltageStopReq_Fptr" sequence="12" description="callback handler for get EPS voltage data stop"/>
             <Field name="process_response_get_eps_voltage_start" type="ProcessRespGetEpsVoltageStartReq_Fptr" sequence="13" description="callback handler for get EPS voltage data start"/>
-            <Field name="process_cb_get_eps_voltage" type="ProcessGetEpsVoltage_Fptr" sequence="11" description="callback handler for EPS voltage data"/>
-            <Field name="process_response_start_ses_therm_mgmnt_req" type="ProcessRespStartSesThermMgmntReq_Fptr" sequence="14" description="callback handler for start SES thermal management req response"/>
-            <Field name="process_response_stop_ses_therm_mgmnt_req" type="ProcessRespStopSesThermMgmntReq_Fptr" sequence="15" description="callback handler for stop SES thermal management req response"/>
-            <Field name="process_response_ses_temp_req" type="ProcessRespSesTempReq_Fptr" sequence="16" description="callback handler for SES temperature req response"/>
-            <Field name="process_cb_ses_thrml_ntf" type="ProcessSesThrmlNtf_Fptr" sequence="17" description="callback handler for SES thermal nofirication"/>
+            <Field name="process_cb_get_eps_voltage" type="ProcessGetEpsVoltage_Fptr" sequence="14" description="callback handler for EPS voltage data"/>
+            <Field name="process_response_start_ses_therm_mgmnt_req" type="ProcessRespStartSesThermMgmntReq_Fptr" sequence="15" description="callback handler for start SES thermal management req response"/>
+            <Field name="process_response_stop_ses_therm_mgmnt_req" type="ProcessRespStopSesThermMgmntReq_Fptr" sequence="16" description="callback handler for stop SES thermal management req response"/>
+            <Field name="process_response_ses_temp_req" type="ProcessRespSesTempReq_Fptr" sequence="17" description="callback handler for SES temperature req response"/>
+            <Field name="process_cb_ses_thrml_ntf" type="ProcessSesThrmlNtf_Fptr" sequence="18" description="callback handler for SES thermal nofirication"/>
+            <Field name="process_pa_satos_msg_response" type="ProcessRespPaSatOsMsg_Fptr" sequence="19" description="callback handler for PA to satOS command response"/>
         </Struct>
 
         <Struct name="AntarisCorrelationId" description="Wrapper structure for correlation-id">
@@ -399,6 +413,10 @@
 
         <FunctionPtr name="ProcessSesThrmlNtf_Fptr" description="Callback request to SES thermal notifictaion" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
             <Parameter variable_name="ses_thrml_ntf" type="SesThermalStatusNtf *" description="SES thermal notifictaion parameters"/>
+        </FunctionPtr>
+
+        <FunctionPtr name="ProcessRespPaSatOsMsg_Fptr" description="Callback for PA SatOS message request" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="pa_satos_msg_response" type="RespPaSatOsMsg *" description="response PA to SatOS command response"/>
         </FunctionPtr>
     </Callbacks>
 
@@ -507,6 +525,12 @@
                         return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
             <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
             <Parameter variable_name="req_ses_temp" type="SesTempReq *" description="SES temperature response parameters"/>
+        </Function>
+
+        <Function name="api_pa_pc_pa_satos_message" description="API to respond to SatOS message request"
+                        return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
+            <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
+            <Parameter variable_name="pa_satos_msg" type="PaSatOsMsg *" description="Message to SatOS from PA"/>
         </Function>
 
     </Functions>
