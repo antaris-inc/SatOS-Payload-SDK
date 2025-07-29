@@ -33,6 +33,9 @@
 #include "antaris_api.grpc.pb.h"
 #include "antaris_api.pb.h"
 #include "antaris_sdk_version.h"
+#include <thread>
+#include <chrono>
+
 
 using grpc::Channel;
 using grpc::ClientContext;
@@ -74,12 +77,8 @@ class PCServiceClient {
         Status pc_status;
         // Context for the client. It could be used to convey extra information to
         // the server and/or tweak certain RPC behaviors.
-        ClientContext context;
 
         app_to_peer_ReqRegisterParams(req_params, &pc_req);
-
-
-        context.AddMetadata( COOKIE_STR, this->cookie_str);
 
         p_version = pc_req.mutable_sdk_version();
     
@@ -90,18 +89,25 @@ class PCServiceClient {
         printf("%s: Invoking PC_register api towards PC, sdk version %d.%d.%d\n",
                 __FUNCTION__, ANTARIS_PA_PC_SDK_MAJOR_VERSION, ANTARIS_PA_PC_SDK_MINOR_VERSION,
                 ANTARIS_PA_PC_SDK_PATCH_VERSION);
-
-        pc_status = stub_->PC_register(&context, pc_req, &pc_response);
-
-        printf("%s: Got return code %s\n", __FUNCTION__, pc_status.ok() ? "OK" : "NOT-OK");
-
+        int max_retries = 15;
         AntarisReturnCode tmp_return;
+        for(int i = 0; i < max_retries; i++){
+            ClientContext context;
+            context.AddMetadata( COOKIE_STR, this->cookie_str);
+            pc_status = stub_->PC_register(&context, pc_req, &pc_response);
 
-        // Act upon its status.
-        if (pc_status.ok()) {
-             tmp_return = (AntarisReturnCode)(pc_response.return_code());
-        } else {
-            tmp_return = An_GENERIC_FAILURE;
+            // Act upon its status.
+            if (pc_status.ok()) {
+                printf("%s: Got return code OK. \n", __FUNCTION__);
+                tmp_return = (AntarisReturnCode)(pc_response.return_code());
+                break;
+            } else {
+                if(i != max_retries -1){
+                    printf("%s: Got return code OK. retrying again in one seconds\n", __FUNCTION__);
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                }
+                tmp_return = An_GENERIC_FAILURE;
+            }
         }
 
         return tmp_return;
