@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Stage 1: Build dependencies.
-FROM quay.io/antaris-inc/satos-payload-app-cpp:stable AS dependencies
+FROM quay.io/antaris-inc/satos-payload-app-cpp:v25.3 AS dependencies
 RUN apt update && apt install -y build-essential
 
 # Stage 2: Build your payload app.
@@ -23,7 +23,7 @@ COPY . .
 RUN make payload_app
 
 # Stage 3: Runtime image
-FROM quay.io/antaris-inc/satos-payload-app-cpp:stable
+FROM quay.io/antaris-inc/satos-payload-app-cpp:v25.3
 COPY --from=builder /workspace/payload_app /opt/antaris/app/payload_app
 COPY entrypoint.sh /opt/antaris/app/entrypoint.sh
 RUN mkdir -p /opt/antaris/outbound /opt/antaris/inbound
