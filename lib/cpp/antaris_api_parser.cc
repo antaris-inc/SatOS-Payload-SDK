@@ -166,7 +166,6 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_gpio_info(gpio_s *gpio)
 
     // get Interrupt pin, it is optional, hence not returning upon failure
     pJsonStr = cJSON_GetObjectItem(key_gpio, JSON_Key_Interrupt_Pin);
-    printf("rahul int %d \n", pJsonStr->valueint);
     if (cJSON_IsString(pJsonStr) != cJSON_Invalid) {
         str = cJSON_GetStringValue(pJsonStr);
         if ((*str != 0) && (str == NULL)) {
@@ -241,7 +240,6 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_gpio_adapter_type(char *adapte
         return An_GENERIC_FAILURE;
     }
     memcpy(adapter, str, 32);
-    printf("Inside parser adapter = %s \n", adapter);
     return An_SUCCESS;
 }
 

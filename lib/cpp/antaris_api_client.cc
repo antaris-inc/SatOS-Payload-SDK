@@ -384,6 +384,7 @@ class PCServiceClient {
 
     return tmp_return;
   }
+
   AntarisReturnCode Invoke_PC_start_ses_therm_mgmnt_req(StartSesThermMgmntReq *req_params) {
     antaris_api_peer_to_peer::StartSesThermMgmntReq pc_req;
     antaris_api_peer_to_peer::AntarisReturnType pc_response;

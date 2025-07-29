@@ -37,6 +37,8 @@ ADCS_start_success = 0
 ADCS_start_reconfigured = 1
 ADCS_start_failed = 2
 
+Request_success = 0
+
 logger = logging.getLogger()
 
 class Controller:
@@ -137,7 +139,7 @@ class Controller:
         if ctx.params.lower() == "stop":
             logger.info("Sending GNSS EPH data stop request")
             resp = ctx.client.gnss_eph_stop_data_req()
-            if (resp == True):
+            if (resp.req_status == Request_success):
                 logger.info("GNSS EPH data stop request success")
             else:
                 logger.info("GNSS EPH data stop request failed")
@@ -158,7 +160,7 @@ class Controller:
         if ctx.params.lower() == "stop":
             logger.info("Sending Get Eps Voltage telemetry stop request")
             resp = ctx.client.get_eps_voltage_stop_req()
-            if (resp == 0):
+            if (resp.req_status == Request_success):
                 logger.info("Get Eps Voltage telemetry stop request success")
             else:
                 logger.info("Get Eps Voltage telemetry stop request failed")
@@ -178,14 +180,14 @@ class Controller:
         if ctx.params.lower() == "stop":
             logger.info("Sending stop SES thermal management request")
             resp = ctx.client.stop_ses_therm_mgmnt_req(hardware_id)
-            if (resp == 0):
+            if (resp.req_status == Request_success):
                 logger.info("stop SES thermal management request success")
             else:
                 logger.info("stop SES thermal management request failed")
         elif ctx.params.lower() == "start":
             logger.info("Sending start SES thermal management request")
             resp = ctx.client.start_ses_therm_mgmnt_req(hardware_id, duration, upper_threshold, lower_threshold)
-            if (resp == 0):
+            if (resp.req_status == Request_success):
                 logger.info("start SES thermal management request success")
             else:
                 logger.info("start SES thermal management request failed")
@@ -213,7 +215,7 @@ class Controller:
         gpio_info = api_parser.api_pa_pc_get_gpio_info()
 
         logger.info("Total gpio pins = %d", int(gpio_info.pin_count))
-
+        api_gpio.api_pa_pc_init_gpio_lib()
         i = 0
         # Read initial value of GPIO pins.
         # As GPIO pins are back-to-back connected, their value must be same.
@@ -240,6 +242,8 @@ class Controller:
                 else:
                     logger.error("error in pin no %d ", int(writePin))
                     return 
+                
+                logger.info("Reading from pin no. %d", int(readPin))
                 # As Read and Write pins are back-to-back connected, 
                 # Reading value of Read pin to confirm GPIO success/failure
                 val = api_gpio.api_pa_pc_read_gpio(int(readPin))
@@ -249,6 +253,8 @@ class Controller:
                     logger.error("Error in pin no %d", int(readPin))
                     return
             i += 1
+        
+        api_gpio.api_pa_pc_deinit_gpio_lib()
         return 
     
     # Sequence to test UART loopback. The sample program assumes Tx and Rx are connected in loopback mode.
@@ -366,14 +372,7 @@ class Controller:
         channel = i2cInfo.i2c_dev[0]
         logger.info("Starting CAN receiver port %s", channel)
 
-        #init i2c
-
-        # Read data from i2c bus
-        ret = api_i2c.init_i2c_lib()
-        if ret == False:
-            logger.info("I2C library init failed")
-            return
-
+        api_i2c.api_pa_pc_init_i2c_lib()
         # Write data to i2c bus
         baseAddr = 0xA0
         index= 0
@@ -382,11 +381,12 @@ class Controller:
 
         time.sleep(1)
 
+        # Read data from i2c bus
         api_i2c.api_pa_pc_read_i2c(i2cInfo.i2c_dev[0], baseAddr, index, data)
 
         logger.info(f"Data received = {data}")
 
-        api_i2c.deinit_i2c_lib()
+        api_i2c.api_pa_pc_deinit_i2c_lib()
         
         return 
 
