@@ -43,7 +43,7 @@ g_KEEPALIVE_TIME_MS = 10000
 g_KEEPALIVE_TIMEOUT_MS = 5000
 g_KEEPALIVE_PERMIT_WITHOUT_CALLS = True
 g_MAX_PING_STRIKES = 0
-max_retries = 15
+g_Max_Retries = 15
 
 class AntarisChannel:
     def __init__(self, grpc_client_handle, grpc_server_handle, pc_to_app_server, is_secure, callback_func_list):
@@ -370,7 +370,7 @@ def api_pa_pc_register(channel, register_params):
     peer_params.sdk_version.minor = sdk_version.ANTARIS_PA_PC_SDK_MINOR_VERSION
     peer_params.sdk_version.patch = sdk_version.ANTARIS_PA_PC_SDK_PATCH_VERSION
     metadata = ((g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    for attempt in range(1, max_retries + 1):
+    for attempt in range(1,g_Max_Retries + 1):
             try:
                 peer_ret = channel.grpc_client_handle.PC_register(peer_params, metadata=metadata)
 

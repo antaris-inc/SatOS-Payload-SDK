@@ -50,7 +50,7 @@ extern char g_SSL_ENABLE;
 extern char g_KEEPALIVE_ENABLE;
 
 #define ANTARIS_CALLBACK_GRACE_DELAY    10
-int max_retries = 15;
+int g_Max_Retries = 15;
 
 class PCServiceClient {
  public:
@@ -91,7 +91,7 @@ class PCServiceClient {
                 __FUNCTION__, ANTARIS_PA_PC_SDK_MAJOR_VERSION, ANTARIS_PA_PC_SDK_MINOR_VERSION,
                 ANTARIS_PA_PC_SDK_PATCH_VERSION);
         AntarisReturnCode tmp_return;
-        for(int i = 0; i < max_retries; i++){
+        for(int i = 0; i < g_Max_Retries; i++){
             ClientContext context;
             context.AddMetadata( COOKIE_STR, this->cookie_str);
             pc_status = stub_->PC_register(&context, pc_req, &pc_response);
@@ -102,7 +102,7 @@ class PCServiceClient {
                 tmp_return = (AntarisReturnCode)(pc_response.return_code());
                 break;
             } else {
-                if(i != max_retries -1){
+                if(i != g_Max_Retries -1){
                     printf("%s: Got return code Not OK. retrying again in one seconds\n", __FUNCTION__);
                     std::this_thread::sleep_for(std::chrono::seconds(1));
                 }
