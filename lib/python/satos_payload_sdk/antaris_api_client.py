@@ -43,6 +43,7 @@ g_KEEPALIVE_TIME_MS = 10000
 g_KEEPALIVE_TIMEOUT_MS = 5000
 g_KEEPALIVE_PERMIT_WITHOUT_CALLS = True
 g_MAX_PING_STRIKES = 0
+max_retries = 15
 
 class AntarisChannel:
     def __init__(self, grpc_client_handle, grpc_server_handle, pc_to_app_server, is_secure, callback_func_list):
@@ -369,12 +370,27 @@ def api_pa_pc_register(channel, register_params):
     peer_params.sdk_version.minor = sdk_version.ANTARIS_PA_PC_SDK_MINOR_VERSION
     peer_params.sdk_version.patch = sdk_version.ANTARIS_PA_PC_SDK_PATCH_VERSION
     metadata = ((g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_register(peer_params , metadata=metadata)
+    for attempt in range(1, max_retries + 1):
+            try:
+                peer_ret = channel.grpc_client_handle.PC_register(peer_params, metadata=metadata)
 
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+                if peer_ret.return_code == api_types.AntarisReturnCode.An_SUCCESS:
+                    print("Attempt {}: Registration successful".format(attempt))
+                    return peer_ret.return_code
+                else:
+                    print("Attempt {}: Registration failed with return code {}"
+                        .format(attempt, peer_ret.return_code))
 
-    return peer_ret.return_code
+            except grpc.RpcError as e:
+                print("Attempt {}: gRPC error occurred: {}".format(attempt, e.details()))
+                print("Status code: {}".format(e.code()))
+
+            except Exception as e:
+                print("Attempt {}: Unexpected error: {}".format(attempt, str(e)))
+
+            time.sleep(1)  # Add delay before retrying
+
+    return -1
 
 def api_pa_pc_get_current_location(channel, get_location_params):
     print("api_pa_pc_get_curent_location")

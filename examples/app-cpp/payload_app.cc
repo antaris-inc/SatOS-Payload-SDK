@@ -953,12 +953,15 @@ int main(int argc, char *argv[])
     // After registration, simulated PC will ask application to start sequence HelloWorld
 
     printf("All sequences ready to start ...\n");
-
-    while (shutdown_requested == 0) {
+    while (shutdown_requested == 0 && ret == An_SUCCESS) {
         sleep(1);
     }
-
+    if(ret != An_SUCCESS){
+        printf("return code is %d, not able to communicate with server, waiting for sequence cleanups\n",ret);
+    }
+    else{
     printf("Detected shutdown request, waiting for sequence cleanups\n");
+    }
 
     // Wait for all FSM threads to complete
 
