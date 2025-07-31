@@ -796,7 +796,7 @@ AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
 
     if(gnss_eph_data->gps_timeout_flag == 1) {
         printf("gps_fix_time: %d",gnss_eph_data->gps_eph_data.gps_fix_time);
-        printf("gps_sys_time: %lld",gnss_eph_data->gps_eph_data.gps_sys_time);
+        printf("gps_sys_time: %llu",gnss_eph_data->gps_eph_data.gps_sys_time);
         OBC_time obc = gnss_eph_data->gps_eph_data.obc_time;
         printf("obc_time : %02d:%02d:%02d.%03d Date: %02d/%02d/%d\n",
                obc.hour, obc.minute, obc.millisecond / 1000,
@@ -953,12 +953,15 @@ int main(int argc, char *argv[])
     // After registration, simulated PC will ask application to start sequence HelloWorld
 
     printf("All sequences ready to start ...\n");
-
-    while (shutdown_requested == 0) {
+    while (shutdown_requested == 0 && ret == An_SUCCESS) {
         sleep(1);
     }
-
+    if(ret != An_SUCCESS){
+        printf("return code is %d, not able to communicate with server, waiting for sequence cleanups\n",ret);
+    }
+    else{
     printf("Detected shutdown request, waiting for sequence cleanups\n");
+    }
 
     // Wait for all FSM threads to complete
 
