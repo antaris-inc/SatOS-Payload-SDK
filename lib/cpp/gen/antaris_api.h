@@ -484,6 +484,7 @@ void peer_to_app_RespStageFileDownloadParams(const void *ptr_src_peer, void *ptr
 struct ReqPayloadPowerControlParams {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     UINT16                                          power_operation;                                 ///< @var Power operation : Power-Off (0), Power-On (1)
+    UINT16                                          hw_id;                                           ///< @var HW Id of Payload
 };
 
 void displayReqPayloadPowerControlParams(const void *obj);

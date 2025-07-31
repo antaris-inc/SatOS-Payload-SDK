@@ -411,12 +411,12 @@ class ChannelClient:
 
         return resp
 
-    def payload_power_control(self, power_state):
+    def payload_power_control(self, power_state, hw_id):
         # In case if True-twin mode, return success
         if api_common.g_KEEPALIVE_ENABLE == '1':
             return api_types.AntarisReturnCode.An_SUCCESS 
         else:
-            payload_power_control_params = api_types.ReqPayloadPowerControlParams(self._get_next_cid(), int(power_state))
+            payload_power_control_params = api_types.ReqPayloadPowerControlParams(self._get_next_cid(), int(power_state), int(hw_id))
 
             resp = api_client.api_pa_pc_payload_power_control(self._channel, payload_power_control_params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:

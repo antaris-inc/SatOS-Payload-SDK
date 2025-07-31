@@ -205,8 +205,12 @@ class Controller:
 
     def handle_power_control(self, ctx):
         logger.info("Handling payload power")
-        power_state = ctx.params                    # 0 = power off, 1 = power on
-        resp = ctx.client.payload_power_control(power_state)
+        power_state = ctx.params      # 0 = power off, 1 = power on
+        hw_id = 0x4001                # If hw_id = 0, then default payload hardware id is send
+        if(power_state != 0 or power_state != 1):
+            logger.info("invlaid power state. power state can only be 0 or 1")
+            return
+        resp = ctx.client.payload_power_control(power_state, hw_id)
         logger.info(f"Power control state = {power_state}. Call response is = {resp}")
         
     # The sample program assumes 2 GPIO pins are connected back-to-back. 
