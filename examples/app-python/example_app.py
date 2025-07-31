@@ -205,8 +205,8 @@ class Controller:
 
     def handle_power_control(self, ctx):
         logger.info("Handling payload power")
-        power_state = ctx.params
-        hw_id = 0x4001                  # 0 = power off, 1 = power on
+        power_state = ctx.params      # 0 = power off, 1 = power on
+        hw_id = 0x4001                # If hw_id = 0, then default payload hardware id is send
         if(power_state != 0 or power_state != 1):
             logger.info("invlaid power state. power state can only be 0 or 1")
             return
