@@ -1639,6 +1639,7 @@ class ReqPayloadPowerControlParams final :
   enum : int {
     kCorrelationIdFieldNumber = 1,
     kPowerOperationFieldNumber = 2,
+    kHwIdFieldNumber = 3,
   };
   // int32 correlation_id = 1;
   void clear_correlation_id();
@@ -1658,6 +1659,15 @@ class ReqPayloadPowerControlParams final :
   void _internal_set_power_operation(int32_t value);
   public:
 
+  // int32 hw_id = 3;
+  void clear_hw_id();
+  int32_t hw_id() const;
+  void set_hw_id(int32_t value);
+  private:
+  int32_t _internal_hw_id() const;
+  void _internal_set_hw_id(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.ReqPayloadPowerControlParams)
  private:
   class _Internal;
@@ -1667,6 +1677,7 @@ class ReqPayloadPowerControlParams final :
   typedef void DestructorSkippable_;
   int32_t correlation_id_;
   int32_t power_operation_;
+  int32_t hw_id_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
 };
@@ -8336,6 +8347,26 @@ inline void ReqPayloadPowerControlParams::_internal_set_power_operation(int32_t 
 inline void ReqPayloadPowerControlParams::set_power_operation(int32_t value) {
   _internal_set_power_operation(value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ReqPayloadPowerControlParams.power_operation)
+}
+
+// int32 hw_id = 3;
+inline void ReqPayloadPowerControlParams::clear_hw_id() {
+  hw_id_ = 0;
+}
+inline int32_t ReqPayloadPowerControlParams::_internal_hw_id() const {
+  return hw_id_;
+}
+inline int32_t ReqPayloadPowerControlParams::hw_id() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.ReqPayloadPowerControlParams.hw_id)
+  return _internal_hw_id();
+}
+inline void ReqPayloadPowerControlParams::_internal_set_hw_id(int32_t value) {
+  
+  hw_id_ = value;
+}
+inline void ReqPayloadPowerControlParams::set_hw_id(int32_t value) {
+  _internal_set_hw_id(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ReqPayloadPowerControlParams.hw_id)
 }
 
 // -------------------------------------------------------------------

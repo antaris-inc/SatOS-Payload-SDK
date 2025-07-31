@@ -290,10 +290,12 @@ def app_to_peer_RespStageFileDownloadParams(app_struct):
 ## @brief: Request parameters for Payload Power Control
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
 ## @param: power_operation                                 :    Power operation : Power-Off (0), Power-On (1)   
+## @param: hw_id                                           :    HW Id of Payload                                
 class ReqPayloadPowerControlParams:
-    def __init__(self, correlation_id, power_operation):
+    def __init__(self, correlation_id, power_operation, hw_id):
         self.correlation_id = correlation_id
         self.power_operation = power_operation
+        self.hw_id = hw_id
 
     def __str__(self):
         ret_str = ""
@@ -301,6 +303,8 @@ class ReqPayloadPowerControlParams:
         ret_str += str(self.correlation_id) + "\n"
         ret_str += "power_operation:\n"
         ret_str += str(self.power_operation) + "\n"
+        ret_str += "hw_id:\n"
+        ret_str += str(self.hw_id) + "\n"
 
         return ret_str
 
@@ -310,10 +314,11 @@ class ReqPayloadPowerControlParams:
 def peer_to_app_ReqPayloadPowerControlParams(peer_struct):
     correlation_id = peer_struct.correlation_id
     power_operation = peer_struct.power_operation
-    return ReqPayloadPowerControlParams(correlation_id, power_operation)
+    hw_id = peer_struct.hw_id
+    return ReqPayloadPowerControlParams(correlation_id, power_operation, hw_id)
 
 def app_to_peer_ReqPayloadPowerControlParams(app_struct):
-    return antaris_api_pb2.ReqPayloadPowerControlParams(correlation_id = app_struct.correlation_id, power_operation = app_struct.power_operation)
+    return antaris_api_pb2.ReqPayloadPowerControlParams(correlation_id = app_struct.correlation_id, power_operation = app_struct.power_operation, hw_id = app_struct.hw_id)
 
 ## @class: RespPayloadPowerControlParams
 ## @brief: Response parameters for Payload Power Control request

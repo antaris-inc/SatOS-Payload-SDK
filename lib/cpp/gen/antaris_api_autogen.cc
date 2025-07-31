@@ -403,6 +403,8 @@ displayReqPayloadPowerControlParams(const void *obj)
     displayUINT16((void *)&p->correlation_id);
     printf("power_operation ==>\n");
     displayUINT16((void *)&p->power_operation);
+    printf("hw_id ==>\n");
+    displayUINT16((void *)&p->hw_id);
 
 }
 
@@ -414,6 +416,7 @@ app_to_peer_ReqPayloadPowerControlParams(const void *ptr_src_app, void *ptr_dst_
 
     UINT32 __tmp_correlation_id = 0;
     UINT32 __tmp_power_operation = 0;
+    UINT32 __tmp_hw_id = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -422,6 +425,10 @@ app_to_peer_ReqPayloadPowerControlParams(const void *ptr_src_app, void *ptr_dst_
     app_to_peer_UINT16(&src->power_operation, &__tmp_power_operation); // power_operation
 
     dst->set_power_operation(__tmp_power_operation);
+
+    app_to_peer_UINT16(&src->hw_id, &__tmp_hw_id); // hw_id
+
+    dst->set_hw_id(__tmp_hw_id);
 
 
 }
@@ -434,6 +441,7 @@ peer_to_app_ReqPayloadPowerControlParams(const void *ptr_src_peer, void *ptr_dst
 
     dst->correlation_id = src->correlation_id();
     dst->power_operation = src->power_operation();
+    dst->hw_id = src->hw_id();
 
 }
 

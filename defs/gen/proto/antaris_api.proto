@@ -111,6 +111,7 @@ message RespStageFileDownloadParams {
 message ReqPayloadPowerControlParams {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     int32                           power_operation  = 2; // Power operation : Power-Off (0), Power-On (1)
+    int32                           hw_id            = 3; // HW Id of Payload
 }
 
 message RespPayloadPowerControlParams {
