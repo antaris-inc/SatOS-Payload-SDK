@@ -50,7 +50,9 @@
 #define GnssDataTelemetry_IDX           7
 #define TestI2CBUS_ID                   "TestI2CBus"
 #define TestI2CBUS_IDX                  8
-#define SEQUENCE_ID_MAX                 9
+#define PowerControl_ID                 "PowerControl"
+#define PowerControl_IDX                9
+#define SEQUENCE_ID_MAX                 10
 
 #define APP_STATE_ACTIVE                0  // Application State : Good (0), Error (non-Zero)
 
@@ -204,6 +206,19 @@ void handle_Eps_Voltage_Telemetry_Request(mythreadState_t *mythread){
     else{
         printf("Incorrect parameters. Parameter can be 'stop' or 'start'");
     }
+
+    // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], EpsVoltageTelemetry_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } else {
+        printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+    }
 }
 
 void handle_gnss_data_Telemetry_Request(mythreadState_t *mythread){
@@ -245,6 +260,18 @@ void handle_gnss_data_Telemetry_Request(mythreadState_t *mythread){
     }
     else{
         printf("Incorrect parameters. Parameter can be 'stop' or 'start'");
+    }
+    // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], GnssDataTelemetry_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } else {
+        printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
     }
 
 
@@ -534,6 +561,50 @@ void handle_TestI2CBus(mythreadState_t *mythread)
     
     printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
 }
+void handle_PowerControl(mythreadState_t *mythread){
+    printf("Handling payload power");
+    AntarisReturnCode ret;
+    // char* power_state = mythread->seq_params;
+    printf("parmas is %s\n",mythread->seq_params);
+    char *endptr;
+    errno = 0;
+    long power_state = strtol(mythread->seq_params,&endptr,10);
+    if (errno != 0 || endptr == mythread->seq_params) {
+        printf("incorrect parameters. not able to convert string to integer.\n");
+        return;
+    }
+     else {
+        if(power_state != 0 && power_state != 1){
+            printf("incorrect parameters. parameters can be only 0 or 1.\n");
+        }
+        else {
+            UINT16 hw_id = 0x4001;
+            ReqPayloadPowerControlParams PayloadPowerControl = {0};
+            PayloadPowerControl.hw_id = hw_id;
+            PayloadPowerControl.correlation_id = mythread->correlation_id;
+            PayloadPowerControl.power_operation = power_state;
+            ret = api_pa_pc_payload_power_control(channel,&PayloadPowerControl);
+            if(ret == An_SUCCESS){
+                    printf("Payload power control request success, ret %d\n",ret);
+            } else{
+                fprintf(stderr, " payload power control request failed, ret %d\n", ret);
+            }
+        }
+    }
+    // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], PowerControl_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } else {
+        printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+    }
+
+}
 
 // Table of Sequence_id : FsmThread
 mythreadState_t *payload_sequences_fsms[SEQUENCE_ID_MAX];
@@ -624,6 +695,9 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
     } else if (strcmp(sequence_string, TestI2CBUS_ID) == 0) {
         printf("\t => %d\n", TestI2CBUS_IDX);
         return TestI2CBUS_IDX;
+    }  else if (strcmp(sequence_string, PowerControl_ID) == 0) {
+        printf("\t => %d\n", PowerControl_IDX);
+        return PowerControl_IDX;
     }
     
     printf("Unknown sequence, returning -1\n");
@@ -939,6 +1013,7 @@ int main(int argc, char *argv[])
     payload_sequences_fsms[EpsVoltageTelemetry_IDX] = fsmThreadCreate(channel, 1, EpsVoltageTelemetry_ID, handle_Eps_Voltage_Telemetry_Request);
     payload_sequences_fsms[GnssDataTelemetry_IDX] = fsmThreadCreate(channel, 1, GnssDataTelemetry_ID, handle_gnss_data_Telemetry_Request);
     payload_sequences_fsms[TestI2CBUS_IDX] = fsmThreadCreate(channel, 1, TestI2CBUS_ID, handle_TestI2CBus);
+    payload_sequences_fsms[PowerControl_IDX] = fsmThreadCreate(channel, 1, PowerControl_ID, handle_PowerControl);
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure
