@@ -564,7 +564,6 @@ void handle_TestI2CBus(mythreadState_t *mythread)
 void handle_PowerControl(mythreadState_t *mythread){
     printf("Handling payload power");
     AntarisReturnCode ret;
-    // char* power_state = mythread->seq_params;
     printf("parmas is %s\n",mythread->seq_params);
     char *endptr;
     errno = 0;
