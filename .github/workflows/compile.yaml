@@ -1,0 +1,59 @@
+name: Compile and Build
+
+on:
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build SDK Tools Image
+        run: |
+          docker build -f images/sdk-tools/Dockerfile -t satos-payload-sdk-tools .
+
+      - name: Run make api_lib agent_package in SDK Tools
+        run: |
+          docker run --platform linux/amd64 -v ${{ github.workspace }}:/workspace satos-payload-sdk-tools make api_lib agent_package
+
+      - name: Run make python_package in SDK Tools
+        run: |
+          docker run --platform linux/amd64 -v ${{ github.workspace }}:/workspace satos-payload-sdk-tools make python_package
+
+      - name: Build Python App Image
+        run: |
+          docker build -f images/app-python/Dockerfile -t satos-payload-app-python .
+
+      - name: Build Example Python App
+        working-directory: examples/app-python
+        run: |
+          docker build --platform=linux/amd64 -t satos-payload-example-app-python .
+
+      - name: Build SDK Tool Image
+        run: |
+          docker build -f images/sdk-tools/Dockerfile -t satos-payload-sdk-tool .
+
+      - name: Run make api_lib agent_package in SDK Tool
+        run: |
+          docker run --platform linux/amd64 -v ${{ github.workspace }}:/workspace satos-payload-sdk-tool make api_lib agent_package
+
+      - name: Run make cpp_package in SDK Tool
+        run: |
+          docker run --platform linux/amd64 -v ${{ github.workspace }}:/workspace satos-payload-sdk-tool make cpp_package
+
+      - name: Build C++ App Image
+        run: |
+          docker build -f images/app-cpp/Dockerfile -t satos-payload-app-cpp .
+
+      - name: Build Example C++ App
+        working-directory: examples/app-cpp
+        run: |
+          docker build --platform=linux/amd64 -t satos-payload-example-app-cpp .

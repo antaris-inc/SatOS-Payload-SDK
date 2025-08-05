@@ -31,6 +31,8 @@ RUN python3 -m pip install pyserial
 RUN python3 -m pip install azure-storage-file-share
 RUN python3 -m pip install requests
 RUN python3 -m pip install python-can
+# Needed for checking connetivity with remote PC
+RUN apt install -y netcat
 
 RUN mkdir /stage
 COPY dist/satos-payload-sdk-cpp.deb /stage

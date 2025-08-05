@@ -17,6 +17,9 @@
 // This file assumes that, config.json file is present at /opt/antaris/app
 // location. The sample file is checked-in in conf directory
 
+#ifndef  __ANTARIS_API_GPIO_H__
+#define  __ANTARIS_API_GPIO_H__
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -53,10 +56,18 @@ typedef struct gpio {
 class AntarisApiGPIO {
     public:
         AntarisReturnCode api_pa_pc_get_gpio_info(gpio_s *gpio);
-
+    
+        AntarisReturnCode api_pa_pc_init_gpio_lib();
+        AntarisReturnCode init_qa7_lib(); 
+    
+        AntarisReturnCode api_pa_pc_deinit_gpio_lib();
+        AntarisReturnCode deinit_qa7_lib(); 
+    
         int8_t api_pa_pc_read_gpio(int8_t gpio_port, int8_t pin_number);
-
+        int8_t read_qa7_pin(int8_t gpio_port, int8_t pin_number);
+    
         AntarisReturnCode api_pa_pc_write_gpio(int8_t gpio_port, int8_t pin_number, int8_t value);
+        int8_t write_qa7_pin(int8_t gpio_port, int8_t pin_number, int8_t value);
         
     private:
         AntarisReturnCode verify_gpio_pin(int8_t pin_number);
@@ -65,3 +76,4 @@ class AntarisApiGPIO {
 AntarisReturnCode init_satos_lib();
 
 void with_timeout_deinit_satos_lib();
+#endif // __ANTARIS_API_GPIO_H__

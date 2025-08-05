@@ -13,7 +13,7 @@
     },
     "IO_Access": {
         "GPIO": {
-            "ADAPTER_TYPE" : "FTDI",
+            "ADAPTER_TYPE" : "QA7",
             "GPIO_PIN_COUNT": "2",
             "GPIO_Port" : "0",
             "GPIO_PIN_0": "5",
@@ -21,14 +21,22 @@
             "GPIO_Interrupt": "0"
         },
         "UART": {
+            "ADAPTER_TYPE": "FTDI", 
             "UART_PORT_COUNT": "2",
             "Device_Path_0": "/dev/ttyUSB0",
             "Device_Path_1": "/dev/ttyUSB1"
         },
         "CAN": {
+            "ADAPTER_TYPE": "FTDI",
             "CAN_PORT_COUNT": "1",
             "CAN_Bus_Path_0": "can1",
             "CAN_Bus_Path_1": "can0"
+        },
+        "I2C": {
+            "ADAPTER_TYPE": "QA7",
+            "I2C_PORT_COUNT": "1",
+            "I2C_Bus_Path_0": "0",
+            "I2C_Bus_Path_1": "0"
         }
     },
     "Network" : {
@@ -54,5 +62,6 @@
         "Run_Proxy" : "1",
         "Proxy_IP" : "127.0.0.1",
         "Proxy_Port" : "1051"
-    }
+    },
+    "QA7_LIB" : "/opt/antaris/lib/libQA7Bus.so"
 }

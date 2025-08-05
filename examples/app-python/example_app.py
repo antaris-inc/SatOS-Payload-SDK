@@ -24,6 +24,8 @@ import serial
 from satos_payload_sdk import app_framework
 from satos_payload_sdk import antaris_api_gpio as api_gpio
 from satos_payload_sdk import antaris_api_can as api_can
+from satos_payload_sdk import antaris_api_parser as api_parser
+from satos_payload_sdk import antaris_api_i2c as api_i2c
 import satos_payload_sdk.gen.antaris_api_types as api_types
 
 g_GPIO_ERROR = -1
@@ -34,6 +36,8 @@ g_StageFileName = "SampleFile.txt"              # name of staged file
 ADCS_start_success = 0
 ADCS_start_reconfigured = 1
 ADCS_start_failed = 2
+
+Request_success = 0
 
 logger = logging.getLogger()
 
@@ -135,7 +139,7 @@ class Controller:
         if ctx.params.lower() == "stop":
             logger.info("Sending GNSS EPH data stop request")
             resp = ctx.client.gnss_eph_stop_data_req()
-            if (resp == True):
+            if (resp.req_status == Request_success):
                 logger.info("GNSS EPH data stop request success")
             else:
                 logger.info("GNSS EPH data stop request failed")
@@ -156,17 +160,14 @@ class Controller:
         if ctx.params.lower() == "stop":
             logger.info("Sending Get Eps Voltage telemetry stop request")
             resp = ctx.client.get_eps_voltage_stop_req()
-            if (resp.req_status >= 0):
+            if (resp.req_status == Request_success):
                 logger.info("Get Eps Voltage telemetry stop request success")
             else:
                 logger.info("Get Eps Voltage telemetry stop request failed")
         elif ctx.params.lower() == "start":
             logger.info("Sending Get Eps Voltage telemetry start request")
             resp = ctx.client.get_eps_voltage_start_req(periodicity_in_ms)
-            if (resp.req_status >= 0):
-                logger.info("Get Eps Voltage telemetry start request success")
-            else:
-                logger.info("Get Eps Voltage telemetry start request failed")
+            logger.info(f"Current voltage = {resp}")
         else:
             logger.info("Incorrect parameters. Parameter can be 'stop' or 'start'")
 
@@ -179,14 +180,14 @@ class Controller:
         if ctx.params.lower() == "stop":
             logger.info("Sending stop SES thermal management request")
             resp = ctx.client.stop_ses_therm_mgmnt_req(hardware_id)
-            if (resp == 0):
+            if (resp.req_status == Request_success):
                 logger.info("stop SES thermal management request success")
             else:
                 logger.info("stop SES thermal management request failed")
         elif ctx.params.lower() == "start":
             logger.info("Sending start SES thermal management request")
             resp = ctx.client.start_ses_therm_mgmnt_req(hardware_id, duration, upper_threshold, lower_threshold)
-            if (resp == 0):
+            if (resp.req_status == Request_success):
                 logger.info("start SES thermal management request success")
             else:
                 logger.info("start SES thermal management request failed")
@@ -204,17 +205,21 @@ class Controller:
 
     def handle_power_control(self, ctx):
         logger.info("Handling payload power")
-        power_state = ctx.params                    # 0 = power off, 1 = power on
-        resp = ctx.client.payload_power_control(power_state)
+        power_state = ctx.params      # 0 = power off, 1 = power on
+        hw_id = 0x4001                # If hw_id = 0, then default payload hardware id is send
+        if(power_state != 0 and power_state != 1):
+            logger.info("invlaid power state. power state can only be 0 or 1")
+            return
+        resp = ctx.client.payload_power_control(power_state, hw_id)
         logger.info(f"Power control state = {power_state}. Call response is = {resp}")
         
     # The sample program assumes 2 GPIO pins are connected back-to-back. 
     # This sequence toggles level of 'Write Pin' and then reads level of 'Read Pin'
     def handle_test_gpio(self, ctx):
-        gpio_info = api_gpio.api_pa_pc_get_gpio_info()
+        gpio_info = api_parser.api_pa_pc_get_gpio_info()
 
         logger.info("Total gpio pins = %d", int(gpio_info.pin_count))
-
+        api_gpio.api_pa_pc_init_gpio_lib()
         i = 0
         # Read initial value of GPIO pins.
         # As GPIO pins are back-to-back connected, their value must be same.
@@ -241,6 +246,8 @@ class Controller:
                 else:
                     logger.error("error in pin no %d ", int(writePin))
                     return 
+                
+                logger.info("Reading from pin no. %d", int(readPin))
                 # As Read and Write pins are back-to-back connected, 
                 # Reading value of Read pin to confirm GPIO success/failure
                 val = api_gpio.api_pa_pc_read_gpio(int(readPin))
@@ -250,7 +257,10 @@ class Controller:
                     logger.error("Error in pin no %d", int(readPin))
                     return
             i += 1
-
+        
+        api_gpio.api_pa_pc_deinit_gpio_lib()
+        return 
+    
     # Sequence to test UART loopback. The sample program assumes Tx and Rx are connected in loopback mode.
     def handle_uart_loopback(self, ctx):
         data = ctx.params
@@ -355,6 +365,44 @@ class Controller:
 
         return 
     
+    def handle_test_i2c_bus(self, ctx):
+        logger.info("Test I2C bus")
+
+        # Check number of i2c bus 
+        i2cInfo = api_parser.api_pa_pc_get_i2c_dev()
+        logger.info("Total I2C bus ports = %d", int(i2cInfo.i2c_port_count))
+
+        # Get i2c devide details
+        channel = i2cInfo.i2c_dev[0]
+        logger.info("Starting CAN receiver port %s", channel)
+
+        api_i2c.api_pa_pc_init_i2c_lib()
+        # Write data to i2c bus
+        baseAddr = 0xA0
+        index= 0
+        data = 1
+        api_i2c.api_pa_pc_write_i2c_data(i2cInfo.i2c_dev[0], baseAddr, index, data)
+
+        time.sleep(1)
+
+        # Read data from i2c bus
+        api_i2c.api_pa_pc_read_i2c(i2cInfo.i2c_dev[0], baseAddr, index, data)
+
+        logger.info(f"Data received = {data}")
+
+        api_i2c.api_pa_pc_deinit_i2c_lib()
+        
+        return 
+
+    def handle_pa_satos_message(self, ctx):
+        command = 1  # UINT16 command ID
+        payload_data = bytes([0x12, 0x34, 0x56])  # Can be up to 1020 bytes
+
+        resp = ctx.client.pa_satos_message(command, payload_data)
+        print(f"Command id = {resp.command_id} , status = {resp.req_status}")
+
+        return
+
 def new():
     ctl = Controller()
 
@@ -376,10 +424,12 @@ def new():
     app.mount_sequence("StageFile",ctl.handle_stage_filedownload)
     app.mount_sequence("PowerControl", ctl.handle_power_control)
     app.mount_sequence("TestCANBus", ctl.handle_test_can_bus)
-    app.mount_sequence("GetGnssEphData", ctl.handle_gnss_data)
-    app.mount_sequence("GetEpsVoltage", ctl.handle_eps_voltage_telemetry_request)
+    app.mount_sequence("GnssDataTm", ctl.handle_gnss_data)
+    app.mount_sequence("EpsVoltageTm", ctl.handle_eps_voltage_telemetry_request)
     app.mount_sequence("SesThermMgmnt", ctl.handle_ses_therm_mgmnt)
     app.mount_sequence("SesTempReq", ctl.handle_ses_temp_req)
+    app.mount_sequence("TestI2CBus", ctl.handle_test_i2c_bus)
+    app.mount_sequence("PaSatOsMsg", ctl.handle_pa_satos_message)
     return app
 
 def set_payload_values(payload_app):

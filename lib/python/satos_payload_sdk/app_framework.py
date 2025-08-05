@@ -162,7 +162,8 @@ class ChannelClient:
             'RespStartSesThermMgmntReq': self._handle_response,
             'RespStopSesThermMgmntReq': self._handle_response,
             'RespSesTempReq': self._handle_response,
-            'SesThrmlStsNtf': ses_thermal_ntf_cb
+            'SesThrmlStsNtf': ses_thermal_ntf_cb,
+            'PaSatOsMsg': self._handle_response
         }
 
     def _get_next_cid(self):
@@ -410,18 +411,40 @@ class ChannelClient:
 
         return resp
 
-    def payload_power_control(self, power_state):
+    def payload_power_control(self, power_state, hw_id):
         # In case if True-twin mode, return success
         if api_common.g_KEEPALIVE_ENABLE == '1':
             return api_types.AntarisReturnCode.An_SUCCESS 
         else:
-            payload_power_control_params = api_types.ReqPayloadPowerControlParams(self._get_next_cid(), int(power_state))
+            payload_power_control_params = api_types.ReqPayloadPowerControlParams(self._get_next_cid(), int(power_state), int(hw_id))
 
             resp = api_client.api_pa_pc_payload_power_control(self._channel, payload_power_control_params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
                 logger.error("sequence_done request failed: resp=%d" % resp)
             return resp
             
+    def pa_satos_message(self, command, payload_data):
+        with self._cond:
+            params = api_types.PaSatOsMsg(self._get_next_cid(), command, payload_data)
+            resp = api_client.api_pa_pc_pa_satos_message(self._channel, params)
+            if resp != api_types.AntarisReturnCode.An_SUCCESS:
+                logger.error("api_pa_pc_pa_satos_message request failed")
+                return None
+
+            resp_cond = threading.Condition()
+            resp_cond.acquire()
+
+            self._responses[params.correlation_id] = [resp_cond, None]
+
+        # wait for response trigger
+        resp_cond.wait()
+
+        with self._cond:
+            resp = self._responses[params.correlation_id][1]
+            del self._responses[params.correlation_id]
+
+        return resp
+
     def _sequence_done(self, sequence_id):
         params = api_types.CmdSequenceDoneParams(sequence_id)
         resp = api_client.api_pa_pc_sequence_done(self._channel, params)
