@@ -22,7 +22,34 @@ if [[ ${RUN_PROXY} != "1" ]]; then
 	exit 1
 fi
 
+echo "Trying to connect to cloud"
+
 PROXY_IP=`jq --raw-output  '.Proxy.Proxy_IP' ${CONFIG_FILE}`
 PROXY_PORT=`jq --raw-output  '.Proxy.Proxy_Port' ${CONFIG_FILE}`
 
-python3 /opt/antaris/sdk-agent/agent.py -m user -i ${PROXY_IP} -p ${PROXY_PORT} -s 127.0.0.1 -t 50051 -l 127.0.0.1 -o 50053
+while ! nc -z ${PROXY_IP} ${PROXY_PORT}; do
+    sleep 0.5
+done
+
+echo "Connected to cloud, running proxy"
+
+python3 /opt/antaris/sdk-agent/agent.py -m user -i ${PROXY_IP} -p ${PROXY_PORT} -s 127.0.0.1 -t 50051 -l 127.0.0.1 -o 50053 &> /opt/antaris/logs/sdk-agent.log &
+
+FLAG_FILE="/opt/antaris/logs/listener_started.flag"
+TIMEOUT=30  # Max wait time in seconds
+INTERVAL=1  # Check every 1 second
+
+elapsed=0
+
+echo "Waiting for listener to start..."
+
+while [ ! -f "$FLAG_FILE" ]; do
+    if [ "$elapsed" -ge "$TIMEOUT" ]; then
+        echo "Timeout waiting for listener to start."
+        exit 1
+    fi
+    sleep "$INTERVAL"
+    elapsed=$((elapsed + INTERVAL))
+done
+
+echo "Listener started. Starting payload_app...."
