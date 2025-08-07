@@ -265,6 +265,15 @@ def setup_internal_listener():
 
     # log_sockets(logger.info, "Setup internal-listener completed")
 
+    # Create the flag file
+    try:
+        os.makedirs("/opt/antaris/logs", exist_ok=True)
+        with open("/opt/antaris/logs/listener_started.flag", "w") as f:
+            f.write("OK\n")
+        logger.info("Flag file /opt/antaris/logs/listener_started.flag created.")
+    except Exception as e:
+        logger.error(f"Failed to create listener flag file: {e}")
+
 def install_permanent_handler():
     global gServerIp
     global gServerPort
