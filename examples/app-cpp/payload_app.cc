@@ -204,6 +204,19 @@ void handle_Eps_Voltage_Telemetry_Request(mythreadState_t *mythread){
     else{
         printf("Incorrect parameters. Parameter can be 'stop' or 'start'");
     }
+
+    // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], EpsVoltageTelemetry_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } else {
+        printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+    }
 }
 
 void handle_gnss_data_Telemetry_Request(mythreadState_t *mythread){
@@ -245,6 +258,18 @@ void handle_gnss_data_Telemetry_Request(mythreadState_t *mythread){
     }
     else{
         printf("Incorrect parameters. Parameter can be 'stop' or 'start'");
+    }
+    // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], GnssDataTelemetry_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } else {
+        printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
     }
 
 
