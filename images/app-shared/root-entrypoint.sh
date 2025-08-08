@@ -29,7 +29,7 @@ if [ "${RUN_SDK_AGENT}" != "" ]; then
 	unzip ${CONFIG_ABS}
 	dpkg -i *.deb
 
-	/opt/antaris/sdk-agent/run-agent.sh &> /opt/antaris/logs/sdk-agent.log &
+	/opt/antaris/sdk-agent/run-agent.sh
 fi
 
 CONFIG_FILE=/opt/antaris/app/config.json

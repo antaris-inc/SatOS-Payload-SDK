@@ -370,14 +370,14 @@ void handle_StageFile(mythreadState_t *mythread)
     
     printf("\n Handling sequence: StageFile! \n");
 
-    filename_size = strnlen(STAGE_FILE_DOWNLOAD_DIR, MAX_FILE_OR_PROP_LEN_NAME) + strnlen(STAGE_FILE_NAME, MAX_FILE_OR_PROP_LEN_NAME);
+    filename_size = strnlen(STAGE_FILE_NAME, MAX_FILE_OR_PROP_LEN_NAME);
 
     if (filename_size > MAX_FILE_OR_PROP_LEN_NAME) {
         printf("Error: Stagefile path can not be greater than %d \n", MAX_FILE_OR_PROP_LEN_NAME);
         goto exit_sequence;
     }
 
-    sprintf(download_file_params.file_path, "%s%s", STAGE_FILE_DOWNLOAD_DIR, STAGE_FILE_NAME);
+    sprintf(download_file_params.file_path, "%s", STAGE_FILE_NAME);
     
     // Adding dummy data in file
     fp = fopen(download_file_params.file_path, "w");
@@ -390,6 +390,8 @@ void handle_StageFile(mythreadState_t *mythread)
 
     printf("Info: Downloading file = %s \n", download_file_params.file_path);
 
+    download_file_params.file_priority = FILE_DL_PRIORITY_NORMAL;
+    download_file_params.file_dl_band = FILE_DL_SBAND;
     // Staging file
     ret = api_pa_pc_stage_file_download(channel, &download_file_params);
 
