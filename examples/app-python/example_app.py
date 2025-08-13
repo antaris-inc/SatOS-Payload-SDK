@@ -194,7 +194,7 @@ class Controller:
 
     def handle_ses_temp_req(self, ctx):
         hardware_id = 0   # 0:SESA , 1:SESB
-        resp = ctx.ses_temp_req(hardware_id)
+        resp = ctx.client.ses_temp_req(hardware_id)
         logger.info(f"Current temperature = {resp.temp}")
         logger.info(f"Heater power status = {resp.heater_pwr_status}") # 0:OFF, 1:ON
 
