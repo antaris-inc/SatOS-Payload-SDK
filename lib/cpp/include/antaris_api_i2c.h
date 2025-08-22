@@ -31,7 +31,7 @@ class AntarisApiI2C {
 
         AntarisReturnCode read_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data);
 
-        AntarisReturnCode api_pa_pc_write_i2c_bus(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data);
+        AntarisReturnCode api_pa_pc_write_i2c_bus(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data, int data_length);
 
         AntarisReturnCode write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data);
         

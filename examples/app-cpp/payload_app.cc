@@ -513,7 +513,8 @@ void handle_TestI2CBus(mythreadState_t *mythread)
     AntarisApiParser api_parser;
     i2c_s i2c_info;
     int i = 0;
-    uint8_t read, write = 1;
+    uint8_t read, write_len = 5;
+    uint8_t writebuf[5] = {0x4, 0x5, 0x6, 0x7, 0x8}; 
     uint16_t address = 0xA0;
     uint16_t index = 1;
 
@@ -541,8 +542,8 @@ void handle_TestI2CBus(mythreadState_t *mythread)
         }
         
         printf("I2c read = %d \n", read);
-                   
-        ret = api_i2c.api_pa_pc_write_i2c_bus(i2c_info.i2c_dev[0], address, index, &write);
+
+        ret = api_i2c.api_pa_pc_write_i2c_bus(i2c_info.i2c_dev[0], address, index, &writebuf, write_len);
         if (ret != An_SUCCESS) {
             printf("Error: Write I2C failed \n");
             return;

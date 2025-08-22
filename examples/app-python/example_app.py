@@ -381,15 +381,17 @@ class Controller:
         # Write data to i2c bus
         baseAddr = 0xA0
         index= 0
-        data = 1
-        api_i2c.api_pa_pc_write_i2c_data(i2cInfo.i2c_dev[0], baseAddr, index, data)
+        data = (c_uint8 * 4)(0x11, 0x22, 0x33, 0x44)  # buffer of 4 bytes
+        length = 3
+        api_i2c.api_pa_pc_write_i2c_data(i2cInfo.i2c_dev[0], baseAddr, index, data, length)
 
         time.sleep(1)
 
         # Read data from i2c bus
-        api_i2c.api_pa_pc_read_i2c(i2cInfo.i2c_dev[0], baseAddr, index, data)
+        buffer = (ctypes.c_uint8 * 16)()  # allocate buffer for 16 bytes
+        api_i2c.api_pa_pc_read_i2c(i2cInfo.i2c_dev[0], baseAddr, index, buffer)
 
-        logger.info(f"Data received = {data}")
+        logger.info(f"Data received = {buffer}")
 
         api_i2c.api_pa_pc_deinit_i2c_lib()
         

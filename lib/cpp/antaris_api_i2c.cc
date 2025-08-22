@@ -122,18 +122,18 @@ AntarisReturnCode AntarisApiI2C::read_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_addr
     return An_SUCCESS;
 }
 
-AntarisReturnCode AntarisApiI2C::api_pa_pc_write_i2c_bus(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
+AntarisReturnCode AntarisApiI2C::api_pa_pc_write_i2c_bus(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data, int data_length)
 {
     AntarisApiParser api_parser;
     AntarisReturnCode ret = An_SUCCESS;
 
     if ((strncmp(i2c_adapter_type, "QA7", 2) == 0)) {
-        ret = write_qa7_i2c(i2c_dev, i2c_address, index, data);
+        ret = write_qa7_i2c(i2c_dev, i2c_address, index, data, data_length);
     }
     return ret;
 }
 
-AntarisReturnCode AntarisApiI2C::write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
+AntarisReturnCode AntarisApiI2C::write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data, int data_length)
 {
     write_i2c_t write_i2c;
 
@@ -154,7 +154,7 @@ AntarisReturnCode AntarisApiI2C::write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_add
     }
 
     // Call the function
-    unsigned int result = write_i2c(i2c_dev, i2c_address, index, data);
+    unsigned int result = write_i2c(i2c_dev, i2c_address, index, data, data_length);
     printf("write_i2c result: %u\n", result);
 
     return An_SUCCESS;
