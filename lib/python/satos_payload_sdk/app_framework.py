@@ -386,12 +386,12 @@ class ChannelClient:
 
         return resp
 
-    def stage_file_download(self, filename, file_priority):
+    def stage_file_download(self, filename, file_priority, file_dl_band):
         with self._cond:
             if (file_priority < api_types.FilePriorities.FILE_DL_PRIORITY_LOW) or (file_priority > api_types.FilePriorities.FILE_DL_PRIORITY_IMMEDIATE):
                 return ValueError("Invalid file priority")
 
-            params = api_types.ReqStageFileDownloadParams(self._get_next_cid(), filename, file_priority)
+            params = api_types.ReqStageFileDownloadParams(self._get_next_cid(), filename, file_priority,file_dl_band)
             resp = api_client.api_pa_pc_stage_file_download(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
                 logger.error("stage_file_download request failed")
