@@ -303,7 +303,7 @@ class Controller:
         # 'FILE_DL_PRIORITY_NORMAL': 1,
         # 'FILE_DL_PRIORITY_HIGH': 2,
         # 'FILE_DL_PRIORITY_IMMEDIATE': 3,
-        api_types.FileDlRadioType.file_dl_band = FILE_DL_XBAND
+        api_types.FileDlRadioType.file_dl_band =  api_types.FileDlRadioType.FILE_DL_XBAND
         resp = ctx.client.stage_file_download(g_StageFileName, api_types.FilePriorities.FILE_DL_PRIORITY_NORMAL, api_types.FileDlRadioType.file_dl_band)
         if resp == ValueError:
             print("Error in staging file")
