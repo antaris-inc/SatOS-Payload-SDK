@@ -35,7 +35,7 @@ GPIO
 ^^^^
 
 Payload device access is not yet abstracted through the `satos_payload_sdk.app_framework` module.  
-Instead, developers should use the `satos_payload_sdk.antaris_api_gpio` module.
+Instead, developers should use the `satos_payload_sdk.antaris_api_gpio` and `satos_payload_sdk.antaris_api_parser` modules.
 
 To understand the available GPIO pin configuration, call `api_pa_pc_get_gpio_info()`.
 The function will return an object with three attributes:
@@ -44,6 +44,8 @@ The function will return an object with three attributes:
 * `pins` holds an array of assigned pin numbers (of length `pin_count`)
 * `interrupt` holds the assigned interrupt pin number
 
+To initialize the GPIO library for QA7 and FTDI simply call `api_pa_pc_init_gpio_lib()`
+
 To read the current value from a GPIO pin, simply call `api_pa_pc_read_gpio(<pin>)`.
 The read value will be returned from the function.
 A value of -1 will be returned if the operation fails.
@@ -51,8 +53,9 @@ A value of -1 will be returned if the operation fails.
 To write to a GPIO pin, call `api_pa_pc_write_gpio(<pin>, <value>)`.
 The written value will be returned from the function.
 A value of -1 will be returned if the operation fails.
+After the operation is completed simply call `api_pa_pc_deinit_gpio_lib()` to deinitialize the GPIO library
 
-At this time, GPIO support is limited to FTDI devices.
+At this time, GPIO support is limited to FTDI and QA7 devices.
 
 
 CAN
@@ -76,3 +79,21 @@ To send message over CAN bus, call `api_pa_pc_send_can_message()` with following
 * `channel` holds the CAN interface id
 * `arb_id` holds arbitration id
 * `data_bytes` holds 8-byte data 
+
+
+I2C
+^^^
+
+To understand available I2C bus configuration, call `api_pa_pc_get_i2c_dev()`.
+The function will return an object with two attributes:
+
+* `i2c_port_count` holds the number of I2C bus connected
+* `i2c_dev` holds an array of assigned I2C bus interface (of length `i2c_port_count`)
+
+To initialize the I2C library for QA7 and FTDI simply call `api_pa_pc_init_i2c_lib()`
+
+to write data to I2C bus call `api_pa_pc_write_i2c_data(<i2c_dev>,<base_addr>,<index>,data)`
+
+to read data from I2C bus call `api_pa_pc_read_i2c(<i2c_dev>, <baseAddr>, <index>, <data>)`
+
+After the operation is completed simply call `api_pa_pc_deinit_i2c_lib()` to deinitialize the I2C library
