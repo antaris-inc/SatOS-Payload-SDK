@@ -272,7 +272,7 @@ Expected periodic callback from AC: ``ResponseEpsVoltage``
 SesThermMgmntReq
 ^^^^^^^^^^^^^
 
-Request OBC to monitor Temp of hardware in every ``n ms (duration)``. Callback is received to application if Temp of hardware is not between lower and upper thresholds .
+Request SatOS to monitor Temp of hardware in every ``n ms (duration)``. Callback is received to SatOS_SDK if Temp of hardware is not between lower and upper thresholds .
 
 Parameters:
 
@@ -310,7 +310,7 @@ Expected periodic callback from AC: ``SesThrmlNtf``
 SesTempReq
 ^^^^^^^^^^^^^
 
-Sends Payload data to OBC.
+Request temperature of hardware and power state of heater .
 
 Parameters:
 
@@ -336,15 +336,18 @@ Expected periodic callback from AC: ``RespSesTempReq``
 PaSatosMessage
 ^^^^^^^^^^^^^
 
-Data that has to be sent to the OBC.
+Data that has to be sent to the SatOS_SDK.
 
 Parameters:
 
 * ``U16 CorrelationId``
-* ``U16 CommandId``
+* ``U16 Command``
+      * Command is payload specific and it is understanding between SatOS_SDK and SatOS.
+
 * ``INT[255] payload data``
 
-  * payload data that has to be sent to the OBC. it can be upto to 1020 bytes.
+  * payload data is a command parameter that has to be sent to the SatOS_SDK. it can be upto to 1020 bytes.
+    
 
 Expected periodic callback from AC: ``RespPaSatOsMsg``
 
