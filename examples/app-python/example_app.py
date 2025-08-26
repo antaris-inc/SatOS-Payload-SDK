@@ -20,6 +20,7 @@ import os
 import sys
 import time
 import serial
+import ctypes
 
 from satos_payload_sdk import app_framework
 from satos_payload_sdk import antaris_api_gpio as api_gpio
@@ -381,17 +382,22 @@ class Controller:
         # Write data to i2c bus
         baseAddr = 0xA0
         index= 0
-        data = (c_uint8 * 4)(0x11, 0x22, 0x33, 0x44)  # buffer of 4 bytes
-        length = 3
-        api_i2c.api_pa_pc_write_i2c_data(i2cInfo.i2c_dev[0], baseAddr, index, data, length)
+        data = (ctypes.c_uint8 * 4)(0x11, 0x22, 0x33, 0x44)  # buffer of 4 bytes
+        length = len(data)
+        api_i2c.api_pa_pc_write_i2c_data(int(i2cInfo.i2c_dev[0]), baseAddr, index, data, length)
 
         time.sleep(1)
 
         # Read data from i2c bus
-        buffer = (ctypes.c_uint8 * 16)()  # allocate buffer for 16 bytes
-        api_i2c.api_pa_pc_read_i2c(i2cInfo.i2c_dev[0], baseAddr, index, buffer)
+        index = 0
+        while index < len(data):
+            buffer = (ctypes.c_uint8 * 1)()  # allocate buffer for 1 byte
+            api_i2c.api_pa_pc_read_i2c_data( int(i2cInfo.i2c_dev[0]), baseAddr, index, buffer)
+            data_received = buffer[0]
+            logger.info(f"Data[{index}] = {data_received:#04x}")
 
-        logger.info(f"Data received = {buffer}")
+            index += 1
+
 
         api_i2c.api_pa_pc_deinit_i2c_lib()
         

@@ -6,7 +6,7 @@
 typedef int (*init_qa7_lib_t)(void);
 typedef int (*deinit_qa7_lib_t)(void);
 typedef unsigned int (*read_i2c_t)(unsigned short, unsigned char, unsigned short, unsigned char *);
-typedef unsigned int (*write_i2c_t)(unsigned short, unsigned char, unsigned short, unsigned char *);
+typedef unsigned int (*write_i2c_t)(unsigned short, unsigned char, unsigned short, unsigned char *, int);
 
 extern char qa7_lib[32];
 char i2c_adapter_type[32] = {0};
