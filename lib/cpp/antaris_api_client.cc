@@ -1345,4 +1345,22 @@ AntarisReturnCode api_pa_pc_ses_temp_req(AntarisChannel channel, SesTempReq *ses
     return channel_ctx->pc_service_handle->Invoke_PC_ses_temp_req(ses_temp_req);
 }
 
+AntarisReturnCode api_pa_pc_pa_satos_message(AntarisChannel channel, PaSatOsMsg *pa_satos_msg)
+{
+    AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
+    AntarisReturnCode ret = An_SUCCESS;
+
+    printf("PaSatOsMsg\n");
+
+    if (!channel_ctx || !channel_ctx->pc_service_handle || !pa_satos_msg) {
+        ret = An_GENERIC_FAILURE;
+        return ret;
+    }
+
+    if (api_debug) {
+        displayPayloadMetricsResponse(pa_satos_msg);
+    }
+    return channel_ctx->pc_service_handle->Invoke_PC_pa_satos_message(pa_satos_msg);
+}
+
 } // extern C
