@@ -52,7 +52,13 @@
 #define TestI2CBUS_IDX                  8
 #define PowerControl_ID                 "PowerControl"
 #define PowerControl_IDX                9
-#define SEQUENCE_ID_MAX                 10
+#define SesThermMgmt_ID                 "SesThermMgmnt"
+#define SesThermMgmt_IDX                10
+#define SesTempReq_ID                   "SesTempReq"
+#define SesTempReq_IDX                  11
+#define PaSatosMsg_ID                   "PaSatOsMsg"
+#define PaSatosMsg_IDX                  12
+#define SEQUENCE_ID_MAX                 13
 
 #define APP_STATE_ACTIVE                0  // Application State : Good (0), Error (non-Zero)
 
@@ -60,6 +66,8 @@
 #define STAGE_FILE_NAME                 "SampleFile.txt"            // name of staged file
 #define MAX_DATA_BYTES 8
 #define SEND_MSG_LIMIT 10
+#define MAX_PAYLOAD_DATA_SIZE 1020
+
 
 /*
  * Following counters should be incremented whenever
@@ -608,6 +616,131 @@ void handle_PowerControl(mythreadState_t *mythread){
 
 }
 
+void handle_ses_therm_mgmnt(mythreadState_t *mythread){
+    printf("Handling Ses thermal management request");
+    AntarisReturnCode ret;
+    UINT8 hardware_id = 0;  // 0:SESA , 1:SESB
+    UINT32 duration = 2000 ;  // millisecond
+    UINT8 upper_threshold = 25; // in celsius
+    UINT8 lower_threshold = 20; // in celsius
+
+    char *seq_params_lower = (char *)malloc(strlen(mythread->seq_params) + 1);
+    for(int i = 0;mythread->seq_params[i] != '\0';i++){
+        seq_params_lower[i] = tolower(mythread->seq_params[i]);
+    }
+    seq_params_lower[strlen(mythread->seq_params)] = '\0';
+    if(strcmp(seq_params_lower, "stop") == 0){
+        printf("\n Sending stop SES thermal management request \n");
+
+        StopSesThermMgmntReq stop_ses_therm_mgmt_req = {0};
+        stop_ses_therm_mgmt_req.correlation_id = mythread->correlation_id;
+        stop_ses_therm_mgmt_req.hardware_id = hardware_id;
+        ret = api_pa_pc_stop_ses_therm_mgmnt_req(channel, &stop_ses_therm_mgmt_req);
+        if(ret == An_SUCCESS){
+            printf("stop SES thermal management request success, ret %d\n",ret);
+        }
+        else{
+            fprintf(stderr, " stop SES thermal management request failed, ret %d\n", ret);
+        }
+    }
+    else if(strcmp(seq_params_lower, "start") == 0){
+        printf("\n Sending start SES thermal management request \n");
+        StartSesThermMgmntReq start_ses_therm_mgmt_req = {0};
+        start_ses_therm_mgmt_req.correlation_id = mythread->correlation_id;
+        start_ses_therm_mgmt_req.duration = duration;
+        start_ses_therm_mgmt_req.hardware_id = hardware_id;
+        start_ses_therm_mgmt_req.lower_threshold = lower_threshold;
+        start_ses_therm_mgmt_req.upper_threshold = upper_threshold;
+        ret = api_pa_pc_start_ses_therm_mgmnt_req(channel, &start_ses_therm_mgmt_req);
+        if(ret == An_SUCCESS){
+            printf("start SES thermal management request success, ret %d\n",ret);
+        }
+        else{
+            fprintf(stderr, " start SES thermal management request failed, ret %d\n", ret);
+        }
+    }
+    else{
+        printf("Incorrect parameters. Parameter can be 'stop' or 'start'");
+    }
+
+    // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], SesThermMgmt_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } else {
+        printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+    }
+
+}
+
+void handle_ses_temp_req(mythreadState_t *mythread){
+
+    printf("Handling SES Temperature request");
+    AntarisReturnCode ret;
+    UINT8 hardware_id = 0;  // 0:SESA , 1:SESB
+    SesTempReq ses_temp_req = {0};
+    ses_temp_req.correlation_id = mythread->correlation_id;
+    ses_temp_req.hardware_id = hardware_id;
+    ret = api_pa_pc_ses_temp_req(channel,&ses_temp_req);
+    if(ret == An_SUCCESS){
+        printf("SES temp request success, ret %d\n",ret);
+    }
+    else{
+        fprintf(stderr, " SES temp request failed, ret %d\n", ret);
+    }
+
+     // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], SesTempReq_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } else {
+        printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+    }
+
+}
+
+void handle_pa_satos_message(mythreadState_t *mythread){
+
+    printf("Handling Pa-SatOS message");
+    AntarisReturnCode ret;
+    UINT16 command = 1;  // command ID
+    INT8 Payload_data[MAX_PAYLOAD_DATA_SIZE] = { 0x12, 0x34, 0x56 };  // Can be up to 1020 bytes
+    PaSatOsMsg pa_satos_msg = {0};
+    pa_satos_msg.correlation_id = mythread->correlation_id;
+    pa_satos_msg.command_id = command;
+    ret = api_pa_pc_pa_satos_message(channel, &pa_satos_msg);
+    if(ret == An_SUCCESS){
+        printf("Pa SatOS message success, ret %d\n",ret);
+    }
+    else{
+        fprintf(stderr, " Pa SatOS message failed, ret %d\n", ret);
+    }
+
+     // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], PaSatosMsg_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } else {
+        printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+    }
+
+}
+
 // Table of Sequence_id : FsmThread
 mythreadState_t *payload_sequences_fsms[SEQUENCE_ID_MAX];
 unsigned int current_sequence_idx = HelloWorld_IDX;
@@ -700,7 +833,17 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
     }  else if (strcmp(sequence_string, PowerControl_ID) == 0) {
         printf("\t => %d\n", PowerControl_IDX);
         return PowerControl_IDX;
+    }   else if (strcmp(sequence_string, SesThermMgmt_ID) == 0) {
+        printf("\t => %d\n", SesThermMgmt_IDX);
+        return SesThermMgmt_IDX;
+    }   else if (strcmp(sequence_string, SesTempReq_ID) == 0) {
+        printf("\t => %d\n", SesTempReq_IDX);
+        return SesTempReq_IDX;
+    }   else if (strcmp(sequence_string, PaSatosMsg_ID) == 0) {
+        printf("\t => %d\n", PaSatosMsg_IDX);
+        return PaSatosMsg_IDX;
     }
+
     
     printf("Unknown sequence, returning -1\n");
     return -1;
@@ -844,6 +987,44 @@ AntarisReturnCode process_response_get_eps_voltage(GetEpsVoltage *get_eps_voltag
         displayGetEpsVoltage(get_eps_voltage);
     }
 
+    // #<Payload Application Business Logic>
+    wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
+    return An_SUCCESS;
+}
+
+AntarisReturnCode process_response_thrml_ntf(SesThermalStatusNtf *ses_thermal_status_ntf)
+{
+    printf("processing SES thermal status notification\n");
+    printf("Current temperature = %u\n",(unsigned int)ses_thermal_status_ntf->temp);
+    printf("Heater power status = %u\n",(unsigned int)ses_thermal_status_ntf->heater_pwr_status);  // 0:OFF, 1:ON
+    if (debug) {
+        displaySesThermalStatusNtf(ses_thermal_status_ntf);
+    }
+    // #<Payload Application Business Logic>
+    wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
+    return An_SUCCESS;
+}
+
+AntarisReturnCode process_response_ses_temp(RespSesTempReqParams *ses_temp_req_params)
+{
+    printf("Current temperature = %u\n",(unsigned int)ses_temp_req_params->temp);
+    printf("Heater power status = %u\n",(unsigned int)ses_temp_req_params->heater_pwr_status);  // 0:OFF, 1:ON
+    if (debug) {
+        displayRespSesTempReqParams(ses_temp_req_params);
+        
+    }
+    // #<Payload Application Business Logic>
+    wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
+    return An_SUCCESS;
+}
+
+AntarisReturnCode process_response_pa_satos_msg(RespPaSatOsMsg *resp_pa_satos_message)
+{
+    printf("Command id = %hu , status = %d\n", resp_pa_satos_message->command_id, resp_pa_satos_message->req_status);
+    if (debug) {
+        displayPaSatOsMsg(resp_pa_satos_message);
+        
+    }
     // #<Payload Application Business Logic>
     wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
     return An_SUCCESS;
@@ -995,6 +1176,9 @@ int main(int argc, char *argv[])
             req_payload_metrics: process_req_payload_metrics,
             process_cb_gnss_eph_data : process_response_gnss_eph_data,
             process_cb_get_eps_voltage: process_response_get_eps_voltage,
+            process_response_ses_temp_req: process_response_ses_temp,
+            process_cb_ses_thrml_ntf: process_response_thrml_ntf,
+            process_pa_satos_msg_response: process_response_pa_satos_msg,
     };
 
     // Create Channel to talk to Payload Controller (PC)
@@ -1016,6 +1200,9 @@ int main(int argc, char *argv[])
     payload_sequences_fsms[GnssDataTelemetry_IDX] = fsmThreadCreate(channel, 1, GnssDataTelemetry_ID, handle_gnss_data_Telemetry_Request);
     payload_sequences_fsms[TestI2CBUS_IDX] = fsmThreadCreate(channel, 1, TestI2CBUS_ID, handle_TestI2CBus);
     payload_sequences_fsms[PowerControl_IDX] = fsmThreadCreate(channel, 1, PowerControl_ID, handle_PowerControl);
+    payload_sequences_fsms[SesThermMgmt_IDX] = fsmThreadCreate(channel, 1, SesThermMgmt_ID, handle_ses_therm_mgmnt);
+    payload_sequences_fsms[SesTempReq_IDX] = fsmThreadCreate(channel, 1, SesTempReq_ID, handle_ses_temp_req);
+    payload_sequences_fsms[PaSatosMsg_IDX] = fsmThreadCreate(channel, 1, PaSatosMsg_ID, handle_pa_satos_message);
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure
@@ -1069,6 +1256,18 @@ int main(int argc, char *argv[])
     if (strcmp(payload_sequences_fsms[TestI2CBUS_IDX]->state, "NOT_STARTED") != 0) {
         pthread_join(payload_sequences_fsms[TestI2CBUS_IDX]->thread_id, &exit_status);
     }
+
+    if (strcmp(payload_sequences_fsms[SesThermMgmt_IDX]->state, "NOT_STARTED") != 0) {
+        pthread_join(payload_sequences_fsms[SesThermMgmt_IDX]->thread_id, &exit_status);
+    }
+
+    if (strcmp(payload_sequences_fsms[SesTempReq_IDX]->state, "NOT_STARTED") != 0) {
+        pthread_join(payload_sequences_fsms[SesTempReq_IDX]->thread_id, &exit_status);
+    }
+
+    if (strcmp(payload_sequences_fsms[PaSatosMsg_IDX]->state, "NOT_STARTED") != 0) {
+        pthread_join(payload_sequences_fsms[PaSatosMsg_IDX]->thread_id, &exit_status);
+    }
     
     printf("Cleaning up sequence resources\n");
 
@@ -1080,6 +1279,9 @@ int main(int argc, char *argv[])
     fsmThreadCleanup(payload_sequences_fsms[EpsVoltageTelemetry_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[GnssDataTelemetry_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[TestI2CBUS_IDX]);
+    fsmThreadCleanup(payload_sequences_fsms[SesThermMgmt_IDX]);
+    fsmThreadCleanup(payload_sequences_fsms[SesTempReq_IDX]);
+    fsmThreadCleanup(payload_sequences_fsms[PaSatosMsg_IDX]);
 
     // Delete Channel
     api_pa_pc_delete_channel(channel);
