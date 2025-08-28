@@ -118,7 +118,6 @@ AntarisReturnCode AntarisApiI2C::read_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_addr
         printf("read_i2c() failed\n");
     }
 
-    dlclose(qa7handle);
     return An_SUCCESS;
 }
 
@@ -135,7 +134,7 @@ AntarisReturnCode AntarisApiI2C::api_pa_pc_write_i2c_bus(uint16_t i2c_dev, uint8
 
 AntarisReturnCode AntarisApiI2C::write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data, int data_length)
 {
-    write_i2c_t write_i2c;
+    write_i2c_t write_i2c_func;
 
     // Load the shared library
     if (qa7handle == NULL) {
@@ -145,7 +144,7 @@ AntarisReturnCode AntarisApiI2C::write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_add
     }
 
     // Load the symbol
-    *(void **)(&write_i2c) = dlsym(qa7handle, QA7_I2C_WRITE_FUNCTION);
+    *(void **)(&write_i2c_func) = dlsym(qa7handle, QA7_I2C_WRITE_FUNCTION);
     char *error = dlerror();
     if (error) {
         fprintf(stderr, "dlsym error: %s\n", error);
@@ -154,7 +153,7 @@ AntarisReturnCode AntarisApiI2C::write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_add
     }
 
     // Call the function
-    unsigned int result = write_i2c(i2c_dev, i2c_address, index, data, data_length);
+    unsigned int result = write_i2c_func(i2c_dev, i2c_address, index, data, data_length);
     printf("write_i2c result: %u\n", result);
 
     return An_SUCCESS;
