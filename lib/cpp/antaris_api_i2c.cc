@@ -6,7 +6,7 @@
 typedef int (*init_qa7_lib_t)(void);
 typedef int (*deinit_qa7_lib_t)(void);
 typedef unsigned int (*read_i2c_t)(unsigned short, unsigned char, unsigned short, unsigned char *);
-typedef unsigned int (*write_i2c_t)(unsigned short, unsigned char, unsigned short, unsigned char *);
+typedef unsigned int (*write_i2c_t)(unsigned short, unsigned char, unsigned short, unsigned char *, int);
 
 extern char qa7_lib[32];
 char i2c_adapter_type[32] = {0};
@@ -118,24 +118,23 @@ AntarisReturnCode AntarisApiI2C::read_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_addr
         printf("read_i2c() failed\n");
     }
 
-    dlclose(qa7handle);
     return An_SUCCESS;
 }
 
-AntarisReturnCode AntarisApiI2C::api_pa_pc_write_i2c_bus(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
+AntarisReturnCode AntarisApiI2C::api_pa_pc_write_i2c_bus(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data, int data_length)
 {
     AntarisApiParser api_parser;
     AntarisReturnCode ret = An_SUCCESS;
 
     if ((strncmp(i2c_adapter_type, "QA7", 2) == 0)) {
-        ret = write_qa7_i2c(i2c_dev, i2c_address, index, data);
+        ret = write_qa7_i2c(i2c_dev, i2c_address, index, data, data_length);
     }
     return ret;
 }
 
-AntarisReturnCode AntarisApiI2C::write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data)
+AntarisReturnCode AntarisApiI2C::write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_address, uint16_t index, uint8_t *data, int data_length)
 {
-    write_i2c_t write_i2c;
+    write_i2c_t write_i2c_func;
 
     // Load the shared library
     if (qa7handle == NULL) {
@@ -145,7 +144,7 @@ AntarisReturnCode AntarisApiI2C::write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_add
     }
 
     // Load the symbol
-    *(void **)(&write_i2c) = dlsym(qa7handle, QA7_I2C_WRITE_FUNCTION);
+    *(void **)(&write_i2c_func) = dlsym(qa7handle, QA7_I2C_WRITE_FUNCTION);
     char *error = dlerror();
     if (error) {
         fprintf(stderr, "dlsym error: %s\n", error);
@@ -154,7 +153,7 @@ AntarisReturnCode AntarisApiI2C::write_qa7_i2c(uint16_t i2c_dev, uint8_t i2c_add
     }
 
     // Call the function
-    unsigned int result = write_i2c(i2c_dev, i2c_address, index, data);
+    unsigned int result = write_i2c_func(i2c_dev, i2c_address, index, data, data_length);
     printf("write_i2c result: %u\n", result);
 
     return An_SUCCESS;
