@@ -100,14 +100,18 @@ Expected async response from AC: ``ResponseGetCurrentLocation``
 PayloadPowerControl
 ^^^^^^^^^^^^^^^^^^^
 
-Request to change the power state of the Payload Device. PA can power cycle its device by issuing a Power-Off request followed by a Power-On after some delay.
+Request to change the power state of any specific Payload Device. PA can power cycle its device by issuing a Power-Off request followed by a Power-On after some delay.
 
 Parameters:
 
 * ``U16 CorrelationId``
 * ``U16 PowerOperation``
+* ``U16 hwid``
 
   * Request Power-Off with a value of ``0``, or Power-On with a value of ``1``
+  * ``U16 hw_id`` 
+
+    * the Id of the payload device which needs to Power-On or Power-Off
 
 Expected async response from AC: ``ResponsePayloadPowerControl``
 
@@ -264,6 +268,100 @@ Expected periodic callback from AC: ``ResponseEpsVoltage``
 * ``FLOAT EPS_Voltage``   
                 
   * EPS instanteneous voltage
+
+SesThermMgmntReq
+^^^^^^^^^^^^^
+
+Request SatOS to monitor temperature of hardware in every ``n ms (duration)``. Callback is received to SatOS_SDK if temperature of hardware is not in the range of lower and upper thresholds .
+
+Parameters:
+
+* ``U16 CorrelationId``
+* ``U8 hardware_id``
+
+  * Id of hardware which needs to be monitor
+
+* ``U32 duration``
+
+  * it monitor the hardware temperature in every given duration.
+
+* ``U8 lower_threshold``
+  
+  * value of lower threshold, will recieve callback if temperature goes below this value.
+
+* ``U8 upper_threshold``
+  
+  * value of upper threshold, will recieve callback if temperature goes above this value.
+
+Expected periodic callback from AC: ``SesThrmlNtf``
+
+* ``U16 CorrelationId``
+
+  * Will match what was sent in request
+
+* ``U8 heater_pwr_status``   
+                
+  * status of heater 0:OFF, 1:ON
+
+* ``U8 temp``   
+                
+  * temperature of hardware in celsius
+
+SesTempReq
+^^^^^^^^^^^^^
+
+Request temperature of hardware and power state of heater .
+
+Parameters:
+
+* ``U16 CorrelationId``
+* ``U8 hardware_id``
+
+  * Id of hardware
+
+Expected periodic callback from AC: ``RespSesTempReq``
+
+* ``U16 CorrelationId``
+
+  * Will match what was sent in request
+
+* ``U8 temp``   
+                
+  * temperature of hardware in celsius
+
+* ``U8 heater_pwr_status``   
+                
+  * status of heater 0:OFF, 1:ON
+
+PaSatosMessage
+^^^^^^^^^^^^^
+
+Data that has to be sent to the SatOS.
+
+Parameters:
+
+* ``U16 CorrelationId``
+* ``U16 Command``
+      * Command is payload specific and it is understanding between SatOS_SDK and SatOS.
+
+* ``INT[255] payload data``
+
+  * payload data is a command parameter that has to be sent to the SatOS. it can be upto to 1020 bytes.
+    
+
+Expected periodic callback from AC: ``RespPaSatOsMsg``
+
+* ``U16 CorrelationId``
+
+  * Will match what was sent in request
+
+* ``U16 Command Id``   
+                
+  * Will match what was sent in request
+
+* ``U16 ReqStatus``
+
+  * ``0`` if request succeeded, otherwise non-zero value indicating failure 
 
 Application Controller Requests
 ===============================
