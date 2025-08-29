@@ -272,7 +272,7 @@ Expected periodic callback from AC: ``ResponseEpsVoltage``
 SesThermMgmntReq
 ^^^^^^^^^^^^^
 
-Request SatOS to monitor Temp of hardware in every ``n ms (duration)``. Callback is received to SatOS_SDK if Temp of hardware is not between lower and upper thresholds .
+Request SatOS to monitor temperature of hardware in every ``n ms (duration)``. Callback is received to SatOS_SDK if temperature of hardware is not in the range of lower and upper thresholds .
 
 Parameters:
 
@@ -283,15 +283,15 @@ Parameters:
 
 * ``U32 duration``
 
-  * it monitor the hardware temp in every given duration.
+  * it monitor the hardware temperature in every given duration.
 
 * ``U8 lower_threshold``
   
-  * value of lower threshold, will recieve callback if temp goes below this value.
+  * value of lower threshold, will recieve callback if temperature goes below this value.
 
 * ``U8 upper_threshold``
   
-  * value of upper threshold, will recieve callback if temp goes above this value.
+  * value of upper threshold, will recieve callback if temperature goes above this value.
 
 Expected periodic callback from AC: ``SesThrmlNtf``
 
@@ -336,7 +336,7 @@ Expected periodic callback from AC: ``RespSesTempReq``
 PaSatosMessage
 ^^^^^^^^^^^^^
 
-Data that has to be sent to the SatOS_SDK.
+Data that has to be sent to the SatOS.
 
 Parameters:
 
@@ -346,7 +346,7 @@ Parameters:
 
 * ``INT[255] payload data``
 
-  * payload data is a command parameter that has to be sent to the SatOS_SDK. it can be upto to 1020 bytes.
+  * payload data is a command parameter that has to be sent to the SatOS. it can be upto to 1020 bytes.
     
 
 Expected periodic callback from AC: ``RespPaSatOsMsg``

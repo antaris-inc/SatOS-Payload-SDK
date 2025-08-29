@@ -92,8 +92,8 @@ The function will return an object with two attributes:
 
 To initialize the I2C library for QA7 and FTDI simply call `api_pa_pc_init_i2c_lib()`
 
-to write data to I2C bus call `api_pa_pc_write_i2c_data(<i2c_dev>,<base_addr>,<index>,data)`
+to write data to I2C bus call `api_pa_pc_write_i2c_data(<i2c_dev>,<base_addr>,<index>,<data>,<length>)`
 
-to read data from I2C bus call `api_pa_pc_read_i2c(<i2c_dev>, <baseAddr>, <index>, <data>)`
+to read data from I2C bus call `api_pa_pc_read_i2c(<i2c_dev>, <baseAddr>, <index>, <buffer>)`
 
 After the operation is completed simply call `api_pa_pc_deinit_i2c_lib()` to deinitialize the I2C library
