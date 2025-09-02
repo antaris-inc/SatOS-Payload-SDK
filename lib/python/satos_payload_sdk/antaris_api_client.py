@@ -369,12 +369,21 @@ def api_pa_pc_register(channel, register_params):
     peer_params.sdk_version.minor = sdk_version.ANTARIS_PA_PC_SDK_MINOR_VERSION
     peer_params.sdk_version.patch = sdk_version.ANTARIS_PA_PC_SDK_PATCH_VERSION
     metadata = ((g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_register(peer_params , metadata=metadata)
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_register(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
-
-    return peer_ret.return_code
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
 def api_pa_pc_get_current_location(channel, get_location_params):
     print("api_pa_pc_get_curent_location")
@@ -383,12 +392,21 @@ def api_pa_pc_get_current_location(channel, get_location_params):
 
     peer_params = api_types.app_to_peer_ReqGetCurrentLocationParams(get_location_params)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_get_current_location(peer_params , metadata=metadata)
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_get_current_location(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
-
-    return peer_ret.return_code
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
 def api_pa_pc_stage_file_download(channel, download_file_params):
     print("api_pa_pc_stage_file_download")
@@ -401,12 +419,21 @@ def api_pa_pc_stage_file_download(channel, download_file_params):
             return False
     peer_params = api_types.app_to_peer_ReqStageFileDownloadParams(download_file_params)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_stage_file_download(peer_params , metadata = metadata)
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_stage_file_download(peer_params , metadata = metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
-
-    return peer_ret.return_code
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
 def api_pa_pc_sequence_done(channel, sequence_done_params):
     print("api_pa_pc_sequence_done")
@@ -414,12 +441,21 @@ def api_pa_pc_sequence_done(channel, sequence_done_params):
         sequence_done_params.display()
     peer_params = api_types.app_to_peer_CmdSequenceDoneParams(sequence_done_params)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_sequence_done(peer_params , metadata=metadata)
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_sequence_done(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
-
-    return peer_ret.return_code
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
 def api_pa_pc_payload_power_control(channel, payload_power_control_params):
     print("api_pa_pc_payload_power_control")
@@ -427,12 +463,21 @@ def api_pa_pc_payload_power_control(channel, payload_power_control_params):
         payload_power_control_params.display()
     peer_params = api_types.app_to_peer_ReqPayloadPowerControlParams(payload_power_control_params)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_payload_power_control(peer_params , metadata=metadata)
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_payload_power_control(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
-
-    return peer_ret.return_code
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
 def api_pa_pc_response_health_check(channel, response_health_check_params):
     print("api_pa_pc_response_health_check")
@@ -440,12 +485,21 @@ def api_pa_pc_response_health_check(channel, response_health_check_params):
         response_health_check_params.display()
     peer_params = api_types.app_to_peer_RespHealthCheckParams(response_health_check_params)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_response_health_check(peer_params , metadata=metadata)
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_response_health_check(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
-
-    return peer_ret.return_code
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
 def api_pa_pc_response_payload_metrics(channel, response_payload_metrics_params):
     print("api_pa_pc_response_payload_metrics")
@@ -453,12 +507,21 @@ def api_pa_pc_response_payload_metrics(channel, response_payload_metrics_params)
         response_payload_metrics_params.display()
     peer_params = api_types.app_to_peer_PayloadMetricsResponse(response_payload_metrics_params)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_response_payload_metrics(peer_params , metadata=metadata)
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_response_payload_metrics(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
-
-    return peer_ret.return_code
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
 def api_pa_pc_response_shutdown(channel, response_shutdown_params):
     print("api_pa_pc_response_shutdown")
@@ -466,93 +529,166 @@ def api_pa_pc_response_shutdown(channel, response_shutdown_params):
         response_shutdown_params.display()
     peer_params = api_types.app_to_peer_RespShutdownParams(response_shutdown_params)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_response_shutdown(peer_params , metadata=metadata)
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_response_shutdown(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    return peer_ret.return_code
-
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 def api_pa_pc_gnss_eph_stop_req(channel, req_gnss_eph_stop):
     print("api_pa_pc_gnss_eph_stop_req")
 
     peer_params = api_types.app_to_peer_ReqGnssEphStopDataReq(req_gnss_eph_stop)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_gnss_eph_stop_req(peer_params , metadata=metadata)
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_gnss_eph_stop_req(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
-
-    return peer_ret.return_code
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
 def api_pa_pc_gnss_eph_start_req(channel, req_gnss_eph_start):
     print("api_pa_pc_gnss_eph_start_req")
 
     peer_params = api_types.app_to_peer_ReqGnssEphStartDataReq(req_gnss_eph_start)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_gnss_eph_start_req(peer_params , metadata=metadata)
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_gnss_eph_start_req(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    return peer_ret.return_code
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
 def api_pa_pc_get_eps_voltage_stop_req(channel, req_get_eps_voltage_stop):
     print("api_pa_pc_get_eps_voltage_stop_req")
 
     peer_params = api_types.app_to_peer_ReqGetEpsVoltageStopReq(req_get_eps_voltage_stop)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_get_eps_voltage_stop_req(peer_params , metadata=metadata)
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_get_eps_voltage_stop_req(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
-
-    return peer_ret.return_code
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
 def api_pa_pc_get_eps_voltage_start_req(channel, req_get_eps_voltage_start):
     print("api_pa_pc_get_eps_voltage_start_req")
 
     peer_params = api_types.app_to_peer_ReqGetEpsVoltageStartReq(req_get_eps_voltage_start)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_get_eps_voltage_start_req(peer_params , metadata=metadata)
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_get_eps_voltage_start_req(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    return peer_ret.return_code
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
 def api_pa_pc_start_ses_therm_mgmnt_req(channel, req_start_ses_therm_mgmnt):
     print("api_pa_pc_start_ses_therm_mgmnt_req")
 
     peer_params = api_types.app_to_peer_StartSesThermMgmntReq(req_start_ses_therm_mgmnt)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_start_ses_therm_mgmnt_req(peer_params , metadata=metadata)
-    
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_start_ses_therm_mgmnt_req(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    return peer_ret.return_code
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
 def api_pa_pc_stop_ses_therm_mgmnt_req(channel, req_stop_ses_therm_mgmnt):
     print("api_pa_pc_stop_ses_therm_mgmnt_req")
 
     peer_params = api_types.app_to_peer_StopSesThermMgmntReq(req_stop_ses_therm_mgmnt)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_stop_ses_therm_mgmnt_req(peer_params , metadata=metadata)
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_stop_ses_therm_mgmnt_req(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
-
-    return peer_ret.return_code
-
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 def api_pa_pc_ses_temp_req(channel, req_ses_temp):
     print("api_pa_pc_ses_temp_req")
 
     peer_params = api_types.app_to_peer_SesTempReq(req_ses_temp)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_ses_temp_req(peer_params , metadata=metadata)
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_ses_temp_req(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
-
-    return peer_ret.return_code
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
 def api_pa_pc_pa_satos_message(channel, pa_command_param):
     print("api_pa_pc_pa_satos_message")
@@ -561,9 +697,18 @@ def api_pa_pc_pa_satos_message(channel, pa_command_param):
 
     peer_params = api_types.app_to_peer_PaSatOsMsg(pa_command_param)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = channel.grpc_client_handle.PC_pa_satos_message(peer_params , metadata=metadata)
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_pa_satos_message(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
 
-    if (api_debug):
-        print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
-
-    return peer_ret.return_code
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
