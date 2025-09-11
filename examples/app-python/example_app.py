@@ -411,6 +411,11 @@ class Controller:
         print(f"Command id = {resp.command_id} , status = {resp.req_status}")
 
         return
+    
+    def handle_pc_ip_read(self, ctx):
+        payload_ip = api_parser.get_pc_ip()
+        print(f"Payload controller IP is = {payload_ip}")
+        return
 
 def new():
     ctl = Controller()
@@ -439,6 +444,7 @@ def new():
     app.mount_sequence("SesTempReq", ctl.handle_ses_temp_req)
     app.mount_sequence("TestI2CBus", ctl.handle_test_i2c_bus)
     app.mount_sequence("PaSatOsMsg", ctl.handle_pa_satos_message)
+    app.mount_sequence("ReadPcIp", ctl.handle_pc_ip_read)
     return app
 
 def set_payload_values(payload_app):

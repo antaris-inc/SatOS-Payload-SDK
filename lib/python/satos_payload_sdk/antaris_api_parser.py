@@ -19,6 +19,8 @@ g_JSON_Key_I2C = "I2C"
 g_JSON_Key_I2C_Adapter_Type = "ADAPTER_TYPE"
 g_JSON_Key_I2C_Device_Count = "I2C_PORT_COUNT"
 g_JSON_Key_I2C_Device_Path = "I2C_Bus_Path_"
+g_JSON_Key__Network = "Network"
+g_JSON_Key_Payload_Controller_IP_Address = "Payload_Controller_IP_Address"
 
 g_JSON_Key_QA7_LIB  = "QA7_LIB"
 
@@ -71,7 +73,11 @@ def api_pa_pc_get_gpio_info():
 
     interrupt_pin = api_pa_pc_get_io_interrupt_pin()
     gpio = GPIO(g_total_gpio_pins, pin, interrupt_pin)
-    return gpio    
+    return gpio
+
+def get_pc_ip():
+    pc_ip = jsfile_data[g_JSON_Key__Network][g_JSON_Key_Payload_Controller_IP_Address]
+    return pc_ip
 
 def api_pa_pc_get_gpio_pin_count():
     g_total_gpio_pins = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_GPIO_Pin_Count]
