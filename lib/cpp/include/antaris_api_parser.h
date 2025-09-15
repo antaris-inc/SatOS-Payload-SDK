@@ -57,7 +57,7 @@ class AntarisApiParser {
         AntarisReturnCode api_pa_pc_get_i2c_adapter(char *adapter);
         
         AntarisReturnCode api_pa_pc_get_qa7_lib();
-        AntarisReturnCode api_pa_pc_get_pc_ip(char *);
+        AntarisReturnCode api_pa_pc_get_pc_ip(char *pc_ip);
     private:
 };
 

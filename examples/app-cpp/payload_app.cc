@@ -58,8 +58,8 @@
 #define SesTempReq_IDX                  11
 #define PaSatosMsg_ID                   "PaSatOsMsg"
 #define PaSatosMsg_IDX                  12
-#define ReadPcIp_ID                     "ReadPcIp"
-#define ReadPcIp_IDX                    13
+#define ReadAcIp_ID                     "ReadAcIp"
+#define ReadAcIp_IDX                    13
 #define SEQUENCE_ID_MAX                 14
 
 #define APP_STATE_ACTIVE                0  // Application State : Good (0), Error (non-Zero)
@@ -744,27 +744,27 @@ void handle_pa_satos_message(mythreadState_t *mythread){
 
 }
 
-void handle_pc_ip_read(mythreadState_t *mythread){
+void handle_ac_ip_read(mythreadState_t *mythread){
 
     AntarisReturnCode ret;
     AntarisApiParser api_parser;
-    char pc_ip[32] = {0};
+    char ac_ip[32] = {0};
     
-    printf("\n Handling sequence: Read Payload controller IP! \n");
+    printf("\n Handling sequence: Read Activity controller IP! \n");
 
-    ret = api_parser.api_pa_pc_get_pc_ip(pc_ip);
+    ret = api_parser.api_pa_pc_get_ac_ip(ac_ip);
 
     if (ret != An_SUCCESS) {
         printf("Error: json file is not configured properly. Kindly check configurations done in ACP \n");
         return;
     }
     else{
-        printf("Payload controller Ip is : %s",pc_ip);
+        printf("Activity controller Ip is : %s",ac_ip);
     }
     
     // Tell PC that current sequence is done
     CmdSequenceDoneParams sequence_done_params = {0};
-    strcpy(&sequence_done_params.sequence_id[0], ReadPcIp_ID);
+    strcpy(&sequence_done_params.sequence_id[0], ReadAcIp_ID);
     ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
 
     printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
@@ -877,9 +877,9 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
     }   else if (strcmp(sequence_string, PaSatosMsg_ID) == 0) {
         printf("\t => %d\n", PaSatosMsg_IDX);
         return PaSatosMsg_IDX;
-    }   else if (strcmp(sequence_string, ReadPcIp_ID) == 0) {
-        printf("\t => %d\n", ReadPcIp_IDX);
-        return ReadPcIp_IDX;
+    }   else if (strcmp(sequence_string, ReadAcIp_ID) == 0) {
+        printf("\t => %d\n", ReadAcIp_IDX);
+        return ReadAcIp_IDX;
     }   
 
     
@@ -1241,7 +1241,7 @@ int main(int argc, char *argv[])
     payload_sequences_fsms[SesThermMgmt_IDX] = fsmThreadCreate(channel, 1, SesThermMgmt_ID, handle_ses_therm_mgmnt);
     payload_sequences_fsms[SesTempReq_IDX] = fsmThreadCreate(channel, 1, SesTempReq_ID, handle_ses_temp_req);
     payload_sequences_fsms[PaSatosMsg_IDX] = fsmThreadCreate(channel, 1, PaSatosMsg_ID, handle_pa_satos_message);
-    payload_sequences_fsms[ReadPcIp_IDX] = fsmThreadCreate(channel, 1, PaSatosMsg_ID, handle_pc_ip_read);
+    payload_sequences_fsms[ReadAcIp_IDX] = fsmThreadCreate(channel, 1, ReadAcIp_ID, handle_ac_ip_read);
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure
@@ -1308,8 +1308,8 @@ int main(int argc, char *argv[])
         pthread_join(payload_sequences_fsms[PaSatosMsg_IDX]->thread_id, &exit_status);
     }
 
-    if (strcmp(payload_sequences_fsms[ReadPcIp_IDX]->state, "NOT_STARTED") != 0) {
-        pthread_join(payload_sequences_fsms[ReadPcIp_IDX]->thread_id, &exit_status);
+    if (strcmp(payload_sequences_fsms[ReadAcIp_IDX]->state, "NOT_STARTED") != 0) {
+        pthread_join(payload_sequences_fsms[ReadAcIp_IDX]->thread_id, &exit_status);
     }
     
     printf("Cleaning up sequence resources\n");
@@ -1325,7 +1325,7 @@ int main(int argc, char *argv[])
     fsmThreadCleanup(payload_sequences_fsms[SesThermMgmt_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[SesTempReq_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[PaSatosMsg_IDX]);
-    fsmThreadCleanup(payload_sequences_fsms[ReadPcIp_IDX]);
+    fsmThreadCleanup(payload_sequences_fsms[ReadAcIp_IDX]);
 
     // Delete Channel
     api_pa_pc_delete_channel(channel);

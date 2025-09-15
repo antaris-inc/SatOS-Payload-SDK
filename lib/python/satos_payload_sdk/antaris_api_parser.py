@@ -75,9 +75,9 @@ def api_pa_pc_get_gpio_info():
     gpio = GPIO(g_total_gpio_pins, pin, interrupt_pin)
     return gpio
 
-def get_pc_ip():
-    pc_ip = jsfile_data[g_JSON_Key__Network][g_JSON_Key_Payload_Controller_IP_Address]
-    return pc_ip
+def get_ac_ip():
+    ac_ip = jsfile_data[g_JSON_Key__Network][g_JSON_Key_Payload_Controller_IP_Address]
+    return ac_ip
 
 def api_pa_pc_get_gpio_pin_count():
     g_total_gpio_pins = jsfile_data[g_JSON_Key_IO_Access][g_JSON_Key_GPIO][g_JSON_Key_GPIO_Pin_Count]

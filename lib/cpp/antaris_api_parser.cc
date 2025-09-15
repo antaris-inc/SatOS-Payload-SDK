@@ -404,7 +404,7 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_qa7_lib()
     return An_SUCCESS;
 }
 
-AntarisReturnCode AntarisApiParser::api_pa_pc get_pc_ip(char * pc_ip)
+AntarisReturnCode AntarisApiParser::api_pa_pc_get_pc_ip(char * pc_ip)
 {
     AntarisReturnCode ret = An_SUCCESS;
     cJSON *p_cJson = NULL;
