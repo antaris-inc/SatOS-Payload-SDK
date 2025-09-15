@@ -36,6 +36,8 @@
 #define JSON_Key_I2C_Port_Count   ("I2C_PORT_COUNT")
 #define JSON_Key_I2C_Bus_Path     ("I2C_Bus_Path_")
 #define JSON_Key_QA7_LIB          ("QA7_LIB")
+#define JSON_Key_Network       ("Network")
+#define JSON_Key_Payload_Controller_IP_Address  ("Payload_Controller_IP_Address")
 
 #define MAX_DEV_NAME_LENGTH       32  // Max length for each device name
 
@@ -55,6 +57,7 @@ class AntarisApiParser {
         AntarisReturnCode api_pa_pc_get_i2c_adapter(char *adapter);
         
         AntarisReturnCode api_pa_pc_get_qa7_lib();
+        AntarisReturnCode api_pa_pc_get_pc_ip(char *);
     private:
 };
 
