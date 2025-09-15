@@ -412,9 +412,9 @@ class Controller:
 
         return
     
-    def handle_pc_ip_read(self, ctx):
-        payload_ip = api_parser.get_pc_ip()
-        print(f"Payload controller IP is = {payload_ip}")
+    def handle_ac_ip_read(self, ctx):
+        ac_ip = api_parser.get_ac_ip()
+        print(f"Activity controller IP is = {ac_ip}")
         return
 
 def new():
@@ -444,7 +444,7 @@ def new():
     app.mount_sequence("SesTempReq", ctl.handle_ses_temp_req)
     app.mount_sequence("TestI2CBus", ctl.handle_test_i2c_bus)
     app.mount_sequence("PaSatOsMsg", ctl.handle_pa_satos_message)
-    app.mount_sequence("ReadPcIp", ctl.handle_pc_ip_read)
+    app.mount_sequence("ReadAcIp", ctl.handle_ac_ip_read)
     return app
 
 def set_payload_values(payload_app):

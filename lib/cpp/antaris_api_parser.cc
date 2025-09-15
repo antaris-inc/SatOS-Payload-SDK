@@ -404,7 +404,7 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_qa7_lib()
     return An_SUCCESS;
 }
 
-AntarisReturnCode AntarisApiParser::api_pa_pc_get_pc_ip(char * pc_ip)
+AntarisReturnCode AntarisApiParser::api_pa_pc_get_ac_ip(char * ac_ip)
 {
     AntarisReturnCode ret = An_SUCCESS;
     cJSON *p_cJson = NULL;
@@ -442,6 +442,6 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_pc_ip(char * pc_ip)
         printf("Failed to read gpio count the json, GPIO support not added \n");
         return An_GENERIC_FAILURE;
     }
-    memcpy(pc_ip, str, 32);
+    memcpy(ac_ip, str, 32);
     return An_SUCCESS;
 }
