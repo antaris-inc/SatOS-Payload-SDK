@@ -750,7 +750,7 @@ void handle_ac_ip_read(mythreadState_t *mythread){
     AntarisApiParser api_parser;
     char ac_ip[32] = {0};
     
-    printf("\n Handling sequence: Read Activity controller IP! \n");
+    printf("\n Handling sequence: Read Application controller IP! \n");
 
     ret = api_parser.api_pa_pc_get_ac_ip(ac_ip);
 
@@ -759,7 +759,7 @@ void handle_ac_ip_read(mythreadState_t *mythread){
         return;
     }
     else{
-        printf("Activity controller Ip is : %s",ac_ip);
+        printf("Application controller Ip is : %s",ac_ip);
     }
     
     // Tell PC that current sequence is done

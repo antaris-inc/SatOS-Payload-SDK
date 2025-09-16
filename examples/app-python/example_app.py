@@ -414,7 +414,7 @@ class Controller:
     
     def handle_ac_ip_read(self, ctx):
         ac_ip = api_parser.get_ac_ip()
-        print(f"Activity controller IP is = {ac_ip}")
+        print(f"Application controller IP is = {ac_ip}")
         return
 
 def new():
