@@ -425,15 +425,15 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_ac_ip(char * ac_ip)
         return An_GENERIC_FAILURE;
     }
         
-    pJsonStr = cJSON_GetObjectItem(key_network, JSON_Key_Activity_Controller_IP_Address);
+    pJsonStr = cJSON_GetObjectItem(key_network, JSON_Key_Application_Controller_IP_Address);
     if (pJsonStr == NULL) {
-        printf("Error: %s key absent in config.json \n", JSON_Key_Activity_Controller_IP_Address);
+        printf("Error: %s key absent in config.json \n", JSON_Key_Application_Controller_IP_Address);
         return An_GENERIC_FAILURE;
     }
 
    
     if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
-        printf("Error: %s value is not a string \n", JSON_Key_Activity_Controller_IP_Address);
+        printf("Error: %s value is not a string \n", JSON_Key_Application_Controller_IP_Address);
         return An_GENERIC_FAILURE;
     }
     str = cJSON_GetStringValue(pJsonStr);
