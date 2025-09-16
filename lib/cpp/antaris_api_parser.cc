@@ -403,3 +403,45 @@ AntarisReturnCode AntarisApiParser::api_pa_pc_get_qa7_lib()
     memcpy(qa7_lib, str, 32);
     return An_SUCCESS;
 }
+
+AntarisReturnCode AntarisApiParser::api_pa_pc_get_ac_ip(char * ac_ip)
+{
+    AntarisReturnCode ret = An_SUCCESS;
+    cJSON *p_cJson = NULL;
+    cJSON *key_network = NULL;
+    cJSON *pJsonStr = NULL;
+    char *str = NULL;
+
+    read_config_json(&p_cJson);
+    if (p_cJson == NULL)
+    {
+        printf("Error: Failed to read the config.json\n");
+        return An_GENERIC_FAILURE;
+    }
+
+    key_network = cJSON_GetObjectItemCaseSensitive(p_cJson, JSON_Key_Network);
+    if (key_network == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_Network);
+        return An_GENERIC_FAILURE;
+    }
+        
+    pJsonStr = cJSON_GetObjectItem(key_network, JSON_Key_Application_Controller_IP_Address);
+    if (pJsonStr == NULL) {
+        printf("Error: %s key absent in config.json \n", JSON_Key_Application_Controller_IP_Address);
+        return An_GENERIC_FAILURE;
+    }
+
+   
+    if (cJSON_IsString(pJsonStr) == cJSON_Invalid) {
+        printf("Error: %s value is not a string \n", JSON_Key_Application_Controller_IP_Address);
+        return An_GENERIC_FAILURE;
+    }
+    str = cJSON_GetStringValue(pJsonStr);
+    if ((*str == 0) || (str == NULL))
+    {
+        printf("Failed to read gpio count the json, GPIO support not added \n");
+        return An_GENERIC_FAILURE;
+    }
+    memcpy(ac_ip, str, 32);
+    return An_SUCCESS;
+}
