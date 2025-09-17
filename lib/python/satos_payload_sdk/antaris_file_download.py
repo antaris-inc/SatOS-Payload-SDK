@@ -25,12 +25,12 @@ class File_Stage():
     def start_upload(self):
         file_path_local = g_Outbound_Path_Prefix + self.download_file_params.file_path
         connection_string = self.config_data[g_FTM][g_File_String]
-        api_key = self.config_data[g_FTM][g_API_Key],
+        api_key = self.config_data[g_FTM][g_API_Key]
         
         if "FileEndpoint=" in connection_string:
             ret = azure_file_upload(file_path_local, connection_string, self.config_data[g_FTM][g_Share_Name], self.file_path_remote)
             return ret
-        elif "gcs-bucket-upload" in connection_string:
+        elif "upload-file-to-bucket" in connection_string:
             return gcp_file_upload(
                 endpoint=connection_string,
                 api_key=api_key,

@@ -15,7 +15,7 @@
 #define ANTARIS_SDK_BUILD_USER       "uid=0(root) gid=0(root) groups=0(root)"
 
 
-#define ANTARIS_SDK_BUILD_TIME       "Wed Aug 27 03:56:14 UTC 2025"
+#define ANTARIS_SDK_BUILD_TIME       "Wed Sep 17 08:54:05 UTC 2025"
 
 
 #define ANTARIS_PA_PC_SDK_MAJOR_VERSION             1

@@ -37,7 +37,7 @@
 #define AZURE_STRING                   "FileEndpoint="
 #define PYTHON_AZURE_STAGEFILE_MODULE  "azure_file_upload"
 
-#define GCS_STRING                     "gcs-bucket-upload"
+#define GCS_STRING                     "upload-file-to-bucket"
 #define PYTHON_GCS_STAGEFILE_MODULE    "gcp_file_upload"
 
 #define TRUE        1
