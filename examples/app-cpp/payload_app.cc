@@ -377,7 +377,8 @@ void handle_StageFile(mythreadState_t *mythread)
     FILE *fp = NULL;
     size_t filename_size = 0;
     ReqStageFileDownloadParams download_file_params = {0};
-    
+    char full_file_path[256];
+
     printf("\n Handling sequence: StageFile! \n");
 
     filename_size = strnlen(STAGE_FILE_NAME, MAX_FILE_OR_PROP_LEN_NAME);
@@ -387,18 +388,23 @@ void handle_StageFile(mythreadState_t *mythread)
         goto exit_sequence;
     }
 
+    // Pass just the filename
     sprintf(download_file_params.file_path, "%s", STAGE_FILE_NAME);
-    
+
+    // Create the full path for file creation
+    sprintf(full_file_path, "%s%s", STAGE_FILE_DOWNLOAD_DIR, STAGE_FILE_NAME);
+
     // Adding dummy data in file
-    fp = fopen(download_file_params.file_path, "w");
+    fp = fopen(full_file_path, "w");
     if (fp == NULL) {
-        printf("Error: Can not open file %s. Sequence failed \n", download_file_params.file_path);
+        printf("Error: Can not open file %s. Sequence failed \n", full_file_path);
         goto exit_sequence;
     }
     fprintf(fp, "Testing file download with payload \n");
     fclose(fp);
 
-    printf("Info: Downloading file = %s \n", download_file_params.file_path);
+    printf("Info: Created file at %s \n", full_file_path);
+    printf("Info: Staging file = %s \n", download_file_params.file_path);  // Should print "SampleFile.txt"
 
     download_file_params.file_priority = FILE_DL_PRIORITY_NORMAL;
     download_file_params.file_dl_band = FILE_DL_SBAND;
