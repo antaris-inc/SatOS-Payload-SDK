@@ -530,6 +530,7 @@ class PayloadApplication(Stoppable):
     # to represent gnss eph data handling, respectively
     def set_gnss_eph_data_cb(self, gnss_eph_data_handler):
         self.gnss_eph_data_handler = gnss_eph_data_handler
+
     # Provided function should expect no arguments and return True or False
     # to represent get eps voltage handling, respectively
     def set_get_eps_voltage_cb(self, get_eps_voltage_handler):
@@ -539,6 +540,11 @@ class PayloadApplication(Stoppable):
     # to represent SES thermal status notification, respectively
     def set_ses_thermal_status_ntf(self, ses_thermal_status_ntf):
         self.ses_thermal_status_ntf = ses_thermal_status_ntf
+
+    # Notifies application when remote application controller is ON
+    def remote_ac_power_on_ntf(self, remote_ac_status):
+        self.remote_ac_power_on_ntf_handler = remote_ac_status
+
     #TODO(bcwaldon): actually do something with the provided params
     def _handle_health_check(self, params):
         try:
@@ -556,7 +562,7 @@ class PayloadApplication(Stoppable):
         logger.info("payload app starting")
 
         if not self.channel_client:
-            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb, self._set_get_eps_voltage_cb, self._set_ses_thermal_status_ntf)
+            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb, self._set_get_eps_voltage_cb, self._set_ses_thermal_status_ntf, self._remote_ac_power_on_ntf)
         
         self.channel_client._connect()
 
@@ -681,6 +687,19 @@ class PayloadApplication(Stoppable):
             hv = self.ses_thermal_status_ntf(params)
         except:
             logger.exception("Handling get EPS voltage failed")
+            hv = False
+
+        if hv:
+            return api_types.AntarisReturnCode.An_SUCCESS
+        else:
+            return api_types.AntarisReturnCode.An_GENERIC_FAILURE
+
+    def _remote_ac_power_on_ntf(self, params):
+        logger.info("Handling Remote application controller power on notification")
+        try:
+            hv = self.remote_ac_power_on_ntf(params)
+        except:
+            logger.exception("Handling Remote application controller notification failed")
             hv = False
 
         if hv:

@@ -232,6 +232,14 @@ class PCToAppService(antaris_api_pb2_grpc.AntarisapiApplicationCallbackServicer)
         else:
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
 
+    def PA_ProcessRemoteAcPwrStatusNtf(self, request, context):
+        if self.channel.process_remote_ac_power_on_ntf:
+            app_request = api_types.peer_to_app_NtfRemoteAcPwrStatus(request)
+            app_ret = self.channel.process_remote_ac_power_on_ntf(app_request)
+            return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
+        else:
+            return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
+
 def api_pa_pc_create_channel_common(secure, callback_func_list):
     global g_SERVER_CERT_FILE
     global g_CLIENT_CERT_FILE
