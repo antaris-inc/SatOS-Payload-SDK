@@ -43,7 +43,7 @@
         "Bridge_Name": "br21",
         "MAC": "52:54:00:59:ce:01",
         "VM_IP_Address": "192.168.40.101",
-	    "Payload_Hardware_IP_Address": "192.168.40.102",
+	"Payload_Hardware_IP_Address": "192.168.40.102",
         "Application_Controller_IP_Address": "192.168.40.1",
         "NTP_Server_IP_Address" : "192.168.40.1"
     },
