@@ -5,7 +5,7 @@ import warnings
 
 from satos_payload_sdk.gen import antaris_api_pb2 as satos__payload__sdk_dot_gen_dot_antaris__api__pb2
 
-GRPC_GENERATED_VERSION = '1.73.1'
+GRPC_GENERATED_VERSION = '1.74.0'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
 
@@ -129,6 +129,11 @@ class AntarisapiApplicationCallbackStub(object):
                 request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespPaSatOsMsg.SerializeToString,
                 response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
                 _registered_method=True)
+        self.PA_ProcessRemoteAcPwrStatusNtf = channel.unary_unary(
+                '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRemoteAcPwrStatusNtf',
+                request_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.NtfRemoteAcPwrStatus.SerializeToString,
+                response_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+                _registered_method=True)
 
 
 class AntarisapiApplicationCallbackServicer(object):
@@ -248,6 +253,12 @@ class AntarisapiApplicationCallbackServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def PA_ProcessRemoteAcPwrStatusNtf(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AntarisapiApplicationCallbackServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -344,6 +355,11 @@ def add_AntarisapiApplicationCallbackServicer_to_server(servicer, server):
             'PA_ProcessRespPaSatOsMsg': grpc.unary_unary_rpc_method_handler(
                     servicer.PA_ProcessRespPaSatOsMsg,
                     request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespPaSatOsMsg.FromString,
+                    response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
+            ),
+            'PA_ProcessRemoteAcPwrStatusNtf': grpc.unary_unary_rpc_method_handler(
+                    servicer.PA_ProcessRemoteAcPwrStatusNtf,
+                    request_deserializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.NtfRemoteAcPwrStatus.FromString,
                     response_serializer=satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.SerializeToString,
             ),
     }
@@ -859,6 +875,33 @@ class AntarisapiApplicationCallback(object):
             target,
             '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespPaSatOsMsg',
             satos__payload__sdk_dot_gen_dot_antaris__api__pb2.RespPaSatOsMsg.SerializeToString,
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def PA_ProcessRemoteAcPwrStatusNtf(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRemoteAcPwrStatusNtf',
+            satos__payload__sdk_dot_gen_dot_antaris__api__pb2.NtfRemoteAcPwrStatus.SerializeToString,
             satos__payload__sdk_dot_gen_dot_antaris__api__pb2.AntarisReturnType.FromString,
             options,
             channel_credentials,

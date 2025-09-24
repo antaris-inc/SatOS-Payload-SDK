@@ -41,6 +41,7 @@ static const char* AntarisapiApplicationCallback_method_names[] = {
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespSesTempReq",
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessSesThrmlNtf",
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespPaSatOsMsg",
+  "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRemoteAcPwrStatusNtf",
 };
 
 std::unique_ptr< AntarisapiApplicationCallback::Stub> AntarisapiApplicationCallback::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -69,6 +70,7 @@ AntarisapiApplicationCallback::Stub::Stub(const std::shared_ptr< ::grpc::Channel
   , rpcmethod_PA_ProcessRespSesTempReq_(AntarisapiApplicationCallback_method_names[16], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PA_ProcessSesThrmlNtf_(AntarisapiApplicationCallback_method_names[17], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PA_ProcessRespPaSatOsMsg_(AntarisapiApplicationCallback_method_names[18], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PA_ProcessRemoteAcPwrStatusNtf_(AntarisapiApplicationCallback_method_names[19], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status AntarisapiApplicationCallback::Stub::PA_StartSequence(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::StartSequenceParams& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
@@ -508,6 +510,29 @@ void AntarisapiApplicationCallback::Stub::async::PA_ProcessRespPaSatOsMsg(::grpc
   return result;
 }
 
+::grpc::Status AntarisapiApplicationCallback::Stub::PA_ProcessRemoteAcPwrStatusNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PA_ProcessRemoteAcPwrStatusNtf_, context, request, response);
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessRemoteAcPwrStatusNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessRemoteAcPwrStatusNtf_, context, request, response, std::move(f));
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessRemoteAcPwrStatusNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessRemoteAcPwrStatusNtf_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::PrepareAsyncPA_ProcessRemoteAcPwrStatusNtfRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PA_ProcessRemoteAcPwrStatusNtf_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::AsyncPA_ProcessRemoteAcPwrStatusNtfRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPA_ProcessRemoteAcPwrStatusNtfRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 AntarisapiApplicationCallback::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       AntarisapiApplicationCallback_method_names[0],
@@ -699,6 +724,16 @@ AntarisapiApplicationCallback::Service::Service() {
              ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
                return service->PA_ProcessRespPaSatOsMsg(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiApplicationCallback_method_names[19],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiApplicationCallback::Service, ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiApplicationCallback::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PA_ProcessRemoteAcPwrStatusNtf(ctx, req, resp);
+             }, this)));
 }
 
 AntarisapiApplicationCallback::Service::~Service() {
@@ -831,6 +866,13 @@ AntarisapiApplicationCallback::Service::~Service() {
 }
 
 ::grpc::Status AntarisapiApplicationCallback::Service::PA_ProcessRespPaSatOsMsg(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AntarisapiApplicationCallback::Service::PA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
   (void) context;
   (void) request;
   (void) response;

@@ -47,7 +47,7 @@ struct TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[42]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[43]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -82,6 +82,9 @@ extern GpsEphemerisDataDefaultTypeInternal _GpsEphemerisData_default_instance_;
 class HealthCheckParams;
 struct HealthCheckParamsDefaultTypeInternal;
 extern HealthCheckParamsDefaultTypeInternal _HealthCheckParams_default_instance_;
+class NtfRemoteAcPwrStatus;
+struct NtfRemoteAcPwrStatusDefaultTypeInternal;
+extern NtfRemoteAcPwrStatusDefaultTypeInternal _NtfRemoteAcPwrStatus_default_instance_;
 class OBC_time;
 struct OBC_timeDefaultTypeInternal;
 extern OBC_timeDefaultTypeInternal _OBC_time_default_instance_;
@@ -192,6 +195,7 @@ template<> ::antaris_api_peer_to_peer::GetEpsVoltage* Arena::CreateMaybeMessage<
 template<> ::antaris_api_peer_to_peer::GnssEphData* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::GnssEphData>(Arena*);
 template<> ::antaris_api_peer_to_peer::GpsEphemerisData* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::GpsEphemerisData>(Arena*);
 template<> ::antaris_api_peer_to_peer::HealthCheckParams* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::HealthCheckParams>(Arena*);
+template<> ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus>(Arena*);
 template<> ::antaris_api_peer_to_peer::OBC_time* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::OBC_time>(Arena*);
 template<> ::antaris_api_peer_to_peer::PaSatOsMsg* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::PaSatOsMsg>(Arena*);
 template<> ::antaris_api_peer_to_peer::PayloadMetricsInfo* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::PayloadMetricsInfo>(Arena*);
@@ -6250,6 +6254,174 @@ class GetEpsVoltage final :
 };
 // -------------------------------------------------------------------
 
+class NtfRemoteAcPwrStatus final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:antaris_api_peer_to_peer.NtfRemoteAcPwrStatus) */ {
+ public:
+  inline NtfRemoteAcPwrStatus() : NtfRemoteAcPwrStatus(nullptr) {}
+  ~NtfRemoteAcPwrStatus() override;
+  explicit constexpr NtfRemoteAcPwrStatus(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  NtfRemoteAcPwrStatus(const NtfRemoteAcPwrStatus& from);
+  NtfRemoteAcPwrStatus(NtfRemoteAcPwrStatus&& from) noexcept
+    : NtfRemoteAcPwrStatus() {
+    *this = ::std::move(from);
+  }
+
+  inline NtfRemoteAcPwrStatus& operator=(const NtfRemoteAcPwrStatus& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline NtfRemoteAcPwrStatus& operator=(NtfRemoteAcPwrStatus&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const NtfRemoteAcPwrStatus& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const NtfRemoteAcPwrStatus* internal_default_instance() {
+    return reinterpret_cast<const NtfRemoteAcPwrStatus*>(
+               &_NtfRemoteAcPwrStatus_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    33;
+
+  friend void swap(NtfRemoteAcPwrStatus& a, NtfRemoteAcPwrStatus& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(NtfRemoteAcPwrStatus* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(NtfRemoteAcPwrStatus* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  NtfRemoteAcPwrStatus* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<NtfRemoteAcPwrStatus>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const NtfRemoteAcPwrStatus& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const NtfRemoteAcPwrStatus& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(NtfRemoteAcPwrStatus* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "antaris_api_peer_to_peer.NtfRemoteAcPwrStatus";
+  }
+  protected:
+  explicit NtfRemoteAcPwrStatus(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCorrelationIdFieldNumber = 1,
+    kAcAppIdFieldNumber = 2,
+    kPowerStatusFieldNumber = 3,
+  };
+  // int32 correlation_id = 1;
+  void clear_correlation_id();
+  int32_t correlation_id() const;
+  void set_correlation_id(int32_t value);
+  private:
+  int32_t _internal_correlation_id() const;
+  void _internal_set_correlation_id(int32_t value);
+  public:
+
+  // int32 ac_app_id = 2;
+  void clear_ac_app_id();
+  int32_t ac_app_id() const;
+  void set_ac_app_id(int32_t value);
+  private:
+  int32_t _internal_ac_app_id() const;
+  void _internal_set_ac_app_id(int32_t value);
+  public:
+
+  // int32 power_status = 3;
+  void clear_power_status();
+  int32_t power_status() const;
+  void set_power_status(int32_t value);
+  private:
+  int32_t _internal_power_status() const;
+  void _internal_set_power_status(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.NtfRemoteAcPwrStatus)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  int32_t correlation_id_;
+  int32_t ac_app_id_;
+  int32_t power_status_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
+};
+// -------------------------------------------------------------------
+
 class StartSesThermMgmntReq final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:antaris_api_peer_to_peer.StartSesThermMgmntReq) */ {
  public:
@@ -6298,7 +6470,7 @@ class StartSesThermMgmntReq final :
                &_StartSesThermMgmntReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    34;
 
   friend void swap(StartSesThermMgmntReq& a, StartSesThermMgmntReq& b) {
     a.Swap(&b);
@@ -6488,7 +6660,7 @@ class RespStartSesThermMgmntReq final :
                &_RespStartSesThermMgmntReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    35;
 
   friend void swap(RespStartSesThermMgmntReq& a, RespStartSesThermMgmntReq& b) {
     a.Swap(&b);
@@ -6645,7 +6817,7 @@ class StopSesThermMgmntReq final :
                &_StopSesThermMgmntReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    36;
 
   friend void swap(StopSesThermMgmntReq& a, StopSesThermMgmntReq& b) {
     a.Swap(&b);
@@ -6802,7 +6974,7 @@ class RespStopSesThermMgmntReq final :
                &_RespStopSesThermMgmntReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    37;
 
   friend void swap(RespStopSesThermMgmntReq& a, RespStopSesThermMgmntReq& b) {
     a.Swap(&b);
@@ -6959,7 +7131,7 @@ class SesTempReq final :
                &_SesTempReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    38;
 
   friend void swap(SesTempReq& a, SesTempReq& b) {
     a.Swap(&b);
@@ -7116,7 +7288,7 @@ class RespSesTempReqParams final :
                &_RespSesTempReqParams_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    39;
 
   friend void swap(RespSesTempReqParams& a, RespSesTempReqParams& b) {
     a.Swap(&b);
@@ -7284,7 +7456,7 @@ class SesThermalStatusNtf final :
                &_SesThermalStatusNtf_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    40;
 
   friend void swap(SesThermalStatusNtf& a, SesThermalStatusNtf& b) {
     a.Swap(&b);
@@ -7452,7 +7624,7 @@ class AntarisCorrelationId final :
                &_AntarisCorrelationId_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    40;
+    41;
 
   friend void swap(AntarisCorrelationId& a, AntarisCorrelationId& b) {
     a.Swap(&b);
@@ -7598,7 +7770,7 @@ class AntarisReturnType final :
                &_AntarisReturnType_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    41;
+    42;
 
   friend void swap(AntarisReturnType& a, AntarisReturnType& b) {
     a.Swap(&b);
@@ -10906,6 +11078,70 @@ inline void GetEpsVoltage::set_eps_voltage(float value) {
 
 // -------------------------------------------------------------------
 
+// NtfRemoteAcPwrStatus
+
+// int32 correlation_id = 1;
+inline void NtfRemoteAcPwrStatus::clear_correlation_id() {
+  correlation_id_ = 0;
+}
+inline int32_t NtfRemoteAcPwrStatus::_internal_correlation_id() const {
+  return correlation_id_;
+}
+inline int32_t NtfRemoteAcPwrStatus::correlation_id() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.NtfRemoteAcPwrStatus.correlation_id)
+  return _internal_correlation_id();
+}
+inline void NtfRemoteAcPwrStatus::_internal_set_correlation_id(int32_t value) {
+  
+  correlation_id_ = value;
+}
+inline void NtfRemoteAcPwrStatus::set_correlation_id(int32_t value) {
+  _internal_set_correlation_id(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.NtfRemoteAcPwrStatus.correlation_id)
+}
+
+// int32 ac_app_id = 2;
+inline void NtfRemoteAcPwrStatus::clear_ac_app_id() {
+  ac_app_id_ = 0;
+}
+inline int32_t NtfRemoteAcPwrStatus::_internal_ac_app_id() const {
+  return ac_app_id_;
+}
+inline int32_t NtfRemoteAcPwrStatus::ac_app_id() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.NtfRemoteAcPwrStatus.ac_app_id)
+  return _internal_ac_app_id();
+}
+inline void NtfRemoteAcPwrStatus::_internal_set_ac_app_id(int32_t value) {
+  
+  ac_app_id_ = value;
+}
+inline void NtfRemoteAcPwrStatus::set_ac_app_id(int32_t value) {
+  _internal_set_ac_app_id(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.NtfRemoteAcPwrStatus.ac_app_id)
+}
+
+// int32 power_status = 3;
+inline void NtfRemoteAcPwrStatus::clear_power_status() {
+  power_status_ = 0;
+}
+inline int32_t NtfRemoteAcPwrStatus::_internal_power_status() const {
+  return power_status_;
+}
+inline int32_t NtfRemoteAcPwrStatus::power_status() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.NtfRemoteAcPwrStatus.power_status)
+  return _internal_power_status();
+}
+inline void NtfRemoteAcPwrStatus::_internal_set_power_status(int32_t value) {
+  
+  power_status_ = value;
+}
+inline void NtfRemoteAcPwrStatus::set_power_status(int32_t value) {
+  _internal_set_power_status(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.NtfRemoteAcPwrStatus.power_status)
+}
+
+// -------------------------------------------------------------------
+
 // StartSesThermMgmntReq
 
 // int32 correlation_id = 1;
@@ -11363,6 +11599,8 @@ inline void AntarisReturnType::set_return_code(::antaris_api_peer_to_peer::Antar
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -292,6 +292,12 @@ message GetEpsVoltage {
     float                           eps_voltage      = 2; // EPS voltage
 }
 
+message NtfRemoteAcPwrStatus {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           ac_app_id        = 2; // Remote AC app_id
+    int32                           power_status     = 3; // 0: ON, 1 = OFF
+}
+
 message StartSesThermMgmntReq {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     int32                           hardware_id      = 2; // 0:SESA, 1:SESB
@@ -360,6 +366,7 @@ service AntarisapiApplicationCallback {
     rpc PA_ProcessRespSesTempReq(RespSesTempReqParams) returns (AntarisReturnType) {}
     rpc PA_ProcessSesThrmlNtf(SesThermalStatusNtf) returns (AntarisReturnType) {}
     rpc PA_ProcessRespPaSatOsMsg(RespPaSatOsMsg) returns (AntarisReturnType) {}
+    rpc PA_ProcessRemoteAcPwrStatusNtf(NtfRemoteAcPwrStatus) returns (AntarisReturnType) {}
 }
 
 service AntarisapiPayloadController {
