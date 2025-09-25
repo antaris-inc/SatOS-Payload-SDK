@@ -4679,52 +4679,52 @@ class GpsEphemerisData final :
     kGpsPositionEcefFieldNumber = 4,
     kGpsVelocityEcefFieldNumber = 5,
     kObcTimeFieldNumber = 3,
-    kGpsSysTimeFieldNumber = 2,
     kGpsFixTimeFieldNumber = 1,
+    kGpsSysTimeFieldNumber = 2,
     kGpsValidityFlagPosVelFieldNumber = 6,
   };
-  // repeated int32 gps_position_ecef = 4;
+  // repeated int64 gps_position_ecef = 4;
   int gps_position_ecef_size() const;
   private:
   int _internal_gps_position_ecef_size() const;
   public:
   void clear_gps_position_ecef();
   private:
-  int32_t _internal_gps_position_ecef(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
+  int64_t _internal_gps_position_ecef(int index) const;
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
       _internal_gps_position_ecef() const;
-  void _internal_add_gps_position_ecef(int32_t value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
+  void _internal_add_gps_position_ecef(int64_t value);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
       _internal_mutable_gps_position_ecef();
   public:
-  int32_t gps_position_ecef(int index) const;
-  void set_gps_position_ecef(int index, int32_t value);
-  void add_gps_position_ecef(int32_t value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
+  int64_t gps_position_ecef(int index) const;
+  void set_gps_position_ecef(int index, int64_t value);
+  void add_gps_position_ecef(int64_t value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
       gps_position_ecef() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
       mutable_gps_position_ecef();
 
-  // repeated int32 gps_velocity_ecef = 5;
+  // repeated int64 gps_velocity_ecef = 5;
   int gps_velocity_ecef_size() const;
   private:
   int _internal_gps_velocity_ecef_size() const;
   public:
   void clear_gps_velocity_ecef();
   private:
-  int32_t _internal_gps_velocity_ecef(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
+  int64_t _internal_gps_velocity_ecef(int index) const;
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
       _internal_gps_velocity_ecef() const;
-  void _internal_add_gps_velocity_ecef(int32_t value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
+  void _internal_add_gps_velocity_ecef(int64_t value);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
       _internal_mutable_gps_velocity_ecef();
   public:
-  int32_t gps_velocity_ecef(int index) const;
-  void set_gps_velocity_ecef(int index, int32_t value);
-  void add_gps_velocity_ecef(int32_t value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
+  int64_t gps_velocity_ecef(int index) const;
+  void set_gps_velocity_ecef(int index, int64_t value);
+  void add_gps_velocity_ecef(int64_t value);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
       gps_velocity_ecef() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
       mutable_gps_velocity_ecef();
 
   // .antaris_api_peer_to_peer.OBC_time obc_time = 3;
@@ -4745,6 +4745,15 @@ class GpsEphemerisData final :
       ::antaris_api_peer_to_peer::OBC_time* obc_time);
   ::antaris_api_peer_to_peer::OBC_time* unsafe_arena_release_obc_time();
 
+  // int64 gps_fix_time = 1;
+  void clear_gps_fix_time();
+  int64_t gps_fix_time() const;
+  void set_gps_fix_time(int64_t value);
+  private:
+  int64_t _internal_gps_fix_time() const;
+  void _internal_set_gps_fix_time(int64_t value);
+  public:
+
   // int64 gps_sys_time = 2;
   void clear_gps_sys_time();
   int64_t gps_sys_time() const;
@@ -4752,15 +4761,6 @@ class GpsEphemerisData final :
   private:
   int64_t _internal_gps_sys_time() const;
   void _internal_set_gps_sys_time(int64_t value);
-  public:
-
-  // int32 gps_fix_time = 1;
-  void clear_gps_fix_time();
-  int32_t gps_fix_time() const;
-  void set_gps_fix_time(int32_t value);
-  private:
-  int32_t _internal_gps_fix_time() const;
-  void _internal_set_gps_fix_time(int32_t value);
   public:
 
   // int32 gps_validity_flag_pos_vel = 6;
@@ -4779,13 +4779,13 @@ class GpsEphemerisData final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t > gps_position_ecef_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t > gps_position_ecef_;
   mutable std::atomic<int> _gps_position_ecef_cached_byte_size_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t > gps_velocity_ecef_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t > gps_velocity_ecef_;
   mutable std::atomic<int> _gps_velocity_ecef_cached_byte_size_;
   ::antaris_api_peer_to_peer::OBC_time* obc_time_;
+  int64_t gps_fix_time_;
   int64_t gps_sys_time_;
-  int32_t gps_fix_time_;
   int32_t gps_validity_flag_pos_vel_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
@@ -9592,22 +9592,22 @@ inline void OBC_time::set_year(int32_t value) {
 
 // GpsEphemerisData
 
-// int32 gps_fix_time = 1;
+// int64 gps_fix_time = 1;
 inline void GpsEphemerisData::clear_gps_fix_time() {
-  gps_fix_time_ = 0;
+  gps_fix_time_ = int64_t{0};
 }
-inline int32_t GpsEphemerisData::_internal_gps_fix_time() const {
+inline int64_t GpsEphemerisData::_internal_gps_fix_time() const {
   return gps_fix_time_;
 }
-inline int32_t GpsEphemerisData::gps_fix_time() const {
+inline int64_t GpsEphemerisData::gps_fix_time() const {
   // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.GpsEphemerisData.gps_fix_time)
   return _internal_gps_fix_time();
 }
-inline void GpsEphemerisData::_internal_set_gps_fix_time(int32_t value) {
+inline void GpsEphemerisData::_internal_set_gps_fix_time(int64_t value) {
   
   gps_fix_time_ = value;
 }
-inline void GpsEphemerisData::set_gps_fix_time(int32_t value) {
+inline void GpsEphemerisData::set_gps_fix_time(int64_t value) {
   _internal_set_gps_fix_time(value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.GpsEphemerisData.gps_fix_time)
 }
@@ -9722,7 +9722,7 @@ inline void GpsEphemerisData::set_allocated_obc_time(::antaris_api_peer_to_peer:
   // @@protoc_insertion_point(field_set_allocated:antaris_api_peer_to_peer.GpsEphemerisData.obc_time)
 }
 
-// repeated int32 gps_position_ecef = 4;
+// repeated int64 gps_position_ecef = 4;
 inline int GpsEphemerisData::_internal_gps_position_ecef_size() const {
   return gps_position_ecef_.size();
 }
@@ -9732,44 +9732,44 @@ inline int GpsEphemerisData::gps_position_ecef_size() const {
 inline void GpsEphemerisData::clear_gps_position_ecef() {
   gps_position_ecef_.Clear();
 }
-inline int32_t GpsEphemerisData::_internal_gps_position_ecef(int index) const {
+inline int64_t GpsEphemerisData::_internal_gps_position_ecef(int index) const {
   return gps_position_ecef_.Get(index);
 }
-inline int32_t GpsEphemerisData::gps_position_ecef(int index) const {
+inline int64_t GpsEphemerisData::gps_position_ecef(int index) const {
   // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.GpsEphemerisData.gps_position_ecef)
   return _internal_gps_position_ecef(index);
 }
-inline void GpsEphemerisData::set_gps_position_ecef(int index, int32_t value) {
+inline void GpsEphemerisData::set_gps_position_ecef(int index, int64_t value) {
   gps_position_ecef_.Set(index, value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.GpsEphemerisData.gps_position_ecef)
 }
-inline void GpsEphemerisData::_internal_add_gps_position_ecef(int32_t value) {
+inline void GpsEphemerisData::_internal_add_gps_position_ecef(int64_t value) {
   gps_position_ecef_.Add(value);
 }
-inline void GpsEphemerisData::add_gps_position_ecef(int32_t value) {
+inline void GpsEphemerisData::add_gps_position_ecef(int64_t value) {
   _internal_add_gps_position_ecef(value);
   // @@protoc_insertion_point(field_add:antaris_api_peer_to_peer.GpsEphemerisData.gps_position_ecef)
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
 GpsEphemerisData::_internal_gps_position_ecef() const {
   return gps_position_ecef_;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
 GpsEphemerisData::gps_position_ecef() const {
   // @@protoc_insertion_point(field_list:antaris_api_peer_to_peer.GpsEphemerisData.gps_position_ecef)
   return _internal_gps_position_ecef();
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
 GpsEphemerisData::_internal_mutable_gps_position_ecef() {
   return &gps_position_ecef_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
 GpsEphemerisData::mutable_gps_position_ecef() {
   // @@protoc_insertion_point(field_mutable_list:antaris_api_peer_to_peer.GpsEphemerisData.gps_position_ecef)
   return _internal_mutable_gps_position_ecef();
 }
 
-// repeated int32 gps_velocity_ecef = 5;
+// repeated int64 gps_velocity_ecef = 5;
 inline int GpsEphemerisData::_internal_gps_velocity_ecef_size() const {
   return gps_velocity_ecef_.size();
 }
@@ -9779,38 +9779,38 @@ inline int GpsEphemerisData::gps_velocity_ecef_size() const {
 inline void GpsEphemerisData::clear_gps_velocity_ecef() {
   gps_velocity_ecef_.Clear();
 }
-inline int32_t GpsEphemerisData::_internal_gps_velocity_ecef(int index) const {
+inline int64_t GpsEphemerisData::_internal_gps_velocity_ecef(int index) const {
   return gps_velocity_ecef_.Get(index);
 }
-inline int32_t GpsEphemerisData::gps_velocity_ecef(int index) const {
+inline int64_t GpsEphemerisData::gps_velocity_ecef(int index) const {
   // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.GpsEphemerisData.gps_velocity_ecef)
   return _internal_gps_velocity_ecef(index);
 }
-inline void GpsEphemerisData::set_gps_velocity_ecef(int index, int32_t value) {
+inline void GpsEphemerisData::set_gps_velocity_ecef(int index, int64_t value) {
   gps_velocity_ecef_.Set(index, value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.GpsEphemerisData.gps_velocity_ecef)
 }
-inline void GpsEphemerisData::_internal_add_gps_velocity_ecef(int32_t value) {
+inline void GpsEphemerisData::_internal_add_gps_velocity_ecef(int64_t value) {
   gps_velocity_ecef_.Add(value);
 }
-inline void GpsEphemerisData::add_gps_velocity_ecef(int32_t value) {
+inline void GpsEphemerisData::add_gps_velocity_ecef(int64_t value) {
   _internal_add_gps_velocity_ecef(value);
   // @@protoc_insertion_point(field_add:antaris_api_peer_to_peer.GpsEphemerisData.gps_velocity_ecef)
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
 GpsEphemerisData::_internal_gps_velocity_ecef() const {
   return gps_velocity_ecef_;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >&
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >&
 GpsEphemerisData::gps_velocity_ecef() const {
   // @@protoc_insertion_point(field_list:antaris_api_peer_to_peer.GpsEphemerisData.gps_velocity_ecef)
   return _internal_gps_velocity_ecef();
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
 GpsEphemerisData::_internal_mutable_gps_velocity_ecef() {
   return &gps_velocity_ecef_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
 GpsEphemerisData::mutable_gps_velocity_ecef() {
   // @@protoc_insertion_point(field_mutable_list:antaris_api_peer_to_peer.GpsEphemerisData.gps_velocity_ecef)
   return _internal_mutable_gps_velocity_ecef();

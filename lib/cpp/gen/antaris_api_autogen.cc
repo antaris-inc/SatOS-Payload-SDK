@@ -1360,23 +1360,23 @@ displayGpsEphemerisData(const void *obj)
     printf("GpsEphemerisData %p =>\n", obj);
 
     printf("gps_fix_time ==>\n");
-    displayUINT32((void *)&p->gps_fix_time);
+    displayUINT64((void *)&p->gps_fix_time);
     printf("gps_sys_time ==>\n");
     displayUINT64((void *)&p->gps_sys_time);
     printf("obc_time ==>\n");
     displayOBC_time((void *)&p->obc_time);
     printf("gps_position_ecef ==>\n");
     for (int i = 0; i < 3; i++) {
-        displayUINT32((void *)&p->gps_position_ecef[i]);
+        displayUINT64((void *)&p->gps_position_ecef[i]);
     }
 
     printf("gps_velocity_ecef ==>\n");
     for (int i = 0; i < 3; i++) {
-        displayUINT32((void *)&p->gps_velocity_ecef[i]);
+        displayUINT64((void *)&p->gps_velocity_ecef[i]);
     }
 
     printf("gps_validity_flag_pos_vel ==>\n");
-    displayUINT32((void *)&p->gps_validity_flag_pos_vel);
+    displayUINT16((void *)&p->gps_validity_flag_pos_vel);
 
 }
 
@@ -1386,14 +1386,14 @@ app_to_peer_GpsEphemerisData(const void *ptr_src_app, void *ptr_dst_peer)
     GpsEphemerisData *src = (GpsEphemerisData *)ptr_src_app;
     ::antaris_api_peer_to_peer::GpsEphemerisData *dst = (::antaris_api_peer_to_peer::GpsEphemerisData *)ptr_dst_peer;
 
-    UINT32 __tmp_gps_fix_time = 0;
+    UINT64 __tmp_gps_fix_time;
     UINT64 __tmp_gps_sys_time;
     OBC_time __tmp_obc_time;
-    UINT32 __tmp_gps_position_ecef = 0;
-    UINT32 __tmp_gps_velocity_ecef = 0;
+    UINT64 __tmp_gps_position_ecef;
+    UINT64 __tmp_gps_velocity_ecef;
     UINT32 __tmp_gps_validity_flag_pos_vel = 0;
 
-    app_to_peer_UINT32(&src->gps_fix_time, &__tmp_gps_fix_time); // gps_fix_time
+    app_to_peer_UINT64(&src->gps_fix_time, &__tmp_gps_fix_time); // gps_fix_time
 
     dst->set_gps_fix_time(__tmp_gps_fix_time);
 
@@ -1404,16 +1404,16 @@ app_to_peer_GpsEphemerisData(const void *ptr_src_app, void *ptr_dst_peer)
     app_to_peer_OBC_time(&src->obc_time, dst->mutable_obc_time()); // obc_time
 
     for (int i = 0; i < 3; i++) { // gps_position_ecef
-        UINT32 converted_value;
-        app_to_peer_UINT32(&src->gps_position_ecef[i], &converted_value);
+        UINT64 converted_value;
+        app_to_peer_UINT64(&src->gps_position_ecef[i], &converted_value);
         dst->add_gps_position_ecef(converted_value);
     }
     for (int i = 0; i < 3; i++) { // gps_velocity_ecef
-        UINT32 converted_value;
-        app_to_peer_UINT32(&src->gps_velocity_ecef[i], &converted_value);
+        UINT64 converted_value;
+        app_to_peer_UINT64(&src->gps_velocity_ecef[i], &converted_value);
         dst->add_gps_velocity_ecef(converted_value);
     }
-    app_to_peer_UINT32(&src->gps_validity_flag_pos_vel, &__tmp_gps_validity_flag_pos_vel); // gps_validity_flag_pos_vel
+    app_to_peer_UINT16(&src->gps_validity_flag_pos_vel, &__tmp_gps_validity_flag_pos_vel); // gps_validity_flag_pos_vel
 
     dst->set_gps_validity_flag_pos_vel(__tmp_gps_validity_flag_pos_vel);
 
@@ -1431,16 +1431,16 @@ peer_to_app_GpsEphemerisData(const void *ptr_src_peer, void *ptr_dst_app)
     OBC_time *mutable_obc_time = &dst->obc_time;
     peer_to_app_OBC_time(&src->obc_time(), mutable_obc_time);
     for (int i = 1; i < 3; i++) { // gps_position_ecef
-        UINT32 src_info = src->gps_position_ecef(i);
-        UINT32 *dst_info = &dst->gps_position_ecef[i];
+        UINT64 src_info = src->gps_position_ecef(i);
+        UINT64 *dst_info = &dst->gps_position_ecef[i];
 
-        peer_to_app_UINT32(&src_info, dst_info);
+        peer_to_app_UINT64(&src_info, dst_info);
     }
     for (int i = 1; i < 3; i++) { // gps_velocity_ecef
-        UINT32 src_info = src->gps_velocity_ecef(i);
-        UINT32 *dst_info = &dst->gps_velocity_ecef[i];
+        UINT64 src_info = src->gps_velocity_ecef(i);
+        UINT64 *dst_info = &dst->gps_velocity_ecef[i];
 
-        peer_to_app_UINT32(&src_info, dst_info);
+        peer_to_app_UINT64(&src_info, dst_info);
     }
     dst->gps_validity_flag_pos_vel = src->gps_validity_flag_pos_vel();
 
