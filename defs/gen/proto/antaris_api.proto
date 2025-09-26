@@ -223,7 +223,7 @@ message GpsEphemerisData {
     OBC_time                        obc_time         = 3; // OBC time
     repeated int64                  gps_position_ecef = 4; // GPS position
     repeated int64                  gps_velocity_ecef = 5; // GPS velocity
-    int16                           gps_validity_flag_pos_vel = 6; // GPS validity flag
+    int32                           gps_validity_flag_pos_vel = 6; // GPS validity flag
 }
 
 message AdcsEphemerisData {
