@@ -9,6 +9,7 @@ logger.setLevel(logging.WARNING)
 gHttpOk = 200
 g_FTM = "FTM"
 g_File_String = "File_Conn_Str"
+g_API_Key = "File_Share_API_Key"
 g_Truetwin_Dir = "Truetwin_Dir"
 g_Share_Name = "Share_Name"
 g_Outbound_Path_Prefix = "/opt/antaris/outbound/"
@@ -24,13 +25,15 @@ class File_Stage():
     def start_upload(self):
         file_path_local = g_Outbound_Path_Prefix + self.download_file_params.file_path
         connection_string = self.config_data[g_FTM][g_File_String]
+        api_key = self.config_data[g_FTM][g_API_Key]
         
         if "FileEndpoint=" in connection_string:
             ret = azure_file_upload(file_path_local, connection_string, self.config_data[g_FTM][g_Share_Name], self.file_path_remote)
             return ret
-        elif "gcs-bucket-upload" in connection_string:
+        elif "upload-file-to-bucket" in connection_string:
             return gcp_file_upload(
                 endpoint=connection_string,
+                api_key=api_key,
                 file_path=file_path_local,
                 gcs_bucket=self.config_data[g_FTM][g_Share_Name],
                 truetwin_dir=self.config_data[g_FTM][g_Truetwin_Dir],
@@ -53,18 +56,21 @@ def azure_file_upload(file_name, conn_str, share_name, file_path):
         logger.error(f"Error message: {str(e)}")
         return False
 
-def gcp_file_upload(endpoint, file_path, gcs_bucket, truetwin_dir, filename):
+def gcp_file_upload(endpoint, api_key ,file_path, gcs_bucket, truetwin_dir, filename):
     try:
         with open(file_path, 'rb') as f:
             files = {
                 'file': (filename, f),
+            }
+            headers = {
+                'X-API-Key': api_key
             }
             data = {
                 'gcs_bucket': gcs_bucket,
                 'truetwin_dir': truetwin_dir,
                 'filename': filename,
             }
-            response = requests.post(endpoint, files=files, data=data)
+            response = requests.post(endpoint, files=files, data=data, headers=headers)
 
         if response.status_code == gHttpOk:
             return True
