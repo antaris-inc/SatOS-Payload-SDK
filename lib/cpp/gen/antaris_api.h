@@ -705,12 +705,12 @@ void peer_to_app_OBC_time(const void *ptr_src_peer, void *ptr_dst_app);
 /// @struct GpsEphemerisData
 /// @brief GNSS Eph1/Eph2 data
 struct GpsEphemerisData {
-    UINT32                                          gps_fix_time;                                    ///< @var GPS time
+    UINT64                                          gps_fix_time;                                    ///< @var GPS time
     UINT64                                          gps_sys_time;                                    ///< @var GPS System time
     OBC_time                                        obc_time;                                        ///< @var OBC time
-    UINT32                                          gps_position_ecef[3];                            ///< @var GPS position
-    UINT32                                          gps_velocity_ecef[3];                            ///< @var GPS velocity
-    UINT32                                          gps_validity_flag_pos_vel;                       ///< @var GPS validity flag
+    UINT64                                          gps_position_ecef[3];                            ///< @var GPS position
+    UINT64                                          gps_velocity_ecef[3];                            ///< @var GPS velocity
+    UINT16                                          gps_validity_flag_pos_vel;                       ///< @var GPS validity flag
 };
 
 void displayGpsEphemerisData(const void *obj);

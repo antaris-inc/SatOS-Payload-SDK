@@ -375,8 +375,8 @@ constexpr GpsEphemerisData::GpsEphemerisData(
   , gps_velocity_ecef_()
   , _gps_velocity_ecef_cached_byte_size_(0)
   , obc_time_(nullptr)
+  , gps_fix_time_(int64_t{0})
   , gps_sys_time_(int64_t{0})
-  , gps_fix_time_(0)
   , gps_validity_flag_pos_vel_(0){}
 struct GpsEphemerisDataDefaultTypeInternal {
   constexpr GpsEphemerisDataDefaultTypeInternal()
@@ -1188,11 +1188,11 @@ const char descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[
   "\002 \001(\005\"h\n\010OBC_time\022\014\n\004hour\030\001 \001(\005\022\016\n\006minut"
   "e\030\002 \001(\005\022\023\n\013millisecond\030\003 \001(\005\022\014\n\004date\030\004 \001"
   "(\005\022\r\n\005month\030\005 \001(\005\022\014\n\004year\030\006 \001(\005\"\315\001\n\020GpsE"
-  "phemerisData\022\024\n\014gps_fix_time\030\001 \001(\005\022\024\n\014gp"
+  "phemerisData\022\024\n\014gps_fix_time\030\001 \001(\003\022\024\n\014gp"
   "s_sys_time\030\002 \001(\003\0224\n\010obc_time\030\003 \001(\0132\".ant"
   "aris_api_peer_to_peer.OBC_time\022\031\n\021gps_po"
-  "sition_ecef\030\004 \003(\005\022\031\n\021gps_velocity_ecef\030\005"
-  " \003(\005\022!\n\031gps_validity_flag_pos_vel\030\006 \001(\005\""
+  "sition_ecef\030\004 \003(\003\022\031\n\021gps_velocity_ecef\030\005"
+  " \003(\003\022!\n\031gps_validity_flag_pos_vel\030\006 \001(\005\""
   "\325\005\n\021AdcsEphemerisData\022\022\n\norbit_time\030\001 \001("
   "\001\022\026\n\016eci_position_x\030\002 \001(\001\022\026\n\016eci_positio"
   "n_y\030\003 \001(\001\022\026\n\016eci_position_z\030\004 \001(\001\022\026\n\016eci"
@@ -7536,9 +7536,9 @@ GpsEphemerisData::GpsEphemerisData(const GpsEphemerisData& from)
   } else {
     obc_time_ = nullptr;
   }
-  ::memcpy(&gps_sys_time_, &from.gps_sys_time_,
+  ::memcpy(&gps_fix_time_, &from.gps_fix_time_,
     static_cast<size_t>(reinterpret_cast<char*>(&gps_validity_flag_pos_vel_) -
-    reinterpret_cast<char*>(&gps_sys_time_)) + sizeof(gps_validity_flag_pos_vel_));
+    reinterpret_cast<char*>(&gps_fix_time_)) + sizeof(gps_validity_flag_pos_vel_));
   // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.GpsEphemerisData)
 }
 
@@ -7583,9 +7583,9 @@ void GpsEphemerisData::Clear() {
     delete obc_time_;
   }
   obc_time_ = nullptr;
-  ::memset(&gps_sys_time_, 0, static_cast<size_t>(
+  ::memset(&gps_fix_time_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&gps_validity_flag_pos_vel_) -
-      reinterpret_cast<char*>(&gps_sys_time_)) + sizeof(gps_validity_flag_pos_vel_));
+      reinterpret_cast<char*>(&gps_fix_time_)) + sizeof(gps_validity_flag_pos_vel_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -7595,10 +7595,10 @@ const char* GpsEphemerisData::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPA
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // int32 gps_fix_time = 1;
+      // int64 gps_fix_time = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
-          gps_fix_time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          gps_fix_time_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -7619,24 +7619,24 @@ const char* GpsEphemerisData::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPA
         } else
           goto handle_unusual;
         continue;
-      // repeated int32 gps_position_ecef = 4;
+      // repeated int64 gps_position_ecef = 4;
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_gps_position_ecef(), ptr, ctx);
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt64Parser(_internal_mutable_gps_position_ecef(), ptr, ctx);
           CHK_(ptr);
         } else if (static_cast<uint8_t>(tag) == 32) {
-          _internal_add_gps_position_ecef(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
+          _internal_add_gps_position_ecef(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr));
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // repeated int32 gps_velocity_ecef = 5;
+      // repeated int64 gps_velocity_ecef = 5;
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_gps_velocity_ecef(), ptr, ctx);
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt64Parser(_internal_mutable_gps_velocity_ecef(), ptr, ctx);
           CHK_(ptr);
         } else if (static_cast<uint8_t>(tag) == 40) {
-          _internal_add_gps_velocity_ecef(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
+          _internal_add_gps_velocity_ecef(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -7678,10 +7678,10 @@ uint8_t* GpsEphemerisData::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 gps_fix_time = 1;
+  // int64 gps_fix_time = 1;
   if (this->_internal_gps_fix_time() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_gps_fix_time(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(1, this->_internal_gps_fix_time(), target);
   }
 
   // int64 gps_sys_time = 2;
@@ -7698,20 +7698,20 @@ uint8_t* GpsEphemerisData::_InternalSerialize(
         3, _Internal::obc_time(this), target, stream);
   }
 
-  // repeated int32 gps_position_ecef = 4;
+  // repeated int64 gps_position_ecef = 4;
   {
     int byte_size = _gps_position_ecef_cached_byte_size_.load(std::memory_order_relaxed);
     if (byte_size > 0) {
-      target = stream->WriteInt32Packed(
+      target = stream->WriteInt64Packed(
           4, _internal_gps_position_ecef(), byte_size, target);
     }
   }
 
-  // repeated int32 gps_velocity_ecef = 5;
+  // repeated int64 gps_velocity_ecef = 5;
   {
     int byte_size = _gps_velocity_ecef_cached_byte_size_.load(std::memory_order_relaxed);
     if (byte_size > 0) {
-      target = stream->WriteInt32Packed(
+      target = stream->WriteInt64Packed(
           5, _internal_gps_velocity_ecef(), byte_size, target);
     }
   }
@@ -7738,10 +7738,10 @@ size_t GpsEphemerisData::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated int32 gps_position_ecef = 4;
+  // repeated int64 gps_position_ecef = 4;
   {
     size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      Int32Size(this->gps_position_ecef_);
+      Int64Size(this->gps_position_ecef_);
     if (data_size > 0) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
@@ -7753,10 +7753,10 @@ size_t GpsEphemerisData::ByteSizeLong() const {
     total_size += data_size;
   }
 
-  // repeated int32 gps_velocity_ecef = 5;
+  // repeated int64 gps_velocity_ecef = 5;
   {
     size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      Int32Size(this->gps_velocity_ecef_);
+      Int64Size(this->gps_velocity_ecef_);
     if (data_size > 0) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
@@ -7775,14 +7775,14 @@ size_t GpsEphemerisData::ByteSizeLong() const {
         *obc_time_);
   }
 
+  // int64 gps_fix_time = 1;
+  if (this->_internal_gps_fix_time() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64SizePlusOne(this->_internal_gps_fix_time());
+  }
+
   // int64 gps_sys_time = 2;
   if (this->_internal_gps_sys_time() != 0) {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64SizePlusOne(this->_internal_gps_sys_time());
-  }
-
-  // int32 gps_fix_time = 1;
-  if (this->_internal_gps_fix_time() != 0) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_gps_fix_time());
   }
 
   // int32 gps_validity_flag_pos_vel = 6;
@@ -7817,11 +7817,11 @@ void GpsEphemerisData::MergeFrom(const GpsEphemerisData& from) {
   if (from._internal_has_obc_time()) {
     _internal_mutable_obc_time()->::antaris_api_peer_to_peer::OBC_time::MergeFrom(from._internal_obc_time());
   }
-  if (from._internal_gps_sys_time() != 0) {
-    _internal_set_gps_sys_time(from._internal_gps_sys_time());
-  }
   if (from._internal_gps_fix_time() != 0) {
     _internal_set_gps_fix_time(from._internal_gps_fix_time());
+  }
+  if (from._internal_gps_sys_time() != 0) {
+    _internal_set_gps_sys_time(from._internal_gps_sys_time());
   }
   if (from._internal_gps_validity_flag_pos_vel() != 0) {
     _internal_set_gps_validity_flag_pos_vel(from._internal_gps_validity_flag_pos_vel());

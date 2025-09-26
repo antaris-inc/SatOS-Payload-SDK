@@ -167,11 +167,11 @@ Expected periodic callback from AC: ``ResponseGnssEphData``
 
   * Will match what was sent in request
 
-* ``U32 GPS_Fix_Time``   
+* ``U64 GPS_Fix_Time``   
                 
   * GPS time
       
-* ``U32 GPS_Sys_Time``               
+* ``U64 GPS_Sys_Time``               
     
   * GPS System time
         
@@ -179,15 +179,15 @@ Expected periodic callback from AC: ``ResponseGnssEphData``
     	
 	* OBC time
         
-* ``U32 GPS_Position_ECEF[3]``       
+* ``U64 GPS_Position_ECEF[3]``       
     
 	* GPS position
    
-* ``U32 GPS_Velocity_ECEF[3]``       
+* ``U64 GPS_Velocity_ECEF[3]``       
     
 	* GPS velocity
     
-* ``U32 GPS_Validity_flag_pos_vel``  
+* ``U16 GPS_Validity_flag_pos_vel``  
     
 	* GPS validity flag
     
