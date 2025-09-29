@@ -55,7 +55,7 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
     char *g_Truetwin_Dir = NULL;
     char *g_Share_Name = NULL;
     char dst_file_name[MAX_FILE_OR_PROP_LEN_NAME] = {'\0'};
-    char *position = NULL;
+    char full_source_path[MAX_FILE_OR_PROP_LEN_NAME] = {'\0'};
     size_t remaining_length = 0;
 
     read_config_json(&p_cJson);
@@ -131,25 +131,28 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
         goto cleanup_and_exit;
     }
 
-    // Creating destination file path
-    position = strstr(download_file_params->file_path, FILE_DOWNLOAD_DIR);
-    if ( position == NULL ) {
-        printf("Error: source file should be at %s \n", FILE_DOWNLOAD_DIR);
+    printf("Download file path: %s\n", download_file_params->file_path);
+
+    // Construct the full source path for verification
+    sprintf(full_source_path, "%s%s", FILE_DOWNLOAD_DIR, download_file_params->file_path);
+    if (access(full_source_path, F_OK) != 0) {
+        printf("Error: File not found at %s\n", full_source_path);
         exit_status = An_GENERIC_FAILURE;
         goto cleanup_and_exit;
     }
+    printf("Download file path: %s\n", download_file_params->file_path);
 
-    position += strlen(FILE_DOWNLOAD_DIR);
-    position--;
-    remaining_length = strlen(position);
     strcpy(dst_file_name, g_Truetwin_Dir);
-    strncat(dst_file_name, position, remaining_length);
+    if (dst_file_name[strlen(dst_file_name) - 1] != '/') {
+        strcat(dst_file_name, "/");
+    }
+    strcat(dst_file_name, download_file_params->file_path);
 
     printf("Antaris_SatOS : Uploading file %s \n", download_file_params->file_path);
     printf("Antaris_SatOS : file string %s \n", g_File_String);
     printf("Antaris_SatOS : Share name %s \n", g_Share_Name);
     printf("Antaris_SatOS : dst TrueTwin %s \n", g_Truetwin_Dir);
-    printf("Antaris_SatOS : dst file name %s \n", ++position);
+    printf("Antaris_SatOS : dst file name %s \n", download_file_params->file_path);
     printf("Antaris_SatOS : dst complete name %s \n", dst_file_name);
 
     pName = PyUnicode_DecodeFSDefault(PYTHON_SCRIPT_FILE);
@@ -171,7 +174,7 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
         }
         pArgs = PyTuple_New(4);  // Create a tuple with 4 elements
 
-        PyTuple_SetItem(pArgs, 0, Py_BuildValue("s", download_file_params->file_path));  // 's' for string
+        PyTuple_SetItem(pArgs, 0, Py_BuildValue("s", full_source_path)); // 's' for string
         PyTuple_SetItem(pArgs, 1, Py_BuildValue("s", g_File_String));
         PyTuple_SetItem(pArgs, 2, Py_BuildValue("s", g_Share_Name));
         PyTuple_SetItem(pArgs, 3, Py_BuildValue("s", dst_file_name));
@@ -186,10 +189,10 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
         pArgs = PyTuple_New(5);  // Create a tuple with 5 elements
 
         PyTuple_SetItem(pArgs, 0, Py_BuildValue("s", g_File_String));  // 's' for string
-        PyTuple_SetItem(pArgs, 1, Py_BuildValue("s", download_file_params->file_path));
+        PyTuple_SetItem(pArgs, 1, Py_BuildValue("s", full_source_path));
         PyTuple_SetItem(pArgs, 2, Py_BuildValue("s", g_Share_Name));
         PyTuple_SetItem(pArgs, 3, Py_BuildValue("s", g_Truetwin_Dir));
-        PyTuple_SetItem(pArgs, 4, Py_BuildValue("s", position));
+        PyTuple_SetItem(pArgs, 4, Py_BuildValue("s", download_file_params->file_path));
     } else {
         printf("Unsupported connection string format");
         goto cleanup_and_exit;
