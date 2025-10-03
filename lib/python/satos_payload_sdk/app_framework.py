@@ -135,7 +135,7 @@ class SequenceHandler(Stoppable, threading.Thread):
 
 
 class ChannelClient:
-    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb, ses_thermal_ntf_cb):
+    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb, ses_thermal_ntf_cb, remote_ac_power_on_ntf):
         self._channel = None
         self._cond = threading.Condition()
         self._next_cid = 0
@@ -163,7 +163,8 @@ class ChannelClient:
             'RespStopSesThermMgmntReq': self._handle_response,
             'RespSesTempReq': self._handle_response,
             'SesThrmlStsNtf': ses_thermal_ntf_cb,
-            'PaSatOsMsg': self._handle_response
+            'PaSatOsMsg': self._handle_response,
+            'RemoteAcPowerStatusNtf': remote_ac_power_on_ntf
         }
 
     def _get_next_cid(self):
@@ -364,28 +365,6 @@ class ChannelClient:
 
         return resp
     
-    def ses_thermal_ntf_cb(self, hardware_id):
-        with self._cond:
-            params = api_types.SesTempReq(self._get_next_cid(), hardware_id)
-            resp = api_client.api_pa_pc_ses_temp_req(self._channel, params)
-            if resp != api_types.AntarisReturnCode.An_SUCCESS:
-                logger.error("api_pa_pc_ses_temp_req request failed")
-                return None
-
-            resp_cond = threading.Condition()
-            resp_cond.acquire()
-
-            self._responses[params.correlation_id] = [resp_cond, None]
-
-        # wait for response trigger
-        resp_cond.wait()
-
-        with self._cond:
-            resp = self._responses[params.correlation_id][1]
-            del self._responses[params.correlation_id]
-
-        return resp
-
     def stage_file_download(self, filename, file_priority, file_dl_band):
         with self._cond:
             if (file_priority < api_types.FilePriorities.FILE_DL_PRIORITY_LOW) or (file_priority > api_types.FilePriorities.FILE_DL_PRIORITY_IMMEDIATE):
@@ -543,7 +522,7 @@ class PayloadApplication(Stoppable):
 
     # Notifies application when remote application controller is ON
     def remote_ac_power_on_ntf(self, remote_ac_status):
-        self.remote_ac_power_on_ntf_handler = remote_ac_status
+        self.remote_ac_power_on_ntf = remote_ac_status
 
     #TODO(bcwaldon): actually do something with the provided params
     def _handle_health_check(self, params):

@@ -533,7 +533,7 @@ public:
 
     Status PA_ProcessRespPaSatOsMsg(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
-    Status AppCallbackServiceImpl::PA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+    Status PA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
 public:
 
