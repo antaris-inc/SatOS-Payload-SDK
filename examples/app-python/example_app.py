@@ -125,9 +125,13 @@ class Controller:
     
     def remote_ac_power_on_ntf_handler(self, ctx):
         if ctx.power_status == 0:
-            logger.info(f"Power on status received for {ctx.ac_app_id} = {ctx.power_status}")
+            logger.info(f"{ctx.ac_app_id} is Power OFF state")
+        elif ctx.power_status == 1:
+            logger.info(f"{ctx.ac_app_id} is Power ON state")
+        elif ctx.power_status == 3:
+            logger.info(f"{ctx.ac_app_id} is booting in progress state")
         else:
-            logger.info(f"Power off status received for {ctx.ac_app_id} = {ctx.power_status}")
+            logger.info(f"Unknown Power status received for {ctx.ac_app_id} = {ctx.power_status}")
         return True
 
     def handle_hello_world(self, ctx):
