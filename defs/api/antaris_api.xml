@@ -273,9 +273,15 @@
             <Field name="req_status" type="INT32" sequence="2" description="status of get-eps-voltage-start request"/>
          </Struct>
 
-        <Struct name="GetEpsVoltage" description="get EPS voltage1">
+        <Struct name="GetEpsVoltage" description="get EPS voltage">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="eps_voltage" type="FLOAT" sequence="2" description="EPS voltage"/>
+        </Struct>
+
+        <Struct name="NtfRemoteAcPwrStatus" description="Power status of remote AC">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="ac_app_id" type="UINT8" sequence="2" description="Remote AC app_id"/>
+            <Field name="power_status" type="UINT8" sequence="3" description="0: ON, 1 = OFF"/>
         </Struct>
 
         <Struct name="StartSesThermMgmntReq" description="Start SES thermal management">
@@ -338,6 +344,7 @@
             <Field name="process_response_ses_temp_req" type="ProcessRespSesTempReq_Fptr" sequence="17" description="callback handler for SES temperature req response"/>
             <Field name="process_cb_ses_thrml_ntf" type="ProcessSesThrmlNtf_Fptr" sequence="18" description="callback handler for SES thermal nofirication"/>
             <Field name="process_pa_satos_msg_response" type="ProcessRespPaSatOsMsg_Fptr" sequence="19" description="callback handler for PA to satOS command response"/>
+            <Field name="process_remote_ac_power_on_ntf" type="ProcessRemoteAcPwrStatusNtf_Fptr" sequence="20" description="callback handler for remote application controller power on status notification"/>
         </Struct>
 
         <Struct name="AntarisCorrelationId" description="Wrapper structure for correlation-id">
@@ -406,6 +413,7 @@
         <FunctionPtr name="ProcessGetEpsVoltage_Fptr" description="Callback for GNSS EPS data" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
             <Parameter variable_name="get_eps_voltage" type="GetEpsVoltage *" description="get EPS voltage data"/>
         </FunctionPtr>
+
         <FunctionPtr name="ProcessRespStartSesThermMgmntReq_Fptr" description="callback handler for start SES thermal management req response" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
             <Parameter variable_name="start_ses_therm_mgmnt_response" type="RespStartSesThermMgmntReq *" description="response to thermal management start req"/>
         </FunctionPtr>
@@ -424,6 +432,10 @@
 
         <FunctionPtr name="ProcessRespPaSatOsMsg_Fptr" description="Callback for PA SatOS message request" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
             <Parameter variable_name="pa_satos_msg_response" type="RespPaSatOsMsg *" description="response PA to SatOS command response"/>
+        </FunctionPtr>
+
+        <FunctionPtr name="ProcessRemoteAcPwrStatusNtf_Fptr" description="callback handler for remote application controller power status notification" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="remote_app_status" type="NtfRemoteAcPwrStatus *" description="response remote AC power status"/>
         </FunctionPtr>
     </Callbacks>
 

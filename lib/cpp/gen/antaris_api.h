@@ -190,6 +190,9 @@ typedef struct RespGetEpsVoltageStartReq RespGetEpsVoltageStartReq;
 struct GetEpsVoltage;
 typedef struct GetEpsVoltage GetEpsVoltage;
 
+struct NtfRemoteAcPwrStatus;
+typedef struct NtfRemoteAcPwrStatus NtfRemoteAcPwrStatus;
+
 struct StartSesThermMgmntReq;
 typedef struct StartSesThermMgmntReq StartSesThermMgmntReq;
 
@@ -413,6 +416,16 @@ typedef AntarisReturnCode
 );
 static inline void
 displayProcessRespPaSatOsMsg_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessRemoteAcPwrStatusNtf_Fptr
+/// @typedef callback handler for remote application controller power status notification
+
+typedef AntarisReturnCode
+(*ProcessRemoteAcPwrStatusNtf_Fptr)
+(
+    NtfRemoteAcPwrStatus *           ///< @param response remote AC power status
+);
+static inline void
+displayProcessRemoteAcPwrStatusNtf_Fptr(void *obj) { printf("%p\n", obj); }
 
 // >>>> Data Types <<<<<
 
@@ -815,7 +828,7 @@ void app_to_peer_RespGetEpsVoltageStartReq(const void *ptr_src_app, void *ptr_ds
 void peer_to_app_RespGetEpsVoltageStartReq(const void *ptr_src_peer, void *ptr_dst_app);
 
 /// @struct GetEpsVoltage
-/// @brief get EPS voltage1
+/// @brief get EPS voltage
 struct GetEpsVoltage {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     FLOAT                                           eps_voltage;                                     ///< @var EPS voltage
@@ -824,6 +837,18 @@ struct GetEpsVoltage {
 void displayGetEpsVoltage(const void *obj);
 void app_to_peer_GetEpsVoltage(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_GetEpsVoltage(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct NtfRemoteAcPwrStatus
+/// @brief Power status of remote AC
+struct NtfRemoteAcPwrStatus {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           ac_app_id;                                       ///< @var Remote AC app_id
+    UINT8                                           power_status;                                    ///< @var 0: ON, 1 = OFF
+};
+
+void displayNtfRemoteAcPwrStatus(const void *obj);
+void app_to_peer_NtfRemoteAcPwrStatus(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_NtfRemoteAcPwrStatus(const void *ptr_src_peer, void *ptr_dst_app);
 
 /// @struct StartSesThermMgmntReq
 /// @brief Start SES thermal management
@@ -929,6 +954,7 @@ struct AntarisApiCallbackFuncList {
     ProcessRespSesTempReq_Fptr                      process_response_ses_temp_req;                   ///< @var callback handler for SES temperature req response
     ProcessSesThrmlNtf_Fptr                         process_cb_ses_thrml_ntf;                        ///< @var callback handler for SES thermal nofirication
     ProcessRespPaSatOsMsg_Fptr                      process_pa_satos_msg_response;                   ///< @var callback handler for PA to satOS command response
+    ProcessRemoteAcPwrStatusNtf_Fptr                process_remote_ac_power_on_ntf;                  ///< @var callback handler for remote application controller power on status notification
 };
 
 void displayAntarisApiCallbackFuncList(const void *obj);

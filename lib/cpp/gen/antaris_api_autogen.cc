@@ -2008,6 +2008,59 @@ peer_to_app_GetEpsVoltage(const void *ptr_src_peer, void *ptr_dst_app)
 }
 
 void
+displayNtfRemoteAcPwrStatus(const void *obj)
+{
+    NtfRemoteAcPwrStatus *p = (NtfRemoteAcPwrStatus *)obj;
+
+    printf("NtfRemoteAcPwrStatus %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("ac_app_id ==>\n");
+    displayUINT8((void *)&p->ac_app_id);
+    printf("power_status ==>\n");
+    displayUINT8((void *)&p->power_status);
+
+}
+
+void
+app_to_peer_NtfRemoteAcPwrStatus(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    NtfRemoteAcPwrStatus *src = (NtfRemoteAcPwrStatus *)ptr_src_app;
+    ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus *dst = (::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_ac_app_id = 0;
+    UINT32 __tmp_power_status = 0;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->ac_app_id, &__tmp_ac_app_id); // ac_app_id
+
+    dst->set_ac_app_id(__tmp_ac_app_id);
+
+    app_to_peer_UINT8(&src->power_status, &__tmp_power_status); // power_status
+
+    dst->set_power_status(__tmp_power_status);
+
+
+}
+
+void
+peer_to_app_NtfRemoteAcPwrStatus(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    NtfRemoteAcPwrStatus *dst = (NtfRemoteAcPwrStatus *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus *src = (::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->ac_app_id = src->ac_app_id();
+    dst->power_status = src->power_status();
+
+}
+
+void
 displayStartSesThermMgmntReq(const void *obj)
 {
     StartSesThermMgmntReq *p = (StartSesThermMgmntReq *)obj;
@@ -2407,6 +2460,8 @@ displayAntarisApiCallbackFuncList(const void *obj)
     displayProcessSesThrmlNtf_Fptr((void *)&p->process_cb_ses_thrml_ntf);
     printf("process_pa_satos_msg_response ==>\n");
     displayProcessRespPaSatOsMsg_Fptr((void *)&p->process_pa_satos_msg_response);
+    printf("process_remote_ac_power_on_ntf ==>\n");
+    displayProcessRemoteAcPwrStatusNtf_Fptr((void *)&p->process_remote_ac_power_on_ntf);
 
 }
 

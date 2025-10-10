@@ -36,7 +36,7 @@
 #define JSON_Key_I2C_Port_Count   ("I2C_PORT_COUNT")
 #define JSON_Key_I2C_Bus_Path     ("I2C_Bus_Path_")
 #define JSON_Key_QA7_LIB          ("QA7_LIB")
-#define JSON_Key_Network       ("Network")
+#define JSON_Key_Network          ("Network")
 #define JSON_Key_Application_Controller_IP_Address  ("Application_Controller_IP_Address")
 
 #define MAX_DEV_NAME_LENGTH       32  // Max length for each device name

@@ -339,33 +339,62 @@ class AppToPCClient {
             return An_GENERIC_FAILURE;
         }
     }
-  AntarisReturnCode InvokeProcessGetEpsVoltage(GetEpsVoltage *req_params)
-  {
-      antaris_api_peer_to_peer::GetEpsVoltage cb_req;
-      antaris_api_peer_to_peer::AntarisReturnType cb_response;
-      Status cb_status;
-      // Context for the client. It could be used to convey extra information to
-      // the server and/or tweak certain RPC behaviors.
-      ClientContext context;
+  
+    AntarisReturnCode InvokeProcessGetEpsVoltage(GetEpsVoltage *req_params)
+    {
+        antaris_api_peer_to_peer::GetEpsVoltage cb_req;
+        antaris_api_peer_to_peer::AntarisReturnType cb_response;
+        Status cb_status;
+        // Context for the client. It could be used to convey extra information to
+        // the server and/or tweak certain RPC behaviors.
+        ClientContext context;
 
-      // Adding deadline or timeout
-      std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
-      context.set_deadline(deadline);
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
 
-      app_to_peer_GetEpsVoltage(req_params, &cb_req);
+        app_to_peer_GetEpsVoltage(req_params, &cb_req);
 
-      cb_status = app_grpc_handle_->PA_ProcessGetEpsVoltage(&context, cb_req, &cb_response);
+        cb_status = app_grpc_handle_->PA_ProcessGetEpsVoltage(&context, cb_req, &cb_response);
 
-      // Act upon its status.
-      if (cb_status.ok())
-      {
-          return (AntarisReturnCode)(cb_response.return_code());
-      }
-      else
-      {
-          return An_GENERIC_FAILURE;
-      }
-  }
+        // Act upon its status.
+        if (cb_status.ok())
+        {
+            return (AntarisReturnCode)(cb_response.return_code());
+        }
+        else
+        {
+            return An_GENERIC_FAILURE;
+        }
+    }
+
+    AntarisReturnCode InvokeProcessNtfRemoteAcPwrStatus(NtfRemoteAcPwrStatus *req_params)
+    {
+        antaris_api_peer_to_peer::NtfRemoteAcPwrStatus cb_req;
+        antaris_api_peer_to_peer::AntarisReturnType cb_response;
+        Status cb_status;
+        // Context for the client. It could be used to convey extra information to
+        // the server and/or tweak certain RPC behaviors.
+        ClientContext context;
+
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
+
+        app_to_peer_NtfRemoteAcPwrStatus(req_params, &cb_req);
+
+        cb_status = app_grpc_handle_->PA_ProcessRemoteAcPwrStatusNtf(&context, cb_req, &cb_response);
+
+        // Act upon its status.
+        if (cb_status.ok())
+        {
+            return (AntarisReturnCode)(cb_response.return_code());
+        }
+        else
+        {
+            return An_GENERIC_FAILURE;
+        }
+    }
 
   AntarisReturnCode InvokeProcessRespGetEpsVoltageStartReq(RespGetEpsVoltageStartReq *req_params)
   {
@@ -912,6 +941,22 @@ done:
         return Status::OK;
     }
 
+    Status PC_response_remote_ac_status(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
+    {
+        AppToPCCallbackParams_t api_request = {0};
+        AntarisReturnType api_response = {return_code : An_SUCCESS};
+        cookie_t cookie;
+        cookie = decodeCookie(context);
+
+        peer_to_app_NtfRemoteAcPwrStatus(request, &api_request);
+
+        user_callbacks_(user_cb_ctx_, cookie, e_app2PC_invalid, &api_request, &api_response.return_code);
+
+        app_to_peer_AntarisReturnType(&api_response, response);
+
+        return Status::OK;
+    }
+
 private:
     static void LaunchGrpcServer(AppToPCApiService *ctx, UINT32 ssl_flag) {
         grpc::EnableDefaultHealthCheckService(true);
@@ -1215,6 +1260,10 @@ AntarisReturnCode an_pc_pa_invoke_api(PCToAppClientContext ctx, PCToAppApiId_e a
 
     case e_PC2App_respPaSatOsMsg:
         ret = internal_ctx->client_api_handle->InvokeProcessPaSatOsMsg(&api_params->pa_satos_msg_response);
+        break;
+
+    case e_PC2App_NtfRemoteAcPowerStatus:
+        ret = internal_ctx->client_api_handle->InvokeProcessNtfRemoteAcPwrStatus(&api_params->remote_app_status);
         break;
     } // switch api_id
 

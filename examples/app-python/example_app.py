@@ -123,6 +123,17 @@ class Controller:
         logger.info(f"EPS voltage data received : {float(ctx.eps_voltage):.2f}")
         return True
     
+    def remote_ac_power_on_ntf_handler(self, ctx):
+        if ctx.power_status == 0:
+            logger.info(f"{ctx.ac_app_id} is Power OFF state")
+        elif ctx.power_status == 1:
+            logger.info(f"{ctx.ac_app_id} is Power ON state")
+        elif ctx.power_status == 3:
+            logger.info(f"{ctx.ac_app_id} is booting in progress state")
+        else:
+            logger.info(f"Unknown Power status received for {ctx.ac_app_id} = {ctx.power_status}")
+        return True
+
     def handle_hello_world(self, ctx):
         logger.info("Handling sequence: hello, world!")
 
@@ -206,8 +217,9 @@ class Controller:
 
     def handle_power_control(self, ctx):
         logger.info("Handling payload power")
-        power_state = ctx.params      # 0 = power off, 1 = power on
-        hw_id = 0x4001                # If hw_id = 0, then default payload hardware id is send
+        power_state = 0 #ctx.params      # 0 = power off, 1 = power on
+        hw_id = 134                   # If hw_id = 0, then default payload hardware id is send
+                                      # HW ID is 134 is for PS and 135 for Edge
         if(power_state != 0 and power_state != 1):
             logger.info("invlaid power state. power state can only be 0 or 1")
             return
@@ -425,6 +437,7 @@ def new():
     app.set_gnss_eph_data_cb(ctl.gnss_eph_data_handler)
     app.set_get_eps_voltage_cb(ctl.get_eps_voltage_handler)
     app.set_ses_thermal_status_ntf(ctl.ses_thermal_status_ntf)
+    app.remote_ac_power_on_ntf(ctl.remote_ac_power_on_ntf_handler)
 
     # Sample function to add stats counters and names
     set_payload_values(app)

@@ -110,6 +110,7 @@ typedef enum {
     e_PC2App_respSesTempReq,
     e_PC2App_SesThrmlNtf,
     e_PC2App_respPaSatOsMsg,
+    e_PC2App_NtfRemoteAcPowerStatus,
     e_PC2App_MaxRequest,
 } PCToAppApiId_e;
 
@@ -132,7 +133,8 @@ typedef union {
     RespStopSesThermMgmntReq            stop_ses_therm_mgmnt;
     RespSesTempReqParams                ses_temp;
     SesThermalStatusNtf                 ses_thermal_ntf;
-    RespPaSatOsMsg                       pa_satos_msg_response;
+    RespPaSatOsMsg                      pa_satos_msg_response;
+    NtfRemoteAcPwrStatus                remote_app_status;
 } PCToAppApiParams_t;
 
 PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port, INT8 *client_ssl_addr, UINT32 ssl_flag);

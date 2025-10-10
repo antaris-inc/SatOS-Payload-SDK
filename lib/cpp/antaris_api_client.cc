@@ -533,6 +533,8 @@ public:
 
     Status PA_ProcessRespPaSatOsMsg(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
+    Status PA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
 public:
 
     void set_client_channel_ctx(AntarisInternalClientChannelContext_t *ctx) {
@@ -829,6 +831,21 @@ Status AppCallbackServiceImpl::PA_ProcessRespPaSatOsMsg(::grpc::ServerContext* c
     if (client_channel_ctx_->callbacks.process_pa_satos_msg_response) {
         peer_to_app_RespPaSatOsMsg((void *)request, &app_request);
         app_ret = client_channel_ctx_->callbacks.process_pa_satos_msg_response(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    NtfRemoteAcPwrStatus app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    
+    if (client_channel_ctx_->callbacks.process_remote_ac_power_on_ntf) {
+        peer_to_app_NtfRemoteAcPwrStatus((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_remote_ac_power_on_ntf(&app_request);
     }
 
     response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));

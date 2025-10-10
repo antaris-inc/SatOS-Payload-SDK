@@ -69,6 +69,7 @@ class AntarisChannel:
         self.process_response_ses_temp_req = callback_func_list['RespSesTempReq']
         self.process_cb_ses_thrml_ntf = callback_func_list['SesThrmlStsNtf']
         self.process_pa_satos_msg_response = callback_func_list['PaSatOsMsg']
+        self.process_remote_ac_power_on_ntf = callback_func_list['RemoteAcPowerStatusNtf']
         try :
             # Read config info
             jsonfile = open(g_CONFIG_JSON_FILE, 'r')
@@ -228,6 +229,14 @@ class PCToAppService(antaris_api_pb2_grpc.AntarisapiApplicationCallbackServicer)
         if self.channel.process_pa_satos_msg_response:
             app_request = api_types.peer_to_app_RespPaSatOsMsg(request)
             app_ret = self.channel.process_pa_satos_msg_response(app_request)
+            return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
+        else:
+            return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
+
+    def PA_ProcessRemoteAcPwrStatusNtf(self, request, context):
+        if self.channel.process_remote_ac_power_on_ntf:
+            app_request = api_types.peer_to_app_NtfRemoteAcPwrStatus(request)
+            app_ret = self.channel.process_remote_ac_power_on_ntf(app_request)
             return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
         else:
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
@@ -544,6 +553,7 @@ def api_pa_pc_response_shutdown(channel, response_shutdown_params):
     else:
         # fallback error code if call failed
         return api_types.AntarisReturnCode.An_GENERIC_FAILURE
+
 def api_pa_pc_gnss_eph_stop_req(channel, req_gnss_eph_stop):
     print("api_pa_pc_gnss_eph_stop_req")
 
@@ -669,6 +679,7 @@ def api_pa_pc_stop_ses_therm_mgmnt_req(channel, req_stop_ses_therm_mgmnt):
     else:
         # fallback error code if call failed
         return api_types.AntarisReturnCode.An_GENERIC_FAILURE
+
 def api_pa_pc_ses_temp_req(channel, req_ses_temp):
     print("api_pa_pc_ses_temp_req")
 
@@ -696,6 +707,29 @@ def api_pa_pc_pa_satos_message(channel, pa_command_param):
         pa_command_param.display()
 
     peer_params = api_types.app_to_peer_PaSatOsMsg(pa_command_param)
+    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
+    peer_ret = None
+    try:
+        peer_ret = channel.grpc_client_handle.PC_pa_satos_message(peer_params , metadata=metadata)
+    except grpc.RpcError as e:
+        status_code = e.code()
+        details = e.details()
+        print(f"gRPC call failed with code {status_code}, details: {details}")
+
+    if peer_ret:
+        if api_debug:
+            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
+        return peer_ret.return_code
+    else:
+        # fallback error code if call failed
+        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
+
+def api_pa_pc_remote_ac_status_ntf(channel, pa_remote_ac_status_ntf):
+    print("api_pa_pc_remote_ac_status_ntf")
+    if (api_debug):
+        pa_remote_ac_status_ntf.display()
+
+    peer_params = api_types.app_to_peer_NtfRemoteAcPwrStatus(pa_remote_ac_status_ntf)
     metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
     peer_ret = None
     try:
