@@ -1074,6 +1074,33 @@ AntarisReturnCode process_response_pa_satos_msg(RespPaSatOsMsg *resp_pa_satos_me
     return An_SUCCESS;
 }
 
+AntarisReturnCode process_req_satos_pa_msg(SatOsPaMsg *satos_pa_message)
+{   
+    RespSatOsPaMsg resp_satos_pa_msg;
+    if(satos_pa_message->payload_data[0] != '\0'){
+
+        printf("Command id = %hu\n", satos_pa_message->command_id);
+        printf("Payload data = %s\n", satos_pa_message->payload_data);
+        if (debug) {
+            displaySatOsPaMsg(satos_pa_message);  
+        }
+        resp_satos_pa_msg.command_id = satos_pa_message->command_id;
+        resp_satos_pa_msg.correlation_id = satos_pa_message->correlation_id;
+        resp_satos_pa_msg.req_status = An_SUCCESS;
+        api_pa_pc_satos_pa_message_resp(channel,&resp_satos_pa_msg);
+    }
+    else{
+        resp_satos_pa_msg.command_id = satos_pa_message->command_id;
+        resp_satos_pa_msg.correlation_id = satos_pa_message->correlation_id;
+        resp_satos_pa_msg.req_status = An_GENERIC_FAILURE;
+        api_pa_pc_satos_pa_message_resp(channel,&resp_satos_pa_msg);
+    }
+    // #<Payload Application Business Logic>
+    wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
+    return An_SUCCESS;
+}
+
+
 AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
 {
     printf("process_response_gnss_eph_data\n");
@@ -1223,6 +1250,7 @@ int main(int argc, char *argv[])
             process_response_ses_temp_req: process_response_ses_temp,
             process_cb_ses_thrml_ntf: process_response_thrml_ntf,
             process_pa_satos_msg_response: process_response_pa_satos_msg,
+            process_satos_pa_msg: process_req_satos_pa_msg,
     };
 
     // Create Channel to talk to Payload Controller (PC)

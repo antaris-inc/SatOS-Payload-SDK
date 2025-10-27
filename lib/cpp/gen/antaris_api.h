@@ -148,8 +148,14 @@ typedef struct CmdSequenceDoneParams CmdSequenceDoneParams;
 struct PaSatOsMsg;
 typedef struct PaSatOsMsg PaSatOsMsg;
 
+struct SatOsPaMsg;
+typedef struct SatOsPaMsg SatOsPaMsg;
+
 struct RespPaSatOsMsg;
 typedef struct RespPaSatOsMsg RespPaSatOsMsg;
+
+struct RespSatOsPaMsg;
+typedef struct RespSatOsPaMsg RespSatOsPaMsg;
 
 struct ReqGnssEphStopDataReq;
 typedef struct ReqGnssEphStopDataReq ReqGnssEphStopDataReq;
@@ -416,6 +422,16 @@ typedef AntarisReturnCode
 );
 static inline void
 displayProcessRespPaSatOsMsg_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessSatOsPaMsg_Fptr
+/// @typedef SatOS Pa message request
+
+typedef AntarisReturnCode
+(*ProcessSatOsPaMsg_Fptr)
+(
+    SatOsPaMsg *                     ///< @param response PA to SatOS command response
+);
+static inline void
+displayProcessSatOsPaMsg_Fptr(void *obj) { printf("%p\n", obj); }
 /// @brief Callback function type ProcessRemoteAcPwrStatusNtf_Fptr
 /// @typedef callback handler for remote application controller power status notification
 
@@ -644,6 +660,18 @@ void displayPaSatOsMsg(const void *obj);
 void app_to_peer_PaSatOsMsg(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_PaSatOsMsg(const void *ptr_src_peer, void *ptr_dst_app);
 
+/// @struct SatOsPaMsg
+/// @brief To send message from SatOS to PA
+struct SatOsPaMsg {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT16                                          command_id;                                      ///< @var command id
+    INT8                                            payload_data[1020];                              ///< @var payload data for sending for Pa, string
+};
+
+void displaySatOsPaMsg(const void *obj);
+void app_to_peer_SatOsPaMsg(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_SatOsPaMsg(const void *ptr_src_peer, void *ptr_dst_app);
+
 /// @struct RespPaSatOsMsg
 /// @brief To send acknowledge to PA from SatOS
 struct RespPaSatOsMsg {
@@ -655,6 +683,18 @@ struct RespPaSatOsMsg {
 void displayRespPaSatOsMsg(const void *obj);
 void app_to_peer_RespPaSatOsMsg(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_RespPaSatOsMsg(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespSatOsPaMsg
+/// @brief To send acknowledge to SatOS from Pa
+struct RespSatOsPaMsg {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT16                                          command_id;                                      ///< @var command id
+    INT32                                           req_status;                                      ///< @var status of  SatOS Pa Message request
+};
+
+void displayRespSatOsPaMsg(const void *obj);
+void app_to_peer_RespSatOsPaMsg(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespSatOsPaMsg(const void *ptr_src_peer, void *ptr_dst_app);
 
 /// @struct ReqGnssEphStopDataReq
 /// @brief Request GNSS EPH data stop
@@ -954,6 +994,7 @@ struct AntarisApiCallbackFuncList {
     ProcessRespSesTempReq_Fptr                      process_response_ses_temp_req;                   ///< @var callback handler for SES temperature req response
     ProcessSesThrmlNtf_Fptr                         process_cb_ses_thrml_ntf;                        ///< @var callback handler for SES thermal nofirication
     ProcessRespPaSatOsMsg_Fptr                      process_pa_satos_msg_response;                   ///< @var callback handler for PA to satOS command response
+    ProcessSatOsPaMsg_Fptr                          process_satos_pa_msg;                            ///< @var callback handler for satOS to PA command response
     ProcessRemoteAcPwrStatusNtf_Fptr                process_remote_ac_power_on_ntf;                  ///< @var callback handler for remote application controller power on status notification
 };
 
@@ -1146,6 +1187,15 @@ api_pa_pc_pa_satos_message
 (
     AntarisChannel                  channel,                         ///< @param channel context for API execution
     PaSatOsMsg *                    pa_satos_msg                     ///< @param Message to SatOS from PA
+);
+
+/// @brief Function api_pa_pc_satos_pa_message_resp
+/// @fn API to respond to SatOS Pa message request
+AntarisReturnCode
+api_pa_pc_satos_pa_message_resp
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    RespSatOsPaMsg *                satos_pa_msg_resp                ///< @param Message to SatOS from PA
 );
 
 
