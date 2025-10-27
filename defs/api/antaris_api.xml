@@ -169,10 +169,22 @@
             <Field name="payload_data" type="INT8" sequence="3" description="payload data for sending for SatOS, string" array="1020"/>
         </Struct>
 
+        <Struct name="SatOsPaMsg" description="To send message from SatOS to PA">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="command_id" type="UINT16" sequence="2" description="command id"/>
+            <Field name="payload_data" type="INT8" sequence="3" description="payload data for sending for Pa, string" array="1020"/>
+        </Struct>
+
         <Struct name="RespPaSatOsMsg" description="To send acknowledge to PA from SatOS">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="command_id" type="UINT16" sequence="2" description="command id"/>
             <Field name="req_status" type="INT32" sequence="3" description="status of PA SatOS Message request"/>
+        </Struct>
+
+        <Struct name="RespSatOsPaMsg" description="To send acknowledge to SatOS from Pa">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="command_id" type="UINT16" sequence="2" description="command id"/>
+            <Field name="req_status" type="INT32" sequence="3" description="status of  SatOS Pa Message request"/>
         </Struct>
 
         <Struct name="ReqGnssEphStopDataReq" description="Request GNSS EPH data stop">
@@ -344,6 +356,7 @@
             <Field name="process_response_ses_temp_req" type="ProcessRespSesTempReq_Fptr" sequence="17" description="callback handler for SES temperature req response"/>
             <Field name="process_cb_ses_thrml_ntf" type="ProcessSesThrmlNtf_Fptr" sequence="18" description="callback handler for SES thermal nofirication"/>
             <Field name="process_pa_satos_msg_response" type="ProcessRespPaSatOsMsg_Fptr" sequence="19" description="callback handler for PA to satOS command response"/>
+            <Field name="process_satos_pa_msg" type="ProcessSatOsPaMsg_Fptr" sequence="19" description="callback handler for satOS to PA command response"/>
             <Field name="process_remote_ac_power_on_ntf" type="ProcessRemoteAcPwrStatusNtf_Fptr" sequence="20" description="callback handler for remote application controller power on status notification"/>
         </Struct>
 
@@ -432,6 +445,10 @@
 
         <FunctionPtr name="ProcessRespPaSatOsMsg_Fptr" description="Callback for PA SatOS message request" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
             <Parameter variable_name="pa_satos_msg_response" type="RespPaSatOsMsg *" description="response PA to SatOS command response"/>
+        </FunctionPtr>
+
+        <FunctionPtr name="ProcessSatOsPaMsg_Fptr" description="SatOS Pa message request" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="satos_pa_msg_response" type="SatOsPaMsg *" description="response PA to SatOS command response"/>
         </FunctionPtr>
 
         <FunctionPtr name="ProcessRemoteAcPwrStatusNtf_Fptr" description="callback handler for remote application controller power status notification" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
@@ -550,6 +567,12 @@
                         return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
             <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
             <Parameter variable_name="pa_satos_msg" type="PaSatOsMsg *" description="Message to SatOS from PA"/>
+        </Function>
+
+        <Function name="api_pa_pc_satos_pa_message_resp" description="API to respond to SatOS Pa message request"
+                        return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
+            <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
+            <Parameter variable_name="satos_pa_msg_resp" type="RespSatOsPaMsg *" description="Message to SatOS from PA"/>
         </Function>
 
     </Functions>

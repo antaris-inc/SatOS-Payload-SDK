@@ -45,6 +45,7 @@ typedef enum {
     e_app2PC_StopSesThermMgmntReq,
     e_app2PC_SesTempReq,
     e_app2PC_PaSatOsMsg,
+    e_app2PC_RespSatOsPaMsg,
     e_app2PC_MaxRequest
 } AppToPCCallbackId_e;
 
@@ -73,6 +74,7 @@ typedef union {
     StopSesThermMgmntReq            stop_ses_therm_mgmnt;
     SesTempReq                      ses_temp_req;
     PaSatOsMsg                      pa_satos_msg;
+    RespSatOsPaMsg                  resp_satos_pa_msg;
     AntarisAppSdkVersion_t          sdk_version;
 } AppToPCCallbackParams_t;
 
@@ -110,6 +112,9 @@ typedef enum {
     e_PC2App_respSesTempReq,
     e_PC2App_SesThrmlNtf,
     e_PC2App_respPaSatOsMsg,
+    e_PC2App_PaSatOsMsg,
+    e_PC2App_respSatOsPaMsg,
+    e_PC2App_SatOsPaMsg,
     e_PC2App_NtfRemoteAcPowerStatus,
     e_PC2App_MaxRequest,
 } PCToAppApiId_e;
@@ -134,6 +139,7 @@ typedef union {
     RespSesTempReqParams                ses_temp;
     SesThermalStatusNtf                 ses_thermal_ntf;
     RespPaSatOsMsg                      pa_satos_msg_response;
+    SatOsPaMsg                          satos_pa_msg;
     NtfRemoteAcPwrStatus                remote_app_status;
 } PCToAppApiParams_t;
 

@@ -210,6 +210,13 @@ class AntarisapiApplicationCallback final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPA_ProcessRespPaSatOsMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPA_ProcessRespPaSatOsMsgRaw(context, request, cq));
     }
+    virtual ::grpc::Status PA_ProcessSatOsPaMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> AsyncPA_ProcessSatOsPaMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(AsyncPA_ProcessSatOsPaMsgRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPA_ProcessSatOsPaMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPA_ProcessSatOsPaMsgRaw(context, request, cq));
+    }
     virtual ::grpc::Status PA_ProcessRemoteAcPwrStatusNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> AsyncPA_ProcessRemoteAcPwrStatusNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(AsyncPA_ProcessRemoteAcPwrStatusNtfRaw(context, request, cq));
@@ -258,6 +265,8 @@ class AntarisapiApplicationCallback final {
       virtual void PA_ProcessSesThrmlNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void PA_ProcessRespPaSatOsMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) = 0;
       virtual void PA_ProcessRespPaSatOsMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void PA_ProcessSatOsPaMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void PA_ProcessSatOsPaMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void PA_ProcessRemoteAcPwrStatusNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) = 0;
       virtual void PA_ProcessRemoteAcPwrStatusNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
@@ -303,6 +312,8 @@ class AntarisapiApplicationCallback final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessSesThrmlNtfRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessRespPaSatOsMsgRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessRespPaSatOsMsgRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessSatOsPaMsgRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessSatOsPaMsgRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessRemoteAcPwrStatusNtfRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessRemoteAcPwrStatusNtfRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus& request, ::grpc::CompletionQueue* cq) = 0;
   };
@@ -442,6 +453,13 @@ class AntarisapiApplicationCallback final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPA_ProcessRespPaSatOsMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPA_ProcessRespPaSatOsMsgRaw(context, request, cq));
     }
+    ::grpc::Status PA_ProcessSatOsPaMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> AsyncPA_ProcessSatOsPaMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(AsyncPA_ProcessSatOsPaMsgRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPA_ProcessSatOsPaMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPA_ProcessSatOsPaMsgRaw(context, request, cq));
+    }
     ::grpc::Status PA_ProcessRemoteAcPwrStatusNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> AsyncPA_ProcessRemoteAcPwrStatusNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(AsyncPA_ProcessRemoteAcPwrStatusNtfRaw(context, request, cq));
@@ -490,6 +508,8 @@ class AntarisapiApplicationCallback final {
       void PA_ProcessSesThrmlNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
       void PA_ProcessRespPaSatOsMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) override;
       void PA_ProcessRespPaSatOsMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void PA_ProcessSatOsPaMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) override;
+      void PA_ProcessSatOsPaMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
       void PA_ProcessRemoteAcPwrStatusNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) override;
       void PA_ProcessRemoteAcPwrStatusNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
@@ -541,6 +561,8 @@ class AntarisapiApplicationCallback final {
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessSesThrmlNtfRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessRespPaSatOsMsgRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessRespPaSatOsMsgRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessSatOsPaMsgRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessSatOsPaMsgRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPA_ProcessRemoteAcPwrStatusNtfRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPA_ProcessRemoteAcPwrStatusNtfRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_PA_StartSequence_;
@@ -562,6 +584,7 @@ class AntarisapiApplicationCallback final {
     const ::grpc::internal::RpcMethod rpcmethod_PA_ProcessRespSesTempReq_;
     const ::grpc::internal::RpcMethod rpcmethod_PA_ProcessSesThrmlNtf_;
     const ::grpc::internal::RpcMethod rpcmethod_PA_ProcessRespPaSatOsMsg_;
+    const ::grpc::internal::RpcMethod rpcmethod_PA_ProcessSatOsPaMsg_;
     const ::grpc::internal::RpcMethod rpcmethod_PA_ProcessRemoteAcPwrStatusNtf_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
@@ -589,6 +612,7 @@ class AntarisapiApplicationCallback final {
     virtual ::grpc::Status PA_ProcessRespSesTempReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespSesTempReqParams* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     virtual ::grpc::Status PA_ProcessSesThrmlNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SesThermalStatusNtf* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     virtual ::grpc::Status PA_ProcessRespPaSatOsMsg(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespPaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+    virtual ::grpc::Status PA_ProcessSatOsPaMsg(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     virtual ::grpc::Status PA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
   };
   template <class BaseClass>
@@ -972,12 +996,32 @@ class AntarisapiApplicationCallback final {
     }
   };
   template <class BaseClass>
+  class WithAsyncMethod_PA_ProcessSatOsPaMsg : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_PA_ProcessSatOsPaMsg() {
+      ::grpc::Service::MarkMethodAsync(19);
+    }
+    ~WithAsyncMethod_PA_ProcessSatOsPaMsg() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PA_ProcessSatOsPaMsg(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::SatOsPaMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestPA_ProcessSatOsPaMsg(::grpc::ServerContext* context, ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::grpc::ServerAsyncResponseWriter< ::antaris_api_peer_to_peer::AntarisReturnType>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(19, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithAsyncMethod_PA_ProcessRemoteAcPwrStatusNtf : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_PA_ProcessRemoteAcPwrStatusNtf() {
-      ::grpc::Service::MarkMethodAsync(19);
+      ::grpc::Service::MarkMethodAsync(20);
     }
     ~WithAsyncMethod_PA_ProcessRemoteAcPwrStatusNtf() override {
       BaseClassMustBeDerivedFromService(this);
@@ -988,10 +1032,10 @@ class AntarisapiApplicationCallback final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestPA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerContext* context, ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::grpc::ServerAsyncResponseWriter< ::antaris_api_peer_to_peer::AntarisReturnType>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(19, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(20, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_PA_StartSequence<WithAsyncMethod_PA_ShutdownApp<WithAsyncMethod_PA_ProcessHealthCheck<WithAsyncMethod_PA_ProcessResponseRegister<WithAsyncMethod_PA_ProcessResponseGetCurrentLocation<WithAsyncMethod_PA_ProcessResponseStageFileDownload<WithAsyncMethod_PA_ProcessResponsePayloadPowerControl<WithAsyncMethod_PA_ProcessReqPayloadMetrics<WithAsyncMethod_PA_ProcessRespGnssEphStopDataReq<WithAsyncMethod_PA_ProcessRespGnssEphStartDataReq<WithAsyncMethod_PA_ProcessGnssEphData<WithAsyncMethod_PA_ProcessRespGetEpsVoltageStopReq<WithAsyncMethod_PA_ProcessRespGetEpsVoltageStartReq<WithAsyncMethod_PA_ProcessGetEpsVoltage<WithAsyncMethod_PA_ProcessRespStartSesThermMgmntReq<WithAsyncMethod_PA_ProcessRespStopSesThermMgmntReq<WithAsyncMethod_PA_ProcessRespSesTempReq<WithAsyncMethod_PA_ProcessSesThrmlNtf<WithAsyncMethod_PA_ProcessRespPaSatOsMsg<WithAsyncMethod_PA_ProcessRemoteAcPwrStatusNtf<Service > > > > > > > > > > > > > > > > > > > > AsyncService;
+  typedef WithAsyncMethod_PA_StartSequence<WithAsyncMethod_PA_ShutdownApp<WithAsyncMethod_PA_ProcessHealthCheck<WithAsyncMethod_PA_ProcessResponseRegister<WithAsyncMethod_PA_ProcessResponseGetCurrentLocation<WithAsyncMethod_PA_ProcessResponseStageFileDownload<WithAsyncMethod_PA_ProcessResponsePayloadPowerControl<WithAsyncMethod_PA_ProcessReqPayloadMetrics<WithAsyncMethod_PA_ProcessRespGnssEphStopDataReq<WithAsyncMethod_PA_ProcessRespGnssEphStartDataReq<WithAsyncMethod_PA_ProcessGnssEphData<WithAsyncMethod_PA_ProcessRespGetEpsVoltageStopReq<WithAsyncMethod_PA_ProcessRespGetEpsVoltageStartReq<WithAsyncMethod_PA_ProcessGetEpsVoltage<WithAsyncMethod_PA_ProcessRespStartSesThermMgmntReq<WithAsyncMethod_PA_ProcessRespStopSesThermMgmntReq<WithAsyncMethod_PA_ProcessRespSesTempReq<WithAsyncMethod_PA_ProcessSesThrmlNtf<WithAsyncMethod_PA_ProcessRespPaSatOsMsg<WithAsyncMethod_PA_ProcessSatOsPaMsg<WithAsyncMethod_PA_ProcessRemoteAcPwrStatusNtf<Service > > > > > > > > > > > > > > > > > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_PA_StartSequence : public BaseClass {
    private:
@@ -1506,18 +1550,45 @@ class AntarisapiApplicationCallback final {
       ::grpc::CallbackServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespPaSatOsMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
+  class WithCallbackMethod_PA_ProcessSatOsPaMsg : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_PA_ProcessSatOsPaMsg() {
+      ::grpc::Service::MarkMethodCallback(19,
+          new ::grpc::internal::CallbackUnaryHandler< ::antaris_api_peer_to_peer::SatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) { return this->PA_ProcessSatOsPaMsg(context, request, response); }));}
+    void SetMessageAllocatorFor_PA_ProcessSatOsPaMsg(
+        ::grpc::MessageAllocator< ::antaris_api_peer_to_peer::SatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(19);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::antaris_api_peer_to_peer::SatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_PA_ProcessSatOsPaMsg() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PA_ProcessSatOsPaMsg(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::SatOsPaMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* PA_ProcessSatOsPaMsg(
+      ::grpc::CallbackServerContext* /*context*/, const ::antaris_api_peer_to_peer::SatOsPaMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
   class WithCallbackMethod_PA_ProcessRemoteAcPwrStatusNtf : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_PA_ProcessRemoteAcPwrStatusNtf() {
-      ::grpc::Service::MarkMethodCallback(19,
+      ::grpc::Service::MarkMethodCallback(20,
           new ::grpc::internal::CallbackUnaryHandler< ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus, ::antaris_api_peer_to_peer::AntarisReturnType>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) { return this->PA_ProcessRemoteAcPwrStatusNtf(context, request, response); }));}
     void SetMessageAllocatorFor_PA_ProcessRemoteAcPwrStatusNtf(
         ::grpc::MessageAllocator< ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus, ::antaris_api_peer_to_peer::AntarisReturnType>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(19);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(20);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus, ::antaris_api_peer_to_peer::AntarisReturnType>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -1532,7 +1603,7 @@ class AntarisapiApplicationCallback final {
     virtual ::grpc::ServerUnaryReactor* PA_ProcessRemoteAcPwrStatusNtf(
       ::grpc::CallbackServerContext* /*context*/, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_PA_StartSequence<WithCallbackMethod_PA_ShutdownApp<WithCallbackMethod_PA_ProcessHealthCheck<WithCallbackMethod_PA_ProcessResponseRegister<WithCallbackMethod_PA_ProcessResponseGetCurrentLocation<WithCallbackMethod_PA_ProcessResponseStageFileDownload<WithCallbackMethod_PA_ProcessResponsePayloadPowerControl<WithCallbackMethod_PA_ProcessReqPayloadMetrics<WithCallbackMethod_PA_ProcessRespGnssEphStopDataReq<WithCallbackMethod_PA_ProcessRespGnssEphStartDataReq<WithCallbackMethod_PA_ProcessGnssEphData<WithCallbackMethod_PA_ProcessRespGetEpsVoltageStopReq<WithCallbackMethod_PA_ProcessRespGetEpsVoltageStartReq<WithCallbackMethod_PA_ProcessGetEpsVoltage<WithCallbackMethod_PA_ProcessRespStartSesThermMgmntReq<WithCallbackMethod_PA_ProcessRespStopSesThermMgmntReq<WithCallbackMethod_PA_ProcessRespSesTempReq<WithCallbackMethod_PA_ProcessSesThrmlNtf<WithCallbackMethod_PA_ProcessRespPaSatOsMsg<WithCallbackMethod_PA_ProcessRemoteAcPwrStatusNtf<Service > > > > > > > > > > > > > > > > > > > > CallbackService;
+  typedef WithCallbackMethod_PA_StartSequence<WithCallbackMethod_PA_ShutdownApp<WithCallbackMethod_PA_ProcessHealthCheck<WithCallbackMethod_PA_ProcessResponseRegister<WithCallbackMethod_PA_ProcessResponseGetCurrentLocation<WithCallbackMethod_PA_ProcessResponseStageFileDownload<WithCallbackMethod_PA_ProcessResponsePayloadPowerControl<WithCallbackMethod_PA_ProcessReqPayloadMetrics<WithCallbackMethod_PA_ProcessRespGnssEphStopDataReq<WithCallbackMethod_PA_ProcessRespGnssEphStartDataReq<WithCallbackMethod_PA_ProcessGnssEphData<WithCallbackMethod_PA_ProcessRespGetEpsVoltageStopReq<WithCallbackMethod_PA_ProcessRespGetEpsVoltageStartReq<WithCallbackMethod_PA_ProcessGetEpsVoltage<WithCallbackMethod_PA_ProcessRespStartSesThermMgmntReq<WithCallbackMethod_PA_ProcessRespStopSesThermMgmntReq<WithCallbackMethod_PA_ProcessRespSesTempReq<WithCallbackMethod_PA_ProcessSesThrmlNtf<WithCallbackMethod_PA_ProcessRespPaSatOsMsg<WithCallbackMethod_PA_ProcessSatOsPaMsg<WithCallbackMethod_PA_ProcessRemoteAcPwrStatusNtf<Service > > > > > > > > > > > > > > > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_PA_StartSequence : public BaseClass {
@@ -1858,12 +1929,29 @@ class AntarisapiApplicationCallback final {
     }
   };
   template <class BaseClass>
+  class WithGenericMethod_PA_ProcessSatOsPaMsg : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_PA_ProcessSatOsPaMsg() {
+      ::grpc::Service::MarkMethodGeneric(19);
+    }
+    ~WithGenericMethod_PA_ProcessSatOsPaMsg() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PA_ProcessSatOsPaMsg(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::SatOsPaMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
   class WithGenericMethod_PA_ProcessRemoteAcPwrStatusNtf : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_PA_ProcessRemoteAcPwrStatusNtf() {
-      ::grpc::Service::MarkMethodGeneric(19);
+      ::grpc::Service::MarkMethodGeneric(20);
     }
     ~WithGenericMethod_PA_ProcessRemoteAcPwrStatusNtf() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2255,12 +2343,32 @@ class AntarisapiApplicationCallback final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_PA_ProcessSatOsPaMsg : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_PA_ProcessSatOsPaMsg() {
+      ::grpc::Service::MarkMethodRaw(19);
+    }
+    ~WithRawMethod_PA_ProcessSatOsPaMsg() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PA_ProcessSatOsPaMsg(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::SatOsPaMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestPA_ProcessSatOsPaMsg(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(19, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawMethod_PA_ProcessRemoteAcPwrStatusNtf : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_PA_ProcessRemoteAcPwrStatusNtf() {
-      ::grpc::Service::MarkMethodRaw(19);
+      ::grpc::Service::MarkMethodRaw(20);
     }
     ~WithRawMethod_PA_ProcessRemoteAcPwrStatusNtf() override {
       BaseClassMustBeDerivedFromService(this);
@@ -2271,7 +2379,7 @@ class AntarisapiApplicationCallback final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestPA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(19, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(20, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2693,12 +2801,34 @@ class AntarisapiApplicationCallback final {
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
+  class WithRawCallbackMethod_PA_ProcessSatOsPaMsg : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_PA_ProcessSatOsPaMsg() {
+      ::grpc::Service::MarkMethodRawCallback(19,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->PA_ProcessSatOsPaMsg(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_PA_ProcessSatOsPaMsg() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PA_ProcessSatOsPaMsg(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::SatOsPaMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* PA_ProcessSatOsPaMsg(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
   class WithRawCallbackMethod_PA_ProcessRemoteAcPwrStatusNtf : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_PA_ProcessRemoteAcPwrStatusNtf() {
-      ::grpc::Service::MarkMethodRawCallback(19,
+      ::grpc::Service::MarkMethodRawCallback(20,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->PA_ProcessRemoteAcPwrStatusNtf(context, request, response); }));
@@ -3228,12 +3358,39 @@ class AntarisapiApplicationCallback final {
     virtual ::grpc::Status StreamedPA_ProcessRespPaSatOsMsg(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::antaris_api_peer_to_peer::RespPaSatOsMsg,::antaris_api_peer_to_peer::AntarisReturnType>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
+  class WithStreamedUnaryMethod_PA_ProcessSatOsPaMsg : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_PA_ProcessSatOsPaMsg() {
+      ::grpc::Service::MarkMethodStreamed(19,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::antaris_api_peer_to_peer::SatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::antaris_api_peer_to_peer::SatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType>* streamer) {
+                       return this->StreamedPA_ProcessSatOsPaMsg(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_PA_ProcessSatOsPaMsg() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status PA_ProcessSatOsPaMsg(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::SatOsPaMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedPA_ProcessSatOsPaMsg(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::antaris_api_peer_to_peer::SatOsPaMsg,::antaris_api_peer_to_peer::AntarisReturnType>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
   class WithStreamedUnaryMethod_PA_ProcessRemoteAcPwrStatusNtf : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_PA_ProcessRemoteAcPwrStatusNtf() {
-      ::grpc::Service::MarkMethodStreamed(19,
+      ::grpc::Service::MarkMethodStreamed(20,
         new ::grpc::internal::StreamedUnaryHandler<
           ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus, ::antaris_api_peer_to_peer::AntarisReturnType>(
             [this](::grpc::ServerContext* context,
@@ -3254,9 +3411,9 @@ class AntarisapiApplicationCallback final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedPA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus,::antaris_api_peer_to_peer::AntarisReturnType>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_PA_StartSequence<WithStreamedUnaryMethod_PA_ShutdownApp<WithStreamedUnaryMethod_PA_ProcessHealthCheck<WithStreamedUnaryMethod_PA_ProcessResponseRegister<WithStreamedUnaryMethod_PA_ProcessResponseGetCurrentLocation<WithStreamedUnaryMethod_PA_ProcessResponseStageFileDownload<WithStreamedUnaryMethod_PA_ProcessResponsePayloadPowerControl<WithStreamedUnaryMethod_PA_ProcessReqPayloadMetrics<WithStreamedUnaryMethod_PA_ProcessRespGnssEphStopDataReq<WithStreamedUnaryMethod_PA_ProcessRespGnssEphStartDataReq<WithStreamedUnaryMethod_PA_ProcessGnssEphData<WithStreamedUnaryMethod_PA_ProcessRespGetEpsVoltageStopReq<WithStreamedUnaryMethod_PA_ProcessRespGetEpsVoltageStartReq<WithStreamedUnaryMethod_PA_ProcessGetEpsVoltage<WithStreamedUnaryMethod_PA_ProcessRespStartSesThermMgmntReq<WithStreamedUnaryMethod_PA_ProcessRespStopSesThermMgmntReq<WithStreamedUnaryMethod_PA_ProcessRespSesTempReq<WithStreamedUnaryMethod_PA_ProcessSesThrmlNtf<WithStreamedUnaryMethod_PA_ProcessRespPaSatOsMsg<WithStreamedUnaryMethod_PA_ProcessRemoteAcPwrStatusNtf<Service > > > > > > > > > > > > > > > > > > > > StreamedUnaryService;
+  typedef WithStreamedUnaryMethod_PA_StartSequence<WithStreamedUnaryMethod_PA_ShutdownApp<WithStreamedUnaryMethod_PA_ProcessHealthCheck<WithStreamedUnaryMethod_PA_ProcessResponseRegister<WithStreamedUnaryMethod_PA_ProcessResponseGetCurrentLocation<WithStreamedUnaryMethod_PA_ProcessResponseStageFileDownload<WithStreamedUnaryMethod_PA_ProcessResponsePayloadPowerControl<WithStreamedUnaryMethod_PA_ProcessReqPayloadMetrics<WithStreamedUnaryMethod_PA_ProcessRespGnssEphStopDataReq<WithStreamedUnaryMethod_PA_ProcessRespGnssEphStartDataReq<WithStreamedUnaryMethod_PA_ProcessGnssEphData<WithStreamedUnaryMethod_PA_ProcessRespGetEpsVoltageStopReq<WithStreamedUnaryMethod_PA_ProcessRespGetEpsVoltageStartReq<WithStreamedUnaryMethod_PA_ProcessGetEpsVoltage<WithStreamedUnaryMethod_PA_ProcessRespStartSesThermMgmntReq<WithStreamedUnaryMethod_PA_ProcessRespStopSesThermMgmntReq<WithStreamedUnaryMethod_PA_ProcessRespSesTempReq<WithStreamedUnaryMethod_PA_ProcessSesThrmlNtf<WithStreamedUnaryMethod_PA_ProcessRespPaSatOsMsg<WithStreamedUnaryMethod_PA_ProcessSatOsPaMsg<WithStreamedUnaryMethod_PA_ProcessRemoteAcPwrStatusNtf<Service > > > > > > > > > > > > > > > > > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_PA_StartSequence<WithStreamedUnaryMethod_PA_ShutdownApp<WithStreamedUnaryMethod_PA_ProcessHealthCheck<WithStreamedUnaryMethod_PA_ProcessResponseRegister<WithStreamedUnaryMethod_PA_ProcessResponseGetCurrentLocation<WithStreamedUnaryMethod_PA_ProcessResponseStageFileDownload<WithStreamedUnaryMethod_PA_ProcessResponsePayloadPowerControl<WithStreamedUnaryMethod_PA_ProcessReqPayloadMetrics<WithStreamedUnaryMethod_PA_ProcessRespGnssEphStopDataReq<WithStreamedUnaryMethod_PA_ProcessRespGnssEphStartDataReq<WithStreamedUnaryMethod_PA_ProcessGnssEphData<WithStreamedUnaryMethod_PA_ProcessRespGetEpsVoltageStopReq<WithStreamedUnaryMethod_PA_ProcessRespGetEpsVoltageStartReq<WithStreamedUnaryMethod_PA_ProcessGetEpsVoltage<WithStreamedUnaryMethod_PA_ProcessRespStartSesThermMgmntReq<WithStreamedUnaryMethod_PA_ProcessRespStopSesThermMgmntReq<WithStreamedUnaryMethod_PA_ProcessRespSesTempReq<WithStreamedUnaryMethod_PA_ProcessSesThrmlNtf<WithStreamedUnaryMethod_PA_ProcessRespPaSatOsMsg<WithStreamedUnaryMethod_PA_ProcessRemoteAcPwrStatusNtf<Service > > > > > > > > > > > > > > > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_PA_StartSequence<WithStreamedUnaryMethod_PA_ShutdownApp<WithStreamedUnaryMethod_PA_ProcessHealthCheck<WithStreamedUnaryMethod_PA_ProcessResponseRegister<WithStreamedUnaryMethod_PA_ProcessResponseGetCurrentLocation<WithStreamedUnaryMethod_PA_ProcessResponseStageFileDownload<WithStreamedUnaryMethod_PA_ProcessResponsePayloadPowerControl<WithStreamedUnaryMethod_PA_ProcessReqPayloadMetrics<WithStreamedUnaryMethod_PA_ProcessRespGnssEphStopDataReq<WithStreamedUnaryMethod_PA_ProcessRespGnssEphStartDataReq<WithStreamedUnaryMethod_PA_ProcessGnssEphData<WithStreamedUnaryMethod_PA_ProcessRespGetEpsVoltageStopReq<WithStreamedUnaryMethod_PA_ProcessRespGetEpsVoltageStartReq<WithStreamedUnaryMethod_PA_ProcessGetEpsVoltage<WithStreamedUnaryMethod_PA_ProcessRespStartSesThermMgmntReq<WithStreamedUnaryMethod_PA_ProcessRespStopSesThermMgmntReq<WithStreamedUnaryMethod_PA_ProcessRespSesTempReq<WithStreamedUnaryMethod_PA_ProcessSesThrmlNtf<WithStreamedUnaryMethod_PA_ProcessRespPaSatOsMsg<WithStreamedUnaryMethod_PA_ProcessSatOsPaMsg<WithStreamedUnaryMethod_PA_ProcessRemoteAcPwrStatusNtf<Service > > > > > > > > > > > > > > > > > > > > > StreamedService;
 };
 
 class AntarisapiPayloadController final {
@@ -3379,6 +3536,13 @@ class AntarisapiPayloadController final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPC_pa_satos_message(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PaSatOsMsg& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPC_pa_satos_messageRaw(context, request, cq));
     }
+    virtual ::grpc::Status PC_satos_pa_message_resp(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> AsyncPC_satos_pa_message_resp(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(AsyncPC_satos_pa_message_respRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPC_satos_pa_message_resp(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPC_satos_pa_message_respRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
@@ -3414,6 +3578,8 @@ class AntarisapiPayloadController final {
       virtual void PC_ses_temp_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesTempReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void PC_pa_satos_message(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) = 0;
       virtual void PC_pa_satos_message(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void PC_satos_pa_message_resp(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void PC_satos_pa_message_resp(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -3451,6 +3617,8 @@ class AntarisapiPayloadController final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPC_ses_temp_reqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesTempReq& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPC_pa_satos_messageRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PaSatOsMsg& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPC_pa_satos_messageRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PaSatOsMsg& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPC_satos_pa_message_respRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPC_satos_pa_message_respRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -3567,6 +3735,13 @@ class AntarisapiPayloadController final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPC_pa_satos_message(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PaSatOsMsg& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPC_pa_satos_messageRaw(context, request, cq));
     }
+    ::grpc::Status PC_satos_pa_message_resp(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> AsyncPC_satos_pa_message_resp(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(AsyncPC_satos_pa_message_respRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>> PrepareAsyncPC_satos_pa_message_resp(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>>(PrepareAsyncPC_satos_pa_message_respRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
@@ -3602,6 +3777,8 @@ class AntarisapiPayloadController final {
       void PC_ses_temp_req(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesTempReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
       void PC_pa_satos_message(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) override;
       void PC_pa_satos_message(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void PC_satos_pa_message_resp(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)>) override;
+      void PC_satos_pa_message_resp(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -3645,6 +3822,8 @@ class AntarisapiPayloadController final {
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPC_ses_temp_reqRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SesTempReq& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPC_pa_satos_messageRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PaSatOsMsg& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPC_pa_satos_messageRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::PaSatOsMsg& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AsyncPC_satos_pa_message_respRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* PrepareAsyncPC_satos_pa_message_respRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_PC_register_;
     const ::grpc::internal::RpcMethod rpcmethod_PC_get_current_location_;
     const ::grpc::internal::RpcMethod rpcmethod_PC_stage_file_download_;
@@ -3661,6 +3840,7 @@ class AntarisapiPayloadController final {
     const ::grpc::internal::RpcMethod rpcmethod_PC_stop_ses_therm_mgmnt_req_;
     const ::grpc::internal::RpcMethod rpcmethod_PC_ses_temp_req_;
     const ::grpc::internal::RpcMethod rpcmethod_PC_pa_satos_message_;
+    const ::grpc::internal::RpcMethod rpcmethod_PC_satos_pa_message_resp_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -3684,6 +3864,7 @@ class AntarisapiPayloadController final {
     virtual ::grpc::Status PC_stop_ses_therm_mgmnt_req(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::StopSesThermMgmntReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     virtual ::grpc::Status PC_ses_temp_req(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SesTempReq* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     virtual ::grpc::Status PC_pa_satos_message(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::PaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+    virtual ::grpc::Status PC_satos_pa_message_resp(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_PC_register : public BaseClass {
@@ -4005,7 +4186,27 @@ class AntarisapiPayloadController final {
       ::grpc::Service::RequestAsyncUnary(15, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_PC_register<WithAsyncMethod_PC_get_current_location<WithAsyncMethod_PC_stage_file_download<WithAsyncMethod_PC_sequence_done<WithAsyncMethod_PC_payload_power_control<WithAsyncMethod_PC_response_health_check<WithAsyncMethod_PC_response_shutdown<WithAsyncMethod_PC_response_payload_metrics<WithAsyncMethod_PC_gnss_eph_stop_req<WithAsyncMethod_PC_gnss_eph_start_req<WithAsyncMethod_PC_get_eps_voltage_stop_req<WithAsyncMethod_PC_get_eps_voltage_start_req<WithAsyncMethod_PC_start_ses_therm_mgmnt_req<WithAsyncMethod_PC_stop_ses_therm_mgmnt_req<WithAsyncMethod_PC_ses_temp_req<WithAsyncMethod_PC_pa_satos_message<Service > > > > > > > > > > > > > > > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_PC_satos_pa_message_resp : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_PC_satos_pa_message_resp() {
+      ::grpc::Service::MarkMethodAsync(16);
+    }
+    ~WithAsyncMethod_PC_satos_pa_message_resp() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PC_satos_pa_message_resp(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestPC_satos_pa_message_resp(::grpc::ServerContext* context, ::antaris_api_peer_to_peer::RespSatOsPaMsg* request, ::grpc::ServerAsyncResponseWriter< ::antaris_api_peer_to_peer::AntarisReturnType>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(16, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_PC_register<WithAsyncMethod_PC_get_current_location<WithAsyncMethod_PC_stage_file_download<WithAsyncMethod_PC_sequence_done<WithAsyncMethod_PC_payload_power_control<WithAsyncMethod_PC_response_health_check<WithAsyncMethod_PC_response_shutdown<WithAsyncMethod_PC_response_payload_metrics<WithAsyncMethod_PC_gnss_eph_stop_req<WithAsyncMethod_PC_gnss_eph_start_req<WithAsyncMethod_PC_get_eps_voltage_stop_req<WithAsyncMethod_PC_get_eps_voltage_start_req<WithAsyncMethod_PC_start_ses_therm_mgmnt_req<WithAsyncMethod_PC_stop_ses_therm_mgmnt_req<WithAsyncMethod_PC_ses_temp_req<WithAsyncMethod_PC_pa_satos_message<WithAsyncMethod_PC_satos_pa_message_resp<Service > > > > > > > > > > > > > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_PC_register : public BaseClass {
    private:
@@ -4438,7 +4639,34 @@ class AntarisapiPayloadController final {
     virtual ::grpc::ServerUnaryReactor* PC_pa_satos_message(
       ::grpc::CallbackServerContext* /*context*/, const ::antaris_api_peer_to_peer::PaSatOsMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_PC_register<WithCallbackMethod_PC_get_current_location<WithCallbackMethod_PC_stage_file_download<WithCallbackMethod_PC_sequence_done<WithCallbackMethod_PC_payload_power_control<WithCallbackMethod_PC_response_health_check<WithCallbackMethod_PC_response_shutdown<WithCallbackMethod_PC_response_payload_metrics<WithCallbackMethod_PC_gnss_eph_stop_req<WithCallbackMethod_PC_gnss_eph_start_req<WithCallbackMethod_PC_get_eps_voltage_stop_req<WithCallbackMethod_PC_get_eps_voltage_start_req<WithCallbackMethod_PC_start_ses_therm_mgmnt_req<WithCallbackMethod_PC_stop_ses_therm_mgmnt_req<WithCallbackMethod_PC_ses_temp_req<WithCallbackMethod_PC_pa_satos_message<Service > > > > > > > > > > > > > > > > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_PC_satos_pa_message_resp : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_PC_satos_pa_message_resp() {
+      ::grpc::Service::MarkMethodCallback(16,
+          new ::grpc::internal::CallbackUnaryHandler< ::antaris_api_peer_to_peer::RespSatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) { return this->PC_satos_pa_message_resp(context, request, response); }));}
+    void SetMessageAllocatorFor_PC_satos_pa_message_resp(
+        ::grpc::MessageAllocator< ::antaris_api_peer_to_peer::RespSatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(16);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::antaris_api_peer_to_peer::RespSatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_PC_satos_pa_message_resp() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PC_satos_pa_message_resp(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* PC_satos_pa_message_resp(
+      ::grpc::CallbackServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_PC_register<WithCallbackMethod_PC_get_current_location<WithCallbackMethod_PC_stage_file_download<WithCallbackMethod_PC_sequence_done<WithCallbackMethod_PC_payload_power_control<WithCallbackMethod_PC_response_health_check<WithCallbackMethod_PC_response_shutdown<WithCallbackMethod_PC_response_payload_metrics<WithCallbackMethod_PC_gnss_eph_stop_req<WithCallbackMethod_PC_gnss_eph_start_req<WithCallbackMethod_PC_get_eps_voltage_stop_req<WithCallbackMethod_PC_get_eps_voltage_start_req<WithCallbackMethod_PC_start_ses_therm_mgmnt_req<WithCallbackMethod_PC_stop_ses_therm_mgmnt_req<WithCallbackMethod_PC_ses_temp_req<WithCallbackMethod_PC_pa_satos_message<WithCallbackMethod_PC_satos_pa_message_resp<Service > > > > > > > > > > > > > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_PC_register : public BaseClass {
@@ -4708,6 +4936,23 @@ class AntarisapiPayloadController final {
     }
     // disable synchronous version of this method
     ::grpc::Status PC_pa_satos_message(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::PaSatOsMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_PC_satos_pa_message_resp : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_PC_satos_pa_message_resp() {
+      ::grpc::Service::MarkMethodGeneric(16);
+    }
+    ~WithGenericMethod_PC_satos_pa_message_resp() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PC_satos_pa_message_resp(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -5030,6 +5275,26 @@ class AntarisapiPayloadController final {
     }
     void RequestPC_pa_satos_message(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(15, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_PC_satos_pa_message_resp : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_PC_satos_pa_message_resp() {
+      ::grpc::Service::MarkMethodRaw(16);
+    }
+    ~WithRawMethod_PC_satos_pa_message_resp() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PC_satos_pa_message_resp(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestPC_satos_pa_message_resp(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(16, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -5382,6 +5647,28 @@ class AntarisapiPayloadController final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* PC_pa_satos_message(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_PC_satos_pa_message_resp : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_PC_satos_pa_message_resp() {
+      ::grpc::Service::MarkMethodRawCallback(16,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->PC_satos_pa_message_resp(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_PC_satos_pa_message_resp() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status PC_satos_pa_message_resp(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* PC_satos_pa_message_resp(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -5816,9 +6103,36 @@ class AntarisapiPayloadController final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedPC_pa_satos_message(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::antaris_api_peer_to_peer::PaSatOsMsg,::antaris_api_peer_to_peer::AntarisReturnType>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_PC_register<WithStreamedUnaryMethod_PC_get_current_location<WithStreamedUnaryMethod_PC_stage_file_download<WithStreamedUnaryMethod_PC_sequence_done<WithStreamedUnaryMethod_PC_payload_power_control<WithStreamedUnaryMethod_PC_response_health_check<WithStreamedUnaryMethod_PC_response_shutdown<WithStreamedUnaryMethod_PC_response_payload_metrics<WithStreamedUnaryMethod_PC_gnss_eph_stop_req<WithStreamedUnaryMethod_PC_gnss_eph_start_req<WithStreamedUnaryMethod_PC_get_eps_voltage_stop_req<WithStreamedUnaryMethod_PC_get_eps_voltage_start_req<WithStreamedUnaryMethod_PC_start_ses_therm_mgmnt_req<WithStreamedUnaryMethod_PC_stop_ses_therm_mgmnt_req<WithStreamedUnaryMethod_PC_ses_temp_req<WithStreamedUnaryMethod_PC_pa_satos_message<Service > > > > > > > > > > > > > > > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_PC_satos_pa_message_resp : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_PC_satos_pa_message_resp() {
+      ::grpc::Service::MarkMethodStreamed(16,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::antaris_api_peer_to_peer::RespSatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::antaris_api_peer_to_peer::RespSatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType>* streamer) {
+                       return this->StreamedPC_satos_pa_message_resp(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_PC_satos_pa_message_resp() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status PC_satos_pa_message_resp(::grpc::ServerContext* /*context*/, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* /*request*/, ::antaris_api_peer_to_peer::AntarisReturnType* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedPC_satos_pa_message_resp(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::antaris_api_peer_to_peer::RespSatOsPaMsg,::antaris_api_peer_to_peer::AntarisReturnType>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_PC_register<WithStreamedUnaryMethod_PC_get_current_location<WithStreamedUnaryMethod_PC_stage_file_download<WithStreamedUnaryMethod_PC_sequence_done<WithStreamedUnaryMethod_PC_payload_power_control<WithStreamedUnaryMethod_PC_response_health_check<WithStreamedUnaryMethod_PC_response_shutdown<WithStreamedUnaryMethod_PC_response_payload_metrics<WithStreamedUnaryMethod_PC_gnss_eph_stop_req<WithStreamedUnaryMethod_PC_gnss_eph_start_req<WithStreamedUnaryMethod_PC_get_eps_voltage_stop_req<WithStreamedUnaryMethod_PC_get_eps_voltage_start_req<WithStreamedUnaryMethod_PC_start_ses_therm_mgmnt_req<WithStreamedUnaryMethod_PC_stop_ses_therm_mgmnt_req<WithStreamedUnaryMethod_PC_ses_temp_req<WithStreamedUnaryMethod_PC_pa_satos_message<WithStreamedUnaryMethod_PC_satos_pa_message_resp<Service > > > > > > > > > > > > > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_PC_register<WithStreamedUnaryMethod_PC_get_current_location<WithStreamedUnaryMethod_PC_stage_file_download<WithStreamedUnaryMethod_PC_sequence_done<WithStreamedUnaryMethod_PC_payload_power_control<WithStreamedUnaryMethod_PC_response_health_check<WithStreamedUnaryMethod_PC_response_shutdown<WithStreamedUnaryMethod_PC_response_payload_metrics<WithStreamedUnaryMethod_PC_gnss_eph_stop_req<WithStreamedUnaryMethod_PC_gnss_eph_start_req<WithStreamedUnaryMethod_PC_get_eps_voltage_stop_req<WithStreamedUnaryMethod_PC_get_eps_voltage_start_req<WithStreamedUnaryMethod_PC_start_ses_therm_mgmnt_req<WithStreamedUnaryMethod_PC_stop_ses_therm_mgmnt_req<WithStreamedUnaryMethod_PC_ses_temp_req<WithStreamedUnaryMethod_PC_pa_satos_message<Service > > > > > > > > > > > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_PC_register<WithStreamedUnaryMethod_PC_get_current_location<WithStreamedUnaryMethod_PC_stage_file_download<WithStreamedUnaryMethod_PC_sequence_done<WithStreamedUnaryMethod_PC_payload_power_control<WithStreamedUnaryMethod_PC_response_health_check<WithStreamedUnaryMethod_PC_response_shutdown<WithStreamedUnaryMethod_PC_response_payload_metrics<WithStreamedUnaryMethod_PC_gnss_eph_stop_req<WithStreamedUnaryMethod_PC_gnss_eph_start_req<WithStreamedUnaryMethod_PC_get_eps_voltage_stop_req<WithStreamedUnaryMethod_PC_get_eps_voltage_start_req<WithStreamedUnaryMethod_PC_start_ses_therm_mgmnt_req<WithStreamedUnaryMethod_PC_stop_ses_therm_mgmnt_req<WithStreamedUnaryMethod_PC_ses_temp_req<WithStreamedUnaryMethod_PC_pa_satos_message<WithStreamedUnaryMethod_PC_satos_pa_message_resp<Service > > > > > > > > > > > > > > > > > StreamedService;
 };
 
 }  // namespace antaris_api_peer_to_peer

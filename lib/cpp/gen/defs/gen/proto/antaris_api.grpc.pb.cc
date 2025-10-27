@@ -41,6 +41,7 @@ static const char* AntarisapiApplicationCallback_method_names[] = {
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespSesTempReq",
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessSesThrmlNtf",
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRespPaSatOsMsg",
+  "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessSatOsPaMsg",
   "/antaris_api_peer_to_peer.AntarisapiApplicationCallback/PA_ProcessRemoteAcPwrStatusNtf",
 };
 
@@ -70,7 +71,8 @@ AntarisapiApplicationCallback::Stub::Stub(const std::shared_ptr< ::grpc::Channel
   , rpcmethod_PA_ProcessRespSesTempReq_(AntarisapiApplicationCallback_method_names[16], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PA_ProcessSesThrmlNtf_(AntarisapiApplicationCallback_method_names[17], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PA_ProcessRespPaSatOsMsg_(AntarisapiApplicationCallback_method_names[18], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_PA_ProcessRemoteAcPwrStatusNtf_(AntarisapiApplicationCallback_method_names[19], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PA_ProcessSatOsPaMsg_(AntarisapiApplicationCallback_method_names[19], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PA_ProcessRemoteAcPwrStatusNtf_(AntarisapiApplicationCallback_method_names[20], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status AntarisapiApplicationCallback::Stub::PA_StartSequence(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::StartSequenceParams& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
@@ -510,6 +512,29 @@ void AntarisapiApplicationCallback::Stub::async::PA_ProcessRespPaSatOsMsg(::grpc
   return result;
 }
 
+::grpc::Status AntarisapiApplicationCallback::Stub::PA_ProcessSatOsPaMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::SatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PA_ProcessSatOsPaMsg_, context, request, response);
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessSatOsPaMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::SatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessSatOsPaMsg_, context, request, response, std::move(f));
+}
+
+void AntarisapiApplicationCallback::Stub::async::PA_ProcessSatOsPaMsg(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PA_ProcessSatOsPaMsg_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::PrepareAsyncPA_ProcessSatOsPaMsgRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::SatOsPaMsg, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PA_ProcessSatOsPaMsg_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiApplicationCallback::Stub::AsyncPA_ProcessSatOsPaMsgRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPA_ProcessSatOsPaMsgRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 ::grpc::Status AntarisapiApplicationCallback::Stub::PA_ProcessRemoteAcPwrStatusNtf(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
   return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PA_ProcessRemoteAcPwrStatusNtf_, context, request, response);
 }
@@ -727,6 +752,16 @@ AntarisapiApplicationCallback::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       AntarisapiApplicationCallback_method_names[19],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiApplicationCallback::Service, ::antaris_api_peer_to_peer::SatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiApplicationCallback::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::SatOsPaMsg* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PA_ProcessSatOsPaMsg(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiApplicationCallback_method_names[20],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< AntarisapiApplicationCallback::Service, ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](AntarisapiApplicationCallback::Service* service,
              ::grpc::ServerContext* ctx,
@@ -872,6 +907,13 @@ AntarisapiApplicationCallback::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
+::grpc::Status AntarisapiApplicationCallback::Service::PA_ProcessSatOsPaMsg(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
 ::grpc::Status AntarisapiApplicationCallback::Service::PA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
   (void) context;
   (void) request;
@@ -897,6 +939,7 @@ static const char* AntarisapiPayloadController_method_names[] = {
   "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_stop_ses_therm_mgmnt_req",
   "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_ses_temp_req",
   "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_pa_satos_message",
+  "/antaris_api_peer_to_peer.AntarisapiPayloadController/PC_satos_pa_message_resp",
 };
 
 std::unique_ptr< AntarisapiPayloadController::Stub> AntarisapiPayloadController::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -922,6 +965,7 @@ AntarisapiPayloadController::Stub::Stub(const std::shared_ptr< ::grpc::ChannelIn
   , rpcmethod_PC_stop_ses_therm_mgmnt_req_(AntarisapiPayloadController_method_names[13], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PC_ses_temp_req_(AntarisapiPayloadController_method_names[14], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PC_pa_satos_message_(AntarisapiPayloadController_method_names[15], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_PC_satos_pa_message_resp_(AntarisapiPayloadController_method_names[16], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status AntarisapiPayloadController::Stub::PC_register(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::ReqRegisterParams& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
@@ -1292,6 +1336,29 @@ void AntarisapiPayloadController::Stub::async::PC_pa_satos_message(::grpc::Clien
   return result;
 }
 
+::grpc::Status AntarisapiPayloadController::Stub::PC_satos_pa_message_resp(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg& request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::antaris_api_peer_to_peer::RespSatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PC_satos_pa_message_resp_, context, request, response);
+}
+
+void AntarisapiPayloadController::Stub::async::PC_satos_pa_message_resp(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::antaris_api_peer_to_peer::RespSatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PC_satos_pa_message_resp_, context, request, response, std::move(f));
+}
+
+void AntarisapiPayloadController::Stub::async::PC_satos_pa_message_resp(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PC_satos_pa_message_resp_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiPayloadController::Stub::PrepareAsyncPC_satos_pa_message_respRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::antaris_api_peer_to_peer::AntarisReturnType, ::antaris_api_peer_to_peer::RespSatOsPaMsg, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PC_satos_pa_message_resp_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::antaris_api_peer_to_peer::AntarisReturnType>* AntarisapiPayloadController::Stub::AsyncPC_satos_pa_message_respRaw(::grpc::ClientContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncPC_satos_pa_message_respRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 AntarisapiPayloadController::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       AntarisapiPayloadController_method_names[0],
@@ -1453,6 +1520,16 @@ AntarisapiPayloadController::Service::Service() {
              ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
                return service->PC_pa_satos_message(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      AntarisapiPayloadController_method_names[16],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< AntarisapiPayloadController::Service, ::antaris_api_peer_to_peer::RespSatOsPaMsg, ::antaris_api_peer_to_peer::AntarisReturnType, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](AntarisapiPayloadController::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::antaris_api_peer_to_peer::RespSatOsPaMsg* req,
+             ::antaris_api_peer_to_peer::AntarisReturnType* resp) {
+               return service->PC_satos_pa_message_resp(ctx, req, resp);
+             }, this)));
 }
 
 AntarisapiPayloadController::Service::~Service() {
@@ -1564,6 +1641,13 @@ AntarisapiPayloadController::Service::~Service() {
 }
 
 ::grpc::Status AntarisapiPayloadController::Service::PC_pa_satos_message(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::PaSatOsMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status AntarisapiPayloadController::Service::PC_satos_pa_message_resp(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespSatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response) {
   (void) context;
   (void) request;
   (void) response;

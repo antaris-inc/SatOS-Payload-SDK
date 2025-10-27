@@ -285,6 +285,33 @@ class PCServiceClient {
         return tmp_return;
   }
 
+    AntarisReturnCode Invoke_PC_satos_pa_message_resp(RespSatOsPaMsg *req_params) {
+        antaris_api_peer_to_peer::RespSatOsPaMsg pc_req;
+        antaris_api_peer_to_peer::AntarisReturnType pc_response;
+        Status pc_status;
+        // Context for the client. It could be used to convey extra information to
+        // the server and/or tweak certain RPC behaviors.
+        ClientContext context;
+
+        app_to_peer_RespSatOsPaMsg(req_params,&pc_req);
+        // Please note key needs to be lower case. This was not mentioned in the documentation, 
+        // but there seems to be such constraint.
+        context.AddMetadata(COOKIE_STR, this->cookie_str);
+
+        pc_status = stub_->PC_satos_pa_message_resp(&context, pc_req, &pc_response);
+
+        AntarisReturnCode tmp_return;
+
+        // Act upon its status.
+        if (pc_status.ok()) {
+             tmp_return = (AntarisReturnCode)(pc_response.return_code());
+        } else {
+            tmp_return = An_GENERIC_FAILURE;
+        }
+
+        return tmp_return;
+  }
+
   AntarisReturnCode Invoke_PC_gnss_eph_stop_req(ReqGnssEphStopDataReq *req_params) {
     antaris_api_peer_to_peer::ReqGnssEphStopDataReq pc_req;
     antaris_api_peer_to_peer::AntarisReturnType pc_response;
@@ -1208,6 +1235,25 @@ AntarisReturnCode api_pa_pc_response_shutdown(AntarisChannel channel, RespShutdo
     }
 
     return channel_ctx->pc_service_handle->Invoke_PC_response_shutdown(response_shutdown_params);
+}
+
+AntarisReturnCode api_pa_pc_satos_pa_message_resp(AntarisChannel channel, RespSatOsPaMsg *resp_satos_pa_msg)
+{
+    AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
+    AntarisReturnCode ret = An_SUCCESS;
+
+    printf("api_pa_pc_response_satos_pa_msg\n");
+
+    if (!channel_ctx || !channel_ctx->pc_service_handle || !resp_satos_pa_msg) {
+        ret = An_GENERIC_FAILURE;
+        return ret;
+    }
+
+    if (api_debug) {
+        displayRespSatOsPaMsg(resp_satos_pa_msg);
+    }
+
+    return channel_ctx->pc_service_handle->Invoke_PC_satos_pa_message_resp(resp_satos_pa_msg);
 }
 
 AntarisReturnCode api_pa_pc_response_payload_metrics(AntarisChannel channel, PayloadMetricsResponse *response_payload_metrics_params)
