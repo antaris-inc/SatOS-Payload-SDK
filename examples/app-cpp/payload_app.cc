@@ -1104,77 +1104,77 @@ AntarisReturnCode process_req_satos_pa_msg(SatOsPaMsg *satos_pa_message)
 AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
 {
     printf("process_response_gnss_eph_data\n");
-    // if (debug) {
-    //     displayGnssEphData(gnss_eph_data);
-    // }
+    if (debug) {
+        displayGnssEphData(gnss_eph_data);
+    }
 
-    // const char *fields[] = {
-    //     "Time Validity",
-    //     "ECI Position Validity",
-    //     "ECI Velocity Validity",
-    //     "ECEF Position Validity",
-    //     "ECEF Velocity Validity",
-    //     "Angular Rate Validity",
-    //     "Attitude Quaternion Validity",
-    //     "Lat-Lon-Altitude Validity",
-    //     "Nadir Vector Validity",
-    //     "Geodetric Nadir Vector Validity",
-    //     "Beta Angle Validity"
-    // };
+    const char *fields[] = {
+        "Time Validity",
+        "ECI Position Validity",
+        "ECI Velocity Validity",
+        "ECEF Position Validity",
+        "ECEF Velocity Validity",
+        "Angular Rate Validity",
+        "Attitude Quaternion Validity",
+        "Lat-Lon-Altitude Validity",
+        "Nadir Vector Validity",
+        "Geodetric Nadir Vector Validity",
+        "Beta Angle Validity"
+    };
 
-    // if(gnss_eph_data->gps_timeout_flag == 1) {
-    //     printf("gps_fix_time: %d",gnss_eph_data->gps_eph_data.gps_fix_time);
-    //     printf("gps_sys_time: %lld",gnss_eph_data->gps_eph_data.gps_sys_time);
-    //     OBC_time obc = gnss_eph_data->gps_eph_data.obc_time;
-    //     printf("obc_time : %02d:%02d:%02d.%03d Date: %02d/%02d/%d\n",
-    //            obc.hour, obc.minute, obc.millisecond / 1000,
-    //            obc.millisecond % 1000, obc.date, obc.month, obc.year);
-    //     for(int i = 0; i<3; i++){
-    //         printf("gps_position_ecef: %d\n",gnss_eph_data->gps_eph_data.gps_position_ecef[i]);
-    //     }
+    if(gnss_eph_data->gps_timeout_flag == 1) {
+        printf("gps_fix_time: %d",gnss_eph_data->gps_eph_data.gps_fix_time);
+        printf("gps_sys_time: %lld",gnss_eph_data->gps_eph_data.gps_sys_time);
+        OBC_time obc = gnss_eph_data->gps_eph_data.obc_time;
+        printf("obc_time : %02d:%02d:%02d.%03d Date: %02d/%02d/%d\n",
+               obc.hour, obc.minute, obc.millisecond / 1000,
+               obc.millisecond % 1000, obc.date, obc.month, obc.year);
+        for(int i = 0; i<3; i++){
+            printf("gps_position_ecef: %d\n",gnss_eph_data->gps_eph_data.gps_position_ecef[i]);
+        }
 
-    //     for(int i = 0; i<3; i++){
-    //         printf("gps_velocity_ecef: %d\n",gnss_eph_data->gps_eph_data.gps_velocity_ecef[i]);
+        for(int i = 0; i<3; i++){
+            printf("gps_velocity_ecef: %d\n",gnss_eph_data->gps_eph_data.gps_velocity_ecef[i]);
            
-    //     }
-    //     printf("gps_validity_flag_pos_vel: %d\n",gnss_eph_data->gps_eph_data.gps_validity_flag_pos_vel);
-    // } else if(gnss_eph_data->adcs_timeout_flag == 1) {
-    //     printf("ADCS Orbit Propagator/System Time = %f\n",gnss_eph_data->adcs_eph_data.orbit_time);
-    //     printf("ECI Position X (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_x);
-    //     printf("ECI Position Y (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_y);
-    //     printf("ECI Position Z (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_z);
-    //     printf("ECI Velocity X (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_x);
-    //     printf("ECI Velocity Y (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_y);
-    //     printf("ECI Velocity Z (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_z);
-    //     printf("ECEF Position X (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_x);
-    //     printf("ECEF Position Y (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_y);
-    //     printf("ECEF Position Z (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_z);
-    //     printf("ECEF Velocity X (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_x);
-    //     printf("ECEF Velocity Y (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_y);
-    //     printf("ECEF Velocity Z (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_z);
-    //     printf("X axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_x);
-    //     printf("Y axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_y);
-    //     printf("Z axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_z);
-    //     printf("Attitude Quaternion 1 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_1);
-    //     printf("Attitude Quaternion 2 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_2);
-    //     printf("Attitude Quaternion 3 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_3);
-    //     printf("Attitude Quaternion 4 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_4);
-    //     printf("Latitude (deg) = %f\n",gnss_eph_data->adcs_eph_data.latitude);
-    //     printf("Longitude (deg) = %f\n",gnss_eph_data->adcs_eph_data.longitude);
-    //     printf("Altitude (km) %f\n",gnss_eph_data->adcs_eph_data.altitude);
-    //     printf("X Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_x);
-    //     printf("Y Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_y);
-    //     printf("Z Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_z);
-    //     printf("X Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_x);
-    //     printf("Y Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_y);
-    //     printf("Z Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_z);
-    //     printf("Beta Angle (deg) %f\n",gnss_eph_data->adcs_eph_data.beta_angle);
-    //     for (int i = 0; i < sizeof(fields)/sizeof(fields[0]); i++) {
-    //         int bit_value = (gnss_eph_data->adcs_eph_data.validity_flags >> i) & 1;
-    //         printf("%s: %d\n", fields[i], bit_value);
+        }
+        printf("gps_validity_flag_pos_vel: %d\n",gnss_eph_data->gps_eph_data.gps_validity_flag_pos_vel);
+    } else if(gnss_eph_data->adcs_timeout_flag == 1) {
+        printf("ADCS Orbit Propagator/System Time = %f\n",gnss_eph_data->adcs_eph_data.orbit_time);
+        printf("ECI Position X (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_x);
+        printf("ECI Position Y (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_y);
+        printf("ECI Position Z (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_z);
+        printf("ECI Velocity X (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_x);
+        printf("ECI Velocity Y (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_y);
+        printf("ECI Velocity Z (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_z);
+        printf("ECEF Position X (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_x);
+        printf("ECEF Position Y (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_y);
+        printf("ECEF Position Z (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_z);
+        printf("ECEF Velocity X (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_x);
+        printf("ECEF Velocity Y (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_y);
+        printf("ECEF Velocity Z (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_z);
+        printf("X axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_x);
+        printf("Y axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_y);
+        printf("Z axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_z);
+        printf("Attitude Quaternion 1 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_1);
+        printf("Attitude Quaternion 2 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_2);
+        printf("Attitude Quaternion 3 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_3);
+        printf("Attitude Quaternion 4 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_4);
+        printf("Latitude (deg) = %f\n",gnss_eph_data->adcs_eph_data.latitude);
+        printf("Longitude (deg) = %f\n",gnss_eph_data->adcs_eph_data.longitude);
+        printf("Altitude (km) %f\n",gnss_eph_data->adcs_eph_data.altitude);
+        printf("X Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_x);
+        printf("Y Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_y);
+        printf("Z Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_z);
+        printf("X Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_x);
+        printf("Y Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_y);
+        printf("Z Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_z);
+        printf("Beta Angle (deg) %f\n",gnss_eph_data->adcs_eph_data.beta_angle);
+        for (int i = 0; i < sizeof(fields)/sizeof(fields[0]); i++) {
+            int bit_value = (gnss_eph_data->adcs_eph_data.validity_flags >> i) & 1;
+            printf("%s: %d\n", fields[i], bit_value);
 
-    //     }
-    // }
+        }
+    }
     // #<Payload Application Business Logic>
     wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
     return An_SUCCESS;
