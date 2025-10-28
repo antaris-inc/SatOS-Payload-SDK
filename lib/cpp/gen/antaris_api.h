@@ -637,7 +637,7 @@ void peer_to_app_CmdSequenceDoneParams(const void *ptr_src_peer, void *ptr_dst_a
 struct PaSatOsMsg {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     UINT16                                          command_id;                                      ///< @var command id
-    INT8                                            payload_data[1020];                              ///< @var payload data for sending for SatOS, string
+    INT8                                            payload_data[1020];                              ///< @var payload data for sending for SatOS, bytes
 };
 
 void displayPaSatOsMsg(const void *obj);

@@ -26,6 +26,7 @@ gProtoFunctionPtrPrefix = "PA_"
 gProtoServiceKeyword = "service"
 gProtoMessageKeyword = "message"
 gProtoNamepsaceSuffix = "_peer_to_peer"
+gProtoTypeBytes = "bytes"
 
 def service_from_filename(filename):
     service_name = filename.replace("_", "") # eat all under-scores
@@ -36,7 +37,8 @@ def service_from_filename(filename):
 
     return service_name
 
-def remap_type(type, array):
+def remap_type(type, array, is_binary=False):
+    global gProtoTypeBytes
     global gProtoTypeString
     global gProtoTypeInt
     global gProtoTypeLongInt
@@ -50,14 +52,13 @@ def remap_type(type, array):
     possible_double_types = ["DOUBLE"]
     not_an_array = ""
 
-    if type in possible_string_types:
-        # qualifies as a string only if it is also an array
-        if array == "repeated":
-            return gProtoTypeString, not_an_array
+    # handle INT8/UINT8 arrays — string or bytes based on flag
+    if type in possible_string_types and array == "repeated":
+        return (gProtoTypeBytes if is_binary else gProtoTypeString), not_an_array
 
     if type in possible_int_types:
         return gProtoTypeInt, array
-    
+
     if type in possible_long_int_types:
         return gProtoTypeLongInt, array
 
@@ -66,8 +67,8 @@ def remap_type(type, array):
 
     if type in possible_double_types:
         return gprotoTypeDouble, array
-    
-    return type, array # custom?
+
+    return type, array
 
 class InterfaceGen(PARSER_INTF.XMLToCode):
     def __init__(self, xmlFile, schemaFile, headerFile, sourceFile):
@@ -181,10 +182,14 @@ class ProtoField(PARSER_INTF.Field):
         super().__init__(xmlMetaData, xmlElement)
         self.array = ""
 
-        if self.array_xml != None and self.array_xml != "0":
+        # detect if field is an array
+        if self.array_xml is not None and self.array_xml != "0":
             self.array = "repeated"
 
-        self.modified_type, self.modified_array = remap_type(self.type, self.array)
+        # detect if field has binary flag
+        is_binary = self.bytes_xml is not None and self.bytes_xml.lower() == "true"
+
+        self.modified_type, self.modified_array = remap_type(self.type, self.array, is_binary)
 
     def declaration_file_body(self, targetFile):
         global gIndent
@@ -238,7 +243,12 @@ class ProtoFuncParam(PARSER_INTF.FuncParam):
         self.is_first = is_first
         self.is_last = is_last
         self.type_without_pointer = PARSER_INTF.get_typename_without_pointer(self.type)
-        self.modified_type, self.modified_array = remap_type(self.type_without_pointer, None)
+
+        # detect binary flag here too (for consistency)
+        bytes_xml = xmlElement.get("bytes")
+        is_binary = bytes_xml is not None and bytes_xml.lower() == "true"
+
+        self.modified_type, self.modified_array = remap_type(self.type_without_pointer, None, is_binary)
 
     def declaration_file_body(self, targetFile):
         if self.is_last:

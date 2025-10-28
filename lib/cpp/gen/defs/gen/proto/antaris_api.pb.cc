@@ -1200,7 +1200,7 @@ const char descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[
   "er_to_peer.PayloadMetricsInfo\",\n\025CmdSequ"
   "enceDoneParams\022\023\n\013sequence_id\030\001 \001(\t\"N\n\nP"
   "aSatOsMsg\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\ncom"
-  "mand_id\030\002 \001(\005\022\024\n\014payload_data\030\003 \001(\t\"P\n\016R"
+  "mand_id\030\002 \001(\005\022\024\n\014payload_data\030\003 \001(\014\"P\n\016R"
   "espPaSatOsMsg\022\026\n\016correlation_id\030\001 \001(\005\022\022\n"
   "\ncommand_id\030\002 \001(\005\022\022\n\nreq_status\030\003 \001(\005\"/\n"
   "\025ReqGnssEphStopDataReq\022\026\n\016correlation_id"
@@ -6001,12 +6001,11 @@ const char* PaSatOsMsg::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID:
         } else
           goto handle_unusual;
         continue;
-      // string payload_data = 3;
+      // bytes payload_data = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
           auto str = _internal_mutable_payload_data();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "antaris_api_peer_to_peer.PaSatOsMsg.payload_data"));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -6052,13 +6051,9 @@ uint8_t* PaSatOsMsg::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_command_id(), target);
   }
 
-  // string payload_data = 3;
+  // bytes payload_data = 3;
   if (!this->_internal_payload_data().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_payload_data().data(), static_cast<int>(this->_internal_payload_data().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "antaris_api_peer_to_peer.PaSatOsMsg.payload_data");
-    target = stream->WriteStringMaybeAliased(
+    target = stream->WriteBytesMaybeAliased(
         3, this->_internal_payload_data(), target);
   }
 
@@ -6078,10 +6073,10 @@ size_t PaSatOsMsg::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string payload_data = 3;
+  // bytes payload_data = 3;
   if (!this->_internal_payload_data().empty()) {
     total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
         this->_internal_payload_data());
   }
 

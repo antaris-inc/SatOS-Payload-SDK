@@ -166,7 +166,7 @@
         <Struct name="PaSatOsMsg" description="To send message to SatOS from PA">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="command_id" type="UINT16" sequence="2" description="command id"/>
-            <Field name="payload_data" type="INT8" sequence="3" description="payload data for sending for SatOS, string" array="1020"/>
+            <Field name="payload_data" type="INT8" sequence="3" description="payload data for sending for SatOS, bytes" bytes="true" array="1020"/>
         </Struct>
 
         <Struct name="RespPaSatOsMsg" description="To send acknowledge to PA from SatOS">

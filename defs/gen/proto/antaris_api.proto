@@ -179,7 +179,7 @@ message CmdSequenceDoneParams {
 message PaSatOsMsg {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     int32                           command_id       = 2; // command id
-    string                          payload_data     = 3; // payload data for sending for SatOS, string
+    bytes                           payload_data     = 3; // payload data for sending for SatOS, bytes
 }
 
 message RespPaSatOsMsg {

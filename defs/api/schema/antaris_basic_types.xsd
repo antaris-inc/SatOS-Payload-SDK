@@ -81,11 +81,12 @@
     <xs:element name="Field">
         <xs:complexType>
             <xs:attribute name="name" type="VarName" use="required"/>
-            <xs:attribute name="type" type="TypeNameWithPointer" use="required"/>
-            <xs:attribute name="sequence" type="PositiveInteger" use="required" />
-            <xs:attribute name="description" type="xs:string" use="required" />
-            <xs:attribute name="array" type="PositiveAndZeroInteger" use="optional" default="0"/>
-            <xs:attribute ref="consumed_by" default="All" use="optional" />
+        <xs:attribute name="type" type="TypeNameWithPointer" use="required"/>
+        <xs:attribute name="sequence" type="PositiveInteger" use="required" />
+        <xs:attribute name="description" type="xs:string" use="required" />
+        <xs:attribute name="array" type="PositiveAndZeroInteger" use="optional" default="0"/>
+        <xs:attribute name="bytes" type="xs:boolean" use="optional" default="false"/>
+        <xs:attribute ref="consumed_by" default="All" use="optional" />
         </xs:complexType>
     </xs:element>
 
