@@ -659,7 +659,7 @@ def app_to_peer_CmdSequenceDoneParams(app_struct):
 ## @brief: To send message to SatOS from PA
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
 ## @param: command_id                                      :    command id                                      
-## @param: payload_data                                    :    payload data for sending for SatOS, string      
+## @param: payload_data                                    :    payload data for sending for SatOS, bytes       
 class PaSatOsMsg:
     def __init__(self, correlation_id, command_id, payload_data):
         self.correlation_id = correlation_id

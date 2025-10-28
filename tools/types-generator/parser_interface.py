@@ -427,6 +427,7 @@ class Field(Generator):
     attrib_description = "description"
     attrib_sequence = "sequence"
     attrib_array = "array"
+    attrib_bytes = "bytes"
     attrib_consumed_by = "consumed_by"
 
     def __init__(self, xmlMetaData, xmlElement):
@@ -437,6 +438,7 @@ class Field(Generator):
         self.sequence = xmlElement.get(Field.attrib_sequence)
         self.consumed_by = xmlElement.get(Field.attrib_consumed_by)
         self.array_xml = xmlElement.get(Field.attrib_array)
+        self.bytes_xml = xmlElement.get(Field.attrib_bytes)
 
         logger.debug(str(self))
         logger.debug("{} -> consumed by {}".format(self.name, self.consumed_by))
