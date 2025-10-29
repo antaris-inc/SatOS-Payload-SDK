@@ -1020,7 +1020,7 @@ app_to_peer_PaSatOsMsg(const void *ptr_src_app, void *ptr_dst_peer)
 
     dst->set_command_id(__tmp_command_id);
 
-    dst->set_payload_data(&src->payload_data[0]);
+    dst->set_payload_data(src->payload_data, sizeof(src->payload_data));
 
 
 }
@@ -1033,12 +1033,14 @@ peer_to_app_PaSatOsMsg(const void *ptr_src_peer, void *ptr_dst_app)
 
     dst->correlation_id = src->correlation_id();
     dst->command_id = src->command_id();
-    size_t payload_data_length = strnlen(src->payload_data().c_str(), 1020);
-    if ( payload_data_length >= 1020 ) {
-        printf("Error:  payload_data_length should be less than 1020 \n");
-        return;
+    size_t payload_data_length = src->payload_data().size();
+    if (payload_data_length > 1020) {
+        printf("Warning: payload_data length (%zu) truncated to 1020\n", payload_data_length);
+        payload_data_length = 1020;
     }
-    strncpy(&dst->payload_data[0], src->payload_data().c_str(), 1020);
+    memcpy(dst->payload_data, src->payload_data().data(), payload_data_length);
+    if (payload_data_length < 1020)
+        memset(dst->payload_data + payload_data_length, 0, 1020 - payload_data_length);
 
 }
 
