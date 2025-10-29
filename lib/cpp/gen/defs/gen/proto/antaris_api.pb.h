@@ -3514,7 +3514,7 @@ class PaSatOsMsg final :
     kCorrelationIdFieldNumber = 1,
     kCommandIdFieldNumber = 2,
   };
-  // string payload_data = 3;
+  // bytes payload_data = 3;
   void clear_payload_data();
   const std::string& payload_data() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -9345,7 +9345,7 @@ inline void PaSatOsMsg::set_command_id(int32_t value) {
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.PaSatOsMsg.command_id)
 }
 
-// string payload_data = 3;
+// bytes payload_data = 3;
 inline void PaSatOsMsg::clear_payload_data() {
   payload_data_.ClearToEmpty();
 }
@@ -9357,7 +9357,7 @@ template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
 void PaSatOsMsg::set_payload_data(ArgT0&& arg0, ArgT... args) {
  
- payload_data_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+ payload_data_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.PaSatOsMsg.payload_data)
 }
 inline std::string* PaSatOsMsg::mutable_payload_data() {
