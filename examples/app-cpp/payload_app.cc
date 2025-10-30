@@ -727,6 +727,7 @@ void handle_pa_satos_message(mythreadState_t *mythread){
     PaSatOsMsg pa_satos_msg = {0};
     pa_satos_msg.correlation_id = mythread->correlation_id;
     pa_satos_msg.command_id = command;
+    memcpy(&pa_satos_msg.payload_data,Payload_data,sizeof(Payload_data));
     ret = api_pa_pc_pa_satos_message(channel, &pa_satos_msg);
     if(ret == An_SUCCESS){
         printf("Pa SatOS message success, ret %d\n",ret);

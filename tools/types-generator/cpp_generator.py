@@ -274,7 +274,14 @@ class CPPField(PARSER_INTF.Field):
                 targetFile.write("{}{}(&src->{}[i], dst_info);\n".format(gIndent * 2, get_app_to_peer_fn_for_type(self.type), self.name))
                 targetFile.write("{}{}\n".format(gIndent, "}"))
             else:
-                targetFile.write("{}dst->set_{}(&src->{}[0]);\n\n".format(gIndent, self.name, self.name, ))
+                if self.bytes_xml == "true":
+                    # Handle bytes array correctly
+                    targetFile.write("{}dst->set_{}(src->{}, sizeof(src->{}));\n\n".format(
+                        gIndent, self.name, self.name, self.name))
+                else:
+                    targetFile.write("{}dst->set_{}(&src->{}[0]);\n\n".format(
+                        gIndent, self.name, self.name))
+                
 
     def print_peer_to_app_component(self, targetFile, namespace):
         global gIndent
@@ -319,13 +326,26 @@ class CPPField(PARSER_INTF.Field):
                 targetFile.write("{}{}\n".format(gIndent, "}"))
             else:
                 strlength = int(''.join(self.array[1:-1]))
-                targetFile.write("{}size_t {}_length = strnlen(src->{}().c_str(), {});\n".format(gIndent, self.name, self.name, strlength))
-                targetFile.write("{}{} {}_length >= {} {}\n".format(gIndent, "if (", self.name, strlength, ") {"))
-                targetFile.write("{}{}{} {}_length should be less than {}{}\n".format(gIndent, gIndent, "printf(\"Error: ", self.name, strlength, " \\n\");" ))
-                targetFile.write("{}{}{}\n".format(gIndent, gIndent, "return;"))
-                targetFile.write("{}{}\n".format(gIndent, "}"))
-                targetFile.write("{}strncpy(&dst->{}[0], src->{}().c_str(), {});\n".format(gIndent, self.name, self.name, strlength))
+                # If this field is binary data (bytes_xml="true"), use safe binary copy
+                if (getattr(self, "bytes_xml", "") or "").lower() == "true":
+                    targetFile.write(f"{gIndent}size_t {self.name}_length = src->{self.name}().size();\n")
+                    targetFile.write(f"{gIndent}if ({self.name}_length > {strlength}) {{\n")
+                    targetFile.write(f"{gIndent*2}printf(\"Warning: {self.name} length (%zu) truncated to {strlength}\\n\", {self.name}_length);\n")
+                    targetFile.write(f"{gIndent*2}{self.name}_length = {strlength};\n")
+                    targetFile.write(f"{gIndent}}}\n")
+                    targetFile.write(f"{gIndent}memcpy(dst->{self.name}, src->{self.name}().data(), {self.name}_length);\n")
+                    targetFile.write(f"{gIndent}if ({self.name}_length < {strlength})\n")
+                    targetFile.write(f"{gIndent*2}memset(dst->{self.name} + {self.name}_length, 0, {strlength} - {self.name}_length);\n")
 
+                # Otherwise, fall back to old string-based handling
+                else:
+                    strlength = int(''.join(self.array[1:-1]))
+                    targetFile.write("{}size_t {}_length = strnlen(src->{}().c_str(), {});\n".format(gIndent, self.name, self.name, strlength))
+                    targetFile.write("{}{} {}_length >= {} {}\n".format(gIndent, "if (", self.name, strlength, ") {"))
+                    targetFile.write("{}{}{} {}_length should be less than {}{}\n".format(gIndent, gIndent, "printf(\"Error: ", self.name, strlength, " \\n\");" ))
+                    targetFile.write("{}{}{}\n".format(gIndent, gIndent, "return;"))
+                    targetFile.write("{}{}\n".format(gIndent, "}"))
+                    targetFile.write("{}strncpy(&dst->{}[0], src->{}().c_str(), {});\n".format(gIndent, self.name, self.name, strlength))
     def get_peer_local_tmp_varname(self):
         return "__tmp_{}".format(self.name)
 
