@@ -314,6 +314,33 @@ inline bool FileDlRadioType_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<FileDlRadioType>(
     FileDlRadioType_descriptor(), name, value);
 }
+enum PA_shut_purpose : int {
+  SP_SYS_SHUT = 0,
+  SP_LOW_BTRY = 1,
+  SP_OVR_TEMP = 2,
+  SP_INVLD = 3,
+  PA_shut_purpose_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  PA_shut_purpose_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool PA_shut_purpose_IsValid(int value);
+constexpr PA_shut_purpose PA_shut_purpose_MIN = SP_SYS_SHUT;
+constexpr PA_shut_purpose PA_shut_purpose_MAX = SP_INVLD;
+constexpr int PA_shut_purpose_ARRAYSIZE = PA_shut_purpose_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PA_shut_purpose_descriptor();
+template<typename T>
+inline const std::string& PA_shut_purpose_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, PA_shut_purpose>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function PA_shut_purpose_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    PA_shut_purpose_descriptor(), enum_t_value);
+}
+inline bool PA_shut_purpose_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, PA_shut_purpose* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<PA_shut_purpose>(
+    PA_shut_purpose_descriptor(), name, value);
+}
 // ===================================================================
 
 class AntarisSdkVersion final :
@@ -2529,6 +2556,7 @@ class ShutdownParams final :
   enum : int {
     kCorrelationIdFieldNumber = 1,
     kGraceTimeFieldNumber = 2,
+    kShutPurposeFieldNumber = 3,
   };
   // int32 correlation_id = 1;
   void clear_correlation_id();
@@ -2548,6 +2576,15 @@ class ShutdownParams final :
   void _internal_set_grace_time(int32_t value);
   public:
 
+  // .antaris_api_peer_to_peer.PA_shut_purpose shut_purpose = 3;
+  void clear_shut_purpose();
+  ::antaris_api_peer_to_peer::PA_shut_purpose shut_purpose() const;
+  void set_shut_purpose(::antaris_api_peer_to_peer::PA_shut_purpose value);
+  private:
+  ::antaris_api_peer_to_peer::PA_shut_purpose _internal_shut_purpose() const;
+  void _internal_set_shut_purpose(::antaris_api_peer_to_peer::PA_shut_purpose value);
+  public:
+
   // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.ShutdownParams)
  private:
   class _Internal;
@@ -2557,6 +2594,7 @@ class ShutdownParams final :
   typedef void DestructorSkippable_;
   int32_t correlation_id_;
   int32_t grace_time_;
+  int shut_purpose_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
 };
@@ -8959,6 +8997,26 @@ inline void ShutdownParams::set_grace_time(int32_t value) {
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ShutdownParams.grace_time)
 }
 
+// .antaris_api_peer_to_peer.PA_shut_purpose shut_purpose = 3;
+inline void ShutdownParams::clear_shut_purpose() {
+  shut_purpose_ = 0;
+}
+inline ::antaris_api_peer_to_peer::PA_shut_purpose ShutdownParams::_internal_shut_purpose() const {
+  return static_cast< ::antaris_api_peer_to_peer::PA_shut_purpose >(shut_purpose_);
+}
+inline ::antaris_api_peer_to_peer::PA_shut_purpose ShutdownParams::shut_purpose() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.ShutdownParams.shut_purpose)
+  return _internal_shut_purpose();
+}
+inline void ShutdownParams::_internal_set_shut_purpose(::antaris_api_peer_to_peer::PA_shut_purpose value) {
+  
+  shut_purpose_ = value;
+}
+inline void ShutdownParams::set_shut_purpose(::antaris_api_peer_to_peer::PA_shut_purpose value) {
+  _internal_set_shut_purpose(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ShutdownParams.shut_purpose)
+}
+
 // -------------------------------------------------------------------
 
 // HealthCheckParams
@@ -11704,6 +11762,11 @@ template <> struct is_proto_enum< ::antaris_api_peer_to_peer::FileDlRadioType> :
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::antaris_api_peer_to_peer::FileDlRadioType>() {
   return ::antaris_api_peer_to_peer::FileDlRadioType_descriptor();
+}
+template <> struct is_proto_enum< ::antaris_api_peer_to_peer::PA_shut_purpose> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::antaris_api_peer_to_peer::PA_shut_purpose>() {
+  return ::antaris_api_peer_to_peer::PA_shut_purpose_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

@@ -686,6 +686,8 @@ displayShutdownParams(const void *obj)
     displayUINT16((void *)&p->correlation_id);
     printf("grace_time ==>\n");
     displayUINT16((void *)&p->grace_time);
+    printf("shut_purpose ==>\n");
+    displayPA_shut_purpose((void *)&p->shut_purpose);
 
 }
 
@@ -697,6 +699,7 @@ app_to_peer_ShutdownParams(const void *ptr_src_app, void *ptr_dst_peer)
 
     UINT32 __tmp_correlation_id = 0;
     UINT32 __tmp_grace_time = 0;
+    PA_shut_purpose __tmp_shut_purpose;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -705,6 +708,10 @@ app_to_peer_ShutdownParams(const void *ptr_src_app, void *ptr_dst_peer)
     app_to_peer_UINT16(&src->grace_time, &__tmp_grace_time); // grace_time
 
     dst->set_grace_time(__tmp_grace_time);
+
+    app_to_peer_PA_shut_purpose(&src->shut_purpose, &__tmp_shut_purpose); // shut_purpose
+
+    dst->set_shut_purpose((::antaris_api_peer_to_peer::PA_shut_purpose)__tmp_shut_purpose);
 
 
 }
@@ -717,6 +724,7 @@ peer_to_app_ShutdownParams(const void *ptr_src_peer, void *ptr_dst_app)
 
     dst->correlation_id = src->correlation_id();
     dst->grace_time = src->grace_time();
+    dst->shut_purpose = (PA_shut_purpose)src->shut_purpose();
 
 }
 
@@ -2576,6 +2584,22 @@ app_to_peer_FileDlRadioType(void *ptr_src_app, void *ptr_dst_peer)
 {
     FileDlRadioType *src = (FileDlRadioType *)ptr_src_app;
     FileDlRadioType *dst = (FileDlRadioType *)ptr_dst_peer;
+
+    *dst = *src;
+
+}
+
+void
+displayPA_shut_purpose(void *obj)
+{
+    printf("%s => %d\n", "PA_shut_purpose", *(INT32 *)obj);
+}
+
+void
+app_to_peer_PA_shut_purpose(void *ptr_src_app, void *ptr_dst_peer)
+{
+    PA_shut_purpose *src = (PA_shut_purpose *)ptr_src_app;
+    PA_shut_purpose *dst = (PA_shut_purpose *)ptr_dst_peer;
 
     *dst = *src;
 
