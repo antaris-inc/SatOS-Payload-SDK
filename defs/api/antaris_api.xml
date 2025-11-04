@@ -55,11 +55,12 @@
             <EnumValue name="FILE_DL_XBAND" value="1" description="X-band file downlink"/>
         </Enum>
 
-         <Enum name="PA_shut_purpose" description="Payload application shutdonw purpose">
-            <EnumValue name="SP_SYS_SHUT" value="0" description="System shutdown "/>
+         <Enum name="PA_shutdown_reason" description="Payload application shutdonw purpose">
+            <EnumValue name="SP_SCHEDULED_OFF" value="0" description="System shutdown "/>
             <EnumValue name="SP_LOW_BTRY" value="1" description="Shutdown due to low battery"/>
             <EnumValue name="SP_OVR_TEMP" value="2" description="Critical Temperature Shutdown"/>
-            <EnumValue name="SP_INVLD" value="3" description="Shutdown reason not known"/>
+            <EnumValue name="SP_COMMAND_FROM_GS" value="3" description="Shutdown is requested by ground station"/>
+            <EnumValue name="SP_OTHER_REASON" value="4" description="Shutdown reason not known"/>
         </Enum>
 
         <Struct name="AntarisSdkVersion" description="SDK version specification" consumed_by="Peer">
@@ -141,7 +142,7 @@
         <Struct name="ShutdownParams" description="Callback parameters notifying Application of imminent shutdown">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="grace_time" type="UINT16" sequence="2" description="grace time in seconds after which the VM will be powered down"/>
-            <Field name="shutdown_reason" type="PA_shut_purpose" sequence="3" description="purpose of shutdown"/>
+            <Field name="shutdown_reason" type="PA_shutdown_reason" sequence="3" description="purpose of shutdown"/>
 
         </Struct>
 

@@ -687,7 +687,7 @@ displayShutdownParams(const void *obj)
     printf("grace_time ==>\n");
     displayUINT16((void *)&p->grace_time);
     printf("shutdown_reason ==>\n");
-    displayPA_shut_purpose((void *)&p->shutdown_reason);
+    displayPA_shutdown_reason((void *)&p->shutdown_reason);
 
 }
 
@@ -699,7 +699,7 @@ app_to_peer_ShutdownParams(const void *ptr_src_app, void *ptr_dst_peer)
 
     UINT32 __tmp_correlation_id = 0;
     UINT32 __tmp_grace_time = 0;
-    PA_shut_purpose __tmp_shutdown_reason;
+    PA_shutdown_reason __tmp_shutdown_reason;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -709,9 +709,9 @@ app_to_peer_ShutdownParams(const void *ptr_src_app, void *ptr_dst_peer)
 
     dst->set_grace_time(__tmp_grace_time);
 
-    app_to_peer_PA_shut_purpose(&src->shutdown_reason, &__tmp_shutdown_reason); // shutdown_reason
+    app_to_peer_PA_shutdown_reason(&src->shutdown_reason, &__tmp_shutdown_reason); // shutdown_reason
 
-    dst->set_shutdown_reason((::antaris_api_peer_to_peer::PA_shut_purpose)__tmp_shutdown_reason);
+    dst->set_shutdown_reason((::antaris_api_peer_to_peer::PA_shutdown_reason)__tmp_shutdown_reason);
 
 
 }
@@ -724,7 +724,7 @@ peer_to_app_ShutdownParams(const void *ptr_src_peer, void *ptr_dst_app)
 
     dst->correlation_id = src->correlation_id();
     dst->grace_time = src->grace_time();
-    dst->shutdown_reason = (PA_shut_purpose)src->shutdown_reason();
+    dst->shutdown_reason = (PA_shutdown_reason)src->shutdown_reason();
 
 }
 
@@ -2590,16 +2590,16 @@ app_to_peer_FileDlRadioType(void *ptr_src_app, void *ptr_dst_peer)
 }
 
 void
-displayPA_shut_purpose(void *obj)
+displayPA_shutdown_reason(void *obj)
 {
-    printf("%s => %d\n", "PA_shut_purpose", *(INT32 *)obj);
+    printf("%s => %d\n", "PA_shutdown_reason", *(INT32 *)obj);
 }
 
 void
-app_to_peer_PA_shut_purpose(void *ptr_src_app, void *ptr_dst_peer)
+app_to_peer_PA_shutdown_reason(void *ptr_src_app, void *ptr_dst_peer)
 {
-    PA_shut_purpose *src = (PA_shut_purpose *)ptr_src_app;
-    PA_shut_purpose *dst = (PA_shut_purpose *)ptr_dst_peer;
+    PA_shutdown_reason *src = (PA_shutdown_reason *)ptr_src_app;
+    PA_shutdown_reason *dst = (PA_shutdown_reason *)ptr_dst_peer;
 
     *dst = *src;
 

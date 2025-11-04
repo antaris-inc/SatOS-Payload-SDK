@@ -94,18 +94,19 @@ void displayFileDlRadioType(void *obj);
 void app_to_peer_FileDlRadioType(void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_FileDlRadioType(void *ptr_src_peer, void *ptr_dst_app);
 
-/// @enum PA_shut_purpose
+/// @enum PA_shutdown_reason
 /// @brief Payload application shutdonw purpose
-typedef enum PA_shut_purpose {
-    SP_SYS_SHUT                      = 0,                               ///< System shutdown 
+typedef enum PA_shutdown_reason {
+    SP_SCHEDULED_OFF                 = 0,                               ///< System shutdown 
     SP_LOW_BTRY                      = 1,                               ///< Shutdown due to low battery
     SP_OVR_TEMP                      = 2,                               ///< Critical Temperature Shutdown
-    SP_INVLD                         = 3,                               ///< Shutdown reason not known
-} PA_shut_purpose;
+    SP_COMMAND_FROM_GS               = 3,                               ///< Shutdown is requested by ground station
+    SP_OTHER_REASON                  = 4,                               ///< Shutdown reason not known
+} PA_shutdown_reason;
 
-void displayPA_shut_purpose(void *obj);
-void app_to_peer_PA_shut_purpose(void *ptr_src_app, void *ptr_dst_peer);
-void peer_to_app_PA_shut_purpose(void *ptr_src_peer, void *ptr_dst_app);
+void displayPA_shutdown_reason(void *obj);
+void app_to_peer_PA_shutdown_reason(void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_PA_shutdown_reason(void *ptr_src_peer, void *ptr_dst_app);
 
 struct ReqRegisterParams;
 typedef struct ReqRegisterParams ReqRegisterParams;
@@ -582,7 +583,7 @@ void peer_to_app_StartSequenceParams(const void *ptr_src_peer, void *ptr_dst_app
 struct ShutdownParams {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     UINT16                                          grace_time;                                      ///< @var grace time in seconds after which the VM will be powered down
-    PA_shut_purpose                                 shutdown_reason;                                 ///< @var purpose of shutdown
+    PA_shutdown_reason                              shutdown_reason;                                 ///< @var purpose of shutdown
 };
 
 void displayShutdownParams(const void *obj);

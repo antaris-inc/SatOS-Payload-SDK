@@ -978,14 +978,17 @@ AntarisReturnCode shutdown_app(ShutdownParams *shutdown_param)
     RespShutdownParams   resp_shutdown_params;
 
     printf("shutdown_app : Got Shutdown request from PC\n");
-    if(shutdown_param->shutdown_reason == SP_SYS_SHUT){
-        printf("Shutdown is requested from system\n");
+    if(shutdown_param->shutdown_reason == SP_SCHEDULED_OFF){
+        printf("Shutdown is requested as a part of schedule\n");
     }
     else if(shutdown_param->shutdown_reason == SP_LOW_BTRY){
         printf("Shutdown is due to low battery voltage\n");
     }
     else if(shutdown_param->shutdown_reason == SP_OVR_TEMP){
         printf("Shutdown is due to Temperature reaches above the safe limit\n");
+    }
+     else if(shutdown_param->shutdown_reason == SP_COMMAND_FROM_GS){
+        printf("Shutdown is requested from Ground Station\n");
     }
     else{
         printf("shutdown reason is not known");

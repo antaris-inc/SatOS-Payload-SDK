@@ -68,11 +68,12 @@ enum FileDlRadioType {
     FILE_DL_XBAND                    = 1; // X-band file downlink
 }
 
-enum PA_shut_purpose {
-    SP_SYS_SHUT                      = 0; // System shutdown 
+enum PA_shutdown_reason {
+    SP_SCHEDULED_OFF                 = 0; // System shutdown 
     SP_LOW_BTRY                      = 1; // Shutdown due to low battery
     SP_OVR_TEMP                      = 2; // Critical Temperature Shutdown
-    SP_INVLD                         = 3; // Shutdown reason not known
+    SP_COMMAND_FROM_GS               = 3; // Shutdown is requested by ground station
+    SP_OTHER_REASON                  = 4; // Shutdown reason not known
 }
 
 message AntarisSdkVersion {
@@ -154,7 +155,7 @@ message StartSequenceParams {
 message ShutdownParams {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     int32                           grace_time       = 2; // grace time in seconds after which the VM will be powered down
-    PA_shut_purpose                 shutdown_reason  = 3; // purpose of shutdown
+    PA_shutdown_reason              shutdown_reason  = 3; // purpose of shutdown
 }
 
 message HealthCheckParams {
