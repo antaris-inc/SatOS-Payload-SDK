@@ -82,16 +82,15 @@ class FileDlRadioType:
 
 
 
-# ENUM: PA_shutdown_reason - Payload application shutdonw purpose
+# ENUM: PA_shutdown_reason - Payload application shutdonw reasons
 class PA_shutdown_reason:
-    SP_SCHEDULED_OFF = 0 # System shutdown 
-    SP_LOW_BTRY = 1 # Shutdown due to low battery
-    SP_OVR_TEMP = 2 # Critical Temperature Shutdown
-    SP_COMMAND_FROM_GS = 3 # Shutdown is requested by ground station
-    SP_OTHER_REASON = 4 # Shutdown reason not known
+    SP_SYSTEM_SHUTDOWN = 0 # System shutdown 
+    SP_LOW_BATTERY = 1 # Shutdown due to low battery
+    SP_RESET_RECOVERY = 2 # Shutdown due to reset recovery
+    SP_OVER_TEMPERATURE = 3 # Shutdown due to temperature value reaches above safe values
 
 
-    reverse_dict = {0 : "SP_SCHEDULED_OFF", 1 : "SP_LOW_BTRY", 2 : "SP_OVR_TEMP", 3 : "SP_COMMAND_FROM_GS", 4 : "SP_OTHER_REASON"}
+    reverse_dict = {0 : "SP_SYSTEM_SHUTDOWN", 1 : "SP_LOW_BATTERY", 2 : "SP_RESET_RECOVERY", 3 : "SP_OVER_TEMPERATURE"}
 
 
 

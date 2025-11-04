@@ -55,12 +55,11 @@
             <EnumValue name="FILE_DL_XBAND" value="1" description="X-band file downlink"/>
         </Enum>
 
-         <Enum name="PA_shutdown_reason" description="Payload application shutdonw purpose">
-            <EnumValue name="SP_SCHEDULED_OFF" value="0" description="System shutdown "/>
-            <EnumValue name="SP_LOW_BTRY" value="1" description="Shutdown due to low battery"/>
-            <EnumValue name="SP_OVR_TEMP" value="2" description="Critical Temperature Shutdown"/>
-            <EnumValue name="SP_COMMAND_FROM_GS" value="3" description="Shutdown is requested by ground station"/>
-            <EnumValue name="SP_OTHER_REASON" value="4" description="Shutdown reason not known"/>
+         <Enum name="PA_shutdown_reason" description="Payload application shutdonw reasons">
+            <EnumValue name="SP_SYSTEM_SHUTDOWN" value="0" description="System shutdown "/>
+            <EnumValue name="SP_LOW_BATTERY" value="1" description="Shutdown due to low battery"/>
+            <EnumValue name="SP_RESET_RECOVERY" value="2" description="Shutdown due to reset recovery"/>
+            <EnumValue name="SP_OVER_TEMPERATURE" value="3" description="Shutdown due to temperature value reaches above safe values"/>
         </Enum>
 
         <Struct name="AntarisSdkVersion" description="SDK version specification" consumed_by="Peer">

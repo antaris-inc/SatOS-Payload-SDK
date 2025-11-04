@@ -315,17 +315,16 @@ inline bool FileDlRadioType_Parse(
     FileDlRadioType_descriptor(), name, value);
 }
 enum PA_shutdown_reason : int {
-  SP_SCHEDULED_OFF = 0,
-  SP_LOW_BTRY = 1,
-  SP_OVR_TEMP = 2,
-  SP_COMMAND_FROM_GS = 3,
-  SP_OTHER_REASON = 4,
+  SP_SYSTEM_SHUTDOWN = 0,
+  SP_LOW_BATTERY = 1,
+  SP_RESET_RECOVERY = 2,
+  SP_OVER_TEMPERATURE = 3,
   PA_shutdown_reason_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   PA_shutdown_reason_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool PA_shutdown_reason_IsValid(int value);
-constexpr PA_shutdown_reason PA_shutdown_reason_MIN = SP_SCHEDULED_OFF;
-constexpr PA_shutdown_reason PA_shutdown_reason_MAX = SP_OTHER_REASON;
+constexpr PA_shutdown_reason PA_shutdown_reason_MIN = SP_SYSTEM_SHUTDOWN;
+constexpr PA_shutdown_reason PA_shutdown_reason_MAX = SP_OVER_TEMPERATURE;
 constexpr int PA_shutdown_reason_ARRAYSIZE = PA_shutdown_reason_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PA_shutdown_reason_descriptor();

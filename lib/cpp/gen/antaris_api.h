@@ -95,13 +95,12 @@ void app_to_peer_FileDlRadioType(void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_FileDlRadioType(void *ptr_src_peer, void *ptr_dst_app);
 
 /// @enum PA_shutdown_reason
-/// @brief Payload application shutdonw purpose
+/// @brief Payload application shutdonw reasons
 typedef enum PA_shutdown_reason {
-    SP_SCHEDULED_OFF                 = 0,                               ///< System shutdown 
-    SP_LOW_BTRY                      = 1,                               ///< Shutdown due to low battery
-    SP_OVR_TEMP                      = 2,                               ///< Critical Temperature Shutdown
-    SP_COMMAND_FROM_GS               = 3,                               ///< Shutdown is requested by ground station
-    SP_OTHER_REASON                  = 4,                               ///< Shutdown reason not known
+    SP_SYSTEM_SHUTDOWN               = 0,                               ///< System shutdown 
+    SP_LOW_BATTERY                   = 1,                               ///< Shutdown due to low battery
+    SP_RESET_RECOVERY                = 2,                               ///< Shutdown due to reset recovery
+    SP_OVER_TEMPERATURE              = 3,                               ///< Shutdown due to temperature value reaches above safe values
 } PA_shutdown_reason;
 
 void displayPA_shutdown_reason(void *obj);
