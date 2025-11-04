@@ -582,7 +582,7 @@ void peer_to_app_StartSequenceParams(const void *ptr_src_peer, void *ptr_dst_app
 struct ShutdownParams {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     UINT16                                          grace_time;                                      ///< @var grace time in seconds after which the VM will be powered down
-    PA_shut_purpose                                 shut_purpose;                                    ///< @var purpose of shutdown
+    PA_shut_purpose                                 shutdown_reason;                                 ///< @var purpose of shutdown
 };
 
 void displayShutdownParams(const void *obj);

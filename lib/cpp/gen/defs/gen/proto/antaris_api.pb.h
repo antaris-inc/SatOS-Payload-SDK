@@ -2556,7 +2556,7 @@ class ShutdownParams final :
   enum : int {
     kCorrelationIdFieldNumber = 1,
     kGraceTimeFieldNumber = 2,
-    kShutPurposeFieldNumber = 3,
+    kShutdownReasonFieldNumber = 3,
   };
   // int32 correlation_id = 1;
   void clear_correlation_id();
@@ -2576,13 +2576,13 @@ class ShutdownParams final :
   void _internal_set_grace_time(int32_t value);
   public:
 
-  // .antaris_api_peer_to_peer.PA_shut_purpose shut_purpose = 3;
-  void clear_shut_purpose();
-  ::antaris_api_peer_to_peer::PA_shut_purpose shut_purpose() const;
-  void set_shut_purpose(::antaris_api_peer_to_peer::PA_shut_purpose value);
+  // .antaris_api_peer_to_peer.PA_shut_purpose shutdown_reason = 3;
+  void clear_shutdown_reason();
+  ::antaris_api_peer_to_peer::PA_shut_purpose shutdown_reason() const;
+  void set_shutdown_reason(::antaris_api_peer_to_peer::PA_shut_purpose value);
   private:
-  ::antaris_api_peer_to_peer::PA_shut_purpose _internal_shut_purpose() const;
-  void _internal_set_shut_purpose(::antaris_api_peer_to_peer::PA_shut_purpose value);
+  ::antaris_api_peer_to_peer::PA_shut_purpose _internal_shutdown_reason() const;
+  void _internal_set_shutdown_reason(::antaris_api_peer_to_peer::PA_shut_purpose value);
   public:
 
   // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.ShutdownParams)
@@ -2594,7 +2594,7 @@ class ShutdownParams final :
   typedef void DestructorSkippable_;
   int32_t correlation_id_;
   int32_t grace_time_;
-  int shut_purpose_;
+  int shutdown_reason_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
 };
@@ -8997,24 +8997,24 @@ inline void ShutdownParams::set_grace_time(int32_t value) {
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ShutdownParams.grace_time)
 }
 
-// .antaris_api_peer_to_peer.PA_shut_purpose shut_purpose = 3;
-inline void ShutdownParams::clear_shut_purpose() {
-  shut_purpose_ = 0;
+// .antaris_api_peer_to_peer.PA_shut_purpose shutdown_reason = 3;
+inline void ShutdownParams::clear_shutdown_reason() {
+  shutdown_reason_ = 0;
 }
-inline ::antaris_api_peer_to_peer::PA_shut_purpose ShutdownParams::_internal_shut_purpose() const {
-  return static_cast< ::antaris_api_peer_to_peer::PA_shut_purpose >(shut_purpose_);
+inline ::antaris_api_peer_to_peer::PA_shut_purpose ShutdownParams::_internal_shutdown_reason() const {
+  return static_cast< ::antaris_api_peer_to_peer::PA_shut_purpose >(shutdown_reason_);
 }
-inline ::antaris_api_peer_to_peer::PA_shut_purpose ShutdownParams::shut_purpose() const {
-  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.ShutdownParams.shut_purpose)
-  return _internal_shut_purpose();
+inline ::antaris_api_peer_to_peer::PA_shut_purpose ShutdownParams::shutdown_reason() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.ShutdownParams.shutdown_reason)
+  return _internal_shutdown_reason();
 }
-inline void ShutdownParams::_internal_set_shut_purpose(::antaris_api_peer_to_peer::PA_shut_purpose value) {
+inline void ShutdownParams::_internal_set_shutdown_reason(::antaris_api_peer_to_peer::PA_shut_purpose value) {
   
-  shut_purpose_ = value;
+  shutdown_reason_ = value;
 }
-inline void ShutdownParams::set_shut_purpose(::antaris_api_peer_to_peer::PA_shut_purpose value) {
-  _internal_set_shut_purpose(value);
-  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ShutdownParams.shut_purpose)
+inline void ShutdownParams::set_shutdown_reason(::antaris_api_peer_to_peer::PA_shut_purpose value) {
+  _internal_set_shutdown_reason(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ShutdownParams.shutdown_reason)
 }
 
 // -------------------------------------------------------------------

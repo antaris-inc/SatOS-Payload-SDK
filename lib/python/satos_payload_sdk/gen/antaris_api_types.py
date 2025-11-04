@@ -487,12 +487,12 @@ def app_to_peer_StartSequenceParams(app_struct):
 ## @brief: Callback parameters notifying Application of imminent shutdown
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
 ## @param: grace_time                                      :    grace time in seconds after which the VM will be powered down
-## @param: shut_purpose                                    :    purpose of shutdown                             
+## @param: shutdown_reason                                 :    purpose of shutdown                             
 class ShutdownParams:
-    def __init__(self, correlation_id, grace_time, shut_purpose):
+    def __init__(self, correlation_id, grace_time, shutdown_reason):
         self.correlation_id = correlation_id
         self.grace_time = grace_time
-        self.shut_purpose = shut_purpose
+        self.shutdown_reason = shutdown_reason
 
     def __str__(self):
         ret_str = ""
@@ -500,8 +500,8 @@ class ShutdownParams:
         ret_str += str(self.correlation_id) + "\n"
         ret_str += "grace_time:\n"
         ret_str += str(self.grace_time) + "\n"
-        ret_str += "shut_purpose:\n"
-        ret_str += str(self.shut_purpose) + "\n"
+        ret_str += "shutdown_reason:\n"
+        ret_str += str(self.shutdown_reason) + "\n"
 
         return ret_str
 
@@ -511,11 +511,11 @@ class ShutdownParams:
 def peer_to_app_ShutdownParams(peer_struct):
     correlation_id = peer_struct.correlation_id
     grace_time = peer_struct.grace_time
-    shut_purpose = peer_struct.shut_purpose
-    return ShutdownParams(correlation_id, grace_time, shut_purpose)
+    shutdown_reason = peer_struct.shutdown_reason
+    return ShutdownParams(correlation_id, grace_time, shutdown_reason)
 
 def app_to_peer_ShutdownParams(app_struct):
-    return antaris_api_pb2.ShutdownParams(correlation_id = app_struct.correlation_id, grace_time = app_struct.grace_time, shut_purpose = app_struct.shut_purpose)
+    return antaris_api_pb2.ShutdownParams(correlation_id = app_struct.correlation_id, grace_time = app_struct.grace_time, shutdown_reason = app_struct.shutdown_reason)
 
 ## @class: HealthCheckParams
 ## @brief: HealthCheck message
