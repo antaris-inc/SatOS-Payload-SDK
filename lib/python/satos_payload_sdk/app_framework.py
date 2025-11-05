@@ -613,6 +613,7 @@ class PayloadApplication(Stoppable):
 
         with self.lock:
             self.shutdown_correlation_id = params.correlation_id
+        logger.info("shutdown return code is %u" % params.shutdown_reason)
 
         # non-blocking, as we just want to accept the request and proceed
         # in the background with full shutdown. Response will be sent later.
