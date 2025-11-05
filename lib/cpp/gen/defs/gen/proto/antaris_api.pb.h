@@ -2529,6 +2529,7 @@ class ShutdownParams final :
   enum : int {
     kCorrelationIdFieldNumber = 1,
     kGraceTimeFieldNumber = 2,
+    kShutdownReasonFieldNumber = 3,
   };
   // int32 correlation_id = 1;
   void clear_correlation_id();
@@ -2548,6 +2549,15 @@ class ShutdownParams final :
   void _internal_set_grace_time(int32_t value);
   public:
 
+  // int32 shutdown_reason = 3;
+  void clear_shutdown_reason();
+  int32_t shutdown_reason() const;
+  void set_shutdown_reason(int32_t value);
+  private:
+  int32_t _internal_shutdown_reason() const;
+  void _internal_set_shutdown_reason(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.ShutdownParams)
  private:
   class _Internal;
@@ -2557,6 +2567,7 @@ class ShutdownParams final :
   typedef void DestructorSkippable_;
   int32_t correlation_id_;
   int32_t grace_time_;
+  int32_t shutdown_reason_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
 };
@@ -8957,6 +8968,26 @@ inline void ShutdownParams::_internal_set_grace_time(int32_t value) {
 inline void ShutdownParams::set_grace_time(int32_t value) {
   _internal_set_grace_time(value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ShutdownParams.grace_time)
+}
+
+// int32 shutdown_reason = 3;
+inline void ShutdownParams::clear_shutdown_reason() {
+  shutdown_reason_ = 0;
+}
+inline int32_t ShutdownParams::_internal_shutdown_reason() const {
+  return shutdown_reason_;
+}
+inline int32_t ShutdownParams::shutdown_reason() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.ShutdownParams.shutdown_reason)
+  return _internal_shutdown_reason();
+}
+inline void ShutdownParams::_internal_set_shutdown_reason(int32_t value) {
+  
+  shutdown_reason_ = value;
+}
+inline void ShutdownParams::set_shutdown_reason(int32_t value) {
+  _internal_set_shutdown_reason(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ShutdownParams.shutdown_reason)
 }
 
 // -------------------------------------------------------------------

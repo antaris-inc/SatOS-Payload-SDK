@@ -147,6 +147,7 @@ message StartSequenceParams {
 message ShutdownParams {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     int32                           grace_time       = 2; // grace time in seconds after which the VM will be powered down
+    int32                           shutdown_reason  = 3; // purpose of shutdown
 }
 
 message HealthCheckParams {

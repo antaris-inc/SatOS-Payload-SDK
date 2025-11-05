@@ -978,6 +978,7 @@ AntarisReturnCode shutdown_app(ShutdownParams *shutdown_param)
     RespShutdownParams   resp_shutdown_params;
 
     printf("shutdown_app : Got Shutdown request from PC\n");
+    printf("return code for shutdown is %u\n",shutdown_param->shutdown_reason);
 
     if (debug) {
         displayShutdownParams(shutdown_param);

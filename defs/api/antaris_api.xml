@@ -134,6 +134,8 @@
         <Struct name="ShutdownParams" description="Callback parameters notifying Application of imminent shutdown">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="grace_time" type="UINT16" sequence="2" description="grace time in seconds after which the VM will be powered down"/>
+            <Field name="shutdown_reason" type="UINT8" sequence="3" description="purpose of shutdown"/>
+
         </Struct>
 
         <Struct name="HealthCheckParams" description="HealthCheck message">

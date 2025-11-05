@@ -686,6 +686,8 @@ displayShutdownParams(const void *obj)
     displayUINT16((void *)&p->correlation_id);
     printf("grace_time ==>\n");
     displayUINT16((void *)&p->grace_time);
+    printf("shutdown_reason ==>\n");
+    displayUINT8((void *)&p->shutdown_reason);
 
 }
 
@@ -697,6 +699,7 @@ app_to_peer_ShutdownParams(const void *ptr_src_app, void *ptr_dst_peer)
 
     UINT32 __tmp_correlation_id = 0;
     UINT32 __tmp_grace_time = 0;
+    UINT32 __tmp_shutdown_reason = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -705,6 +708,10 @@ app_to_peer_ShutdownParams(const void *ptr_src_app, void *ptr_dst_peer)
     app_to_peer_UINT16(&src->grace_time, &__tmp_grace_time); // grace_time
 
     dst->set_grace_time(__tmp_grace_time);
+
+    app_to_peer_UINT8(&src->shutdown_reason, &__tmp_shutdown_reason); // shutdown_reason
+
+    dst->set_shutdown_reason(__tmp_shutdown_reason);
 
 
 }
@@ -717,6 +724,7 @@ peer_to_app_ShutdownParams(const void *ptr_src_peer, void *ptr_dst_app)
 
     dst->correlation_id = src->correlation_id();
     dst->grace_time = src->grace_time();
+    dst->shutdown_reason = src->shutdown_reason();
 
 }
 
