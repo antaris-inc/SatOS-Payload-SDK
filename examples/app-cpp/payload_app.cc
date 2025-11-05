@@ -978,21 +978,7 @@ AntarisReturnCode shutdown_app(ShutdownParams *shutdown_param)
     RespShutdownParams   resp_shutdown_params;
 
     printf("shutdown_app : Got Shutdown request from PC\n");
-    if(shutdown_param->shutdown_reason == SP_SYSTEM_SHUTDOWN){
-        printf("Shutdown is due to System shutdown\n");
-    }
-    else if(shutdown_param->shutdown_reason == SP_LOW_BATTERY){
-        printf("Shutdown is due to low battery voltage\n");
-    }
-    else if(shutdown_param->shutdown_reason == SP_RESET_RECOVERY){
-        printf("Shutdown is due to reset recovery\n");
-    }
-     else if(shutdown_param->shutdown_reason == SP_OVER_TEMPERATURE){
-        printf("Shutdown is due to Temperature reaches above the safe limit\n");
-    }
-    else{
-        printf("shutdown reason is not known");
-    }
+    printf("return code for shutdown is %u\n",shutdown_param->shutdown_reason);
 
     if (debug) {
         displayShutdownParams(shutdown_param);

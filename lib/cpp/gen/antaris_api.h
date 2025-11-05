@@ -94,19 +94,6 @@ void displayFileDlRadioType(void *obj);
 void app_to_peer_FileDlRadioType(void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_FileDlRadioType(void *ptr_src_peer, void *ptr_dst_app);
 
-/// @enum PA_shutdown_reason
-/// @brief Payload application shutdonw reasons
-typedef enum PA_shutdown_reason {
-    SP_SYSTEM_SHUTDOWN               = 0,                               ///< System shutdown 
-    SP_LOW_BATTERY                   = 1,                               ///< Shutdown due to low battery
-    SP_RESET_RECOVERY                = 2,                               ///< Shutdown due to reset recovery
-    SP_OVER_TEMPERATURE              = 3,                               ///< Shutdown due to temperature value reaches above safe values
-} PA_shutdown_reason;
-
-void displayPA_shutdown_reason(void *obj);
-void app_to_peer_PA_shutdown_reason(void *ptr_src_app, void *ptr_dst_peer);
-void peer_to_app_PA_shutdown_reason(void *ptr_src_peer, void *ptr_dst_app);
-
 struct ReqRegisterParams;
 typedef struct ReqRegisterParams ReqRegisterParams;
 
@@ -582,7 +569,7 @@ void peer_to_app_StartSequenceParams(const void *ptr_src_peer, void *ptr_dst_app
 struct ShutdownParams {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     UINT16                                          grace_time;                                      ///< @var grace time in seconds after which the VM will be powered down
-    PA_shutdown_reason                              shutdown_reason;                                 ///< @var purpose of shutdown
+    UINT8                                           shutdown_reason;                                 ///< @var purpose of shutdown
 };
 
 void displayShutdownParams(const void *obj);

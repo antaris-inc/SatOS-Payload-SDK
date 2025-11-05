@@ -82,18 +82,6 @@ class FileDlRadioType:
 
 
 
-# ENUM: PA_shutdown_reason - Payload application shutdonw reasons
-class PA_shutdown_reason:
-    SP_SYSTEM_SHUTDOWN = 0 # System shutdown 
-    SP_LOW_BATTERY = 1 # Shutdown due to low battery
-    SP_RESET_RECOVERY = 2 # Shutdown due to reset recovery
-    SP_OVER_TEMPERATURE = 3 # Shutdown due to temperature value reaches above safe values
-
-
-    reverse_dict = {0 : "SP_SYSTEM_SHUTDOWN", 1 : "SP_LOW_BATTERY", 2 : "SP_RESET_RECOVERY", 3 : "SP_OVER_TEMPERATURE"}
-
-
-
 ## @class: ReqRegisterParams
 ## @brief: Request parameters for registering with Payload Controller
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks

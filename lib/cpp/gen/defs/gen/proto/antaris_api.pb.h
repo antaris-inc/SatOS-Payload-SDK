@@ -314,33 +314,6 @@ inline bool FileDlRadioType_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<FileDlRadioType>(
     FileDlRadioType_descriptor(), name, value);
 }
-enum PA_shutdown_reason : int {
-  SP_SYSTEM_SHUTDOWN = 0,
-  SP_LOW_BATTERY = 1,
-  SP_RESET_RECOVERY = 2,
-  SP_OVER_TEMPERATURE = 3,
-  PA_shutdown_reason_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
-  PA_shutdown_reason_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
-};
-bool PA_shutdown_reason_IsValid(int value);
-constexpr PA_shutdown_reason PA_shutdown_reason_MIN = SP_SYSTEM_SHUTDOWN;
-constexpr PA_shutdown_reason PA_shutdown_reason_MAX = SP_OVER_TEMPERATURE;
-constexpr int PA_shutdown_reason_ARRAYSIZE = PA_shutdown_reason_MAX + 1;
-
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* PA_shutdown_reason_descriptor();
-template<typename T>
-inline const std::string& PA_shutdown_reason_Name(T enum_t_value) {
-  static_assert(::std::is_same<T, PA_shutdown_reason>::value ||
-    ::std::is_integral<T>::value,
-    "Incorrect type passed to function PA_shutdown_reason_Name.");
-  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
-    PA_shutdown_reason_descriptor(), enum_t_value);
-}
-inline bool PA_shutdown_reason_Parse(
-    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, PA_shutdown_reason* value) {
-  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<PA_shutdown_reason>(
-    PA_shutdown_reason_descriptor(), name, value);
-}
 // ===================================================================
 
 class AntarisSdkVersion final :
@@ -2576,13 +2549,13 @@ class ShutdownParams final :
   void _internal_set_grace_time(int32_t value);
   public:
 
-  // .antaris_api_peer_to_peer.PA_shutdown_reason shutdown_reason = 3;
+  // int32 shutdown_reason = 3;
   void clear_shutdown_reason();
-  ::antaris_api_peer_to_peer::PA_shutdown_reason shutdown_reason() const;
-  void set_shutdown_reason(::antaris_api_peer_to_peer::PA_shutdown_reason value);
+  int32_t shutdown_reason() const;
+  void set_shutdown_reason(int32_t value);
   private:
-  ::antaris_api_peer_to_peer::PA_shutdown_reason _internal_shutdown_reason() const;
-  void _internal_set_shutdown_reason(::antaris_api_peer_to_peer::PA_shutdown_reason value);
+  int32_t _internal_shutdown_reason() const;
+  void _internal_set_shutdown_reason(int32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.ShutdownParams)
@@ -2594,7 +2567,7 @@ class ShutdownParams final :
   typedef void DestructorSkippable_;
   int32_t correlation_id_;
   int32_t grace_time_;
-  int shutdown_reason_;
+  int32_t shutdown_reason_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
 };
@@ -8997,22 +8970,22 @@ inline void ShutdownParams::set_grace_time(int32_t value) {
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ShutdownParams.grace_time)
 }
 
-// .antaris_api_peer_to_peer.PA_shutdown_reason shutdown_reason = 3;
+// int32 shutdown_reason = 3;
 inline void ShutdownParams::clear_shutdown_reason() {
   shutdown_reason_ = 0;
 }
-inline ::antaris_api_peer_to_peer::PA_shutdown_reason ShutdownParams::_internal_shutdown_reason() const {
-  return static_cast< ::antaris_api_peer_to_peer::PA_shutdown_reason >(shutdown_reason_);
+inline int32_t ShutdownParams::_internal_shutdown_reason() const {
+  return shutdown_reason_;
 }
-inline ::antaris_api_peer_to_peer::PA_shutdown_reason ShutdownParams::shutdown_reason() const {
+inline int32_t ShutdownParams::shutdown_reason() const {
   // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.ShutdownParams.shutdown_reason)
   return _internal_shutdown_reason();
 }
-inline void ShutdownParams::_internal_set_shutdown_reason(::antaris_api_peer_to_peer::PA_shutdown_reason value) {
+inline void ShutdownParams::_internal_set_shutdown_reason(int32_t value) {
   
   shutdown_reason_ = value;
 }
-inline void ShutdownParams::set_shutdown_reason(::antaris_api_peer_to_peer::PA_shutdown_reason value) {
+inline void ShutdownParams::set_shutdown_reason(int32_t value) {
   _internal_set_shutdown_reason(value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.ShutdownParams.shutdown_reason)
 }
@@ -11762,11 +11735,6 @@ template <> struct is_proto_enum< ::antaris_api_peer_to_peer::FileDlRadioType> :
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::antaris_api_peer_to_peer::FileDlRadioType>() {
   return ::antaris_api_peer_to_peer::FileDlRadioType_descriptor();
-}
-template <> struct is_proto_enum< ::antaris_api_peer_to_peer::PA_shutdown_reason> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::antaris_api_peer_to_peer::PA_shutdown_reason>() {
-  return ::antaris_api_peer_to_peer::PA_shutdown_reason_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

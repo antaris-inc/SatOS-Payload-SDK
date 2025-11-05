@@ -687,7 +687,7 @@ displayShutdownParams(const void *obj)
     printf("grace_time ==>\n");
     displayUINT16((void *)&p->grace_time);
     printf("shutdown_reason ==>\n");
-    displayPA_shutdown_reason((void *)&p->shutdown_reason);
+    displayUINT8((void *)&p->shutdown_reason);
 
 }
 
@@ -699,7 +699,7 @@ app_to_peer_ShutdownParams(const void *ptr_src_app, void *ptr_dst_peer)
 
     UINT32 __tmp_correlation_id = 0;
     UINT32 __tmp_grace_time = 0;
-    PA_shutdown_reason __tmp_shutdown_reason;
+    UINT32 __tmp_shutdown_reason = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -709,9 +709,9 @@ app_to_peer_ShutdownParams(const void *ptr_src_app, void *ptr_dst_peer)
 
     dst->set_grace_time(__tmp_grace_time);
 
-    app_to_peer_PA_shutdown_reason(&src->shutdown_reason, &__tmp_shutdown_reason); // shutdown_reason
+    app_to_peer_UINT8(&src->shutdown_reason, &__tmp_shutdown_reason); // shutdown_reason
 
-    dst->set_shutdown_reason((::antaris_api_peer_to_peer::PA_shutdown_reason)__tmp_shutdown_reason);
+    dst->set_shutdown_reason(__tmp_shutdown_reason);
 
 
 }
@@ -724,7 +724,7 @@ peer_to_app_ShutdownParams(const void *ptr_src_peer, void *ptr_dst_app)
 
     dst->correlation_id = src->correlation_id();
     dst->grace_time = src->grace_time();
-    dst->shutdown_reason = (PA_shutdown_reason)src->shutdown_reason();
+    dst->shutdown_reason = src->shutdown_reason();
 
 }
 
@@ -2584,22 +2584,6 @@ app_to_peer_FileDlRadioType(void *ptr_src_app, void *ptr_dst_peer)
 {
     FileDlRadioType *src = (FileDlRadioType *)ptr_src_app;
     FileDlRadioType *dst = (FileDlRadioType *)ptr_dst_peer;
-
-    *dst = *src;
-
-}
-
-void
-displayPA_shutdown_reason(void *obj)
-{
-    printf("%s => %d\n", "PA_shutdown_reason", *(INT32 *)obj);
-}
-
-void
-app_to_peer_PA_shutdown_reason(void *ptr_src_app, void *ptr_dst_peer)
-{
-    PA_shutdown_reason *src = (PA_shutdown_reason *)ptr_src_app;
-    PA_shutdown_reason *dst = (PA_shutdown_reason *)ptr_dst_peer;
 
     *dst = *src;
 
