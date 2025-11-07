@@ -1041,8 +1041,34 @@ AntarisReturnCode process_response_get_eps_voltage(GetEpsVoltage *get_eps_voltag
 AntarisReturnCode process_response_thrml_ntf(SesThermalStatusNtf *ses_thermal_status_ntf)
 {
     printf("processing SES thermal status notification\n");
-    printf("Current temperature = %u\n",(unsigned int)ses_thermal_status_ntf->temp);
-    printf("Heater power status = %u\n",(unsigned int)ses_thermal_status_ntf->heater_pwr_status);  // 0:OFF, 1:ON
+
+    if (ses_thermal_status_ntf->heater_pwr_status == 0) {
+        if (ses_thermal_status_ntf->hw_id_of_pwr_status == 0) { // 0: SESA
+            printf("SESA power ON/OFF success\n");
+        } else if (ses_thermal_status_ntf->hw_id_of_pwr_status == 1)  { // 1: SESB
+            printf("SESB power ON/OFF success\n");
+        } else {
+            printf("Invalid HW ID\n");
+        }
+    } else {
+        if (ses_thermal_status_ntf->hw_id_of_pwr_status == 0) { // 0: SESA
+            printf("SESA power ON/OFF failure\n");
+        } else if (ses_thermal_status_ntf->hw_id_of_pwr_status == 1)  { // 1: SESB
+            printf("SESB power ON/OFF failure\n");
+        } else {
+            printf("Invalid HW ID\n");
+        }
+    }
+    if (ses_thermal_status_ntf->heater_temp_status == 0) {
+        if (ses_thermal_status_ntf->hw_id_of_temp_status == 0) { // 0: SESA    
+            printf("SESA Temparature : %hhu celsius\n",ses_thermal_status_ntf->temperature);
+        } else if (ses_thermal_status_ntf->hw_id_of_temp_status == 1)  { // 1: SESB
+            printf("SESB Temparature : %hhu celsius\n",ses_thermal_status_ntf->temperature);
+        } else {
+            printf("Invalid HW ID\n");
+        }
+    } 
+
     if (debug) {
         displaySesThermalStatusNtf(ses_thermal_status_ntf);
     }
@@ -1053,7 +1079,7 @@ AntarisReturnCode process_response_thrml_ntf(SesThermalStatusNtf *ses_thermal_st
 
 AntarisReturnCode process_response_ses_temp(RespSesTempReqParams *ses_temp_req_params)
 {
-    printf("Current temperature = %u\n",(unsigned int)ses_temp_req_params->temp);
+    printf("Current temperature = %u\n",(unsigned int)ses_temp_req_params->temperature);
     printf("Heater power status = %u\n",(unsigned int)ses_temp_req_params->heater_pwr_status);  // 0:OFF, 1:ON
     if (debug) {
         displayRespSesTempReqParams(ses_temp_req_params);
