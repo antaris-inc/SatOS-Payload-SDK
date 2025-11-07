@@ -210,13 +210,32 @@ class Controller:
     def handle_ses_temp_req(self, ctx):
         hardware_id = 0   # 0:SESA , 1:SESB
         resp = ctx.client.ses_temp_req(hardware_id)
-        logger.info(f"Current temperature = {resp.temp}")
+        logger.info(f"Current temperature = {resp.temperature}")
         logger.info(f"Heater power status = {resp.heater_pwr_status}") # 0:OFF, 1:ON
 
     def ses_thermal_status_ntf(self, ctx):
-        logger.info(f"Hardware IS = {ctx.hardware_id}") # 0:SAS-A 1: SAS-B
-        logger.info(f"Current temperature = {ctx.temp}")
-        logger.info(f"Heater power status = {ctx.heater_pwr_status}") # 0:OFF, 1:ON
+        if ctx.heater_pwr_status == 0:
+            if ctx.hw_id_of_pwr_status == 0:  #SESA:0
+                logger.info("SESA power ON/OFF success\n");
+            elif ctx.hw_id_of_pwr_status == 1:  #SESB:1
+                logger.info("SESB power ON/OFF success\n");
+            else:
+                logger.info("Invalid HW ID\n");
+        else:
+            if ctx.hw_id_of_pwr_status == 0:  #SESA:0
+                logger.info("SESA power ON/OFF failure\n");
+            elif ctx.hw_id_of_pwr_status == 1:  #SESB:1
+                logger.info("SESB power ON/OFF failure\n");
+            else:
+                logger.info("Invalid HW ID\n");
+        
+        if ctx.heater_temp_status == 0:
+            if ctx.hw_id_of_temp_status == 0:  #SESA:0
+                logger.info(f"SESA temperature = {ctx.temperature}")
+            elif ctx.hw_id_of_temp_status == 1:  #SESB:1
+                logger.info(f"SESB temperature = {ctx.temperature}")
+        else:
+                logger.info("Invalid HW ID\n");
 
     def handle_power_control(self, ctx):
         logger.info("Handling payload power")

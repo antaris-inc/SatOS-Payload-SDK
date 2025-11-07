@@ -2328,8 +2328,8 @@ displayRespSesTempReqParams(const void *obj)
 
     printf("correlation_id ==>\n");
     displayUINT16((void *)&p->correlation_id);
-    printf("temp ==>\n");
-    displayUINT8((void *)&p->temp);
+    printf("temperature ==>\n");
+    displayUINT8((void *)&p->temperature);
     printf("heater_pwr_status ==>\n");
     displayUINT8((void *)&p->heater_pwr_status);
 
@@ -2342,16 +2342,16 @@ app_to_peer_RespSesTempReqParams(const void *ptr_src_app, void *ptr_dst_peer)
     ::antaris_api_peer_to_peer::RespSesTempReqParams *dst = (::antaris_api_peer_to_peer::RespSesTempReqParams *)ptr_dst_peer;
 
     UINT32 __tmp_correlation_id = 0;
-    UINT32 __tmp_temp = 0;
+    UINT32 __tmp_temperature = 0;
     UINT32 __tmp_heater_pwr_status = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
     dst->set_correlation_id(__tmp_correlation_id);
 
-    app_to_peer_UINT8(&src->temp, &__tmp_temp); // temp
+    app_to_peer_UINT8(&src->temperature, &__tmp_temperature); // temperature
 
-    dst->set_temp(__tmp_temp);
+    dst->set_temperature(__tmp_temperature);
 
     app_to_peer_UINT8(&src->heater_pwr_status, &__tmp_heater_pwr_status); // heater_pwr_status
 
@@ -2367,7 +2367,7 @@ peer_to_app_RespSesTempReqParams(const void *ptr_src_peer, void *ptr_dst_app)
     ::antaris_api_peer_to_peer::RespSesTempReqParams *src = (::antaris_api_peer_to_peer::RespSesTempReqParams *)ptr_src_peer;
 
     dst->correlation_id = src->correlation_id();
-    dst->temp = src->temp();
+    dst->temperature = src->temperature();
     dst->heater_pwr_status = src->heater_pwr_status();
 
 }
@@ -2383,8 +2383,14 @@ displaySesThermalStatusNtf(const void *obj)
     displayUINT16((void *)&p->correlation_id);
     printf("heater_pwr_status ==>\n");
     displayUINT8((void *)&p->heater_pwr_status);
-    printf("temp ==>\n");
-    displayUINT8((void *)&p->temp);
+    printf("hw_id_of_pwr_status ==>\n");
+    displayUINT8((void *)&p->hw_id_of_pwr_status);
+    printf("heater_temp_status ==>\n");
+    displayUINT8((void *)&p->heater_temp_status);
+    printf("hw_id_of_temp_status ==>\n");
+    displayUINT8((void *)&p->hw_id_of_temp_status);
+    printf("temperature ==>\n");
+    displayINT8((void *)&p->temperature);
 
 }
 
@@ -2396,7 +2402,10 @@ app_to_peer_SesThermalStatusNtf(const void *ptr_src_app, void *ptr_dst_peer)
 
     UINT32 __tmp_correlation_id = 0;
     UINT32 __tmp_heater_pwr_status = 0;
-    UINT32 __tmp_temp = 0;
+    UINT32 __tmp_hw_id_of_pwr_status = 0;
+    UINT32 __tmp_heater_temp_status = 0;
+    UINT32 __tmp_hw_id_of_temp_status = 0;
+    INT32 __tmp_temperature;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -2406,9 +2415,21 @@ app_to_peer_SesThermalStatusNtf(const void *ptr_src_app, void *ptr_dst_peer)
 
     dst->set_heater_pwr_status(__tmp_heater_pwr_status);
 
-    app_to_peer_UINT8(&src->temp, &__tmp_temp); // temp
+    app_to_peer_UINT8(&src->hw_id_of_pwr_status, &__tmp_hw_id_of_pwr_status); // hw_id_of_pwr_status
 
-    dst->set_temp(__tmp_temp);
+    dst->set_hw_id_of_pwr_status(__tmp_hw_id_of_pwr_status);
+
+    app_to_peer_UINT8(&src->heater_temp_status, &__tmp_heater_temp_status); // heater_temp_status
+
+    dst->set_heater_temp_status(__tmp_heater_temp_status);
+
+    app_to_peer_UINT8(&src->hw_id_of_temp_status, &__tmp_hw_id_of_temp_status); // hw_id_of_temp_status
+
+    dst->set_hw_id_of_temp_status(__tmp_hw_id_of_temp_status);
+
+    app_to_peer_INT8(&src->temperature, &__tmp_temperature); // temperature
+
+    dst->set_temperature(__tmp_temperature);
 
 
 }
@@ -2421,7 +2442,10 @@ peer_to_app_SesThermalStatusNtf(const void *ptr_src_peer, void *ptr_dst_app)
 
     dst->correlation_id = src->correlation_id();
     dst->heater_pwr_status = src->heater_pwr_status();
-    dst->temp = src->temp();
+    dst->hw_id_of_pwr_status = src->hw_id_of_pwr_status();
+    dst->heater_temp_status = src->heater_temp_status();
+    dst->hw_id_of_temp_status = src->hw_id_of_temp_status();
+    dst->temperature = src->temperature();
 
 }
 
