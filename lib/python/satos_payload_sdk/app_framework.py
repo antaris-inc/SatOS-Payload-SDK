@@ -524,6 +524,9 @@ class PayloadApplication(Stoppable):
     def remote_ac_power_on_ntf(self, remote_ac_status):
         self.remote_ac_power_on_ntf = remote_ac_status
 
+    def shutdown_ntf(self, shutdown_ntf_cb):
+        self.shutdown_ntf = shutdown_ntf_cb
+
     #TODO(bcwaldon): actually do something with the provided params
     def _handle_health_check(self, params):
         try:
@@ -614,6 +617,11 @@ class PayloadApplication(Stoppable):
         with self.lock:
             self.shutdown_correlation_id = params.correlation_id
         logger.info("shutdown return code is %u" % params.shutdown_reason)
+
+        try:
+            hv = self.shutdown_ntf(params)
+        except:
+            logger.exception("Handling shutdown notification failed")
 
         # non-blocking, as we just want to accept the request and proceed
         # in the background with full shutdown. Response will be sent later.
