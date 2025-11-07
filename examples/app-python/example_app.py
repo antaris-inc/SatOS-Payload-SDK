@@ -134,6 +134,9 @@ class Controller:
             logger.info(f"Unknown Power status received for {ctx.ac_app_id} = {ctx.power_status}")
         return True
 
+    def shutdown_ntf_handler(self, ctx):
+        logger.info(f"Shutdown reason is = {ctx.shutdown_reason}")
+
     def handle_hello_world(self, ctx):
         logger.info("Handling sequence: hello, world!")
 
@@ -438,6 +441,7 @@ def new():
     app.set_get_eps_voltage_cb(ctl.get_eps_voltage_handler)
     app.set_ses_thermal_status_ntf(ctl.ses_thermal_status_ntf)
     app.remote_ac_power_on_ntf(ctl.remote_ac_power_on_ntf_handler)
+    app.shutdown_ntf(ctl.shutdown_ntf_handler)
 
     # Sample function to add stats counters and names
     set_payload_values(app)
