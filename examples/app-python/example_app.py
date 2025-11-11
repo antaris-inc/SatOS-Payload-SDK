@@ -215,8 +215,7 @@ class Controller:
             logger.info(f"Hardware id = {resp.hardware_id}") # 0:SESA, 1:SESB
         else:
             logger.info(f"Unable read temperature for = {resp.hardware_id}") # 0:SESA, 1:SESB
-        fi 
-
+        
     def ses_thermal_status_ntf(self, ctx):
         if ctx.heater_pwr_status == 0:
             if ctx.hw_id_of_pwr_status == 0:  #SESA:0
