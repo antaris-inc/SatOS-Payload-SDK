@@ -2328,10 +2328,12 @@ displayRespSesTempReqParams(const void *obj)
 
     printf("correlation_id ==>\n");
     displayUINT16((void *)&p->correlation_id);
+    printf("status ==>\n");
+    displayUINT8((void *)&p->status);
     printf("temperature ==>\n");
     displayUINT8((void *)&p->temperature);
-    printf("heater_pwr_status ==>\n");
-    displayUINT8((void *)&p->heater_pwr_status);
+    printf("hardware_id ==>\n");
+    displayUINT8((void *)&p->hardware_id);
 
 }
 
@@ -2342,20 +2344,25 @@ app_to_peer_RespSesTempReqParams(const void *ptr_src_app, void *ptr_dst_peer)
     ::antaris_api_peer_to_peer::RespSesTempReqParams *dst = (::antaris_api_peer_to_peer::RespSesTempReqParams *)ptr_dst_peer;
 
     UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_status = 0;
     UINT32 __tmp_temperature = 0;
-    UINT32 __tmp_heater_pwr_status = 0;
+    UINT32 __tmp_hardware_id = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
     dst->set_correlation_id(__tmp_correlation_id);
 
+    app_to_peer_UINT8(&src->status, &__tmp_status); // status
+
+    dst->set_status(__tmp_status);
+
     app_to_peer_UINT8(&src->temperature, &__tmp_temperature); // temperature
 
     dst->set_temperature(__tmp_temperature);
 
-    app_to_peer_UINT8(&src->heater_pwr_status, &__tmp_heater_pwr_status); // heater_pwr_status
+    app_to_peer_UINT8(&src->hardware_id, &__tmp_hardware_id); // hardware_id
 
-    dst->set_heater_pwr_status(__tmp_heater_pwr_status);
+    dst->set_hardware_id(__tmp_hardware_id);
 
 
 }
@@ -2367,8 +2374,9 @@ peer_to_app_RespSesTempReqParams(const void *ptr_src_peer, void *ptr_dst_app)
     ::antaris_api_peer_to_peer::RespSesTempReqParams *src = (::antaris_api_peer_to_peer::RespSesTempReqParams *)ptr_src_peer;
 
     dst->correlation_id = src->correlation_id();
+    dst->status = src->status();
     dst->temperature = src->temperature();
-    dst->heater_pwr_status = src->heater_pwr_status();
+    dst->hardware_id = src->hardware_id();
 
 }
 

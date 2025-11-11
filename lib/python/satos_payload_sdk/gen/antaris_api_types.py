@@ -1497,22 +1497,26 @@ def app_to_peer_SesTempReq(app_struct):
 ## @class: RespSesTempReqParams
 ## @brief: Response to SES temperature request
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: status                                          :    Status of read                                  
 ## @param: temperature                                     :    in Celsius                                      
-## @param: heater_pwr_status                               :    0:OFF, 1:ON                                     
+## @param: hardware_id                                     :    SESA or SESB hardware                           
 class RespSesTempReqParams:
-    def __init__(self, correlation_id, temperature, heater_pwr_status):
+    def __init__(self, correlation_id, status, temperature, hardware_id):
         self.correlation_id = correlation_id
+        self.status = status
         self.temperature = temperature
-        self.heater_pwr_status = heater_pwr_status
+        self.hardware_id = hardware_id
 
     def __str__(self):
         ret_str = ""
         ret_str += "correlation_id:\n"
         ret_str += str(self.correlation_id) + "\n"
+        ret_str += "status:\n"
+        ret_str += str(self.status) + "\n"
         ret_str += "temperature:\n"
         ret_str += str(self.temperature) + "\n"
-        ret_str += "heater_pwr_status:\n"
-        ret_str += str(self.heater_pwr_status) + "\n"
+        ret_str += "hardware_id:\n"
+        ret_str += str(self.hardware_id) + "\n"
 
         return ret_str
 
@@ -1521,12 +1525,13 @@ class RespSesTempReqParams:
 
 def peer_to_app_RespSesTempReqParams(peer_struct):
     correlation_id = peer_struct.correlation_id
+    status = peer_struct.status
     temperature = peer_struct.temperature
-    heater_pwr_status = peer_struct.heater_pwr_status
-    return RespSesTempReqParams(correlation_id, temperature, heater_pwr_status)
+    hardware_id = peer_struct.hardware_id
+    return RespSesTempReqParams(correlation_id, status, temperature, hardware_id)
 
 def app_to_peer_RespSesTempReqParams(app_struct):
-    return antaris_api_pb2.RespSesTempReqParams(correlation_id = app_struct.correlation_id, temperature = app_struct.temperature, heater_pwr_status = app_struct.heater_pwr_status)
+    return antaris_api_pb2.RespSesTempReqParams(correlation_id = app_struct.correlation_id, status = app_struct.status, temperature = app_struct.temperature, hardware_id = app_struct.hardware_id)
 
 ## @class: SesThermalStatusNtf
 ## @brief: SES thermal notification from PC

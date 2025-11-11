@@ -316,8 +316,9 @@
 
         <Struct name="RespSesTempReqParams" description="Response to SES temperature request">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
-            <Field name="temperature" type="UINT8" sequence="2" description="in Celsius"/>
-            <Field name="heater_pwr_status" type="UINT8" sequence="3" description="0:OFF, 1:ON"/>
+            <Field name="status" type="UINT8" sequence="2" description="Status of read"/>
+            <Field name="temperature" type="UINT8" sequence="3" description="in Celsius"/>
+            <Field name="hardware_id" type="UINT8" sequence="4" description="SESA or SESB hardware"/>
         </Struct>
 
         <Struct name="SesThermalStatusNtf" description="SES thermal notification from PC">
