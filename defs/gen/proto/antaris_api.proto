@@ -329,8 +329,9 @@ message SesTempReq {
 
 message RespSesTempReqParams {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
-    int32                           temperature      = 2; // in Celsius
-    int32                           heater_pwr_status = 3; // 0:OFF, 1:ON
+    int32                           status           = 2; // Status of read
+    int32                           temperature      = 3; // in Celsius
+    int32                           hardware_id      = 4; // SESA or SESB hardware
 }
 
 message SesThermalStatusNtf {
