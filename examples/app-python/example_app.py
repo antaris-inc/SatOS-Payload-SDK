@@ -239,6 +239,7 @@ class Controller:
                 logger.info(f"SESB temperature = {ctx.temperature}")
         else:
                 logger.info("Invalid HW ID\n");
+        return True
 
     def handle_power_control(self, ctx):
         logger.info("Handling payload power")
