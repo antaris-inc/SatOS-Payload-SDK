@@ -217,7 +217,7 @@ class PCToAppService(antaris_api_pb2_grpc.AntarisapiApplicationCallbackServicer)
         else:
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
         
-    def PA_ProcessSesTempNtf(self, request, context):
+    def PA_ProcessSesThrmlNtf(self, request, context):
         if self.channel.process_cb_ses_thrml_ntf:
             app_request = api_types.peer_to_app_SesThermalStatusNtf(request)
             app_ret = self.channel.process_cb_ses_thrml_ntf(app_request)
