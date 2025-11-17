@@ -135,13 +135,13 @@ class SequenceHandler(Stoppable, threading.Thread):
 
 
 class ChannelClient:
-    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb, ses_thermal_ntf_cb, remote_ac_power_on_ntf, payload_power_control_ntf):
+    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb, ses_thermal_ntf_cb, remote_ac_power_on_ntf, payload_power_control_request_status):
         self._channel = None
         self._cond = threading.Condition()
         self._next_cid = 0
         self._responses = {}
 
-        self._payload_power_control_ntf = payload_power_control_ntf
+        self._payload_power_control_request_status = payload_power_control_request_status
         self._start_sequence_cb = start_sequence_cb
         self._req_payload_metrics_cb = req_payload_metrics_cb
         # used to facilitate communications with payload interface
@@ -152,7 +152,7 @@ class ChannelClient:
             'RespRegister': lambda x: api_types.AntarisReturnCode.An_SUCCESS,
             'RespGetCurrentLocation': self._handle_response,
             'RespStageFileDownload': self._handle_response,
-            'RespPayloadPowerControl': self._payload_power_control_ntf,
+            'RespPayloadPowerControl': self._payload_power_control_request_status,
             'ReqPayloadMetrics':self._handle_payload_metrics,
             'RespGnssEphStopDataReq':self._handle_response,
             'RespGnssEphStartDataReq': self._handle_response,
@@ -528,8 +528,8 @@ class PayloadApplication(Stoppable):
     def shutdown_ntf(self, shutdown_ntf_cb):
         self.shutdown_ntf = shutdown_ntf_cb
 
-    def payload_power_control_ntf(self, payload_power_control_ntf):
-        self.payload_power_control_ntf = payload_power_control_ntf
+    def payload_power_control_request_status(self, payload_power_control_request_status):
+        self.payload_power_control_request_status = payload_power_control_request_status
 
     #TODO(bcwaldon): actually do something with the provided params
     def _handle_health_check(self, params):
@@ -548,7 +548,7 @@ class PayloadApplication(Stoppable):
         logger.info("payload app starting")
 
         if not self.channel_client:
-            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb, self._set_get_eps_voltage_cb, self._set_ses_thermal_status_ntf, self._remote_ac_power_on_ntf, self._payload_power_control_ntf)
+            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb, self._set_get_eps_voltage_cb, self._set_ses_thermal_status_ntf, self._remote_ac_power_on_ntf, self._payload_power_control_request_status)
         
         self.channel_client._connect()
 
@@ -674,11 +674,11 @@ class PayloadApplication(Stoppable):
             return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
     def _set_ses_thermal_status_ntf(self, params):
-        logger.info("Handling SES thermal notification")
+        logger.info("Handling HW thermal notification")
         try:
             hv = self.ses_thermal_status_ntf(params)
         except:
-            logger.exception("Handling SES thermal notification failed")
+            logger.exception("Handling HW thermal notification not implemented in application")
             hv = False
 
         if hv:
@@ -691,7 +691,7 @@ class PayloadApplication(Stoppable):
         try:
             hv = self.remote_ac_power_on_ntf(params)
         except:
-            logger.exception("Handling Remote application controller notification failed or application callback returning false")
+            logger.exception("Remote application controller power on notification not implemented in application")
             hv = False
 
         if hv:
@@ -699,12 +699,12 @@ class PayloadApplication(Stoppable):
         else:
             return api_types.AntarisReturnCode.An_GENERIC_FAILURE
 
-    def _payload_power_control_ntf(self, params):
+    def _payload_power_control_request_status(self, params):
         logger.info("Handling power control status callback")
         try:
-            hv = self.payload_power_control_ntf(params)
+            hv = self.payload_power_control_request_status(params)
         except:
-            logger.exception("Power status callback is either not implemented or application callback returning false")
+            logger.exception("Power status callback is not implemented in application")
             hv = False
         
         if hv:

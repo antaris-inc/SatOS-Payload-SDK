@@ -123,7 +123,7 @@ class Controller:
         logger.info(f"EPS voltage data received : {float(ctx.eps_voltage):.2f}")
         return True
     
-    def payload_power_control_ntf(self, ctx):
+    def payload_power_control_request_status(self, ctx):
         logger.info(f"Request status = {ctx.req_status}")
 
     def remote_ac_power_on_ntf_handler(self, ctx):
@@ -468,7 +468,7 @@ def new():
     app.set_ses_thermal_status_ntf(ctl.ses_thermal_status_ntf)
     app.remote_ac_power_on_ntf(ctl.remote_ac_power_on_ntf_handler)
     app.shutdown_ntf(ctl.shutdown_ntf_handler)
-    app.payload_power_control_ntf(ctl.payload_power_control_ntf)
+    app.payload_power_control_request_status(ctl.payload_power_control_request_status)
 
     # Sample function to add stats counters and names
     set_payload_values(app)
