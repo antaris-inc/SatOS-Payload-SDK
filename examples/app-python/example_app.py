@@ -124,7 +124,8 @@ class Controller:
         return True
     
     def payload_power_control_request_status(self, ctx):
-        logger.info(f"Request status = {ctx.req_status}")
+        logger.info(f"Power control request status = {ctx.req_status}")
+        return True
 
     def remote_ac_power_on_ntf_handler(self, ctx):
         if ctx.power_status == 0:
