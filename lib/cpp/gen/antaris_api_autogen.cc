@@ -1106,6 +1106,156 @@ peer_to_app_RespPaSatOsMsg(const void *ptr_src_peer, void *ptr_dst_app)
 }
 
 void
+displayPstoEsFtmOperation(const void *obj)
+{
+    PstoEsFtmOperation *p = (PstoEsFtmOperation *)obj;
+
+    printf("PstoEsFtmOperation %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("pc_app_id ==>\n");
+    displayUINT8((void *)&p->pc_app_id);
+    printf("ftm_src ==>\n");
+    displayUINT8((void *)&p->ftm_src);
+    printf("ftm_dest ==>\n");
+    displayUINT8((void *)&p->ftm_dest);
+    printf("no_of_files ==>\n");
+    displayUINT16((void *)&p->no_of_files);
+    printf("file_names ==>\n");
+    for (int i = 0; i < 1020; i++) {
+        displayINT8((void *)&p->file_names[i]);
+    }
+
+
+}
+
+void
+app_to_peer_PstoEsFtmOperation(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    PstoEsFtmOperation *src = (PstoEsFtmOperation *)ptr_src_app;
+    ::antaris_api_peer_to_peer::PstoEsFtmOperation *dst = (::antaris_api_peer_to_peer::PstoEsFtmOperation *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_pc_app_id = 0;
+    UINT32 __tmp_ftm_src = 0;
+    UINT32 __tmp_ftm_dest = 0;
+    UINT32 __tmp_no_of_files = 0;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->pc_app_id, &__tmp_pc_app_id); // pc_app_id
+
+    dst->set_pc_app_id(__tmp_pc_app_id);
+
+    app_to_peer_UINT8(&src->ftm_src, &__tmp_ftm_src); // ftm_src
+
+    dst->set_ftm_src(__tmp_ftm_src);
+
+    app_to_peer_UINT8(&src->ftm_dest, &__tmp_ftm_dest); // ftm_dest
+
+    dst->set_ftm_dest(__tmp_ftm_dest);
+
+    app_to_peer_UINT16(&src->no_of_files, &__tmp_no_of_files); // no_of_files
+
+    dst->set_no_of_files(__tmp_no_of_files);
+
+    dst->set_file_names(src->file_names, sizeof(src->file_names));
+
+
+}
+
+void
+peer_to_app_PstoEsFtmOperation(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    PstoEsFtmOperation *dst = (PstoEsFtmOperation *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::PstoEsFtmOperation *src = (::antaris_api_peer_to_peer::PstoEsFtmOperation *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->pc_app_id = src->pc_app_id();
+    dst->ftm_src = src->ftm_src();
+    dst->ftm_dest = src->ftm_dest();
+    dst->no_of_files = src->no_of_files();
+    size_t file_names_length = src->file_names().size();
+    if (file_names_length > 1020) {
+        printf("Warning: file_names length (%zu) truncated to 1020\n", file_names_length);
+        file_names_length = 1020;
+    }
+    memcpy(dst->file_names, src->file_names().data(), file_names_length);
+    if (file_names_length < 1020)
+        memset(dst->file_names + file_names_length, 0, 1020 - file_names_length);
+
+}
+
+void
+displayPstoEsFtmOperationNotify(const void *obj)
+{
+    PstoEsFtmOperationNotify *p = (PstoEsFtmOperationNotify *)obj;
+
+    printf("PstoEsFtmOperationNotify %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("ftm_complete ==>\n");
+    displayUINT8((void *)&p->ftm_complete);
+    printf("req_status ==>\n");
+    displayINT32((void *)&p->req_status);
+    printf("file_name ==>\n");
+    for (int i = 0; i < 16; i++) {
+        displayINT8((void *)&p->file_name[i]);
+    }
+
+
+}
+
+void
+app_to_peer_PstoEsFtmOperationNotify(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    PstoEsFtmOperationNotify *src = (PstoEsFtmOperationNotify *)ptr_src_app;
+    ::antaris_api_peer_to_peer::PstoEsFtmOperationNotify *dst = (::antaris_api_peer_to_peer::PstoEsFtmOperationNotify *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_ftm_complete = 0;
+    INT32 __tmp_req_status;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->ftm_complete, &__tmp_ftm_complete); // ftm_complete
+
+    dst->set_ftm_complete(__tmp_ftm_complete);
+
+    app_to_peer_INT32(&src->req_status, &__tmp_req_status); // req_status
+
+    dst->set_req_status(__tmp_req_status);
+
+    dst->set_file_name(&src->file_name[0]);
+
+
+}
+
+void
+peer_to_app_PstoEsFtmOperationNotify(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    PstoEsFtmOperationNotify *dst = (PstoEsFtmOperationNotify *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::PstoEsFtmOperationNotify *src = (::antaris_api_peer_to_peer::PstoEsFtmOperationNotify *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->ftm_complete = src->ftm_complete();
+    dst->req_status = src->req_status();
+    size_t file_name_length = strnlen(src->file_name().c_str(), 16);
+    if ( file_name_length >= 16 ) {
+        printf("Error:  file_name_length should be less than 16 \n");
+        return;
+    }
+    strncpy(&dst->file_name[0], src->file_name().c_str(), 16);
+
+}
+
+void
 displayReqGnssEphStopDataReq(const void *obj)
 {
     ReqGnssEphStopDataReq *p = (ReqGnssEphStopDataReq *)obj;
@@ -2504,6 +2654,8 @@ displayAntarisApiCallbackFuncList(const void *obj)
     displayProcessRespPaSatOsMsg_Fptr((void *)&p->process_pa_satos_msg_response);
     printf("process_remote_ac_power_on_ntf ==>\n");
     displayProcessRemoteAcPwrStatusNtf_Fptr((void *)&p->process_remote_ac_power_on_ntf);
+    printf("process_pstoes_ftm_operation_notify ==>\n");
+    displayProcessPstoEsFtmOperationNotify_Fptr((void *)&p->process_pstoes_ftm_operation_notify);
 
 }
 
