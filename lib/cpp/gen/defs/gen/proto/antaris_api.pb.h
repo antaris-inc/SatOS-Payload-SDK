@@ -47,7 +47,7 @@ struct TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[43]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[45]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -97,6 +97,12 @@ extern PayloadMetricsInfoDefaultTypeInternal _PayloadMetricsInfo_default_instanc
 class PayloadMetricsResponse;
 struct PayloadMetricsResponseDefaultTypeInternal;
 extern PayloadMetricsResponseDefaultTypeInternal _PayloadMetricsResponse_default_instance_;
+class PstoEsFtmOperation;
+struct PstoEsFtmOperationDefaultTypeInternal;
+extern PstoEsFtmOperationDefaultTypeInternal _PstoEsFtmOperation_default_instance_;
+class PstoEsFtmOperationNotify;
+struct PstoEsFtmOperationNotifyDefaultTypeInternal;
+extern PstoEsFtmOperationNotifyDefaultTypeInternal _PstoEsFtmOperationNotify_default_instance_;
 class ReqGetCurrentLocationParams;
 struct ReqGetCurrentLocationParamsDefaultTypeInternal;
 extern ReqGetCurrentLocationParamsDefaultTypeInternal _ReqGetCurrentLocationParams_default_instance_;
@@ -200,6 +206,8 @@ template<> ::antaris_api_peer_to_peer::OBC_time* Arena::CreateMaybeMessage<::ant
 template<> ::antaris_api_peer_to_peer::PaSatOsMsg* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::PaSatOsMsg>(Arena*);
 template<> ::antaris_api_peer_to_peer::PayloadMetricsInfo* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::PayloadMetricsInfo>(Arena*);
 template<> ::antaris_api_peer_to_peer::PayloadMetricsResponse* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::PayloadMetricsResponse>(Arena*);
+template<> ::antaris_api_peer_to_peer::PstoEsFtmOperation* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::PstoEsFtmOperation>(Arena*);
+template<> ::antaris_api_peer_to_peer::PstoEsFtmOperationNotify* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::PstoEsFtmOperationNotify>(Arena*);
 template<> ::antaris_api_peer_to_peer::ReqGetCurrentLocationParams* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::ReqGetCurrentLocationParams>(Arena*);
 template<> ::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq>(Arena*);
 template<> ::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq>(Arena*);
@@ -3740,6 +3748,396 @@ class RespPaSatOsMsg final :
 };
 // -------------------------------------------------------------------
 
+class PstoEsFtmOperation final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:antaris_api_peer_to_peer.PstoEsFtmOperation) */ {
+ public:
+  inline PstoEsFtmOperation() : PstoEsFtmOperation(nullptr) {}
+  ~PstoEsFtmOperation() override;
+  explicit constexpr PstoEsFtmOperation(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  PstoEsFtmOperation(const PstoEsFtmOperation& from);
+  PstoEsFtmOperation(PstoEsFtmOperation&& from) noexcept
+    : PstoEsFtmOperation() {
+    *this = ::std::move(from);
+  }
+
+  inline PstoEsFtmOperation& operator=(const PstoEsFtmOperation& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline PstoEsFtmOperation& operator=(PstoEsFtmOperation&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const PstoEsFtmOperation& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const PstoEsFtmOperation* internal_default_instance() {
+    return reinterpret_cast<const PstoEsFtmOperation*>(
+               &_PstoEsFtmOperation_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    20;
+
+  friend void swap(PstoEsFtmOperation& a, PstoEsFtmOperation& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(PstoEsFtmOperation* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(PstoEsFtmOperation* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  PstoEsFtmOperation* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<PstoEsFtmOperation>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const PstoEsFtmOperation& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const PstoEsFtmOperation& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PstoEsFtmOperation* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "antaris_api_peer_to_peer.PstoEsFtmOperation";
+  }
+  protected:
+  explicit PstoEsFtmOperation(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kFileNamesFieldNumber = 6,
+    kCorrelationIdFieldNumber = 1,
+    kPcAppIdFieldNumber = 2,
+    kFtmSrcFieldNumber = 3,
+    kFtmDestFieldNumber = 4,
+    kNoOfFilesFieldNumber = 5,
+  };
+  // bytes file_names = 6;
+  void clear_file_names();
+  const std::string& file_names() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_file_names(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_file_names();
+  PROTOBUF_NODISCARD std::string* release_file_names();
+  void set_allocated_file_names(std::string* file_names);
+  private:
+  const std::string& _internal_file_names() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_file_names(const std::string& value);
+  std::string* _internal_mutable_file_names();
+  public:
+
+  // int32 correlation_id = 1;
+  void clear_correlation_id();
+  int32_t correlation_id() const;
+  void set_correlation_id(int32_t value);
+  private:
+  int32_t _internal_correlation_id() const;
+  void _internal_set_correlation_id(int32_t value);
+  public:
+
+  // int32 pc_app_id = 2;
+  void clear_pc_app_id();
+  int32_t pc_app_id() const;
+  void set_pc_app_id(int32_t value);
+  private:
+  int32_t _internal_pc_app_id() const;
+  void _internal_set_pc_app_id(int32_t value);
+  public:
+
+  // int32 ftm_src = 3;
+  void clear_ftm_src();
+  int32_t ftm_src() const;
+  void set_ftm_src(int32_t value);
+  private:
+  int32_t _internal_ftm_src() const;
+  void _internal_set_ftm_src(int32_t value);
+  public:
+
+  // int32 ftm_dest = 4;
+  void clear_ftm_dest();
+  int32_t ftm_dest() const;
+  void set_ftm_dest(int32_t value);
+  private:
+  int32_t _internal_ftm_dest() const;
+  void _internal_set_ftm_dest(int32_t value);
+  public:
+
+  // int32 no_of_files = 5;
+  void clear_no_of_files();
+  int32_t no_of_files() const;
+  void set_no_of_files(int32_t value);
+  private:
+  int32_t _internal_no_of_files() const;
+  void _internal_set_no_of_files(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.PstoEsFtmOperation)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr file_names_;
+  int32_t correlation_id_;
+  int32_t pc_app_id_;
+  int32_t ftm_src_;
+  int32_t ftm_dest_;
+  int32_t no_of_files_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
+};
+// -------------------------------------------------------------------
+
+class PstoEsFtmOperationNotify final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:antaris_api_peer_to_peer.PstoEsFtmOperationNotify) */ {
+ public:
+  inline PstoEsFtmOperationNotify() : PstoEsFtmOperationNotify(nullptr) {}
+  ~PstoEsFtmOperationNotify() override;
+  explicit constexpr PstoEsFtmOperationNotify(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  PstoEsFtmOperationNotify(const PstoEsFtmOperationNotify& from);
+  PstoEsFtmOperationNotify(PstoEsFtmOperationNotify&& from) noexcept
+    : PstoEsFtmOperationNotify() {
+    *this = ::std::move(from);
+  }
+
+  inline PstoEsFtmOperationNotify& operator=(const PstoEsFtmOperationNotify& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline PstoEsFtmOperationNotify& operator=(PstoEsFtmOperationNotify&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const PstoEsFtmOperationNotify& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const PstoEsFtmOperationNotify* internal_default_instance() {
+    return reinterpret_cast<const PstoEsFtmOperationNotify*>(
+               &_PstoEsFtmOperationNotify_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    21;
+
+  friend void swap(PstoEsFtmOperationNotify& a, PstoEsFtmOperationNotify& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(PstoEsFtmOperationNotify* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(PstoEsFtmOperationNotify* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  PstoEsFtmOperationNotify* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<PstoEsFtmOperationNotify>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const PstoEsFtmOperationNotify& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const PstoEsFtmOperationNotify& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PstoEsFtmOperationNotify* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "antaris_api_peer_to_peer.PstoEsFtmOperationNotify";
+  }
+  protected:
+  explicit PstoEsFtmOperationNotify(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kFileNameFieldNumber = 4,
+    kCorrelationIdFieldNumber = 1,
+    kFtmCompleteFieldNumber = 2,
+    kReqStatusFieldNumber = 3,
+  };
+  // string file_name = 4;
+  void clear_file_name();
+  const std::string& file_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_file_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_file_name();
+  PROTOBUF_NODISCARD std::string* release_file_name();
+  void set_allocated_file_name(std::string* file_name);
+  private:
+  const std::string& _internal_file_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_file_name(const std::string& value);
+  std::string* _internal_mutable_file_name();
+  public:
+
+  // int32 correlation_id = 1;
+  void clear_correlation_id();
+  int32_t correlation_id() const;
+  void set_correlation_id(int32_t value);
+  private:
+  int32_t _internal_correlation_id() const;
+  void _internal_set_correlation_id(int32_t value);
+  public:
+
+  // int32 ftm_complete = 2;
+  void clear_ftm_complete();
+  int32_t ftm_complete() const;
+  void set_ftm_complete(int32_t value);
+  private:
+  int32_t _internal_ftm_complete() const;
+  void _internal_set_ftm_complete(int32_t value);
+  public:
+
+  // int32 req_status = 3;
+  void clear_req_status();
+  int32_t req_status() const;
+  void set_req_status(int32_t value);
+  private:
+  int32_t _internal_req_status() const;
+  void _internal_set_req_status(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.PstoEsFtmOperationNotify)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr file_name_;
+  int32_t correlation_id_;
+  int32_t ftm_complete_;
+  int32_t req_status_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
+};
+// -------------------------------------------------------------------
+
 class ReqGnssEphStopDataReq final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:antaris_api_peer_to_peer.ReqGnssEphStopDataReq) */ {
  public:
@@ -3788,7 +4186,7 @@ class ReqGnssEphStopDataReq final :
                &_ReqGnssEphStopDataReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    22;
 
   friend void swap(ReqGnssEphStopDataReq& a, ReqGnssEphStopDataReq& b) {
     a.Swap(&b);
@@ -3934,7 +4332,7 @@ class RespGnssEphStopDataReq final :
                &_RespGnssEphStopDataReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    23;
 
   friend void swap(RespGnssEphStopDataReq& a, RespGnssEphStopDataReq& b) {
     a.Swap(&b);
@@ -4091,7 +4489,7 @@ class ReqGnssEphStartDataReq final :
                &_ReqGnssEphStartDataReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    24;
 
   friend void swap(ReqGnssEphStartDataReq& a, ReqGnssEphStartDataReq& b) {
     a.Swap(&b);
@@ -4259,7 +4657,7 @@ class RespGnssEphStartDataReq final :
                &_RespGnssEphStartDataReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    25;
 
   friend void swap(RespGnssEphStartDataReq& a, RespGnssEphStartDataReq& b) {
     a.Swap(&b);
@@ -4416,7 +4814,7 @@ class OBC_time final :
                &_OBC_time_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    26;
 
   friend void swap(OBC_time& a, OBC_time& b) {
     a.Swap(&b);
@@ -4617,7 +5015,7 @@ class GpsEphemerisData final :
                &_GpsEphemerisData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    27;
 
   friend void swap(GpsEphemerisData& a, GpsEphemerisData& b) {
     a.Swap(&b);
@@ -4855,7 +5253,7 @@ class AdcsEphemerisData final :
                &_AdcsEphemerisData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    28;
 
   friend void swap(AdcsEphemerisData& a, AdcsEphemerisData& b) {
     a.Swap(&b);
@@ -5331,7 +5729,7 @@ class GnssEphData final :
                &_GnssEphData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    29;
 
   friend void swap(GnssEphData& a, GnssEphData& b) {
     a.Swap(&b);
@@ -5539,7 +5937,7 @@ class ReqGetEpsVoltageStopReq final :
                &_ReqGetEpsVoltageStopReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    30;
 
   friend void swap(ReqGetEpsVoltageStopReq& a, ReqGetEpsVoltageStopReq& b) {
     a.Swap(&b);
@@ -5685,7 +6083,7 @@ class RespGetEpsVoltageStopReq final :
                &_RespGetEpsVoltageStopReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    31;
 
   friend void swap(RespGetEpsVoltageStopReq& a, RespGetEpsVoltageStopReq& b) {
     a.Swap(&b);
@@ -5842,7 +6240,7 @@ class ReqGetEpsVoltageStartReq final :
                &_ReqGetEpsVoltageStartReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    32;
 
   friend void swap(ReqGetEpsVoltageStartReq& a, ReqGetEpsVoltageStartReq& b) {
     a.Swap(&b);
@@ -5999,7 +6397,7 @@ class RespGetEpsVoltageStartReq final :
                &_RespGetEpsVoltageStartReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    33;
 
   friend void swap(RespGetEpsVoltageStartReq& a, RespGetEpsVoltageStartReq& b) {
     a.Swap(&b);
@@ -6156,7 +6554,7 @@ class GetEpsVoltage final :
                &_GetEpsVoltage_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    34;
 
   friend void swap(GetEpsVoltage& a, GetEpsVoltage& b) {
     a.Swap(&b);
@@ -6313,7 +6711,7 @@ class NtfRemoteAcPwrStatus final :
                &_NtfRemoteAcPwrStatus_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    35;
 
   friend void swap(NtfRemoteAcPwrStatus& a, NtfRemoteAcPwrStatus& b) {
     a.Swap(&b);
@@ -6481,7 +6879,7 @@ class StartSesThermMgmntReq final :
                &_StartSesThermMgmntReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    36;
 
   friend void swap(StartSesThermMgmntReq& a, StartSesThermMgmntReq& b) {
     a.Swap(&b);
@@ -6671,7 +7069,7 @@ class RespStartSesThermMgmntReq final :
                &_RespStartSesThermMgmntReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    37;
 
   friend void swap(RespStartSesThermMgmntReq& a, RespStartSesThermMgmntReq& b) {
     a.Swap(&b);
@@ -6828,7 +7226,7 @@ class StopSesThermMgmntReq final :
                &_StopSesThermMgmntReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    38;
 
   friend void swap(StopSesThermMgmntReq& a, StopSesThermMgmntReq& b) {
     a.Swap(&b);
@@ -6985,7 +7383,7 @@ class RespStopSesThermMgmntReq final :
                &_RespStopSesThermMgmntReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    39;
 
   friend void swap(RespStopSesThermMgmntReq& a, RespStopSesThermMgmntReq& b) {
     a.Swap(&b);
@@ -7142,7 +7540,7 @@ class SesTempReq final :
                &_SesTempReq_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    38;
+    40;
 
   friend void swap(SesTempReq& a, SesTempReq& b) {
     a.Swap(&b);
@@ -7299,7 +7697,7 @@ class RespSesTempReqParams final :
                &_RespSesTempReqParams_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    41;
 
   friend void swap(RespSesTempReqParams& a, RespSesTempReqParams& b) {
     a.Swap(&b);
@@ -7467,7 +7865,7 @@ class SesThermalStatusNtf final :
                &_SesThermalStatusNtf_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    40;
+    42;
 
   friend void swap(SesThermalStatusNtf& a, SesThermalStatusNtf& b) {
     a.Swap(&b);
@@ -7635,7 +8033,7 @@ class AntarisCorrelationId final :
                &_AntarisCorrelationId_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    41;
+    43;
 
   friend void swap(AntarisCorrelationId& a, AntarisCorrelationId& b) {
     a.Swap(&b);
@@ -7781,7 +8179,7 @@ class AntarisReturnType final :
                &_AntarisReturnType_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    42;
+    44;
 
   friend void swap(AntarisReturnType& a, AntarisReturnType& b) {
     a.Swap(&b);
@@ -9489,6 +9887,276 @@ inline void RespPaSatOsMsg::_internal_set_req_status(int32_t value) {
 inline void RespPaSatOsMsg::set_req_status(int32_t value) {
   _internal_set_req_status(value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.RespPaSatOsMsg.req_status)
+}
+
+// -------------------------------------------------------------------
+
+// PstoEsFtmOperation
+
+// int32 correlation_id = 1;
+inline void PstoEsFtmOperation::clear_correlation_id() {
+  correlation_id_ = 0;
+}
+inline int32_t PstoEsFtmOperation::_internal_correlation_id() const {
+  return correlation_id_;
+}
+inline int32_t PstoEsFtmOperation::correlation_id() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.PstoEsFtmOperation.correlation_id)
+  return _internal_correlation_id();
+}
+inline void PstoEsFtmOperation::_internal_set_correlation_id(int32_t value) {
+  
+  correlation_id_ = value;
+}
+inline void PstoEsFtmOperation::set_correlation_id(int32_t value) {
+  _internal_set_correlation_id(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.PstoEsFtmOperation.correlation_id)
+}
+
+// int32 pc_app_id = 2;
+inline void PstoEsFtmOperation::clear_pc_app_id() {
+  pc_app_id_ = 0;
+}
+inline int32_t PstoEsFtmOperation::_internal_pc_app_id() const {
+  return pc_app_id_;
+}
+inline int32_t PstoEsFtmOperation::pc_app_id() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.PstoEsFtmOperation.pc_app_id)
+  return _internal_pc_app_id();
+}
+inline void PstoEsFtmOperation::_internal_set_pc_app_id(int32_t value) {
+  
+  pc_app_id_ = value;
+}
+inline void PstoEsFtmOperation::set_pc_app_id(int32_t value) {
+  _internal_set_pc_app_id(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.PstoEsFtmOperation.pc_app_id)
+}
+
+// int32 ftm_src = 3;
+inline void PstoEsFtmOperation::clear_ftm_src() {
+  ftm_src_ = 0;
+}
+inline int32_t PstoEsFtmOperation::_internal_ftm_src() const {
+  return ftm_src_;
+}
+inline int32_t PstoEsFtmOperation::ftm_src() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.PstoEsFtmOperation.ftm_src)
+  return _internal_ftm_src();
+}
+inline void PstoEsFtmOperation::_internal_set_ftm_src(int32_t value) {
+  
+  ftm_src_ = value;
+}
+inline void PstoEsFtmOperation::set_ftm_src(int32_t value) {
+  _internal_set_ftm_src(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.PstoEsFtmOperation.ftm_src)
+}
+
+// int32 ftm_dest = 4;
+inline void PstoEsFtmOperation::clear_ftm_dest() {
+  ftm_dest_ = 0;
+}
+inline int32_t PstoEsFtmOperation::_internal_ftm_dest() const {
+  return ftm_dest_;
+}
+inline int32_t PstoEsFtmOperation::ftm_dest() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.PstoEsFtmOperation.ftm_dest)
+  return _internal_ftm_dest();
+}
+inline void PstoEsFtmOperation::_internal_set_ftm_dest(int32_t value) {
+  
+  ftm_dest_ = value;
+}
+inline void PstoEsFtmOperation::set_ftm_dest(int32_t value) {
+  _internal_set_ftm_dest(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.PstoEsFtmOperation.ftm_dest)
+}
+
+// int32 no_of_files = 5;
+inline void PstoEsFtmOperation::clear_no_of_files() {
+  no_of_files_ = 0;
+}
+inline int32_t PstoEsFtmOperation::_internal_no_of_files() const {
+  return no_of_files_;
+}
+inline int32_t PstoEsFtmOperation::no_of_files() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.PstoEsFtmOperation.no_of_files)
+  return _internal_no_of_files();
+}
+inline void PstoEsFtmOperation::_internal_set_no_of_files(int32_t value) {
+  
+  no_of_files_ = value;
+}
+inline void PstoEsFtmOperation::set_no_of_files(int32_t value) {
+  _internal_set_no_of_files(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.PstoEsFtmOperation.no_of_files)
+}
+
+// bytes file_names = 6;
+inline void PstoEsFtmOperation::clear_file_names() {
+  file_names_.ClearToEmpty();
+}
+inline const std::string& PstoEsFtmOperation::file_names() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.PstoEsFtmOperation.file_names)
+  return _internal_file_names();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void PstoEsFtmOperation::set_file_names(ArgT0&& arg0, ArgT... args) {
+ 
+ file_names_.SetBytes(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.PstoEsFtmOperation.file_names)
+}
+inline std::string* PstoEsFtmOperation::mutable_file_names() {
+  std::string* _s = _internal_mutable_file_names();
+  // @@protoc_insertion_point(field_mutable:antaris_api_peer_to_peer.PstoEsFtmOperation.file_names)
+  return _s;
+}
+inline const std::string& PstoEsFtmOperation::_internal_file_names() const {
+  return file_names_.Get();
+}
+inline void PstoEsFtmOperation::_internal_set_file_names(const std::string& value) {
+  
+  file_names_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* PstoEsFtmOperation::_internal_mutable_file_names() {
+  
+  return file_names_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* PstoEsFtmOperation::release_file_names() {
+  // @@protoc_insertion_point(field_release:antaris_api_peer_to_peer.PstoEsFtmOperation.file_names)
+  return file_names_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void PstoEsFtmOperation::set_allocated_file_names(std::string* file_names) {
+  if (file_names != nullptr) {
+    
+  } else {
+    
+  }
+  file_names_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), file_names,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (file_names_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    file_names_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:antaris_api_peer_to_peer.PstoEsFtmOperation.file_names)
+}
+
+// -------------------------------------------------------------------
+
+// PstoEsFtmOperationNotify
+
+// int32 correlation_id = 1;
+inline void PstoEsFtmOperationNotify::clear_correlation_id() {
+  correlation_id_ = 0;
+}
+inline int32_t PstoEsFtmOperationNotify::_internal_correlation_id() const {
+  return correlation_id_;
+}
+inline int32_t PstoEsFtmOperationNotify::correlation_id() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.PstoEsFtmOperationNotify.correlation_id)
+  return _internal_correlation_id();
+}
+inline void PstoEsFtmOperationNotify::_internal_set_correlation_id(int32_t value) {
+  
+  correlation_id_ = value;
+}
+inline void PstoEsFtmOperationNotify::set_correlation_id(int32_t value) {
+  _internal_set_correlation_id(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.PstoEsFtmOperationNotify.correlation_id)
+}
+
+// int32 ftm_complete = 2;
+inline void PstoEsFtmOperationNotify::clear_ftm_complete() {
+  ftm_complete_ = 0;
+}
+inline int32_t PstoEsFtmOperationNotify::_internal_ftm_complete() const {
+  return ftm_complete_;
+}
+inline int32_t PstoEsFtmOperationNotify::ftm_complete() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.PstoEsFtmOperationNotify.ftm_complete)
+  return _internal_ftm_complete();
+}
+inline void PstoEsFtmOperationNotify::_internal_set_ftm_complete(int32_t value) {
+  
+  ftm_complete_ = value;
+}
+inline void PstoEsFtmOperationNotify::set_ftm_complete(int32_t value) {
+  _internal_set_ftm_complete(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.PstoEsFtmOperationNotify.ftm_complete)
+}
+
+// int32 req_status = 3;
+inline void PstoEsFtmOperationNotify::clear_req_status() {
+  req_status_ = 0;
+}
+inline int32_t PstoEsFtmOperationNotify::_internal_req_status() const {
+  return req_status_;
+}
+inline int32_t PstoEsFtmOperationNotify::req_status() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.PstoEsFtmOperationNotify.req_status)
+  return _internal_req_status();
+}
+inline void PstoEsFtmOperationNotify::_internal_set_req_status(int32_t value) {
+  
+  req_status_ = value;
+}
+inline void PstoEsFtmOperationNotify::set_req_status(int32_t value) {
+  _internal_set_req_status(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.PstoEsFtmOperationNotify.req_status)
+}
+
+// string file_name = 4;
+inline void PstoEsFtmOperationNotify::clear_file_name() {
+  file_name_.ClearToEmpty();
+}
+inline const std::string& PstoEsFtmOperationNotify::file_name() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.PstoEsFtmOperationNotify.file_name)
+  return _internal_file_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void PstoEsFtmOperationNotify::set_file_name(ArgT0&& arg0, ArgT... args) {
+ 
+ file_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.PstoEsFtmOperationNotify.file_name)
+}
+inline std::string* PstoEsFtmOperationNotify::mutable_file_name() {
+  std::string* _s = _internal_mutable_file_name();
+  // @@protoc_insertion_point(field_mutable:antaris_api_peer_to_peer.PstoEsFtmOperationNotify.file_name)
+  return _s;
+}
+inline const std::string& PstoEsFtmOperationNotify::_internal_file_name() const {
+  return file_name_.Get();
+}
+inline void PstoEsFtmOperationNotify::_internal_set_file_name(const std::string& value) {
+  
+  file_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* PstoEsFtmOperationNotify::_internal_mutable_file_name() {
+  
+  return file_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* PstoEsFtmOperationNotify::release_file_name() {
+  // @@protoc_insertion_point(field_release:antaris_api_peer_to_peer.PstoEsFtmOperationNotify.file_name)
+  return file_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void PstoEsFtmOperationNotify::set_allocated_file_name(std::string* file_name) {
+  if (file_name != nullptr) {
+    
+  } else {
+    
+  }
+  file_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), file_name,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (file_name_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    file_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:antaris_api_peer_to_peer.PstoEsFtmOperationNotify.file_name)
 }
 
 // -------------------------------------------------------------------
@@ -11630,6 +12298,10 @@ inline void AntarisReturnType::set_return_code(::antaris_api_peer_to_peer::Antar
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

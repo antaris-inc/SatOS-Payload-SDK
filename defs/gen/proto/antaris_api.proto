@@ -189,6 +189,22 @@ message RespPaSatOsMsg {
     int32                           req_status       = 3; // status of PA SatOS Message request
 }
 
+message PstoEsFtmOperation {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           pc_app_id        = 2; // PC appliction id from which files are copied to edge system
+    int32                           ftm_src          = 3; // source of ftm command
+    int32                           ftm_dest         = 4; // destination of ftm command
+    int32                           no_of_files      = 5; // no of files to copy, if the value is 0 copy all files
+    bytes                           file_names       = 6; // array of bytes for sending file name, one byte for file_name_size and next file_name_size bytes for file_name to be copied, bytes
+}
+
+message PstoEsFtmOperationNotify {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           ftm_complete     = 2; // 0 indiacates if all file transfer complete, -1 if files transfer in still ongoing 
+    int32                           req_status       = 3; // status of file transfer
+    string                          file_name        = 4; // file_name, string
+}
+
 message ReqGnssEphStopDataReq {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
 }
@@ -368,6 +384,7 @@ service AntarisapiApplicationCallback {
     rpc PA_ProcessSesThrmlNtf(SesThermalStatusNtf) returns (AntarisReturnType) {}
     rpc PA_ProcessRespPaSatOsMsg(RespPaSatOsMsg) returns (AntarisReturnType) {}
     rpc PA_ProcessRemoteAcPwrStatusNtf(NtfRemoteAcPwrStatus) returns (AntarisReturnType) {}
+    rpc PA_ProcessPstoEsFtmOperationNotify(PstoEsFtmOperationNotify) returns (AntarisReturnType) {}
 }
 
 service AntarisapiPayloadController {
@@ -387,5 +404,6 @@ service AntarisapiPayloadController {
     rpc PC_stop_ses_therm_mgmnt_req(StopSesThermMgmntReq) returns (AntarisReturnType) {}
     rpc PC_ses_temp_req(SesTempReq) returns (AntarisReturnType) {}
     rpc PC_pa_satos_message(PaSatOsMsg) returns (AntarisReturnType) {}
+    rpc PC_pstoes_ftm_operation(PstoEsFtmOperation) returns (AntarisReturnType) {}
 }
 
