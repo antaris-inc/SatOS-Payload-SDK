@@ -1538,13 +1538,15 @@ def app_to_peer_RespSesTempReqParams(app_struct):
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
 ## @param: heater_pwr_status                               :    0:OFF, 1:ON                                     
 ## @param: hardware_id                                     :    SESA or SESB hardware                           
+## @param: reserved                                        :    reserved for future use                         
 ## @param: heater_temp_status                              :    Temperature status                              
 ## @param: temperature                                     :    in Celsius                                      
 class SesThermalStatusNtf:
-    def __init__(self, correlation_id, heater_pwr_status, hardware_id, heater_temp_status, temperature):
+    def __init__(self, correlation_id, heater_pwr_status, hardware_id, reserved, heater_temp_status, temperature):
         self.correlation_id = correlation_id
         self.heater_pwr_status = heater_pwr_status
         self.hardware_id = hardware_id
+        self.reserved = reserved
         self.heater_temp_status = heater_temp_status
         self.temperature = temperature
 
@@ -1556,6 +1558,8 @@ class SesThermalStatusNtf:
         ret_str += str(self.heater_pwr_status) + "\n"
         ret_str += "hardware_id:\n"
         ret_str += str(self.hardware_id) + "\n"
+        ret_str += "reserved:\n"
+        ret_str += str(self.reserved) + "\n"
         ret_str += "heater_temp_status:\n"
         ret_str += str(self.heater_temp_status) + "\n"
         ret_str += "temperature:\n"
@@ -1570,12 +1574,13 @@ def peer_to_app_SesThermalStatusNtf(peer_struct):
     correlation_id = peer_struct.correlation_id
     heater_pwr_status = peer_struct.heater_pwr_status
     hardware_id = peer_struct.hardware_id
+    reserved = peer_struct.reserved
     heater_temp_status = peer_struct.heater_temp_status
     temperature = peer_struct.temperature
-    return SesThermalStatusNtf(correlation_id, heater_pwr_status, hardware_id, heater_temp_status, temperature)
+    return SesThermalStatusNtf(correlation_id, heater_pwr_status, hardware_id, reserved, heater_temp_status, temperature)
 
 def app_to_peer_SesThermalStatusNtf(app_struct):
-    return antaris_api_pb2.SesThermalStatusNtf(correlation_id = app_struct.correlation_id, heater_pwr_status = app_struct.heater_pwr_status, hardware_id = app_struct.hardware_id, heater_temp_status = app_struct.heater_temp_status, temperature = app_struct.temperature)
+    return antaris_api_pb2.SesThermalStatusNtf(correlation_id = app_struct.correlation_id, heater_pwr_status = app_struct.heater_pwr_status, hardware_id = app_struct.hardware_id, reserved = app_struct.reserved, heater_temp_status = app_struct.heater_temp_status, temperature = app_struct.temperature)
 
 ## @class: AntarisApiCallbackFuncList
 ## @brief: Callback-functions registration structure for channel creation

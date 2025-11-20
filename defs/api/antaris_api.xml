@@ -325,8 +325,9 @@
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="heater_pwr_status" type="UINT8" sequence="2" description="0:OFF, 1:ON"/>
             <Field name="hardware_id" type="UINT8" sequence="3" description="SESA or SESB hardware"/>
-            <Field name="heater_temp_status" type="UINT8" sequence="4" description="Temperature status"/>
-            <Field name="temperature" type="INT8" sequence="5" description="in Celsius"/>
+            <Field name="reserved" type="UINT8" sequence="4" description="reserved for future use"/>
+            <Field name="heater_temp_status" type="UINT8" sequence="5" description="Temperature status"/>
+            <Field name="temperature" type="INT8" sequence="6" description="in Celsius"/>
         </Struct>
 
         <Struct name="AntarisApiCallbackFuncList" description="Callback-functions registration structure for channel creation" consumed_by="Application">

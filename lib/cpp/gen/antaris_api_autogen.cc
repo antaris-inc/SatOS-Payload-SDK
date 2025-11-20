@@ -2393,6 +2393,8 @@ displaySesThermalStatusNtf(const void *obj)
     displayUINT8((void *)&p->heater_pwr_status);
     printf("hardware_id ==>\n");
     displayUINT8((void *)&p->hardware_id);
+    printf("reserved ==>\n");
+    displayUINT8((void *)&p->reserved);
     printf("heater_temp_status ==>\n");
     displayUINT8((void *)&p->heater_temp_status);
     printf("temperature ==>\n");
@@ -2409,6 +2411,7 @@ app_to_peer_SesThermalStatusNtf(const void *ptr_src_app, void *ptr_dst_peer)
     UINT32 __tmp_correlation_id = 0;
     UINT32 __tmp_heater_pwr_status = 0;
     UINT32 __tmp_hardware_id = 0;
+    UINT32 __tmp_reserved = 0;
     UINT32 __tmp_heater_temp_status = 0;
     INT32 __tmp_temperature;
 
@@ -2423,6 +2426,10 @@ app_to_peer_SesThermalStatusNtf(const void *ptr_src_app, void *ptr_dst_peer)
     app_to_peer_UINT8(&src->hardware_id, &__tmp_hardware_id); // hardware_id
 
     dst->set_hardware_id(__tmp_hardware_id);
+
+    app_to_peer_UINT8(&src->reserved, &__tmp_reserved); // reserved
+
+    dst->set_reserved(__tmp_reserved);
 
     app_to_peer_UINT8(&src->heater_temp_status, &__tmp_heater_temp_status); // heater_temp_status
 
@@ -2444,6 +2451,7 @@ peer_to_app_SesThermalStatusNtf(const void *ptr_src_peer, void *ptr_dst_app)
     dst->correlation_id = src->correlation_id();
     dst->heater_pwr_status = src->heater_pwr_status();
     dst->hardware_id = src->hardware_id();
+    dst->reserved = src->reserved();
     dst->heater_temp_status = src->heater_temp_status();
     dst->temperature = src->temperature();
 

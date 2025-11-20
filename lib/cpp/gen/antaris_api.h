@@ -928,6 +928,7 @@ struct SesThermalStatusNtf {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     UINT8                                           heater_pwr_status;                               ///< @var 0:OFF, 1:ON
     UINT8                                           hardware_id;                                     ///< @var SESA or SESB hardware
+    UINT8                                           reserved;                                        ///< @var reserved for future use
     UINT8                                           heater_temp_status;                              ///< @var Temperature status
     INT8                                            temperature;                                     ///< @var in Celsius
 };

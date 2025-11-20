@@ -7555,8 +7555,9 @@ class SesThermalStatusNtf final :
     kCorrelationIdFieldNumber = 1,
     kHeaterPwrStatusFieldNumber = 2,
     kHardwareIdFieldNumber = 3,
-    kHeaterTempStatusFieldNumber = 4,
-    kTemperatureFieldNumber = 5,
+    kReservedFieldNumber = 4,
+    kHeaterTempStatusFieldNumber = 5,
+    kTemperatureFieldNumber = 6,
   };
   // int32 correlation_id = 1;
   void clear_correlation_id();
@@ -7585,7 +7586,16 @@ class SesThermalStatusNtf final :
   void _internal_set_hardware_id(int32_t value);
   public:
 
-  // int32 heater_temp_status = 4;
+  // int32 reserved = 4;
+  void clear_reserved();
+  int32_t reserved() const;
+  void set_reserved(int32_t value);
+  private:
+  int32_t _internal_reserved() const;
+  void _internal_set_reserved(int32_t value);
+  public:
+
+  // int32 heater_temp_status = 5;
   void clear_heater_temp_status();
   int32_t heater_temp_status() const;
   void set_heater_temp_status(int32_t value);
@@ -7594,7 +7604,7 @@ class SesThermalStatusNtf final :
   void _internal_set_heater_temp_status(int32_t value);
   public:
 
-  // int32 temperature = 5;
+  // int32 temperature = 6;
   void clear_temperature();
   int32_t temperature() const;
   void set_temperature(int32_t value);
@@ -7613,6 +7623,7 @@ class SesThermalStatusNtf final :
   int32_t correlation_id_;
   int32_t heater_pwr_status_;
   int32_t hardware_id_;
+  int32_t reserved_;
   int32_t heater_temp_status_;
   int32_t temperature_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
@@ -11632,7 +11643,27 @@ inline void SesThermalStatusNtf::set_hardware_id(int32_t value) {
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.SesThermalStatusNtf.hardware_id)
 }
 
-// int32 heater_temp_status = 4;
+// int32 reserved = 4;
+inline void SesThermalStatusNtf::clear_reserved() {
+  reserved_ = 0;
+}
+inline int32_t SesThermalStatusNtf::_internal_reserved() const {
+  return reserved_;
+}
+inline int32_t SesThermalStatusNtf::reserved() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.SesThermalStatusNtf.reserved)
+  return _internal_reserved();
+}
+inline void SesThermalStatusNtf::_internal_set_reserved(int32_t value) {
+  
+  reserved_ = value;
+}
+inline void SesThermalStatusNtf::set_reserved(int32_t value) {
+  _internal_set_reserved(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.SesThermalStatusNtf.reserved)
+}
+
+// int32 heater_temp_status = 5;
 inline void SesThermalStatusNtf::clear_heater_temp_status() {
   heater_temp_status_ = 0;
 }
@@ -11652,7 +11683,7 @@ inline void SesThermalStatusNtf::set_heater_temp_status(int32_t value) {
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.SesThermalStatusNtf.heater_temp_status)
 }
 
-// int32 temperature = 5;
+// int32 temperature = 6;
 inline void SesThermalStatusNtf::clear_temperature() {
   temperature_ = 0;
 }
