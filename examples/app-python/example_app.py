@@ -222,24 +222,24 @@ class Controller:
         
     def ses_thermal_status_ntf(self, ctx):
         if ctx.heater_pwr_status == 0:
-            if ctx.hw_id_of_pwr_status == 0:  #SESA:0
+            if ctx.hardware_id == 0:  #SESA:0
                 logger.info("SESA power ON/OFF success\n");
-            elif ctx.hw_id_of_pwr_status == 1:  #SESB:1
+            elif ctx.hardware_id == 1:  #SESB:1
                 logger.info("SESB power ON/OFF success\n");
             else:
                 logger.info("Invalid HW ID\n");
         else:
-            if ctx.hw_id_of_pwr_status == 0:  #SESA:0
+            if ctx.hardware_id == 0:  #SESA:0
                 logger.info("SESA power ON/OFF failure\n");
-            elif ctx.hw_id_of_pwr_status == 1:  #SESB:1
+            elif ctx.hardware_id == 1:  #SESB:1
                 logger.info("SESB power ON/OFF failure\n");
             else:
                 logger.info("Invalid HW ID\n");
         
         if ctx.heater_temp_status == 0:
-            if ctx.hw_id_of_temp_status == 0:  #SESA:0
+            if ctx.hardware_id == 0:  #SESA:0
                 logger.info(f"SESA temperature = {ctx.temperature}")
-            elif ctx.hw_id_of_temp_status == 1:  #SESB:1
+            elif ctx.hardware_id == 1:  #SESB:1
                 logger.info(f"SESB temperature = {ctx.temperature}")
         else:
                 logger.info("Invalid HW ID\n");
