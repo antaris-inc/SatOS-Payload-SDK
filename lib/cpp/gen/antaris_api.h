@@ -914,7 +914,7 @@ void peer_to_app_SesTempReq(const void *ptr_src_peer, void *ptr_dst_app);
 struct RespSesTempReqParams {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     UINT8                                           status;                                          ///< @var Status of read
-    UINT8                                           temperature;                                     ///< @var in Celsius
+    INT8                                            temperature;                                     ///< @var in Celsius
     UINT8                                           hardware_id;                                     ///< @var SESA or SESB hardware
 };
 
@@ -927,9 +927,9 @@ void peer_to_app_RespSesTempReqParams(const void *ptr_src_peer, void *ptr_dst_ap
 struct SesThermalStatusNtf {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     UINT8                                           heater_pwr_status;                               ///< @var 0:OFF, 1:ON
-    UINT8                                           hw_id_of_pwr_status;                             ///< @var SESA or SESB hardware
+    UINT8                                           hardware_id;                                     ///< @var SESA or SESB hardware
+    UINT8                                           reserved;                                        ///< @var reserved for future use
     UINT8                                           heater_temp_status;                              ///< @var Temperature status
-    UINT8                                           hw_id_of_temp_status;                            ///< @var SESA or SESB hardware
     INT8                                            temperature;                                     ///< @var in Celsius
 };
 

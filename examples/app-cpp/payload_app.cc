@@ -697,10 +697,10 @@ void handle_ses_temp_req(mythreadState_t *mythread){
     ses_temp_req.hardware_id = hardware_id;
     ret = api_pa_pc_ses_temp_req(channel,&ses_temp_req);
     if(ret == An_SUCCESS){
-        printf("SES temp request success, ret %d\n",ret);
+        printf("SES temperature request success, ret %d\n",ret);
     }
     else{
-        fprintf(stderr, " SES temp request failed, ret %d\n", ret);
+        fprintf(stderr, " SES temperature request failed, ret %d\n", ret);
     }
 
      // Tell PC that current sequence is done
@@ -1043,26 +1043,26 @@ AntarisReturnCode process_response_thrml_ntf(SesThermalStatusNtf *ses_thermal_st
     printf("processing SES thermal status notification\n");
 
     if (ses_thermal_status_ntf->heater_pwr_status == 0) {
-        if (ses_thermal_status_ntf->hw_id_of_pwr_status == 0) { // 0: SESA
+        if (ses_thermal_status_ntf->hardware_id == 0) { // 0: SESA
             printf("SESA power ON/OFF success\n");
-        } else if (ses_thermal_status_ntf->hw_id_of_pwr_status == 1)  { // 1: SESB
+        } else if (ses_thermal_status_ntf->hardware_id == 1)  { // 1: SESB
             printf("SESB power ON/OFF success\n");
         } else {
             printf("Invalid HW ID\n");
         }
     } else {
-        if (ses_thermal_status_ntf->hw_id_of_pwr_status == 0) { // 0: SESA
+        if (ses_thermal_status_ntf->hardware_id == 0) { // 0: SESA
             printf("SESA power ON/OFF failure\n");
-        } else if (ses_thermal_status_ntf->hw_id_of_pwr_status == 1)  { // 1: SESB
+        } else if (ses_thermal_status_ntf->hardware_id == 1)  { // 1: SESB
             printf("SESB power ON/OFF failure\n");
         } else {
             printf("Invalid HW ID\n");
         }
     }
     if (ses_thermal_status_ntf->heater_temp_status == 0) {
-        if (ses_thermal_status_ntf->hw_id_of_temp_status == 0) { // 0: SESA    
+        if (ses_thermal_status_ntf->hardware_id == 0) { // 0: SESA    
             printf("SESA Temparature : %hhu celsius\n",ses_thermal_status_ntf->temperature);
-        } else if (ses_thermal_status_ntf->hw_id_of_temp_status == 1)  { // 1: SESB
+        } else if (ses_thermal_status_ntf->hardware_id == 1)  { // 1: SESB
             printf("SESB Temparature : %hhu celsius\n",ses_thermal_status_ntf->temperature);
         } else {
             printf("Invalid HW ID\n");

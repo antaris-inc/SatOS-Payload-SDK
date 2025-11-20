@@ -2331,7 +2331,7 @@ displayRespSesTempReqParams(const void *obj)
     printf("status ==>\n");
     displayUINT8((void *)&p->status);
     printf("temperature ==>\n");
-    displayUINT8((void *)&p->temperature);
+    displayINT8((void *)&p->temperature);
     printf("hardware_id ==>\n");
     displayUINT8((void *)&p->hardware_id);
 
@@ -2345,7 +2345,7 @@ app_to_peer_RespSesTempReqParams(const void *ptr_src_app, void *ptr_dst_peer)
 
     UINT32 __tmp_correlation_id = 0;
     UINT32 __tmp_status = 0;
-    UINT32 __tmp_temperature = 0;
+    INT32 __tmp_temperature;
     UINT32 __tmp_hardware_id = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
@@ -2356,7 +2356,7 @@ app_to_peer_RespSesTempReqParams(const void *ptr_src_app, void *ptr_dst_peer)
 
     dst->set_status(__tmp_status);
 
-    app_to_peer_UINT8(&src->temperature, &__tmp_temperature); // temperature
+    app_to_peer_INT8(&src->temperature, &__tmp_temperature); // temperature
 
     dst->set_temperature(__tmp_temperature);
 
@@ -2391,12 +2391,12 @@ displaySesThermalStatusNtf(const void *obj)
     displayUINT16((void *)&p->correlation_id);
     printf("heater_pwr_status ==>\n");
     displayUINT8((void *)&p->heater_pwr_status);
-    printf("hw_id_of_pwr_status ==>\n");
-    displayUINT8((void *)&p->hw_id_of_pwr_status);
+    printf("hardware_id ==>\n");
+    displayUINT8((void *)&p->hardware_id);
+    printf("reserved ==>\n");
+    displayUINT8((void *)&p->reserved);
     printf("heater_temp_status ==>\n");
     displayUINT8((void *)&p->heater_temp_status);
-    printf("hw_id_of_temp_status ==>\n");
-    displayUINT8((void *)&p->hw_id_of_temp_status);
     printf("temperature ==>\n");
     displayINT8((void *)&p->temperature);
 
@@ -2410,9 +2410,9 @@ app_to_peer_SesThermalStatusNtf(const void *ptr_src_app, void *ptr_dst_peer)
 
     UINT32 __tmp_correlation_id = 0;
     UINT32 __tmp_heater_pwr_status = 0;
-    UINT32 __tmp_hw_id_of_pwr_status = 0;
+    UINT32 __tmp_hardware_id = 0;
+    UINT32 __tmp_reserved = 0;
     UINT32 __tmp_heater_temp_status = 0;
-    UINT32 __tmp_hw_id_of_temp_status = 0;
     INT32 __tmp_temperature;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
@@ -2423,17 +2423,17 @@ app_to_peer_SesThermalStatusNtf(const void *ptr_src_app, void *ptr_dst_peer)
 
     dst->set_heater_pwr_status(__tmp_heater_pwr_status);
 
-    app_to_peer_UINT8(&src->hw_id_of_pwr_status, &__tmp_hw_id_of_pwr_status); // hw_id_of_pwr_status
+    app_to_peer_UINT8(&src->hardware_id, &__tmp_hardware_id); // hardware_id
 
-    dst->set_hw_id_of_pwr_status(__tmp_hw_id_of_pwr_status);
+    dst->set_hardware_id(__tmp_hardware_id);
+
+    app_to_peer_UINT8(&src->reserved, &__tmp_reserved); // reserved
+
+    dst->set_reserved(__tmp_reserved);
 
     app_to_peer_UINT8(&src->heater_temp_status, &__tmp_heater_temp_status); // heater_temp_status
 
     dst->set_heater_temp_status(__tmp_heater_temp_status);
-
-    app_to_peer_UINT8(&src->hw_id_of_temp_status, &__tmp_hw_id_of_temp_status); // hw_id_of_temp_status
-
-    dst->set_hw_id_of_temp_status(__tmp_hw_id_of_temp_status);
 
     app_to_peer_INT8(&src->temperature, &__tmp_temperature); // temperature
 
@@ -2450,9 +2450,9 @@ peer_to_app_SesThermalStatusNtf(const void *ptr_src_peer, void *ptr_dst_app)
 
     dst->correlation_id = src->correlation_id();
     dst->heater_pwr_status = src->heater_pwr_status();
-    dst->hw_id_of_pwr_status = src->hw_id_of_pwr_status();
+    dst->hardware_id = src->hardware_id();
+    dst->reserved = src->reserved();
     dst->heater_temp_status = src->heater_temp_status();
-    dst->hw_id_of_temp_status = src->hw_id_of_temp_status();
     dst->temperature = src->temperature();
 
 }
