@@ -619,7 +619,7 @@ displayStartSequenceParams(const void *obj)
     }
 
     printf("sequence_params ==>\n");
-    for (int i = 0; i < 64; i++) {
+    for (int i = 0; i < 128; i++) {
         displayINT8((void *)&p->sequence_params[i]);
     }
 
@@ -665,12 +665,12 @@ peer_to_app_StartSequenceParams(const void *ptr_src_peer, void *ptr_dst_app)
         return;
     }
     strncpy(&dst->sequence_id[0], src->sequence_id().c_str(), 16);
-    size_t sequence_params_length = strnlen(src->sequence_params().c_str(), 64);
-    if ( sequence_params_length >= 64 ) {
-        printf("Error:  sequence_params_length should be less than 64 \n");
+    size_t sequence_params_length = strnlen(src->sequence_params().c_str(), 128);
+    if ( sequence_params_length >= 128 ) {
+        printf("Error:  sequence_params_length should be less than 128 \n");
         return;
     }
-    strncpy(&dst->sequence_params[0], src->sequence_params().c_str(), 64);
+    strncpy(&dst->sequence_params[0], src->sequence_params().c_str(), 128);
     dst->scheduled_deadline = src->scheduled_deadline();
 
 }
