@@ -556,7 +556,7 @@ void peer_to_app_RespHealthCheckParams(const void *ptr_src_peer, void *ptr_dst_a
 struct StartSequenceParams {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     INT8                                            sequence_id[16];                                 ///< @var app-defined sequence-id for payload application to execute
-    INT8                                            sequence_params[64];                             ///< @var app-defined sequence parameters corresponding to the sequence-id
+    INT8                                            sequence_params[128];                            ///< @var app-defined sequence parameters corresponding to the sequence-id
     UINT64                                          scheduled_deadline;                              ///< @var Epoch time till this sequence is allowed to run
 };
 
