@@ -150,6 +150,11 @@
             <Field name="names" type="INT8" sequence="2" description="Counter names, string" array="16"/>
         </Struct>
 
+        <Struct name="FilesInput" description="files input parameters Parameters">
+            <Field name="files_name_length" type="INT8" sequence="1" description="array of files name length, string" array="128"/>
+            <Field name="file_names" type="INT8" sequence="2" description="array of bytes for sending file name to be copied, bytes" bytes="true" array="4096"/>        
+        </Struct>
+
         <Struct name="ReqPayloadMetricsParams" description="Payload Metrics Parameters">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
         </Struct>
@@ -177,18 +182,18 @@
             <Field name="req_status" type="INT32" sequence="3" description="status of PA SatOS Message request"/>
         </Struct>
 
-        <Struct name="PstoEsFtmOperation" description="To start or file transfer from PS To ES">
+        <Struct name="PstoEsFcmOperation" description="To start or file copy from PS To ES">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
-            <Field name="pc_app_id" type="UINT8" sequence="2" description="PC appliction id from which files are copied to edge system"/>
-            <Field name="ftm_src" type="UINT8" sequence="3" description="source of ftm command"/>
-            <Field name="ftm_dest" type="UINT8" sequence="4" description="destination of ftm command"/>
+            <Field name="peer_app_id" type="UINT8" sequence="2" description="PC appliction id from which files are copied to edge system"/>
+            <Field name="fcm_src" type="UINT8" sequence="3" description="source of fcm command"/>
+            <Field name="fcm_dest" type="UINT8" sequence="4" description="destination of fcm command"/>
             <Field name="no_of_files" type="UINT16" sequence="5" description="no of files to copy, if the value is 0 copy all files"/>            
-            <Field name="file_names" type="INT8" sequence="6" description="array of bytes for sending file name, one byte for file_name_size and next file_name_size bytes for file_name to be copied, bytes" bytes="true" array="1020"/>
+            <Field name="files_input" type="FilesInput" sequence="6" description="details of Files to be copied"/>
         </Struct>
 
-        <Struct name="PstoEsFtmOperationNotify" description="To send Notification to Es on completion of Ftm">
+        <Struct name="PstoEsFcmOperationNotify" description="To send Notification to Es on completion of Fcm">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
-            <Field name="ftm_complete" type="UINT8" sequence="2" description="0 indiacates if all file transfer complete, -1 if files transfer in still ongoing "/>
+            <Field name="fcm_complete" type="UINT8" sequence="2" description="0 indiacates if all file transfer complete, -1 if files transfer in still ongoing "/>
             <Field name="req_status" type="INT32" sequence="3" description="status of file transfer"/>
             <Field name="file_name" type="INT8" sequence="4" description="file_name, string" array="16"/>
         </Struct>
@@ -367,7 +372,7 @@
             <Field name="process_cb_ses_thrml_ntf" type="ProcessSesThrmlNtf_Fptr" sequence="18" description="callback handler for SES thermal nofirication"/>
             <Field name="process_pa_satos_msg_response" type="ProcessRespPaSatOsMsg_Fptr" sequence="19" description="callback handler for PA to satOS command response"/>
             <Field name="process_remote_ac_power_on_ntf" type="ProcessRemoteAcPwrStatusNtf_Fptr" sequence="20" description="callback handler for remote application controller power on status notification"/>
-            <Field name="process_pstoes_ftm_operation_notify" type="ProcessPstoEsFtmOperationNotify_Fptr" sequence="21" description="callback handler for ftm operation status"/>
+            <Field name="process_pstoes_fcm_operation_notify" type="ProcessPstoEsFcmOperationNotify_Fptr" sequence="21" description="callback handler for fcm operation status"/>
         </Struct>
 
         <Struct name="AntarisCorrelationId" description="Wrapper structure for correlation-id">
@@ -461,8 +466,8 @@
             <Parameter variable_name="remote_app_status" type="NtfRemoteAcPwrStatus *" description="response remote AC power status"/>
         </FunctionPtr>
 
-        <FunctionPtr name="ProcessPstoEsFtmOperationNotify_Fptr" description="Callback for ftm operation status" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
-            <Parameter variable_name="pstoes_ftm_operation_notify" type="PstoEsFtmOperationNotify *" description="response Ps ftm operation status"/>
+        <FunctionPtr name="ProcessPstoEsFcmOperationNotify_Fptr" description="Callback for fcm operation status" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="pstoes_fcm_operation_notify" type="PstoEsFcmOperationNotify *" description="response Ps fcm operation status"/>
         </FunctionPtr>
     </Callbacks>
 
@@ -579,10 +584,10 @@
             <Parameter variable_name="pa_satos_msg" type="PaSatOsMsg *" description="Message to SatOS from PA"/>
         </Function>
 
-        <Function name="api_pa_pc_pstoes_ftm_operation" description="API to start ftm operation"
+        <Function name="api_pa_pc_pstoes_fcm_operation" description="API to start fcm operation"
                         return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
             <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
-            <Parameter variable_name="pstoes_ftm_operation" type="PstoEsFtmOperation *" description="Parameters for ps to es ftm operation"/>
+            <Parameter variable_name="pstoes_fcm_operation" type="PstoEsFcmOperation *" description="Parameters for ps to es fcm operation"/>
         </Function>
 
     </Functions>

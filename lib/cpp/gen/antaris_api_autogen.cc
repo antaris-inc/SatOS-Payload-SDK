@@ -840,6 +840,63 @@ peer_to_app_PayloadMetricsInfo(const void *ptr_src_peer, void *ptr_dst_app)
 }
 
 void
+displayFilesInput(const void *obj)
+{
+    FilesInput *p = (FilesInput *)obj;
+
+    printf("FilesInput %p =>\n", obj);
+
+    printf("files_name_length ==>\n");
+    for (int i = 0; i < 128; i++) {
+        displayINT8((void *)&p->files_name_length[i]);
+    }
+
+    printf("file_names ==>\n");
+    for (int i = 0; i < 4096; i++) {
+        displayINT8((void *)&p->file_names[i]);
+    }
+
+
+}
+
+void
+app_to_peer_FilesInput(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    FilesInput *src = (FilesInput *)ptr_src_app;
+    ::antaris_api_peer_to_peer::FilesInput *dst = (::antaris_api_peer_to_peer::FilesInput *)ptr_dst_peer;
+
+
+    dst->set_files_name_length(&src->files_name_length[0]);
+
+    dst->set_file_names(src->file_names, sizeof(src->file_names));
+
+
+}
+
+void
+peer_to_app_FilesInput(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    FilesInput *dst = (FilesInput *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::FilesInput *src = (::antaris_api_peer_to_peer::FilesInput *)ptr_src_peer;
+
+    size_t files_name_length_length = strnlen(src->files_name_length().c_str(), 128);
+    if ( files_name_length_length >= 128 ) {
+        printf("Error:  files_name_length_length should be less than 128 \n");
+        return;
+    }
+    strncpy(&dst->files_name_length[0], src->files_name_length().c_str(), 128);
+    size_t file_names_length = src->file_names().size();
+    if (file_names_length > 4096) {
+        printf("Warning: file_names length (%zu) truncated to 4096\n", file_names_length);
+        file_names_length = 4096;
+    }
+    memcpy(dst->file_names, src->file_names().data(), file_names_length);
+    if (file_names_length < 4096)
+        memset(dst->file_names + file_names_length, 0, 4096 - file_names_length);
+
+}
+
+void
 displayReqPayloadMetricsParams(const void *obj)
 {
     ReqPayloadMetricsParams *p = (ReqPayloadMetricsParams *)obj;
@@ -1106,100 +1163,92 @@ peer_to_app_RespPaSatOsMsg(const void *ptr_src_peer, void *ptr_dst_app)
 }
 
 void
-displayPstoEsFtmOperation(const void *obj)
+displayPstoEsFcmOperation(const void *obj)
 {
-    PstoEsFtmOperation *p = (PstoEsFtmOperation *)obj;
+    PstoEsFcmOperation *p = (PstoEsFcmOperation *)obj;
 
-    printf("PstoEsFtmOperation %p =>\n", obj);
+    printf("PstoEsFcmOperation %p =>\n", obj);
 
     printf("correlation_id ==>\n");
     displayUINT16((void *)&p->correlation_id);
-    printf("pc_app_id ==>\n");
-    displayUINT8((void *)&p->pc_app_id);
-    printf("ftm_src ==>\n");
-    displayUINT8((void *)&p->ftm_src);
-    printf("ftm_dest ==>\n");
-    displayUINT8((void *)&p->ftm_dest);
+    printf("peer_app_id ==>\n");
+    displayUINT8((void *)&p->peer_app_id);
+    printf("fcm_src ==>\n");
+    displayUINT8((void *)&p->fcm_src);
+    printf("fcm_dest ==>\n");
+    displayUINT8((void *)&p->fcm_dest);
     printf("no_of_files ==>\n");
     displayUINT16((void *)&p->no_of_files);
-    printf("file_names ==>\n");
-    for (int i = 0; i < 1020; i++) {
-        displayINT8((void *)&p->file_names[i]);
-    }
-
+    printf("files_input ==>\n");
+    displayFilesInput((void *)&p->files_input);
 
 }
 
 void
-app_to_peer_PstoEsFtmOperation(const void *ptr_src_app, void *ptr_dst_peer)
+app_to_peer_PstoEsFcmOperation(const void *ptr_src_app, void *ptr_dst_peer)
 {
-    PstoEsFtmOperation *src = (PstoEsFtmOperation *)ptr_src_app;
-    ::antaris_api_peer_to_peer::PstoEsFtmOperation *dst = (::antaris_api_peer_to_peer::PstoEsFtmOperation *)ptr_dst_peer;
+    PstoEsFcmOperation *src = (PstoEsFcmOperation *)ptr_src_app;
+    ::antaris_api_peer_to_peer::PstoEsFcmOperation *dst = (::antaris_api_peer_to_peer::PstoEsFcmOperation *)ptr_dst_peer;
 
     UINT32 __tmp_correlation_id = 0;
-    UINT32 __tmp_pc_app_id = 0;
-    UINT32 __tmp_ftm_src = 0;
-    UINT32 __tmp_ftm_dest = 0;
+    UINT32 __tmp_peer_app_id = 0;
+    UINT32 __tmp_fcm_src = 0;
+    UINT32 __tmp_fcm_dest = 0;
     UINT32 __tmp_no_of_files = 0;
+    FilesInput __tmp_files_input;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
     dst->set_correlation_id(__tmp_correlation_id);
 
-    app_to_peer_UINT8(&src->pc_app_id, &__tmp_pc_app_id); // pc_app_id
+    app_to_peer_UINT8(&src->peer_app_id, &__tmp_peer_app_id); // peer_app_id
 
-    dst->set_pc_app_id(__tmp_pc_app_id);
+    dst->set_peer_app_id(__tmp_peer_app_id);
 
-    app_to_peer_UINT8(&src->ftm_src, &__tmp_ftm_src); // ftm_src
+    app_to_peer_UINT8(&src->fcm_src, &__tmp_fcm_src); // fcm_src
 
-    dst->set_ftm_src(__tmp_ftm_src);
+    dst->set_fcm_src(__tmp_fcm_src);
 
-    app_to_peer_UINT8(&src->ftm_dest, &__tmp_ftm_dest); // ftm_dest
+    app_to_peer_UINT8(&src->fcm_dest, &__tmp_fcm_dest); // fcm_dest
 
-    dst->set_ftm_dest(__tmp_ftm_dest);
+    dst->set_fcm_dest(__tmp_fcm_dest);
 
     app_to_peer_UINT16(&src->no_of_files, &__tmp_no_of_files); // no_of_files
 
     dst->set_no_of_files(__tmp_no_of_files);
 
-    dst->set_file_names(src->file_names, sizeof(src->file_names));
+    app_to_peer_FilesInput(&src->files_input, dst->mutable_files_input()); // files_input
 
 
 }
 
 void
-peer_to_app_PstoEsFtmOperation(const void *ptr_src_peer, void *ptr_dst_app)
+peer_to_app_PstoEsFcmOperation(const void *ptr_src_peer, void *ptr_dst_app)
 {
-    PstoEsFtmOperation *dst = (PstoEsFtmOperation *)ptr_dst_app;
-    ::antaris_api_peer_to_peer::PstoEsFtmOperation *src = (::antaris_api_peer_to_peer::PstoEsFtmOperation *)ptr_src_peer;
+    PstoEsFcmOperation *dst = (PstoEsFcmOperation *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::PstoEsFcmOperation *src = (::antaris_api_peer_to_peer::PstoEsFcmOperation *)ptr_src_peer;
 
     dst->correlation_id = src->correlation_id();
-    dst->pc_app_id = src->pc_app_id();
-    dst->ftm_src = src->ftm_src();
-    dst->ftm_dest = src->ftm_dest();
+    dst->peer_app_id = src->peer_app_id();
+    dst->fcm_src = src->fcm_src();
+    dst->fcm_dest = src->fcm_dest();
     dst->no_of_files = src->no_of_files();
-    size_t file_names_length = src->file_names().size();
-    if (file_names_length > 1020) {
-        printf("Warning: file_names length (%zu) truncated to 1020\n", file_names_length);
-        file_names_length = 1020;
-    }
-    memcpy(dst->file_names, src->file_names().data(), file_names_length);
-    if (file_names_length < 1020)
-        memset(dst->file_names + file_names_length, 0, 1020 - file_names_length);
+    FilesInput *mutable_files_input = &dst->files_input;
+    peer_to_app_FilesInput(&src->files_input(), mutable_files_input);
 
 }
 
 void
-displayPstoEsFtmOperationNotify(const void *obj)
+displayPstoEsFcmOperationNotify(const void *obj)
 {
-    PstoEsFtmOperationNotify *p = (PstoEsFtmOperationNotify *)obj;
+    PstoEsFcmOperationNotify *p = (PstoEsFcmOperationNotify *)obj;
 
-    printf("PstoEsFtmOperationNotify %p =>\n", obj);
+    printf("PstoEsFcmOperationNotify %p =>\n", obj);
 
     printf("correlation_id ==>\n");
     displayUINT16((void *)&p->correlation_id);
-    printf("ftm_complete ==>\n");
-    displayUINT8((void *)&p->ftm_complete);
+    printf("fcm_complete ==>\n");
+    displayUINT8((void *)&p->fcm_complete);
     printf("req_status ==>\n");
     displayINT32((void *)&p->req_status);
     printf("file_name ==>\n");
@@ -1211,22 +1260,22 @@ displayPstoEsFtmOperationNotify(const void *obj)
 }
 
 void
-app_to_peer_PstoEsFtmOperationNotify(const void *ptr_src_app, void *ptr_dst_peer)
+app_to_peer_PstoEsFcmOperationNotify(const void *ptr_src_app, void *ptr_dst_peer)
 {
-    PstoEsFtmOperationNotify *src = (PstoEsFtmOperationNotify *)ptr_src_app;
-    ::antaris_api_peer_to_peer::PstoEsFtmOperationNotify *dst = (::antaris_api_peer_to_peer::PstoEsFtmOperationNotify *)ptr_dst_peer;
+    PstoEsFcmOperationNotify *src = (PstoEsFcmOperationNotify *)ptr_src_app;
+    ::antaris_api_peer_to_peer::PstoEsFcmOperationNotify *dst = (::antaris_api_peer_to_peer::PstoEsFcmOperationNotify *)ptr_dst_peer;
 
     UINT32 __tmp_correlation_id = 0;
-    UINT32 __tmp_ftm_complete = 0;
+    UINT32 __tmp_fcm_complete = 0;
     INT32 __tmp_req_status;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
     dst->set_correlation_id(__tmp_correlation_id);
 
-    app_to_peer_UINT8(&src->ftm_complete, &__tmp_ftm_complete); // ftm_complete
+    app_to_peer_UINT8(&src->fcm_complete, &__tmp_fcm_complete); // fcm_complete
 
-    dst->set_ftm_complete(__tmp_ftm_complete);
+    dst->set_fcm_complete(__tmp_fcm_complete);
 
     app_to_peer_INT32(&src->req_status, &__tmp_req_status); // req_status
 
@@ -1238,13 +1287,13 @@ app_to_peer_PstoEsFtmOperationNotify(const void *ptr_src_app, void *ptr_dst_peer
 }
 
 void
-peer_to_app_PstoEsFtmOperationNotify(const void *ptr_src_peer, void *ptr_dst_app)
+peer_to_app_PstoEsFcmOperationNotify(const void *ptr_src_peer, void *ptr_dst_app)
 {
-    PstoEsFtmOperationNotify *dst = (PstoEsFtmOperationNotify *)ptr_dst_app;
-    ::antaris_api_peer_to_peer::PstoEsFtmOperationNotify *src = (::antaris_api_peer_to_peer::PstoEsFtmOperationNotify *)ptr_src_peer;
+    PstoEsFcmOperationNotify *dst = (PstoEsFcmOperationNotify *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::PstoEsFcmOperationNotify *src = (::antaris_api_peer_to_peer::PstoEsFcmOperationNotify *)ptr_src_peer;
 
     dst->correlation_id = src->correlation_id();
-    dst->ftm_complete = src->ftm_complete();
+    dst->fcm_complete = src->fcm_complete();
     dst->req_status = src->req_status();
     size_t file_name_length = strnlen(src->file_name().c_str(), 16);
     if ( file_name_length >= 16 ) {
@@ -2654,8 +2703,8 @@ displayAntarisApiCallbackFuncList(const void *obj)
     displayProcessRespPaSatOsMsg_Fptr((void *)&p->process_pa_satos_msg_response);
     printf("process_remote_ac_power_on_ntf ==>\n");
     displayProcessRemoteAcPwrStatusNtf_Fptr((void *)&p->process_remote_ac_power_on_ntf);
-    printf("process_pstoes_ftm_operation_notify ==>\n");
-    displayProcessPstoEsFtmOperationNotify_Fptr((void *)&p->process_pstoes_ftm_operation_notify);
+    printf("process_pstoes_fcm_operation_notify ==>\n");
+    displayProcessPstoEsFcmOperationNotify_Fptr((void *)&p->process_pstoes_fcm_operation_notify);
 
 }
 

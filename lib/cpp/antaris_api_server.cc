@@ -591,9 +591,9 @@ class AppToPCClient {
         }
     }
 
-    AntarisReturnCode InvokeProcessPstoesFtmOperationNotify(PstoEsFtmOperationNotify *req_params)
+    AntarisReturnCode InvokeProcessPstoesFcmOperationNotify(PstoEsFcmOperationNotify *req_params)
     {
-        antaris_api_peer_to_peer::PstoEsFtmOperationNotify cb_req;
+        antaris_api_peer_to_peer::PstoEsFcmOperationNotify cb_req;
         antaris_api_peer_to_peer::AntarisReturnType cb_response;
         Status cb_status;
         // Context for the client. It could be used to convey extra information to
@@ -604,9 +604,9 @@ class AppToPCClient {
         std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
         context.set_deadline(deadline);
 
-        app_to_peer_PstoEsFtmOperationNotify(req_params, &cb_req);
+        app_to_peer_PstoEsFcmOperationNotify(req_params, &cb_req);
 
-        cb_status = app_grpc_handle_->PA_ProcessPstoEsFtmOperationNotify(&context, cb_req, &cb_response);
+        cb_status = app_grpc_handle_->PA_ProcessPstoEsFcmOperationNotify(&context, cb_req, &cb_response);
 
         // Act upon its status.
         if (cb_status.ok())
@@ -969,16 +969,16 @@ done:
         return Status::OK;
     }
     
-    Status PC_pstoes_ftm_operation(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::PstoEsFtmOperation *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
+    Status PC_pstoes_fcm_operation(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::PstoEsFcmOperation *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
     {
         AppToPCCallbackParams_t api_request = {0};
         AntarisReturnType api_response = {return_code : An_SUCCESS};
         cookie_t cookie;
         cookie = decodeCookie(context);
 
-        peer_to_app_PstoEsFtmOperation(request, &api_request);
+        peer_to_app_PstoEsFcmOperation(request, &api_request);
 
-        user_callbacks_(user_cb_ctx_, cookie, e_app2PC_PstoEsFtmOperation, &api_request, &api_response.return_code);
+        user_callbacks_(user_cb_ctx_, cookie, e_app2PC_PstoEsFcmOperation, &api_request, &api_response.return_code);
 
         app_to_peer_AntarisReturnType(&api_response, response);
 
@@ -1310,8 +1310,8 @@ AntarisReturnCode an_pc_pa_invoke_api(PCToAppClientContext ctx, PCToAppApiId_e a
         ret = internal_ctx->client_api_handle->InvokeProcessNtfRemoteAcPwrStatus(&api_params->remote_app_status);
         break;
 
-    case e_PC2App_PstoEsFtmOperationNotify:
-        ret = internal_ctx->client_api_handle->InvokeProcessPstoesFtmOperationNotify(&api_params->pstoes_ftm_operation_notify);
+    case e_PC2App_PstoEsFcmOperationNotify:
+        ret = internal_ctx->client_api_handle->InvokeProcessPstoesFcmOperationNotify(&api_params->pstoes_fcm_operation_notify);
     } // switch api_id
 
     return ret;

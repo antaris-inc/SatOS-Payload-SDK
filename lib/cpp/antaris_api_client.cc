@@ -485,18 +485,18 @@ class PCServiceClient {
     return tmp_return;
   }
 
-  AntarisReturnCode Invoke_PC_pa_pstoes_ftm_operation(PstoEsFtmOperation *req_params) {
-    antaris_api_peer_to_peer::PstoEsFtmOperation pc_req;
+  AntarisReturnCode Invoke_PC_pa_pstoes_fcm_operation(PstoEsFcmOperation *req_params) {
+    antaris_api_peer_to_peer::PstoEsFcmOperation pc_req;
     antaris_api_peer_to_peer::AntarisReturnType pc_response;
     Status pc_status;
     // Context for the client. It could be used to convey extra information to
     // the server and/or tweak certain RPC behaviors.
     ClientContext context;
 
-    app_to_peer_PstoEsFtmOperation(req_params, &pc_req);
+    app_to_peer_PstoEsFcmOperation(req_params, &pc_req);
     context.AddMetadata(COOKIE_STR, this->cookie_str);
 
-    pc_status = stub_->PC_pstoes_ftm_operation(&context, pc_req, &pc_response);
+    pc_status = stub_->PC_pstoes_fcm_operation(&context, pc_req, &pc_response);
 
     AntarisReturnCode tmp_return;
 
@@ -508,7 +508,6 @@ class PCServiceClient {
         printf("gRPC Error: %d (%s)\n", 
         pc_status.error_code(), 
         pc_status.error_message().c_str());
-        printf("failed here 2\n");
     }
 
     return tmp_return;
@@ -564,7 +563,7 @@ public:
 
     Status PA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     
-    Status PA_ProcessPstoEsFtmOperationNotify(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::PstoEsFtmOperationNotify* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+    Status PA_ProcessPstoEsFcmOperationNotify(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::PstoEsFcmOperationNotify* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
 public:
 
@@ -869,14 +868,14 @@ Status AppCallbackServiceImpl::PA_ProcessRespPaSatOsMsg(::grpc::ServerContext* c
     return Status::OK;
 }
 
-Status AppCallbackServiceImpl::PA_ProcessPstoEsFtmOperationNotify(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::PstoEsFtmOperationNotify* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+Status AppCallbackServiceImpl::PA_ProcessPstoEsFcmOperationNotify(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::PstoEsFcmOperationNotify* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
 {
-    PstoEsFtmOperationNotify app_request;
+    PstoEsFcmOperationNotify app_request;
     AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
     
     if (client_channel_ctx_->callbacks.process_pa_satos_msg_response) {
-        peer_to_app_PstoEsFtmOperationNotify((void *)request, &app_request);
-        app_ret = client_channel_ctx_->callbacks.process_pstoes_ftm_operation_notify(&app_request);
+        peer_to_app_PstoEsFcmOperationNotify((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_pstoes_fcm_operation_notify(&app_request);
     }
 
     response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
@@ -1427,23 +1426,22 @@ AntarisReturnCode api_pa_pc_pa_satos_message(AntarisChannel channel, PaSatOsMsg 
     return channel_ctx->pc_service_handle->Invoke_PC_pa_satos_message(pa_satos_msg);
 }
 
-AntarisReturnCode api_pa_pc_pstoes_ftm_operation(AntarisChannel channel, PstoEsFtmOperation *pstoes_ftm_operation)
+AntarisReturnCode api_pa_pc_pstoes_fcm_operation(AntarisChannel channel, PstoEsFcmOperation *pstoes_fcm_operation)
 {
     AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
     AntarisReturnCode ret = An_SUCCESS;
 
-    printf("requesting FTM start\n");
+    printf("requesting FCM start\n");
 
-    if (!channel_ctx || !channel_ctx->pc_service_handle || !pstoes_ftm_operation) {
+    if (!channel_ctx || !channel_ctx->pc_service_handle || !pstoes_fcm_operation) {
         ret = An_GENERIC_FAILURE;
-        printf("failed here\n");
         return ret;
     }
 
     if (api_debug) {
-        displayPayloadMetricsResponse(pstoes_ftm_operation);
+        displayPayloadMetricsResponse(pstoes_fcm_operation);
     }
-    return channel_ctx->pc_service_handle->Invoke_PC_pa_pstoes_ftm_operation(pstoes_ftm_operation);
+    return channel_ctx->pc_service_handle->Invoke_PC_pa_pstoes_fcm_operation(pstoes_fcm_operation);
 }
 
 } // extern C

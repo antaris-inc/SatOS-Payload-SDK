@@ -758,28 +758,34 @@ void handle_ftm_start_operation(mythreadState_t *mythread){
     printf("Handling FTM start operation");
 
     AntarisReturnCode ret;
-    PstoEsFtmOperation pstoes_ftm_operation = {0};
-    pstoes_ftm_operation.correlation_id = mythread->correlation_id;
-    pstoes_ftm_operation.ftm_dest = 6;  //this is id corresponding to pc
-    pstoes_ftm_operation.ftm_src = 10;  //this is id corresponding to edge
-    pstoes_ftm_operation.pc_app_id = 136;
-    pstoes_ftm_operation.no_of_files = 2;
-    UINT8 *ptr = (UINT8 *)pstoes_ftm_operation.file_names;
+    PstoEsFcmOperation pstoes_fcm_operation = {0};
+    pstoes_fcm_operation.correlation_id = mythread->correlation_id;
+    pstoes_fcm_operation.fcm_dest = 6;  //this is id corresponding to pc
+    pstoes_fcm_operation.fcm_src = 10;  //this is id corresponding to edge
+    pstoes_fcm_operation.peer_app_id = 136;
+    pstoes_fcm_operation.no_of_files = 2;
+    UINT8 *ptr1 = (UINT8 *)pstoes_fcm_operation.files_input.files_name_length;
+    UINT8 *ptr2 = (UINT8 *)pstoes_fcm_operation.files_input.file_names;
+
+    UINT32 len_offset  = 0;
+    UINT32 name_offset = 0;
 
     const char *file1 = "abc.txt";
+    UINT8 len1 = strlen(file1) + 1;
+
+    ptr1[len_offset++] = len1;               
+    memcpy(&ptr2[name_offset], file1, len1); 
+    name_offset += len1;
+
     const char *file2 = "bcd.txt";
-
-    UINT8 len1 = strlen(file1) + 1;  
-    ptr[0] = len1;                  
-    memcpy(&ptr[1], file1, len1);   
-    UINT32 offset = 1 + len1;
-
     UINT8 len2 = strlen(file2) + 1;
-    ptr[offset] = len2;
-    memcpy(&ptr[offset + 1], file2, len2);
-    offset += 1 + len2;
 
-    ret = api_pa_pc_pstoes_ftm_operation(channel, &pstoes_ftm_operation);
+    ptr1[len_offset++] = len2;               
+    memcpy(&ptr2[name_offset], file2, len2); 
+    name_offset += len2;
+
+    // Send request
+    ret = api_pa_pc_pstoes_fcm_operation(channel, &pstoes_fcm_operation);
     if(ret == An_SUCCESS){
         printf("Ftm start request success, ret %d\n",ret);
     }
@@ -1160,24 +1166,24 @@ AntarisReturnCode process_response_pa_satos_msg(RespPaSatOsMsg *resp_pa_satos_me
     return An_SUCCESS;
 }
 
-AntarisReturnCode process_response_ftm_operation(PstoEsFtmOperationNotify *pstoes_ftm_operation_notify)
+AntarisReturnCode process_response_ftm_operation(PstoEsFcmOperationNotify *pstoes_fcm_operation_notify)
 {
-    printf("Processed file is %s\n",pstoes_ftm_operation_notify->file_name);
-    if(pstoes_ftm_operation_notify->req_status == 0){
+    printf("Processed file is %s\n",pstoes_fcm_operation_notify->file_name);
+    if(pstoes_fcm_operation_notify->req_status == 0){
         printf("file is successfully copied\n");
     }
     else{
         printf("file copy is failed\n");
     }
 
-    if(pstoes_ftm_operation_notify->ftm_complete == 0){
+    if(pstoes_fcm_operation_notify->fcm_complete == 0){
         printf("All files are processed. FTM operation is complete\n");
     }
     else{
         printf("FTM operation is still in progress\n");
     }
     if (debug) {
-        displayPstoEsFtmOperationNotify(pstoes_ftm_operation_notify);
+        displayPstoEsFcmOperationNotify(pstoes_fcm_operation_notify);
     }
     // #<Payload Application Business Logic>
     wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
@@ -1333,7 +1339,7 @@ int main(int argc, char *argv[])
             process_response_ses_temp_req: process_response_ses_temp,
             process_cb_ses_thrml_ntf: process_response_thrml_ntf,
             process_pa_satos_msg_response: process_response_pa_satos_msg,
-            process_pstoes_ftm_operation_notify: process_response_ftm_operation,
+            process_pstoes_fcm_operation_notify: process_response_ftm_operation,
     };
 
     // Create Channel to talk to Payload Controller (PC)
