@@ -767,7 +767,7 @@ void handle_fcm_start_operation(mythreadState_t *mythread){
     pstoes_fcm_operation.fcm_src = EDGE_APP_ID;
     pstoes_fcm_operation.peer_app_id = 136;
     pstoes_fcm_operation.no_of_files = 2;
-    
+
     const char *file1 = "abc.txt";
     UINT8 len1 = strlen(file1) + 1;
 
@@ -778,7 +778,7 @@ void handle_fcm_start_operation(mythreadState_t *mythread){
     UINT8 len2 = strlen(file2) + 1;
 
     pstoes_fcm_operation.file_input[1].filename_length = len2;               
-    memcpy(&pstoes_fcm_operation.file_input[0].filename, file2, len2);
+    memcpy(&pstoes_fcm_operation.file_input[1].filename, file2, len2);
 
     // Send request
     ret = api_pa_pc_host_to_peer_fcm_operation(channel, &pstoes_fcm_operation);
