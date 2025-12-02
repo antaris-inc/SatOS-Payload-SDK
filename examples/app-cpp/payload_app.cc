@@ -60,8 +60,8 @@
 #define PaSatosMsg_IDX                  12
 #define ReadAcIp_ID                     "ReadAcIp"
 #define ReadAcIp_IDX                    13
-#define FTM_ID                          "FTMStart"
-#define FTM_IDX                         14
+#define FCM_ID                          "FCMStart"
+#define FCM_IDX                         14
 #define SEQUENCE_ID_MAX                 15
 
 #define APP_STATE_ACTIVE                0  // Application State : Good (0), Error (non-Zero)
@@ -753,9 +753,9 @@ void handle_pa_satos_message(mythreadState_t *mythread){
 
 }
 
-void handle_ftm_start_operation(mythreadState_t *mythread){
+void handle_fcm_start_operation(mythreadState_t *mythread){
 
-    printf("Handling FTM start operation");
+    printf("Handling FCM start operation");
 
     AntarisReturnCode ret;
     PstoEsFcmOperation pstoes_fcm_operation = {0};
@@ -787,15 +787,15 @@ void handle_ftm_start_operation(mythreadState_t *mythread){
     // Send request
     ret = api_pa_pc_pstoes_fcm_operation(channel, &pstoes_fcm_operation);
     if(ret == An_SUCCESS){
-        printf("Ftm start request success, ret %d\n",ret);
+        printf("Fcm start request success, ret %d\n",ret);
     }
     else{
-        fprintf(stderr, " FTM start request failed, ret %d\n", ret);
+        fprintf(stderr, " FCM start request failed, ret %d\n", ret);
     }
 
      // Tell PC that current sequence is done
     CmdSequenceDoneParams sequence_done_params = {0};
-    strcpy(&sequence_done_params.sequence_id[0], FTM_ID);
+    strcpy(&sequence_done_params.sequence_id[0], FCM_ID);
     ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
 
     printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
@@ -944,9 +944,9 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
     }   else if (strcmp(sequence_string, ReadAcIp_ID) == 0) {
         printf("\t => %d\n", ReadAcIp_IDX);
         return ReadAcIp_IDX;
-    }   else if (strcmp(sequence_string, FTM_ID) == 0) {
-        printf("\t => %d\n", FTM_IDX);
-        return FTM_IDX;
+    }   else if (strcmp(sequence_string, FCM_ID) == 0) {
+        printf("\t => %d\n", FCM_IDX);
+        return FCM_IDX;
     }
 
     
@@ -1166,7 +1166,7 @@ AntarisReturnCode process_response_pa_satos_msg(RespPaSatOsMsg *resp_pa_satos_me
     return An_SUCCESS;
 }
 
-AntarisReturnCode process_response_ftm_operation(PstoEsFcmOperationNotify *pstoes_fcm_operation_notify)
+AntarisReturnCode process_response_fcm_operation(PstoEsFcmOperationNotify *pstoes_fcm_operation_notify)
 {
     printf("Processed file is %s\n",pstoes_fcm_operation_notify->file_name);
     if(pstoes_fcm_operation_notify->req_status == 0){
@@ -1177,10 +1177,10 @@ AntarisReturnCode process_response_ftm_operation(PstoEsFcmOperationNotify *pstoe
     }
 
     if(pstoes_fcm_operation_notify->fcm_complete == 0){
-        printf("All files are processed. FTM operation is complete\n");
+        printf("All files are processed. FCM operation is complete\n");
     }
     else{
-        printf("FTM operation is still in progress\n");
+        printf("FCM operation is still in progress\n");
     }
     if (debug) {
         displayPstoEsFcmOperationNotify(pstoes_fcm_operation_notify);
@@ -1339,7 +1339,7 @@ int main(int argc, char *argv[])
             process_response_ses_temp_req: process_response_ses_temp,
             process_cb_ses_thrml_ntf: process_response_thrml_ntf,
             process_pa_satos_msg_response: process_response_pa_satos_msg,
-            process_pstoes_fcm_operation_notify: process_response_ftm_operation,
+            process_pstoes_fcm_operation_notify: process_response_fcm_operation,
     };
 
     // Create Channel to talk to Payload Controller (PC)
@@ -1365,7 +1365,7 @@ int main(int argc, char *argv[])
     payload_sequences_fsms[SesTempReq_IDX] = fsmThreadCreate(channel, 1, SesTempReq_ID, handle_ses_temp_req);
     payload_sequences_fsms[PaSatosMsg_IDX] = fsmThreadCreate(channel, 1, PaSatosMsg_ID, handle_pa_satos_message);
     payload_sequences_fsms[ReadAcIp_IDX] = fsmThreadCreate(channel, 1, ReadAcIp_ID, handle_ac_ip_read);
-    payload_sequences_fsms[FTM_IDX] = fsmThreadCreate(channel, 1, FTM_ID, handle_ftm_start_operation);
+    payload_sequences_fsms[FCM_IDX] = fsmThreadCreate(channel, 1, FCM_ID, handle_fcm_start_operation);
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure
@@ -1436,8 +1436,8 @@ int main(int argc, char *argv[])
         pthread_join(payload_sequences_fsms[ReadAcIp_IDX]->thread_id, &exit_status);
     }
 
-    if (strcmp(payload_sequences_fsms[FTM_IDX]->state, "NOT_STARTED") != 0) {
-        pthread_join(payload_sequences_fsms[FTM_IDX]->thread_id, &exit_status);
+    if (strcmp(payload_sequences_fsms[FCM_IDX]->state, "NOT_STARTED") != 0) {
+        pthread_join(payload_sequences_fsms[FCM_IDX]->thread_id, &exit_status);
     }
     
     printf("Cleaning up sequence resources\n");
@@ -1454,7 +1454,7 @@ int main(int argc, char *argv[])
     fsmThreadCleanup(payload_sequences_fsms[SesTempReq_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[PaSatosMsg_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[ReadAcIp_IDX]);
-    fsmThreadCleanup(payload_sequences_fsms[FTM_IDX]);
+    fsmThreadCleanup(payload_sequences_fsms[FCM_IDX]);
 
     // Delete Channel
     api_pa_pc_delete_channel(channel);
