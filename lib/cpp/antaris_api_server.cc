@@ -591,9 +591,9 @@ class AppToPCClient {
         }
     }
 
-    AntarisReturnCode InvokeProcessPstoesFcmOperationNotify(PstoEsFcmOperationNotify *req_params)
+    AntarisReturnCode InvokeProcessPstoesFcmOperationNotify(HostToPeerFcmOperationNotify *req_params)
     {
-        antaris_api_peer_to_peer::PstoEsFcmOperationNotify cb_req;
+        antaris_api_peer_to_peer::HostToPeerFcmOperationNotify cb_req;
         antaris_api_peer_to_peer::AntarisReturnType cb_response;
         Status cb_status;
         // Context for the client. It could be used to convey extra information to
@@ -604,9 +604,9 @@ class AppToPCClient {
         std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
         context.set_deadline(deadline);
 
-        app_to_peer_PstoEsFcmOperationNotify(req_params, &cb_req);
+        app_to_peer_HostToPeerFcmOperationNotify(req_params, &cb_req);
 
-        cb_status = app_grpc_handle_->PA_ProcessPstoEsFcmOperationNotify(&context, cb_req, &cb_response);
+        cb_status = app_grpc_handle_->PA_ProcessHostToPeerFcmOperationNotify(&context, cb_req, &cb_response);
 
         // Act upon its status.
         if (cb_status.ok())
@@ -969,14 +969,14 @@ done:
         return Status::OK;
     }
     
-    Status PC_pstoes_fcm_operation(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::PstoEsFcmOperation *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
+    Status PC_pstoes_fcm_operation(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::HostToPeerFcmOperation *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
     {
         AppToPCCallbackParams_t api_request = {0};
         AntarisReturnType api_response = {return_code : An_SUCCESS};
         cookie_t cookie;
         cookie = decodeCookie(context);
 
-        peer_to_app_PstoEsFcmOperation(request, &api_request);
+        peer_to_app_HostToPeerFcmOperation(request, &api_request);
 
         user_callbacks_(user_cb_ctx_, cookie, e_app2PC_PstoEsFcmOperation, &api_request, &api_response.return_code);
 

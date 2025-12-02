@@ -75,7 +75,7 @@ typedef union {
     SesTempReq                      ses_temp_req;
     PaSatOsMsg                      pa_satos_msg;
     AntarisAppSdkVersion_t          sdk_version;
-    PstoEsFcmOperation              pstoes_fcm_operation;
+    HostToPeerFcmOperation          pstoes_fcm_operation;
 } AppToPCCallbackParams_t;
 
 typedef    UINT16 SHORT_APP_ID_t;
@@ -138,7 +138,7 @@ typedef union {
     SesThermalStatusNtf                 ses_thermal_ntf;
     RespPaSatOsMsg                      pa_satos_msg_response;
     NtfRemoteAcPwrStatus                remote_app_status;
-    PstoEsFcmOperationNotify            pstoes_fcm_operation_notify;
+    HostToPeerFcmOperationNotify        pstoes_fcm_operation_notify;
 } PCToAppApiParams_t;
 
 PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port, INT8 *client_ssl_addr, UINT32 ssl_flag);

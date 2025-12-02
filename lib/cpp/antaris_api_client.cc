@@ -485,18 +485,18 @@ class PCServiceClient {
     return tmp_return;
   }
 
-  AntarisReturnCode Invoke_PC_pa_pstoes_fcm_operation(PstoEsFcmOperation *req_params) {
-    antaris_api_peer_to_peer::PstoEsFcmOperation pc_req;
+  AntarisReturnCode Invoke_PC_pa_pstoes_fcm_operation(HostToPeerFcmOperation *req_params) {
+    antaris_api_peer_to_peer::HostToPeerFcmOperation pc_req;
     antaris_api_peer_to_peer::AntarisReturnType pc_response;
     Status pc_status;
     // Context for the client. It could be used to convey extra information to
     // the server and/or tweak certain RPC behaviors.
     ClientContext context;
 
-    app_to_peer_PstoEsFcmOperation(req_params, &pc_req);
+    app_to_peer_HostToPeerFcmOperation(req_params, &pc_req);
     context.AddMetadata(COOKIE_STR, this->cookie_str);
 
-    pc_status = stub_->PC_pstoes_fcm_operation(&context, pc_req, &pc_response);
+    pc_status = stub_->PC_host_to_peer_fcm_operation(&context, pc_req, &pc_response);
 
     AntarisReturnCode tmp_return;
 
@@ -563,7 +563,7 @@ public:
 
     Status PA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     
-    Status PA_ProcessPstoEsFcmOperationNotify(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::PstoEsFcmOperationNotify* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+    Status PA_ProcessHostToPeerFcmOperationNotify(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::HostToPeerFcmOperationNotify* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
 public:
 
@@ -868,14 +868,14 @@ Status AppCallbackServiceImpl::PA_ProcessRespPaSatOsMsg(::grpc::ServerContext* c
     return Status::OK;
 }
 
-Status AppCallbackServiceImpl::PA_ProcessPstoEsFcmOperationNotify(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::PstoEsFcmOperationNotify* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+Status AppCallbackServiceImpl::PA_ProcessHostToPeerFcmOperationNotify(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::HostToPeerFcmOperationNotify* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
 {
-    PstoEsFcmOperationNotify app_request;
+    HostToPeerFcmOperationNotify app_request;
     AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
     
     if (client_channel_ctx_->callbacks.process_pa_satos_msg_response) {
-        peer_to_app_PstoEsFcmOperationNotify((void *)request, &app_request);
-        app_ret = client_channel_ctx_->callbacks.process_pstoes_fcm_operation_notify(&app_request);
+        peer_to_app_HostToPeerFcmOperationNotify((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_host_to_peer_fcm_operation_notify(&app_request);
     }
 
     response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
@@ -1426,7 +1426,7 @@ AntarisReturnCode api_pa_pc_pa_satos_message(AntarisChannel channel, PaSatOsMsg 
     return channel_ctx->pc_service_handle->Invoke_PC_pa_satos_message(pa_satos_msg);
 }
 
-AntarisReturnCode api_pa_pc_pstoes_fcm_operation(AntarisChannel channel, PstoEsFcmOperation *pstoes_fcm_operation)
+AntarisReturnCode api_pa_pc_host_to_peer_fcm_operation(AntarisChannel channel, HostToPeerFcmOperation *pstoes_fcm_operation)
 {
     AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
     AntarisReturnCode ret = An_SUCCESS;

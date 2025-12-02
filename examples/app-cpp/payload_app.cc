@@ -761,34 +761,27 @@ void handle_fcm_start_operation(mythreadState_t *mythread){
     printf("Handling FCM start operation");
 
     AntarisReturnCode ret;
-    PstoEsFcmOperation pstoes_fcm_operation = {0};
+    HostToPeerFcmOperation pstoes_fcm_operation = {0};
     pstoes_fcm_operation.correlation_id = mythread->correlation_id;
     pstoes_fcm_operation.fcm_dest = PC_APP_ID; 
     pstoes_fcm_operation.fcm_src = EDGE_APP_ID;
     pstoes_fcm_operation.peer_app_id = 136;
     pstoes_fcm_operation.no_of_files = 2;
-    UINT8 *ptr1 = (UINT8 *)pstoes_fcm_operation.files_input.files_name_length;
-    UINT8 *ptr2 = (UINT8 *)pstoes_fcm_operation.files_input.file_names;
-
-    UINT32 len_offset  = 0;
-    UINT32 name_offset = 0;
-
+    
     const char *file1 = "abc.txt";
     UINT8 len1 = strlen(file1) + 1;
 
-    ptr1[len_offset++] = len1;               
-    memcpy(&ptr2[name_offset], file1, len1); 
-    name_offset += len1;
+    pstoes_fcm_operation.file_input[0].filename_length = len1;               
+    memcpy(&pstoes_fcm_operation.file_input[0].filename, file1, len1); 
 
     const char *file2 = "bcd.txt";
     UINT8 len2 = strlen(file2) + 1;
 
-    ptr1[len_offset++] = len2;               
-    memcpy(&ptr2[name_offset], file2, len2); 
-    name_offset += len2;
+    pstoes_fcm_operation.file_input[1].filename_length = len2;               
+    memcpy(&pstoes_fcm_operation.file_input[0].filename, file2, len2);
 
     // Send request
-    ret = api_pa_pc_pstoes_fcm_operation(channel, &pstoes_fcm_operation);
+    ret = api_pa_pc_host_to_peer_fcm_operation(channel, &pstoes_fcm_operation);
     if(ret == An_SUCCESS){
         printf("Fcm start request success, ret %d\n",ret);
     }
@@ -1169,7 +1162,7 @@ AntarisReturnCode process_response_pa_satos_msg(RespPaSatOsMsg *resp_pa_satos_me
     return An_SUCCESS;
 }
 
-AntarisReturnCode process_response_fcm_operation(PstoEsFcmOperationNotify *pstoes_fcm_operation_notify)
+AntarisReturnCode process_response_fcm_operation(HostToPeerFcmOperationNotify *pstoes_fcm_operation_notify)
 {
     printf("Processed file is %s\n",pstoes_fcm_operation_notify->file_name);
     if(pstoes_fcm_operation_notify->req_status == 0){
@@ -1186,7 +1179,7 @@ AntarisReturnCode process_response_fcm_operation(PstoEsFcmOperationNotify *pstoe
         printf("FCM operation is still in progress\n");
     }
     if (debug) {
-        displayPstoEsFcmOperationNotify(pstoes_fcm_operation_notify);
+        displayHostToPeerFcmOperationNotify(pstoes_fcm_operation_notify);
     }
     // #<Payload Application Business Logic>
     wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
@@ -1342,7 +1335,7 @@ int main(int argc, char *argv[])
             process_response_ses_temp_req: process_response_ses_temp,
             process_cb_ses_thrml_ntf: process_response_thrml_ntf,
             process_pa_satos_msg_response: process_response_pa_satos_msg,
-            process_pstoes_fcm_operation_notify: process_response_fcm_operation,
+            process_host_to_peer_fcm_operation_notify: process_response_fcm_operation,
     };
 
     // Create Channel to talk to Payload Controller (PC)
