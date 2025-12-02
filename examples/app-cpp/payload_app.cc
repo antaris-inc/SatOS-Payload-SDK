@@ -72,6 +72,9 @@
 #define SEND_MSG_LIMIT 10
 #define MAX_PAYLOAD_DATA_SIZE 1020
 
+#define PC_APP_ID               134   //! APP ID of PS
+#define EDGE_APP_ID             135   //! APP ID of EDGE
+
 
 /*
  * Following counters should be incremented whenever
@@ -760,8 +763,8 @@ void handle_fcm_start_operation(mythreadState_t *mythread){
     AntarisReturnCode ret;
     PstoEsFcmOperation pstoes_fcm_operation = {0};
     pstoes_fcm_operation.correlation_id = mythread->correlation_id;
-    pstoes_fcm_operation.fcm_dest = 6;  //this is id corresponding to pc
-    pstoes_fcm_operation.fcm_src = 10;  //this is id corresponding to edge
+    pstoes_fcm_operation.fcm_dest = PC_APP_ID; 
+    pstoes_fcm_operation.fcm_src = EDGE_APP_ID;
     pstoes_fcm_operation.peer_app_id = 136;
     pstoes_fcm_operation.no_of_files = 2;
     UINT8 *ptr1 = (UINT8 *)pstoes_fcm_operation.files_input.files_name_length;
