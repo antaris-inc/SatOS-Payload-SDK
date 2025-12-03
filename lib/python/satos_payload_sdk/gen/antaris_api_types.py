@@ -573,6 +573,35 @@ def peer_to_app_PayloadMetricsInfo(peer_struct):
 def app_to_peer_PayloadMetricsInfo(app_struct):
     return antaris_api_pb2.PayloadMetricsInfo(counter = app_struct.counter, names = app_struct.names)
 
+## @class: FileInput
+## @brief: file input parameters Parameters
+## @param: filename_length                                 :    length of filename                              
+## @param: filename                                        :    filename string, bytes                          
+class FileInput:
+    def __init__(self, filename_length, filename):
+        self.filename_length = filename_length
+        self.filename = filename
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "filename_length:\n"
+        ret_str += str(self.filename_length) + "\n"
+        ret_str += "filename:\n"
+        ret_str += str(self.filename) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_FileInput(peer_struct):
+    filename_length = peer_struct.filename_length
+    filename = peer_struct.filename
+    return FileInput(filename_length, filename)
+
+def app_to_peer_FileInput(app_struct):
+    return antaris_api_pb2.FileInput(filename_length = app_struct.filename_length, filename = app_struct.filename)
+
 ## @class: ReqPayloadMetricsParams
 ## @brief: Payload Metrics Parameters
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
@@ -727,6 +756,94 @@ def peer_to_app_RespPaSatOsMsg(peer_struct):
 
 def app_to_peer_RespPaSatOsMsg(app_struct):
     return antaris_api_pb2.RespPaSatOsMsg(correlation_id = app_struct.correlation_id, command_id = app_struct.command_id, req_status = app_struct.req_status)
+
+## @class: HostToPeerFcmOperation
+## @brief: To start or file copy from PS To ES
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: peer_app_id                                     :    PC appliction id from which files are copied to edge system
+## @param: fcm_src                                         :    source of fcm command                           
+## @param: fcm_dest                                        :    destination of fcm command                      
+## @param: no_of_files                                     :    no of files to copy, if the value is 0 copy all files
+## @param: file_input                                      :    details of Files to be copied                   
+class HostToPeerFcmOperation:
+    def __init__(self, correlation_id, peer_app_id, fcm_src, fcm_dest, no_of_files, file_input):
+        self.correlation_id = correlation_id
+        self.peer_app_id = peer_app_id
+        self.fcm_src = fcm_src
+        self.fcm_dest = fcm_dest
+        self.no_of_files = no_of_files
+        self.file_input = file_input
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "peer_app_id:\n"
+        ret_str += str(self.peer_app_id) + "\n"
+        ret_str += "fcm_src:\n"
+        ret_str += str(self.fcm_src) + "\n"
+        ret_str += "fcm_dest:\n"
+        ret_str += str(self.fcm_dest) + "\n"
+        ret_str += "no_of_files:\n"
+        ret_str += str(self.no_of_files) + "\n"
+        ret_str += "file_input:\n"
+        ret_str += str(self.file_input) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_HostToPeerFcmOperation(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    peer_app_id = peer_struct.peer_app_id
+    fcm_src = peer_struct.fcm_src
+    fcm_dest = peer_struct.fcm_dest
+    no_of_files = peer_struct.no_of_files
+    file_input = peer_struct.file_input
+    return HostToPeerFcmOperation(correlation_id, peer_app_id, fcm_src, fcm_dest, no_of_files, file_input)
+
+def app_to_peer_HostToPeerFcmOperation(app_struct):
+    return antaris_api_pb2.HostToPeerFcmOperation(correlation_id = app_struct.correlation_id, peer_app_id = app_struct.peer_app_id, fcm_src = app_struct.fcm_src, fcm_dest = app_struct.fcm_dest, no_of_files = app_struct.no_of_files, file_input = app_struct.file_input)
+
+## @class: HostToPeerFcmOperationNotify
+## @brief: To send Notification to Es on completion of Fcm
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: fcm_complete                                    :    0 indiacates if all file transfer complete, -1 if files transfer in still ongoing 
+## @param: req_status                                      :    status of file transfer                         
+## @param: file_name                                       :    file_name, string                               
+class HostToPeerFcmOperationNotify:
+    def __init__(self, correlation_id, fcm_complete, req_status, file_name):
+        self.correlation_id = correlation_id
+        self.fcm_complete = fcm_complete
+        self.req_status = req_status
+        self.file_name = file_name
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "fcm_complete:\n"
+        ret_str += str(self.fcm_complete) + "\n"
+        ret_str += "req_status:\n"
+        ret_str += str(self.req_status) + "\n"
+        ret_str += "file_name:\n"
+        ret_str += str(self.file_name) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_HostToPeerFcmOperationNotify(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    fcm_complete = peer_struct.fcm_complete
+    req_status = peer_struct.req_status
+    file_name = peer_struct.file_name
+    return HostToPeerFcmOperationNotify(correlation_id, fcm_complete, req_status, file_name)
+
+def app_to_peer_HostToPeerFcmOperationNotify(app_struct):
+    return antaris_api_pb2.HostToPeerFcmOperationNotify(correlation_id = app_struct.correlation_id, fcm_complete = app_struct.fcm_complete, req_status = app_struct.req_status, file_name = app_struct.file_name)
 
 ## @class: ReqGnssEphStopDataReq
 ## @brief: Request GNSS EPH data stop
@@ -1604,8 +1721,9 @@ def app_to_peer_SesThermalStatusNtf(app_struct):
 ## @param: process_cb_ses_thrml_ntf                        :    callback handler for SES thermal nofirication   
 ## @param: process_pa_satos_msg_response                   :    callback handler for PA to satOS command response
 ## @param: process_remote_ac_power_on_ntf                  :    callback handler for remote application controller power on status notification
+## @param: process_host_to_peer_fcm_operation_notify       :    callback handler for fcm operation status       
 class AntarisApiCallbackFuncList:
-    def __init__(self, start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req, process_cb_ses_thrml_ntf, process_pa_satos_msg_response, process_remote_ac_power_on_ntf):
+    def __init__(self, start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req, process_cb_ses_thrml_ntf, process_pa_satos_msg_response, process_remote_ac_power_on_ntf, process_host_to_peer_fcm_operation_notify):
         self.start_sequence = start_sequence
         self.shutdown_app = shutdown_app
         self.process_health_check = process_health_check
@@ -1626,6 +1744,7 @@ class AntarisApiCallbackFuncList:
         self.process_cb_ses_thrml_ntf = process_cb_ses_thrml_ntf
         self.process_pa_satos_msg_response = process_pa_satos_msg_response
         self.process_remote_ac_power_on_ntf = process_remote_ac_power_on_ntf
+        self.process_host_to_peer_fcm_operation_notify = process_host_to_peer_fcm_operation_notify
 
     def __str__(self):
         ret_str = ""
@@ -1669,6 +1788,8 @@ class AntarisApiCallbackFuncList:
         ret_str += str(self.process_pa_satos_msg_response) + "\n"
         ret_str += "process_remote_ac_power_on_ntf:\n"
         ret_str += str(self.process_remote_ac_power_on_ntf) + "\n"
+        ret_str += "process_host_to_peer_fcm_operation_notify:\n"
+        ret_str += str(self.process_host_to_peer_fcm_operation_notify) + "\n"
 
         return ret_str
 
@@ -1696,10 +1817,11 @@ def peer_to_app_AntarisApiCallbackFuncList(peer_struct):
     process_cb_ses_thrml_ntf = peer_struct.process_cb_ses_thrml_ntf
     process_pa_satos_msg_response = peer_struct.process_pa_satos_msg_response
     process_remote_ac_power_on_ntf = peer_struct.process_remote_ac_power_on_ntf
-    return AntarisApiCallbackFuncList(start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req, process_cb_ses_thrml_ntf, process_pa_satos_msg_response, process_remote_ac_power_on_ntf)
+    process_host_to_peer_fcm_operation_notify = peer_struct.process_host_to_peer_fcm_operation_notify
+    return AntarisApiCallbackFuncList(start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req, process_cb_ses_thrml_ntf, process_pa_satos_msg_response, process_remote_ac_power_on_ntf, process_host_to_peer_fcm_operation_notify)
 
 def app_to_peer_AntarisApiCallbackFuncList(app_struct):
-    return antaris_api_pb2.AntarisApiCallbackFuncList(start_sequence = app_struct.start_sequence, shutdown_app = app_struct.shutdown_app, process_health_check = app_struct.process_health_check, process_response_register = app_struct.process_response_register, process_response_get_current_location = app_struct.process_response_get_current_location, process_response_stage_file_download = app_struct.process_response_stage_file_download, process_response_payload_power_control = app_struct.process_response_payload_power_control, req_payload_metrics = app_struct.req_payload_metrics, process_response_gnss_eph_stop = app_struct.process_response_gnss_eph_stop, process_response_gnss_eph_start = app_struct.process_response_gnss_eph_start, process_cb_gnss_eph_data = app_struct.process_cb_gnss_eph_data, process_response_get_eps_voltage_stop = app_struct.process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start = app_struct.process_response_get_eps_voltage_start, process_cb_get_eps_voltage = app_struct.process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req = app_struct.process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req = app_struct.process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req = app_struct.process_response_ses_temp_req, process_cb_ses_thrml_ntf = app_struct.process_cb_ses_thrml_ntf, process_pa_satos_msg_response = app_struct.process_pa_satos_msg_response, process_remote_ac_power_on_ntf = app_struct.process_remote_ac_power_on_ntf)
+    return antaris_api_pb2.AntarisApiCallbackFuncList(start_sequence = app_struct.start_sequence, shutdown_app = app_struct.shutdown_app, process_health_check = app_struct.process_health_check, process_response_register = app_struct.process_response_register, process_response_get_current_location = app_struct.process_response_get_current_location, process_response_stage_file_download = app_struct.process_response_stage_file_download, process_response_payload_power_control = app_struct.process_response_payload_power_control, req_payload_metrics = app_struct.req_payload_metrics, process_response_gnss_eph_stop = app_struct.process_response_gnss_eph_stop, process_response_gnss_eph_start = app_struct.process_response_gnss_eph_start, process_cb_gnss_eph_data = app_struct.process_cb_gnss_eph_data, process_response_get_eps_voltage_stop = app_struct.process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start = app_struct.process_response_get_eps_voltage_start, process_cb_get_eps_voltage = app_struct.process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req = app_struct.process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req = app_struct.process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req = app_struct.process_response_ses_temp_req, process_cb_ses_thrml_ntf = app_struct.process_cb_ses_thrml_ntf, process_pa_satos_msg_response = app_struct.process_pa_satos_msg_response, process_remote_ac_power_on_ntf = app_struct.process_remote_ac_power_on_ntf, process_host_to_peer_fcm_operation_notify = app_struct.process_host_to_peer_fcm_operation_notify)
 
 ## @class: AntarisReturnType
 ## @brief: Wrapper structure for AntarisReturnCode

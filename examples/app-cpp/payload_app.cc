@@ -60,7 +60,9 @@
 #define PaSatosMsg_IDX                  12
 #define ReadAcIp_ID                     "ReadAcIp"
 #define ReadAcIp_IDX                    13
-#define SEQUENCE_ID_MAX                 14
+#define FCM_ID                          "FCMStart"
+#define FCM_IDX                         14
+#define SEQUENCE_ID_MAX                 15
 
 #define APP_STATE_ACTIVE                0  // Application State : Good (0), Error (non-Zero)
 
@@ -69,6 +71,9 @@
 #define MAX_DATA_BYTES 8
 #define SEND_MSG_LIMIT 10
 #define MAX_PAYLOAD_DATA_SIZE 1020
+
+#define PC_APP_ID               134   //! APP ID of PS
+#define EDGE_APP_ID             135   //! APP ID of EDGE
 
 
 /*
@@ -751,6 +756,54 @@ void handle_pa_satos_message(mythreadState_t *mythread){
 
 }
 
+void handle_fcm_start_operation(mythreadState_t *mythread){
+
+    printf("Handling FCM start operation");
+
+    AntarisReturnCode ret;
+    HostToPeerFcmOperation pstoes_fcm_operation = {0};
+    pstoes_fcm_operation.correlation_id = mythread->correlation_id;
+    pstoes_fcm_operation.fcm_dest = PC_APP_ID; 
+    pstoes_fcm_operation.fcm_src = EDGE_APP_ID;
+    pstoes_fcm_operation.peer_app_id = 136;
+    pstoes_fcm_operation.no_of_files = 2;
+
+    const char *file1 = "abc.txt";
+    UINT8 len1 = strlen(file1) + 1;
+
+    pstoes_fcm_operation.file_input[0].filename_length = len1;               
+    memcpy(&pstoes_fcm_operation.file_input[0].filename, file1, len1); 
+
+    const char *file2 = "bcd.txt";
+    UINT8 len2 = strlen(file2) + 1;
+
+    pstoes_fcm_operation.file_input[1].filename_length = len2;               
+    memcpy(&pstoes_fcm_operation.file_input[1].filename, file2, len2);
+
+    // Send request
+    ret = api_pa_pc_host_to_peer_fcm_operation(channel, &pstoes_fcm_operation);
+    if(ret == An_SUCCESS){
+        printf("Fcm start request success, ret %d\n",ret);
+    }
+    else{
+        fprintf(stderr, " FCM start request failed, ret %d\n", ret);
+    }
+
+     // Tell PC that current sequence is done
+    CmdSequenceDoneParams sequence_done_params = {0};
+    strcpy(&sequence_done_params.sequence_id[0], FCM_ID);
+    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
+
+    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
+    if (An_SUCCESS != ret) {
+        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
+        _exit(-1);
+    } else {
+        printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
+    }
+
+}
+
 void handle_ac_ip_read(mythreadState_t *mythread){
 
     AntarisReturnCode ret;
@@ -887,7 +940,10 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
     }   else if (strcmp(sequence_string, ReadAcIp_ID) == 0) {
         printf("\t => %d\n", ReadAcIp_IDX);
         return ReadAcIp_IDX;
-    }   
+    }   else if (strcmp(sequence_string, FCM_ID) == 0) {
+        printf("\t => %d\n", FCM_IDX);
+        return FCM_IDX;
+    }
 
     
     printf("Unknown sequence, returning -1\n");
@@ -1106,6 +1162,30 @@ AntarisReturnCode process_response_pa_satos_msg(RespPaSatOsMsg *resp_pa_satos_me
     return An_SUCCESS;
 }
 
+AntarisReturnCode process_response_fcm_operation(HostToPeerFcmOperationNotify *pstoes_fcm_operation_notify)
+{
+    printf("Processed file is %s\n",pstoes_fcm_operation_notify->file_name);
+    if(pstoes_fcm_operation_notify->req_status == 0){
+        printf("file is successfully copied\n");
+    }
+    else{
+        printf("file copy is failed\n");
+    }
+
+    if(pstoes_fcm_operation_notify->fcm_complete == 0){
+        printf("All files are processed. FCM operation is complete\n");
+    }
+    else{
+        printf("FCM operation is still in progress\n");
+    }
+    if (debug) {
+        displayHostToPeerFcmOperationNotify(pstoes_fcm_operation_notify);
+    }
+    // #<Payload Application Business Logic>
+    wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
+    return An_SUCCESS;
+}
+
 AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
 {
     printf("process_response_gnss_eph_data\n");
@@ -1255,6 +1335,7 @@ int main(int argc, char *argv[])
             process_response_ses_temp_req: process_response_ses_temp,
             process_cb_ses_thrml_ntf: process_response_thrml_ntf,
             process_pa_satos_msg_response: process_response_pa_satos_msg,
+            process_host_to_peer_fcm_operation_notify: process_response_fcm_operation,
     };
 
     // Create Channel to talk to Payload Controller (PC)
@@ -1280,6 +1361,7 @@ int main(int argc, char *argv[])
     payload_sequences_fsms[SesTempReq_IDX] = fsmThreadCreate(channel, 1, SesTempReq_ID, handle_ses_temp_req);
     payload_sequences_fsms[PaSatosMsg_IDX] = fsmThreadCreate(channel, 1, PaSatosMsg_ID, handle_pa_satos_message);
     payload_sequences_fsms[ReadAcIp_IDX] = fsmThreadCreate(channel, 1, ReadAcIp_ID, handle_ac_ip_read);
+    payload_sequences_fsms[FCM_IDX] = fsmThreadCreate(channel, 1, FCM_ID, handle_fcm_start_operation);
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure
@@ -1349,6 +1431,10 @@ int main(int argc, char *argv[])
     if (strcmp(payload_sequences_fsms[ReadAcIp_IDX]->state, "NOT_STARTED") != 0) {
         pthread_join(payload_sequences_fsms[ReadAcIp_IDX]->thread_id, &exit_status);
     }
+
+    if (strcmp(payload_sequences_fsms[FCM_IDX]->state, "NOT_STARTED") != 0) {
+        pthread_join(payload_sequences_fsms[FCM_IDX]->thread_id, &exit_status);
+    }
     
     printf("Cleaning up sequence resources\n");
 
@@ -1364,6 +1450,7 @@ int main(int argc, char *argv[])
     fsmThreadCleanup(payload_sequences_fsms[SesTempReq_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[PaSatosMsg_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[ReadAcIp_IDX]);
+    fsmThreadCleanup(payload_sequences_fsms[FCM_IDX]);
 
     // Delete Channel
     api_pa_pc_delete_channel(channel);

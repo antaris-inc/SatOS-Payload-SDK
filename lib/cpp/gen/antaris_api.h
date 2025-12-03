@@ -136,6 +136,9 @@ typedef struct HealthCheckParams HealthCheckParams;
 struct PayloadMetricsInfo;
 typedef struct PayloadMetricsInfo PayloadMetricsInfo;
 
+struct FileInput;
+typedef struct FileInput FileInput;
+
 struct ReqPayloadMetricsParams;
 typedef struct ReqPayloadMetricsParams ReqPayloadMetricsParams;
 
@@ -150,6 +153,12 @@ typedef struct PaSatOsMsg PaSatOsMsg;
 
 struct RespPaSatOsMsg;
 typedef struct RespPaSatOsMsg RespPaSatOsMsg;
+
+struct HostToPeerFcmOperation;
+typedef struct HostToPeerFcmOperation HostToPeerFcmOperation;
+
+struct HostToPeerFcmOperationNotify;
+typedef struct HostToPeerFcmOperationNotify HostToPeerFcmOperationNotify;
 
 struct ReqGnssEphStopDataReq;
 typedef struct ReqGnssEphStopDataReq ReqGnssEphStopDataReq;
@@ -426,6 +435,16 @@ typedef AntarisReturnCode
 );
 static inline void
 displayProcessRemoteAcPwrStatusNtf_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessHostToPeerFcmOperationNotify_Fptr
+/// @typedef Callback for fcm operation status
+
+typedef AntarisReturnCode
+(*ProcessHostToPeerFcmOperationNotify_Fptr)
+(
+    HostToPeerFcmOperationNotify *   ///< @param response Ps fcm operation status
+);
+static inline void
+displayProcessHostToPeerFcmOperationNotify_Fptr(void *obj) { printf("%p\n", obj); }
 
 // >>>> Data Types <<<<<
 
@@ -600,6 +619,17 @@ void displayPayloadMetricsInfo(const void *obj);
 void app_to_peer_PayloadMetricsInfo(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_PayloadMetricsInfo(const void *ptr_src_peer, void *ptr_dst_app);
 
+/// @struct FileInput
+/// @brief file input parameters Parameters
+struct FileInput {
+    INT8                                            filename_length;                                 ///< @var length of filename
+    INT8                                            filename[128];                                   ///< @var filename string, bytes
+};
+
+void displayFileInput(const void *obj);
+void app_to_peer_FileInput(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_FileInput(const void *ptr_src_peer, void *ptr_dst_app);
+
 /// @struct ReqPayloadMetricsParams
 /// @brief Payload Metrics Parameters
 struct ReqPayloadMetricsParams {
@@ -656,6 +686,34 @@ struct RespPaSatOsMsg {
 void displayRespPaSatOsMsg(const void *obj);
 void app_to_peer_RespPaSatOsMsg(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_RespPaSatOsMsg(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct HostToPeerFcmOperation
+/// @brief To start or file copy from PS To ES
+struct HostToPeerFcmOperation {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           peer_app_id;                                     ///< @var PC appliction id from which files are copied to edge system
+    UINT8                                           fcm_src;                                         ///< @var source of fcm command
+    UINT8                                           fcm_dest;                                        ///< @var destination of fcm command
+    UINT16                                          no_of_files;                                     ///< @var no of files to copy, if the value is 0 copy all files
+    FileInput                                       file_input[32];                                  ///< @var details of Files to be copied
+};
+
+void displayHostToPeerFcmOperation(const void *obj);
+void app_to_peer_HostToPeerFcmOperation(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_HostToPeerFcmOperation(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct HostToPeerFcmOperationNotify
+/// @brief To send Notification to Es on completion of Fcm
+struct HostToPeerFcmOperationNotify {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           fcm_complete;                                    ///< @var 0 indiacates if all file transfer complete, -1 if files transfer in still ongoing 
+    INT32                                           req_status;                                      ///< @var status of file transfer
+    INT8                                            file_name[16];                                   ///< @var file_name, string
+};
+
+void displayHostToPeerFcmOperationNotify(const void *obj);
+void app_to_peer_HostToPeerFcmOperationNotify(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_HostToPeerFcmOperationNotify(const void *ptr_src_peer, void *ptr_dst_app);
 
 /// @struct ReqGnssEphStopDataReq
 /// @brief Request GNSS EPH data stop
@@ -960,6 +1018,7 @@ struct AntarisApiCallbackFuncList {
     ProcessSesThrmlNtf_Fptr                         process_cb_ses_thrml_ntf;                        ///< @var callback handler for SES thermal nofirication
     ProcessRespPaSatOsMsg_Fptr                      process_pa_satos_msg_response;                   ///< @var callback handler for PA to satOS command response
     ProcessRemoteAcPwrStatusNtf_Fptr                process_remote_ac_power_on_ntf;                  ///< @var callback handler for remote application controller power on status notification
+    ProcessHostToPeerFcmOperationNotify_Fptr        process_host_to_peer_fcm_operation_notify;       ///< @var callback handler for fcm operation status
 };
 
 void displayAntarisApiCallbackFuncList(const void *obj);
@@ -1151,6 +1210,15 @@ api_pa_pc_pa_satos_message
 (
     AntarisChannel                  channel,                         ///< @param channel context for API execution
     PaSatOsMsg *                    pa_satos_msg                     ///< @param Message to SatOS from PA
+);
+
+/// @brief Function api_pa_pc_host_to_peer_fcm_operation
+/// @fn API to start fcm operation
+AntarisReturnCode
+api_pa_pc_host_to_peer_fcm_operation
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    HostToPeerFcmOperation *        host_to_peer_fcm_operation       ///< @param Parameters for ps to es fcm operation
 );
 
 

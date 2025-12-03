@@ -840,6 +840,58 @@ peer_to_app_PayloadMetricsInfo(const void *ptr_src_peer, void *ptr_dst_app)
 }
 
 void
+displayFileInput(const void *obj)
+{
+    FileInput *p = (FileInput *)obj;
+
+    printf("FileInput %p =>\n", obj);
+
+    printf("filename_length ==>\n");
+    displayINT8((void *)&p->filename_length);
+    printf("filename ==>\n");
+    for (int i = 0; i < 128; i++) {
+        displayINT8((void *)&p->filename[i]);
+    }
+
+
+}
+
+void
+app_to_peer_FileInput(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    FileInput *src = (FileInput *)ptr_src_app;
+    ::antaris_api_peer_to_peer::FileInput *dst = (::antaris_api_peer_to_peer::FileInput *)ptr_dst_peer;
+
+    INT32 __tmp_filename_length;
+
+    app_to_peer_INT8(&src->filename_length, &__tmp_filename_length); // filename_length
+
+    dst->set_filename_length(__tmp_filename_length);
+
+    dst->set_filename(src->filename, sizeof(src->filename));
+
+
+}
+
+void
+peer_to_app_FileInput(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    FileInput *dst = (FileInput *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::FileInput *src = (::antaris_api_peer_to_peer::FileInput *)ptr_src_peer;
+
+    dst->filename_length = src->filename_length();
+    size_t filename_length = src->filename().size();
+    if (filename_length > 128) {
+        printf("Warning: filename length (%zu) truncated to 128\n", filename_length);
+        filename_length = 128;
+    }
+    memcpy(dst->filename, src->filename().data(), filename_length);
+    if (filename_length < 128)
+        memset(dst->filename + filename_length, 0, 128 - filename_length);
+
+}
+
+void
 displayReqPayloadMetricsParams(const void *obj)
 {
     ReqPayloadMetricsParams *p = (ReqPayloadMetricsParams *)obj;
@@ -1102,6 +1154,162 @@ peer_to_app_RespPaSatOsMsg(const void *ptr_src_peer, void *ptr_dst_app)
     dst->correlation_id = src->correlation_id();
     dst->command_id = src->command_id();
     dst->req_status = src->req_status();
+
+}
+
+void
+displayHostToPeerFcmOperation(const void *obj)
+{
+    HostToPeerFcmOperation *p = (HostToPeerFcmOperation *)obj;
+
+    printf("HostToPeerFcmOperation %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("peer_app_id ==>\n");
+    displayUINT8((void *)&p->peer_app_id);
+    printf("fcm_src ==>\n");
+    displayUINT8((void *)&p->fcm_src);
+    printf("fcm_dest ==>\n");
+    displayUINT8((void *)&p->fcm_dest);
+    printf("no_of_files ==>\n");
+    displayUINT16((void *)&p->no_of_files);
+    printf("file_input ==>\n");
+    for (int i = 0; i < 32; i++) {
+        displayFileInput((void *)&p->file_input[i]);
+    }
+
+
+}
+
+void
+app_to_peer_HostToPeerFcmOperation(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    HostToPeerFcmOperation *src = (HostToPeerFcmOperation *)ptr_src_app;
+    ::antaris_api_peer_to_peer::HostToPeerFcmOperation *dst = (::antaris_api_peer_to_peer::HostToPeerFcmOperation *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_peer_app_id = 0;
+    UINT32 __tmp_fcm_src = 0;
+    UINT32 __tmp_fcm_dest = 0;
+    UINT32 __tmp_no_of_files = 0;
+    FileInput __tmp_file_input;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->peer_app_id, &__tmp_peer_app_id); // peer_app_id
+
+    dst->set_peer_app_id(__tmp_peer_app_id);
+
+    app_to_peer_UINT8(&src->fcm_src, &__tmp_fcm_src); // fcm_src
+
+    dst->set_fcm_src(__tmp_fcm_src);
+
+    app_to_peer_UINT8(&src->fcm_dest, &__tmp_fcm_dest); // fcm_dest
+
+    dst->set_fcm_dest(__tmp_fcm_dest);
+
+    app_to_peer_UINT16(&src->no_of_files, &__tmp_no_of_files); // no_of_files
+
+    dst->set_no_of_files(__tmp_no_of_files);
+
+    for (int i = 0; i < 32; i++) { // file_input
+        ::antaris_api_peer_to_peer::FileInput* dst_info;
+        if (i >= dst->file_input_size()) {
+            dst_info = dst->add_file_input();
+        } else {
+            dst_info = dst->mutable_file_input(i);
+        }
+        app_to_peer_FileInput(&src->file_input[i], dst_info);
+    }
+
+}
+
+void
+peer_to_app_HostToPeerFcmOperation(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    HostToPeerFcmOperation *dst = (HostToPeerFcmOperation *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::HostToPeerFcmOperation *src = (::antaris_api_peer_to_peer::HostToPeerFcmOperation *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->peer_app_id = src->peer_app_id();
+    dst->fcm_src = src->fcm_src();
+    dst->fcm_dest = src->fcm_dest();
+    dst->no_of_files = src->no_of_files();
+    for (int i = 0; i < 32; i++) { // file_input
+        const ::antaris_api_peer_to_peer::FileInput &src_info = src->file_input(i);
+        FileInput *dst_info = &dst->file_input[i];
+
+        peer_to_app_FileInput(&src_info, dst_info);
+    }
+
+}
+
+void
+displayHostToPeerFcmOperationNotify(const void *obj)
+{
+    HostToPeerFcmOperationNotify *p = (HostToPeerFcmOperationNotify *)obj;
+
+    printf("HostToPeerFcmOperationNotify %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("fcm_complete ==>\n");
+    displayUINT8((void *)&p->fcm_complete);
+    printf("req_status ==>\n");
+    displayINT32((void *)&p->req_status);
+    printf("file_name ==>\n");
+    for (int i = 0; i < 16; i++) {
+        displayINT8((void *)&p->file_name[i]);
+    }
+
+
+}
+
+void
+app_to_peer_HostToPeerFcmOperationNotify(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    HostToPeerFcmOperationNotify *src = (HostToPeerFcmOperationNotify *)ptr_src_app;
+    ::antaris_api_peer_to_peer::HostToPeerFcmOperationNotify *dst = (::antaris_api_peer_to_peer::HostToPeerFcmOperationNotify *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_fcm_complete = 0;
+    INT32 __tmp_req_status;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->fcm_complete, &__tmp_fcm_complete); // fcm_complete
+
+    dst->set_fcm_complete(__tmp_fcm_complete);
+
+    app_to_peer_INT32(&src->req_status, &__tmp_req_status); // req_status
+
+    dst->set_req_status(__tmp_req_status);
+
+    dst->set_file_name(&src->file_name[0]);
+
+
+}
+
+void
+peer_to_app_HostToPeerFcmOperationNotify(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    HostToPeerFcmOperationNotify *dst = (HostToPeerFcmOperationNotify *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::HostToPeerFcmOperationNotify *src = (::antaris_api_peer_to_peer::HostToPeerFcmOperationNotify *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->fcm_complete = src->fcm_complete();
+    dst->req_status = src->req_status();
+    size_t file_name_length = strnlen(src->file_name().c_str(), 16);
+    if ( file_name_length >= 16 ) {
+        printf("Error:  file_name_length should be less than 16 \n");
+        return;
+    }
+    strncpy(&dst->file_name[0], src->file_name().c_str(), 16);
 
 }
 
@@ -2504,6 +2712,8 @@ displayAntarisApiCallbackFuncList(const void *obj)
     displayProcessRespPaSatOsMsg_Fptr((void *)&p->process_pa_satos_msg_response);
     printf("process_remote_ac_power_on_ntf ==>\n");
     displayProcessRemoteAcPwrStatusNtf_Fptr((void *)&p->process_remote_ac_power_on_ntf);
+    printf("process_host_to_peer_fcm_operation_notify ==>\n");
+    displayProcessHostToPeerFcmOperationNotify_Fptr((void *)&p->process_host_to_peer_fcm_operation_notify);
 
 }
 
