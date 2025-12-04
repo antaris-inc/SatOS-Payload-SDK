@@ -135,7 +135,7 @@ class SequenceHandler(Stoppable, threading.Thread):
 
 
 class ChannelClient:
-    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb, ses_thermal_ntf_cb, remote_ac_power_on_ntf, payload_power_control_request_status):
+    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb, ses_thermal_ntf_cb, remote_ac_power_on_ntf, payload_power_control_request_status, process_response_fcm_operation_cb):
         self._channel = None
         self._cond = threading.Condition()
         self._next_cid = 0
@@ -165,7 +165,8 @@ class ChannelClient:
             'RespSesTempReq': self._handle_response,
             'SesThrmlStsNtf': ses_thermal_ntf_cb,
             'PaSatOsMsg': self._handle_response,
-            'RemoteAcPowerStatusNtf': remote_ac_power_on_ntf
+            'RemoteAcPowerStatusNtf': remote_ac_power_on_ntf,
+            'FcmOperationNotify': process_response_fcm_operation_cb
         }
 
     def _get_next_cid(self):
@@ -424,6 +425,16 @@ class ChannelClient:
             del self._responses[params.correlation_id]
 
         return resp
+    
+    def host_to_peer_fcm_operation(self, peer_app_id, fcm_src, fcm_dest, no_of_files, file_input):
+        with self._cond:
+            params = api_types.HostToPeerFcmOperation(self._get_next_cid(), peer_app_id, fcm_src, fcm_dest, no_of_files, file_input)
+            resp = api_client.api_pa_pc_host_to_peer_fcm_operation(self._channel, params)
+            if resp != api_types.AntarisReturnCode.An_SUCCESS:
+                logger.error("api_pa_pc_host_to_peer_fcm_operation request failed")
+                return None
+
+        return resp
 
     def _sequence_done(self, sequence_id):
         params = api_types.CmdSequenceDoneParams(sequence_id)
@@ -489,6 +500,9 @@ class PayloadApplication(Stoppable):
 
         # default gnss data handler; can be overridden
         self.get_eps_voltage_handler = lambda: True
+
+        # default fcm operation notify; can be overridden
+        self.process_response_fcm_operation = lambda: True
         # abstracts access to channel APIs for sequences
         self.channel_client = None
 
@@ -515,6 +529,11 @@ class PayloadApplication(Stoppable):
     # to represent get eps voltage handling, respectively
     def set_get_eps_voltage_cb(self, get_eps_voltage_handler):
         self.get_eps_voltage_handler = get_eps_voltage_handler
+
+    # Provided function should expect no arguments and return True or False
+    # to represent fcm operation notify handling, respectively
+    def set_process_response_fcm_operation(self, process_response_fcm_operation):
+        self.process_response_fcm_operation = process_response_fcm_operation
 
     # Provided function should expect no arguments and return True or False
     # to represent SES thermal status notification, respectively
@@ -548,7 +567,7 @@ class PayloadApplication(Stoppable):
         logger.info("payload app starting")
 
         if not self.channel_client:
-            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb, self._set_get_eps_voltage_cb, self._set_ses_thermal_status_ntf, self._remote_ac_power_on_ntf, self._payload_power_control_request_status)
+            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb, self._set_get_eps_voltage_cb, self._set_ses_thermal_status_ntf, self._remote_ac_power_on_ntf, self._payload_power_control_request_status, self._set_process_response_fcm_operation_cb)
         
         self.channel_client._connect()
 
@@ -666,6 +685,19 @@ class PayloadApplication(Stoppable):
             hv = self.get_eps_voltage_handler(params)
         except:
             logger.exception("Handling get EPS voltage failed")
+            hv = False
+
+        if hv:
+            return api_types.AntarisReturnCode.An_SUCCESS
+        else:
+            return api_types.AntarisReturnCode.An_GENERIC_FAILURE
+        
+    def _set_process_response_fcm_operation_cb(self, params):
+        logger.info("Handling FCM operation notification")
+        try:
+            hv = self.process_response_fcm_operation(params)
+        except:
+            logger.exception("Handling FCM operation failed")
             hv = False
 
         if hv:
