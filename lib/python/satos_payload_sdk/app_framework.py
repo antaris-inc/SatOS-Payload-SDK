@@ -135,7 +135,7 @@ class SequenceHandler(Stoppable, threading.Thread):
 
 
 class ChannelClient:
-    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb, ses_thermal_ntf_cb, remote_ac_power_on_ntf, payload_power_control_request_status, process_response_fcm_operation_cb):
+    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb, ses_thermal_ntf_cb, remote_ac_power_on_ntf, payload_power_control_request_status, process_notify_fcm_operation_cb):
         self._channel = None
         self._cond = threading.Condition()
         self._next_cid = 0
@@ -166,7 +166,7 @@ class ChannelClient:
             'SesThrmlStsNtf': ses_thermal_ntf_cb,
             'PaSatOsMsg': self._handle_response,
             'RemoteAcPowerStatusNtf': remote_ac_power_on_ntf,
-            'FcmOperationNotify': process_response_fcm_operation_cb
+            'FcmOperationNotify': process_notify_fcm_operation_cb
         }
 
     def _get_next_cid(self):
@@ -502,7 +502,7 @@ class PayloadApplication(Stoppable):
         self.get_eps_voltage_handler = lambda: True
 
         # default fcm operation notify; can be overridden
-        self.process_response_fcm_operation = lambda: True
+        self.process_notify_fcm_operation = lambda: True
         # abstracts access to channel APIs for sequences
         self.channel_client = None
 
@@ -532,8 +532,8 @@ class PayloadApplication(Stoppable):
 
     # Provided function should expect no arguments and return True or False
     # to represent fcm operation notify handling, respectively
-    def set_process_response_fcm_operation(self, process_response_fcm_operation):
-        self.process_response_fcm_operation = process_response_fcm_operation
+    def set_process_notify_fcm_operation(self, process_notify_fcm_operation):
+        self.process_notify_fcm_operation = process_notify_fcm_operation
 
     # Provided function should expect no arguments and return True or False
     # to represent SES thermal status notification, respectively
@@ -567,7 +567,7 @@ class PayloadApplication(Stoppable):
         logger.info("payload app starting")
 
         if not self.channel_client:
-            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb, self._set_get_eps_voltage_cb, self._set_ses_thermal_status_ntf, self._remote_ac_power_on_ntf, self._payload_power_control_request_status, self._set_process_response_fcm_operation_cb)
+            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb, self._set_get_eps_voltage_cb, self._set_ses_thermal_status_ntf, self._remote_ac_power_on_ntf, self._payload_power_control_request_status, self._set_process_notify_fcm_operation_cb)
         
         self.channel_client._connect()
 
@@ -692,10 +692,10 @@ class PayloadApplication(Stoppable):
         else:
             return api_types.AntarisReturnCode.An_GENERIC_FAILURE
         
-    def _set_process_response_fcm_operation_cb(self, params):
+    def _set_process_notify_fcm_operation_cb(self, params):
         logger.info("Handling FCM operation notification")
         try:
-            hv = self.process_response_fcm_operation(params)
+            hv = self.process_notify_fcm_operation(params)
         except:
             logger.exception("Handling FCM operation failed")
             hv = False

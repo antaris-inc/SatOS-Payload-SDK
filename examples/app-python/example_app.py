@@ -127,7 +127,7 @@ class Controller:
         logger.info(f"EPS voltage data received : {float(ctx.eps_voltage):.2f}")
         return True
     
-    def process_response_fcm_operation(self, ctx):
+    def process_notify_fcm_operation(self, ctx):
 
         logger.info(f"Processed file is : {ctx.file_name}")
         if(ctx.req_status == 0):
@@ -524,7 +524,7 @@ def new():
     app.set_health_check(ctl.is_healthy)
     app.set_gnss_eph_data_cb(ctl.gnss_eph_data_handler)
     app.set_get_eps_voltage_cb(ctl.get_eps_voltage_handler)
-    app.set_process_response_fcm_operation(ctl.process_response_fcm_operation)
+    app.set_process_notify_fcm_operation(ctl.process_notify_fcm_operation)
     app.set_ses_thermal_status_ntf(ctl.ses_thermal_status_ntf)
     app.remote_ac_power_on_ntf(ctl.remote_ac_power_on_ntf_handler)
     app.shutdown_ntf(ctl.shutdown_ntf_handler)
