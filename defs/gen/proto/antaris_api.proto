@@ -194,6 +194,32 @@ message RespPaSatOsMsg {
     int32                           req_status       = 3; // status of PA SatOS Message request
 }
 
+message SatOsPaMsg {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           command_id       = 2; // command id
+    bytes                           payload_data     = 3; // payload data for sending for PA, bytes
+}
+
+message RespSatOsPaMsg {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           command_id       = 2; // command id
+    int32                           req_status       = 3; // status of SatOS PA Message request
+}
+
+message StageHmData {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           submod_id        = 2; // submodule id
+    int32                           queue_id         = 3; // queue id
+    int32                           file_pri         = 4; // File priority
+    int32                           dl_band          = 5; // Downlink band
+}
+
+message RespStageHmData {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           command_id       = 2; // command id
+    int32                           req_status       = 3; // status of HM data stagging
+}
+
 message HostToPeerFcmOperation {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     int32                           peer_app_id      = 2; // PC appliction id from which files are copied to edge system
@@ -392,6 +418,8 @@ service AntarisapiApplicationCallback {
     rpc PA_ProcessRespSesTempReq(RespSesTempReqParams) returns (AntarisReturnType) {}
     rpc PA_ProcessSesThrmlNtf(SesThermalStatusNtf) returns (AntarisReturnType) {}
     rpc PA_ProcessRespPaSatOsMsg(RespPaSatOsMsg) returns (AntarisReturnType) {}
+    rpc PA_ProcessSatOsPaMsg(SatOsPaMsg) returns (AntarisReturnType) {}
+    rpc PA_ProcessStageHmDataReq(StageHmData) returns (AntarisReturnType) {}
     rpc PA_ProcessRemoteAcPwrStatusNtf(NtfRemoteAcPwrStatus) returns (AntarisReturnType) {}
     rpc PA_ProcessHostToPeerFcmOperationNotify(HostToPeerFcmOperationNotify) returns (AntarisReturnType) {}
 }
@@ -414,5 +442,7 @@ service AntarisapiPayloadController {
     rpc PC_ses_temp_req(SesTempReq) returns (AntarisReturnType) {}
     rpc PC_pa_satos_message(PaSatOsMsg) returns (AntarisReturnType) {}
     rpc PC_host_to_peer_fcm_operation(HostToPeerFcmOperation) returns (AntarisReturnType) {}
+    rpc PC_satos_pa_message(RespSatOsPaMsg) returns (AntarisReturnType) {}
+    rpc PC_hm_data_rsp(RespStageHmData) returns (AntarisReturnType) {}
 }
 

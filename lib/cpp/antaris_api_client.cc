@@ -565,6 +565,10 @@ public:
     
     Status PA_ProcessHostToPeerFcmOperationNotify(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::HostToPeerFcmOperationNotify* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
+    Status PA_ProcessSatOsPaMsg(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
+    Status PA_ProcessStageHmDataReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::StageHmData* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
 public:
 
     void set_client_channel_ctx(AntarisInternalClientChannelContext_t *ctx) {
@@ -899,6 +903,33 @@ Status AppCallbackServiceImpl::PA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerCont
     return Status::OK;
 }
 
+Status AppCallbackServiceImpl::PA_ProcessSatOsPaMsg(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    SatOsPaMsg app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    if (client_channel_ctx_->callbacks.process_satos_pa_msg) {
+        peer_to_app_SatOsPaMsg((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_satos_pa_msg(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessStageHmDataReq(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::StageHmData* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    StageHmData app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    if (client_channel_ctx_->callbacks.process_stage_hm_data) {
+        peer_to_app_StageHmData((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_stage_hm_data(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
 void *start_callback_server(void *thread_param)
 {
     AntarisInternalClientChannelContext_t *ctx = (AntarisInternalClientChannelContext_t *)thread_param;

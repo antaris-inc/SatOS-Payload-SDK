@@ -313,6 +313,64 @@ struct RespPaSatOsMsgDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT RespPaSatOsMsgDefaultTypeInternal _RespPaSatOsMsg_default_instance_;
+constexpr SatOsPaMsg::SatOsPaMsg(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : payload_data_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , correlation_id_(0)
+  , command_id_(0){}
+struct SatOsPaMsgDefaultTypeInternal {
+  constexpr SatOsPaMsgDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~SatOsPaMsgDefaultTypeInternal() {}
+  union {
+    SatOsPaMsg _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT SatOsPaMsgDefaultTypeInternal _SatOsPaMsg_default_instance_;
+constexpr RespSatOsPaMsg::RespSatOsPaMsg(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : correlation_id_(0)
+  , command_id_(0)
+  , req_status_(0){}
+struct RespSatOsPaMsgDefaultTypeInternal {
+  constexpr RespSatOsPaMsgDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~RespSatOsPaMsgDefaultTypeInternal() {}
+  union {
+    RespSatOsPaMsg _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT RespSatOsPaMsgDefaultTypeInternal _RespSatOsPaMsg_default_instance_;
+constexpr StageHmData::StageHmData(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : correlation_id_(0)
+  , submod_id_(0)
+  , queue_id_(0)
+  , file_pri_(0)
+  , dl_band_(0){}
+struct StageHmDataDefaultTypeInternal {
+  constexpr StageHmDataDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~StageHmDataDefaultTypeInternal() {}
+  union {
+    StageHmData _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT StageHmDataDefaultTypeInternal _StageHmData_default_instance_;
+constexpr RespStageHmData::RespStageHmData(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : correlation_id_(0)
+  , command_id_(0)
+  , req_status_(0){}
+struct RespStageHmDataDefaultTypeInternal {
+  constexpr RespStageHmDataDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~RespStageHmDataDefaultTypeInternal() {}
+  union {
+    RespStageHmData _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT RespStageHmDataDefaultTypeInternal _RespStageHmData_default_instance_;
 constexpr HostToPeerFcmOperation::HostToPeerFcmOperation(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : file_input_()
@@ -695,7 +753,7 @@ struct AntarisReturnTypeDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AntarisReturnTypeDefaultTypeInternal _AntarisReturnType_default_instance_;
 }  // namespace antaris_api_peer_to_peer
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[46];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[50];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[3];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto = nullptr;
 
@@ -889,6 +947,44 @@ const uint32_t TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto::offsets[]
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespPaSatOsMsg, correlation_id_),
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespPaSatOsMsg, command_id_),
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespPaSatOsMsg, req_status_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::SatOsPaMsg, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::SatOsPaMsg, correlation_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::SatOsPaMsg, command_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::SatOsPaMsg, payload_data_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespSatOsPaMsg, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespSatOsPaMsg, correlation_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespSatOsPaMsg, command_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespSatOsPaMsg, req_status_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::StageHmData, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::StageHmData, correlation_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::StageHmData, submod_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::StageHmData, queue_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::StageHmData, file_pri_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::StageHmData, dl_band_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespStageHmData, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespStageHmData, correlation_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespStageHmData, command_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespStageHmData, req_status_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::HostToPeerFcmOperation, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1165,31 +1261,35 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 164, -1, -1, sizeof(::antaris_api_peer_to_peer::CmdSequenceDoneParams)},
   { 171, -1, -1, sizeof(::antaris_api_peer_to_peer::PaSatOsMsg)},
   { 180, -1, -1, sizeof(::antaris_api_peer_to_peer::RespPaSatOsMsg)},
-  { 189, -1, -1, sizeof(::antaris_api_peer_to_peer::HostToPeerFcmOperation)},
-  { 201, -1, -1, sizeof(::antaris_api_peer_to_peer::HostToPeerFcmOperationNotify)},
-  { 211, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGnssEphStopDataReq)},
-  { 218, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGnssEphStopDataReq)},
-  { 226, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGnssEphStartDataReq)},
-  { 235, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGnssEphStartDataReq)},
-  { 243, -1, -1, sizeof(::antaris_api_peer_to_peer::OBC_time)},
-  { 255, -1, -1, sizeof(::antaris_api_peer_to_peer::GpsEphemerisData)},
-  { 267, -1, -1, sizeof(::antaris_api_peer_to_peer::AdcsEphemerisData)},
-  { 304, -1, -1, sizeof(::antaris_api_peer_to_peer::GnssEphData)},
-  { 315, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq)},
-  { 322, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq)},
-  { 330, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq)},
-  { 338, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq)},
-  { 346, -1, -1, sizeof(::antaris_api_peer_to_peer::GetEpsVoltage)},
-  { 354, -1, -1, sizeof(::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus)},
-  { 363, -1, -1, sizeof(::antaris_api_peer_to_peer::StartSesThermMgmntReq)},
-  { 374, -1, -1, sizeof(::antaris_api_peer_to_peer::RespStartSesThermMgmntReq)},
-  { 382, -1, -1, sizeof(::antaris_api_peer_to_peer::StopSesThermMgmntReq)},
-  { 390, -1, -1, sizeof(::antaris_api_peer_to_peer::RespStopSesThermMgmntReq)},
-  { 398, -1, -1, sizeof(::antaris_api_peer_to_peer::SesTempReq)},
-  { 406, -1, -1, sizeof(::antaris_api_peer_to_peer::RespSesTempReqParams)},
-  { 416, -1, -1, sizeof(::antaris_api_peer_to_peer::SesThermalStatusNtf)},
-  { 428, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisCorrelationId)},
-  { 435, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisReturnType)},
+  { 189, -1, -1, sizeof(::antaris_api_peer_to_peer::SatOsPaMsg)},
+  { 198, -1, -1, sizeof(::antaris_api_peer_to_peer::RespSatOsPaMsg)},
+  { 207, -1, -1, sizeof(::antaris_api_peer_to_peer::StageHmData)},
+  { 218, -1, -1, sizeof(::antaris_api_peer_to_peer::RespStageHmData)},
+  { 227, -1, -1, sizeof(::antaris_api_peer_to_peer::HostToPeerFcmOperation)},
+  { 239, -1, -1, sizeof(::antaris_api_peer_to_peer::HostToPeerFcmOperationNotify)},
+  { 249, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGnssEphStopDataReq)},
+  { 256, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGnssEphStopDataReq)},
+  { 264, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGnssEphStartDataReq)},
+  { 273, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGnssEphStartDataReq)},
+  { 281, -1, -1, sizeof(::antaris_api_peer_to_peer::OBC_time)},
+  { 293, -1, -1, sizeof(::antaris_api_peer_to_peer::GpsEphemerisData)},
+  { 305, -1, -1, sizeof(::antaris_api_peer_to_peer::AdcsEphemerisData)},
+  { 342, -1, -1, sizeof(::antaris_api_peer_to_peer::GnssEphData)},
+  { 353, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq)},
+  { 360, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGetEpsVoltageStopReq)},
+  { 368, -1, -1, sizeof(::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq)},
+  { 376, -1, -1, sizeof(::antaris_api_peer_to_peer::RespGetEpsVoltageStartReq)},
+  { 384, -1, -1, sizeof(::antaris_api_peer_to_peer::GetEpsVoltage)},
+  { 392, -1, -1, sizeof(::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus)},
+  { 401, -1, -1, sizeof(::antaris_api_peer_to_peer::StartSesThermMgmntReq)},
+  { 412, -1, -1, sizeof(::antaris_api_peer_to_peer::RespStartSesThermMgmntReq)},
+  { 420, -1, -1, sizeof(::antaris_api_peer_to_peer::StopSesThermMgmntReq)},
+  { 428, -1, -1, sizeof(::antaris_api_peer_to_peer::RespStopSesThermMgmntReq)},
+  { 436, -1, -1, sizeof(::antaris_api_peer_to_peer::SesTempReq)},
+  { 444, -1, -1, sizeof(::antaris_api_peer_to_peer::RespSesTempReqParams)},
+  { 454, -1, -1, sizeof(::antaris_api_peer_to_peer::SesThermalStatusNtf)},
+  { 466, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisCorrelationId)},
+  { 473, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisReturnType)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -1214,6 +1314,10 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_CmdSequenceDoneParams_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_PaSatOsMsg_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_RespPaSatOsMsg_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_SatOsPaMsg_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_RespSatOsPaMsg_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_StageHmData_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_RespStageHmData_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_HostToPeerFcmOperation_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_HostToPeerFcmOperationNotify_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::antaris_api_peer_to_peer::_ReqGnssEphStopDataReq_default_instance_),
@@ -1295,222 +1399,242 @@ const char descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[
   "PaSatOsMsg\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nco"
   "mmand_id\030\002 \001(\005\022\024\n\014payload_data\030\003 \001(\014\"P\n\016"
   "RespPaSatOsMsg\022\026\n\016correlation_id\030\001 \001(\005\022\022"
-  "\n\ncommand_id\030\002 \001(\005\022\022\n\nreq_status\030\003 \001(\005\"\266"
-  "\001\n\026HostToPeerFcmOperation\022\026\n\016correlation"
-  "_id\030\001 \001(\005\022\023\n\013peer_app_id\030\002 \001(\005\022\017\n\007fcm_sr"
-  "c\030\003 \001(\005\022\020\n\010fcm_dest\030\004 \001(\005\022\023\n\013no_of_files"
-  "\030\005 \001(\005\0227\n\nfile_input\030\006 \003(\0132#.antaris_api"
-  "_peer_to_peer.FileInput\"s\n\034HostToPeerFcm"
-  "OperationNotify\022\026\n\016correlation_id\030\001 \001(\005\022"
-  "\024\n\014fcm_complete\030\002 \001(\005\022\022\n\nreq_status\030\003 \001("
-  "\005\022\021\n\tfile_name\030\004 \001(\t\"/\n\025ReqGnssEphStopDa"
-  "taReq\022\026\n\016correlation_id\030\001 \001(\005\"D\n\026RespGns"
-  "sEphStopDataReq\022\026\n\016correlation_id\030\001 \001(\005\022"
-  "\022\n\nreq_status\030\002 \001(\005\"`\n\026ReqGnssEphStartDa"
-  "taReq\022\026\n\016correlation_id\030\001 \001(\005\022\031\n\021periodi"
-  "city_in_ms\030\002 \001(\005\022\023\n\013eph2_enable\030\003 \001(\005\"E\n"
-  "\027RespGnssEphStartDataReq\022\026\n\016correlation_"
-  "id\030\001 \001(\005\022\022\n\nreq_status\030\002 \001(\005\"h\n\010OBC_time"
-  "\022\014\n\004hour\030\001 \001(\005\022\016\n\006minute\030\002 \001(\005\022\023\n\013millis"
-  "econd\030\003 \001(\005\022\014\n\004date\030\004 \001(\005\022\r\n\005month\030\005 \001(\005"
-  "\022\014\n\004year\030\006 \001(\005\"\315\001\n\020GpsEphemerisData\022\024\n\014g"
-  "ps_fix_time\030\001 \001(\003\022\024\n\014gps_sys_time\030\002 \001(\003\022"
-  "4\n\010obc_time\030\003 \001(\0132\".antaris_api_peer_to_"
-  "peer.OBC_time\022\031\n\021gps_position_ecef\030\004 \003(\003"
-  "\022\031\n\021gps_velocity_ecef\030\005 \003(\003\022!\n\031gps_valid"
-  "ity_flag_pos_vel\030\006 \001(\005\"\325\005\n\021AdcsEphemeris"
-  "Data\022\022\n\norbit_time\030\001 \001(\001\022\026\n\016eci_position"
-  "_x\030\002 \001(\001\022\026\n\016eci_position_y\030\003 \001(\001\022\026\n\016eci_"
-  "position_z\030\004 \001(\001\022\026\n\016eci_velocity_x\030\005 \001(\001"
-  "\022\026\n\016eci_velocity_y\030\006 \001(\001\022\026\n\016eci_velocity"
-  "_z\030\007 \001(\001\022\027\n\017ecef_position_x\030\010 \001(\001\022\027\n\017ece"
-  "f_position_y\030\t \001(\001\022\027\n\017ecef_position_z\030\n "
-  "\001(\001\022\027\n\017ecef_velocity_x\030\013 \001(\001\022\027\n\017ecef_vel"
-  "ocity_y\030\014 \001(\001\022\027\n\017ecef_velocity_z\030\r \001(\001\022\022"
-  "\n\nang_rate_x\030\016 \001(\001\022\022\n\nang_rate_y\030\017 \001(\001\022\022"
-  "\n\nang_rate_z\030\020 \001(\001\022\022\n\natt_quat_1\030\021 \001(\001\022\022"
-  "\n\natt_quat_2\030\024 \001(\001\022\022\n\natt_quat_3\030\025 \001(\001\022\022"
-  "\n\natt_quat_4\030\026 \001(\001\022\020\n\010latitude\030\027 \001(\002\022\021\n\t"
-  "longitude\030\030 \001(\002\022\020\n\010altitude\030\031 \001(\002\022\026\n\016nad"
-  "ir_vector_x\030\032 \001(\002\022\026\n\016nadir_vector_y\030\033 \001("
-  "\002\022\026\n\016nadir_vector_z\030\034 \001(\002\022\031\n\021gd_nadir_ve"
-  "ctor_x\030\035 \001(\002\022\031\n\021gd_nadir_vector_y\030\036 \001(\002\022"
-  "\031\n\021gd_nadir_vector_z\030\037 \001(\002\022\022\n\nbeta_angle"
-  "\030  \001(\002\022\026\n\016validity_flags\030! \001(\005\"\340\001\n\013GnssE"
-  "phData\022\026\n\016correlation_id\030\001 \001(\005\022B\n\radcs_e"
-  "ph_data\030\002 \001(\0132+.antaris_api_peer_to_peer"
-  ".AdcsEphemerisData\022@\n\014gps_eph_data\030\003 \001(\013"
-  "2*.antaris_api_peer_to_peer.GpsEphemeris"
-  "Data\022\031\n\021adcs_timeout_flag\030\004 \001(\005\022\030\n\020gps_t"
-  "imeout_flag\030\005 \001(\005\"1\n\027ReqGetEpsVoltageSto"
-  "pReq\022\026\n\016correlation_id\030\001 \001(\005\"F\n\030RespGetE"
-  "psVoltageStopReq\022\026\n\016correlation_id\030\001 \001(\005"
-  "\022\022\n\nreq_status\030\002 \001(\005\"M\n\030ReqGetEpsVoltage"
-  "StartReq\022\026\n\016correlation_id\030\001 \001(\005\022\031\n\021peri"
-  "odicity_in_ms\030\002 \001(\005\"G\n\031RespGetEpsVoltage"
-  "StartReq\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nreq_"
-  "status\030\002 \001(\005\"<\n\rGetEpsVoltage\022\026\n\016correla"
-  "tion_id\030\001 \001(\005\022\023\n\013eps_voltage\030\002 \001(\002\"W\n\024Nt"
-  "fRemoteAcPwrStatus\022\026\n\016correlation_id\030\001 \001"
-  "(\005\022\021\n\tac_app_id\030\002 \001(\005\022\024\n\014power_status\030\003 "
-  "\001(\005\"\210\001\n\025StartSesThermMgmntReq\022\026\n\016correla"
-  "tion_id\030\001 \001(\005\022\023\n\013hardware_id\030\002 \001(\005\022\020\n\010du"
-  "ration\030\003 \001(\005\022\027\n\017lower_threshold\030\004 \001(\005\022\027\n"
-  "\017upper_threshold\030\005 \001(\005\"G\n\031RespStartSesTh"
-  "ermMgmntReq\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nr"
-  "eq_status\030\002 \001(\005\"C\n\024StopSesThermMgmntReq\022"
-  "\026\n\016correlation_id\030\001 \001(\005\022\023\n\013hardware_id\030\002"
-  " \001(\005\"F\n\030RespStopSesThermMgmntReq\022\026\n\016corr"
-  "elation_id\030\001 \001(\005\022\022\n\nreq_status\030\002 \001(\005\"9\n\n"
-  "SesTempReq\022\026\n\016correlation_id\030\001 \001(\005\022\023\n\013ha"
-  "rdware_id\030\002 \001(\005\"h\n\024RespSesTempReqParams\022"
-  "\026\n\016correlation_id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022"
-  "\023\n\013temperature\030\003 \001(\005\022\023\n\013hardware_id\030\004 \001("
-  "\005\"\240\001\n\023SesThermalStatusNtf\022\026\n\016correlation"
-  "_id\030\001 \001(\005\022\031\n\021heater_pwr_status\030\002 \001(\005\022\023\n\013"
-  "hardware_id\030\003 \001(\005\022\020\n\010reserved\030\004 \001(\005\022\032\n\022h"
-  "eater_temp_status\030\005 \001(\005\022\023\n\013temperature\030\006"
-  " \001(\005\".\n\024AntarisCorrelationId\022\026\n\016correlat"
-  "ion_id\030\001 \001(\005\"U\n\021AntarisReturnType\022@\n\013ret"
-  "urn_code\030\001 \001(\0162+.antaris_api_peer_to_pee"
-  "r.AntarisReturnCode*\354\001\n\021AntarisReturnCod"
-  "e\022\016\n\nAn_SUCCESS\020\000\022\037\n\022An_GENERIC_FAILURE\020"
-  "\377\377\377\377\377\377\377\377\377\001\022\037\n\022An_NOT_IMPLEMENTED\020\376\377\377\377\377\377\377"
-  "\377\377\001\022 \n\023An_OUT_OF_RESOURCES\020\375\377\377\377\377\377\377\377\377\001\022\035\n"
-  "\020An_NOT_PERMITTED\020\374\377\377\377\377\377\377\377\377\001\022\036\n\021An_INVAL"
-  "ID_PARAMS\020\373\377\377\377\377\377\377\377\377\001\022$\n\027An_INCOMPATIBLE_"
-  "VERSION\020\372\377\377\377\377\377\377\377\377\001*\202\001\n\016FilePriorities\022\030\n"
-  "\024FILE_DL_PRIORITY_LOW\020\000\022\033\n\027FILE_DL_PRIOR"
-  "ITY_NORMAL\020\001\022\031\n\025FILE_DL_PRIORITY_HIGH\020\002\022"
-  "\036\n\032FILE_DL_PRIORITY_IMMEDIATE\020\003*7\n\017FileD"
-  "lRadioType\022\021\n\rFILE_DL_SBAND\020\000\022\021\n\rFILE_DL"
-  "_XBAND\020\0012\263\025\n\035AntarisapiApplicationCallba"
-  "ck\022p\n\020PA_StartSequence\022-.antaris_api_pee"
-  "r_to_peer.StartSequenceParams\032+.antaris_"
-  "api_peer_to_peer.AntarisReturnType\"\000\022i\n\016"
-  "PA_ShutdownApp\022(.antaris_api_peer_to_pee"
-  "r.ShutdownParams\032+.antaris_api_peer_to_p"
-  "eer.AntarisReturnType\"\000\022s\n\025PA_ProcessHea"
-  "lthCheck\022+.antaris_api_peer_to_peer.Heal"
-  "thCheckParams\032+.antaris_api_peer_to_peer"
-  ".AntarisReturnType\"\000\022y\n\032PA_ProcessRespon"
-  "seRegister\022,.antaris_api_peer_to_peer.Re"
-  "spRegisterParams\032+.antaris_api_peer_to_p"
-  "eer.AntarisReturnType\"\000\022\215\001\n$PA_ProcessRe"
-  "sponseGetCurrentLocation\0226.antaris_api_p"
-  "eer_to_peer.RespGetCurrentLocationParams"
-  "\032+.antaris_api_peer_to_peer.AntarisRetur"
-  "nType\"\000\022\213\001\n#PA_ProcessResponseStageFileD"
-  "ownload\0225.antaris_api_peer_to_peer.RespS"
-  "tageFileDownloadParams\032+.antaris_api_pee"
-  "r_to_peer.AntarisReturnType\"\000\022\217\001\n%PA_Pro"
-  "cessResponsePayloadPowerControl\0227.antari"
-  "s_api_peer_to_peer.RespPayloadPowerContr"
-  "olParams\032+.antaris_api_peer_to_peer.Anta"
-  "risReturnType\"\000\022\177\n\033PA_ProcessReqPayloadM"
-  "etrics\0221.antaris_api_peer_to_peer.ReqPay"
-  "loadMetricsParams\032+.antaris_api_peer_to_"
-  "peer.AntarisReturnType\"\000\022\203\001\n PA_ProcessR"
-  "espGnssEphStopDataReq\0220.antaris_api_peer"
-  "_to_peer.RespGnssEphStopDataReq\032+.antari"
-  "s_api_peer_to_peer.AntarisReturnType\"\000\022\205"
-  "\001\n!PA_ProcessRespGnssEphStartDataReq\0221.a"
-  "ntaris_api_peer_to_peer.RespGnssEphStart"
-  "DataReq\032+.antaris_api_peer_to_peer.Antar"
-  "isReturnType\"\000\022m\n\025PA_ProcessGnssEphData\022"
-  "%.antaris_api_peer_to_peer.GnssEphData\032+"
-  ".antaris_api_peer_to_peer.AntarisReturnT"
-  "ype\"\000\022\207\001\n\"PA_ProcessRespGetEpsVoltageSto"
-  "pReq\0222.antaris_api_peer_to_peer.RespGetE"
-  "psVoltageStopReq\032+.antaris_api_peer_to_p"
-  "eer.AntarisReturnType\"\000\022\211\001\n#PA_ProcessRe"
-  "spGetEpsVoltageStartReq\0223.antaris_api_pe"
-  "er_to_peer.RespGetEpsVoltageStartReq\032+.a"
+  "\n\ncommand_id\030\002 \001(\005\022\022\n\nreq_status\030\003 \001(\005\"N"
+  "\n\nSatOsPaMsg\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\n"
+  "command_id\030\002 \001(\005\022\024\n\014payload_data\030\003 \001(\014\"P"
+  "\n\016RespSatOsPaMsg\022\026\n\016correlation_id\030\001 \001(\005"
+  "\022\022\n\ncommand_id\030\002 \001(\005\022\022\n\nreq_status\030\003 \001(\005"
+  "\"m\n\013StageHmData\022\026\n\016correlation_id\030\001 \001(\005\022"
+  "\021\n\tsubmod_id\030\002 \001(\005\022\020\n\010queue_id\030\003 \001(\005\022\020\n\010"
+  "file_pri\030\004 \001(\005\022\017\n\007dl_band\030\005 \001(\005\"Q\n\017RespS"
+  "tageHmData\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nco"
+  "mmand_id\030\002 \001(\005\022\022\n\nreq_status\030\003 \001(\005\"\266\001\n\026H"
+  "ostToPeerFcmOperation\022\026\n\016correlation_id\030"
+  "\001 \001(\005\022\023\n\013peer_app_id\030\002 \001(\005\022\017\n\007fcm_src\030\003 "
+  "\001(\005\022\020\n\010fcm_dest\030\004 \001(\005\022\023\n\013no_of_files\030\005 \001"
+  "(\005\0227\n\nfile_input\030\006 \003(\0132#.antaris_api_pee"
+  "r_to_peer.FileInput\"s\n\034HostToPeerFcmOper"
+  "ationNotify\022\026\n\016correlation_id\030\001 \001(\005\022\024\n\014f"
+  "cm_complete\030\002 \001(\005\022\022\n\nreq_status\030\003 \001(\005\022\021\n"
+  "\tfile_name\030\004 \001(\t\"/\n\025ReqGnssEphStopDataRe"
+  "q\022\026\n\016correlation_id\030\001 \001(\005\"D\n\026RespGnssEph"
+  "StopDataReq\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nr"
+  "eq_status\030\002 \001(\005\"`\n\026ReqGnssEphStartDataRe"
+  "q\022\026\n\016correlation_id\030\001 \001(\005\022\031\n\021periodicity"
+  "_in_ms\030\002 \001(\005\022\023\n\013eph2_enable\030\003 \001(\005\"E\n\027Res"
+  "pGnssEphStartDataReq\022\026\n\016correlation_id\030\001"
+  " \001(\005\022\022\n\nreq_status\030\002 \001(\005\"h\n\010OBC_time\022\014\n\004"
+  "hour\030\001 \001(\005\022\016\n\006minute\030\002 \001(\005\022\023\n\013millisecon"
+  "d\030\003 \001(\005\022\014\n\004date\030\004 \001(\005\022\r\n\005month\030\005 \001(\005\022\014\n\004"
+  "year\030\006 \001(\005\"\315\001\n\020GpsEphemerisData\022\024\n\014gps_f"
+  "ix_time\030\001 \001(\003\022\024\n\014gps_sys_time\030\002 \001(\003\0224\n\010o"
+  "bc_time\030\003 \001(\0132\".antaris_api_peer_to_peer"
+  ".OBC_time\022\031\n\021gps_position_ecef\030\004 \003(\003\022\031\n\021"
+  "gps_velocity_ecef\030\005 \003(\003\022!\n\031gps_validity_"
+  "flag_pos_vel\030\006 \001(\005\"\325\005\n\021AdcsEphemerisData"
+  "\022\022\n\norbit_time\030\001 \001(\001\022\026\n\016eci_position_x\030\002"
+  " \001(\001\022\026\n\016eci_position_y\030\003 \001(\001\022\026\n\016eci_posi"
+  "tion_z\030\004 \001(\001\022\026\n\016eci_velocity_x\030\005 \001(\001\022\026\n\016"
+  "eci_velocity_y\030\006 \001(\001\022\026\n\016eci_velocity_z\030\007"
+  " \001(\001\022\027\n\017ecef_position_x\030\010 \001(\001\022\027\n\017ecef_po"
+  "sition_y\030\t \001(\001\022\027\n\017ecef_position_z\030\n \001(\001\022"
+  "\027\n\017ecef_velocity_x\030\013 \001(\001\022\027\n\017ecef_velocit"
+  "y_y\030\014 \001(\001\022\027\n\017ecef_velocity_z\030\r \001(\001\022\022\n\nan"
+  "g_rate_x\030\016 \001(\001\022\022\n\nang_rate_y\030\017 \001(\001\022\022\n\nan"
+  "g_rate_z\030\020 \001(\001\022\022\n\natt_quat_1\030\021 \001(\001\022\022\n\nat"
+  "t_quat_2\030\024 \001(\001\022\022\n\natt_quat_3\030\025 \001(\001\022\022\n\nat"
+  "t_quat_4\030\026 \001(\001\022\020\n\010latitude\030\027 \001(\002\022\021\n\tlong"
+  "itude\030\030 \001(\002\022\020\n\010altitude\030\031 \001(\002\022\026\n\016nadir_v"
+  "ector_x\030\032 \001(\002\022\026\n\016nadir_vector_y\030\033 \001(\002\022\026\n"
+  "\016nadir_vector_z\030\034 \001(\002\022\031\n\021gd_nadir_vector"
+  "_x\030\035 \001(\002\022\031\n\021gd_nadir_vector_y\030\036 \001(\002\022\031\n\021g"
+  "d_nadir_vector_z\030\037 \001(\002\022\022\n\nbeta_angle\030  \001"
+  "(\002\022\026\n\016validity_flags\030! \001(\005\"\340\001\n\013GnssEphDa"
+  "ta\022\026\n\016correlation_id\030\001 \001(\005\022B\n\radcs_eph_d"
+  "ata\030\002 \001(\0132+.antaris_api_peer_to_peer.Adc"
+  "sEphemerisData\022@\n\014gps_eph_data\030\003 \001(\0132*.a"
+  "ntaris_api_peer_to_peer.GpsEphemerisData"
+  "\022\031\n\021adcs_timeout_flag\030\004 \001(\005\022\030\n\020gps_timeo"
+  "ut_flag\030\005 \001(\005\"1\n\027ReqGetEpsVoltageStopReq"
+  "\022\026\n\016correlation_id\030\001 \001(\005\"F\n\030RespGetEpsVo"
+  "ltageStopReq\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\n"
+  "req_status\030\002 \001(\005\"M\n\030ReqGetEpsVoltageStar"
+  "tReq\022\026\n\016correlation_id\030\001 \001(\005\022\031\n\021periodic"
+  "ity_in_ms\030\002 \001(\005\"G\n\031RespGetEpsVoltageStar"
+  "tReq\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nreq_stat"
+  "us\030\002 \001(\005\"<\n\rGetEpsVoltage\022\026\n\016correlation"
+  "_id\030\001 \001(\005\022\023\n\013eps_voltage\030\002 \001(\002\"W\n\024NtfRem"
+  "oteAcPwrStatus\022\026\n\016correlation_id\030\001 \001(\005\022\021"
+  "\n\tac_app_id\030\002 \001(\005\022\024\n\014power_status\030\003 \001(\005\""
+  "\210\001\n\025StartSesThermMgmntReq\022\026\n\016correlation"
+  "_id\030\001 \001(\005\022\023\n\013hardware_id\030\002 \001(\005\022\020\n\010durati"
+  "on\030\003 \001(\005\022\027\n\017lower_threshold\030\004 \001(\005\022\027\n\017upp"
+  "er_threshold\030\005 \001(\005\"G\n\031RespStartSesThermM"
+  "gmntReq\022\026\n\016correlation_id\030\001 \001(\005\022\022\n\nreq_s"
+  "tatus\030\002 \001(\005\"C\n\024StopSesThermMgmntReq\022\026\n\016c"
+  "orrelation_id\030\001 \001(\005\022\023\n\013hardware_id\030\002 \001(\005"
+  "\"F\n\030RespStopSesThermMgmntReq\022\026\n\016correlat"
+  "ion_id\030\001 \001(\005\022\022\n\nreq_status\030\002 \001(\005\"9\n\nSesT"
+  "empReq\022\026\n\016correlation_id\030\001 \001(\005\022\023\n\013hardwa"
+  "re_id\030\002 \001(\005\"h\n\024RespSesTempReqParams\022\026\n\016c"
+  "orrelation_id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022\023\n\013t"
+  "emperature\030\003 \001(\005\022\023\n\013hardware_id\030\004 \001(\005\"\240\001"
+  "\n\023SesThermalStatusNtf\022\026\n\016correlation_id\030"
+  "\001 \001(\005\022\031\n\021heater_pwr_status\030\002 \001(\005\022\023\n\013hard"
+  "ware_id\030\003 \001(\005\022\020\n\010reserved\030\004 \001(\005\022\032\n\022heate"
+  "r_temp_status\030\005 \001(\005\022\023\n\013temperature\030\006 \001(\005"
+  "\".\n\024AntarisCorrelationId\022\026\n\016correlation_"
+  "id\030\001 \001(\005\"U\n\021AntarisReturnType\022@\n\013return_"
+  "code\030\001 \001(\0162+.antaris_api_peer_to_peer.An"
+  "tarisReturnCode*\354\001\n\021AntarisReturnCode\022\016\n"
+  "\nAn_SUCCESS\020\000\022\037\n\022An_GENERIC_FAILURE\020\377\377\377\377"
+  "\377\377\377\377\377\001\022\037\n\022An_NOT_IMPLEMENTED\020\376\377\377\377\377\377\377\377\377\001\022"
+  " \n\023An_OUT_OF_RESOURCES\020\375\377\377\377\377\377\377\377\377\001\022\035\n\020An_"
+  "NOT_PERMITTED\020\374\377\377\377\377\377\377\377\377\001\022\036\n\021An_INVALID_P"
+  "ARAMS\020\373\377\377\377\377\377\377\377\377\001\022$\n\027An_INCOMPATIBLE_VERS"
+  "ION\020\372\377\377\377\377\377\377\377\377\001*\202\001\n\016FilePriorities\022\030\n\024FIL"
+  "E_DL_PRIORITY_LOW\020\000\022\033\n\027FILE_DL_PRIORITY_"
+  "NORMAL\020\001\022\031\n\025FILE_DL_PRIORITY_HIGH\020\002\022\036\n\032F"
+  "ILE_DL_PRIORITY_IMMEDIATE\020\003*7\n\017FileDlRad"
+  "ioType\022\021\n\rFILE_DL_SBAND\020\000\022\021\n\rFILE_DL_XBA"
+  "ND\020\0012\222\027\n\035AntarisapiApplicationCallback\022p"
+  "\n\020PA_StartSequence\022-.antaris_api_peer_to"
+  "_peer.StartSequenceParams\032+.antaris_api_"
+  "peer_to_peer.AntarisReturnType\"\000\022i\n\016PA_S"
+  "hutdownApp\022(.antaris_api_peer_to_peer.Sh"
+  "utdownParams\032+.antaris_api_peer_to_peer."
+  "AntarisReturnType\"\000\022s\n\025PA_ProcessHealthC"
+  "heck\022+.antaris_api_peer_to_peer.HealthCh"
+  "eckParams\032+.antaris_api_peer_to_peer.Ant"
+  "arisReturnType\"\000\022y\n\032PA_ProcessResponseRe"
+  "gister\022,.antaris_api_peer_to_peer.RespRe"
+  "gisterParams\032+.antaris_api_peer_to_peer."
+  "AntarisReturnType\"\000\022\215\001\n$PA_ProcessRespon"
+  "seGetCurrentLocation\0226.antaris_api_peer_"
+  "to_peer.RespGetCurrentLocationParams\032+.a"
   "ntaris_api_peer_to_peer.AntarisReturnTyp"
-  "e\"\000\022q\n\027PA_ProcessGetEpsVoltage\022\'.antaris"
-  "_api_peer_to_peer.GetEpsVoltage\032+.antari"
-  "s_api_peer_to_peer.AntarisReturnType\"\000\022\211"
-  "\001\n#PA_ProcessRespStartSesThermMgmntReq\0223"
-  ".antaris_api_peer_to_peer.RespStartSesTh"
-  "ermMgmntReq\032+.antaris_api_peer_to_peer.A"
-  "ntarisReturnType\"\000\022\207\001\n\"PA_ProcessRespSto"
-  "pSesThermMgmntReq\0222.antaris_api_peer_to_"
-  "peer.RespStopSesThermMgmntReq\032+.antaris_"
-  "api_peer_to_peer.AntarisReturnType\"\000\022y\n\030"
-  "PA_ProcessRespSesTempReq\022..antaris_api_p"
-  "eer_to_peer.RespSesTempReqParams\032+.antar"
-  "is_api_peer_to_peer.AntarisReturnType\"\000\022"
-  "u\n\025PA_ProcessSesThrmlNtf\022-.antaris_api_p"
-  "eer_to_peer.SesThermalStatusNtf\032+.antari"
-  "s_api_peer_to_peer.AntarisReturnType\"\000\022s"
-  "\n\030PA_ProcessRespPaSatOsMsg\022(.antaris_api"
-  "_peer_to_peer.RespPaSatOsMsg\032+.antaris_a"
-  "pi_peer_to_peer.AntarisReturnType\"\000\022\177\n\036P"
-  "A_ProcessRemoteAcPwrStatusNtf\022..antaris_"
-  "api_peer_to_peer.NtfRemoteAcPwrStatus\032+."
-  "antaris_api_peer_to_peer.AntarisReturnTy"
-  "pe\"\000\022\217\001\n&PA_ProcessHostToPeerFcmOperatio"
-  "nNotify\0226.antaris_api_peer_to_peer.HostT"
-  "oPeerFcmOperationNotify\032+.antaris_api_pe"
-  "er_to_peer.AntarisReturnType\"\0002\275\020\n\033Antar"
-  "isapiPayloadController\022i\n\013PC_register\022+."
-  "antaris_api_peer_to_peer.ReqRegisterPara"
-  "ms\032+.antaris_api_peer_to_peer.AntarisRet"
-  "urnType\"\000\022\177\n\027PC_get_current_location\0225.a"
-  "ntaris_api_peer_to_peer.ReqGetCurrentLoc"
-  "ationParams\032+.antaris_api_peer_to_peer.A"
-  "ntarisReturnType\"\000\022}\n\026PC_stage_file_down"
-  "load\0224.antaris_api_peer_to_peer.ReqStage"
+  "e\"\000\022\213\001\n#PA_ProcessResponseStageFileDownl"
+  "oad\0225.antaris_api_peer_to_peer.RespStage"
   "FileDownloadParams\032+.antaris_api_peer_to"
-  "_peer.AntarisReturnType\"\000\022r\n\020PC_sequence"
-  "_done\022/.antaris_api_peer_to_peer.CmdSequ"
-  "enceDoneParams\032+.antaris_api_peer_to_pee"
-  "r.AntarisReturnType\"\000\022\201\001\n\030PC_payload_pow"
-  "er_control\0226.antaris_api_peer_to_peer.Re"
-  "qPayloadPowerControlParams\032+.antaris_api"
-  "_peer_to_peer.AntarisReturnType\"\000\022z\n\030PC_"
-  "response_health_check\022/.antaris_api_peer"
-  "_to_peer.RespHealthCheckParams\032+.antaris"
-  "_api_peer_to_peer.AntarisReturnType\"\000\022s\n"
-  "\024PC_response_shutdown\022,.antaris_api_peer"
-  "_to_peer.RespShutdownParams\032+.antaris_ap"
-  "i_peer_to_peer.AntarisReturnType\"\000\022~\n\033PC"
-  "_response_payload_metrics\0220.antaris_api_"
-  "peer_to_peer.PayloadMetricsResponse\032+.an"
-  "taris_api_peer_to_peer.AntarisReturnType"
-  "\"\000\022v\n\024PC_gnss_eph_stop_req\022/.antaris_api"
-  "_peer_to_peer.ReqGnssEphStopDataReq\032+.an"
-  "taris_api_peer_to_peer.AntarisReturnType"
-  "\"\000\022x\n\025PC_gnss_eph_start_req\0220.antaris_ap"
-  "i_peer_to_peer.ReqGnssEphStartDataReq\032+."
-  "antaris_api_peer_to_peer.AntarisReturnTy"
-  "pe\"\000\022\177\n\033PC_get_eps_voltage_stop_req\0221.an"
-  "taris_api_peer_to_peer.ReqGetEpsVoltageS"
-  "topReq\032+.antaris_api_peer_to_peer.Antari"
-  "sReturnType\"\000\022\201\001\n\034PC_get_eps_voltage_sta"
-  "rt_req\0222.antaris_api_peer_to_peer.ReqGet"
-  "EpsVoltageStartReq\032+.antaris_api_peer_to"
-  "_peer.AntarisReturnType\"\000\022~\n\034PC_start_se"
-  "s_therm_mgmnt_req\022/.antaris_api_peer_to_"
-  "peer.StartSesThermMgmntReq\032+.antaris_api"
-  "_peer_to_peer.AntarisReturnType\"\000\022|\n\033PC_"
-  "stop_ses_therm_mgmnt_req\022..antaris_api_p"
-  "eer_to_peer.StopSesThermMgmntReq\032+.antar"
+  "_peer.AntarisReturnType\"\000\022\217\001\n%PA_Process"
+  "ResponsePayloadPowerControl\0227.antaris_ap"
+  "i_peer_to_peer.RespPayloadPowerControlPa"
+  "rams\032+.antaris_api_peer_to_peer.AntarisR"
+  "eturnType\"\000\022\177\n\033PA_ProcessReqPayloadMetri"
+  "cs\0221.antaris_api_peer_to_peer.ReqPayload"
+  "MetricsParams\032+.antaris_api_peer_to_peer"
+  ".AntarisReturnType\"\000\022\203\001\n PA_ProcessRespG"
+  "nssEphStopDataReq\0220.antaris_api_peer_to_"
+  "peer.RespGnssEphStopDataReq\032+.antaris_ap"
+  "i_peer_to_peer.AntarisReturnType\"\000\022\205\001\n!P"
+  "A_ProcessRespGnssEphStartDataReq\0221.antar"
+  "is_api_peer_to_peer.RespGnssEphStartData"
+  "Req\032+.antaris_api_peer_to_peer.AntarisRe"
+  "turnType\"\000\022m\n\025PA_ProcessGnssEphData\022%.an"
+  "taris_api_peer_to_peer.GnssEphData\032+.ant"
+  "aris_api_peer_to_peer.AntarisReturnType\""
+  "\000\022\207\001\n\"PA_ProcessRespGetEpsVoltageStopReq"
+  "\0222.antaris_api_peer_to_peer.RespGetEpsVo"
+  "ltageStopReq\032+.antaris_api_peer_to_peer."
+  "AntarisReturnType\"\000\022\211\001\n#PA_ProcessRespGe"
+  "tEpsVoltageStartReq\0223.antaris_api_peer_t"
+  "o_peer.RespGetEpsVoltageStartReq\032+.antar"
   "is_api_peer_to_peer.AntarisReturnType\"\000\022"
-  "f\n\017PC_ses_temp_req\022$.antaris_api_peer_to"
-  "_peer.SesTempReq\032+.antaris_api_peer_to_p"
-  "eer.AntarisReturnType\"\000\022j\n\023PC_pa_satos_m"
-  "essage\022$.antaris_api_peer_to_peer.PaSatO"
-  "sMsg\032+.antaris_api_peer_to_peer.AntarisR"
-  "eturnType\"\000\022\200\001\n\035PC_host_to_peer_fcm_oper"
-  "ation\0220.antaris_api_peer_to_peer.HostToP"
-  "eerFcmOperation\032+.antaris_api_peer_to_pe"
-  "er.AntarisReturnType\"\000b\006proto3"
+  "q\n\027PA_ProcessGetEpsVoltage\022\'.antaris_api"
+  "_peer_to_peer.GetEpsVoltage\032+.antaris_ap"
+  "i_peer_to_peer.AntarisReturnType\"\000\022\211\001\n#P"
+  "A_ProcessRespStartSesThermMgmntReq\0223.ant"
+  "aris_api_peer_to_peer.RespStartSesThermM"
+  "gmntReq\032+.antaris_api_peer_to_peer.Antar"
+  "isReturnType\"\000\022\207\001\n\"PA_ProcessRespStopSes"
+  "ThermMgmntReq\0222.antaris_api_peer_to_peer"
+  ".RespStopSesThermMgmntReq\032+.antaris_api_"
+  "peer_to_peer.AntarisReturnType\"\000\022y\n\030PA_P"
+  "rocessRespSesTempReq\022..antaris_api_peer_"
+  "to_peer.RespSesTempReqParams\032+.antaris_a"
+  "pi_peer_to_peer.AntarisReturnType\"\000\022u\n\025P"
+  "A_ProcessSesThrmlNtf\022-.antaris_api_peer_"
+  "to_peer.SesThermalStatusNtf\032+.antaris_ap"
+  "i_peer_to_peer.AntarisReturnType\"\000\022s\n\030PA"
+  "_ProcessRespPaSatOsMsg\022(.antaris_api_pee"
+  "r_to_peer.RespPaSatOsMsg\032+.antaris_api_p"
+  "eer_to_peer.AntarisReturnType\"\000\022k\n\024PA_Pr"
+  "ocessSatOsPaMsg\022$.antaris_api_peer_to_pe"
+  "er.SatOsPaMsg\032+.antaris_api_peer_to_peer"
+  ".AntarisReturnType\"\000\022p\n\030PA_ProcessStageH"
+  "mDataReq\022%.antaris_api_peer_to_peer.Stag"
+  "eHmData\032+.antaris_api_peer_to_peer.Antar"
+  "isReturnType\"\000\022\177\n\036PA_ProcessRemoteAcPwrS"
+  "tatusNtf\022..antaris_api_peer_to_peer.NtfR"
+  "emoteAcPwrStatus\032+.antaris_api_peer_to_p"
+  "eer.AntarisReturnType\"\000\022\217\001\n&PA_ProcessHo"
+  "stToPeerFcmOperationNotify\0226.antaris_api"
+  "_peer_to_peer.HostToPeerFcmOperationNoti"
+  "fy\032+.antaris_api_peer_to_peer.AntarisRet"
+  "urnType\"\0002\231\022\n\033AntarisapiPayloadControlle"
+  "r\022i\n\013PC_register\022+.antaris_api_peer_to_p"
+  "eer.ReqRegisterParams\032+.antaris_api_peer"
+  "_to_peer.AntarisReturnType\"\000\022\177\n\027PC_get_c"
+  "urrent_location\0225.antaris_api_peer_to_pe"
+  "er.ReqGetCurrentLocationParams\032+.antaris"
+  "_api_peer_to_peer.AntarisReturnType\"\000\022}\n"
+  "\026PC_stage_file_download\0224.antaris_api_pe"
+  "er_to_peer.ReqStageFileDownloadParams\032+."
+  "antaris_api_peer_to_peer.AntarisReturnTy"
+  "pe\"\000\022r\n\020PC_sequence_done\022/.antaris_api_p"
+  "eer_to_peer.CmdSequenceDoneParams\032+.anta"
+  "ris_api_peer_to_peer.AntarisReturnType\"\000"
+  "\022\201\001\n\030PC_payload_power_control\0226.antaris_"
+  "api_peer_to_peer.ReqPayloadPowerControlP"
+  "arams\032+.antaris_api_peer_to_peer.Antaris"
+  "ReturnType\"\000\022z\n\030PC_response_health_check"
+  "\022/.antaris_api_peer_to_peer.RespHealthCh"
+  "eckParams\032+.antaris_api_peer_to_peer.Ant"
+  "arisReturnType\"\000\022s\n\024PC_response_shutdown"
+  "\022,.antaris_api_peer_to_peer.RespShutdown"
+  "Params\032+.antaris_api_peer_to_peer.Antari"
+  "sReturnType\"\000\022~\n\033PC_response_payload_met"
+  "rics\0220.antaris_api_peer_to_peer.PayloadM"
+  "etricsResponse\032+.antaris_api_peer_to_pee"
+  "r.AntarisReturnType\"\000\022v\n\024PC_gnss_eph_sto"
+  "p_req\022/.antaris_api_peer_to_peer.ReqGnss"
+  "EphStopDataReq\032+.antaris_api_peer_to_pee"
+  "r.AntarisReturnType\"\000\022x\n\025PC_gnss_eph_sta"
+  "rt_req\0220.antaris_api_peer_to_peer.ReqGns"
+  "sEphStartDataReq\032+.antaris_api_peer_to_p"
+  "eer.AntarisReturnType\"\000\022\177\n\033PC_get_eps_vo"
+  "ltage_stop_req\0221.antaris_api_peer_to_pee"
+  "r.ReqGetEpsVoltageStopReq\032+.antaris_api_"
+  "peer_to_peer.AntarisReturnType\"\000\022\201\001\n\034PC_"
+  "get_eps_voltage_start_req\0222.antaris_api_"
+  "peer_to_peer.ReqGetEpsVoltageStartReq\032+."
+  "antaris_api_peer_to_peer.AntarisReturnTy"
+  "pe\"\000\022~\n\034PC_start_ses_therm_mgmnt_req\022/.a"
+  "ntaris_api_peer_to_peer.StartSesThermMgm"
+  "ntReq\032+.antaris_api_peer_to_peer.Antaris"
+  "ReturnType\"\000\022|\n\033PC_stop_ses_therm_mgmnt_"
+  "req\022..antaris_api_peer_to_peer.StopSesTh"
+  "ermMgmntReq\032+.antaris_api_peer_to_peer.A"
+  "ntarisReturnType\"\000\022f\n\017PC_ses_temp_req\022$."
+  "antaris_api_peer_to_peer.SesTempReq\032+.an"
+  "taris_api_peer_to_peer.AntarisReturnType"
+  "\"\000\022j\n\023PC_pa_satos_message\022$.antaris_api_"
+  "peer_to_peer.PaSatOsMsg\032+.antaris_api_pe"
+  "er_to_peer.AntarisReturnType\"\000\022\200\001\n\035PC_ho"
+  "st_to_peer_fcm_operation\0220.antaris_api_p"
+  "eer_to_peer.HostToPeerFcmOperation\032+.ant"
+  "aris_api_peer_to_peer.AntarisReturnType\""
+  "\000\022n\n\023PC_satos_pa_message\022(.antaris_api_p"
+  "eer_to_peer.RespSatOsPaMsg\032+.antaris_api"
+  "_peer_to_peer.AntarisReturnType\"\000\022j\n\016PC_"
+  "hm_data_rsp\022).antaris_api_peer_to_peer.R"
+  "espStageHmData\032+.antaris_api_peer_to_pee"
+  "r.AntarisReturnType\"\000b\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto = {
-  false, false, 10550, descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, "defs/gen/proto/antaris_api.proto", 
-  &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once, nullptr, 0, 46,
+  false, false, 11349, descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, "defs/gen/proto/antaris_api.proto", 
+  &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once, nullptr, 0, 50,
   schemas, file_default_instances, TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto::offsets,
   file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, file_level_enum_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, file_level_service_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto,
 };
@@ -6751,6 +6875,1010 @@ void RespPaSatOsMsg::InternalSwap(RespPaSatOsMsg* other) {
 
 // ===================================================================
 
+class SatOsPaMsg::_Internal {
+ public:
+};
+
+SatOsPaMsg::SatOsPaMsg(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:antaris_api_peer_to_peer.SatOsPaMsg)
+}
+SatOsPaMsg::SatOsPaMsg(const SatOsPaMsg& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  payload_data_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    payload_data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_payload_data().empty()) {
+    payload_data_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_payload_data(), 
+      GetArenaForAllocation());
+  }
+  ::memcpy(&correlation_id_, &from.correlation_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&command_id_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(command_id_));
+  // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.SatOsPaMsg)
+}
+
+inline void SatOsPaMsg::SharedCtor() {
+payload_data_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  payload_data_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&command_id_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(command_id_));
+}
+
+SatOsPaMsg::~SatOsPaMsg() {
+  // @@protoc_insertion_point(destructor:antaris_api_peer_to_peer.SatOsPaMsg)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void SatOsPaMsg::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  payload_data_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void SatOsPaMsg::ArenaDtor(void* object) {
+  SatOsPaMsg* _this = reinterpret_cast< SatOsPaMsg* >(object);
+  (void)_this;
+}
+void SatOsPaMsg::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void SatOsPaMsg::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void SatOsPaMsg::Clear() {
+// @@protoc_insertion_point(message_clear_start:antaris_api_peer_to_peer.SatOsPaMsg)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  payload_data_.ClearToEmpty();
+  ::memset(&correlation_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&command_id_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(command_id_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* SatOsPaMsg::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 correlation_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 command_id = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          command_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bytes payload_data = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_payload_data();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* SatOsPaMsg::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:antaris_api_peer_to_peer.SatOsPaMsg)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
+  }
+
+  // int32 command_id = 2;
+  if (this->_internal_command_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_command_id(), target);
+  }
+
+  // bytes payload_data = 3;
+  if (!this->_internal_payload_data().empty()) {
+    target = stream->WriteBytesMaybeAliased(
+        3, this->_internal_payload_data(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:antaris_api_peer_to_peer.SatOsPaMsg)
+  return target;
+}
+
+size_t SatOsPaMsg::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:antaris_api_peer_to_peer.SatOsPaMsg)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // bytes payload_data = 3;
+  if (!this->_internal_payload_data().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::BytesSize(
+        this->_internal_payload_data());
+  }
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  // int32 command_id = 2;
+  if (this->_internal_command_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_command_id());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData SatOsPaMsg::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    SatOsPaMsg::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*SatOsPaMsg::GetClassData() const { return &_class_data_; }
+
+void SatOsPaMsg::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<SatOsPaMsg *>(to)->MergeFrom(
+      static_cast<const SatOsPaMsg &>(from));
+}
+
+
+void SatOsPaMsg::MergeFrom(const SatOsPaMsg& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:antaris_api_peer_to_peer.SatOsPaMsg)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_payload_data().empty()) {
+    _internal_set_payload_data(from._internal_payload_data());
+  }
+  if (from._internal_correlation_id() != 0) {
+    _internal_set_correlation_id(from._internal_correlation_id());
+  }
+  if (from._internal_command_id() != 0) {
+    _internal_set_command_id(from._internal_command_id());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void SatOsPaMsg::CopyFrom(const SatOsPaMsg& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:antaris_api_peer_to_peer.SatOsPaMsg)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SatOsPaMsg::IsInitialized() const {
+  return true;
+}
+
+void SatOsPaMsg::InternalSwap(SatOsPaMsg* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &payload_data_, lhs_arena,
+      &other->payload_data_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(SatOsPaMsg, command_id_)
+      + sizeof(SatOsPaMsg::command_id_)
+      - PROTOBUF_FIELD_OFFSET(SatOsPaMsg, correlation_id_)>(
+          reinterpret_cast<char*>(&correlation_id_),
+          reinterpret_cast<char*>(&other->correlation_id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata SatOsPaMsg::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[21]);
+}
+
+// ===================================================================
+
+class RespSatOsPaMsg::_Internal {
+ public:
+};
+
+RespSatOsPaMsg::RespSatOsPaMsg(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:antaris_api_peer_to_peer.RespSatOsPaMsg)
+}
+RespSatOsPaMsg::RespSatOsPaMsg(const RespSatOsPaMsg& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&correlation_id_, &from.correlation_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&req_status_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+  // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.RespSatOsPaMsg)
+}
+
+inline void RespSatOsPaMsg::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&req_status_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+}
+
+RespSatOsPaMsg::~RespSatOsPaMsg() {
+  // @@protoc_insertion_point(destructor:antaris_api_peer_to_peer.RespSatOsPaMsg)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void RespSatOsPaMsg::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void RespSatOsPaMsg::ArenaDtor(void* object) {
+  RespSatOsPaMsg* _this = reinterpret_cast< RespSatOsPaMsg* >(object);
+  (void)_this;
+}
+void RespSatOsPaMsg::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void RespSatOsPaMsg::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void RespSatOsPaMsg::Clear() {
+// @@protoc_insertion_point(message_clear_start:antaris_api_peer_to_peer.RespSatOsPaMsg)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&correlation_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&req_status_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RespSatOsPaMsg::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 correlation_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 command_id = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          command_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 req_status = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          req_status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RespSatOsPaMsg::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:antaris_api_peer_to_peer.RespSatOsPaMsg)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
+  }
+
+  // int32 command_id = 2;
+  if (this->_internal_command_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_command_id(), target);
+  }
+
+  // int32 req_status = 3;
+  if (this->_internal_req_status() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_req_status(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:antaris_api_peer_to_peer.RespSatOsPaMsg)
+  return target;
+}
+
+size_t RespSatOsPaMsg::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:antaris_api_peer_to_peer.RespSatOsPaMsg)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  // int32 command_id = 2;
+  if (this->_internal_command_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_command_id());
+  }
+
+  // int32 req_status = 3;
+  if (this->_internal_req_status() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_req_status());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RespSatOsPaMsg::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    RespSatOsPaMsg::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RespSatOsPaMsg::GetClassData() const { return &_class_data_; }
+
+void RespSatOsPaMsg::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<RespSatOsPaMsg *>(to)->MergeFrom(
+      static_cast<const RespSatOsPaMsg &>(from));
+}
+
+
+void RespSatOsPaMsg::MergeFrom(const RespSatOsPaMsg& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:antaris_api_peer_to_peer.RespSatOsPaMsg)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_correlation_id() != 0) {
+    _internal_set_correlation_id(from._internal_correlation_id());
+  }
+  if (from._internal_command_id() != 0) {
+    _internal_set_command_id(from._internal_command_id());
+  }
+  if (from._internal_req_status() != 0) {
+    _internal_set_req_status(from._internal_req_status());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RespSatOsPaMsg::CopyFrom(const RespSatOsPaMsg& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:antaris_api_peer_to_peer.RespSatOsPaMsg)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RespSatOsPaMsg::IsInitialized() const {
+  return true;
+}
+
+void RespSatOsPaMsg::InternalSwap(RespSatOsPaMsg* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(RespSatOsPaMsg, req_status_)
+      + sizeof(RespSatOsPaMsg::req_status_)
+      - PROTOBUF_FIELD_OFFSET(RespSatOsPaMsg, correlation_id_)>(
+          reinterpret_cast<char*>(&correlation_id_),
+          reinterpret_cast<char*>(&other->correlation_id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RespSatOsPaMsg::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[22]);
+}
+
+// ===================================================================
+
+class StageHmData::_Internal {
+ public:
+};
+
+StageHmData::StageHmData(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:antaris_api_peer_to_peer.StageHmData)
+}
+StageHmData::StageHmData(const StageHmData& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&correlation_id_, &from.correlation_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&dl_band_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(dl_band_));
+  // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.StageHmData)
+}
+
+inline void StageHmData::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&dl_band_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(dl_band_));
+}
+
+StageHmData::~StageHmData() {
+  // @@protoc_insertion_point(destructor:antaris_api_peer_to_peer.StageHmData)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void StageHmData::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void StageHmData::ArenaDtor(void* object) {
+  StageHmData* _this = reinterpret_cast< StageHmData* >(object);
+  (void)_this;
+}
+void StageHmData::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void StageHmData::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void StageHmData::Clear() {
+// @@protoc_insertion_point(message_clear_start:antaris_api_peer_to_peer.StageHmData)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&correlation_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&dl_band_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(dl_band_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* StageHmData::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 correlation_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 submod_id = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          submod_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 queue_id = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          queue_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 file_pri = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          file_pri_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 dl_band = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          dl_band_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* StageHmData::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:antaris_api_peer_to_peer.StageHmData)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
+  }
+
+  // int32 submod_id = 2;
+  if (this->_internal_submod_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_submod_id(), target);
+  }
+
+  // int32 queue_id = 3;
+  if (this->_internal_queue_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_queue_id(), target);
+  }
+
+  // int32 file_pri = 4;
+  if (this->_internal_file_pri() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_file_pri(), target);
+  }
+
+  // int32 dl_band = 5;
+  if (this->_internal_dl_band() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(5, this->_internal_dl_band(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:antaris_api_peer_to_peer.StageHmData)
+  return target;
+}
+
+size_t StageHmData::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:antaris_api_peer_to_peer.StageHmData)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  // int32 submod_id = 2;
+  if (this->_internal_submod_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_submod_id());
+  }
+
+  // int32 queue_id = 3;
+  if (this->_internal_queue_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_queue_id());
+  }
+
+  // int32 file_pri = 4;
+  if (this->_internal_file_pri() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_file_pri());
+  }
+
+  // int32 dl_band = 5;
+  if (this->_internal_dl_band() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_dl_band());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData StageHmData::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    StageHmData::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*StageHmData::GetClassData() const { return &_class_data_; }
+
+void StageHmData::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<StageHmData *>(to)->MergeFrom(
+      static_cast<const StageHmData &>(from));
+}
+
+
+void StageHmData::MergeFrom(const StageHmData& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:antaris_api_peer_to_peer.StageHmData)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_correlation_id() != 0) {
+    _internal_set_correlation_id(from._internal_correlation_id());
+  }
+  if (from._internal_submod_id() != 0) {
+    _internal_set_submod_id(from._internal_submod_id());
+  }
+  if (from._internal_queue_id() != 0) {
+    _internal_set_queue_id(from._internal_queue_id());
+  }
+  if (from._internal_file_pri() != 0) {
+    _internal_set_file_pri(from._internal_file_pri());
+  }
+  if (from._internal_dl_band() != 0) {
+    _internal_set_dl_band(from._internal_dl_band());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void StageHmData::CopyFrom(const StageHmData& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:antaris_api_peer_to_peer.StageHmData)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool StageHmData::IsInitialized() const {
+  return true;
+}
+
+void StageHmData::InternalSwap(StageHmData* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(StageHmData, dl_band_)
+      + sizeof(StageHmData::dl_band_)
+      - PROTOBUF_FIELD_OFFSET(StageHmData, correlation_id_)>(
+          reinterpret_cast<char*>(&correlation_id_),
+          reinterpret_cast<char*>(&other->correlation_id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata StageHmData::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[23]);
+}
+
+// ===================================================================
+
+class RespStageHmData::_Internal {
+ public:
+};
+
+RespStageHmData::RespStageHmData(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:antaris_api_peer_to_peer.RespStageHmData)
+}
+RespStageHmData::RespStageHmData(const RespStageHmData& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&correlation_id_, &from.correlation_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&req_status_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+  // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.RespStageHmData)
+}
+
+inline void RespStageHmData::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&req_status_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+}
+
+RespStageHmData::~RespStageHmData() {
+  // @@protoc_insertion_point(destructor:antaris_api_peer_to_peer.RespStageHmData)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void RespStageHmData::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void RespStageHmData::ArenaDtor(void* object) {
+  RespStageHmData* _this = reinterpret_cast< RespStageHmData* >(object);
+  (void)_this;
+}
+void RespStageHmData::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void RespStageHmData::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void RespStageHmData::Clear() {
+// @@protoc_insertion_point(message_clear_start:antaris_api_peer_to_peer.RespStageHmData)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&correlation_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&req_status_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(req_status_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RespStageHmData::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 correlation_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          correlation_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 command_id = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          command_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 req_status = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          req_status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RespStageHmData::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:antaris_api_peer_to_peer.RespStageHmData)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_correlation_id(), target);
+  }
+
+  // int32 command_id = 2;
+  if (this->_internal_command_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_command_id(), target);
+  }
+
+  // int32 req_status = 3;
+  if (this->_internal_req_status() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_req_status(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:antaris_api_peer_to_peer.RespStageHmData)
+  return target;
+}
+
+size_t RespStageHmData::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:antaris_api_peer_to_peer.RespStageHmData)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int32 correlation_id = 1;
+  if (this->_internal_correlation_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_correlation_id());
+  }
+
+  // int32 command_id = 2;
+  if (this->_internal_command_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_command_id());
+  }
+
+  // int32 req_status = 3;
+  if (this->_internal_req_status() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_req_status());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RespStageHmData::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    RespStageHmData::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RespStageHmData::GetClassData() const { return &_class_data_; }
+
+void RespStageHmData::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<RespStageHmData *>(to)->MergeFrom(
+      static_cast<const RespStageHmData &>(from));
+}
+
+
+void RespStageHmData::MergeFrom(const RespStageHmData& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:antaris_api_peer_to_peer.RespStageHmData)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_correlation_id() != 0) {
+    _internal_set_correlation_id(from._internal_correlation_id());
+  }
+  if (from._internal_command_id() != 0) {
+    _internal_set_command_id(from._internal_command_id());
+  }
+  if (from._internal_req_status() != 0) {
+    _internal_set_req_status(from._internal_req_status());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RespStageHmData::CopyFrom(const RespStageHmData& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:antaris_api_peer_to_peer.RespStageHmData)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RespStageHmData::IsInitialized() const {
+  return true;
+}
+
+void RespStageHmData::InternalSwap(RespStageHmData* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(RespStageHmData, req_status_)
+      + sizeof(RespStageHmData::req_status_)
+      - PROTOBUF_FIELD_OFFSET(RespStageHmData, correlation_id_)>(
+          reinterpret_cast<char*>(&correlation_id_),
+          reinterpret_cast<char*>(&other->correlation_id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RespStageHmData::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[24]);
+}
+
+// ===================================================================
+
 class HostToPeerFcmOperation::_Internal {
  public:
 };
@@ -7057,7 +8185,7 @@ void HostToPeerFcmOperation::InternalSwap(HostToPeerFcmOperation* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata HostToPeerFcmOperation::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[21]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[25]);
 }
 
 // ===================================================================
@@ -7342,7 +8470,7 @@ void HostToPeerFcmOperationNotify::InternalSwap(HostToPeerFcmOperationNotify* ot
 ::PROTOBUF_NAMESPACE_ID::Metadata HostToPeerFcmOperationNotify::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[22]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[26]);
 }
 
 // ===================================================================
@@ -7520,7 +8648,7 @@ void ReqGnssEphStopDataReq::InternalSwap(ReqGnssEphStopDataReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ReqGnssEphStopDataReq::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[23]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[27]);
 }
 
 // ===================================================================
@@ -7732,7 +8860,7 @@ void RespGnssEphStopDataReq::InternalSwap(RespGnssEphStopDataReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RespGnssEphStopDataReq::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[24]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[28]);
 }
 
 // ===================================================================
@@ -7966,7 +9094,7 @@ void ReqGnssEphStartDataReq::InternalSwap(ReqGnssEphStartDataReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ReqGnssEphStartDataReq::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[25]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[29]);
 }
 
 // ===================================================================
@@ -8178,7 +9306,7 @@ void RespGnssEphStartDataReq::InternalSwap(RespGnssEphStartDataReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RespGnssEphStartDataReq::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[26]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[30]);
 }
 
 // ===================================================================
@@ -8478,7 +9606,7 @@ void OBC_time::InternalSwap(OBC_time* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata OBC_time::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[27]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[31]);
 }
 
 // ===================================================================
@@ -8833,7 +9961,7 @@ void GpsEphemerisData::InternalSwap(GpsEphemerisData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GpsEphemerisData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[28]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[32]);
 }
 
 // ===================================================================
@@ -10045,7 +11173,7 @@ void AdcsEphemerisData::InternalSwap(AdcsEphemerisData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AdcsEphemerisData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[29]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[33]);
 }
 
 // ===================================================================
@@ -10361,7 +11489,7 @@ void GnssEphData::InternalSwap(GnssEphData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GnssEphData::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[30]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[34]);
 }
 
 // ===================================================================
@@ -10539,7 +11667,7 @@ void ReqGetEpsVoltageStopReq::InternalSwap(ReqGetEpsVoltageStopReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ReqGetEpsVoltageStopReq::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[31]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[35]);
 }
 
 // ===================================================================
@@ -10751,7 +11879,7 @@ void RespGetEpsVoltageStopReq::InternalSwap(RespGetEpsVoltageStopReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RespGetEpsVoltageStopReq::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[32]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[36]);
 }
 
 // ===================================================================
@@ -10963,7 +12091,7 @@ void ReqGetEpsVoltageStartReq::InternalSwap(ReqGetEpsVoltageStartReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ReqGetEpsVoltageStartReq::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[33]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[37]);
 }
 
 // ===================================================================
@@ -11175,7 +12303,7 @@ void RespGetEpsVoltageStartReq::InternalSwap(RespGetEpsVoltageStartReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RespGetEpsVoltageStartReq::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[34]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[38]);
 }
 
 // ===================================================================
@@ -11399,7 +12527,7 @@ void GetEpsVoltage::InternalSwap(GetEpsVoltage* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata GetEpsVoltage::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[35]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[39]);
 }
 
 // ===================================================================
@@ -11633,7 +12761,7 @@ void NtfRemoteAcPwrStatus::InternalSwap(NtfRemoteAcPwrStatus* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata NtfRemoteAcPwrStatus::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[36]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[40]);
 }
 
 // ===================================================================
@@ -11911,7 +13039,7 @@ void StartSesThermMgmntReq::InternalSwap(StartSesThermMgmntReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata StartSesThermMgmntReq::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[37]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[41]);
 }
 
 // ===================================================================
@@ -12123,7 +13251,7 @@ void RespStartSesThermMgmntReq::InternalSwap(RespStartSesThermMgmntReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RespStartSesThermMgmntReq::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[38]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[42]);
 }
 
 // ===================================================================
@@ -12335,7 +13463,7 @@ void StopSesThermMgmntReq::InternalSwap(StopSesThermMgmntReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata StopSesThermMgmntReq::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[39]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[43]);
 }
 
 // ===================================================================
@@ -12547,7 +13675,7 @@ void RespStopSesThermMgmntReq::InternalSwap(RespStopSesThermMgmntReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RespStopSesThermMgmntReq::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[40]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[44]);
 }
 
 // ===================================================================
@@ -12759,7 +13887,7 @@ void SesTempReq::InternalSwap(SesTempReq* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SesTempReq::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[41]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[45]);
 }
 
 // ===================================================================
@@ -13015,7 +14143,7 @@ void RespSesTempReqParams::InternalSwap(RespSesTempReqParams* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata RespSesTempReqParams::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[42]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[46]);
 }
 
 // ===================================================================
@@ -13315,7 +14443,7 @@ void SesThermalStatusNtf::InternalSwap(SesThermalStatusNtf* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SesThermalStatusNtf::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[43]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[47]);
 }
 
 // ===================================================================
@@ -13493,7 +14621,7 @@ void AntarisCorrelationId::InternalSwap(AntarisCorrelationId* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AntarisCorrelationId::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[44]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[48]);
 }
 
 // ===================================================================
@@ -13674,7 +14802,7 @@ void AntarisReturnType::InternalSwap(AntarisReturnType* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AntarisReturnType::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_getter, &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once,
-      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[45]);
+      file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[49]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -13742,6 +14870,18 @@ template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::PaSatOsMsg* Arena::Crea
 }
 template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::RespPaSatOsMsg* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::RespPaSatOsMsg >(Arena* arena) {
   return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::RespPaSatOsMsg >(arena);
+}
+template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::SatOsPaMsg* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::SatOsPaMsg >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::SatOsPaMsg >(arena);
+}
+template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::RespSatOsPaMsg* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::RespSatOsPaMsg >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::RespSatOsPaMsg >(arena);
+}
+template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::StageHmData* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::StageHmData >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::StageHmData >(arena);
+}
+template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::RespStageHmData* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::RespStageHmData >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::RespStageHmData >(arena);
 }
 template<> PROTOBUF_NOINLINE ::antaris_api_peer_to_peer::HostToPeerFcmOperation* Arena::CreateMaybeMessage< ::antaris_api_peer_to_peer::HostToPeerFcmOperation >(Arena* arena) {
   return Arena::CreateMessageInternal< ::antaris_api_peer_to_peer::HostToPeerFcmOperation >(arena);
