@@ -154,6 +154,18 @@ typedef struct PaSatOsMsg PaSatOsMsg;
 struct RespPaSatOsMsg;
 typedef struct RespPaSatOsMsg RespPaSatOsMsg;
 
+struct SatOsPaMsg;
+typedef struct SatOsPaMsg SatOsPaMsg;
+
+struct RespSatOsPaMsg;
+typedef struct RespSatOsPaMsg RespSatOsPaMsg;
+
+struct StageHmData;
+typedef struct StageHmData StageHmData;
+
+struct RespStageHmData;
+typedef struct RespStageHmData RespStageHmData;
+
 struct HostToPeerFcmOperation;
 typedef struct HostToPeerFcmOperation HostToPeerFcmOperation;
 
@@ -425,6 +437,26 @@ typedef AntarisReturnCode
 );
 static inline void
 displayProcessRespPaSatOsMsg_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessSatOsPaMsg_Fptr
+/// @typedef Callback for SatOS PA message request
+
+typedef AntarisReturnCode
+(*ProcessSatOsPaMsg_Fptr)
+(
+    SatOsPaMsg *                     ///< @param SatOS to PA command response
+);
+static inline void
+displayProcessSatOsPaMsg_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessStageHmDataReq_Fptr
+/// @typedef Callback for HM data stage message request
+
+typedef AntarisReturnCode
+(*ProcessStageHmDataReq_Fptr)
+(
+    StageHmData *                    ///< @param SatOS to PA command response
+);
+static inline void
+displayProcessStageHmDataReq_Fptr(void *obj) { printf("%p\n", obj); }
 /// @brief Callback function type ProcessRemoteAcPwrStatusNtf_Fptr
 /// @typedef callback handler for remote application controller power status notification
 
@@ -686,6 +718,56 @@ struct RespPaSatOsMsg {
 void displayRespPaSatOsMsg(const void *obj);
 void app_to_peer_RespPaSatOsMsg(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_RespPaSatOsMsg(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct SatOsPaMsg
+/// @brief To send message to PA from SatOS
+struct SatOsPaMsg {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT16                                          command_id;                                      ///< @var command id
+    INT8                                            payload_data[1020];                              ///< @var payload data for sending for PA, bytes
+};
+
+void displaySatOsPaMsg(const void *obj);
+void app_to_peer_SatOsPaMsg(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_SatOsPaMsg(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespSatOsPaMsg
+/// @brief To send acknowledge to SatOS from PA
+struct RespSatOsPaMsg {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT16                                          command_id;                                      ///< @var command id
+    INT32                                           req_status;                                      ///< @var status of SatOS PA Message request
+};
+
+void displayRespSatOsPaMsg(const void *obj);
+void app_to_peer_RespSatOsPaMsg(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespSatOsPaMsg(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct StageHmData
+/// @brief To prepare HM data for Downlink
+struct StageHmData {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           submod_id;                                       ///< @var submodule id
+    UINT8                                           queue_id;                                        ///< @var queue id
+    UINT8                                           file_pri;                                        ///< @var File priority
+    UINT8                                           dl_band;                                         ///< @var Downlink band
+};
+
+void displayStageHmData(const void *obj);
+void app_to_peer_StageHmData(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_StageHmData(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespStageHmData
+/// @brief To send acknowledge to PA from SatOS
+struct RespStageHmData {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT16                                          command_id;                                      ///< @var command id
+    INT32                                           req_status;                                      ///< @var status of HM data stagging
+};
+
+void displayRespStageHmData(const void *obj);
+void app_to_peer_RespStageHmData(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespStageHmData(const void *ptr_src_peer, void *ptr_dst_app);
 
 /// @struct HostToPeerFcmOperation
 /// @brief To start or file copy from PS To ES
@@ -1019,6 +1101,8 @@ struct AntarisApiCallbackFuncList {
     ProcessRespPaSatOsMsg_Fptr                      process_pa_satos_msg_response;                   ///< @var callback handler for PA to satOS command response
     ProcessRemoteAcPwrStatusNtf_Fptr                process_remote_ac_power_on_ntf;                  ///< @var callback handler for remote application controller power on status notification
     ProcessHostToPeerFcmOperationNotify_Fptr        process_host_to_peer_fcm_operation_notify;       ///< @var callback handler for fcm operation status
+    ProcessSatOsPaMsg_Fptr                          process_satos_pa_msg;                            ///< @var callback handler for satOS to PA command response
+    ProcessStageHmDataReq_Fptr                      process_stage_hm_data;                           ///< @var callback handler for satOS to PA command response
 };
 
 void displayAntarisApiCallbackFuncList(const void *obj);
@@ -1219,6 +1303,24 @@ api_pa_pc_host_to_peer_fcm_operation
 (
     AntarisChannel                  channel,                         ///< @param channel context for API execution
     HostToPeerFcmOperation *        host_to_peer_fcm_operation       ///< @param Parameters for ps to es fcm operation
+);
+
+/// @brief Function api_pa_pc_satos_pa_message
+/// @fn API to respond to SatOS message request
+AntarisReturnCode
+api_pa_pc_satos_pa_message
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    RespSatOsPaMsg *                satos_pa_msg                     ///< @param Message to SatOS from PA
+);
+
+/// @brief Function api_pa_pc_hm_data_rsp
+/// @fn API to respond to SatOS message request
+AntarisReturnCode
+api_pa_pc_hm_data_rsp
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    RespStageHmData *               stage_hm_res                     ///< @param Message to SatOS from PA
 );
 
 

@@ -1,0 +1,17 @@
+# Ignore Git metadata
+.git/
+.gitignore
+
+# Ignore build artifacts
+build/
+out/
+*.o
+*.so
+
+# Ignore system files
+*.log
+.DS_Store
+
+# Project specific
+*.zip
+fs_app # Don't copy a prebuilt binary.
