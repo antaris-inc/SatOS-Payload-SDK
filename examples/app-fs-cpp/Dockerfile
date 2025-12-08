@@ -12,21 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# FROM quay.io/antaris-inc/satos-payload-app-python:stable AS app_image
+# Stage 1: Build dependencies.
+FROM satos-payload-app-cpp AS dependencies
+RUN apt update && apt install -y build-essential
 
-# ADD example_app.py /opt/antaris/app/example_app.py
-# ADD entrypoint.sh /opt/antaris/app/entrypoint.sh
-# RUN mkdir -p /opt/antaris/outbound -p /opt/antaris/inbound
+# Stage 2: Build your payload app.
+FROM dependencies AS builder
+WORKDIR /workspace
+COPY . .
+RUN make fs_app
 
-FROM quay.io/antaris-inc/satos-payload-app-python:sayed_health_matrix AS app_image
-
-RUN pip install --no-cache-dir numpy numba cupy-cuda12x
-
-# Add your application code
-ADD example_app.py /opt/antaris/app/example_app.py
-ADD entrypoint.sh /opt/antaris/app/entrypoint.sh
-
-RUN chmod +x /opt/antaris/app/entrypoint.sh
-
-# Create required directories
+# Stage 3: Runtime image
+FROM satos-payload-app-cpp
+COPY --from=builder /workspace/fs_app /opt/antaris/app/fs_app
+COPY entrypoint.sh /opt/antaris/app/entrypoint.sh
 RUN mkdir -p /opt/antaris/outbound /opt/antaris/inbound

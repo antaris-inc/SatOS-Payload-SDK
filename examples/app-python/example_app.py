@@ -33,10 +33,6 @@ g_GPIO_ERROR = -1
 g_Uart_Baudrate = 9600
 g_FileDownloadDir = "/opt/antaris/outbound/"    # path for staged file download
 g_StageFileName = "SampleFile.txt"              # name of staged file
-g_MaxFileNameSize = 128
-g_MaxNoOfFilesToCopy = 32
-PC_APP_ID = 134   # APP ID of PS
-EDGE_APP_ID = 135   # APP ID of EDGE
 
 ADCS_start_success = 0
 ADCS_start_reconfigured = 1
@@ -125,22 +121,6 @@ class Controller:
     
     def get_eps_voltage_handler(self, ctx):
         logger.info(f"EPS voltage data received : {float(ctx.eps_voltage):.2f}")
-        return True
-    
-    def process_notify_fcm_operation(self, ctx):
-
-        logger.info(f"Processed file is : {ctx.file_name}")
-        if(ctx.req_status == 0):
-            logger.info(f"file is successfully copied")
-        else:
-            logger.info(f"file copy is failed")
-        
-
-        if(ctx.fcm_complete == 0):
-            logger.info(f"All files are processed. FCM operation is complete")
-        
-        else:
-            logger.info(f"FCM operation is still in progress")
         return True
     
     def payload_power_control_request_status(self, ctx):
@@ -478,44 +458,6 @@ class Controller:
         ac_ip = api_parser.get_ac_ip()
         print(f"Application controller IP is = {ac_ip}")
         return
-    
-    def handle_fcm_start_operation(self, ctx):
-        fcm_dest = PC_APP_ID
-        fcm_src = EDGE_APP_ID
-        peer_app_id = 136
-
-        filenames = ["abc.txt", "bcd.txt"]
-
-        file_input_list = []
-
-        for filename in filenames:
-            filename_bytes = filename.encode() + b'\0'  # null-terminated
-            if len(filename_bytes) > g_MaxFileNameSize:
-                logger.error("Filename size if too long")
-                break
-
-            padded_filename = filename_bytes.ljust(g_MaxFileNameSize, b'\0')
-
-            file_input_list.append({
-                "filename_length": len(filename_bytes),
-                "filename": padded_filename
-            })
-
-        while len(file_input_list) < g_MaxNoOfFilesToCopy:
-            file_input_list.append({"filename_length": 0, "filename": b'\0'*g_MaxFileNameSize})
-
-        no_of_files = len(filenames)
-
-        resp = ctx.client.host_to_peer_fcm_operation(
-            peer_app_id=peer_app_id,
-            fcm_src=fcm_src,
-            fcm_dest=fcm_dest,
-            no_of_files=no_of_files,
-            file_input=file_input_list
-        )
-
-        return resp
-     
 
 def new():
     ctl = Controller()
@@ -524,7 +466,6 @@ def new():
     app.set_health_check(ctl.is_healthy)
     app.set_gnss_eph_data_cb(ctl.gnss_eph_data_handler)
     app.set_get_eps_voltage_cb(ctl.get_eps_voltage_handler)
-    app.set_process_notify_fcm_operation(ctl.process_notify_fcm_operation)
     app.set_ses_thermal_status_ntf(ctl.ses_thermal_status_ntf)
     app.remote_ac_power_on_ntf(ctl.remote_ac_power_on_ntf_handler)
     app.shutdown_ntf(ctl.shutdown_ntf_handler)
@@ -549,7 +490,6 @@ def new():
     app.mount_sequence("TestI2CBus", ctl.handle_test_i2c_bus)
     app.mount_sequence("PaSatOsMsg", ctl.handle_pa_satos_message)
     app.mount_sequence("ReadAcIp", ctl.handle_ac_ip_read)
-    app.mount_sequence("FCMStart", ctl.handle_fcm_start_operation)
     return app
 
 def set_payload_values(payload_app):

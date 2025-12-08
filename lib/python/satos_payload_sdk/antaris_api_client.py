@@ -70,7 +70,6 @@ class AntarisChannel:
         self.process_cb_ses_thrml_ntf = callback_func_list['SesThrmlStsNtf']
         self.process_pa_satos_msg_response = callback_func_list['PaSatOsMsg']
         self.process_remote_ac_power_on_ntf = callback_func_list['RemoteAcPowerStatusNtf']
-        self.process_host_to_peer_fcm_operation_notify = callback_func_list['FcmOperationNotify']
         try :
             # Read config info
             jsonfile = open(g_CONFIG_JSON_FILE, 'r')
@@ -230,14 +229,6 @@ class PCToAppService(antaris_api_pb2_grpc.AntarisapiApplicationCallbackServicer)
         if self.channel.process_pa_satos_msg_response:
             app_request = api_types.peer_to_app_RespPaSatOsMsg(request)
             app_ret = self.channel.process_pa_satos_msg_response(app_request)
-            return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
-        else:
-            return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
-        
-    def PA_ProcessHostToPeerFcmOperationNotify(self, request, context):
-        if self.channel.process_host_to_peer_fcm_operation_notify:
-            app_request = api_types.peer_to_app_HostToPeerFcmOperationNotify(request)
-            app_ret = self.channel.process_host_to_peer_fcm_operation_notify(app_request)
             return antaris_api_pb2.AntarisReturnType(return_code = app_ret)
         else:
             return antaris_api_pb2.AntarisReturnType(return_code = api_types.AntarisReturnCode.An_NOT_IMPLEMENTED)
@@ -720,29 +711,6 @@ def api_pa_pc_pa_satos_message(channel, pa_command_param):
     peer_ret = None
     try:
         peer_ret = channel.grpc_client_handle.PC_pa_satos_message(peer_params , metadata=metadata)
-    except grpc.RpcError as e:
-        status_code = e.code()
-        details = e.details()
-        print(f"gRPC call failed with code {status_code}, details: {details}")
-
-    if peer_ret:
-        if api_debug:
-            print("Got return code {} => {}".format(peer_ret.return_code, api_types.AntarisReturnCode.reverse_dict[peer_ret.return_code]))
-        return peer_ret.return_code
-    else:
-        # fallback error code if call failed
-        return api_types.AntarisReturnCode.An_GENERIC_FAILURE
-    
-def api_pa_pc_host_to_peer_fcm_operation(channel, host_to_peer_fcm_operation_param):
-    print("api_pa_pc_host_to_peer_fcm_operation")
-    if (api_debug):
-        host_to_peer_fcm_operation_param.display()
-
-    peer_params = api_types.app_to_peer_HostToPeerFcmOperation(host_to_peer_fcm_operation_param)
-    metadata = ( (g_COOKIE_STR , "{}".format(channel.jsfile_data[g_COOKIE_STR]) ) , )
-    peer_ret = None
-    try:
-        peer_ret = channel.grpc_client_handle.PC_host_to_peer_fcm_operation(peer_params , metadata=metadata)
     except grpc.RpcError as e:
         status_code = e.code()
         details = e.details()

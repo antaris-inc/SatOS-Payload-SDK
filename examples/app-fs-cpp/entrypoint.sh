@@ -1,3 +1,5 @@
+#!/bin/bash
+#
 # Copyright 2023 Antaris, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +14,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM quay.io/antaris-inc/satos-payload-app-python:sayed_health_matrix AS app_image
-
-ADD example_app.py /opt/antaris/app/example_app.py
-ADD entrypoint.sh /opt/antaris/app/entrypoint.sh
-RUN mkdir -p /opt/antaris/outbound -p /opt/antaris/inbound
+/opt/antaris/app/fs_app

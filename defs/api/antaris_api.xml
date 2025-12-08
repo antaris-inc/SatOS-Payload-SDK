@@ -182,6 +182,32 @@
             <Field name="req_status" type="INT32" sequence="3" description="status of PA SatOS Message request"/>
         </Struct>
 
+        <Struct name="SatOsPaMsg" description="To send message to PA from SatOS">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="command_id" type="UINT16" sequence="2" description="command id"/>
+            <Field name="payload_data" type="INT8" sequence="3" description="payload data for sending for PA, bytes" bytes="true" array="1020"/>
+        </Struct>
+
+        <Struct name="RespSatOsPaMsg" description="To send acknowledge to SatOS from PA">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="command_id" type="UINT16" sequence="2" description="command id"/>
+            <Field name="req_status" type="INT32" sequence="3" description="status of SatOS PA Message request"/>
+        </Struct>
+
+        <Struct name="StageHmData" description="To prepare HM data for Downlink">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="submod_id" type="UINT8" sequence="2" description="submodule id"/>
+            <Field name="queue_id" type="UINT8" sequence="3" description="queue id"/>
+            <Field name="file_pri" type="UINT8" sequence="4" description="File priority"/>
+            <Field name="dl_band" type="UINT8" sequence="5" description="Downlink band"/>
+        </Struct>
+
+        <Struct name="RespStageHmData" description="To send acknowledge to PA from SatOS">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="command_id" type="UINT16" sequence="2" description="command id"/>
+            <Field name="req_status" type="INT32" sequence="3" description="status of HM data stagging"/>
+        </Struct>
+
         <Struct name="HostToPeerFcmOperation" description="To start or file copy from PS To ES">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="peer_app_id" type="UINT8" sequence="2" description="PC appliction id from which files are copied to edge system"/>
@@ -373,6 +399,8 @@
             <Field name="process_pa_satos_msg_response" type="ProcessRespPaSatOsMsg_Fptr" sequence="19" description="callback handler for PA to satOS command response"/>
             <Field name="process_remote_ac_power_on_ntf" type="ProcessRemoteAcPwrStatusNtf_Fptr" sequence="20" description="callback handler for remote application controller power on status notification"/>
             <Field name="process_host_to_peer_fcm_operation_notify" type="ProcessHostToPeerFcmOperationNotify_Fptr" sequence="21" description="callback handler for fcm operation status"/>
+            <Field name="process_satos_pa_msg" type="ProcessSatOsPaMsg_Fptr" sequence="22" description="callback handler for satOS to PA command response"/>
+            <Field name="process_stage_hm_data" type="ProcessStageHmDataReq_Fptr" sequence="23" description="callback handler for satOS to PA command response"/>
         </Struct>
 
         <Struct name="AntarisCorrelationId" description="Wrapper structure for correlation-id">
@@ -460,6 +488,14 @@
 
         <FunctionPtr name="ProcessRespPaSatOsMsg_Fptr" description="Callback for PA SatOS message request" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
             <Parameter variable_name="pa_satos_msg_response" type="RespPaSatOsMsg *" description="response PA to SatOS command response"/>
+        </FunctionPtr>
+
+         <FunctionPtr name="ProcessSatOsPaMsg_Fptr" description="Callback for SatOS PA message request" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="satos_pa_msg" type="SatOsPaMsg *" description="SatOS to PA command response"/>
+        </FunctionPtr>
+
+        <FunctionPtr name="ProcessStageHmDataReq_Fptr" description="Callback for HM data stage message request" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="hm_stage_req" type="StageHmData *" description="SatOS to PA command response"/>
         </FunctionPtr>
 
         <FunctionPtr name="ProcessRemoteAcPwrStatusNtf_Fptr" description="callback handler for remote application controller power status notification" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
@@ -588,6 +624,18 @@
                         return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
             <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
             <Parameter variable_name="host_to_peer_fcm_operation" type="HostToPeerFcmOperation *" description="Parameters for ps to es fcm operation"/>
+        </Function>
+
+        <Function name="api_pa_pc_satos_pa_message" description="API to respond to SatOS message request"
+                        return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
+            <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
+            <Parameter variable_name="satos_pa_msg" type="RespSatOsPaMsg *" description="Message to SatOS from PA"/>
+        </Function>
+
+        <Function name="api_pa_pc_hm_data_rsp" description="API to respond to SatOS message request"
+                        return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
+            <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
+            <Parameter variable_name="stage_hm_rsp" type="RespStageHmData *" description="Message to SatOS from PA"/>
         </Function>
 
     </Functions>
