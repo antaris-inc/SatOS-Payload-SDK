@@ -353,6 +353,7 @@ message RespSesTempReqParams {
     int32                           status           = 2; // Status of read
     int32                           temperature      = 3; // in Celsius
     int32                           hardware_id      = 4; // SESA or SESB hardware
+    int32                           heater_pwr_status = 5; // 0:OFF, 1:ON
 }
 
 message SesThermalStatusNtf {

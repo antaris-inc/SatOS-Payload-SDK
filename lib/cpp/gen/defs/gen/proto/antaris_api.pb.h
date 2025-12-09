@@ -7945,6 +7945,7 @@ class RespSesTempReqParams final :
     kStatusFieldNumber = 2,
     kTemperatureFieldNumber = 3,
     kHardwareIdFieldNumber = 4,
+    kHeaterPwrStatusFieldNumber = 5,
   };
   // int32 correlation_id = 1;
   void clear_correlation_id();
@@ -7982,6 +7983,15 @@ class RespSesTempReqParams final :
   void _internal_set_hardware_id(int32_t value);
   public:
 
+  // int32 heater_pwr_status = 5;
+  void clear_heater_pwr_status();
+  int32_t heater_pwr_status() const;
+  void set_heater_pwr_status(int32_t value);
+  private:
+  int32_t _internal_heater_pwr_status() const;
+  void _internal_set_heater_pwr_status(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.RespSesTempReqParams)
  private:
   class _Internal;
@@ -7993,6 +8003,7 @@ class RespSesTempReqParams final :
   int32_t status_;
   int32_t temperature_;
   int32_t hardware_id_;
+  int32_t heater_pwr_status_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
 };
@@ -12479,6 +12490,26 @@ inline void RespSesTempReqParams::_internal_set_hardware_id(int32_t value) {
 inline void RespSesTempReqParams::set_hardware_id(int32_t value) {
   _internal_set_hardware_id(value);
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.RespSesTempReqParams.hardware_id)
+}
+
+// int32 heater_pwr_status = 5;
+inline void RespSesTempReqParams::clear_heater_pwr_status() {
+  heater_pwr_status_ = 0;
+}
+inline int32_t RespSesTempReqParams::_internal_heater_pwr_status() const {
+  return heater_pwr_status_;
+}
+inline int32_t RespSesTempReqParams::heater_pwr_status() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.RespSesTempReqParams.heater_pwr_status)
+  return _internal_heater_pwr_status();
+}
+inline void RespSesTempReqParams::_internal_set_heater_pwr_status(int32_t value) {
+  
+  heater_pwr_status_ = value;
+}
+inline void RespSesTempReqParams::set_heater_pwr_status(int32_t value) {
+  _internal_set_heater_pwr_status(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.RespSesTempReqParams.heater_pwr_status)
 }
 
 // -------------------------------------------------------------------

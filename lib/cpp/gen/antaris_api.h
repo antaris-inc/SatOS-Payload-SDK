@@ -974,6 +974,7 @@ struct RespSesTempReqParams {
     UINT8                                           status;                                          ///< @var Status of read
     INT8                                            temperature;                                     ///< @var in Celsius
     UINT8                                           hardware_id;                                     ///< @var SESA or SESB hardware
+    UINT8                                           heater_pwr_status;                               ///< @var 0:OFF, 1:ON
 };
 
 void displayRespSesTempReqParams(const void *obj);
