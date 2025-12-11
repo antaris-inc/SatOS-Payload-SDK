@@ -1153,22 +1153,22 @@ AntarisReturnCode process_response_ses_temp(RespSesTempReqParams *ses_temp_req_p
 
 AntarisReturnCode process_response_start_ses_therm_mgmnt(RespStartSesThermMgmntReq *ses_therm_management_resp_params){
  
-    if(ses_therm_management_resp_params->req_status == An_SUCCESS){
+    if(ses_therm_management_resp_params->req_status == Request_success){
         printf("start SES thermal management request success\n");
     }
-    else if(ses_therm_management_resp_params->req_status == 1){
+    else if(ses_therm_management_resp_params->req_status == Request_failed){
         printf("start SES thermal management request failed\n");
     }
-    else if(ses_therm_management_resp_params->req_status == 2){
+    else if(ses_therm_management_resp_params->req_status == Invalid_timer_or_duration_threshold){
         printf("request failed due to Invalid Time threshold\n");
     }
-    else if(ses_therm_management_resp_params->req_status == 3){
+    else if(ses_therm_management_resp_params->req_status == Invalid_temp_threshold){
         printf("request failed due to Invalid Temperature threshold\n");
     }
-    else if(ses_therm_management_resp_params->req_status == 4){
+    else if(ses_therm_management_resp_params->req_status == Invalid_hw_id){
         printf("request failed due to Invalid Hardware Id\n");
     }
-    else if(ses_therm_management_resp_params->req_status == 5){
+    else if(ses_therm_management_resp_params->req_status == Another_req_in_progress){
         printf("Currently handling another SES polling\n");
     }
 }
@@ -1219,7 +1219,7 @@ AntarisReturnCode process_response_fcm_operation(HostToPeerFcmOperationNotify *p
 }
 
 AntarisReturnCode process_response_gnss_eph_stop(RespGnssEphStopDataReq *gnss_eph_stop_req){
-    if(gnss_eph_stop_req->req_status == An_SUCCESS){
+    if(gnss_eph_stop_req->req_status == Request_success){
         printf("Gnss eph data stop request success\n");
     }
     else{
@@ -1228,19 +1228,19 @@ AntarisReturnCode process_response_gnss_eph_stop(RespGnssEphStopDataReq *gnss_ep
 }
 
 AntarisReturnCode process_response_gnss_eph_start(RespGnssEphStartDataReq *gnss_eph_start_req){
-    if(gnss_eph_start_req->req_status == An_SUCCESS){
+    if(gnss_eph_start_req->req_status == Request_success){
         printf("Gnss eph data start request success\n");
     }
-    else if(gnss_eph_start_req->req_status == 1){
+    else if(gnss_eph_start_req->req_status == Request_failed){
         printf("Gnss eph data start request failed\n");
     }
-    else if(gnss_eph_start_req->req_status == 2){
+    else if(gnss_eph_start_req->req_status == Invalid_timer_or_duration_threshold){
         printf("Gnss eph data start request failed due to Invalid duration threshold\n");
     }
 }
 
 AntarisReturnCode process_response_get_eps_voltage_stop(RespGetEpsVoltageStopReq *get_eps_voltage_stop_req){
-    if(get_eps_voltage_stop_req->req_status == An_SUCCESS){
+    if(get_eps_voltage_stop_req->req_status == Request_success){
         printf("Get Eps voltage stop request success\n");
     }
     else{
@@ -1249,13 +1249,13 @@ AntarisReturnCode process_response_get_eps_voltage_stop(RespGetEpsVoltageStopReq
 }
 
 AntarisReturnCode process_response_get_eps_voltage_start(RespGetEpsVoltageStartReq *get_eps_voltage_start_req){
-    if(get_eps_voltage_start_req->req_status == An_SUCCESS){
+    if(get_eps_voltage_start_req->req_status == Request_success){
         printf("Get Eps Voltage telemetry start request failed\n");
     }
-    else if(get_eps_voltage_start_req->req_status == 1){
+    else if(get_eps_voltage_start_req->req_status == Request_failed){
         printf("Get Eps Voltage telemetry start request failed\n");
     }
-    else if(get_eps_voltage_start_req->req_status == 2){
+    else if(get_eps_voltage_start_req->req_status == Invalid_timer_or_duration_threshold){
         printf("Get Eps Voltage telemetry start request failed due to Invalid Timer duration\n");
     }
 }

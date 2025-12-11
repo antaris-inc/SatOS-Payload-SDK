@@ -301,6 +301,35 @@ inline bool FilePriorities_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<FilePriorities>(
     FilePriorities_descriptor(), name, value);
 }
+enum ReqStatus : int {
+  Request_success = 0,
+  Request_failed = 1,
+  Invalid_timer_or_duration_threshold = 2,
+  Invalid_temp_threshold = 3,
+  Invalid_hw_id = 4,
+  Another_req_in_progress = 5,
+  ReqStatus_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  ReqStatus_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool ReqStatus_IsValid(int value);
+constexpr ReqStatus ReqStatus_MIN = Request_success;
+constexpr ReqStatus ReqStatus_MAX = Another_req_in_progress;
+constexpr int ReqStatus_ARRAYSIZE = ReqStatus_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ReqStatus_descriptor();
+template<typename T>
+inline const std::string& ReqStatus_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, ReqStatus>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function ReqStatus_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    ReqStatus_descriptor(), enum_t_value);
+}
+inline bool ReqStatus_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, ReqStatus* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ReqStatus>(
+    ReqStatus_descriptor(), name, value);
+}
 enum FileDlRadioType : int {
   FILE_DL_SBAND = 0,
   FILE_DL_XBAND = 1,
@@ -12793,6 +12822,11 @@ template <> struct is_proto_enum< ::antaris_api_peer_to_peer::FilePriorities> : 
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::antaris_api_peer_to_peer::FilePriorities>() {
   return ::antaris_api_peer_to_peer::FilePriorities_descriptor();
+}
+template <> struct is_proto_enum< ::antaris_api_peer_to_peer::ReqStatus> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::antaris_api_peer_to_peer::ReqStatus>() {
+  return ::antaris_api_peer_to_peer::ReqStatus_descriptor();
 }
 template <> struct is_proto_enum< ::antaris_api_peer_to_peer::FileDlRadioType> : ::std::true_type {};
 template <>

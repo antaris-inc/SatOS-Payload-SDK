@@ -72,6 +72,20 @@ class FilePriorities:
 
 
 
+# ENUM: ReqStatus - Status of the request
+class ReqStatus:
+    Request_success = 0 # Request Success
+    Request_failed = 1 # Request failed
+    Invalid_timer_or_duration_threshold = 2 # Invalid time or duration
+    Invalid_temp_threshold = 3 # Invalid temperature
+    Invalid_hw_id = 4 # Invalid hardware Id
+    Another_req_in_progress = 5 # Another request already in progress
+
+
+    reverse_dict = {0 : "Request_success", 1 : "Request_failed", 2 : "Invalid_timer_or_duration_threshold", 3 : "Invalid_temp_threshold", 4 : "Invalid_hw_id", 5 : "Another_req_in_progress"}
+
+
+
 # ENUM: FileDlRadioType - File priority
 class FileDlRadioType:
     FILE_DL_SBAND = 0 # S-band file downlink

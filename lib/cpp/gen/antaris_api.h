@@ -83,6 +83,21 @@ void displayFilePriorities(void *obj);
 void app_to_peer_FilePriorities(void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_FilePriorities(void *ptr_src_peer, void *ptr_dst_app);
 
+/// @enum ReqStatus
+/// @brief Status of the request
+typedef enum ReqStatus {
+    Request_success                  = 0,                               ///< Request Success
+    Request_failed                   = 1,                               ///< Request failed
+    Invalid_timer_or_duration_threshold = 2,                               ///< Invalid time or duration
+    Invalid_temp_threshold           = 3,                               ///< Invalid temperature
+    Invalid_hw_id                    = 4,                               ///< Invalid hardware Id
+    Another_req_in_progress          = 5,                               ///< Another request already in progress
+} ReqStatus;
+
+void displayReqStatus(void *obj);
+void app_to_peer_ReqStatus(void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_ReqStatus(void *ptr_src_peer, void *ptr_dst_app);
+
 /// @enum FileDlRadioType
 /// @brief File priority
 typedef enum FileDlRadioType {

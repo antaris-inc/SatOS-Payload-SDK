@@ -2824,6 +2824,22 @@ app_to_peer_FilePriorities(void *ptr_src_app, void *ptr_dst_peer)
 }
 
 void
+displayReqStatus(void *obj)
+{
+    printf("%s => %d\n", "ReqStatus", *(INT32 *)obj);
+}
+
+void
+app_to_peer_ReqStatus(void *ptr_src_app, void *ptr_dst_peer)
+{
+    ReqStatus *src = (ReqStatus *)ptr_src_app;
+    ReqStatus *dst = (ReqStatus *)ptr_dst_peer;
+
+    *dst = *src;
+
+}
+
+void
 displayFileDlRadioType(void *obj)
 {
     printf("%s => %d\n", "FileDlRadioType", *(INT32 *)obj);
