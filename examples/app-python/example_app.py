@@ -258,10 +258,10 @@ class Controller:
         resp = ctx.client.ses_temp_req(hardware_id)
         if resp.status == 0:
             logger.info(f"Current temperature = {resp.temperature}")
-            logger.info(f"Hardware id = {resp.hardware_id}") # 0:SESA, 1:SESB
-            logger.info(f"Heater Power Status = {resp.heater_pwr_status}") # 0:SESA, 1:SESB
+            logger.info(f"Hardware id = {resp.hardware_id}")
+            logger.info(f"Heater Power Status = {resp.heater_pwr_status}") # 0:OFF, 1:ON
         else:
-            logger.info(f"Unable read temperature for = {resp.hardware_id}") # 0:OFF, 1:ON
+            logger.info(f"Unable read temperature for = {resp.hardware_id}")
         
     def ses_thermal_status_ntf(self, ctx):
         if ctx.heater_pwr_status == 0:

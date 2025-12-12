@@ -1138,7 +1138,7 @@ AntarisReturnCode process_response_ses_temp(RespSesTempReqParams *ses_temp_req_p
     if (ses_temp_req_params->status == 0) {
         printf("Current temperature = %d\n",(unsigned int)ses_temp_req_params->temperature);
         printf("Hardware id = %u\n",(unsigned int)ses_temp_req_params->hardware_id);  // 0:SESA, 1:SESB
-        printf("Header Power status is %u\n",(unsigned int)ses_temp_req_params->heater_pwr_status);  // 0:OFF, 1:ON
+        printf("Heater Power status is %u\n",(unsigned int)ses_temp_req_params->heater_pwr_status);  // 0:OFF, 1:ON
     } else {
         printf("Unable to read temperature of %d \n", (unsigned int)ses_temp_req_params->hardware_id);
     }
