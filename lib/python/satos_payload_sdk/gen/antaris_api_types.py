@@ -72,6 +72,20 @@ class FilePriorities:
 
 
 
+# ENUM: ReqStatus - Status of the request
+class ReqStatus:
+    Request_success = 0 # Request Success
+    Request_failed = 1 # Request failed
+    Invalid_timer_or_duration_threshold = 2 # Invalid time or duration
+    Invalid_temp_threshold = 3 # Invalid temperature
+    Invalid_hw_id = 4 # Invalid hardware Id
+    Another_req_in_progress = 5 # Another request already in progress
+
+
+    reverse_dict = {0 : "Request_success", 1 : "Request_failed", 2 : "Invalid_timer_or_duration_threshold", 3 : "Invalid_temp_threshold", 4 : "Invalid_hw_id", 5 : "Another_req_in_progress"}
+
+
+
 # ENUM: FileDlRadioType - File priority
 class FileDlRadioType:
     FILE_DL_SBAND = 0 # S-band file downlink
@@ -1617,12 +1631,14 @@ def app_to_peer_SesTempReq(app_struct):
 ## @param: status                                          :    Status of read                                  
 ## @param: temperature                                     :    in Celsius                                      
 ## @param: hardware_id                                     :    SESA or SESB hardware                           
+## @param: heater_pwr_status                               :    0:OFF, 1:ON                                     
 class RespSesTempReqParams:
-    def __init__(self, correlation_id, status, temperature, hardware_id):
+    def __init__(self, correlation_id, status, temperature, hardware_id, heater_pwr_status):
         self.correlation_id = correlation_id
         self.status = status
         self.temperature = temperature
         self.hardware_id = hardware_id
+        self.heater_pwr_status = heater_pwr_status
 
     def __str__(self):
         ret_str = ""
@@ -1634,6 +1650,8 @@ class RespSesTempReqParams:
         ret_str += str(self.temperature) + "\n"
         ret_str += "hardware_id:\n"
         ret_str += str(self.hardware_id) + "\n"
+        ret_str += "heater_pwr_status:\n"
+        ret_str += str(self.heater_pwr_status) + "\n"
 
         return ret_str
 
@@ -1645,10 +1663,11 @@ def peer_to_app_RespSesTempReqParams(peer_struct):
     status = peer_struct.status
     temperature = peer_struct.temperature
     hardware_id = peer_struct.hardware_id
-    return RespSesTempReqParams(correlation_id, status, temperature, hardware_id)
+    heater_pwr_status = peer_struct.heater_pwr_status
+    return RespSesTempReqParams(correlation_id, status, temperature, hardware_id, heater_pwr_status)
 
 def app_to_peer_RespSesTempReqParams(app_struct):
-    return antaris_api_pb2.RespSesTempReqParams(correlation_id = app_struct.correlation_id, status = app_struct.status, temperature = app_struct.temperature, hardware_id = app_struct.hardware_id)
+    return antaris_api_pb2.RespSesTempReqParams(correlation_id = app_struct.correlation_id, status = app_struct.status, temperature = app_struct.temperature, hardware_id = app_struct.hardware_id, heater_pwr_status = app_struct.heater_pwr_status)
 
 ## @class: SesThermalStatusNtf
 ## @brief: SES thermal notification from PC

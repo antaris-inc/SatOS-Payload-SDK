@@ -301,6 +301,35 @@ inline bool FilePriorities_Parse(
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<FilePriorities>(
     FilePriorities_descriptor(), name, value);
 }
+enum ReqStatus : int {
+  Request_success = 0,
+  Request_failed = 1,
+  Invalid_timer_or_duration_threshold = 2,
+  Invalid_temp_threshold = 3,
+  Invalid_hw_id = 4,
+  Another_req_in_progress = 5,
+  ReqStatus_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
+  ReqStatus_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
+};
+bool ReqStatus_IsValid(int value);
+constexpr ReqStatus ReqStatus_MIN = Request_success;
+constexpr ReqStatus ReqStatus_MAX = Another_req_in_progress;
+constexpr int ReqStatus_ARRAYSIZE = ReqStatus_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ReqStatus_descriptor();
+template<typename T>
+inline const std::string& ReqStatus_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, ReqStatus>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function ReqStatus_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    ReqStatus_descriptor(), enum_t_value);
+}
+inline bool ReqStatus_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, ReqStatus* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<ReqStatus>(
+    ReqStatus_descriptor(), name, value);
+}
 enum FileDlRadioType : int {
   FILE_DL_SBAND = 0,
   FILE_DL_XBAND = 1,
@@ -7945,6 +7974,7 @@ class RespSesTempReqParams final :
     kStatusFieldNumber = 2,
     kTemperatureFieldNumber = 3,
     kHardwareIdFieldNumber = 4,
+    kHeaterPwrStatusFieldNumber = 5,
   };
   // int32 correlation_id = 1;
   void clear_correlation_id();
@@ -7982,6 +8012,15 @@ class RespSesTempReqParams final :
   void _internal_set_hardware_id(int32_t value);
   public:
 
+  // int32 heater_pwr_status = 5;
+  void clear_heater_pwr_status();
+  int32_t heater_pwr_status() const;
+  void set_heater_pwr_status(int32_t value);
+  private:
+  int32_t _internal_heater_pwr_status() const;
+  void _internal_set_heater_pwr_status(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.RespSesTempReqParams)
  private:
   class _Internal;
@@ -7993,6 +8032,7 @@ class RespSesTempReqParams final :
   int32_t status_;
   int32_t temperature_;
   int32_t hardware_id_;
+  int32_t heater_pwr_status_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
 };
@@ -12481,6 +12521,26 @@ inline void RespSesTempReqParams::set_hardware_id(int32_t value) {
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.RespSesTempReqParams.hardware_id)
 }
 
+// int32 heater_pwr_status = 5;
+inline void RespSesTempReqParams::clear_heater_pwr_status() {
+  heater_pwr_status_ = 0;
+}
+inline int32_t RespSesTempReqParams::_internal_heater_pwr_status() const {
+  return heater_pwr_status_;
+}
+inline int32_t RespSesTempReqParams::heater_pwr_status() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.RespSesTempReqParams.heater_pwr_status)
+  return _internal_heater_pwr_status();
+}
+inline void RespSesTempReqParams::_internal_set_heater_pwr_status(int32_t value) {
+  
+  heater_pwr_status_ = value;
+}
+inline void RespSesTempReqParams::set_heater_pwr_status(int32_t value) {
+  _internal_set_heater_pwr_status(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.RespSesTempReqParams.heater_pwr_status)
+}
+
 // -------------------------------------------------------------------
 
 // SesThermalStatusNtf
@@ -12762,6 +12822,11 @@ template <> struct is_proto_enum< ::antaris_api_peer_to_peer::FilePriorities> : 
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::antaris_api_peer_to_peer::FilePriorities>() {
   return ::antaris_api_peer_to_peer::FilePriorities_descriptor();
+}
+template <> struct is_proto_enum< ::antaris_api_peer_to_peer::ReqStatus> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::antaris_api_peer_to_peer::ReqStatus>() {
+  return ::antaris_api_peer_to_peer::ReqStatus_descriptor();
 }
 template <> struct is_proto_enum< ::antaris_api_peer_to_peer::FileDlRadioType> : ::std::true_type {};
 template <>

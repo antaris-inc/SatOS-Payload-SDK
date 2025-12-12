@@ -63,6 +63,15 @@ enum FilePriorities {
     FILE_DL_PRIORITY_IMMEDIATE       = 3; // highest priority
 }
 
+enum ReqStatus {
+    Request_success                  = 0; // Request Success
+    Request_failed                   = 1; // Request failed
+    Invalid_timer_or_duration_threshold = 2; // Invalid time or duration
+    Invalid_temp_threshold           = 3; // Invalid temperature
+    Invalid_hw_id                    = 4; // Invalid hardware Id
+    Another_req_in_progress          = 5; // Another request already in progress
+}
+
 enum FileDlRadioType {
     FILE_DL_SBAND                    = 0; // S-band file downlink
     FILE_DL_XBAND                    = 1; // X-band file downlink
@@ -353,6 +362,7 @@ message RespSesTempReqParams {
     int32                           status           = 2; // Status of read
     int32                           temperature      = 3; // in Celsius
     int32                           hardware_id      = 4; // SESA or SESB hardware
+    int32                           heater_pwr_status = 5; // 0:OFF, 1:ON
 }
 
 message SesThermalStatusNtf {

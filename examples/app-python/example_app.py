@@ -43,6 +43,13 @@ ADCS_start_reconfigured = 1
 ADCS_start_failed = 2
 
 Request_success = 0
+Request_failed = 1
+
+Invalid_timer_threshold = 2
+Invalid_temp_threshold = 3
+Invalid_hw_id_threshold = 4
+Another_req_in_progress = 5
+Invalid_duration_threshold = 2
 
 logger = logging.getLogger()
 
@@ -185,12 +192,13 @@ class Controller:
         elif ctx.params.lower() == "start":
             logger.info("Sending GNSS EPH data start request")
             resp = ctx.client.gnss_eph_start_data_req(periodicity_in_ms, eph2_enable)
-            if (resp.req_status == ADCS_start_success):
-                logger.info("GNSS EPH data start request success")
-            elif (resp.req_status == ADCS_start_reconfigured):
-                logger.info("Reconfiguring GNSS EPH data start request success")
-            else:
-                logger.info("GNSS EPH data start request failed")
+            if (resp.req_status == Request_success):
+                logger.info("Gnss eph data start request success")
+            elif (resp.req_status == Request_failed):
+                logger.info("Gnss eph data start request failed")
+            elif (resp.req_status == Invalid_duration_threshold):
+                logger.info("Gnss eph data start request failed due to Invalid duration threshold")
+            
         else:
             logger.info("Incorrect parameters. Parameter can be 'stop' or 'start'")
 
@@ -206,7 +214,13 @@ class Controller:
         elif ctx.params.lower() == "start":
             logger.info("Sending Get Eps Voltage telemetry start request")
             resp = ctx.client.get_eps_voltage_start_req(periodicity_in_ms)
-            logger.info(f"Current voltage = {resp}")
+            if (resp.req_status == Request_success):
+                logger.info("Get Eps Voltage telemetry stop request success")
+            elif (resp.req_status == Request_failed):
+                logger.info("Get Eps Voltage telemetry start request failed")
+            elif (resp.req_status == Invalid_timer_threshold):
+                logger.info("Get Eps Voltage telemetry start request failed due to Invalid Timer duration")
+            
         else:
             logger.info("Incorrect parameters. Parameter can be 'stop' or 'start'")
 
@@ -228,17 +242,26 @@ class Controller:
             resp = ctx.client.start_ses_therm_mgmnt_req(hardware_id, duration, upper_threshold, lower_threshold)
             if (resp.req_status == Request_success):
                 logger.info("start SES thermal management request success")
-            else:
+            elif (resp.req_status == Request_failed):
                 logger.info("start SES thermal management request failed")
+            elif (resp.req_status == Invalid_timer_threshold):
+                logger.info("request failed due to Invalid Time threshold")
+            elif (resp.req_status == Invalid_temp_threshold):
+                logger.info("request failed due to Invalid Temperature threshold")
+            elif (resp.req_status == Invalid_hw_id_threshold):
+                logger.info("request failed due to Invalid Hardware Id")
+            elif (resp.req_status == Another_req_in_progress):
+                logger.info("Currently handling another SES polling")
 
     def handle_ses_temp_req(self, ctx):
         hardware_id = 0   # 0:SESA , 1:SESB
         resp = ctx.client.ses_temp_req(hardware_id)
         if resp.status == 0:
             logger.info(f"Current temperature = {resp.temperature}")
-            logger.info(f"Hardware id = {resp.hardware_id}") # 0:SESA, 1:SESB
+            logger.info(f"Hardware id = {resp.hardware_id}")
+            logger.info(f"Heater Power Status = {resp.heater_pwr_status}") # 0:OFF, 1:ON
         else:
-            logger.info(f"Unable read temperature for = {resp.hardware_id}") # 0:SESA, 1:SESB
+            logger.info(f"Unable read temperature for = {resp.hardware_id}")
         
     def ses_thermal_status_ntf(self, ctx):
         if ctx.heater_pwr_status == 0:

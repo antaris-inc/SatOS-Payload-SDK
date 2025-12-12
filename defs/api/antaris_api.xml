@@ -50,6 +50,15 @@
             <EnumValue name="FILE_DL_PRIORITY_IMMEDIATE" value="3" description="highest priority"/>
         </Enum>
 
+        <Enum name="ReqStatus" description="Status of the request">
+            <EnumValue name="Request_success" value="0" description="Request Success"/>
+            <EnumValue name="Request_failed" value="1" description="Request failed"/>
+            <EnumValue name="Invalid_timer_or_duration_threshold" value="2" description="Invalid time or duration"/>
+            <EnumValue name="Invalid_temp_threshold" value="3" description="Invalid temperature"/>
+            <EnumValue name="Invalid_hw_id" value="4" description="Invalid hardware Id"/>
+            <EnumValue name="Another_req_in_progress" value="5" description="Another request already in progress"/>
+        </Enum>
+
         <Enum name="FileDlRadioType" description="File priority">
             <EnumValue name="FILE_DL_SBAND" value="0" description="S-band file downlink"/>
             <EnumValue name="FILE_DL_XBAND" value="1" description="X-band file downlink"/>
@@ -340,6 +349,7 @@
             <Field name="status" type="UINT8" sequence="2" description="Status of read"/>
             <Field name="temperature" type="INT8" sequence="3" description="in Celsius"/>
             <Field name="hardware_id" type="UINT8" sequence="4" description="SESA or SESB hardware"/>
+            <Field name="heater_pwr_status" type="UINT8" sequence="5" description="0:OFF, 1:ON"/>
         </Struct>
 
         <Struct name="SesThermalStatusNtf" description="SES thermal notification from PC">

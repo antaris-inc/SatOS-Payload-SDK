@@ -642,7 +642,8 @@ constexpr RespSesTempReqParams::RespSesTempReqParams(
   : correlation_id_(0)
   , status_(0)
   , temperature_(0)
-  , hardware_id_(0){}
+  , hardware_id_(0)
+  , heater_pwr_status_(0){}
 struct RespSesTempReqParamsDefaultTypeInternal {
   constexpr RespSesTempReqParamsDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -696,7 +697,7 @@ struct AntarisReturnTypeDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AntarisReturnTypeDefaultTypeInternal _AntarisReturnType_default_instance_;
 }  // namespace antaris_api_peer_to_peer
 static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[46];
-static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[3];
+static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[4];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto = nullptr;
 
 const uint32_t TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -1116,6 +1117,7 @@ const uint32_t TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto::offsets[]
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespSesTempReqParams, status_),
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespSesTempReqParams, temperature_),
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespSesTempReqParams, hardware_id_),
+  PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::RespSesTempReqParams, heater_pwr_status_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::antaris_api_peer_to_peer::SesThermalStatusNtf, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1187,9 +1189,9 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 390, -1, -1, sizeof(::antaris_api_peer_to_peer::RespStopSesThermMgmntReq)},
   { 398, -1, -1, sizeof(::antaris_api_peer_to_peer::SesTempReq)},
   { 406, -1, -1, sizeof(::antaris_api_peer_to_peer::RespSesTempReqParams)},
-  { 416, -1, -1, sizeof(::antaris_api_peer_to_peer::SesThermalStatusNtf)},
-  { 428, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisCorrelationId)},
-  { 435, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisReturnType)},
+  { 417, -1, -1, sizeof(::antaris_api_peer_to_peer::SesThermalStatusNtf)},
+  { 429, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisCorrelationId)},
+  { 436, -1, -1, sizeof(::antaris_api_peer_to_peer::AntarisReturnType)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -1363,26 +1365,31 @@ const char descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[
   " \001(\005\"F\n\030RespStopSesThermMgmntReq\022\026\n\016corr"
   "elation_id\030\001 \001(\005\022\022\n\nreq_status\030\002 \001(\005\"9\n\n"
   "SesTempReq\022\026\n\016correlation_id\030\001 \001(\005\022\023\n\013ha"
-  "rdware_id\030\002 \001(\005\"h\n\024RespSesTempReqParams\022"
-  "\026\n\016correlation_id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022"
-  "\023\n\013temperature\030\003 \001(\005\022\023\n\013hardware_id\030\004 \001("
-  "\005\"\240\001\n\023SesThermalStatusNtf\022\026\n\016correlation"
-  "_id\030\001 \001(\005\022\031\n\021heater_pwr_status\030\002 \001(\005\022\023\n\013"
-  "hardware_id\030\003 \001(\005\022\020\n\010reserved\030\004 \001(\005\022\032\n\022h"
-  "eater_temp_status\030\005 \001(\005\022\023\n\013temperature\030\006"
-  " \001(\005\".\n\024AntarisCorrelationId\022\026\n\016correlat"
-  "ion_id\030\001 \001(\005\"U\n\021AntarisReturnType\022@\n\013ret"
-  "urn_code\030\001 \001(\0162+.antaris_api_peer_to_pee"
-  "r.AntarisReturnCode*\354\001\n\021AntarisReturnCod"
-  "e\022\016\n\nAn_SUCCESS\020\000\022\037\n\022An_GENERIC_FAILURE\020"
-  "\377\377\377\377\377\377\377\377\377\001\022\037\n\022An_NOT_IMPLEMENTED\020\376\377\377\377\377\377\377"
-  "\377\377\001\022 \n\023An_OUT_OF_RESOURCES\020\375\377\377\377\377\377\377\377\377\001\022\035\n"
-  "\020An_NOT_PERMITTED\020\374\377\377\377\377\377\377\377\377\001\022\036\n\021An_INVAL"
-  "ID_PARAMS\020\373\377\377\377\377\377\377\377\377\001\022$\n\027An_INCOMPATIBLE_"
-  "VERSION\020\372\377\377\377\377\377\377\377\377\001*\202\001\n\016FilePriorities\022\030\n"
-  "\024FILE_DL_PRIORITY_LOW\020\000\022\033\n\027FILE_DL_PRIOR"
-  "ITY_NORMAL\020\001\022\031\n\025FILE_DL_PRIORITY_HIGH\020\002\022"
-  "\036\n\032FILE_DL_PRIORITY_IMMEDIATE\020\003*7\n\017FileD"
+  "rdware_id\030\002 \001(\005\"\203\001\n\024RespSesTempReqParams"
+  "\022\026\n\016correlation_id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005"
+  "\022\023\n\013temperature\030\003 \001(\005\022\023\n\013hardware_id\030\004 \001"
+  "(\005\022\031\n\021heater_pwr_status\030\005 \001(\005\"\240\001\n\023SesThe"
+  "rmalStatusNtf\022\026\n\016correlation_id\030\001 \001(\005\022\031\n"
+  "\021heater_pwr_status\030\002 \001(\005\022\023\n\013hardware_id\030"
+  "\003 \001(\005\022\020\n\010reserved\030\004 \001(\005\022\032\n\022heater_temp_s"
+  "tatus\030\005 \001(\005\022\023\n\013temperature\030\006 \001(\005\".\n\024Anta"
+  "risCorrelationId\022\026\n\016correlation_id\030\001 \001(\005"
+  "\"U\n\021AntarisReturnType\022@\n\013return_code\030\001 \001"
+  "(\0162+.antaris_api_peer_to_peer.AntarisRet"
+  "urnCode*\354\001\n\021AntarisReturnCode\022\016\n\nAn_SUCC"
+  "ESS\020\000\022\037\n\022An_GENERIC_FAILURE\020\377\377\377\377\377\377\377\377\377\001\022\037"
+  "\n\022An_NOT_IMPLEMENTED\020\376\377\377\377\377\377\377\377\377\001\022 \n\023An_OU"
+  "T_OF_RESOURCES\020\375\377\377\377\377\377\377\377\377\001\022\035\n\020An_NOT_PERM"
+  "ITTED\020\374\377\377\377\377\377\377\377\377\001\022\036\n\021An_INVALID_PARAMS\020\373\377"
+  "\377\377\377\377\377\377\377\001\022$\n\027An_INCOMPATIBLE_VERSION\020\372\377\377\377"
+  "\377\377\377\377\377\001*\202\001\n\016FilePriorities\022\030\n\024FILE_DL_PRI"
+  "ORITY_LOW\020\000\022\033\n\027FILE_DL_PRIORITY_NORMAL\020\001"
+  "\022\031\n\025FILE_DL_PRIORITY_HIGH\020\002\022\036\n\032FILE_DL_P"
+  "RIORITY_IMMEDIATE\020\003*\251\001\n\tReqStatus\022\023\n\017Req"
+  "uest_success\020\000\022\022\n\016Request_failed\020\001\022\'\n#In"
+  "valid_timer_or_duration_threshold\020\002\022\032\n\026I"
+  "nvalid_temp_threshold\020\003\022\021\n\rInvalid_hw_id"
+  "\020\004\022\033\n\027Another_req_in_progress\020\005*7\n\017FileD"
   "lRadioType\022\021\n\rFILE_DL_SBAND\020\000\022\021\n\rFILE_DL"
   "_XBAND\020\0012\263\025\n\035AntarisapiApplicationCallba"
   "ck\022p\n\020PA_StartSequence\022-.antaris_api_pee"
@@ -1509,7 +1516,7 @@ const char descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto = {
-  false, false, 10550, descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, "defs/gen/proto/antaris_api.proto", 
+  false, false, 10750, descriptor_table_protodef_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, "defs/gen/proto/antaris_api.proto", 
   &descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto_once, nullptr, 0, 46,
   schemas, file_default_instances, TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto::offsets,
   file_level_metadata_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, file_level_enum_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto, file_level_service_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto,
@@ -1556,9 +1563,27 @@ bool FilePriorities_IsValid(int value) {
   }
 }
 
-const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* FileDlRadioType_descriptor() {
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ReqStatus_descriptor() {
   ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto);
   return file_level_enum_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[2];
+}
+bool ReqStatus_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* FileDlRadioType_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_defs_2fgen_2fproto_2fantaris_5fapi_2eproto);
+  return file_level_enum_descriptors_defs_2fgen_2fproto_2fantaris_5fapi_2eproto[3];
 }
 bool FileDlRadioType_IsValid(int value) {
   switch (value) {
@@ -12781,16 +12806,16 @@ RespSesTempReqParams::RespSesTempReqParams(const RespSesTempReqParams& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   ::memcpy(&correlation_id_, &from.correlation_id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&hardware_id_) -
-    reinterpret_cast<char*>(&correlation_id_)) + sizeof(hardware_id_));
+    static_cast<size_t>(reinterpret_cast<char*>(&heater_pwr_status_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(heater_pwr_status_));
   // @@protoc_insertion_point(copy_constructor:antaris_api_peer_to_peer.RespSesTempReqParams)
 }
 
 inline void RespSesTempReqParams::SharedCtor() {
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&correlation_id_) - reinterpret_cast<char*>(this)),
-    0, static_cast<size_t>(reinterpret_cast<char*>(&hardware_id_) -
-    reinterpret_cast<char*>(&correlation_id_)) + sizeof(hardware_id_));
+    0, static_cast<size_t>(reinterpret_cast<char*>(&heater_pwr_status_) -
+    reinterpret_cast<char*>(&correlation_id_)) + sizeof(heater_pwr_status_));
 }
 
 RespSesTempReqParams::~RespSesTempReqParams() {
@@ -12821,8 +12846,8 @@ void RespSesTempReqParams::Clear() {
   (void) cached_has_bits;
 
   ::memset(&correlation_id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&hardware_id_) -
-      reinterpret_cast<char*>(&correlation_id_)) + sizeof(hardware_id_));
+      reinterpret_cast<char*>(&heater_pwr_status_) -
+      reinterpret_cast<char*>(&correlation_id_)) + sizeof(heater_pwr_status_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -12860,6 +12885,14 @@ const char* RespSesTempReqParams::_InternalParse(const char* ptr, ::PROTOBUF_NAM
       case 4:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
           hardware_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 heater_pwr_status = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          heater_pwr_status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -12917,6 +12950,12 @@ uint8_t* RespSesTempReqParams::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(4, this->_internal_hardware_id(), target);
   }
 
+  // int32 heater_pwr_status = 5;
+  if (this->_internal_heater_pwr_status() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(5, this->_internal_heater_pwr_status(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -12953,6 +12992,11 @@ size_t RespSesTempReqParams::ByteSizeLong() const {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_hardware_id());
   }
 
+  // int32 heater_pwr_status = 5;
+  if (this->_internal_heater_pwr_status() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_heater_pwr_status());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
 }
 
@@ -12987,6 +13031,9 @@ void RespSesTempReqParams::MergeFrom(const RespSesTempReqParams& from) {
   if (from._internal_hardware_id() != 0) {
     _internal_set_hardware_id(from._internal_hardware_id());
   }
+  if (from._internal_heater_pwr_status() != 0) {
+    _internal_set_heater_pwr_status(from._internal_heater_pwr_status());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -13005,8 +13052,8 @@ void RespSesTempReqParams::InternalSwap(RespSesTempReqParams* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(RespSesTempReqParams, hardware_id_)
-      + sizeof(RespSesTempReqParams::hardware_id_)
+      PROTOBUF_FIELD_OFFSET(RespSesTempReqParams, heater_pwr_status_)
+      + sizeof(RespSesTempReqParams::heater_pwr_status_)
       - PROTOBUF_FIELD_OFFSET(RespSesTempReqParams, correlation_id_)>(
           reinterpret_cast<char*>(&correlation_id_),
           reinterpret_cast<char*>(&other->correlation_id_));

@@ -2542,6 +2542,8 @@ displayRespSesTempReqParams(const void *obj)
     displayINT8((void *)&p->temperature);
     printf("hardware_id ==>\n");
     displayUINT8((void *)&p->hardware_id);
+    printf("heater_pwr_status ==>\n");
+    displayUINT8((void *)&p->heater_pwr_status);
 
 }
 
@@ -2555,6 +2557,7 @@ app_to_peer_RespSesTempReqParams(const void *ptr_src_app, void *ptr_dst_peer)
     UINT32 __tmp_status = 0;
     INT32 __tmp_temperature;
     UINT32 __tmp_hardware_id = 0;
+    UINT32 __tmp_heater_pwr_status = 0;
 
     app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
 
@@ -2572,6 +2575,10 @@ app_to_peer_RespSesTempReqParams(const void *ptr_src_app, void *ptr_dst_peer)
 
     dst->set_hardware_id(__tmp_hardware_id);
 
+    app_to_peer_UINT8(&src->heater_pwr_status, &__tmp_heater_pwr_status); // heater_pwr_status
+
+    dst->set_heater_pwr_status(__tmp_heater_pwr_status);
+
 
 }
 
@@ -2585,6 +2592,7 @@ peer_to_app_RespSesTempReqParams(const void *ptr_src_peer, void *ptr_dst_app)
     dst->status = src->status();
     dst->temperature = src->temperature();
     dst->hardware_id = src->hardware_id();
+    dst->heater_pwr_status = src->heater_pwr_status();
 
 }
 
@@ -2810,6 +2818,22 @@ app_to_peer_FilePriorities(void *ptr_src_app, void *ptr_dst_peer)
 {
     FilePriorities *src = (FilePriorities *)ptr_src_app;
     FilePriorities *dst = (FilePriorities *)ptr_dst_peer;
+
+    *dst = *src;
+
+}
+
+void
+displayReqStatus(void *obj)
+{
+    printf("%s => %d\n", "ReqStatus", *(INT32 *)obj);
+}
+
+void
+app_to_peer_ReqStatus(void *ptr_src_app, void *ptr_dst_peer)
+{
+    ReqStatus *src = (ReqStatus *)ptr_src_app;
+    ReqStatus *dst = (ReqStatus *)ptr_dst_peer;
 
     *dst = *src;
 
