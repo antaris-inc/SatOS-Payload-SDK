@@ -18,7 +18,7 @@
 # ADD entrypoint.sh /opt/antaris/app/entrypoint.sh
 # RUN mkdir -p /opt/antaris/outbound -p /opt/antaris/inbound
 
-FROM quay.io/antaris-inc/satos-payload-app-python:stable AS app_image
+FROM quay.io/antaris-inc/satos-payload-app-python:25.7 AS app_image
 
 RUN pip install --no-cache-dir numpy numba cupy-cuda12x
 
