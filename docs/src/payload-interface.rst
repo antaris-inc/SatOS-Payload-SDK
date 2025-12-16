@@ -319,7 +319,7 @@ Parameters:
 
   * Id of hardware
 
-Expected periodic callback from AC: ``RespSesTempReq``
+Expected callback from AC: ``RespSesTempReq``
 
 * ``U16 CorrelationId``
 
@@ -328,6 +328,10 @@ Expected periodic callback from AC: ``RespSesTempReq``
 * ``U8 temp``   
                 
   * temperature of hardware in celsius
+
+* ``U8 hardware id``   
+                
+  * Id of hardware
 
 * ``U8 heater_pwr_status``   
                 
@@ -349,7 +353,7 @@ Parameters:
   * payload data is a command parameter that has to be sent to the SatOS. it can be upto to 1020 bytes.
     
 
-Expected periodic callback from AC: ``RespPaSatOsMsg``
+Expected callback from AC: ``RespPaSatOsMsg``
 
 * ``U16 CorrelationId``
 
@@ -362,6 +366,52 @@ Expected periodic callback from AC: ``RespPaSatOsMsg``
 * ``U16 ReqStatus``
 
   * ``0`` if request succeeded, otherwise non-zero value indicating failure 
+
+FcmOperation
+^^^^^^^^^^^^^
+
+Request to start File copy from peer to host.
+
+Parameters:
+
+* ``U16 CorrelationId``
+
+* ``U8 Dest``
+      * Id of peer from which files are copied.
+
+* ``U8 Src``
+      * Id of peer to which files are copied.
+
+* ``U8 peer app id``
+      * Id of peer application from which files are copied.
+
+* ``U8 no of files``
+      * no of files to be copied. set it to 0 if all files needed to copy.
+
+* ``Struct File Input[32]``
+
+  * INT8 File name length
+        * Length of file name
+  * INT8 Filename[128]
+        * File name    
+
+Expected per file callback from AC: ``RespFcmOperation``
+
+* ``U16 CorrelationId``
+
+  * Will match what was sent in request
+
+* ``U8 Req status``   
+                
+  * Success/failure of file copy
+
+* ``U8 Fcm complete``
+
+  * ``0`` if all files are processed, otherwise operation is still ongoing.
+
+* ``INT8 File name[16]``
+
+  * name of processed file.
 
 Application Controller Requests
 ===============================
