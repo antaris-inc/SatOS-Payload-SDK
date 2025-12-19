@@ -981,7 +981,7 @@ void wakeup_seq_fsm(mythreadState_t *threadState)
         printf("thread state is NULL!!\n");
         return;
     }
-    sleep(1); // avoid lost wakeups by giving fsm thread time to block on its pthread_cond_wait
+    usleep(100 * 1000); // avoid lost wakeups by giving fsm thread time to block on its pthread_cond_wait
     printf("called wakeup_seq_fsm for %s\n", threadState->seq_id);
     pthread_cond_signal(&threadState->condition);
 }
