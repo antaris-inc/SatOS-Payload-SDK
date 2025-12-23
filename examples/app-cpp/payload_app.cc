@@ -31,6 +31,7 @@
 #define MAX_STR_LEN 256
 #define SEQ_PARAMS_LEN 64
 #define SEQ_NAME_LEN   32
+#define FSM_SLEEP_TIME 100*1000 //this sleep time(ms) should be configured considering the PA <--> PC communication frequency
 
 #define HelloWorld_ID                   "HelloWorld"
 #define HelloWorld_IDX                  0
@@ -981,7 +982,7 @@ void wakeup_seq_fsm(mythreadState_t *threadState)
         printf("thread state is NULL!!\n");
         return;
     }
-    sleep(1); // avoid lost wakeups by giving fsm thread time to block on its pthread_cond_wait
+    usleep(FSM_SLEEP_TIME); // avoid lost wakeups by giving fsm thread time to block on its pthread_cond_wait
     printf("called wakeup_seq_fsm for %s\n", threadState->seq_id);
     pthread_cond_signal(&threadState->condition);
 }
