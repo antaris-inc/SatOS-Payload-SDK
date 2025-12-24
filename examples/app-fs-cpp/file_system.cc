@@ -7,227 +7,211 @@
 #include <vector>
 #include <cstdint>
 #include <iostream>
-
+#include "antaris_api.h"
 
 namespace fs = std::filesystem;
 
-static std::string make_filename(const char* dir,  DataFile file, int seq)
+constexpr size_t MAX_QUEUES = 40;
+
+struct QueueOffsetEntry
 {
-    char buf[256];
-    snprintf(buf, sizeof(buf), "%s/%s_seq%d%s",
-             dir, file.basename, seq, file.extension);
-    return std::string(buf);
-}
+    uint64_t write_offset;   // where next write should go
+};
 
-/****************************************************************
- * Decide which seq file (1 or 2) to use based on size
- ****************************************************************/
-static int detect_seq_to_write(const char* dir, DataFile file, uint16_t len)
-{
-    std::string f1 = make_filename(dir, file, 1);
-    std::string f2 = make_filename(dir, file, 2);
+static constexpr size_t MAX_QUEUE_FILE_SIZE = 1 * 1024 * 1024; // 1 MB
+static constexpr const char* OFFSET_FILE = "offset.bin";
 
-    bool e1 = fs::exists(f1);
-    bool e2 = fs::exists(f2);
 
-    size_t max = file.maxsize;
-
-    // ---------------------------
-    // CASE 1 — Both files exist
-    // ---------------------------
-    if (e1 && e2)
-    {
-        size_t s1 = fs::file_size(f1);
-        size_t s2 = fs::file_size(f2);
-        printf("both exist: s1=%zu s2=%zu max=%zu\n", s1, s2, max);
-
-        // Determine which file is newer
-        std::error_code ec1, ec2;
-        auto t1 = fs::last_write_time(f1, ec1);
-        auto t2 = fs::last_write_time(f2, ec2);
-
-        int newest = (t1 > t2) ? 1 : 2;
-        int oldest = (newest == 1 ? 2 : 1);
-
-        std::string newestFile = (newest == 1 ? f1 : f2);
-        size_t newestSize = (newest == 1 ? s1 : s2);
-
-        // If newest file has enough space → write there
-        if (newestSize + len <= max)
-        {
-            return newest;
-        }
-
-        // Otherwise, delete the oldest and write to it
-        std::string oldestFile = (oldest == 1 ? f1 : f2);
-        fs::remove(oldestFile);
-        printf("removed oldest file %s\n", oldestFile.c_str());
-
-        return oldest;
-    }
-
-    // ---------------------------
-    // CASE 2 — Only seq1 exists
-    // ---------------------------
-    if (e1)
-    {
-        size_t s1 = fs::file_size(f1);
-        if (s1 + len <= max) return 1;
-        return 2;  // seq1 full → start seq2
-    }
-
-    // ---------------------------
-    // CASE 3 — No files exist
-    // ---------------------------
-    return 1;
-}
-
-size_t read_from_file(const char* dir, DataFile file, size_t len)
+uint64_t read_queue_offset(const std::string& offsetFile, uint8_t queueId)
 {
     using namespace std;
 
-    string f1 = make_filename(dir, file, 1);
-    string f2 = make_filename(dir, file, 2);
+    if (!fs::exists(offsetFile))
+        return 0;
 
-    bool e1 = fs::exists(f1);
-    bool e2 = fs::exists(f2);
+    ifstream ifs(offsetFile, ios::binary);
+    if (!ifs.is_open())
+        return 0;
 
-    cout << "Found: " << f1 << "\n";
-    cout << "Found: " << f2 << "\n";
+    QueueOffsetEntry entry{};
+    ifs.seekg(queueId * sizeof(QueueOffsetEntry), ios::beg);
+    ifs.read(reinterpret_cast<char*>(&entry), sizeof(entry));
 
-    size_t read_bytes = 0;
+    return entry.write_offset;
+}
 
-    // New output file (seq0)
-    string outFile = make_filename(STAGE_FILE_DOWNLOAD_DIR, file, 0);
-    cout << "Writing new combined data to: " << outFile << "\n";
+void write_queue_offset(const std::string& offsetFile,
+                        uint8_t queueId,
+                        uint64_t offset)
+{
+    using namespace std;
+
+    // Ensure file exists and is sized correctly
+    if (!fs::exists(offsetFile))
+    {
+        ofstream init(offsetFile, ios::binary | ios::trunc);
+        QueueOffsetEntry zero{};
+        for (size_t i = 0; i < MAX_QUEUES; i++)
+            init.write(reinterpret_cast<char*>(&zero), sizeof(zero));
+        init.close();
+    }
+
+    fstream fs(offsetFile, ios::binary | ios::in | ios::out);
+    QueueOffsetEntry entry{offset};
+
+    fs.seekp(queueId * sizeof(QueueOffsetEntry), ios::beg);
+    fs.write(reinterpret_cast<const char*>(&entry), sizeof(entry));
+    fs.close();
+}
+
+static std::string make_filename(const char* dir,  DataFile file)
+{
+    char buf[256];
+    snprintf(buf, sizeof(buf), "%s/%s%s",
+             dir, file.basename, file.extension);
+    return std::string(buf);
+}
+
+size_t read_rotating_queue_file(const char* dir,
+                                DataFile file,
+                                uint8_t queueId,
+                                const std::string& outFile)
+{
+    using namespace std;
+
+    string dataFile   = make_filename(dir, file);
+    string offsetFile = string(dir) + "/" + OFFSET_FILE;
+
+    if (!fs::exists(dataFile))
+        return 0;
+
+    size_t fileSize = fs::file_size(dataFile);
+    if (fileSize == 0)
+        return 0;
+
+    uint64_t offset = read_queue_offset(offsetFile, queueId);
+
+    // Safety clamp (corruption / partial write protection)
+    if (offset > fileSize)
+        offset = fileSize;
+
+    ifstream ifs(dataFile, ios::binary);
+    if (!ifs.is_open())
+        return 0;
 
     ofstream ofs(outFile, ios::binary | ios::trunc);
     if (!ofs.is_open())
-        return -1;
+        return 0;
 
-    // =====================================================================
-    // Single copy routine: read from OFFSET -> END of file and write to ofs
-    // =====================================================================
-    auto copy_offset_to_end = [&](const string& path, size_t offset) -> size_t {
-        if (!fs::exists(path)) return 0;
+    size_t totalRead = 0;
 
-        size_t size = fs::file_size(path);
-        if (size == 0 || offset >= size) return 0;
+    // ======================================================
+    // CASE 1: File not wrapped yet (size < MAX)
+    // Data is linear from 0 → offset
+    // ======================================================
+    if (fileSize < MAX_QUEUE_FILE_SIZE)
+    {
+        vector<uint8_t> buf(offset);
 
-        size_t toRead = size - offset;
-        vector<uint8_t> buf(toRead);
+        ifs.seekg(0, ios::beg);
+        ifs.read(reinterpret_cast<char*>(buf.data()), offset);
 
-        cout << "Reading " << toRead <<" bytes \n";
+        ofs.write(reinterpret_cast<char*>(buf.data()), offset);
+        totalRead = offset;
+    }
+    else
+    {
+        // ==================================================
+        // CASE 2: Wrapped circular buffer
+        // Oldest = offset
+        // ==================================================
+        size_t firstPart = fileSize - offset;
 
-        ifstream ifs(path, ios::binary);
-        if (!ifs.is_open()) return 0;
-
+        // Read oldest → end
+        vector<uint8_t> buf1(firstPart);
         ifs.seekg(offset, ios::beg);
-        ifs.read((char*)buf.data(), toRead);
+        ifs.read(reinterpret_cast<char*>(buf1.data()), firstPart);
+        ofs.write(reinterpret_cast<char*>(buf1.data()), firstPart);
 
-        ofs.write((char*)buf.data(), toRead);
+        totalRead += firstPart;
 
-        ifs.close();
-        return toRead;
-    };
+        // Read newest (0 → offset)
+        if (offset > 0)
+        {
+            vector<uint8_t> buf2(offset);
+            ifs.seekg(0, ios::beg);
+            ifs.read(reinterpret_cast<char*>(buf2.data()), offset);
+            ofs.write(reinterpret_cast<char*>(buf2.data()), offset);
 
-    // =====================================================================
-    // CASE 1: Both seq1 & seq2 exist
-    // =====================================================================
-    if (e1 && e2)
-    {
-        // determine newest / oldest by mtime (safe with error_code)
-        error_code ec1, ec2;
-        auto t1 = fs::last_write_time(f1, ec1);
-        auto t2 = fs::last_write_time(f2, ec2);
-
-        string newest = (t1 > t2 ? f1 : f2);
-        string oldest = (newest == f1 ? f2 : f1);
-
-        size_t newestSize = fs::file_size(newest);
-        size_t oldestSize = fs::file_size(oldest);
-
-        cout << "New File " << newest <<" has " << newestSize << "bytes\n";
-
-        // how many bytes we need from oldest to reach len when combined with newest
-        size_t needOld = 0;
-        if (newestSize < len)
-            needOld = len - newestSize;
-
-        // clamp needOld to what's actually available in oldest
-        if (needOld > oldestSize)
-            needOld = oldestSize;
-
-        // compute offset into oldest: read from (oldestSize - needOld) -> end
-        size_t oldestOffset = (needOld == 0) ? oldestSize : (oldestSize - needOld);
-        if (oldestOffset > oldestSize) oldestOffset = 0; // safety
-
-        cout << "Reading " << needOld <<" bytes from old datfile " << oldest << "\n";
-
-        // read ORDER: oldest (from offset) -> newest (from start)
-        read_bytes += copy_offset_to_end(oldest, oldestOffset);
-        read_bytes += copy_offset_to_end(newest, 0);
-
-        ofs.close();
-        cout << "Read " << read_bytes <<" bytes Total\n";
-        return read_bytes;
+            totalRead += offset;
+        }
     }
 
-    // =====================================================================
-    // CASE 2: Only seq1 exists → read from start to end
-    // =====================================================================
-    if (e1)
-    {
-        read_bytes = copy_offset_to_end(f1, 0);
-        ofs.close();
-        return read_bytes;
-    }
-
-    // =====================================================================
-    // CASE 3: None exist
-    // =====================================================================
+    ifs.close();
     ofs.close();
-    return read_bytes;
+
+    return totalRead;
 }
-
-
-
 
 /****************************************************************
  * WRITE ONE CHUNK
  * Directory may change every call depending on submodule
  ****************************************************************/
-void write_rotating_queue_file(const char* dir,
-                                DataFile file,
+AntarisReturnCode write_rotating_queue_file(const char* dir,
+                               DataFile file,
+                               uint8_t queueId,
                                uint8_t* data,
                                size_t len)
 {
+    using namespace std;
+
+    if (queueId >= MAX_QUEUES)
+        return An_NOT_PERMITTED;
+
     fs::create_directories(dir);
 
-    printf("File size %ld\n",file.maxsize);
-    // Figure out seq file
-    int seq = detect_seq_to_write(dir, file, len);
-    printf("Seg is %d\n",seq);
-    std::string fname = make_filename(dir, file, seq);
+    string dataFile = make_filename(dir, file);
+    string offsetFile = string(dir) + "/" + OFFSET_FILE;
 
-    bool exists = fs::exists(fname);
+    if (len > MAX_QUEUE_FILE_SIZE)
+        return An_NOT_PERMITTED;
 
-    std::ofstream ofs;
+    uint64_t offset = read_queue_offset(offsetFile, queueId);
+    cout << "Starting offset " << offset << endl;
 
-    if (!exists) {
-        // new file → truncate
-        ofs.open(fname, std::ios::binary | std::ios::trunc);
-    } else {
-        // append normally
-        ofs.open(fname, std::ios::binary | std::ios::app);
+    // Open data file (create if needed)
+    fstream fs(dataFile, ios::binary | ios::in | ios::out);
+    if (!fs.is_open())
+    {
+        fs.open(dataFile, ios::binary | ios::out | ios::trunc);
+        fs.close();
+        fs.open(dataFile, ios::binary | ios::in | ios::out);
     }
 
-    if (!ofs.is_open()) {
-        printf("ERROR: cannot open rotated file %s\n", fname.c_str());
-        return;
+    // ----------------------------------------------------
+    // Write with wrap-around
+    // ----------------------------------------------------
+    size_t firstChunk = min(len, MAX_QUEUE_FILE_SIZE - offset);
+    size_t secondChunk = len - firstChunk;
+
+    cout << "First Chuckk " << firstChunk  << "Second Chunk " << secondChunk << endl;
+
+    fs.seekp(offset, ios::beg);
+    fs.write(reinterpret_cast<const char*>(data), firstChunk);
+
+    if (secondChunk > 0)
+    {
+        fs.seekp(0, ios::beg);
+        fs.write(reinterpret_cast<const char*>(data + firstChunk), secondChunk);
     }
 
-    ofs.write(reinterpret_cast<const char*>(data), len);
-    ofs.close();
+    fs.close();
+
+    // Update offset
+    uint64_t newOffset = (offset + len) % MAX_QUEUE_FILE_SIZE;
+    cout << "End  offset " << newOffset << endl;
+    write_queue_offset(offsetFile, queueId, newOffset);
+
+    return An_SUCCESS;
 }
 

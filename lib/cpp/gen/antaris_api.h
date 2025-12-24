@@ -1320,7 +1320,7 @@ AntarisReturnCode
 api_pa_pc_hm_data_rsp
 (
     AntarisChannel                  channel,                         ///< @param channel context for API execution
-    RespStageHmData *               stage_hm_res                     ///< @param Message to SatOS from PA
+    RespStageHmData *               stage_hm_rsp                     ///< @param Message to SatOS from PA
 );
 
 

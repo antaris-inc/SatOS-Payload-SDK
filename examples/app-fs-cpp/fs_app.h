@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <stdint.h>
 #include <string.h>
+#include "antaris_api.h"
 #define MAX_EXTENSION 8
 #define MAX_BASE_NAME 64
 #define STAGE_FILE_DOWNLOAD_DIR         "/opt/antaris/outbound/"    // path for staged file download
@@ -19,13 +20,16 @@ typedef struct
 typedef struct {
     char basename[MAX_BASE_NAME];
     char extension[MAX_EXTENSION];
-    size_t maxsize;
 } DataFile;
 
-void write_rotating_queue_file(const char* dir,
-                                DataFile file,
+AntarisReturnCode write_rotating_queue_file(const char* dir,
+                               DataFile file,
+                               uint8_t queueId,
                                uint8_t* data,
                                size_t len);
 
-size_t read_from_file(const char* dir, DataFile file, size_t len);
+size_t read_rotating_queue_file(const char* dir,
+                                DataFile file,
+                                uint8_t queueId,
+                                const std::string& outFile);
 #endif

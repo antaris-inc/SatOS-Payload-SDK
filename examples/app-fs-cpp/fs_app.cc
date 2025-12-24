@@ -56,7 +56,7 @@
 #define SEND_MSG_LIMIT 10
 #define MAX_PAYLOAD_DATA_SIZE 1020
 
-const char *submodule_names[] = {"eps", "adcs", "comms_sband", "comms_uhf", "sensors", "obc", "error_handler", "gnss", "xband1", "xband2", "thruster", "fdir"};
+const char *submodule_names[] = {"eps", "adcs", "comms_sband", "comms_uhf", "sensors", "obc", "error_handler", "gnss", "xband1", "xband2", "thruster", "fdir","ps","es"};
 
 
 /*
@@ -495,6 +495,7 @@ AntarisReturnCode process_response_pa_satos_msg(RespPaSatOsMsg *resp_pa_satos_me
 AntarisReturnCode process_satos_pa_msg_reg(SatOsPaMsg *pa_satos_message)
 {
     char dir_path[256];
+    AntarisReturnCode ret = An_SUCCESS;
     // char dir_path[256];
    // printf("Command id = %hu , status = %d\n", resp_pa_satos_message->command_id, resp_pa_satos_message->req_status);
     if (debug) {
@@ -508,25 +509,21 @@ AntarisReturnCode process_satos_pa_msg_reg(SatOsPaMsg *pa_satos_message)
     //check if submodule id, message type and message are within the expexted range
     if (file.sub_id < 0 || file.sub_id >= sizeof(submodule_names) / sizeof(submodule_names[0])) {
         printf("Invalid submodule\n");
-        _exit(-1);
+        return An_NOT_PERMITTED;
     }
 
     snprintf(file_name.basename, sizeof(file_name.basename), "queue%d",file.queue_id);
     snprintf(file_name.extension, sizeof(file_name.extension), ".bin");
-    file_name.maxsize = (20 * 1024 * 1024); // set max file size as 5MB
-    printf("file max size %d\n",file_name.maxsize);
 
     snprintf(dir_path, sizeof(dir_path), "%s/%s",HM_FILES_PARENT_DIR, submodule_names[file.sub_id]);
     // open the dir and search for file name 
 
-    write_rotating_queue_file(dir_path,
-                          file_name,
+    ret = write_rotating_queue_file(dir_path,
+                          file_name,file.queue_id,
                           (uint8_t*)pa_satos_message->payload_data + sizeof(file_info),
                           file.data_len);
 
-    // #<Payload Application Business Logic>
-    wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
-    return An_SUCCESS;
+    return ret;
 }
 
 
@@ -534,13 +531,14 @@ AntarisReturnCode process_stage_hm_data_reg(StageHmData *hm_data_stage)
 {
     AntarisReturnCode ret;
     char dir_path[256];
+    char outFile[256];
+    using namespace std;
 
     if (debug) {
         displayStageHmData(hm_data_stage);
     }
     printf("Processing stage HM data \n");
 
-    printf("Sub id %d; queue id %d; pri %d, band %d\n",hm_data_stage->submod_id,hm_data_stage->queue_id, hm_data_stage->file_pri, hm_data_stage->dl_band );
     if (hm_data_stage->submod_id< 0 || hm_data_stage->submod_id >= sizeof(submodule_names) / sizeof(submodule_names[0])) {
         printf("Invalid submodule\n");
         ret = An_GENERIC_FAILURE;
@@ -551,15 +549,16 @@ AntarisReturnCode process_stage_hm_data_reg(StageHmData *hm_data_stage)
     DataFile file_name;
     snprintf(file_name.basename, sizeof(file_name.basename), "queue%d",hm_data_stage->queue_id);
     snprintf(file_name.extension, sizeof(file_name.extension), ".bin");
-    file_name.maxsize = (20 * 1024* 1024); // set max file size as 20MB
 
     snprintf(dir_path, sizeof(dir_path), "%s/%s",HM_FILES_PARENT_DIR, submodule_names[hm_data_stage->submod_id]);
-    printf("dir path  %s\n", dir_path);
-    size_t read_bytes =  read_from_file(dir_path,file_name, 20* 1024*1024);
-    printf("bytes read %ld\n", read_bytes);
-
-    snprintf(download_file_params.file_path, sizeof(download_file_params.file_path), "%s_seq%d%s",
-             file_name.basename, 0, file_name.extension);
+    snprintf(outFile, sizeof(outFile), "%s%s_%s%s",STAGE_FILE_DOWNLOAD_DIR, submodule_names[hm_data_stage->submod_id],
+    file_name.basename,file_name.extension);
+    size_t read_bytes =  read_rotating_queue_file(dir_path,file_name,hm_data_stage->queue_id,outFile);
+    if(read_bytes <= 0 ){
+        return An_GENERIC_FAILURE;
+    }
+    snprintf(download_file_params.file_path, sizeof(download_file_params.file_path), "%s_%s%s",
+            submodule_names[hm_data_stage->submod_id],file_name.basename,file_name.extension);
 
     download_file_params.file_priority =(FilePriorities)hm_data_stage->file_pri;
     download_file_params.file_dl_band = (FileDlRadioType)hm_data_stage->dl_band;
@@ -567,12 +566,10 @@ AntarisReturnCode process_stage_hm_data_reg(StageHmData *hm_data_stage)
     // Staging file
     ret = api_pa_pc_stage_file_download(channel, &download_file_params);
 
-    if (ret == An_GENERIC_FAILURE) {
+    if (ret != An_SUCCESS) {
         printf("Error: Failed to stage file %s \n", download_file_params.file_path);
     }
 
-    // #<Payload Application Business Logic>
-    wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
     return ret;
 }
 

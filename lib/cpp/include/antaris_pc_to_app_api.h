@@ -79,6 +79,7 @@ typedef union {
     AntarisAppSdkVersion_t          sdk_version;
     HostToPeerFcmOperation          pstoes_fcm_operation;
     RespSatOsPaMsg                  resp_satos_pa_msg;
+    RespStageHmData                 resp_stage_hm_file;
 } AppToPCCallbackParams_t;
 
 typedef    UINT16 SHORT_APP_ID_t;
