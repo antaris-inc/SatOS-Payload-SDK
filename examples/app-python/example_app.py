@@ -55,6 +55,17 @@ logger = logging.getLogger()
 
 class Controller:
 
+    # After payload app successfully registered to PC, then this callback is called
+    def post_registration_func(self, client):
+        logger.info("Callback to perform post registration activities")
+        command = 1  # UINT16 dummy command
+        payload_data = bytes([0x12, 0x34, 0x56])  # Can be up to 1020 bytes
+
+        resp = client.pa_satos_message(command, payload_data)
+        logger.info(f"Command id = {resp.command_id} , status = {resp.req_status}")
+
+        return True
+
     def is_healthy(self):
         logger.info("Health check succeeded")
         return True
@@ -544,6 +555,7 @@ def new():
     ctl = Controller()
 
     app = app_framework.PayloadApplication()
+    app.set_post_registration_cb(ctl.post_registration_func)   # Registering post registration callback 
     app.set_health_check(ctl.is_healthy)
     app.set_gnss_eph_data_cb(ctl.gnss_eph_data_handler)
     app.set_get_eps_voltage_cb(ctl.get_eps_voltage_handler)
