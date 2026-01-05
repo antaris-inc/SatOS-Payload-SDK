@@ -135,7 +135,7 @@ class SequenceHandler(Stoppable, threading.Thread):
 
 
 class ChannelClient:
-    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb, ses_thermal_ntf_cb, remote_ac_power_on_ntf, payload_power_control_request_status, process_notify_fcm_operation_cb, process_post_reg_db):
+    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb, ses_thermal_ntf_cb, remote_ac_power_on_ntf, payload_power_control_request_status, process_notify_fcm_operation_cb, process_post_reg_cb):
         self._channel = None
         self._cond = threading.Condition()
         self._next_cid = 0
@@ -167,7 +167,7 @@ class ChannelClient:
             'PaSatOsMsg': self._handle_response,
             'RemoteAcPowerStatusNtf': remote_ac_power_on_ntf,
             'FcmOperationNotify': process_notify_fcm_operation_cb,
-            'PostRegistrationCb' : process_post_reg_db
+            'PostRegistrationCb' : process_post_reg_cb
         }
 
     def _get_next_cid(self):
