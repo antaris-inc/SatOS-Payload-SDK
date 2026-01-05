@@ -135,7 +135,7 @@ class SequenceHandler(Stoppable, threading.Thread):
 
 
 class ChannelClient:
-    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb, ses_thermal_ntf_cb, remote_ac_power_on_ntf, payload_power_control_request_status, process_notify_fcm_operation_cb):
+    def __init__(self, start_sequence_cb, health_check_cb, shutdown_cb, req_payload_metrics_cb, gnss_eph_data_cb, get_eps_voltage_cb, ses_thermal_ntf_cb, remote_ac_power_on_ntf, payload_power_control_request_status, process_notify_fcm_operation_cb, process_post_reg_cb):
         self._channel = None
         self._cond = threading.Condition()
         self._next_cid = 0
@@ -166,7 +166,8 @@ class ChannelClient:
             'SesThrmlStsNtf': ses_thermal_ntf_cb,
             'PaSatOsMsg': self._handle_response,
             'RemoteAcPowerStatusNtf': remote_ac_power_on_ntf,
-            'FcmOperationNotify': process_notify_fcm_operation_cb
+            'FcmOperationNotify': process_notify_fcm_operation_cb,
+            'PostRegistrationCb' : process_post_reg_cb
         }
 
     def _get_next_cid(self):
@@ -492,6 +493,9 @@ class PayloadApplication(Stoppable):
         # index of registered sequence handler funcs
         self.sequence_handler_func_idx = dict()
 
+        # post registration callback function
+        self._post_registration_cb = lambda: True
+
         # default health check; can be overridden
         self.health_check_handler_func = lambda: True
         
@@ -519,6 +523,10 @@ class PayloadApplication(Stoppable):
     # to represent health check success or failure, respectively
     def set_health_check(self, health_check_handler_func):
         self.health_check_handler_func = health_check_handler_func
+
+    # Provided function should expect no arguments and return True or False
+    def set_post_registration_cb(self, set_post_registration_func):
+        self._post_registration_cb = set_post_registration_func
 
     # Provided function should expect no arguments and return True or False
     # to represent gnss eph data handling, respectively
@@ -567,9 +575,11 @@ class PayloadApplication(Stoppable):
         logger.info("payload app starting")
 
         if not self.channel_client:
-            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb, self._set_get_eps_voltage_cb, self._set_ses_thermal_status_ntf, self._remote_ac_power_on_ntf, self._payload_power_control_request_status, self._set_process_notify_fcm_operation_cb)
+            self.channel_client = ChannelClient(self.start_sequence, self._handle_health_check, self._handle_shutdown, self._req_payload_metrics, self._set_gnss_eph_data_cb, self._set_get_eps_voltage_cb, self._set_ses_thermal_status_ntf, self._remote_ac_power_on_ntf, self._payload_power_control_request_status, self._set_process_notify_fcm_operation_cb, self._set_post_registration_cb)
         
         self.channel_client._connect()
+
+        self._post_registration_cb(self.channel_client)
 
         logger.info("payload app running")
 
@@ -665,6 +675,13 @@ class PayloadApplication(Stoppable):
             logger.error("sequence_done request failed: resp=%d" % resp)
 
         return api_types.AntarisReturnCode.An_SUCCESS
+
+    def _set_post_registration_cb(self, params):
+        logger.info("Handling post registration callback")
+        try:
+            hv = self.set_post_registration_cb(params)
+        except:
+            logger.exception("Post registration callback failed")
 
     def _set_gnss_eph_data_cb(self, params):
         logger.info("Handling GNSS EPH data")
