@@ -63,9 +63,7 @@
 #define ReadAcIp_IDX                    13
 #define FCM_ID                          "FCMStart"
 #define FCM_IDX                         14
-#define SatosPaMsg_ID                   "SatOsPaMsg"
-#define SatosPaMsg_IDX                  15
-#define SEQUENCE_ID_MAX                 16
+#define SEQUENCE_ID_MAX                 15
 
 #define APP_STATE_ACTIVE                0  // Application State : Good (0), Error (non-Zero)
 
@@ -807,25 +805,6 @@ void handle_fcm_start_operation(mythreadState_t *mythread){
 
 }
 
-void handle_satos_pa_message(mythreadState_t *mythread){
-
-    printf("Handling SatOS->PA message");
-    AntarisReturnCode ret;
-
-    // Tell PC that current sequence is done
-    CmdSequenceDoneParams sequence_done_params = {0};
-    strcpy(&sequence_done_params.sequence_id[0], SatosPaMsg_ID);
-    ret = api_pa_pc_sequence_done(channel, &sequence_done_params);
-
-    printf("%s: sent sequence-done notification with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
-    if (An_SUCCESS != ret) {
-        fprintf(stderr, "%s: api_pa_pc_sequence_done failed, ret %d\n", __FUNCTION__, ret);
-        _exit(-1);
-    } else {
-        printf("%s: api_pa_pc_sequence_done returned success, ret %d\n", __FUNCTION__, ret);
-    }
-
-}
 
 void handle_ac_ip_read(mythreadState_t *mythread){
 
@@ -1480,7 +1459,6 @@ int main(int argc, char *argv[])
     payload_sequences_fsms[PaSatosMsg_IDX] = fsmThreadCreate(channel, 1, PaSatosMsg_ID, handle_pa_satos_message);
     payload_sequences_fsms[ReadAcIp_IDX] = fsmThreadCreate(channel, 1, ReadAcIp_ID, handle_ac_ip_read);
     payload_sequences_fsms[FCM_IDX] = fsmThreadCreate(channel, 1, FCM_ID, handle_fcm_start_operation);
-    payload_sequences_fsms[SatosPaMsg_IDX] = fsmThreadCreate(channel, 1, SatosPaMsg_ID, handle_satos_pa_message);
 
     // Register application with PC
     // 2nd parameter decides PC's action on PA's health check failure
@@ -1555,9 +1533,6 @@ int main(int argc, char *argv[])
         pthread_join(payload_sequences_fsms[FCM_IDX]->thread_id, &exit_status);
     }
 
-    if (strcmp(payload_sequences_fsms[SatosPaMsg_IDX]->state, "NOT_STARTED") != 0) {
-        pthread_join(payload_sequences_fsms[SatosPaMsg_IDX]->thread_id, &exit_status);
-    }
     
     printf("Cleaning up sequence resources\n");
 
@@ -1574,7 +1549,6 @@ int main(int argc, char *argv[])
     fsmThreadCleanup(payload_sequences_fsms[PaSatosMsg_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[ReadAcIp_IDX]);
     fsmThreadCleanup(payload_sequences_fsms[FCM_IDX]);
-    fsmThreadCleanup(payload_sequences_fsms[SatosPaMsg_IDX]);
 
     // Delete Channel
     api_pa_pc_delete_channel(channel);
