@@ -513,6 +513,31 @@ class PCServiceClient {
     return tmp_return;
   }
 
+  AntarisReturnCode Invoke_PC_satos_pa_message(RespSatOsPaMsg *req_params) {
+    antaris_api_peer_to_peer::RespSatOsPaMsg pc_req;
+    antaris_api_peer_to_peer::AntarisReturnType pc_response;
+    Status pc_status;
+    // Context for the client. It could be used to convey extra information to
+    // the server and/or tweak certain RPC behaviors.
+    ClientContext context;
+
+    app_to_peer_RespSatOsPaMsg(req_params, &pc_req);
+    context.AddMetadata(COOKIE_STR, this->cookie_str);
+
+    pc_status = stub_->PC_satos_pa_message(&context, pc_req, &pc_response);
+
+    AntarisReturnCode tmp_return;
+
+    // Act upon its status.
+    if (pc_status.ok()) {
+         tmp_return = (AntarisReturnCode)(pc_response.return_code());
+    } else {
+        tmp_return = An_GENERIC_FAILURE;
+    }
+
+    return tmp_return;
+  }
+
  private:
   std::unique_ptr<antaris_api_peer_to_peer::AntarisapiPayloadController::Stub> stub_;
   char cookie_str[COOKIE_LEN+1];
@@ -564,6 +589,8 @@ public:
     Status PA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::NtfRemoteAcPwrStatus* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
     
     Status PA_ProcessHostToPeerFcmOperationNotify(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::HostToPeerFcmOperationNotify* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
+    Status PA_ProcessSatOsPaMsg(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
 public:
 
@@ -892,6 +919,21 @@ Status AppCallbackServiceImpl::PA_ProcessRemoteAcPwrStatusNtf(::grpc::ServerCont
     if (client_channel_ctx_->callbacks.process_remote_ac_power_on_ntf) {
         peer_to_app_NtfRemoteAcPwrStatus((void *)request, &app_request);
         app_ret = client_channel_ctx_->callbacks.process_remote_ac_power_on_ntf(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+
+Status AppCallbackServiceImpl::PA_ProcessSatOsPaMsg(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    SatOsPaMsg app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+    if (client_channel_ctx_->callbacks.process_satos_pa_msg) {
+        peer_to_app_SatOsPaMsg((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_satos_pa_msg(&app_request);
     }
 
     response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
@@ -1442,6 +1484,25 @@ AntarisReturnCode api_pa_pc_host_to_peer_fcm_operation(AntarisChannel channel, H
         displayPayloadMetricsResponse(pstoes_fcm_operation);
     }
     return channel_ctx->pc_service_handle->Invoke_PC_pa_pstoes_fcm_operation(pstoes_fcm_operation);
+}
+
+AntarisReturnCode api_pa_pc_satos_pa_message(AntarisChannel channel, RespSatOsPaMsg *response_satos_pa_params)
+{
+    AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
+    AntarisReturnCode ret = An_SUCCESS;
+
+    printf("SatOsPaMsg\n");
+
+    if (!channel_ctx || !channel_ctx->pc_service_handle || !response_satos_pa_params) {
+        ret = An_GENERIC_FAILURE;
+        return ret;
+    }
+
+    if (api_debug) {
+        displayRespShutdownParams(response_satos_pa_params);
+    }
+
+    return channel_ctx->pc_service_handle->Invoke_PC_satos_pa_message(response_satos_pa_params);
 }
 
 } // extern C
