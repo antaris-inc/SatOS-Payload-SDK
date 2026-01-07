@@ -156,9 +156,7 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
     printf("Download file path: %s\n", download_file_params->file_path);
 
     // Construct the full source path for verification
-    len = strlen(FILE_DOWNLOAD_DIR) +
-             strlen(download_file_params->file_path) + 1;
-
+    len = strlen(FILE_DOWNLOAD_DIR) + strlen(download_file_params->file_path) + 1;
     if (len > sizeof(full_source_path)) {
         printf("Error: File path too long\n");
         exit_status = An_GENERIC_FAILURE;
