@@ -494,7 +494,7 @@ class PayloadApplication(Stoppable):
         self.sequence_handler_func_idx = dict()
 
         # post registration callback function
-        self._post_registration_cb = lambda: True
+        self._post_registration_cb = lambda channel_client: True
 
         # default health check; can be overridden
         self.health_check_handler_func = lambda: True
@@ -679,7 +679,7 @@ class PayloadApplication(Stoppable):
     def _set_post_registration_cb(self, params):
         logger.info("Handling post registration callback")
         try:
-            hv = self.set_post_registration_cb(params)
+            hv = self._post_registration_cb(params)
         except:
             logger.exception("Post registration callback failed")
 
