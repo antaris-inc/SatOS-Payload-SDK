@@ -805,6 +805,7 @@ void handle_fcm_start_operation(mythreadState_t *mythread){
 
 }
 
+
 void handle_ac_ip_read(mythreadState_t *mythread){
 
     AntarisReturnCode ret;
@@ -1261,6 +1262,20 @@ AntarisReturnCode process_response_get_eps_voltage_start(RespGetEpsVoltageStartR
     }
 }
 
+AntarisReturnCode process_satos_pa_msg_reg(SatOsPaMsg *pa_satos_message)
+{
+    AntarisReturnCode ret = An_SUCCESS;
+    if (debug) {
+        displaySatOsPaMsg(pa_satos_message);
+    }
+    printf("Processing SatOS-> PA message \n");
+
+    // #<Payload Application Business Logic>
+    wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
+
+    return ret;
+}
+
 AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
 {
     printf("process_response_gnss_eph_data\n");
@@ -1417,6 +1432,7 @@ int main(int argc, char *argv[])
             process_cb_ses_thrml_ntf: process_response_thrml_ntf,
             process_pa_satos_msg_response: process_response_pa_satos_msg,
             process_host_to_peer_fcm_operation_notify: process_response_fcm_operation,
+            process_satos_pa_msg: process_satos_pa_msg_reg,
     };
 
     // Create Channel to talk to Payload Controller (PC)
@@ -1516,6 +1532,7 @@ int main(int argc, char *argv[])
     if (strcmp(payload_sequences_fsms[FCM_IDX]->state, "NOT_STARTED") != 0) {
         pthread_join(payload_sequences_fsms[FCM_IDX]->thread_id, &exit_status);
     }
+
     
     printf("Cleaning up sequence resources\n");
 
