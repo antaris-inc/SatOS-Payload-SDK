@@ -60,6 +60,7 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
     char full_source_path[MAX_FILE_OR_PROP_LEN_NAME] = {'\0'};
     size_t remaining_length = 0;
     size_t len = 0;
+    size_t base_len = strlen(FILE_DOWNLOAD_DIR);
 
     read_config_json(&p_cJson);
     if (p_cJson == NULL)  {
@@ -154,15 +155,11 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
     }
 
     printf("Download file path: %s\n", download_file_params->file_path);
-
     // Construct the full source path for verification
     len = strlen(FILE_DOWNLOAD_DIR) + strlen(download_file_params->file_path) + 1;
-    if (len > sizeof(full_source_path)) {
-        printf("Error: File path too long\n");
-        exit_status = An_GENERIC_FAILURE;
-        goto cleanup_and_exit;
-    }
-    snprintf(full_source_path,  sizeof(full_source_path), "%s%s", FILE_DOWNLOAD_DIR, download_file_params->file_path);
+    memcpy(full_source_path, FILE_DOWNLOAD_DIR, base_len);
+    full_source_path[base_len] = '\0';
+    snprintf(full_source_path + base_len, sizeof(full_source_path) - base_len, "%s", download_file_params->file_path);
     if (access(full_source_path, F_OK) != 0) {
         printf("Error: File not found at %s\n", full_source_path);
         exit_status = An_GENERIC_FAILURE;
