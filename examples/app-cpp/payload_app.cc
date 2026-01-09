@@ -976,26 +976,6 @@ AntarisReturnCode start_sequence(StartSequenceParams *start_seq_param)
     return An_SUCCESS;
 }
 
-void *post_registration_func(void *arg)
-{
-    printf("Callback to perform post registration activities");
-    AntarisReturnCode ret;
-    UINT16 command = 1;  // command ID
-    INT8 Payload_data[MAX_PAYLOAD_DATA_SIZE] = { 0x12, 0x34, 0x56 };  // Can be up to 1020 bytes
-    PaSatOsMsg pa_satos_msg = {0};
-    pa_satos_msg.correlation_id = (unsigned short int)(uintptr_t)arg;
-    pa_satos_msg.command_id = command;
-    memcpy(&pa_satos_msg.payload_data,Payload_data,sizeof(Payload_data));
-    ret = api_pa_pc_pa_satos_message(channel, &pa_satos_msg);
-    if(ret == An_SUCCESS){
-        printf("Pa SatOS message success, ret %d\n",ret);
-    }
-    else{
-        fprintf(stderr, " Pa SatOS message failed, ret %d\n", ret);
-    }
-    return NULL;
-}
-
 void wakeup_seq_fsm(mythreadState_t *threadState)
 {   
     if (threadState == NULL) {
@@ -1473,21 +1453,6 @@ int main(int argc, char *argv[])
     ret = api_pa_pc_register(channel, &register_params);
     printf("api_pa_pc_register returned %d (%s)\n", ret, ret == An_SUCCESS ? "SUCCESS" : "FAILURE");
     correlation_id += 1;
-    if(ret == An_SUCCESS){
-        // post registration callback is implemented
-        pthread_t post_reg_thread;
-        pthread_attr_t attr;
-
-        pthread_attr_init(&attr);
-        pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-
-        pthread_create(&post_reg_thread,
-                    &attr,
-                    post_registration_func,
-                    (void *)(uintptr_t)correlation_id);
-
-        pthread_attr_destroy(&attr);
-    }
 
     // After registration, simulated PC will ask application to start sequence HelloWorld
 
