@@ -534,7 +534,7 @@ void peer_to_app_RespGetCurrentLocationParams(const void *ptr_src_peer, void *pt
 /// @brief Request parameters to stage file download
 struct ReqStageFileDownloadParams {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
-    INT8                                            file_path[256];                                  ///< @var File path relative to outbound mount-point
+    INT8                                            file_path[128];                                  ///< @var File path relative to outbound mount-point
     FilePriorities                                  file_priority;                                   ///< @var File priority
     FileDlRadioType                                 file_dl_band;                                    ///< @var Radio Type for file downlink 
 };
