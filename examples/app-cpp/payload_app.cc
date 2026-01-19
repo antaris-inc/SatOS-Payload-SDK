@@ -389,7 +389,7 @@ void handle_StageFile(mythreadState_t *mythread)
 
     filename_size = strnlen(STAGE_FILE_NAME, MAX_FILE_OR_PROP_LEN_NAME);
 
-    if (filename_size > MAX_FILE_OR_PROP_LEN_NAME) {
+    if (filename_size >= MAX_FILE_OR_PROP_LEN_NAME) {
         printf("Error: Stagefile path can not be greater than %d \n", MAX_FILE_OR_PROP_LEN_NAME);
         goto exit_sequence;
     }

@@ -14,7 +14,8 @@
 #define __ANTARIS_SDK_ENVINRONMENT__
 
 #include "cJSON.h"
-#define MAX_FILE_OR_PROP_LEN_NAME       256
+#define MAX_FILE_OR_PROP_LEN_NAME       128
+#define MAX_FULL_SRC_PATH               256
 #define MAX_IP_OR_PORT_LENGTH           32
 
 /* refresh config by considering environment and config file */

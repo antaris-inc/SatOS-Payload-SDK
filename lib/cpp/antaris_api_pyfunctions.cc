@@ -57,7 +57,7 @@ AntarisReturnCode AntarisApiPyFunctions::api_pa_pc_staged_file(cJSON *p_cJson, R
     char *g_Truetwin_Dir = NULL;
     char *g_Share_Name = NULL;
     char dst_file_name[MAX_FILE_OR_PROP_LEN_NAME] = {'\0'};
-    char full_source_path[MAX_FILE_OR_PROP_LEN_NAME] = {'\0'};
+    char full_source_path[MAX_FULL_SRC_PATH] = {'\0'};
     size_t remaining_length = 0;
 
     read_config_json(&p_cJson);
