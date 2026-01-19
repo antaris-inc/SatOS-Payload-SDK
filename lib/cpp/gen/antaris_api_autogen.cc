@@ -299,7 +299,7 @@ displayReqStageFileDownloadParams(const void *obj)
     printf("correlation_id ==>\n");
     displayUINT16((void *)&p->correlation_id);
     printf("file_path ==>\n");
-    for (int i = 0; i < 128; i++) {
+    for (int i = 0; i < 192; i++) {
         displayINT8((void *)&p->file_path[i]);
     }
 
@@ -344,12 +344,12 @@ peer_to_app_ReqStageFileDownloadParams(const void *ptr_src_peer, void *ptr_dst_a
     ::antaris_api_peer_to_peer::ReqStageFileDownloadParams *src = (::antaris_api_peer_to_peer::ReqStageFileDownloadParams *)ptr_src_peer;
 
     dst->correlation_id = src->correlation_id();
-    size_t file_path_length = strnlen(src->file_path().c_str(), 128);
-    if ( file_path_length >= 128 ) {
-        printf("Error:  file_path_length should be less than 128 \n");
+    size_t file_path_length = strnlen(src->file_path().c_str(), 192);
+    if ( file_path_length >= 192 ) {
+        printf("Error:  file_path_length should be less than 192 \n");
         return;
     }
-    strncpy(&dst->file_path[0], src->file_path().c_str(), 128);
+    strncpy(&dst->file_path[0], src->file_path().c_str(), 192);
     dst->file_priority = (FilePriorities)src->file_priority();
     dst->file_dl_band = (FileDlRadioType)src->file_dl_band();
 
