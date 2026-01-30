@@ -1325,13 +1325,15 @@ def app_to_peer_AdcsEphemerisData(app_struct):
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
 ## @param: adcs_eph_data                                   :    ADCS data                                       
 ## @param: gps_eph_data                                    :    GPS data                                        
+## @param: obc_time                                        :    Obc time                                        
 ## @param: adcs_timeout_flag                               :    ADCS flag                                       
 ## @param: gps_timeout_flag                                :    GPS flag                                        
 class GnssEphData:
-    def __init__(self, correlation_id, adcs_eph_data, gps_eph_data, adcs_timeout_flag, gps_timeout_flag):
+    def __init__(self, correlation_id, adcs_eph_data, gps_eph_data, obc_time, adcs_timeout_flag, gps_timeout_flag):
         self.correlation_id = correlation_id
         self.adcs_eph_data = adcs_eph_data
         self.gps_eph_data = gps_eph_data
+        self.obc_time = obc_time
         self.adcs_timeout_flag = adcs_timeout_flag
         self.gps_timeout_flag = gps_timeout_flag
 
@@ -1343,6 +1345,8 @@ class GnssEphData:
         ret_str += str(self.adcs_eph_data) + "\n"
         ret_str += "gps_eph_data:\n"
         ret_str += str(self.gps_eph_data) + "\n"
+        ret_str += "obc_time:\n"
+        ret_str += str(self.obc_time) + "\n"
         ret_str += "adcs_timeout_flag:\n"
         ret_str += str(self.adcs_timeout_flag) + "\n"
         ret_str += "gps_timeout_flag:\n"
@@ -1357,12 +1361,13 @@ def peer_to_app_GnssEphData(peer_struct):
     correlation_id = peer_struct.correlation_id
     adcs_eph_data = peer_struct.adcs_eph_data
     gps_eph_data = peer_struct.gps_eph_data
+    obc_time = peer_struct.obc_time
     adcs_timeout_flag = peer_struct.adcs_timeout_flag
     gps_timeout_flag = peer_struct.gps_timeout_flag
-    return GnssEphData(correlation_id, adcs_eph_data, gps_eph_data, adcs_timeout_flag, gps_timeout_flag)
+    return GnssEphData(correlation_id, adcs_eph_data, gps_eph_data, obc_time, adcs_timeout_flag, gps_timeout_flag)
 
 def app_to_peer_GnssEphData(app_struct):
-    return antaris_api_pb2.GnssEphData(correlation_id = app_struct.correlation_id, adcs_eph_data = app_struct.adcs_eph_data, gps_eph_data = app_struct.gps_eph_data, adcs_timeout_flag = app_struct.adcs_timeout_flag, gps_timeout_flag = app_struct.gps_timeout_flag)
+    return antaris_api_pb2.GnssEphData(correlation_id = app_struct.correlation_id, adcs_eph_data = app_struct.adcs_eph_data, gps_eph_data = app_struct.gps_eph_data, obc_time = app_struct.obc_time, adcs_timeout_flag = app_struct.adcs_timeout_flag, gps_timeout_flag = app_struct.gps_timeout_flag)
 
 ## @class: ReqGetEpsVoltageStopReq
 ## @brief: Stop request get-eps-voltage

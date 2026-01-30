@@ -2075,6 +2075,8 @@ displayGnssEphData(const void *obj)
     displayAdcsEphemerisData((void *)&p->adcs_eph_data);
     printf("gps_eph_data ==>\n");
     displayGpsEphemerisData((void *)&p->gps_eph_data);
+    printf("obc_time ==>\n");
+    displayOBC_time((void *)&p->obc_time);
     printf("adcs_timeout_flag ==>\n");
     displayUINT8((void *)&p->adcs_timeout_flag);
     printf("gps_timeout_flag ==>\n");
@@ -2091,6 +2093,7 @@ app_to_peer_GnssEphData(const void *ptr_src_app, void *ptr_dst_peer)
     UINT32 __tmp_correlation_id = 0;
     AdcsEphemerisData __tmp_adcs_eph_data;
     GpsEphemerisData __tmp_gps_eph_data;
+    OBC_time __tmp_obc_time;
     UINT32 __tmp_adcs_timeout_flag = 0;
     UINT32 __tmp_gps_timeout_flag = 0;
 
@@ -2101,6 +2104,8 @@ app_to_peer_GnssEphData(const void *ptr_src_app, void *ptr_dst_peer)
     app_to_peer_AdcsEphemerisData(&src->adcs_eph_data, dst->mutable_adcs_eph_data()); // adcs_eph_data
 
     app_to_peer_GpsEphemerisData(&src->gps_eph_data, dst->mutable_gps_eph_data()); // gps_eph_data
+
+    app_to_peer_OBC_time(&src->obc_time, dst->mutable_obc_time()); // obc_time
 
     app_to_peer_UINT8(&src->adcs_timeout_flag, &__tmp_adcs_timeout_flag); // adcs_timeout_flag
 
@@ -2124,6 +2129,8 @@ peer_to_app_GnssEphData(const void *ptr_src_peer, void *ptr_dst_app)
     peer_to_app_AdcsEphemerisData(&src->adcs_eph_data(), mutable_adcs_eph_data);
     GpsEphemerisData *mutable_gps_eph_data = &dst->gps_eph_data;
     peer_to_app_GpsEphemerisData(&src->gps_eph_data(), mutable_gps_eph_data);
+    OBC_time *mutable_obc_time = &dst->obc_time;
+    peer_to_app_OBC_time(&src->obc_time(), mutable_obc_time);
     dst->adcs_timeout_flag = src->adcs_timeout_flag();
     dst->gps_timeout_flag = src->gps_timeout_flag();
 

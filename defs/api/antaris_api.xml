@@ -295,10 +295,11 @@
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="adcs_eph_data" type="AdcsEphemerisData" sequence="2" description="ADCS data"/>
             <Field name="gps_eph_data" type="GpsEphemerisData" sequence="3" description="GPS data"/>
-            <Field name="adcs_timeout_flag" type="UINT8" sequence="4" description="ADCS flag"/>
-            <Field name="gps_timeout_flag" type="UINT8" sequence="5" description="GPS flag"/>
+            <Field name="obc_time" type="OBC_time" sequence="4" description="Obc time"/>
+            <Field name="adcs_timeout_flag" type="UINT8" sequence="5" description="ADCS flag"/>
+            <Field name="gps_timeout_flag" type="UINT8" sequence="6" description="GPS flag"/>
         </Struct>
-    
+
         <Struct name="ReqGetEpsVoltageStopReq" description="Stop request get-eps-voltage">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
         </Struct>

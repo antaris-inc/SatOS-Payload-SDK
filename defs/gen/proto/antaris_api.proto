@@ -308,8 +308,9 @@ message GnssEphData {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     AdcsEphemerisData               adcs_eph_data    = 2; // ADCS data
     GpsEphemerisData                gps_eph_data     = 3; // GPS data
-    int32                           adcs_timeout_flag = 4; // ADCS flag
-    int32                           gps_timeout_flag = 5; // GPS flag
+    OBC_time                        obc_time         = 4; // Obc time
+    int32                           adcs_timeout_flag = 5; // ADCS flag
+    int32                           gps_timeout_flag = 6; // GPS flag
 }
 
 message ReqGetEpsVoltageStopReq {

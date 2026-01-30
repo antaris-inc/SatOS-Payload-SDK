@@ -891,6 +891,7 @@ struct GnssEphData {
     UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
     AdcsEphemerisData                               adcs_eph_data;                                   ///< @var ADCS data
     GpsEphemerisData                                gps_eph_data;                                    ///< @var GPS data
+    OBC_time                                        obc_time;                                        ///< @var Obc time
     UINT8                                           adcs_timeout_flag;                               ///< @var ADCS flag
     UINT8                                           gps_timeout_flag;                                ///< @var GPS flag
 };
