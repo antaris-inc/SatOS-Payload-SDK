@@ -251,10 +251,9 @@
         <Struct name="GpsEphemerisData" description="GNSS Eph1/Eph2 data">
             <Field name="gps_fix_time" type="UINT64" sequence="1" description="GPS time"/>
             <Field name="gps_sys_time" type="UINT64" sequence="2" description="GPS System time"/>
-            <Field name="obc_time" type="OBC_time" sequence="3" description="OBC time"/>
-            <Field name="gps_position_ecef" type="UINT64" sequence="4" description="GPS position" array="3"/>
-            <Field name="gps_velocity_ecef" type="UINT64" sequence="5" description="GPS velocity" array="3"/>
-            <Field name="gps_validity_flag_pos_vel" type="UINT16" sequence="6" description="GPS validity flag"/>
+            <Field name="gps_position_ecef" type="UINT64" sequence="3" description="GPS position" array="3"/>
+            <Field name="gps_velocity_ecef" type="UINT64" sequence="4" description="GPS velocity" array="3"/>
+            <Field name="gps_validity_flag_pos_vel" type="UINT16" sequence="5" description="GPS validity flag"/>
         </Struct>
 
         <Struct name="AdcsEphemerisData" description="ADCS EPH data">

@@ -264,10 +264,9 @@ message OBC_time {
 message GpsEphemerisData {
     int64                           gps_fix_time     = 1; // GPS time
     int64                           gps_sys_time     = 2; // GPS System time
-    OBC_time                        obc_time         = 3; // OBC time
-    repeated int64                  gps_position_ecef = 4; // GPS position
-    repeated int64                  gps_velocity_ecef = 5; // GPS velocity
-    int32                           gps_validity_flag_pos_vel = 6; // GPS validity flag
+    repeated int64                  gps_position_ecef = 3; // GPS position
+    repeated int64                  gps_velocity_ecef = 4; // GPS velocity
+    int32                           gps_validity_flag_pos_vel = 5; // GPS validity flag
 }
 
 message AdcsEphemerisData {

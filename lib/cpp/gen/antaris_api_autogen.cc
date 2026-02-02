@@ -1702,8 +1702,6 @@ displayGpsEphemerisData(const void *obj)
     displayUINT64((void *)&p->gps_fix_time);
     printf("gps_sys_time ==>\n");
     displayUINT64((void *)&p->gps_sys_time);
-    printf("obc_time ==>\n");
-    displayOBC_time((void *)&p->obc_time);
     printf("gps_position_ecef ==>\n");
     for (int i = 0; i < 3; i++) {
         displayUINT64((void *)&p->gps_position_ecef[i]);
@@ -1727,7 +1725,6 @@ app_to_peer_GpsEphemerisData(const void *ptr_src_app, void *ptr_dst_peer)
 
     UINT64 __tmp_gps_fix_time;
     UINT64 __tmp_gps_sys_time;
-    OBC_time __tmp_obc_time;
     UINT64 __tmp_gps_position_ecef;
     UINT64 __tmp_gps_velocity_ecef;
     UINT32 __tmp_gps_validity_flag_pos_vel = 0;
@@ -1739,8 +1736,6 @@ app_to_peer_GpsEphemerisData(const void *ptr_src_app, void *ptr_dst_peer)
     app_to_peer_UINT64(&src->gps_sys_time, &__tmp_gps_sys_time); // gps_sys_time
 
     dst->set_gps_sys_time(__tmp_gps_sys_time);
-
-    app_to_peer_OBC_time(&src->obc_time, dst->mutable_obc_time()); // obc_time
 
     for (int i = 0; i < 3; i++) { // gps_position_ecef
         UINT64 converted_value;
@@ -1767,8 +1762,6 @@ peer_to_app_GpsEphemerisData(const void *ptr_src_peer, void *ptr_dst_app)
 
     dst->gps_fix_time = src->gps_fix_time();
     dst->gps_sys_time = src->gps_sys_time();
-    OBC_time *mutable_obc_time = &dst->obc_time;
-    peer_to_app_OBC_time(&src->obc_time(), mutable_obc_time);
     for (int i = 1; i < 3; i++) { // gps_position_ecef
         UINT64 src_info = src->gps_position_ecef(i);
         UINT64 *dst_info = &dst->gps_position_ecef[i];

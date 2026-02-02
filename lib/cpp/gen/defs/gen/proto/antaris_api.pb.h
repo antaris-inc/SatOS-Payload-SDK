@@ -5648,14 +5648,13 @@ class GpsEphemerisData final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kGpsPositionEcefFieldNumber = 4,
-    kGpsVelocityEcefFieldNumber = 5,
-    kObcTimeFieldNumber = 3,
+    kGpsPositionEcefFieldNumber = 3,
+    kGpsVelocityEcefFieldNumber = 4,
     kGpsFixTimeFieldNumber = 1,
     kGpsSysTimeFieldNumber = 2,
-    kGpsValidityFlagPosVelFieldNumber = 6,
+    kGpsValidityFlagPosVelFieldNumber = 5,
   };
-  // repeated int64 gps_position_ecef = 4;
+  // repeated int64 gps_position_ecef = 3;
   int gps_position_ecef_size() const;
   private:
   int _internal_gps_position_ecef_size() const;
@@ -5677,7 +5676,7 @@ class GpsEphemerisData final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
       mutable_gps_position_ecef();
 
-  // repeated int64 gps_velocity_ecef = 5;
+  // repeated int64 gps_velocity_ecef = 4;
   int gps_velocity_ecef_size() const;
   private:
   int _internal_gps_velocity_ecef_size() const;
@@ -5699,24 +5698,6 @@ class GpsEphemerisData final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t >*
       mutable_gps_velocity_ecef();
 
-  // .antaris_api_peer_to_peer.OBC_time obc_time = 3;
-  bool has_obc_time() const;
-  private:
-  bool _internal_has_obc_time() const;
-  public:
-  void clear_obc_time();
-  const ::antaris_api_peer_to_peer::OBC_time& obc_time() const;
-  PROTOBUF_NODISCARD ::antaris_api_peer_to_peer::OBC_time* release_obc_time();
-  ::antaris_api_peer_to_peer::OBC_time* mutable_obc_time();
-  void set_allocated_obc_time(::antaris_api_peer_to_peer::OBC_time* obc_time);
-  private:
-  const ::antaris_api_peer_to_peer::OBC_time& _internal_obc_time() const;
-  ::antaris_api_peer_to_peer::OBC_time* _internal_mutable_obc_time();
-  public:
-  void unsafe_arena_set_allocated_obc_time(
-      ::antaris_api_peer_to_peer::OBC_time* obc_time);
-  ::antaris_api_peer_to_peer::OBC_time* unsafe_arena_release_obc_time();
-
   // int64 gps_fix_time = 1;
   void clear_gps_fix_time();
   int64_t gps_fix_time() const;
@@ -5735,7 +5716,7 @@ class GpsEphemerisData final :
   void _internal_set_gps_sys_time(int64_t value);
   public:
 
-  // int32 gps_validity_flag_pos_vel = 6;
+  // int32 gps_validity_flag_pos_vel = 5;
   void clear_gps_validity_flag_pos_vel();
   int32_t gps_validity_flag_pos_vel() const;
   void set_gps_validity_flag_pos_vel(int32_t value);
@@ -5755,7 +5736,6 @@ class GpsEphemerisData final :
   mutable std::atomic<int> _gps_position_ecef_cached_byte_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< int64_t > gps_velocity_ecef_;
   mutable std::atomic<int> _gps_velocity_ecef_cached_byte_size_;
-  ::antaris_api_peer_to_peer::OBC_time* obc_time_;
   int64_t gps_fix_time_;
   int64_t gps_sys_time_;
   int32_t gps_validity_flag_pos_vel_;
@@ -11380,97 +11360,7 @@ inline void GpsEphemerisData::set_gps_sys_time(int64_t value) {
   // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.GpsEphemerisData.gps_sys_time)
 }
 
-// .antaris_api_peer_to_peer.OBC_time obc_time = 3;
-inline bool GpsEphemerisData::_internal_has_obc_time() const {
-  return this != internal_default_instance() && obc_time_ != nullptr;
-}
-inline bool GpsEphemerisData::has_obc_time() const {
-  return _internal_has_obc_time();
-}
-inline void GpsEphemerisData::clear_obc_time() {
-  if (GetArenaForAllocation() == nullptr && obc_time_ != nullptr) {
-    delete obc_time_;
-  }
-  obc_time_ = nullptr;
-}
-inline const ::antaris_api_peer_to_peer::OBC_time& GpsEphemerisData::_internal_obc_time() const {
-  const ::antaris_api_peer_to_peer::OBC_time* p = obc_time_;
-  return p != nullptr ? *p : reinterpret_cast<const ::antaris_api_peer_to_peer::OBC_time&>(
-      ::antaris_api_peer_to_peer::_OBC_time_default_instance_);
-}
-inline const ::antaris_api_peer_to_peer::OBC_time& GpsEphemerisData::obc_time() const {
-  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.GpsEphemerisData.obc_time)
-  return _internal_obc_time();
-}
-inline void GpsEphemerisData::unsafe_arena_set_allocated_obc_time(
-    ::antaris_api_peer_to_peer::OBC_time* obc_time) {
-  if (GetArenaForAllocation() == nullptr) {
-    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(obc_time_);
-  }
-  obc_time_ = obc_time;
-  if (obc_time) {
-    
-  } else {
-    
-  }
-  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:antaris_api_peer_to_peer.GpsEphemerisData.obc_time)
-}
-inline ::antaris_api_peer_to_peer::OBC_time* GpsEphemerisData::release_obc_time() {
-  
-  ::antaris_api_peer_to_peer::OBC_time* temp = obc_time_;
-  obc_time_ = nullptr;
-#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
-  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
-  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  if (GetArenaForAllocation() == nullptr) { delete old; }
-#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
-  if (GetArenaForAllocation() != nullptr) {
-    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
-  }
-#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
-  return temp;
-}
-inline ::antaris_api_peer_to_peer::OBC_time* GpsEphemerisData::unsafe_arena_release_obc_time() {
-  // @@protoc_insertion_point(field_release:antaris_api_peer_to_peer.GpsEphemerisData.obc_time)
-  
-  ::antaris_api_peer_to_peer::OBC_time* temp = obc_time_;
-  obc_time_ = nullptr;
-  return temp;
-}
-inline ::antaris_api_peer_to_peer::OBC_time* GpsEphemerisData::_internal_mutable_obc_time() {
-  
-  if (obc_time_ == nullptr) {
-    auto* p = CreateMaybeMessage<::antaris_api_peer_to_peer::OBC_time>(GetArenaForAllocation());
-    obc_time_ = p;
-  }
-  return obc_time_;
-}
-inline ::antaris_api_peer_to_peer::OBC_time* GpsEphemerisData::mutable_obc_time() {
-  ::antaris_api_peer_to_peer::OBC_time* _msg = _internal_mutable_obc_time();
-  // @@protoc_insertion_point(field_mutable:antaris_api_peer_to_peer.GpsEphemerisData.obc_time)
-  return _msg;
-}
-inline void GpsEphemerisData::set_allocated_obc_time(::antaris_api_peer_to_peer::OBC_time* obc_time) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
-  if (message_arena == nullptr) {
-    delete obc_time_;
-  }
-  if (obc_time) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
-        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::antaris_api_peer_to_peer::OBC_time>::GetOwningArena(obc_time);
-    if (message_arena != submessage_arena) {
-      obc_time = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, obc_time, submessage_arena);
-    }
-    
-  } else {
-    
-  }
-  obc_time_ = obc_time;
-  // @@protoc_insertion_point(field_set_allocated:antaris_api_peer_to_peer.GpsEphemerisData.obc_time)
-}
-
-// repeated int64 gps_position_ecef = 4;
+// repeated int64 gps_position_ecef = 3;
 inline int GpsEphemerisData::_internal_gps_position_ecef_size() const {
   return gps_position_ecef_.size();
 }
@@ -11517,7 +11407,7 @@ GpsEphemerisData::mutable_gps_position_ecef() {
   return _internal_mutable_gps_position_ecef();
 }
 
-// repeated int64 gps_velocity_ecef = 5;
+// repeated int64 gps_velocity_ecef = 4;
 inline int GpsEphemerisData::_internal_gps_velocity_ecef_size() const {
   return gps_velocity_ecef_.size();
 }
@@ -11564,7 +11454,7 @@ GpsEphemerisData::mutable_gps_velocity_ecef() {
   return _internal_mutable_gps_velocity_ecef();
 }
 
-// int32 gps_validity_flag_pos_vel = 6;
+// int32 gps_validity_flag_pos_vel = 5;
 inline void GpsEphemerisData::clear_gps_validity_flag_pos_vel() {
   gps_validity_flag_pos_vel_ = 0;
 }
