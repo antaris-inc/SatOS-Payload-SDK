@@ -262,11 +262,16 @@ message OBC_time {
 }
 
 message GpsEphemerisData {
-    int64                           gps_fix_time     = 1; // GPS time
-    int64                           gps_sys_time     = 2; // GPS System time
-    repeated int64                  gps_position_ecef = 3; // GPS position
-    repeated int64                  gps_velocity_ecef = 4; // GPS velocity
-    int32                           gps_validity_flag_pos_vel = 5; // GPS validity flag
+    OBC_time                        gps_fix_time     = 1; // GPS time
+    OBC_time                        gps_sys_time     = 2; // GPS System time
+    double                          gps_position_ecef_x = 3; // GPS position x
+    double                          gps_position_ecef_y = 4; // GPS position y
+    double                          gps_position_ecef_z = 5; // GPS position z
+    double                          gps_velocity_ecef_x = 6; // GPS velocity x
+    double                          gps_velocity_ecef_y = 7; // GPS velocity y
+    double                          gps_velocity_ecef_z = 8; // GPS velocity z
+    int32                           gps_validity_flag_pos = 9; // GPS position validity flag
+    int32                           gps_validity_flag_vel = 10; // GPS velocity validity flag
 }
 
 message AdcsEphemerisData {

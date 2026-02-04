@@ -833,11 +833,16 @@ void peer_to_app_OBC_time(const void *ptr_src_peer, void *ptr_dst_app);
 /// @struct GpsEphemerisData
 /// @brief GNSS Eph1/Eph2 data
 struct GpsEphemerisData {
-    UINT64                                          gps_fix_time;                                    ///< @var GPS time
-    UINT64                                          gps_sys_time;                                    ///< @var GPS System time
-    UINT64                                          gps_position_ecef[3];                            ///< @var GPS position
-    UINT64                                          gps_velocity_ecef[3];                            ///< @var GPS velocity
-    UINT16                                          gps_validity_flag_pos_vel;                       ///< @var GPS validity flag
+    OBC_time                                        gps_fix_time;                                    ///< @var GPS time
+    OBC_time                                        gps_sys_time;                                    ///< @var GPS System time
+    DOUBLE                                          gps_position_ecef_x;                             ///< @var GPS position x
+    DOUBLE                                          gps_position_ecef_y;                             ///< @var GPS position y
+    DOUBLE                                          gps_position_ecef_z;                             ///< @var GPS position z
+    DOUBLE                                          gps_velocity_ecef_x;                             ///< @var GPS velocity x
+    DOUBLE                                          gps_velocity_ecef_y;                             ///< @var GPS velocity y
+    DOUBLE                                          gps_velocity_ecef_z;                             ///< @var GPS velocity z
+    UINT8                                           gps_validity_flag_pos;                           ///< @var GPS position validity flag
+    UINT8                                           gps_validity_flag_vel;                           ///< @var GPS velocity validity flag
 };
 
 void displayGpsEphemerisData(const void *obj);

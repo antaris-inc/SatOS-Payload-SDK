@@ -1699,21 +1699,25 @@ displayGpsEphemerisData(const void *obj)
     printf("GpsEphemerisData %p =>\n", obj);
 
     printf("gps_fix_time ==>\n");
-    displayUINT64((void *)&p->gps_fix_time);
+    displayOBC_time((void *)&p->gps_fix_time);
     printf("gps_sys_time ==>\n");
-    displayUINT64((void *)&p->gps_sys_time);
-    printf("gps_position_ecef ==>\n");
-    for (int i = 0; i < 3; i++) {
-        displayUINT64((void *)&p->gps_position_ecef[i]);
-    }
-
-    printf("gps_velocity_ecef ==>\n");
-    for (int i = 0; i < 3; i++) {
-        displayUINT64((void *)&p->gps_velocity_ecef[i]);
-    }
-
-    printf("gps_validity_flag_pos_vel ==>\n");
-    displayUINT16((void *)&p->gps_validity_flag_pos_vel);
+    displayOBC_time((void *)&p->gps_sys_time);
+    printf("gps_position_ecef_x ==>\n");
+    displayDOUBLE((void *)&p->gps_position_ecef_x);
+    printf("gps_position_ecef_y ==>\n");
+    displayDOUBLE((void *)&p->gps_position_ecef_y);
+    printf("gps_position_ecef_z ==>\n");
+    displayDOUBLE((void *)&p->gps_position_ecef_z);
+    printf("gps_velocity_ecef_x ==>\n");
+    displayDOUBLE((void *)&p->gps_velocity_ecef_x);
+    printf("gps_velocity_ecef_y ==>\n");
+    displayDOUBLE((void *)&p->gps_velocity_ecef_y);
+    printf("gps_velocity_ecef_z ==>\n");
+    displayDOUBLE((void *)&p->gps_velocity_ecef_z);
+    printf("gps_validity_flag_pos ==>\n");
+    displayUINT8((void *)&p->gps_validity_flag_pos);
+    printf("gps_validity_flag_vel ==>\n");
+    displayUINT8((void *)&p->gps_validity_flag_vel);
 
 }
 
@@ -1723,33 +1727,52 @@ app_to_peer_GpsEphemerisData(const void *ptr_src_app, void *ptr_dst_peer)
     GpsEphemerisData *src = (GpsEphemerisData *)ptr_src_app;
     ::antaris_api_peer_to_peer::GpsEphemerisData *dst = (::antaris_api_peer_to_peer::GpsEphemerisData *)ptr_dst_peer;
 
-    UINT64 __tmp_gps_fix_time;
-    UINT64 __tmp_gps_sys_time;
-    UINT64 __tmp_gps_position_ecef;
-    UINT64 __tmp_gps_velocity_ecef;
-    UINT32 __tmp_gps_validity_flag_pos_vel = 0;
+    OBC_time __tmp_gps_fix_time;
+    OBC_time __tmp_gps_sys_time;
+    DOUBLE __tmp_gps_position_ecef_x;
+    DOUBLE __tmp_gps_position_ecef_y;
+    DOUBLE __tmp_gps_position_ecef_z;
+    DOUBLE __tmp_gps_velocity_ecef_x;
+    DOUBLE __tmp_gps_velocity_ecef_y;
+    DOUBLE __tmp_gps_velocity_ecef_z;
+    UINT32 __tmp_gps_validity_flag_pos = 0;
+    UINT32 __tmp_gps_validity_flag_vel = 0;
 
-    app_to_peer_UINT64(&src->gps_fix_time, &__tmp_gps_fix_time); // gps_fix_time
+    app_to_peer_OBC_time(&src->gps_fix_time, dst->mutable_gps_fix_time()); // gps_fix_time
 
-    dst->set_gps_fix_time(__tmp_gps_fix_time);
+    app_to_peer_OBC_time(&src->gps_sys_time, dst->mutable_gps_sys_time()); // gps_sys_time
 
-    app_to_peer_UINT64(&src->gps_sys_time, &__tmp_gps_sys_time); // gps_sys_time
+    app_to_peer_DOUBLE(&src->gps_position_ecef_x, &__tmp_gps_position_ecef_x); // gps_position_ecef_x
 
-    dst->set_gps_sys_time(__tmp_gps_sys_time);
+    dst->set_gps_position_ecef_x(__tmp_gps_position_ecef_x);
 
-    for (int i = 0; i < 3; i++) { // gps_position_ecef
-        UINT64 converted_value;
-        app_to_peer_UINT64(&src->gps_position_ecef[i], &converted_value);
-        dst->add_gps_position_ecef(converted_value);
-    }
-    for (int i = 0; i < 3; i++) { // gps_velocity_ecef
-        UINT64 converted_value;
-        app_to_peer_UINT64(&src->gps_velocity_ecef[i], &converted_value);
-        dst->add_gps_velocity_ecef(converted_value);
-    }
-    app_to_peer_UINT16(&src->gps_validity_flag_pos_vel, &__tmp_gps_validity_flag_pos_vel); // gps_validity_flag_pos_vel
+    app_to_peer_DOUBLE(&src->gps_position_ecef_y, &__tmp_gps_position_ecef_y); // gps_position_ecef_y
 
-    dst->set_gps_validity_flag_pos_vel(__tmp_gps_validity_flag_pos_vel);
+    dst->set_gps_position_ecef_y(__tmp_gps_position_ecef_y);
+
+    app_to_peer_DOUBLE(&src->gps_position_ecef_z, &__tmp_gps_position_ecef_z); // gps_position_ecef_z
+
+    dst->set_gps_position_ecef_z(__tmp_gps_position_ecef_z);
+
+    app_to_peer_DOUBLE(&src->gps_velocity_ecef_x, &__tmp_gps_velocity_ecef_x); // gps_velocity_ecef_x
+
+    dst->set_gps_velocity_ecef_x(__tmp_gps_velocity_ecef_x);
+
+    app_to_peer_DOUBLE(&src->gps_velocity_ecef_y, &__tmp_gps_velocity_ecef_y); // gps_velocity_ecef_y
+
+    dst->set_gps_velocity_ecef_y(__tmp_gps_velocity_ecef_y);
+
+    app_to_peer_DOUBLE(&src->gps_velocity_ecef_z, &__tmp_gps_velocity_ecef_z); // gps_velocity_ecef_z
+
+    dst->set_gps_velocity_ecef_z(__tmp_gps_velocity_ecef_z);
+
+    app_to_peer_UINT8(&src->gps_validity_flag_pos, &__tmp_gps_validity_flag_pos); // gps_validity_flag_pos
+
+    dst->set_gps_validity_flag_pos(__tmp_gps_validity_flag_pos);
+
+    app_to_peer_UINT8(&src->gps_validity_flag_vel, &__tmp_gps_validity_flag_vel); // gps_validity_flag_vel
+
+    dst->set_gps_validity_flag_vel(__tmp_gps_validity_flag_vel);
 
 
 }
@@ -1760,21 +1783,18 @@ peer_to_app_GpsEphemerisData(const void *ptr_src_peer, void *ptr_dst_app)
     GpsEphemerisData *dst = (GpsEphemerisData *)ptr_dst_app;
     ::antaris_api_peer_to_peer::GpsEphemerisData *src = (::antaris_api_peer_to_peer::GpsEphemerisData *)ptr_src_peer;
 
-    dst->gps_fix_time = src->gps_fix_time();
-    dst->gps_sys_time = src->gps_sys_time();
-    for (int i = 1; i < 3; i++) { // gps_position_ecef
-        UINT64 src_info = src->gps_position_ecef(i);
-        UINT64 *dst_info = &dst->gps_position_ecef[i];
-
-        peer_to_app_UINT64(&src_info, dst_info);
-    }
-    for (int i = 1; i < 3; i++) { // gps_velocity_ecef
-        UINT64 src_info = src->gps_velocity_ecef(i);
-        UINT64 *dst_info = &dst->gps_velocity_ecef[i];
-
-        peer_to_app_UINT64(&src_info, dst_info);
-    }
-    dst->gps_validity_flag_pos_vel = src->gps_validity_flag_pos_vel();
+    OBC_time *mutable_gps_fix_time = &dst->gps_fix_time;
+    peer_to_app_OBC_time(&src->gps_fix_time(), mutable_gps_fix_time);
+    OBC_time *mutable_gps_sys_time = &dst->gps_sys_time;
+    peer_to_app_OBC_time(&src->gps_sys_time(), mutable_gps_sys_time);
+    dst->gps_position_ecef_x = src->gps_position_ecef_x();
+    dst->gps_position_ecef_y = src->gps_position_ecef_y();
+    dst->gps_position_ecef_z = src->gps_position_ecef_z();
+    dst->gps_velocity_ecef_x = src->gps_velocity_ecef_x();
+    dst->gps_velocity_ecef_y = src->gps_velocity_ecef_y();
+    dst->gps_velocity_ecef_z = src->gps_velocity_ecef_z();
+    dst->gps_validity_flag_pos = src->gps_validity_flag_pos();
+    dst->gps_validity_flag_vel = src->gps_validity_flag_vel();
 
 }
 

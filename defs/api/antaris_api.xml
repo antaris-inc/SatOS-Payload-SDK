@@ -249,11 +249,16 @@
             <Field name="year" type="UINT16" sequence="6" description="year"/>
         </Struct>
         <Struct name="GpsEphemerisData" description="GNSS Eph1/Eph2 data">
-            <Field name="gps_fix_time" type="UINT64" sequence="1" description="GPS time"/>
-            <Field name="gps_sys_time" type="UINT64" sequence="2" description="GPS System time"/>
-            <Field name="gps_position_ecef" type="UINT64" sequence="3" description="GPS position" array="3"/>
-            <Field name="gps_velocity_ecef" type="UINT64" sequence="4" description="GPS velocity" array="3"/>
-            <Field name="gps_validity_flag_pos_vel" type="UINT16" sequence="5" description="GPS validity flag"/>
+            <Field name="gps_fix_time" type="OBC_time" sequence="1" description="GPS time"/>
+            <Field name="gps_sys_time" type="OBC_time" sequence="2" description="GPS System time"/>
+            <Field name="gps_position_ecef_x" type="DOUBLE" sequence="3" description="GPS position x"/>
+            <Field name="gps_position_ecef_y" type="DOUBLE" sequence="4" description="GPS position y"/>
+            <Field name="gps_position_ecef_z" type="DOUBLE" sequence="5" description="GPS position z"/>
+            <Field name="gps_velocity_ecef_x" type="DOUBLE" sequence="6" description="GPS velocity x"/>
+            <Field name="gps_velocity_ecef_y" type="DOUBLE" sequence="7" description="GPS velocity y"/>
+            <Field name="gps_velocity_ecef_z" type="DOUBLE" sequence="8" description="GPS velocity z"/>
+            <Field name="gps_validity_flag_pos" type="UINT8" sequence="9" description="GPS position validity flag"/>
+            <Field name="gps_validity_flag_vel" type="UINT8" sequence="10" description="GPS velocity validity flag"/>
         </Struct>
 
         <Struct name="AdcsEphemerisData" description="ADCS EPH data">
