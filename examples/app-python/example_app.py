@@ -88,58 +88,87 @@ class Controller:
             "Beta Angle Validity"
         ]
         if gnss_data.gps_timeout_flag == 1:
-            logger.info(f"gps_fix_time: {gnss_data.gps_eph_data.gps_fix_time}")
-            logger.info(f"gps_sys_time: {gnss_data.gps_eph_data.gps_sys_time}")
-            obc = gnss_data.gps_eph_data.obc_time
-            obc_formatted = (
-                f"{obc.hour:02d}:{obc.minute:02d}:{obc.millisecond // 1000:02d}."
-                f"{obc.millisecond % 1000:03d} "
-                f"Date: {obc.date:02d}/{obc.month:02d}/{obc.year}"
+            gps_fix_time = gnss_data.gps_eph_data.gps_fix_time
+            gps_sys_time = gnss_data.gps_eph_data.gps_sys_time
+
+            logger.info(
+                f"gps fix time: {gps_fix_time.hour:02d}:{gps_fix_time.minute:02d}."
+                f"{gps_fix_time.millisecond:03d}  {gps_fix_time.date:02d}/"
+                f"{gps_fix_time.month:02d}/{gps_fix_time.year:04d}"
             )
-            logger.info(f"obc_time : {obc_formatted}")
 
-            for i in {0,1,2}:
-                logger.info(f"gps_position_ecef: {gnss_data.gps_eph_data.gps_position_ecef[i]}")
-            for i in {0,1,2}:
-                logger.info(f"gps_velocity_ecef: {gnss_data.gps_eph_data.gps_velocity_ecef[i]}")
-                logger.info(f"gps_validity_flag_pos_vel: {gnss_data.gps_eph_data.gps_validity_flag_pos_vel}")
+            logger.info(
+                f"gps sys time: {gps_sys_time.hour:02d}:{gps_sys_time.minute:02d}."
+                f"{gps_sys_time.millisecond:03d}  {gps_sys_time.date:02d}/"
+                f"{gps_sys_time.month:02d}/{gps_sys_time.year:04d}"
+            )
 
-        elif gnss_data.adcs_timeout_flag == 1:    
-            logger.info(f"ADCS Orbit Propagator/System Time = {gnss_data.adcs_eph_data.orbit_time}") 
-            logger.info(f"ECI Position X (km) = {gnss_data.adcs_eph_data.eci_position_x}") 
-            logger.info(f"ECI Position Y (km) = {gnss_data.adcs_eph_data.eci_position_y}") 
-            logger.info(f"ECI Position Z (km) = {gnss_data.adcs_eph_data.eci_position_z}") 
-            logger.info(f"ECI Velocity X (km/s) = {gnss_data.adcs_eph_data.eci_velocity_x}") 
-            logger.info(f"ECI Velocity Y (km/s) = {gnss_data.adcs_eph_data.eci_velocity_y}") 
-            logger.info(f"ECI Velocity Z (km/s) = {gnss_data.adcs_eph_data.eci_velocity_z}") 
-            logger.info(f"ECEF Position X (km) = {gnss_data.adcs_eph_data.ecef_position_x}")
-            logger.info(f"ECEF Position Y (km) = {gnss_data.adcs_eph_data.ecef_position_y}")
-            logger.info(f"ECEF Position Z (km) = {gnss_data.adcs_eph_data.ecef_position_z}")
-            logger.info(f"ECEF Velocity X (km/s) = {gnss_data.adcs_eph_data.ecef_velocity_x}")
-            logger.info(f"ECEF Velocity Y (km/s) = {gnss_data.adcs_eph_data.ecef_velocity_y}")
-            logger.info(f"ECEF Velocity Z (km/s) = {gnss_data.adcs_eph_data.ecef_velocity_z}")
-            logger.info(f"X axis Angular rate (deg/s) = {gnss_data.adcs_eph_data.ang_rate_x}")
-            logger.info(f"Y axis Angular rate (deg/s) = {gnss_data.adcs_eph_data.ang_rate_y}")
-            logger.info(f"Z axis Angular rate (deg/s) = {gnss_data.adcs_eph_data.ang_rate_z}")
-            logger.info(f"Attitude Quaternion 1 = {gnss_data.adcs_eph_data.att_quat_1}")
-            logger.info(f"Attitude Quaternion 2 = {gnss_data.adcs_eph_data.att_quat_2}")
-            logger.info(f"Attitude Quaternion 3 = {gnss_data.adcs_eph_data.att_quat_3}")
-            logger.info(f"Attitude Quaternion 4 = {gnss_data.adcs_eph_data.att_quat_4}")
-            logger.info(f"Latitude (deg) = {gnss_data.adcs_eph_data.latitude}")
-            logger.info(f"Longitude (deg) = {gnss_data.adcs_eph_data.longitude}")
-            logger.info(f"Altitude (km) = {gnss_data.adcs_eph_data.altitude}")
-            logger.info(f"X Nadir Vector = {gnss_data.adcs_eph_data.nadir_vector_x}") 
-            logger.info(f"Y Nadir Vector = {gnss_data.adcs_eph_data.nadir_vector_y}") 
-            logger.info(f"Z Nadir Vector = {gnss_data.adcs_eph_data.nadir_vector_z}") 
-            logger.info(f"X Geodetic Nadir Vector = {gnss_data.adcs_eph_data.gd_nadir_vector_x}")
-            logger.info(f"Y Geodetic Nadir Vector = {gnss_data.adcs_eph_data.gd_nadir_vector_y}")
-            logger.info(f"Z Geodetic Nadir Vector = {gnss_data.adcs_eph_data.gd_nadir_vector_z}")
-            logger.info(f"Beta Angle (deg) = {gnss_data.adcs_eph_data.beta_angle}")
-            # Print each bit's meaning
+            obc = gnss_data.obc_time
+            logger.info(
+                f"obc time: {obc.hour:02d}:{obc.minute:02d}."
+                f"{obc.millisecond:03d}  {obc.date:02d}/{obc.month:02d}/{obc.year:04d}"
+            )
+
+            logger.info(f"gps_position_ecef_x: {gnss_data.gps_eph_data.gps_position_ecef_x}")
+            logger.info(f"gps_position_ecef_y: {gnss_data.gps_eph_data.gps_position_ecef_y}")
+            logger.info(f"gps_position_ecef_z: {gnss_data.gps_eph_data.gps_position_ecef_z}")
+
+            logger.info(f"gps_velocity_ecef_x: {gnss_data.gps_eph_data.gps_velocity_ecef_x}")
+            logger.info(f"gps_velocity_ecef_y: {gnss_data.gps_eph_data.gps_velocity_ecef_y}")
+            logger.info(f"gps_velocity_ecef_z: {gnss_data.gps_eph_data.gps_velocity_ecef_z}")
+
+            logger.info(f"gps_validity_flag_pos: {gnss_data.gps_eph_data.gps_validity_flag_pos}")
+            logger.info(f"gps_validity_flag_vel: {gnss_data.gps_eph_data.gps_validity_flag_vel}")
+
+
+        if gnss_data.adcs_timeout_flag == 1:
+            a = gnss_data.adcs_eph_data
+
+            logger.info(f"ADCS Orbit Propagator/System Time = {a.orbit_time}")
+            logger.info(f"ECI Position X (km) = {a.eci_position_x}")
+            logger.info(f"ECI Position Y (km) = {a.eci_position_y}")
+            logger.info(f"ECI Position Z (km) = {a.eci_position_z}")
+            logger.info(f"ECI Velocity X (km/s) = {a.eci_velocity_x}")
+            logger.info(f"ECI Velocity Y (km/s) = {a.eci_velocity_y}")
+            logger.info(f"ECI Velocity Z (km/s) = {a.eci_velocity_z}")
+
+            logger.info(f"ECEF Position X (km) = {a.ecef_position_x}")
+            logger.info(f"ECEF Position Y (km) = {a.ecef_position_y}")
+            logger.info(f"ECEF Position Z (km) = {a.ecef_position_z}")
+            logger.info(f"ECEF Velocity X (km/s) = {a.ecef_velocity_x}")
+            logger.info(f"ECEF Velocity Y (km/s) = {a.ecef_velocity_y}")
+            logger.info(f"ECEF Velocity Z (km/s) = {a.ecef_velocity_z}")
+
+            logger.info(f"X axis Angular rate (deg/s) = {a.ang_rate_x}")
+            logger.info(f"Y axis Angular rate (deg/s) = {a.ang_rate_y}")
+            logger.info(f"Z axis Angular rate (deg/s) = {a.ang_rate_z}")
+
+            logger.info(f"Attitude Quaternion 1 = {a.att_quat_1}")
+            logger.info(f"Attitude Quaternion 2 = {a.att_quat_2}")
+            logger.info(f"Attitude Quaternion 3 = {a.att_quat_3}")
+            logger.info(f"Attitude Quaternion 4 = {a.att_quat_4}")
+
+            logger.info(f"Latitude (deg) = {a.latitude}")
+            logger.info(f"Longitude (deg) = {a.longitude}")
+            logger.info(f"Altitude (km) = {a.altitude}")
+
+            logger.info(f"X Nadir Vector = {a.nadir_vector_x}")
+            logger.info(f"Y Nadir Vector = {a.nadir_vector_y}")
+            logger.info(f"Z Nadir Vector = {a.nadir_vector_z}")
+
+            logger.info(f"X Geodetic Nadir Vector = {a.gd_nadir_vector_x}")
+            logger.info(f"Y Geodetic Nadir Vector = {a.gd_nadir_vector_y}")
+            logger.info(f"Z Geodetic Nadir Vector = {a.gd_nadir_vector_z}")
+
+            logger.info(f"Beta Angle (deg) = {a.beta_angle}")
+
             for i, name in enumerate(fields):
-                bit_value = (gnss_data.adcs_eph_data.validity_flags >> i) & 1
-                print(f"{name}: {bit_value}")
+                bit_value = (a.validity_flags >> i) & 1
+                logger.info(f"{name}: {bit_value}")
+
         return True
+
+
     
     def get_eps_voltage_handler(self, ctx):
         logger.info(f"EPS voltage data received : {float(ctx.eps_voltage):.2f}")

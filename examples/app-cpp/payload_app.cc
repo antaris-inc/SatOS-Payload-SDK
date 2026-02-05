@@ -1324,17 +1324,18 @@ AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
         printf("gps sys time: %02u:%02u.%03u  %02u/%02u/%04u\n", gps_sys_time->hour,gps_sys_time->minute, gps_sys_time->millisecond, gps_sys_time->date, gps_sys_time->month, gps_sys_time->year);
         OBC_time *obc = &gnss_eph_data->obc_time;
         printf("obc time: %02u:%02u.%03u  %02u/%02u/%04u\n", obc->hour,obc->minute, obc->millisecond, obc->date, obc->month, obc->year);
-        printf("gps_position_ecef_x: %d\n",gnss_eph_data->gps_eph_data.gps_position_ecef_x);
-        printf("gps_position_ecef_y: %d\n",gnss_eph_data->gps_eph_data.gps_position_ecef_y);
-        printf("gps_position_ecef_z: %d\n",gnss_eph_data->gps_eph_data.gps_position_ecef_z);
+        printf("gps_position_ecef_x: %lf\n",gnss_eph_data->gps_eph_data.gps_position_ecef_x);
+        printf("gps_position_ecef_y: %lf\n",gnss_eph_data->gps_eph_data.gps_position_ecef_y);
+        printf("gps_position_ecef_z: %lf\n",gnss_eph_data->gps_eph_data.gps_position_ecef_z);
 
-        printf("gps_velocity_ecef_x: %d\n",gnss_eph_data->gps_eph_data.gps_velocity_ecef_x);
-        printf("gps_velocity_ecef_y: %d\n",gnss_eph_data->gps_eph_data.gps_velocity_ecef_y);
-        printf("gps_velocity_ecef_z: %d\n",gnss_eph_data->gps_eph_data.gps_velocity_ecef_z);
+        printf("gps_velocity_ecef_x: %lf\n",gnss_eph_data->gps_eph_data.gps_velocity_ecef_x);
+        printf("gps_velocity_ecef_y: %lf\n",gnss_eph_data->gps_eph_data.gps_velocity_ecef_y);
+        printf("gps_velocity_ecef_z: %lf\n",gnss_eph_data->gps_eph_data.gps_velocity_ecef_z);
            
         printf("gps_validity_flag_pos: %d\n",gnss_eph_data->gps_eph_data.gps_validity_flag_pos);
         printf("gps_validity_flag_vel: %d\n",gnss_eph_data->gps_eph_data.gps_validity_flag_vel);
-    } else if(gnss_eph_data->adcs_timeout_flag == 1) {
+    } 
+    if(gnss_eph_data->adcs_timeout_flag == 1) {
         printf("ADCS Orbit Propagator/System Time = %f\n",gnss_eph_data->adcs_eph_data.orbit_time);
         printf("ECI Position X (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_x);
         printf("ECI Position Y (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_y);
