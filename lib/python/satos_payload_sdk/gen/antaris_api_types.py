@@ -1101,18 +1101,26 @@ def app_to_peer_OBC_time(app_struct):
 ## @brief: GNSS Eph1/Eph2 data
 ## @param: gps_fix_time                                    :    GPS time                                        
 ## @param: gps_sys_time                                    :    GPS System time                                 
-## @param: obc_time                                        :    OBC time                                        
-## @param: gps_position_ecef                               :    GPS position                                    
-## @param: gps_velocity_ecef                               :    GPS velocity                                    
-## @param: gps_validity_flag_pos_vel                       :    GPS validity flag                               
+## @param: gps_position_ecef_x                             :    GPS position x                                  
+## @param: gps_position_ecef_y                             :    GPS position y                                  
+## @param: gps_position_ecef_z                             :    GPS position z                                  
+## @param: gps_velocity_ecef_x                             :    GPS velocity x                                  
+## @param: gps_velocity_ecef_y                             :    GPS velocity y                                  
+## @param: gps_velocity_ecef_z                             :    GPS velocity z                                  
+## @param: gps_validity_flag_pos                           :    GPS position validity flag                      
+## @param: gps_validity_flag_vel                           :    GPS velocity validity flag                      
 class GpsEphemerisData:
-    def __init__(self, gps_fix_time, gps_sys_time, obc_time, gps_position_ecef, gps_velocity_ecef, gps_validity_flag_pos_vel):
+    def __init__(self, gps_fix_time, gps_sys_time, gps_position_ecef_x, gps_position_ecef_y, gps_position_ecef_z, gps_velocity_ecef_x, gps_velocity_ecef_y, gps_velocity_ecef_z, gps_validity_flag_pos, gps_validity_flag_vel):
         self.gps_fix_time = gps_fix_time
         self.gps_sys_time = gps_sys_time
-        self.obc_time = obc_time
-        self.gps_position_ecef = gps_position_ecef
-        self.gps_velocity_ecef = gps_velocity_ecef
-        self.gps_validity_flag_pos_vel = gps_validity_flag_pos_vel
+        self.gps_position_ecef_x = gps_position_ecef_x
+        self.gps_position_ecef_y = gps_position_ecef_y
+        self.gps_position_ecef_z = gps_position_ecef_z
+        self.gps_velocity_ecef_x = gps_velocity_ecef_x
+        self.gps_velocity_ecef_y = gps_velocity_ecef_y
+        self.gps_velocity_ecef_z = gps_velocity_ecef_z
+        self.gps_validity_flag_pos = gps_validity_flag_pos
+        self.gps_validity_flag_vel = gps_validity_flag_vel
 
     def __str__(self):
         ret_str = ""
@@ -1120,14 +1128,22 @@ class GpsEphemerisData:
         ret_str += str(self.gps_fix_time) + "\n"
         ret_str += "gps_sys_time:\n"
         ret_str += str(self.gps_sys_time) + "\n"
-        ret_str += "obc_time:\n"
-        ret_str += str(self.obc_time) + "\n"
-        ret_str += "gps_position_ecef:\n"
-        ret_str += str(self.gps_position_ecef) + "\n"
-        ret_str += "gps_velocity_ecef:\n"
-        ret_str += str(self.gps_velocity_ecef) + "\n"
-        ret_str += "gps_validity_flag_pos_vel:\n"
-        ret_str += str(self.gps_validity_flag_pos_vel) + "\n"
+        ret_str += "gps_position_ecef_x:\n"
+        ret_str += str(self.gps_position_ecef_x) + "\n"
+        ret_str += "gps_position_ecef_y:\n"
+        ret_str += str(self.gps_position_ecef_y) + "\n"
+        ret_str += "gps_position_ecef_z:\n"
+        ret_str += str(self.gps_position_ecef_z) + "\n"
+        ret_str += "gps_velocity_ecef_x:\n"
+        ret_str += str(self.gps_velocity_ecef_x) + "\n"
+        ret_str += "gps_velocity_ecef_y:\n"
+        ret_str += str(self.gps_velocity_ecef_y) + "\n"
+        ret_str += "gps_velocity_ecef_z:\n"
+        ret_str += str(self.gps_velocity_ecef_z) + "\n"
+        ret_str += "gps_validity_flag_pos:\n"
+        ret_str += str(self.gps_validity_flag_pos) + "\n"
+        ret_str += "gps_validity_flag_vel:\n"
+        ret_str += str(self.gps_validity_flag_vel) + "\n"
 
         return ret_str
 
@@ -1137,14 +1153,18 @@ class GpsEphemerisData:
 def peer_to_app_GpsEphemerisData(peer_struct):
     gps_fix_time = peer_struct.gps_fix_time
     gps_sys_time = peer_struct.gps_sys_time
-    obc_time = peer_struct.obc_time
-    gps_position_ecef = peer_struct.gps_position_ecef
-    gps_velocity_ecef = peer_struct.gps_velocity_ecef
-    gps_validity_flag_pos_vel = peer_struct.gps_validity_flag_pos_vel
-    return GpsEphemerisData(gps_fix_time, gps_sys_time, obc_time, gps_position_ecef, gps_velocity_ecef, gps_validity_flag_pos_vel)
+    gps_position_ecef_x = peer_struct.gps_position_ecef_x
+    gps_position_ecef_y = peer_struct.gps_position_ecef_y
+    gps_position_ecef_z = peer_struct.gps_position_ecef_z
+    gps_velocity_ecef_x = peer_struct.gps_velocity_ecef_x
+    gps_velocity_ecef_y = peer_struct.gps_velocity_ecef_y
+    gps_velocity_ecef_z = peer_struct.gps_velocity_ecef_z
+    gps_validity_flag_pos = peer_struct.gps_validity_flag_pos
+    gps_validity_flag_vel = peer_struct.gps_validity_flag_vel
+    return GpsEphemerisData(gps_fix_time, gps_sys_time, gps_position_ecef_x, gps_position_ecef_y, gps_position_ecef_z, gps_velocity_ecef_x, gps_velocity_ecef_y, gps_velocity_ecef_z, gps_validity_flag_pos, gps_validity_flag_vel)
 
 def app_to_peer_GpsEphemerisData(app_struct):
-    return antaris_api_pb2.GpsEphemerisData(gps_fix_time = app_struct.gps_fix_time, gps_sys_time = app_struct.gps_sys_time, obc_time = app_struct.obc_time, gps_position_ecef = app_struct.gps_position_ecef, gps_velocity_ecef = app_struct.gps_velocity_ecef, gps_validity_flag_pos_vel = app_struct.gps_validity_flag_pos_vel)
+    return antaris_api_pb2.GpsEphemerisData(gps_fix_time = app_struct.gps_fix_time, gps_sys_time = app_struct.gps_sys_time, gps_position_ecef_x = app_struct.gps_position_ecef_x, gps_position_ecef_y = app_struct.gps_position_ecef_y, gps_position_ecef_z = app_struct.gps_position_ecef_z, gps_velocity_ecef_x = app_struct.gps_velocity_ecef_x, gps_velocity_ecef_y = app_struct.gps_velocity_ecef_y, gps_velocity_ecef_z = app_struct.gps_velocity_ecef_z, gps_validity_flag_pos = app_struct.gps_validity_flag_pos, gps_validity_flag_vel = app_struct.gps_validity_flag_vel)
 
 ## @class: AdcsEphemerisData
 ## @brief: ADCS EPH data
@@ -1325,13 +1345,15 @@ def app_to_peer_AdcsEphemerisData(app_struct):
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
 ## @param: adcs_eph_data                                   :    ADCS data                                       
 ## @param: gps_eph_data                                    :    GPS data                                        
+## @param: obc_time                                        :    Obc time                                        
 ## @param: adcs_timeout_flag                               :    ADCS flag                                       
 ## @param: gps_timeout_flag                                :    GPS flag                                        
 class GnssEphData:
-    def __init__(self, correlation_id, adcs_eph_data, gps_eph_data, adcs_timeout_flag, gps_timeout_flag):
+    def __init__(self, correlation_id, adcs_eph_data, gps_eph_data, obc_time, adcs_timeout_flag, gps_timeout_flag):
         self.correlation_id = correlation_id
         self.adcs_eph_data = adcs_eph_data
         self.gps_eph_data = gps_eph_data
+        self.obc_time = obc_time
         self.adcs_timeout_flag = adcs_timeout_flag
         self.gps_timeout_flag = gps_timeout_flag
 
@@ -1343,6 +1365,8 @@ class GnssEphData:
         ret_str += str(self.adcs_eph_data) + "\n"
         ret_str += "gps_eph_data:\n"
         ret_str += str(self.gps_eph_data) + "\n"
+        ret_str += "obc_time:\n"
+        ret_str += str(self.obc_time) + "\n"
         ret_str += "adcs_timeout_flag:\n"
         ret_str += str(self.adcs_timeout_flag) + "\n"
         ret_str += "gps_timeout_flag:\n"
@@ -1357,12 +1381,13 @@ def peer_to_app_GnssEphData(peer_struct):
     correlation_id = peer_struct.correlation_id
     adcs_eph_data = peer_struct.adcs_eph_data
     gps_eph_data = peer_struct.gps_eph_data
+    obc_time = peer_struct.obc_time
     adcs_timeout_flag = peer_struct.adcs_timeout_flag
     gps_timeout_flag = peer_struct.gps_timeout_flag
-    return GnssEphData(correlation_id, adcs_eph_data, gps_eph_data, adcs_timeout_flag, gps_timeout_flag)
+    return GnssEphData(correlation_id, adcs_eph_data, gps_eph_data, obc_time, adcs_timeout_flag, gps_timeout_flag)
 
 def app_to_peer_GnssEphData(app_struct):
-    return antaris_api_pb2.GnssEphData(correlation_id = app_struct.correlation_id, adcs_eph_data = app_struct.adcs_eph_data, gps_eph_data = app_struct.gps_eph_data, adcs_timeout_flag = app_struct.adcs_timeout_flag, gps_timeout_flag = app_struct.gps_timeout_flag)
+    return antaris_api_pb2.GnssEphData(correlation_id = app_struct.correlation_id, adcs_eph_data = app_struct.adcs_eph_data, gps_eph_data = app_struct.gps_eph_data, obc_time = app_struct.obc_time, adcs_timeout_flag = app_struct.adcs_timeout_flag, gps_timeout_flag = app_struct.gps_timeout_flag)
 
 ## @class: ReqGetEpsVoltageStopReq
 ## @brief: Stop request get-eps-voltage

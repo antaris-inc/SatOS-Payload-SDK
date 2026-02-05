@@ -1318,22 +1318,24 @@ AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
     };
 
     if(gnss_eph_data->gps_timeout_flag == 1) {
-        printf("gps_fix_time: %d",gnss_eph_data->gps_eph_data.gps_fix_time);
-        printf("gps_sys_time: %lld",gnss_eph_data->gps_eph_data.gps_sys_time);
-        OBC_time obc = gnss_eph_data->gps_eph_data.obc_time;
-        printf("obc_time : %02d:%02d:%02d.%03d Date: %02d/%02d/%d\n",
-               obc.hour, obc.minute, obc.millisecond / 1000,
-               obc.millisecond % 1000, obc.date, obc.month, obc.year);
-        for(int i = 0; i<3; i++){
-            printf("gps_position_ecef: %d\n",gnss_eph_data->gps_eph_data.gps_position_ecef[i]);
-        }
+        OBC_time *gps_fix_time = &gnss_eph_data->gps_eph_data.gps_fix_time;
+        OBC_time *gps_sys_time = &gnss_eph_data->gps_eph_data.gps_sys_time;
+        printf("gps fix time: %02u:%02u.%03u  %02u/%02u/%04u\n", gps_fix_time->hour,gps_fix_time->minute, gps_fix_time->millisecond, gps_fix_time->date, gps_fix_time->month, gps_fix_time->year);
+        printf("gps sys time: %02u:%02u.%03u  %02u/%02u/%04u\n", gps_sys_time->hour,gps_sys_time->minute, gps_sys_time->millisecond, gps_sys_time->date, gps_sys_time->month, gps_sys_time->year);
+        OBC_time *obc = &gnss_eph_data->obc_time;
+        printf("obc time: %02u:%02u.%03u  %02u/%02u/%04u\n", obc->hour,obc->minute, obc->millisecond, obc->date, obc->month, obc->year);
+        printf("gps_position_ecef_x: %lf\n",gnss_eph_data->gps_eph_data.gps_position_ecef_x);
+        printf("gps_position_ecef_y: %lf\n",gnss_eph_data->gps_eph_data.gps_position_ecef_y);
+        printf("gps_position_ecef_z: %lf\n",gnss_eph_data->gps_eph_data.gps_position_ecef_z);
 
-        for(int i = 0; i<3; i++){
-            printf("gps_velocity_ecef: %d\n",gnss_eph_data->gps_eph_data.gps_velocity_ecef[i]);
+        printf("gps_velocity_ecef_x: %lf\n",gnss_eph_data->gps_eph_data.gps_velocity_ecef_x);
+        printf("gps_velocity_ecef_y: %lf\n",gnss_eph_data->gps_eph_data.gps_velocity_ecef_y);
+        printf("gps_velocity_ecef_z: %lf\n",gnss_eph_data->gps_eph_data.gps_velocity_ecef_z);
            
-        }
-        printf("gps_validity_flag_pos_vel: %d\n",gnss_eph_data->gps_eph_data.gps_validity_flag_pos_vel);
-    } else if(gnss_eph_data->adcs_timeout_flag == 1) {
+        printf("gps_validity_flag_pos: %d\n",gnss_eph_data->gps_eph_data.gps_validity_flag_pos);
+        printf("gps_validity_flag_vel: %d\n",gnss_eph_data->gps_eph_data.gps_validity_flag_vel);
+    } 
+    if(gnss_eph_data->adcs_timeout_flag == 1) {
         printf("ADCS Orbit Propagator/System Time = %f\n",gnss_eph_data->adcs_eph_data.orbit_time);
         printf("ECI Position X (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_x);
         printf("ECI Position Y (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_y);

@@ -262,12 +262,16 @@ message OBC_time {
 }
 
 message GpsEphemerisData {
-    int64                           gps_fix_time     = 1; // GPS time
-    int64                           gps_sys_time     = 2; // GPS System time
-    OBC_time                        obc_time         = 3; // OBC time
-    repeated int64                  gps_position_ecef = 4; // GPS position
-    repeated int64                  gps_velocity_ecef = 5; // GPS velocity
-    int32                           gps_validity_flag_pos_vel = 6; // GPS validity flag
+    OBC_time                        gps_fix_time     = 1; // GPS time
+    OBC_time                        gps_sys_time     = 2; // GPS System time
+    double                          gps_position_ecef_x = 3; // GPS position x
+    double                          gps_position_ecef_y = 4; // GPS position y
+    double                          gps_position_ecef_z = 5; // GPS position z
+    double                          gps_velocity_ecef_x = 6; // GPS velocity x
+    double                          gps_velocity_ecef_y = 7; // GPS velocity y
+    double                          gps_velocity_ecef_z = 8; // GPS velocity z
+    int32                           gps_validity_flag_pos = 9; // GPS position validity flag
+    int32                           gps_validity_flag_vel = 10; // GPS velocity validity flag
 }
 
 message AdcsEphemerisData {
@@ -308,8 +312,9 @@ message GnssEphData {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     AdcsEphemerisData               adcs_eph_data    = 2; // ADCS data
     GpsEphemerisData                gps_eph_data     = 3; // GPS data
-    int32                           adcs_timeout_flag = 4; // ADCS flag
-    int32                           gps_timeout_flag = 5; // GPS flag
+    OBC_time                        obc_time         = 4; // Obc time
+    int32                           adcs_timeout_flag = 5; // ADCS flag
+    int32                           gps_timeout_flag = 6; // GPS flag
 }
 
 message ReqGetEpsVoltageStopReq {
