@@ -1540,18 +1540,18 @@ int main(int argc, char *argv[])
     register_params.health_check_fail_action = 0;
     ret = api_pa_pc_register(channel, &register_params);
     printf("api_pa_pc_register returned %d (%s)\n", ret, ret == An_SUCCESS ? "SUCCESS" : "FAILURE");
-    // if(ret == An_SUCCESS){
-    //     // post registration callback is implemented
-    //     pthread_t post_reg_thread;
-    //     pthread_attr_t attr;
-    //     pthread_attr_init(&attr);
-    //     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-    //     pthread_create(&post_reg_thread,
-    //                 &attr,
-    //                 post_registration_func,
-    //                 (void *)(uintptr_t)correlation_id);
-    //     pthread_attr_destroy(&attr);
-    // }
+    if(ret == An_SUCCESS){
+        // post registration callback is implemented
+        pthread_t post_reg_thread;
+        pthread_attr_t attr;
+        pthread_attr_init(&attr);
+        pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+        pthread_create(&post_reg_thread,
+                    &attr,
+                    post_registration_func,
+                    (void *)(uintptr_t)correlation_id);
+        pthread_attr_destroy(&attr);
+    }
     correlation_id += 1;
 
     // After registration, simulated PC will ask application to start sequence HelloWorld
