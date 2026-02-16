@@ -370,6 +370,15 @@
             <Field name="heater_pwr_status" type="UINT8" sequence="5" description="0:OFF, 1:ON"/>
         </Struct>
 
+        <Struct name="PsTempReq" description="Request to get PS temperature">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+        </Struct>
+
+        <Struct name="RespPsTemp" description="Response to get PS temperature request">
+            <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
+            <Field name="temperature" type="UINT8" sequence="2" description="in Celsius"/>
+        </Struct>
+
         <Struct name="SesThermalStatusNtf" description="SES thermal notification from PC">
             <Field name="correlation_id" type="UINT16" sequence="1" description="correlation id for matching requests with responses and callbacks"/>
             <Field name="heater_pwr_status" type="UINT8" sequence="2" description="0:OFF, 1:ON"/>
@@ -402,6 +411,7 @@
             <Field name="process_remote_ac_power_on_ntf" type="ProcessRemoteAcPwrStatusNtf_Fptr" sequence="20" description="callback handler for remote application controller power on status notification"/>
             <Field name="process_host_to_peer_fcm_operation_notify" type="ProcessHostToPeerFcmOperationNotify_Fptr" sequence="21" description="callback handler for fcm operation status"/>
             <Field name="process_satos_pa_msg" type="ProcessSatOsPaMsg_Fptr" sequence="22" description="callback handler for satOS to PA command response"/>
+            <Field name="process_response_ps_temp_req" type="ProcessRespPsTemp_Fptr" sequence="23" description="callback handler for PS temperature req response"/>
         </Struct>
 
         <Struct name="AntarisCorrelationId" description="Wrapper structure for correlation-id">
@@ -481,6 +491,10 @@
 
         <FunctionPtr name="ProcessRespSesTempReq_Fptr" description="callback handler for SES temperature req response" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
             <Parameter variable_name="ses_temp_req_response" type="RespSesTempReqParams *" description="response to SES temperature req"/>
+        </FunctionPtr>
+
+        <FunctionPtr name="ProcessRespPsTemp_Fptr" description="callback handler for PS temperature req response" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
+            <Parameter variable_name="ps_temp_req_response" type="RespPsTemp *" description="response to PS temperature req"/>
         </FunctionPtr>
 
         <FunctionPtr name="ProcessSesThrmlNtf_Fptr" description="Callback request to SES thermal notifictaion" return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode">
@@ -609,6 +623,12 @@
                         return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
             <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
             <Parameter variable_name="req_ses_temp" type="SesTempReq *" description="SES temperature response parameters"/>
+        </Function>
+
+        <Function name="api_pa_pc_ps_temp_req" description="API to request to PS temperature"
+                        return_type_peer="AntarisReturnType" return_type_app="AntarisReturnCode" success_return="An_SUCCESS" failure_return="An_GENERIC_FAILURE">
+            <Parameter variable_name="channel" type="AntarisChannel" description="channel context for API execution" consumed_by="Application"/>
+            <Parameter variable_name="req_ps_temp" type="PsTempReq *" description="SES temperature response parameters"/>
         </Function>
 
         <Function name="api_pa_pc_pa_satos_message" description="API to respond to SatOS message request"

@@ -460,6 +460,31 @@ class PCServiceClient {
     return tmp_return;
   }
 
+  AntarisReturnCode Invoke_PC_ps_temp_req(PsTempReq *req_params) {
+    antaris_api_peer_to_peer::PsTempReq pc_req;
+    antaris_api_peer_to_peer::AntarisReturnType pc_response;
+    Status pc_status;
+    // Context for the client. It could be used to convey extra information to
+    // the server and/or tweak certain RPC behaviors.
+    ClientContext context;
+
+    app_to_peer_PsTempReq(req_params, &pc_req);
+    context.AddMetadata(COOKIE_STR, this->cookie_str);
+
+    pc_status = stub_->PC_ps_temp_req(&context, pc_req, &pc_response);
+
+    AntarisReturnCode tmp_return;
+
+    // Act upon its status.
+    if (pc_status.ok()) {
+         tmp_return = (AntarisReturnCode)(pc_response.return_code());
+    } else {
+        tmp_return = An_GENERIC_FAILURE;
+    }
+
+    return tmp_return;
+  }
+
   AntarisReturnCode Invoke_PC_pa_satos_message(PaSatOsMsg *req_params) {
     antaris_api_peer_to_peer::PaSatOsMsg pc_req;
     antaris_api_peer_to_peer::AntarisReturnType pc_response;
@@ -591,6 +616,9 @@ public:
     Status PA_ProcessHostToPeerFcmOperationNotify(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::HostToPeerFcmOperationNotify* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
 
     Status PA_ProcessSatOsPaMsg(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::SatOsPaMsg* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+    
+    Status PA_ProcessRespPsTemp(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespPsTemp* request, ::antaris_api_peer_to_peer::AntarisReturnType* response);
+
 
 public:
 
@@ -858,6 +886,21 @@ Status AppCallbackServiceImpl::PA_ProcessRespSesTempReq(::grpc::ServerContext* c
     if (client_channel_ctx_->callbacks.process_response_ses_temp_req) {
         peer_to_app_RespSesTempReqParams((void *)request, &app_request);
         app_ret = client_channel_ctx_->callbacks.process_response_ses_temp_req(&app_request);
+    }
+
+    response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
+
+    return Status::OK;
+}
+
+Status AppCallbackServiceImpl::PA_ProcessRespPsTemp(::grpc::ServerContext* context, const ::antaris_api_peer_to_peer::RespPsTemp * request, ::antaris_api_peer_to_peer::AntarisReturnType* response)
+{
+    RespPsTemp app_request;
+    AntarisReturnCode app_ret = An_NOT_IMPLEMENTED;
+
+    if (client_channel_ctx_->callbacks.process_response_ps_temp_req) {
+        peer_to_app_RespPsTemp((void *)request, &app_request);
+        app_ret = client_channel_ctx_->callbacks.process_response_ps_temp_req(&app_request);
     }
 
     response->set_return_code((::antaris_api_peer_to_peer::AntarisReturnCode)(app_ret));
@@ -1448,6 +1491,26 @@ AntarisReturnCode api_pa_pc_ses_temp_req(AntarisChannel channel, SesTempReq *ses
     }
 
     return channel_ctx->pc_service_handle->Invoke_PC_ses_temp_req(ses_temp_req);
+}
+
+AntarisReturnCode api_pa_pc_ps_temp_req(AntarisChannel channel, PsTempReq *ps_temp_req)
+{
+    AntarisInternalClientChannelContext_t *channel_ctx = (AntarisInternalClientChannelContext_t *)channel;
+    AntarisReturnCode ret = An_SUCCESS;
+
+    printf("PsTempReq\n");
+
+    if (!channel_ctx || !channel_ctx->pc_service_handle || !ps_temp_req) {
+        ret = An_GENERIC_FAILURE;
+        return ret;
+
+    }
+
+    if (api_debug) {
+        displayPayloadMetricsResponse(ps_temp_req);
+    }
+
+    return channel_ctx->pc_service_handle->Invoke_PC_ps_temp_req(ps_temp_req);
 }
 
 AntarisReturnCode api_pa_pc_pa_satos_message(AntarisChannel channel, PaSatOsMsg *pa_satos_msg)

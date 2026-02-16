@@ -1767,6 +1767,59 @@ def peer_to_app_RespSesTempReqParams(peer_struct):
 def app_to_peer_RespSesTempReqParams(app_struct):
     return antaris_api_pb2.RespSesTempReqParams(correlation_id = app_struct.correlation_id, status = app_struct.status, temperature = app_struct.temperature, hardware_id = app_struct.hardware_id, heater_pwr_status = app_struct.heater_pwr_status)
 
+## @class: PsTempReq
+## @brief: Request to get PS temperature
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+class PsTempReq:
+    def __init__(self, correlation_id):
+        self.correlation_id = correlation_id
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_PsTempReq(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    return PsTempReq(correlation_id)
+
+def app_to_peer_PsTempReq(app_struct):
+    return antaris_api_pb2.PsTempReq(correlation_id = app_struct.correlation_id)
+
+## @class: RespPsTemp
+## @brief: Response to get PS temperature request
+## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
+## @param: temperature                                     :    in Celsius                                      
+class RespPsTemp:
+    def __init__(self, correlation_id, temperature):
+        self.correlation_id = correlation_id
+        self.temperature = temperature
+
+    def __str__(self):
+        ret_str = ""
+        ret_str += "correlation_id:\n"
+        ret_str += str(self.correlation_id) + "\n"
+        ret_str += "temperature:\n"
+        ret_str += str(self.temperature) + "\n"
+
+        return ret_str
+
+    def display(self):
+        print(str(self))
+
+def peer_to_app_RespPsTemp(peer_struct):
+    correlation_id = peer_struct.correlation_id
+    temperature = peer_struct.temperature
+    return RespPsTemp(correlation_id, temperature)
+
+def app_to_peer_RespPsTemp(app_struct):
+    return antaris_api_pb2.RespPsTemp(correlation_id = app_struct.correlation_id, temperature = app_struct.temperature)
+
 ## @class: SesThermalStatusNtf
 ## @brief: SES thermal notification from PC
 ## @param: correlation_id                                  :    correlation id for matching requests with responses and callbacks
@@ -1840,8 +1893,9 @@ def app_to_peer_SesThermalStatusNtf(app_struct):
 ## @param: process_remote_ac_power_on_ntf                  :    callback handler for remote application controller power on status notification
 ## @param: process_host_to_peer_fcm_operation_notify       :    callback handler for fcm operation status       
 ## @param: process_satos_pa_msg                            :    callback handler for satOS to PA command response
+## @param: process_response_ps_temp_req                    :    callback handler for PS temperature req response
 class AntarisApiCallbackFuncList:
-    def __init__(self, start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req, process_cb_ses_thrml_ntf, process_pa_satos_msg_response, process_remote_ac_power_on_ntf, process_host_to_peer_fcm_operation_notify, process_satos_pa_msg):
+    def __init__(self, start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req, process_cb_ses_thrml_ntf, process_pa_satos_msg_response, process_remote_ac_power_on_ntf, process_host_to_peer_fcm_operation_notify, process_satos_pa_msg, process_response_ps_temp_req):
         self.start_sequence = start_sequence
         self.shutdown_app = shutdown_app
         self.process_health_check = process_health_check
@@ -1864,6 +1918,7 @@ class AntarisApiCallbackFuncList:
         self.process_remote_ac_power_on_ntf = process_remote_ac_power_on_ntf
         self.process_host_to_peer_fcm_operation_notify = process_host_to_peer_fcm_operation_notify
         self.process_satos_pa_msg = process_satos_pa_msg
+        self.process_response_ps_temp_req = process_response_ps_temp_req
 
     def __str__(self):
         ret_str = ""
@@ -1911,6 +1966,8 @@ class AntarisApiCallbackFuncList:
         ret_str += str(self.process_host_to_peer_fcm_operation_notify) + "\n"
         ret_str += "process_satos_pa_msg:\n"
         ret_str += str(self.process_satos_pa_msg) + "\n"
+        ret_str += "process_response_ps_temp_req:\n"
+        ret_str += str(self.process_response_ps_temp_req) + "\n"
 
         return ret_str
 
@@ -1940,10 +1997,11 @@ def peer_to_app_AntarisApiCallbackFuncList(peer_struct):
     process_remote_ac_power_on_ntf = peer_struct.process_remote_ac_power_on_ntf
     process_host_to_peer_fcm_operation_notify = peer_struct.process_host_to_peer_fcm_operation_notify
     process_satos_pa_msg = peer_struct.process_satos_pa_msg
-    return AntarisApiCallbackFuncList(start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req, process_cb_ses_thrml_ntf, process_pa_satos_msg_response, process_remote_ac_power_on_ntf, process_host_to_peer_fcm_operation_notify, process_satos_pa_msg)
+    process_response_ps_temp_req = peer_struct.process_response_ps_temp_req
+    return AntarisApiCallbackFuncList(start_sequence, shutdown_app, process_health_check, process_response_register, process_response_get_current_location, process_response_stage_file_download, process_response_payload_power_control, req_payload_metrics, process_response_gnss_eph_stop, process_response_gnss_eph_start, process_cb_gnss_eph_data, process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start, process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req, process_cb_ses_thrml_ntf, process_pa_satos_msg_response, process_remote_ac_power_on_ntf, process_host_to_peer_fcm_operation_notify, process_satos_pa_msg, process_response_ps_temp_req)
 
 def app_to_peer_AntarisApiCallbackFuncList(app_struct):
-    return antaris_api_pb2.AntarisApiCallbackFuncList(start_sequence = app_struct.start_sequence, shutdown_app = app_struct.shutdown_app, process_health_check = app_struct.process_health_check, process_response_register = app_struct.process_response_register, process_response_get_current_location = app_struct.process_response_get_current_location, process_response_stage_file_download = app_struct.process_response_stage_file_download, process_response_payload_power_control = app_struct.process_response_payload_power_control, req_payload_metrics = app_struct.req_payload_metrics, process_response_gnss_eph_stop = app_struct.process_response_gnss_eph_stop, process_response_gnss_eph_start = app_struct.process_response_gnss_eph_start, process_cb_gnss_eph_data = app_struct.process_cb_gnss_eph_data, process_response_get_eps_voltage_stop = app_struct.process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start = app_struct.process_response_get_eps_voltage_start, process_cb_get_eps_voltage = app_struct.process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req = app_struct.process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req = app_struct.process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req = app_struct.process_response_ses_temp_req, process_cb_ses_thrml_ntf = app_struct.process_cb_ses_thrml_ntf, process_pa_satos_msg_response = app_struct.process_pa_satos_msg_response, process_remote_ac_power_on_ntf = app_struct.process_remote_ac_power_on_ntf, process_host_to_peer_fcm_operation_notify = app_struct.process_host_to_peer_fcm_operation_notify, process_satos_pa_msg = app_struct.process_satos_pa_msg)
+    return antaris_api_pb2.AntarisApiCallbackFuncList(start_sequence = app_struct.start_sequence, shutdown_app = app_struct.shutdown_app, process_health_check = app_struct.process_health_check, process_response_register = app_struct.process_response_register, process_response_get_current_location = app_struct.process_response_get_current_location, process_response_stage_file_download = app_struct.process_response_stage_file_download, process_response_payload_power_control = app_struct.process_response_payload_power_control, req_payload_metrics = app_struct.req_payload_metrics, process_response_gnss_eph_stop = app_struct.process_response_gnss_eph_stop, process_response_gnss_eph_start = app_struct.process_response_gnss_eph_start, process_cb_gnss_eph_data = app_struct.process_cb_gnss_eph_data, process_response_get_eps_voltage_stop = app_struct.process_response_get_eps_voltage_stop, process_response_get_eps_voltage_start = app_struct.process_response_get_eps_voltage_start, process_cb_get_eps_voltage = app_struct.process_cb_get_eps_voltage, process_response_start_ses_therm_mgmnt_req = app_struct.process_response_start_ses_therm_mgmnt_req, process_response_stop_ses_therm_mgmnt_req = app_struct.process_response_stop_ses_therm_mgmnt_req, process_response_ses_temp_req = app_struct.process_response_ses_temp_req, process_cb_ses_thrml_ntf = app_struct.process_cb_ses_thrml_ntf, process_pa_satos_msg_response = app_struct.process_pa_satos_msg_response, process_remote_ac_power_on_ntf = app_struct.process_remote_ac_power_on_ntf, process_host_to_peer_fcm_operation_notify = app_struct.process_host_to_peer_fcm_operation_notify, process_satos_pa_msg = app_struct.process_satos_pa_msg, process_response_ps_temp_req = app_struct.process_response_ps_temp_req)
 
 ## @class: AntarisReturnType
 ## @brief: Wrapper structure for AntarisReturnCode

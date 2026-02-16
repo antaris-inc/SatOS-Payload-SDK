@@ -47,7 +47,7 @@ struct TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[48]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[50]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -106,6 +106,9 @@ extern PayloadMetricsInfoDefaultTypeInternal _PayloadMetricsInfo_default_instanc
 class PayloadMetricsResponse;
 struct PayloadMetricsResponseDefaultTypeInternal;
 extern PayloadMetricsResponseDefaultTypeInternal _PayloadMetricsResponse_default_instance_;
+class PsTempReq;
+struct PsTempReqDefaultTypeInternal;
+extern PsTempReqDefaultTypeInternal _PsTempReq_default_instance_;
 class ReqGetCurrentLocationParams;
 struct ReqGetCurrentLocationParamsDefaultTypeInternal;
 extern ReqGetCurrentLocationParamsDefaultTypeInternal _ReqGetCurrentLocationParams_default_instance_;
@@ -157,6 +160,9 @@ extern RespPaSatOsMsgDefaultTypeInternal _RespPaSatOsMsg_default_instance_;
 class RespPayloadPowerControlParams;
 struct RespPayloadPowerControlParamsDefaultTypeInternal;
 extern RespPayloadPowerControlParamsDefaultTypeInternal _RespPayloadPowerControlParams_default_instance_;
+class RespPsTemp;
+struct RespPsTempDefaultTypeInternal;
+extern RespPsTempDefaultTypeInternal _RespPsTemp_default_instance_;
 class RespRegisterParams;
 struct RespRegisterParamsDefaultTypeInternal;
 extern RespRegisterParamsDefaultTypeInternal _RespRegisterParams_default_instance_;
@@ -218,6 +224,7 @@ template<> ::antaris_api_peer_to_peer::OBC_time* Arena::CreateMaybeMessage<::ant
 template<> ::antaris_api_peer_to_peer::PaSatOsMsg* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::PaSatOsMsg>(Arena*);
 template<> ::antaris_api_peer_to_peer::PayloadMetricsInfo* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::PayloadMetricsInfo>(Arena*);
 template<> ::antaris_api_peer_to_peer::PayloadMetricsResponse* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::PayloadMetricsResponse>(Arena*);
+template<> ::antaris_api_peer_to_peer::PsTempReq* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::PsTempReq>(Arena*);
 template<> ::antaris_api_peer_to_peer::ReqGetCurrentLocationParams* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::ReqGetCurrentLocationParams>(Arena*);
 template<> ::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::ReqGetEpsVoltageStartReq>(Arena*);
 template<> ::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::ReqGetEpsVoltageStopReq>(Arena*);
@@ -235,6 +242,7 @@ template<> ::antaris_api_peer_to_peer::RespGnssEphStopDataReq* Arena::CreateMayb
 template<> ::antaris_api_peer_to_peer::RespHealthCheckParams* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::RespHealthCheckParams>(Arena*);
 template<> ::antaris_api_peer_to_peer::RespPaSatOsMsg* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::RespPaSatOsMsg>(Arena*);
 template<> ::antaris_api_peer_to_peer::RespPayloadPowerControlParams* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::RespPayloadPowerControlParams>(Arena*);
+template<> ::antaris_api_peer_to_peer::RespPsTemp* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::RespPsTemp>(Arena*);
 template<> ::antaris_api_peer_to_peer::RespRegisterParams* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::RespRegisterParams>(Arena*);
 template<> ::antaris_api_peer_to_peer::RespSatOsPaMsg* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::RespSatOsPaMsg>(Arena*);
 template<> ::antaris_api_peer_to_peer::RespSesTempReqParams* Arena::CreateMaybeMessage<::antaris_api_peer_to_peer::RespSesTempReqParams>(Arena*);
@@ -8443,6 +8451,309 @@ class RespSesTempReqParams final :
 };
 // -------------------------------------------------------------------
 
+class PsTempReq final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:antaris_api_peer_to_peer.PsTempReq) */ {
+ public:
+  inline PsTempReq() : PsTempReq(nullptr) {}
+  ~PsTempReq() override;
+  explicit constexpr PsTempReq(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  PsTempReq(const PsTempReq& from);
+  PsTempReq(PsTempReq&& from) noexcept
+    : PsTempReq() {
+    *this = ::std::move(from);
+  }
+
+  inline PsTempReq& operator=(const PsTempReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline PsTempReq& operator=(PsTempReq&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const PsTempReq& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const PsTempReq* internal_default_instance() {
+    return reinterpret_cast<const PsTempReq*>(
+               &_PsTempReq_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    45;
+
+  friend void swap(PsTempReq& a, PsTempReq& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(PsTempReq* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(PsTempReq* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  PsTempReq* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<PsTempReq>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const PsTempReq& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const PsTempReq& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PsTempReq* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "antaris_api_peer_to_peer.PsTempReq";
+  }
+  protected:
+  explicit PsTempReq(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCorrelationIdFieldNumber = 1,
+  };
+  // int32 correlation_id = 1;
+  void clear_correlation_id();
+  int32_t correlation_id() const;
+  void set_correlation_id(int32_t value);
+  private:
+  int32_t _internal_correlation_id() const;
+  void _internal_set_correlation_id(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.PsTempReq)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  int32_t correlation_id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
+};
+// -------------------------------------------------------------------
+
+class RespPsTemp final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:antaris_api_peer_to_peer.RespPsTemp) */ {
+ public:
+  inline RespPsTemp() : RespPsTemp(nullptr) {}
+  ~RespPsTemp() override;
+  explicit constexpr RespPsTemp(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  RespPsTemp(const RespPsTemp& from);
+  RespPsTemp(RespPsTemp&& from) noexcept
+    : RespPsTemp() {
+    *this = ::std::move(from);
+  }
+
+  inline RespPsTemp& operator=(const RespPsTemp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RespPsTemp& operator=(RespPsTemp&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const RespPsTemp& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const RespPsTemp* internal_default_instance() {
+    return reinterpret_cast<const RespPsTemp*>(
+               &_RespPsTemp_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    46;
+
+  friend void swap(RespPsTemp& a, RespPsTemp& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RespPsTemp* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RespPsTemp* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  RespPsTemp* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<RespPsTemp>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const RespPsTemp& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const RespPsTemp& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RespPsTemp* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "antaris_api_peer_to_peer.RespPsTemp";
+  }
+  protected:
+  explicit RespPsTemp(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kCorrelationIdFieldNumber = 1,
+    kTemperatureFieldNumber = 2,
+  };
+  // int32 correlation_id = 1;
+  void clear_correlation_id();
+  int32_t correlation_id() const;
+  void set_correlation_id(int32_t value);
+  private:
+  int32_t _internal_correlation_id() const;
+  void _internal_set_correlation_id(int32_t value);
+  public:
+
+  // int32 temperature = 2;
+  void clear_temperature();
+  int32_t temperature() const;
+  void set_temperature(int32_t value);
+  private:
+  int32_t _internal_temperature() const;
+  void _internal_set_temperature(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:antaris_api_peer_to_peer.RespPsTemp)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  int32_t correlation_id_;
+  int32_t temperature_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_defs_2fgen_2fproto_2fantaris_5fapi_2eproto;
+};
+// -------------------------------------------------------------------
+
 class SesThermalStatusNtf final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:antaris_api_peer_to_peer.SesThermalStatusNtf) */ {
  public:
@@ -8491,7 +8802,7 @@ class SesThermalStatusNtf final :
                &_SesThermalStatusNtf_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    45;
+    47;
 
   friend void swap(SesThermalStatusNtf& a, SesThermalStatusNtf& b) {
     a.Swap(&b);
@@ -8692,7 +9003,7 @@ class AntarisCorrelationId final :
                &_AntarisCorrelationId_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    46;
+    48;
 
   friend void swap(AntarisCorrelationId& a, AntarisCorrelationId& b) {
     a.Swap(&b);
@@ -8838,7 +9149,7 @@ class AntarisReturnType final :
                &_AntarisReturnType_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    47;
+    49;
 
   friend void swap(AntarisReturnType& a, AntarisReturnType& b) {
     a.Swap(&b);
@@ -13313,6 +13624,74 @@ inline void RespSesTempReqParams::set_heater_pwr_status(int32_t value) {
 
 // -------------------------------------------------------------------
 
+// PsTempReq
+
+// int32 correlation_id = 1;
+inline void PsTempReq::clear_correlation_id() {
+  correlation_id_ = 0;
+}
+inline int32_t PsTempReq::_internal_correlation_id() const {
+  return correlation_id_;
+}
+inline int32_t PsTempReq::correlation_id() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.PsTempReq.correlation_id)
+  return _internal_correlation_id();
+}
+inline void PsTempReq::_internal_set_correlation_id(int32_t value) {
+  
+  correlation_id_ = value;
+}
+inline void PsTempReq::set_correlation_id(int32_t value) {
+  _internal_set_correlation_id(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.PsTempReq.correlation_id)
+}
+
+// -------------------------------------------------------------------
+
+// RespPsTemp
+
+// int32 correlation_id = 1;
+inline void RespPsTemp::clear_correlation_id() {
+  correlation_id_ = 0;
+}
+inline int32_t RespPsTemp::_internal_correlation_id() const {
+  return correlation_id_;
+}
+inline int32_t RespPsTemp::correlation_id() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.RespPsTemp.correlation_id)
+  return _internal_correlation_id();
+}
+inline void RespPsTemp::_internal_set_correlation_id(int32_t value) {
+  
+  correlation_id_ = value;
+}
+inline void RespPsTemp::set_correlation_id(int32_t value) {
+  _internal_set_correlation_id(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.RespPsTemp.correlation_id)
+}
+
+// int32 temperature = 2;
+inline void RespPsTemp::clear_temperature() {
+  temperature_ = 0;
+}
+inline int32_t RespPsTemp::_internal_temperature() const {
+  return temperature_;
+}
+inline int32_t RespPsTemp::temperature() const {
+  // @@protoc_insertion_point(field_get:antaris_api_peer_to_peer.RespPsTemp.temperature)
+  return _internal_temperature();
+}
+inline void RespPsTemp::_internal_set_temperature(int32_t value) {
+  
+  temperature_ = value;
+}
+inline void RespPsTemp::set_temperature(int32_t value) {
+  _internal_set_temperature(value);
+  // @@protoc_insertion_point(field_set:antaris_api_peer_to_peer.RespPsTemp.temperature)
+}
+
+// -------------------------------------------------------------------
+
 // SesThermalStatusNtf
 
 // int32 correlation_id = 1;
@@ -13486,6 +13865,10 @@ inline void AntarisReturnType::set_return_code(::antaris_api_peer_to_peer::Antar
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
