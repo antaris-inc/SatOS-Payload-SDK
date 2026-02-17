@@ -302,6 +302,10 @@ class Controller:
             logger.info(f"Heater Power Status = {resp.heater_pwr_status}") # 0:OFF, 1:ON
         else:
             logger.info(f"Unable read temperature for = {resp.hardware_id}")
+
+    def handle_get_ps_temp(self, ctx):
+        resp = ctx.client.ps_temp_req()
+        logger.info(f"Current payload server temperature = {resp.temperature}")
         
     def ses_thermal_status_ntf(self, ctx):
         if ctx.heater_pwr_status == 0:
@@ -614,6 +618,7 @@ def new():
     app.mount_sequence("PaSatOsMsg", ctl.handle_pa_satos_message)
     app.mount_sequence("ReadAcIp", ctl.handle_ac_ip_read)
     app.mount_sequence("FCMStart", ctl.handle_fcm_start_operation)
+    app.mount_sequence("PsTemp", ctl.handle_get_ps_temp)
     return app
 
 def set_payload_values(payload_app):
