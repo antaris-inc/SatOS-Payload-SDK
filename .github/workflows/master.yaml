@@ -6,11 +6,9 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  ## ========================
-  ## SDK tools: amd64
-  ## ========================
-  build-tools-image-amd64:
+  build-and-push-images:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -21,210 +19,38 @@ jobs:
           username: ${{ secrets.QUAY_USERNAME }}
           password: ${{ secrets.QUAY_PASSWORD }}
 
-      - name: Build and push multi-arch tools image
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ========================
+      # SDK Tools (Multi-Arch)
+      # ========================
+      - name: Build & Push SDK Tools (amd64 + arm64)
         run: |
-          docker build \
-            --push \
-            --platform linux/amd64 \
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
             -f images/sdk-tools/Dockerfile \
-            -t quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA}-amd64 .
+            -t quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA} \
+            --push .
 
-  ## ========================
-  ## SDK tools: arm64
-  ## ========================
-  build-tools-image-arm64:
-    runs-on: ubuntu-24.04-arm
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Login to image registry
-        uses: docker/login-action@v2
-        with:
-          registry: quay.io
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_PASSWORD }}
-
-      - name: Build and push multi-arch tools image
+      # ========================
+      # C++ App (Multi-Arch)
+      # ========================
+      - name: Build & Push C++ App (amd64 + arm64)
         run: |
-          docker build \
-            --push \
-            --platform linux/arm64 \
-            -f images/sdk-tools/Dockerfile \
-            -t quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA}-arm64 .
-
-  create-manifest-tools:
-    runs-on: ubuntu-latest
-    needs: [build-tools-image-amd64, build-tools-image-arm64]
-    steps:
-      - name: Login to image registry
-        uses: docker/login-action@v2
-        with:
-          registry: quay.io
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_PASSWORD }}
-
-      - name: Create multi-arch image manifest for tools
-        run: |
-          docker manifest create quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA} \
-            quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA}-amd64 \
-            quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA}-arm64
-
-          docker manifest push quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA}
-
-  ## ========================
-  ## C++ App: amd64
-  ## ========================
-  build-cpp-app-amd64:
-    runs-on: ubuntu-latest
-    needs: create-manifest-tools
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build SDK dependencies
-        run: docker run --platform linux/amd64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA} make api_lib agent_package
-
-      - name: Package cpp lib
-        run: docker run --platform linux/amd64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA} make cpp_package
-
-      - name: Login to image registry
-        uses: docker/login-action@v2
-        with:
-          registry: quay.io
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_PASSWORD }}
-
-      - name: Build and push cpp image
-        run: |
-          docker build \
-            --push \
-            --platform linux/amd64 \
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
             -f images/app-cpp/Dockerfile \
-            -t quay.io/antaris-inc/satos-payload-app-cpp:${GITHUB_SHA}-amd64 .
+            -t quay.io/antaris-inc/satos-payload-app-cpp:${GITHUB_SHA} \
+            --push .
 
-  ## ========================
-  ## C++ App: arm64
-  ## ========================
-  build-cpp-app-arm64:
-    runs-on: ubuntu-24.04-arm
-    needs: create-manifest-tools
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build SDK dependencies
-        run: docker run --platform linux/arm64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA} make api_lib agent_package
-
-      - name: Package cpp lib
-        run: docker run --platform linux/arm64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA} make cpp_package
-
-      - name: Login to image registry
-        uses: docker/login-action@v2
-        with:
-          registry: quay.io
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_PASSWORD }}
-
-      - name: Build and push cpp image
+      # ========================
+      # Python App (Multi-Arch)
+      # ========================
+      - name: Build & Push Python App (amd64 + arm64)
         run: |
-          docker build \
-            --push \
-            --platform linux/arm64 \
-            -f images/app-cpp/Dockerfile \
-            -t quay.io/antaris-inc/satos-payload-app-cpp:${GITHUB_SHA}-arm64 .
-
-  ## ========================
-  ## Python App: amd64
-  ## ========================
-  build-python-app-amd64:
-    runs-on: ubuntu-latest
-    needs: create-manifest-tools
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build SDK dependencies
-        run: docker run --platform linux/amd64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA} make api_lib agent_package
-
-      - name: Package python lib
-        run: docker run --platform linux/amd64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA} make python_package
-
-      - name: Login to image registry
-        uses: docker/login-action@v2
-        with:
-          registry: quay.io
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_PASSWORD }}
-
-      - name: Build and push python image
-        run: |
-          docker build \
-            --push \
-            --platform linux/amd64 \
+          docker buildx build \
+            --platform linux/amd64,linux/arm64 \
             -f images/app-python/Dockerfile \
-            -t quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA}-amd64 .
-
-  ## ========================
-  ## Python App: arm64
-  ## ========================
-  build-python-app-arm64:
-    runs-on: ubuntu-24.04-arm
-    needs: create-manifest-tools
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build SDK dependencies
-        run: docker run --platform linux/arm64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA} make api_lib agent_package
-
-      - name: Package python lib
-        run: docker run --platform linux/arm64 -v $PWD:/workspace quay.io/antaris-inc/satos-payload-sdk-tools:${GITHUB_SHA} make python_package
-
-      - name: Login to image registry
-        uses: docker/login-action@v2
-        with:
-          registry: quay.io
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_PASSWORD }}
-
-      - name: Build and push python image
-        run: |
-          docker build \
-            --push \
-            --platform linux/arm64 \
-            -f images/app-python/Dockerfile \
-            -t quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA}-arm64 .
-
-  create-manifest-python:
-    runs-on: ubuntu-latest
-    needs: [build-python-app-amd64, build-python-app-arm64]
-    steps:
-      - name: Login to image registry
-        uses: docker/login-action@v2
-        with:
-          registry: quay.io
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_PASSWORD }}
-
-      - name: Create multi-arch image manifest for Python app
-        run: |
-          docker manifest create quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA} \
-            quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA}-amd64 \
-            quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA}-arm64
-
-          docker manifest push quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA}
-
-  create-manifest-cpp:
-    runs-on: ubuntu-latest
-    needs: [build-cpp-app-amd64, build-cpp-app-arm64]
-    steps:
-      - name: Login to image registry
-        uses: docker/login-action@v2
-        with:
-          registry: quay.io
-          username: ${{ secrets.QUAY_USERNAME }}
-          password: ${{ secrets.QUAY_PASSWORD }}
-
-      - name: Create multi-arch image manifest for C++ app
-        run: |
-          docker manifest create quay.io/antaris-inc/satos-payload-app-cpp:${GITHUB_SHA} \
-            quay.io/antaris-inc/satos-payload-app-cpp:${GITHUB_SHA}-amd64 \
-            quay.io/antaris-inc/satos-payload-app-cpp:${GITHUB_SHA}-arm64
-
-          docker manifest push quay.io/antaris-inc/satos-payload-app-cpp:${GITHUB_SHA}
+            -t quay.io/antaris-inc/satos-payload-app-python:${GITHUB_SHA} \
+            --push .
