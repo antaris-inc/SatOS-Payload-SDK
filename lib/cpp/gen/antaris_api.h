@@ -241,6 +241,12 @@ typedef struct SesTempReq SesTempReq;
 struct RespSesTempReqParams;
 typedef struct RespSesTempReqParams RespSesTempReqParams;
 
+struct PsTempReq;
+typedef struct PsTempReq PsTempReq;
+
+struct RespPsTemp;
+typedef struct RespPsTemp RespPsTemp;
+
 struct SesThermalStatusNtf;
 typedef struct SesThermalStatusNtf SesThermalStatusNtf;
 
@@ -426,6 +432,16 @@ typedef AntarisReturnCode
 );
 static inline void
 displayProcessRespSesTempReq_Fptr(void *obj) { printf("%p\n", obj); }
+/// @brief Callback function type ProcessRespPsTemp_Fptr
+/// @typedef callback handler for PS temperature req response
+
+typedef AntarisReturnCode
+(*ProcessRespPsTemp_Fptr)
+(
+    RespPsTemp *                     ///< @param response to PS temperature req
+);
+static inline void
+displayProcessRespPsTemp_Fptr(void *obj) { printf("%p\n", obj); }
 /// @brief Callback function type ProcessSesThrmlNtf_Fptr
 /// @typedef Callback request to SES thermal notifictaion
 
@@ -1042,6 +1058,27 @@ void displayRespSesTempReqParams(const void *obj);
 void app_to_peer_RespSesTempReqParams(const void *ptr_src_app, void *ptr_dst_peer);
 void peer_to_app_RespSesTempReqParams(const void *ptr_src_peer, void *ptr_dst_app);
 
+/// @struct PsTempReq
+/// @brief Request to get PS temperature
+struct PsTempReq {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+};
+
+void displayPsTempReq(const void *obj);
+void app_to_peer_PsTempReq(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_PsTempReq(const void *ptr_src_peer, void *ptr_dst_app);
+
+/// @struct RespPsTemp
+/// @brief Response to get PS temperature request
+struct RespPsTemp {
+    UINT16                                          correlation_id;                                  ///< @var correlation id for matching requests with responses and callbacks
+    UINT8                                           temperature;                                     ///< @var in Celsius
+};
+
+void displayRespPsTemp(const void *obj);
+void app_to_peer_RespPsTemp(const void *ptr_src_app, void *ptr_dst_peer);
+void peer_to_app_RespPsTemp(const void *ptr_src_peer, void *ptr_dst_app);
+
 /// @struct SesThermalStatusNtf
 /// @brief SES thermal notification from PC
 struct SesThermalStatusNtf {
@@ -1082,6 +1119,7 @@ struct AntarisApiCallbackFuncList {
     ProcessRemoteAcPwrStatusNtf_Fptr                process_remote_ac_power_on_ntf;                  ///< @var callback handler for remote application controller power on status notification
     ProcessHostToPeerFcmOperationNotify_Fptr        process_host_to_peer_fcm_operation_notify;       ///< @var callback handler for fcm operation status
     ProcessSatOsPaMsg_Fptr                          process_satos_pa_msg;                            ///< @var callback handler for satOS to PA command response
+    ProcessRespPsTemp_Fptr                          process_response_ps_temp_req;                    ///< @var callback handler for PS temperature req response
 };
 
 void displayAntarisApiCallbackFuncList(const void *obj);
@@ -1264,6 +1302,15 @@ api_pa_pc_ses_temp_req
 (
     AntarisChannel                  channel,                         ///< @param channel context for API execution
     SesTempReq *                    req_ses_temp                     ///< @param SES temperature response parameters
+);
+
+/// @brief Function api_pa_pc_ps_temp_req
+/// @fn API to request to PS temperature
+AntarisReturnCode
+api_pa_pc_ps_temp_req
+(
+    AntarisChannel                  channel,                         ///< @param channel context for API execution
+    PsTempReq *                     req_ps_temp                      ///< @param SES temperature response parameters
 );
 
 /// @brief Function api_pa_pc_pa_satos_message

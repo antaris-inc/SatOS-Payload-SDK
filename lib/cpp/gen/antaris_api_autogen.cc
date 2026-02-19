@@ -2738,6 +2738,88 @@ peer_to_app_RespSesTempReqParams(const void *ptr_src_peer, void *ptr_dst_app)
 }
 
 void
+displayPsTempReq(const void *obj)
+{
+    PsTempReq *p = (PsTempReq *)obj;
+
+    printf("PsTempReq %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+
+}
+
+void
+app_to_peer_PsTempReq(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    PsTempReq *src = (PsTempReq *)ptr_src_app;
+    ::antaris_api_peer_to_peer::PsTempReq *dst = (::antaris_api_peer_to_peer::PsTempReq *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+
+}
+
+void
+peer_to_app_PsTempReq(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    PsTempReq *dst = (PsTempReq *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::PsTempReq *src = (::antaris_api_peer_to_peer::PsTempReq *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+
+}
+
+void
+displayRespPsTemp(const void *obj)
+{
+    RespPsTemp *p = (RespPsTemp *)obj;
+
+    printf("RespPsTemp %p =>\n", obj);
+
+    printf("correlation_id ==>\n");
+    displayUINT16((void *)&p->correlation_id);
+    printf("temperature ==>\n");
+    displayUINT8((void *)&p->temperature);
+
+}
+
+void
+app_to_peer_RespPsTemp(const void *ptr_src_app, void *ptr_dst_peer)
+{
+    RespPsTemp *src = (RespPsTemp *)ptr_src_app;
+    ::antaris_api_peer_to_peer::RespPsTemp *dst = (::antaris_api_peer_to_peer::RespPsTemp *)ptr_dst_peer;
+
+    UINT32 __tmp_correlation_id = 0;
+    UINT32 __tmp_temperature = 0;
+
+    app_to_peer_UINT16(&src->correlation_id, &__tmp_correlation_id); // correlation_id
+
+    dst->set_correlation_id(__tmp_correlation_id);
+
+    app_to_peer_UINT8(&src->temperature, &__tmp_temperature); // temperature
+
+    dst->set_temperature(__tmp_temperature);
+
+
+}
+
+void
+peer_to_app_RespPsTemp(const void *ptr_src_peer, void *ptr_dst_app)
+{
+    RespPsTemp *dst = (RespPsTemp *)ptr_dst_app;
+    ::antaris_api_peer_to_peer::RespPsTemp *src = (::antaris_api_peer_to_peer::RespPsTemp *)ptr_src_peer;
+
+    dst->correlation_id = src->correlation_id();
+    dst->temperature = src->temperature();
+
+}
+
+void
 displaySesThermalStatusNtf(const void *obj)
 {
     SesThermalStatusNtf *p = (SesThermalStatusNtf *)obj;
@@ -2865,6 +2947,8 @@ displayAntarisApiCallbackFuncList(const void *obj)
     displayProcessHostToPeerFcmOperationNotify_Fptr((void *)&p->process_host_to_peer_fcm_operation_notify);
     printf("process_satos_pa_msg ==>\n");
     displayProcessSatOsPaMsg_Fptr((void *)&p->process_satos_pa_msg);
+    printf("process_response_ps_temp_req ==>\n");
+    displayProcessRespPsTemp_Fptr((void *)&p->process_response_ps_temp_req);
 
 }
 

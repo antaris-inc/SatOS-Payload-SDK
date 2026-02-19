@@ -383,6 +383,15 @@ message RespSesTempReqParams {
     int32                           heater_pwr_status = 5; // 0:OFF, 1:ON
 }
 
+message PsTempReq {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+}
+
+message RespPsTemp {
+    int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
+    int32                           temperature      = 2; // in Celsius
+}
+
 message SesThermalStatusNtf {
     int32                           correlation_id   = 1; // correlation id for matching requests with responses and callbacks
     int32                           heater_pwr_status = 2; // 0:OFF, 1:ON
@@ -418,6 +427,7 @@ service AntarisapiApplicationCallback {
     rpc PA_ProcessRespStartSesThermMgmntReq(RespStartSesThermMgmntReq) returns (AntarisReturnType) {}
     rpc PA_ProcessRespStopSesThermMgmntReq(RespStopSesThermMgmntReq) returns (AntarisReturnType) {}
     rpc PA_ProcessRespSesTempReq(RespSesTempReqParams) returns (AntarisReturnType) {}
+    rpc PA_ProcessRespPsTemp(RespPsTemp) returns (AntarisReturnType) {}
     rpc PA_ProcessSesThrmlNtf(SesThermalStatusNtf) returns (AntarisReturnType) {}
     rpc PA_ProcessRespPaSatOsMsg(RespPaSatOsMsg) returns (AntarisReturnType) {}
     rpc PA_ProcessSatOsPaMsg(SatOsPaMsg) returns (AntarisReturnType) {}
@@ -441,6 +451,7 @@ service AntarisapiPayloadController {
     rpc PC_start_ses_therm_mgmnt_req(StartSesThermMgmntReq) returns (AntarisReturnType) {}
     rpc PC_stop_ses_therm_mgmnt_req(StopSesThermMgmntReq) returns (AntarisReturnType) {}
     rpc PC_ses_temp_req(SesTempReq) returns (AntarisReturnType) {}
+    rpc PC_ps_temp_req(PsTempReq) returns (AntarisReturnType) {}
     rpc PC_pa_satos_message(PaSatOsMsg) returns (AntarisReturnType) {}
     rpc PC_host_to_peer_fcm_operation(HostToPeerFcmOperation) returns (AntarisReturnType) {}
     rpc PC_satos_pa_message(RespSatOsPaMsg) returns (AntarisReturnType) {}

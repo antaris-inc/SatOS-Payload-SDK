@@ -535,6 +535,34 @@ class AppToPCClient {
         }
     }
 
+    AntarisReturnCode InvokeProcessRespPsTempReq(RespPsTemp *req_params)
+    {
+        antaris_api_peer_to_peer::RespPsTemp cb_req;
+        antaris_api_peer_to_peer::AntarisReturnType cb_response;
+        Status cb_status;
+        // Context for the client. It could be used to convey extra information to
+        // the server and/or tweak certain RPC behaviors.
+        ClientContext context;
+
+        // Adding deadline or timeout
+        std::chrono::system_clock::time_point deadline = std::chrono::system_clock::now() + std::chrono::milliseconds(GRPC_RESPONSE_TIMEOUT_IN_MS);
+        context.set_deadline(deadline);
+
+        app_to_peer_RespPsTemp(req_params, &cb_req);
+
+        cb_status = app_grpc_handle_->PA_ProcessRespPsTemp(&context, cb_req, &cb_response);
+
+        // Act upon its status.
+        if (cb_status.ok())
+        {
+            return (AntarisReturnCode)(cb_response.return_code());
+        }
+        else
+        {
+            return An_GENERIC_FAILURE;
+        }
+    }
+
     AntarisReturnCode InvokeProcessSesThrmlNtf(SesThermalStatusNtf *req_params)
     {
         antaris_api_peer_to_peer::SesThermalStatusNtf cb_req;
@@ -619,7 +647,7 @@ class AppToPCClient {
         }
     }
 
-       AntarisReturnCode InvokeProcessSatOsPaMsg(SatOsPaMsg *req_params)
+    AntarisReturnCode InvokeProcessSatOsPaMsg(SatOsPaMsg *req_params)
     {
         antaris_api_peer_to_peer::SatOsPaMsg cb_req;
         antaris_api_peer_to_peer::AntarisReturnType cb_response;
@@ -974,6 +1002,22 @@ done:
         peer_to_app_SesTempReq(request, &api_request);
 
         user_callbacks_(user_cb_ctx_, cookie, e_app2PC_SesTempReq, &api_request, &api_response.return_code);
+
+        app_to_peer_AntarisReturnType(&api_response, response);
+
+        return Status::OK;
+    }
+
+    Status PC_ps_temp_req(::grpc::ServerContext *context, const ::antaris_api_peer_to_peer::PsTempReq *request, ::antaris_api_peer_to_peer::AntarisReturnType *response)
+    {
+        AppToPCCallbackParams_t api_request = {0};
+        AntarisReturnType api_response = {return_code : An_SUCCESS};
+        cookie_t cookie;
+        cookie = decodeCookie(context);
+
+        peer_to_app_PsTempReq(request, &api_request);
+
+        user_callbacks_(user_cb_ctx_, cookie, e_app2PC_PsTempReq, &api_request, &api_response.return_code);
 
         app_to_peer_AntarisReturnType(&api_response, response);
 
@@ -1359,7 +1403,10 @@ AntarisReturnCode an_pc_pa_invoke_api(PCToAppClientContext ctx, PCToAppApiId_e a
     case e_PC2App_SatOsPaMsg:
         ret = internal_ctx->client_api_handle->InvokeProcessSatOsPaMsg(&api_params->satos_pa_msg);
         break;
-    } // switch api_id
+    case e_PC2App_PsTemp:
+        ret = internal_ctx->client_api_handle->InvokeProcessRespPsTempReq(&api_params->resp_ps_temp);
+        break;
+    }  // switch api_id
 
     return ret;
 }

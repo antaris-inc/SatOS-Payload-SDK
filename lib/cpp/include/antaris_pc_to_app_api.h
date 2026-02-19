@@ -47,6 +47,7 @@ typedef enum {
     e_app2PC_PaSatOsMsg,
     e_app2PC_PstoEsFcmOperation,
     e_app2PC_RespSatOsPaMsg,
+    e_app2PC_PsTempReq,
     e_app2PC_MaxRequest
 } AppToPCCallbackId_e;
 
@@ -78,6 +79,7 @@ typedef union {
     AntarisAppSdkVersion_t          sdk_version;
     HostToPeerFcmOperation          pstoes_fcm_operation;
     RespSatOsPaMsg                  resp_satos_pa_msg;
+    PsTempReq                       ps_temp_req;
 } AppToPCCallbackParams_t;
 
 typedef    UINT16 SHORT_APP_ID_t;
@@ -117,6 +119,7 @@ typedef enum {
     e_PC2App_NtfRemoteAcPowerStatus,
     e_PC2App_PstoEsFcmOperationNotify,
     e_PC2App_SatOsPaMsg,
+    e_PC2App_PsTemp,
     e_PC2App_MaxRequest,
 } PCToAppApiId_e;
 
@@ -143,6 +146,7 @@ typedef union {
     NtfRemoteAcPwrStatus                remote_app_status;
     HostToPeerFcmOperationNotify        pstoes_fcm_operation_notify;
     SatOsPaMsg                          satos_pa_msg;
+    RespPsTemp                          resp_ps_temp;
 } PCToAppApiParams_t;
 
 PCToAppClientContext an_pc_pa_create_client(INT8 *peer_ip_str, UINT16 port, INT8 *client_ssl_addr, UINT32 ssl_flag);

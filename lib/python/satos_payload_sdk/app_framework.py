@@ -167,7 +167,8 @@ class ChannelClient:
             'PaSatOsMsg': self._handle_response,
             'RemoteAcPowerStatusNtf': remote_ac_power_on_ntf,
             'FcmOperationNotify': process_notify_fcm_operation_cb,
-            'PostRegistrationCb' : process_post_reg_cb
+            'PostRegistrationCb' : process_post_reg_cb,
+            'RespPsTemp' : self._handle_response
         }
 
     def _get_next_cid(self):
@@ -352,6 +353,28 @@ class ChannelClient:
             resp = api_client.api_pa_pc_ses_temp_req(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
                 logger.error("api_pa_pc_ses_temp_req request failed")
+                return None
+
+            resp_cond = threading.Condition()
+            resp_cond.acquire()
+
+            self._responses[params.correlation_id] = [resp_cond, None]
+
+        # wait for response trigger
+        resp_cond.wait()
+
+        with self._cond:
+            resp = self._responses[params.correlation_id][1]
+            del self._responses[params.correlation_id]
+
+        return resp
+    
+    def ps_temp_req(self):
+        with self._cond:
+            params = api_types.PsTempReq(self._get_next_cid())
+            resp = api_client.api_pa_pc_ps_temp_req(self._channel, params)
+            if resp != api_types.AntarisReturnCode.An_SUCCESS:
+                logger.error("api_pa_pc_ps_temp_req request failed")
                 return None
 
             resp_cond = threading.Condition()
