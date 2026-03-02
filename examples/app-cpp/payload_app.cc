@@ -616,15 +616,11 @@ void handle_PowerControl(mythreadState_t *mythread){
     char *endptr;
     errno = 0;
     long power_state = strtol(mythread->seq_params,&endptr,10);
-    if (errno != 0 || endptr == mythread->seq_params) {
-        printf("incorrect parameters. not able to convert string to integer.\n");
+    if (errno != 0 || endptr == mythread->seq_params || power_state != 0 && power_state != 1) {
+        printf("incorrect parameters. parameters can be only 0 or 1.\n");
         return;
     }
      else {
-        if(power_state != 0 && power_state != 1){
-            printf("incorrect parameters. parameters can be only 0 or 1.\n");
-        }
-        else {
             UINT16 hw_id = 0x4001;
             ReqPayloadPowerControlParams PayloadPowerControl = {0};
             PayloadPowerControl.hw_id = hw_id;
@@ -636,7 +632,6 @@ void handle_PowerControl(mythreadState_t *mythread){
             } else{
                 fprintf(stderr, " payload power control request failed, ret %d\n", ret);
             }
-        }
     }
     // Tell PC that current sequence is done
     CmdSequenceDoneParams sequence_done_params = {0};
