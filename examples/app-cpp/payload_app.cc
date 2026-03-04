@@ -618,7 +618,6 @@ void handle_PowerControl(mythreadState_t *mythread){
     long power_state = strtol(mythread->seq_params,&endptr,10);
     if (errno != 0 || endptr == mythread->seq_params || power_state != 0 && power_state != 1) {
         printf("incorrect parameters. parameters can be only 0 or 1.\n");
-        return;
     }
      else {
             UINT16 hw_id = 0x4001;
