@@ -1436,6 +1436,12 @@ AntarisReturnCode process_response_get_current_location(RespGetCurrentLocationPa
     if (debug) {
         displayRespGetCurrentLocationParams(resp_get_curr_location_param);
     }
+    printf("Latitude %f\n",resp_get_curr_location_param->latitude);
+    printf("Longitude %f\n",resp_get_curr_location_param->longitude);
+    printf("altitude %f\n",resp_get_curr_location_param->latitude);
+    printf("sd_latitude %f\n",resp_get_curr_location_param->sd_latitude);
+    printf("sd_longitude %f\n",resp_get_curr_location_param->sd_longitude);
+    printf("sd_altitude %f\n",resp_get_curr_location_param->sd_altitude);
 
     // #<Payload Application Business Logic>
     wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
