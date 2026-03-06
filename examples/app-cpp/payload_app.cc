@@ -1438,7 +1438,7 @@ AntarisReturnCode process_response_get_current_location(RespGetCurrentLocationPa
     }
     printf("Latitude %lf\n",resp_get_curr_location_param->latitude);
     printf("Longitude %lf\n",resp_get_curr_location_param->longitude);
-    printf("altitude %lf\n",resp_get_curr_location_param->latitude);
+    printf("altitude %lf\n",resp_get_curr_location_param->altitude);
     printf("sd_latitude %f\n",resp_get_curr_location_param->sd_latitude);
     printf("sd_longitude %f\n",resp_get_curr_location_param->sd_longitude);
     printf("sd_altitude %f\n",resp_get_curr_location_param->sd_altitude);
