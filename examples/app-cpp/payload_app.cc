@@ -29,7 +29,7 @@
 #include "antaris_api_i2c.h"
 
 #define MAX_STR_LEN 256
-#define SEQ_PARAMS_LEN 64
+#define SEQ_PARAMS_LEN 128
 #define SEQ_NAME_LEN   32
 #define FSM_SLEEP_TIME 100*1000 //this sleep time(ms) should be configured considering the PA <--> PC communication frequency
 
