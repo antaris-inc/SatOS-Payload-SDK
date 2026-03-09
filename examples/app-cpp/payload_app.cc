@@ -29,7 +29,7 @@
 #include "antaris_api_i2c.h"
 
 #define MAX_STR_LEN 256
-#define SEQ_PARAMS_LEN 64
+#define SEQ_PARAMS_LEN 128
 #define SEQ_NAME_LEN   32
 #define FSM_SLEEP_TIME 100*1000 //this sleep time(ms) should be configured considering the PA <--> PC communication frequency
 
@@ -1436,6 +1436,12 @@ AntarisReturnCode process_response_get_current_location(RespGetCurrentLocationPa
     if (debug) {
         displayRespGetCurrentLocationParams(resp_get_curr_location_param);
     }
+    printf("Latitude %lf\n",resp_get_curr_location_param->latitude);
+    printf("Longitude %lf\n",resp_get_curr_location_param->longitude);
+    printf("altitude %lf\n",resp_get_curr_location_param->altitude);
+    printf("standard deviation latitude %f\n",resp_get_curr_location_param->sd_latitude);
+    printf("standard deviation longitude %f\n",resp_get_curr_location_param->sd_longitude);
+    printf("standard deviation altitude %f\n",resp_get_curr_location_param->sd_altitude);
 
     // #<Payload Application Business Logic>
     wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
