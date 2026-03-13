@@ -29,7 +29,7 @@
 #include "antaris_api_i2c.h"
 
 #define MAX_STR_LEN 256
-#define SEQ_PARAMS_LEN 64
+#define SEQ_PARAMS_LEN 128
 #define SEQ_NAME_LEN   32
 #define FSM_SLEEP_TIME 100*1000 //this sleep time(ms) should be configured considering the PA <--> PC communication frequency
 
@@ -614,15 +614,10 @@ void handle_PowerControl(mythreadState_t *mythread){
     char *endptr;
     errno = 0;
     long power_state = strtol(mythread->seq_params,&endptr,10);
-    if (errno != 0 || endptr == mythread->seq_params) {
-        printf("incorrect parameters. not able to convert string to integer.\n");
-        return;
+    if (errno != 0 || endptr == mythread->seq_params || power_state != 0 && power_state != 1) {
+        printf("incorrect parameters. parameters can be only 0 or 1.\n");
     }
      else {
-        if(power_state != 0 && power_state != 1){
-            printf("incorrect parameters. parameters can be only 0 or 1.\n");
-        }
-        else {
             UINT16 hw_id = 0x4001;
             ReqPayloadPowerControlParams PayloadPowerControl = {0};
             PayloadPowerControl.hw_id = hw_id;
@@ -634,7 +629,6 @@ void handle_PowerControl(mythreadState_t *mythread){
             } else{
                 fprintf(stderr, " payload power control request failed, ret %d\n", ret);
             }
-        }
     }
     // Tell PC that current sequence is done
     CmdSequenceDoneParams sequence_done_params = {0};
@@ -1394,6 +1388,12 @@ AntarisReturnCode process_response_get_current_location(RespGetCurrentLocationPa
     if (debug) {
         displayRespGetCurrentLocationParams(resp_get_curr_location_param);
     }
+    printf("Latitude %lf\n",resp_get_curr_location_param->latitude);
+    printf("Longitude %lf\n",resp_get_curr_location_param->longitude);
+    printf("altitude %lf\n",resp_get_curr_location_param->altitude);
+    printf("standard deviation latitude %f\n",resp_get_curr_location_param->sd_latitude);
+    printf("standard deviation longitude %f\n",resp_get_curr_location_param->sd_longitude);
+    printf("standard deviation altitude %f\n",resp_get_curr_location_param->sd_altitude);
 
     // #<Payload Application Business Logic>
     wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
