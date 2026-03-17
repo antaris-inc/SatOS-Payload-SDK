@@ -139,11 +139,7 @@ if docker network ls | grep -q '${APP_KEYWORD}'; then
 else
     echo "Creating Docker macvlan network '${APP_KEYWORD}'"
 
-    docker network create \
-        --driver=macvlan \
-        --subnet=${SUBNET} \
-        -o parent="\$MACVLAN_IFACE" \
-        ${APP_KEYWORD}
+    docker network create --driver=macvlan --subnet=${SUBNET} -o parent="\$MACVLAN_IFACE" ${APP_KEYWORD}
 fi
 EOF
 
