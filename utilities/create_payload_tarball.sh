@@ -370,7 +370,7 @@ if ! docker image inspect "$VM_NAME" >/dev/null 2>&1; then
 fi
 
 docker save "$VM_NAME" \
-    -o "$BASE_DIR/factory_restore/${name}_image.tar"
+    -o "$BASE_DIR/factory_restore/${VM_NAME}.tar"
 
 echo "Docker image tarball created."
 
