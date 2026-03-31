@@ -307,9 +307,8 @@ if ask_yes_no "Do you have payload_run.sh ? [y/n]:"; then
     cp "$payload_run_path" "$BASE_DIR/app/"
     chmod +x "$BASE_DIR/app/payload_run.sh"
 elif ask_yes_no "Do you want to create payload_run.sh ? [y/n]:"; then
-    read -rp "Enter Docker image name (e.g. repo/image:tag): " DOCKER_IMAGE
     read -rp "Enter extra docker run command parameters: " EXTRA_MOUNTS
-    generate_payload_script ${name} ${NAME} "$EXTRA_MOUNTS" "$DOCKER_IMAGE"
+    generate_payload_script ${name} ${NAME} "$EXTRA_MOUNTS" "$VM_NAME"
     cp payload_run.sh "$BASE_DIR/app/"
     chmod +x "$BASE_DIR/app/payload_run.sh"
 fi 
@@ -365,12 +364,12 @@ fi
 # Step 8: Docker image tarball
 ############################
 echo "Creating tarball of docker image"
-if ! docker image inspect "$DOCKER_IMAGE" >/dev/null 2>&1; then
+if ! docker image inspect "$VM_NAME" >/dev/null 2>&1; then
     echo "ERROR: Docker image not found locally!"
     exit 1
 fi
 
-docker save "$DOCKER_IMAGE" \
+docker save "$VM_NAME" \
     -o "$BASE_DIR/factory_restore/${name}_image.tar"
 
 echo "Docker image tarball created."
