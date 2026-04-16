@@ -257,6 +257,9 @@ export VM_IP_ADDRESS=$(jq -r '.Network.VM_IP_Address' "$config_json_path")
 export APP_CONTROLLER_IP=$(jq -r '.Network.Application_Controller_IP_Address' "$config_json_path")
 export COOKIE=$(jq -r '.cookie' "$config_json_path")
 
+# convert docker image name to small letters.
+VM_NAME=$(echo "$VM_NAME" | tr '[:upper:]' '[:lower:]')
+
 # Delete last 3 characters of COOKIE
 COOKIE="${COOKIE::-3}"
 
