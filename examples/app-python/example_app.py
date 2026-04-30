@@ -217,8 +217,13 @@ class Controller:
 
     def handle_log_location(self, ctx):
         loc = ctx.client.get_current_location()
-        logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude} standard deviation_lat={loc.sd_latitude}, standard deviation_lng={loc.sd_longitude}, standard deviation_alt={loc.sd_altitude}")
-    
+        logger.info(f"Latitude {loc.latitude}")
+        logger.info(f"Longitude {loc.longitude}")
+        logger.info(f"Altitude {loc.altitude}")
+        logger.info(f"Standard deviation latitude {loc.sd_latitude}")
+        logger.info(f"Standard deviation longitude {loc.sd_longitude}")
+        logger.info(f"Standard deviation altitude {loc.sd_altitude}")
+        
     def handle_gnss_data(self, ctx):
         periodicity_in_ms = 2000    # Periodicity = 0 indicates one time GNSS EPH data. Max is 1 minute
         eph2_enable = 1
@@ -341,15 +346,25 @@ class Controller:
             logger.info("invlaid power state. power state can only be 0 or 1")
             return
         resp = ctx.client.payload_power_control(power_state, hw_id)
-        logger.info(f"Power control state = {power_state}. Call response is = {resp}")
+        logger.info(f"Power Control Call response is = {resp}")
         
     # The sample program assumes 2 GPIO pins are connected back-to-back. 
     # This sequence toggles level of 'Write Pin' and then reads level of 'Read Pin'
     def handle_test_gpio(self, ctx):
+        logger.info("Handling sequence: TestGPIO!")
         gpio_info = api_parser.api_pa_pc_get_gpio_info()
 
+        if gpio_info is None:
+            logger.error("Error: json file is not configured properly. Kindly check configurations done in ACP")
+            return
+
         logger.info("Total gpio pins = %d", int(gpio_info.pin_count))
-        api_gpio.api_pa_pc_init_gpio_lib()
+        ret = api_gpio.api_pa_pc_init_gpio_lib()
+
+        if ret is False:
+            logger.error("Error: Init GPIO lib failed")
+            return
+        
         i = 0
         # Read initial value of GPIO pins.
         # As GPIO pins are back-to-back connected, their value must be same.
@@ -463,6 +478,10 @@ class Controller:
         canInfo = api_can.api_pa_pc_get_can_dev()
         logger.info("Total CAN bus ports = %d", int(canInfo.can_port_count))
 
+        if canInfo.can_port_count == 0:
+            logger.info("No CAN devices available!")
+            return
+
         # Define the CAN channel to use (assuming the first device)
         channel = canInfo.can_dev[0]
         logger.info("Starting CAN receiver port %s", channel)
@@ -497,7 +516,7 @@ class Controller:
         return 
     
     def handle_test_i2c_bus(self, ctx):
-        logger.info("Test I2C bus")
+        logger.info("Handling sequence: TestI2CBus!")
 
         # Check number of i2c bus 
         i2cInfo = api_parser.api_pa_pc_get_i2c_dev()
