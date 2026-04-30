@@ -157,7 +157,7 @@ void handle_HelloFriend(mythreadState_t *mythread)
     AntarisReturnCode ret;
     unsigned long current_time_in_ms;
 
-    printf("Handling sequence: hello, %s \n", mythread->seq_params);
+    printf("Handling sequence: hello, %s! \n", mythread->seq_params);
 
     // Tell PC that current sequence is done
     CmdSequenceDoneParams sequence_done_params = {0};
@@ -185,10 +185,10 @@ static void handle_LogLocation(mythreadState_t *mythread)
 
     printf("%s: sent get-current-location request with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
     if (An_SUCCESS != ret) {
-        fprintf(stderr, "%s: api_pa_pc_get_current_location failed, ret %d\n", __FUNCTION__, ret);
+        fprintf(stderr, "api_pa_pc_get_current_location failed, ret %d\n", ret);
         _exit(-1);
     } else {
-        printf("%s: api_pa_pc_get_current_location returned success, ret %d\n", __FUNCTION__, ret);
+        printf("api_pa_pc_get_current_location returned success, ret %d\n", ret);
     }
 
     // Tell PC that current sequence is done
@@ -276,10 +276,10 @@ void handle_gnss_data_Telemetry_Request(mythreadState_t *mythread){
         req_gnss_eph_stop_data_request.correlation_id = mythread->correlation_id;
         ret = api_pa_pc_gnss_eph_stop_req(channel,&req_gnss_eph_stop_data_request);
         if(ret == An_SUCCESS){
-            printf("Sending GNSS EPH data Telemetry stop request success, ret %d\n",ret);
+            printf("GNSS EPH data stop request success, ret %d\n",ret);
         }
         else{
-            fprintf(stderr, " Sending GNSS EPH data Telemety stop request failed, ret %d\n", ret);
+            fprintf(stderr, "GNSS EPH data Telemety request failed, ret %d\n", ret);
         }
     }
     else if(strcmp(seq_params_lower, "start") == 0){
@@ -290,10 +290,10 @@ void handle_gnss_data_Telemetry_Request(mythreadState_t *mythread){
         req_gnss_eph_start_data_request.eph2_enable = eph2_enable;
         ret = api_pa_pc_gnss_eph_start_req(channel,&req_gnss_eph_start_data_request);
         if(ret == An_SUCCESS){
-            printf("Sending GNSS EPH data Telemetry start request success, ret %d\n",ret);
+            printf("GNSS EPH data start request success, ret %d\n",ret);
         }
         else{
-            fprintf(stderr, " Sending GNSS EPH data Telemetry start request failed, ret %d\n", ret);
+            fprintf(stderr, "GNSS EPH data start request failed, ret %d\n", ret);
         }
     }
     else{
@@ -335,11 +335,6 @@ void handle_TestGPIO(mythreadState_t *mythread)
     }
     printf("Total gpio pins = %d \n", gpio_info.pin_count);
 
-    if (ret != An_SUCCESS) {
-        printf("Error: Unable to initialize GPIO Lib \n");
-        return;
-    }
-
     ret = api_gpio.api_pa_pc_init_gpio_lib();
     if (ret != An_SUCCESS) {
         printf("Error: Init GPIO lib failed \n");
@@ -374,6 +369,8 @@ void handle_TestGPIO(mythreadState_t *mythread)
         /* As Read and Write pins are back-to-back connected, 
            Reading value of Read pin to confirm GPIO success/failure
          */
+
+        printf("Reading from pin no. %d", int(readPin));
         val = api_gpio.api_pa_pc_read_gpio(gpio_info.gpio_port, readPin);
         if (val == GPIO_ERROR) {
             printf("Error in pin no %d \n", int(readPin));
@@ -407,7 +404,7 @@ void handle_StageFile(mythreadState_t *mythread)
     ReqStageFileDownloadParams download_file_params = {0};
     char full_file_path[256];
 
-    printf("\n Handling sequence: StageFile! \n");
+    printf("\n Staging file for download \n");
 
     filename_size = strnlen(STAGE_FILE_NAME, MAX_FILE_OR_PROP_LEN_NAME);
 
@@ -440,7 +437,10 @@ void handle_StageFile(mythreadState_t *mythread)
     ret = api_pa_pc_stage_file_download(channel, &download_file_params);
 
     if (ret == An_GENERIC_FAILURE) {
-        printf("Error: Failed to stage file %s \n", download_file_params.file_path);
+        printf("Error in staging file");
+    }
+    else{
+        printf("File successfully staged");
     }
 exit_sequence:    
     // Tell PC that current sequence is done
@@ -477,6 +477,9 @@ void handle_TestCANBus(mythreadState_t *mythread)
     }
 
     if (parts[0] == NULL || parts[1] == NULL) {
+        printf("Input format is incorrect. The format is:\n");
+        printf("Arbitration ID data[0],data[1],data[2],data[3]..data[7]\n");
+        printf("Using default arbitration ID and data bytes.\n");
         printf("Input format is incorrect. Using default arbitration ID and data bytes.\n");
     }
 
@@ -509,6 +512,7 @@ void handle_TestCANBus(mythreadState_t *mythread)
     }
 
     // Send test messages on each CAN bus
+    printf("Sending data in CAN bus");
     int send_msg_limit = 10;
     for (int loopCounter = 0; loopCounter < send_msg_limit; loopCounter++) {
         for (int i = 0; i < canInfo.can_port_count; i++) {
@@ -517,7 +521,6 @@ void handle_TestCANBus(mythreadState_t *mythread)
         sleep(1);
     }
 
-    printf("Checking received data \n");
 
     for (int i = 0; i < canInfo.can_port_count; i++) {
         while (canInfo.api_pa_pc_get_can_message_received_count(i) > 0) {
@@ -612,12 +615,11 @@ void handle_PowerControl(mythreadState_t *mythread){
     printf("Handling payload power");
     AntarisReturnCode ret;
     // char* power_state = mythread->seq_params;
-    printf("parmas is %s\n",mythread->seq_params);
     char *endptr;
     errno = 0;
     long power_state = strtol(mythread->seq_params,&endptr,10);
     if (errno != 0 || endptr == mythread->seq_params || power_state != 0 && power_state != 1) {
-        printf("incorrect parameters. parameters can be only 0 or 1.\n");
+        printf("invlaid power state. power state can only be 0 or 1\n");
     }
      else {
             UINT16 hw_id = 0x4001;
@@ -629,7 +631,7 @@ void handle_PowerControl(mythreadState_t *mythread){
             if(ret == An_SUCCESS){
                     printf("Payload power control request success, ret %d\n",ret);
             } else{
-                fprintf(stderr, " payload power control request failed, ret %d\n", ret);
+                fprintf(stderr, "payload power control request failed, ret %d\n", ret);
             }
     }
     // Tell PC that current sequence is done
@@ -833,7 +835,7 @@ void handle_fcm_start_operation(mythreadState_t *mythread){
         printf("Fcm start request success, ret %d\n",ret);
     }
     else{
-        fprintf(stderr, " FCM start request failed, ret %d\n", ret);
+        fprintf(stderr, "FCM start request failed, ret %d\n", ret);
     }
 
      // Tell PC that current sequence is done
@@ -1462,7 +1464,7 @@ AntarisReturnCode process_response_stage_file_download(RespStageFileDownloadPara
 
 AntarisReturnCode process_response_payload_power_control(RespPayloadPowerControlParams *resp_payload_power_control)
 {
-    printf("process_response_payload_power_control\n");
+    printf("Power Control Call response is = %d", resp_payload_power_control->req_status);
     if (debug) {
         displayRespPayloadPowerControlParams(resp_payload_power_control);
     }
