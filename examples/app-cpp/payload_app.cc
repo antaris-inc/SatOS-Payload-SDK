@@ -1126,8 +1126,7 @@ static AntarisReturnCode validate_sequence_params(StartSequenceParams *p)
         return An_SUCCESS;
     }
 
-    printf("Unknown sequence in validation\n");
-    return An_INVALID_PARAMS;
+    return An_SUCCESS;
 }
 
 // Callback functions (PC => Application)
@@ -1140,12 +1139,15 @@ AntarisReturnCode start_sequence(StartSequenceParams *start_seq_param)
 
     // <Payload Application Business Logic>
     // Start Sequence FSM Thread
+    // if sequence is not present it will give invlaid sequnce response to the controller
     current_sequence_idx = get_sequence_idx_from_seq_string(&start_seq_param->sequence_id[0]);
     if (current_sequence_idx ==  -1) {
         printf("Invalid Sequence \n");
         return An_INVALID_SEQUENCE;
     }
 
+    // this will validate if sequence parameters are incorrect, application developers should use this function to validate there sequence params.
+    // default repsonse for this function is success
     AntarisReturnCode val_ret = validate_sequence_params(start_seq_param);
 
     if (val_ret != An_SUCCESS) {
