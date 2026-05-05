@@ -41,6 +41,7 @@
             <EnumValue name="An_NOT_PERMITTED" value="-4" description="Operation not allowed"/>
             <EnumValue name="An_INVALID_PARAMS" value="-5" description="Invalid parameter"/>
             <EnumValue name="An_INCOMPATIBLE_VERSION" value="-6" description="Incompatible version of SDK invocation"/>
+            <EnumValue name="An_INVALID_SEQUENCE" value="-7" description="Sequence is not valid"/>
         </Enum>
 
         <Enum name="FilePriorities" description="File priority">

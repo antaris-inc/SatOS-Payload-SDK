@@ -64,6 +64,7 @@ typedef enum AntarisReturnCode {
     An_NOT_PERMITTED                 = -4,                              ///< Operation not allowed
     An_INVALID_PARAMS                = -5,                              ///< Invalid parameter
     An_INCOMPATIBLE_VERSION          = -6,                              ///< Incompatible version of SDK invocation
+    An_INVALID_SEQUENCE              = -7,                              ///< Sequence is not valid
 } AntarisReturnCode;
 
 void displayAntarisReturnCode(void *obj);
