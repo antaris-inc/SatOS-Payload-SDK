@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import logging
+import sys
 import os
 import threading
 import time
@@ -21,6 +22,12 @@ import satos_payload_sdk.antaris_api_client as api_client
 import satos_payload_sdk.gen.antaris_api_types as api_types
 from satos_payload_sdk import antaris_api_common as api_common
 from satos_payload_sdk import gen as api_gen
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
+EXAMPLE_PATH = os.path.join(BASE_DIR, "examples/app-python")
+
+sys.path.append(EXAMPLE_PATH)
+
+from example_app import SequenceValidator
 
 logger = logging.getLogger("satos_payload_sdk")
 
@@ -637,66 +644,6 @@ class PayloadApplication(Stoppable):
 
         self.stopped()
 
-    def validate_sequence_params(self, seq_id, seq_params):
-        if seq_id is None:
-            return api_types.AntarisReturnCode.An_INVALID_PARAMS
-
-        logger.info(f"Validating params for sequence {seq_id}")
-
-        def not_empty(param):
-            return param is not None and param != ""
-
-        def start_stop(param):
-            return param.lower() in ["start", "stop"]
-
-        def zero_one(param):
-            return param in ["0", "1"]
-
-        # Mapping similar to C++ strcmp blocks
-        validation_map = {
-            "HelloWorld": lambda p: True,
-
-            "HelloFriend": lambda p: not_empty(p),
-
-            "LogLocation": lambda p: True,  # TODO
-
-            "TestGPIO": lambda p: True,  # TODO
-
-            "StageFile": lambda p: True,  # TODO
-
-            "TestCANBus": lambda p: True,  # TODO
-
-            "EpsVoltageTelemetry": lambda p: not_empty(p) and start_stop(p),
-
-            "GnssDataTelemetry": lambda p: True,  # TODO
-
-            "TestI2CBUS": lambda p: not_empty(p) and start_stop(p),
-
-            "PowerControl": lambda p: not_empty(p) and zero_one(p),
-
-            "SesThermMgmt": lambda p: not_empty(p) and start_stop(p),
-
-            "SesTempReq": lambda p: True,
-
-            "PaSatosMsg": lambda p: True,
-
-            "ReadAcIp": lambda p: True,
-
-            "FCM": lambda p: True,
-
-            "PS_Temp": lambda p: True,
-        }
-
-        validator = validation_map.get(seq_id)
-
-        if not validator:
-            return api_types.AntarisReturnCode.An_SUCCESS
-
-        if not validator(seq_params):
-            logger.error(f"Invalid params for sequence {seq_id}: {seq_params}")
-            return api_types.AntarisReturnCode.An_INVALID_PARAMS
-
-        return api_types.AntarisReturnCode.An_SUCCESS
 
     def start_sequence(self, seq_id, seq_params, seq_deadline):
         try:
@@ -705,7 +652,10 @@ class PayloadApplication(Stoppable):
             logger.error(f"sequence_id not recognized: {seq_id}")
             return api_types.AntarisReturnCode.An_INVALID_SEQUENCE
         
-        val_ret = self.validate_sequence_params(seq_id, seq_params)
+        validator = SequenceValidator(logger)
+
+        val_ret = validator.validate(seq_id, seq_params)
+
         if val_ret != api_types.AntarisReturnCode.An_SUCCESS:
             return val_ret
 

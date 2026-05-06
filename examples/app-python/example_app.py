@@ -583,6 +583,49 @@ class Controller:
 
         return resp
      
+class SequenceValidator:
+
+    def __init__(self, logger=None):
+        self.logger = logger
+
+    def not_empty(self, param):
+        return param is not None and param != ""
+
+    def start_stop(self, param):
+        return isinstance(param, str) and param.lower() in ["start", "stop"]
+
+    def zero_one(self, param):
+        return isinstance(param, str) and param in ["0", "1"]
+
+    def validate(self, seq_id, seq_params):
+        if seq_id is None:
+            return api_types.AntarisReturnCode.An_INVALID_PARAMS
+
+        if self.logger:
+            self.logger.info(f"[Validator] Validating {seq_id}")
+
+        validation_map = {
+            "HelloWorld": lambda p: True,
+            "HelloFriend": lambda p: self.not_empty(p),
+            "EpsVoltageTelemetry": lambda p: self.not_empty(p) and self.start_stop(p),
+            "TestI2CBUS": lambda p: self.not_empty(p) and self.start_stop(p),
+            "PowerControl": lambda p: self.not_empty(p) and self.zero_one(p),
+            "SesThermMgmt": lambda p: self.not_empty(p) and self.start_stop(p),
+        }
+
+        validator = validation_map.get(seq_id)
+
+        if not validator:
+            if self.logger:
+                self.logger.warning(f"No validator for {seq_id}")
+            return api_types.AntarisReturnCode.An_SUCCESS
+
+        if not validator(seq_params):
+            if self.logger:
+                self.logger.error(f"Invalid params for {seq_id}: {seq_params}")
+            return api_types.AntarisReturnCode.An_INVALID_PARAMS
+
+        return api_types.AntarisReturnCode.An_SUCCESS
 
 def new():
     ctl = Controller()
