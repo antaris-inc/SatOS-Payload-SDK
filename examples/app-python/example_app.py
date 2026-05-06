@@ -582,9 +582,7 @@ class Controller:
         )
 
         return resp
-     
-class SequenceValidator:
-
+    
     def __init__(self, logger=None):
         self.logger = logger
 

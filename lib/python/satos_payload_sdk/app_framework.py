@@ -27,7 +27,7 @@ EXAMPLE_PATH = os.path.join(BASE_DIR, "examples/app-python")
 
 sys.path.append(EXAMPLE_PATH)
 
-from example_app import SequenceValidator
+from example_app import Controller
 
 logger = logging.getLogger("satos_payload_sdk")
 
@@ -652,7 +652,7 @@ class PayloadApplication(Stoppable):
             logger.error(f"sequence_id not recognized: {seq_id}")
             return api_types.AntarisReturnCode.An_INVALID_SEQUENCE
         
-        validator = SequenceValidator(logger)
+        validator = Controller(logger)
 
         val_ret = validator.validate(seq_id, seq_params)
 
