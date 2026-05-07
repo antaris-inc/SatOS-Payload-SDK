@@ -22,12 +22,6 @@ import satos_payload_sdk.antaris_api_client as api_client
 import satos_payload_sdk.gen.antaris_api_types as api_types
 from satos_payload_sdk import antaris_api_common as api_common
 from satos_payload_sdk import gen as api_gen
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../"))
-EXAMPLE_PATH = os.path.join(BASE_DIR, "examples/app-python")
-
-sys.path.append(EXAMPLE_PATH)
-
-from example_app import Controller
 
 logger = logging.getLogger("satos_payload_sdk")
 
@@ -523,6 +517,9 @@ class PayloadApplication(Stoppable):
         # index of registered sequence handler funcs
         self.sequence_handler_func_idx = dict()
 
+        # index of registered sequence validator funcs
+        self.sequence_validator_func_idx = dict()
+
         # post registration callback function
         self._post_registration_cb = lambda channel_client: True
 
@@ -548,6 +545,9 @@ class PayloadApplication(Stoppable):
         
     def mount_sequence(self, sequence_id, sequence_handler_func):
         self.sequence_handler_func_idx[sequence_id] = sequence_handler_func
+
+    def mount_validator(self, sequence_id, validator_func):
+        self.sequence_validator_func_idx[sequence_id] = validator_func
 
     # Provided function should expect no arguments and return True or False
     # to represent health check success or failure, respectively
@@ -652,12 +652,16 @@ class PayloadApplication(Stoppable):
             logger.error(f"sequence_id not recognized: {seq_id}")
             return api_types.AntarisReturnCode.An_INVALID_SEQUENCE
         
-        validator = Controller(logger)
+        try:
+            validator_func = self.sequence_validator_func_idx[seq_id]
 
-        val_ret = validator.validate(seq_id, seq_params)
+            val_ret = validator_func(seq_id, seq_params)
 
-        if val_ret != api_types.AntarisReturnCode.An_SUCCESS:
-            return val_ret
+            if val_ret != api_types.AntarisReturnCode.An_SUCCESS:
+                return val_ret
+
+        except KeyError:
+            logger.warning(f"No validator registered for {seq_id}")
 
         # Keep track of the active sequences
         with self.lock:

@@ -582,9 +582,6 @@ class Controller:
         )
 
         return resp
-    
-    def __init__(self, logger=None):
-        self.logger = logger
 
     def not_empty(self, param):
         return param is not None and param != ""
@@ -596,32 +593,49 @@ class Controller:
         return isinstance(param, str) and param in ["0", "1"]
 
     def validate(self, seq_id, seq_params):
+
+        print(f"[Validator] Validating sequence: {seq_id}")
+        print(f"[Validator] Parameters: {seq_params}")
+
         if seq_id is None:
+            print("[Validator] seq_id is None")
             return api_types.AntarisReturnCode.An_INVALID_PARAMS
 
-        if self.logger:
-            self.logger.info(f"[Validator] Validating {seq_id}")
-
         validation_map = {
+
             "HelloWorld": lambda p: True,
-            "HelloFriend": lambda p: self.not_empty(p),
-            "EpsVoltageTelemetry": lambda p: self.not_empty(p) and self.start_stop(p),
-            "TestI2CBUS": lambda p: self.not_empty(p) and self.start_stop(p),
-            "PowerControl": lambda p: self.not_empty(p) and self.zero_one(p),
-            "SesThermMgmt": lambda p: self.not_empty(p) and self.start_stop(p),
+
+            "HelloFriend": lambda p:
+                self.not_empty(p),
+
+            "EpsVoltageTm": lambda p:
+                self.not_empty(p) and self.start_stop(p),
+
+            "TestI2CBus": lambda p:
+                self.not_empty(p) and self.start_stop(p),
+
+            "PowerControl": lambda p:
+                self.not_empty(p) and self.zero_one(p),
+
+            "SesThermMgmnt": lambda p:
+                self.not_empty(p) and self.start_stop(p),
         }
 
         validator = validation_map.get(seq_id)
 
         if not validator:
-            if self.logger:
-                self.logger.warning(f"No validator for {seq_id}")
+            print(f"[Validator] No validator found for {seq_id}")
+
             return api_types.AntarisReturnCode.An_SUCCESS
 
         if not validator(seq_params):
-            if self.logger:
-                self.logger.error(f"Invalid params for {seq_id}: {seq_params}")
+
+            print(f"[Validator] Validation FAILED for {seq_id}")
+            print(f"[Validator] Invalid params: {seq_params}")
+
             return api_types.AntarisReturnCode.An_INVALID_PARAMS
+
+        print(f"[Validator] Validation SUCCESS for {seq_id}")
 
         return api_types.AntarisReturnCode.An_SUCCESS
 
@@ -641,6 +655,24 @@ def new():
 
     # Sample function to add stats counters and names
     set_payload_values(app)
+
+    app.mount_validator("HelloWorld", ctl.validate)
+    app.mount_validator("HelloFriend", ctl.validate)
+    app.mount_validator("LogLocation", ctl.validate)
+    app.mount_validator("TestGPIO", ctl.validate)
+    app.mount_validator("UARTLoopback", ctl.validate)
+    app.mount_validator("StageFile", ctl.validate)
+    app.mount_validator("PowerControl", ctl.validate)
+    app.mount_validator("TestCANBus", ctl.validate)
+    app.mount_validator("GnssDataTm", ctl.validate)
+    app.mount_validator("EpsVoltageTm", ctl.validate)
+    app.mount_validator("SesThermMgmnt", ctl.validate)
+    app.mount_validator("SesTempReq", ctl.validate)
+    app.mount_validator("TestI2CBus", ctl.validate)
+    app.mount_validator("PaSatOsMsg", ctl.validate)
+    app.mount_validator("ReadAcIp", ctl.validate)
+    app.mount_validator("FCMStart", ctl.validate)
+    app.mount_validator("PsTemp", ctl.validate)
 
     # Note : SatOS-Payload-SDK supports sequence upto 16 characters long
     app.mount_sequence("HelloWorld", ctl.handle_hello_world)
