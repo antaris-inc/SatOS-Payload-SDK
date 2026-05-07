@@ -656,23 +656,10 @@ def new():
     # Sample function to add stats counters and names
     set_payload_values(app)
 
-    app.mount_validator("HelloWorld", ctl.validate)
-    app.mount_validator("HelloFriend", ctl.validate)
-    app.mount_validator("LogLocation", ctl.validate)
-    app.mount_validator("TestGPIO", ctl.validate)
-    app.mount_validator("UARTLoopback", ctl.validate)
-    app.mount_validator("StageFile", ctl.validate)
-    app.mount_validator("PowerControl", ctl.validate)
-    app.mount_validator("TestCANBus", ctl.validate)
-    app.mount_validator("GnssDataTm", ctl.validate)
-    app.mount_validator("EpsVoltageTm", ctl.validate)
-    app.mount_validator("SesThermMgmnt", ctl.validate)
-    app.mount_validator("SesTempReq", ctl.validate)
-    app.mount_validator("TestI2CBus", ctl.validate)
-    app.mount_validator("PaSatOsMsg", ctl.validate)
-    app.mount_validator("ReadAcIp", ctl.validate)
-    app.mount_validator("FCMStart", ctl.validate)
-    app.mount_validator("PsTemp", ctl.validate)
+    #this function is used to validate sequence parameters 
+    #this should be called before executin sequence
+    #todo - to allow user defincd validations
+    app.set_validator(ctl.validate)
 
     # Note : SatOS-Payload-SDK supports sequence upto 16 characters long
     app.mount_sequence("HelloWorld", ctl.handle_hello_world)
