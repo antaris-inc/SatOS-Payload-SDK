@@ -656,9 +656,9 @@ def new():
     # Sample function to add stats counters and names
     set_payload_values(app)
 
-    #this function is used to validate sequence parameters 
-    #this should be called before executin sequence
-    #todo - to allow user defincd validations
+    # This function is used to validate sequence parameters 
+    # It should be called before executing sequence
+    # Todo - To allow user defincd validations
     app.set_validator(ctl.validate)
 
     # Note : SatOS-Payload-SDK supports sequence upto 16 characters long
