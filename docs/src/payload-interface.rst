@@ -39,9 +39,7 @@ API Reference
 Payload Application Request parameter validation 
 ================================================
 
-The validate_sequence_arams function is responsible for validating the parameters of a sequence before execution. Payload application developers may implement additional sequence parameter validation within this function.
-
-If a dedicated parameter validation function is not implemented for a particular sequence, validate_sequence_params returns a default status of SUCCESS.
+The validate_sequence_params function is responsible for validating the parameters of a sequence before execution. Payload application developers may implement additional sequence parameter validation within this function.The default return of this function is SUCCESS
 
 Payload Application Requests
 ============================
