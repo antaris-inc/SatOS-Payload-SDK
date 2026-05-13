@@ -516,6 +516,9 @@ class PayloadApplication(Stoppable):
         # index of registered sequence handler funcs
         self.sequence_handler_func_idx = dict()
 
+        # index of registered sequence validator funcs
+        self.sequence_validator_func = None
+
         # post registration callback function
         self._post_registration_cb = lambda channel_client: True
 
@@ -541,6 +544,9 @@ class PayloadApplication(Stoppable):
         
     def mount_sequence(self, sequence_id, sequence_handler_func):
         self.sequence_handler_func_idx[sequence_id] = sequence_handler_func
+
+    def set_validator(self, validator_func):
+        self.sequence_validator_func = validator_func
 
     # Provided function should expect no arguments and return True or False
     # to represent health check success or failure, respectively
@@ -637,12 +643,19 @@ class PayloadApplication(Stoppable):
 
         self.stopped()
 
+
     def start_sequence(self, seq_id, seq_params, seq_deadline):
         try:
             handler_func = self.sequence_handler_func_idx[seq_id]
         except KeyError:
             logger.error(f"sequence_id not recognized: {seq_id}")
-            return api_types.AntarisReturnCode.An_GENERIC_FAILURE
+            return api_types.AntarisReturnCode.An_INVALID_SEQUENCE
+        
+        if self.sequence_validator_func:
+            val_ret = self.sequence_validator_func(seq_id, seq_params)
+
+            if val_ret != api_types.AntarisReturnCode.An_SUCCESS:
+                return val_ret
 
         # Keep track of the active sequences
         with self.lock:

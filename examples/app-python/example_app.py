@@ -582,7 +582,63 @@ class Controller:
         )
 
         return resp
-     
+
+    def not_empty(self, param):
+        return param is not None and param != ""
+
+    def start_stop(self, param):
+        return isinstance(param, str) and param.lower() in ["start", "stop"]
+
+    def zero_one(self, param):
+        return isinstance(param, str) and param in ["0", "1"]
+    
+    # Function to validate sequence parameters.
+    def validate_sequence_params(self, seq_id, seq_params):
+
+        print(f"[Validator] Validating sequence: {seq_id}")
+        print(f"[Validator] Parameters: {seq_params}")
+
+        if seq_id is None:
+            print("[Validator] seq_id is None")
+            return api_types.AntarisReturnCode.An_INVALID_PARAMS
+
+        validation_map = {
+
+            "HelloWorld": lambda p: True,
+
+            "HelloFriend": lambda p:
+                self.not_empty(p),
+
+            "EpsVoltageTm": lambda p:
+                self.not_empty(p) and self.start_stop(p),
+
+            "TestI2CBus": lambda p:
+                self.not_empty(p) and self.start_stop(p),
+
+            "PowerControl": lambda p:
+                self.not_empty(p) and self.zero_one(p),
+
+            "SesThermMgmnt": lambda p:
+                self.not_empty(p) and self.start_stop(p),
+        }
+
+        validator = validation_map.get(seq_id)
+
+        if not validator:
+            print(f"[Validator] No validator found for {seq_id}")
+
+            return api_types.AntarisReturnCode.An_SUCCESS
+
+        if not validator(seq_params):
+
+            print(f"[Validator] Validation FAILED for {seq_id}")
+            print(f"[Validator] Invalid params: {seq_params}")
+
+            return api_types.AntarisReturnCode.An_INVALID_PARAMS
+
+        print(f"[Validator] Validation SUCCESS for {seq_id}")
+
+        return api_types.AntarisReturnCode.An_SUCCESS
 
 def new():
     ctl = Controller()
@@ -600,6 +656,11 @@ def new():
 
     # Sample function to add stats counters and names
     set_payload_values(app)
+
+    # This function is used to validate sequence parameters 
+    # It should be called before executing sequence
+    # Todo - To allow user defined validations
+    app.set_validator(ctl.validate_sequence_params)
 
     # Note : SatOS-Payload-SDK supports sequence upto 16 characters long
     app.mount_sequence("HelloWorld", ctl.handle_hello_world)

@@ -268,11 +268,12 @@ enum AntarisReturnCode : int {
   An_NOT_PERMITTED = -4,
   An_INVALID_PARAMS = -5,
   An_INCOMPATIBLE_VERSION = -6,
+  An_INVALID_SEQUENCE = -7,
   AntarisReturnCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   AntarisReturnCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool AntarisReturnCode_IsValid(int value);
-constexpr AntarisReturnCode AntarisReturnCode_MIN = An_INCOMPATIBLE_VERSION;
+constexpr AntarisReturnCode AntarisReturnCode_MIN = An_INVALID_SEQUENCE;
 constexpr AntarisReturnCode AntarisReturnCode_MAX = An_SUCCESS;
 constexpr int AntarisReturnCode_ARRAYSIZE = AntarisReturnCode_MAX + 1;
 

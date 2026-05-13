@@ -1001,6 +1001,134 @@ static int get_sequence_idx_from_seq_string(INT8 *sequence_string)
     return -1;
 }
 
+static AntarisReturnCode validate_sequence_params(StartSequenceParams *p)
+{
+    if (!p) {
+        return An_INVALID_PARAMS;
+    }
+
+    printf("%s: Validating params for sequence %s\n",
+           __FUNCTION__, &p->sequence_id[0]);
+
+    if (strcmp(p->sequence_id, HelloWorld_ID) == 0) {
+
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, HelloFriend_ID) == 0) {
+
+        if (p->sequence_params[0] == '\0') {
+            printf("HelloFriend: sequence_params cannot be empty\n");
+            return An_INVALID_PARAMS;
+        }
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, LogLocation_ID) == 0) {
+
+        // TODO: validate LogLocation params
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, TestGPIO_Sequence_ID) == 0) {
+
+        // TODO: validate GPIO params
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, StageFile_Sequence_ID) == 0) {
+
+        // TODO: validate StageFile params
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, TestCANBus_Sequence_ID) == 0) {
+
+        // TODO: validate CAN params
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, EpsVoltageTelemetry_ID) == 0) {
+
+        if (p->sequence_params[0] == '\0') {
+            printf("EPS: sequence_params cannot be empty\n");
+            return An_INVALID_PARAMS;
+        }
+
+        if (strcasecmp(p->sequence_params, "start") != 0 &&
+            strcasecmp(p->sequence_params, "stop") != 0) {
+            printf("EPS: params must be 'start' or 'stop'\n");
+            return An_INVALID_PARAMS;
+        }
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, GnssDataTelemetry_ID) == 0) {
+
+        // TODO: validate GNSS params
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, TestI2CBUS_ID) == 0) {
+
+        if (p->sequence_params[0] == '\0') {
+            printf("GNSS: sequence_params cannot be empty\n");
+            return An_INVALID_PARAMS;
+        }
+
+        if (strcasecmp(p->sequence_params, "start") != 0 &&
+            strcasecmp(p->sequence_params, "stop") != 0) {
+            printf("GNSS: params must be 'start' or 'stop'\n");
+            return An_INVALID_PARAMS;
+        }
+
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, PowerControl_ID) == 0) {
+
+        if (p->sequence_params[0] == '\0') {
+            printf("PowerControl: sequence_params cannot be empty\n");
+            return An_INVALID_PARAMS;
+        }
+
+        if (!(strcmp(p->sequence_params, "0") == 0 ||
+            strcmp(p->sequence_params, "1") == 0)) {
+            printf("PowerControl: params must be '0' or '1'\n");
+            return An_INVALID_PARAMS;
+        }
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, SesThermMgmt_ID) == 0) {
+
+        if (p->sequence_params[0] == '\0') {
+            printf("ThermalMgmt: sequence_params cannot be empty\n");
+            return An_INVALID_PARAMS;
+        }
+
+        if (strcasecmp(p->sequence_params, "start") != 0 &&
+            strcasecmp(p->sequence_params, "stop") != 0) {
+            printf("ThermalMgmt: params must be 'start' or 'stop'\n");
+            return An_INVALID_PARAMS;
+        }
+
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, SesTempReq_ID) == 0) {
+
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, PaSatosMsg_ID) == 0) {
+
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, ReadAcIp_ID) == 0) {
+
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, FCM_ID) == 0) {
+
+        return An_SUCCESS;
+
+    } else if (strcmp(p->sequence_id, PS_Temp_ID) == 0) {
+
+        return An_SUCCESS;
+    }
+
+    return An_SUCCESS;
+}
+
 // Callback functions (PC => Application)
 AntarisReturnCode start_sequence(StartSequenceParams *start_seq_param)
 {
@@ -1011,11 +1139,22 @@ AntarisReturnCode start_sequence(StartSequenceParams *start_seq_param)
 
     // <Payload Application Business Logic>
     // Start Sequence FSM Thread
+    // if sequence is not present it will give invlaid sequnce response to the controller
     current_sequence_idx = get_sequence_idx_from_seq_string(&start_seq_param->sequence_id[0]);
     if (current_sequence_idx ==  -1) {
         printf("Invalid Sequence \n");
-        return An_GENERIC_FAILURE;
+        return An_INVALID_SEQUENCE;
     }
+
+    // Function to validate sequence parameters before calling sequence. Application developers may update this function for validating sequence parameters.
+    // default repsonse for this function is success
+    AntarisReturnCode val_ret = validate_sequence_params(start_seq_param);
+
+    if (val_ret != An_SUCCESS) {
+        printf("Parameter validation failed\n");
+        return val_ret;
+    }
+
     mythreadState_t *thread_state = payload_sequences_fsms[current_sequence_idx];
     strcpy(thread_state->received_name, &start_seq_param->sequence_id[0]);
     strncpy(thread_state->seq_params, start_seq_param->sequence_params, SEQ_PARAMS_LEN);
