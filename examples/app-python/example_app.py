@@ -591,8 +591,9 @@ class Controller:
 
     def zero_one(self, param):
         return isinstance(param, str) and param in ["0", "1"]
-
-    def validate(self, seq_id, seq_params):
+    
+    # Function to validate sequence parameters.
+    def validate_sequence_params(self, seq_id, seq_params):
 
         print(f"[Validator] Validating sequence: {seq_id}")
         print(f"[Validator] Parameters: {seq_params}")
@@ -658,8 +659,8 @@ def new():
 
     # This function is used to validate sequence parameters 
     # It should be called before executing sequence
-    # Todo - To allow user defincd validations
-    app.set_validator(ctl.validate)
+    # Todo - To allow user defined validations
+    app.set_validator(ctl.validate_sequence_params)
 
     # Note : SatOS-Payload-SDK supports sequence upto 16 characters long
     app.mount_sequence("HelloWorld", ctl.handle_hello_world)

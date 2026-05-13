@@ -1146,7 +1146,7 @@ AntarisReturnCode start_sequence(StartSequenceParams *start_seq_param)
         return An_INVALID_SEQUENCE;
     }
 
-    // this will validate if sequence parameters are incorrect, application developers should use this function to validate there sequence params.
+    // Function to validate sequence parameters before calling sequence. Application developers may update this function for validating sequence parameters.
     // default repsonse for this function is success
     AntarisReturnCode val_ret = validate_sequence_params(start_seq_param);
 
