@@ -1,0 +1,598 @@
+{
+  "SCHEMA_VERSION": "1.0",
+  "DESCRIPTION": "Sequence response and periodic callback validation configuration",
+
+  "SEQUENCES": [
+    {
+      "SEQ_NAME": "HelloWorld",
+      "SEQ_PARAMS": "",
+
+      "PERIODIC_CALLBACK": false,
+
+      "EXPECTED_RESPONSE": {
+        "STATUS": "success",
+        "HAS_RETURN_VALUES": false
+      },
+
+      "_COMMENT": "Single response sequence. Expected output format: 'Handling sequence: hello, world!'"
+    },
+
+    {
+      "SEQ_NAME": "HelloFriend",
+      "SEQ_PARAMS":"<Friend_Name>",
+
+      "PERIODIC_CALLBACK": false,
+
+      "EXPECTED_RESPONSE": {
+        "STATUS": "success",
+        "HAS_RETURN_VALUES": false
+      },
+
+      "_COMMENT": "Single response sequence. Expected output format: 'Handling sequence: hello, <Friend_Name>!'"
+    },
+
+
+    {
+      "SEQ_NAME": "LogLocation",
+      "SEQ_PARAMS": "",
+
+      "PERIODIC_CALLBACK": false,
+
+      "EXPECTED_RESPONSE": {
+        "STATUS": "success",
+        "HAS_RETURN_VALUES": true,
+
+        "RETURN_VALUES": [
+          {
+            "NAME": "Latitude",
+            "MIN": 23,
+            "MAX": 26
+          },
+          {
+            "NAME": "Longitude",
+            "MIN": 23,
+            "MAX": 26
+          },
+          {
+            "NAME": "Altitude",
+            "MIN": 23,
+            "MAX": 26
+          },
+          {
+            "NAME": "Standard deviation latitude",
+            "MIN": 23,
+            "MAX": 26
+          },
+          {
+            "NAME": "Standard deviation longitude",
+            "MIN": 23,
+            "MAX": 26
+          },
+          {
+            "NAME": "Standard deviation altitude",
+            "MIN": 23,
+            "MAX": 26
+          }
+        ]
+      },
+
+      "_COMMENT": "Sequence response contains measurable return values which must be validated against configured ranges."
+    },
+
+    {
+      "SEQ_NAME": "EpsVoltageTm",
+      "SEQ_PARAMS": ["start","stop"],
+
+      "PERIODIC_CALLBACK": true,
+
+      "EXPECTED_RESPONSE": {
+        "STATUS": "success"
+      },
+
+      "PERIODIC_CALLBACK_RESPONSE": [
+        {
+        "KEYWORD": "EPS voltage data received",
+
+        "VALIDATION": {
+          "MIN": 23,
+          "MAX": 26
+        }
+      }
+    ],
+      "TIMESTAMP_SOURCE": "Received time",
+
+      "_COMMENT": "Periodic callback enabled. Callback interval is configured in PARAMS. Extract the floating-point value following the keyword and validate it within the configured range."
+    },
+
+    {
+      "SEQ_NAME": "GnssDataTm",
+      "SEQ_PARAMS": ["start","stop"],
+
+      "PERIODIC_CALLBACK": true,
+
+      "EXPECTED_RESPONSE": {
+        "STATUS": "success"
+      },
+
+      "PERIODIC_CALLBACK_RESPONSE": {
+        "flag_1": "gps timeout flag enabled",
+        "flag_1_validations":[
+            {
+                "KEYWORD": "gps fix time",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "gps sys time",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "obc time",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "gps fix time",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                    }
+            },
+            {
+                "KEYWORD": "gps sys time",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "obc time",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "gps_position_ecef_x",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                    }
+            },
+            {
+                "KEYWORD": "gps_position_ecef_y",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "gps_position_ecef_z",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "gps_velocity_ecef_x",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "gps_velocity_ecef_y",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "gps_velocity_ecef_z",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "gps_validity_flag_pos",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "gps_validity_flag_vel",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            }
+        ],
+
+        "flag_2": "adcs timeout flag enabled",
+        "flag_2_validations":[
+            {
+                "KEYWORD": "ADCS Orbit Propagator/System Time",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "ECI Position X (km)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "ECI Position Y (km)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "ECI Position Z (km)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                    }
+            },
+            {
+                "KEYWORD": "ECI Velocity X (km/s)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "ECI Velocity Y (km/s)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "ECI Velocity Z (km/s)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                    }
+            },
+            {
+                "KEYWORD": "ECEF Position X (km)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "ECEF Position Y (km)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "ECEF Position Z (km)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "ECEF Velocity X (km/s)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "ECEF Velocity Y (km/s)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "ECEF Velocity Z (km/s)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "X axis Angular rate (deg/s)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "Y axis Angular rate (deg/s)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "Z axis Angular rate (deg/s)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+             {
+                "KEYWORD": "Attitude Quaternion 1",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "Attitude Quaternion 2",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "Attitude Quaternion 3",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+             {
+                "KEYWORD": "Attitude Quaternion 4",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "Latitude (deg)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "Longitude (deg)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+             {
+                "KEYWORD": "Altitude (km)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "X Nadir Vector",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "Y Nadir Vector",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "Z Nadir Vector",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "X Geodetic Nadir Vector",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "Y Geodetic Nadir Vector",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "Z Geodetic Nadir Vector",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "Beta Angle (deg)",
+                "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+                }
+            }
+        ],
+
+        "TIMESTAMP_SOURCE": "Received time",
+
+        "_COMMENT": "Periodic callback enabled. Callback interval is configured in PARAMS. Extract the floating-point value following the keyword and validate it within the configured range. and based on gps or adcs flag enabled user will recieve the corresponding data"
+      } 
+    },
+    {
+      "SEQ_NAME": "PowerControl",
+      "SEQ_PARAMS": ["0","1"],
+
+      "PERIODIC_CALLBACK": false,
+
+      "EXPECTED_RESPONSE": {
+        "STATUS": "success",
+        "HAS_RETURN_VALUES": false
+      },
+
+      "_COMMENT": "Single response sequence. Expected output format: 'Power Control Call response is <0 or 1>'"
+    },
+    {
+      "SEQ_NAME": "StageFile",
+      "SEQ_PARAMS": [],
+
+      "PERIODIC_CALLBACK": false,
+
+      "EXPECTED_RESPONSE": {
+        "STATUS": "success",
+        "HAS_RETURN_VALUES": false
+      },
+
+      "_COMMENT": "Single response sequence. Expected output format: 'File successfully staged or Error in staging file'"
+    },
+    {
+      "SEQ_NAME": "SesThermMgmnt",
+      "SEQ_PARAMS": [],
+
+      "PERIODIC_CALLBACK": false,
+
+      "EXPECTED_RESPONSE": {
+        "STATUS": "success",
+        "HAS_RETURN_VALUES": false
+      },
+
+      "_COMMENT": "Single response sequence. Expected output format: 'request <success/failed>'"
+    },
+    {
+      "SEQ_NAME": "SesTempReq",
+      "SEQ_PARAMS": ["start","stop"],
+
+      "PERIODIC_CALLBACK": true,
+
+      "EXPECTED_RESPONSE": {
+        "STATUS": "success"
+      },
+
+      "PERIODIC_CALLBACK_RESPONSE": {
+        "flag_1": "ses temperature request success",
+        "flag_1_validations":[
+        {
+            "KEYWORD": "Current temperature = ",
+
+            "VALIDATION": {
+            "MIN": 23,
+            "MAX": 26
+            }
+        },
+
+        {
+            "KEYWORD": "Hardware id =",
+
+            "VALIDATION": {
+            "MIN": 23,
+            "MAX": 26
+            }
+        },
+        {
+            "KEYWORD": "Heater Power status is =",
+
+            "VALIDATION": {
+            "MIN": 23,
+            "MAX": 26
+            }
+        }
+        ],
+        "flag_2": "ses temperature request failed",
+        "flag_2_validations" :[
+            {
+            "KEYWORD": "Unable to read temperature of",
+
+            "VALIDATION": {
+            "MIN": 23,
+            "MAX": 26
+            }
+        }
+        ]
+    },
+      "TIMESTAMP_SOURCE": "Received time",
+
+      "_COMMENT": "Periodic callback enabled. Callback interval is configured in PARAMS. Extract the floating-point value following the keyword and validate it within the configured range."
+    },
+    {
+      "SEQ_NAME": "PaSatOsMsg",
+      "SEQ_PARAMS": [],
+
+
+      "EXPECTED_RESPONSE": {
+
+        "PERIODIC_CALLBACK": false,
+        "HAS_RETURN_VALUES": true,
+        "RETURN_VALUES": [
+          {
+            "NAME": "Command id",
+            "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+            }
+          },
+          {
+            "NAME": "status",
+            "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+            }
+          }
+        ],
+
+        "_COMMENT": "Single response sequence. Expected output format: Pa SatOS message <success/failed>'"
+      }
+    },
+    {
+      "SEQ_NAME": "ReadAcIp",
+      "SEQ_PARAMS": "",
+
+      "PERIODIC_CALLBACK": false,
+
+      "EXPECTED_RESPONSE": {
+        "STATUS": "success",
+        "HAS_RETURN_VALUES": false
+      },
+
+      "_COMMENT": "Single response sequence. Expected output format: 'Application controller IP is <ip address>'"
+    },
+    {
+      "SEQ_NAME": "PsTemp",
+      "SEQ_PARAMS": [],
+
+
+      "EXPECTED_RESPONSE": {
+
+        "PERIODIC_CALLBACK": false,
+        "HAS_RETURN_VALUES": true,
+        "RETURN_VALUES": [
+          {
+            "NAME": "Current payload server temperature",
+            "VALIDATION": {
+                "MIN": 23,
+                "MAX": 26
+            }
+          }
+        ],
+
+        "_COMMENT": "Single response sequence. Expected output format: PS temperature request success <success/failed>'"
+      }
+    }
+  ]
+}

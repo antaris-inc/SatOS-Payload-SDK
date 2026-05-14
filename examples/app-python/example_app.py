@@ -90,6 +90,7 @@ class Controller:
         if gnss_data.gps_timeout_flag == 1:
             gps_fix_time = gnss_data.gps_eph_data.gps_fix_time
             gps_sys_time = gnss_data.gps_eph_data.gps_sys_time
+            logger.info("gps timeout flag enabled")
 
             logger.info(
                 f"gps fix time: {gps_fix_time.hour:02d}:{gps_fix_time.minute:02d}."
@@ -123,7 +124,7 @@ class Controller:
 
         if gnss_data.adcs_timeout_flag == 1:
             a = gnss_data.adcs_eph_data
-
+            logger.info("adcs timeout flag enabled")
             logger.info(f"ADCS Orbit Propagator/System Time = {a.orbit_time}")
             logger.info(f"ECI Position X (km) = {a.eci_position_x}")
             logger.info(f"ECI Position Y (km) = {a.eci_position_y}")
@@ -217,8 +218,13 @@ class Controller:
 
     def handle_log_location(self, ctx):
         loc = ctx.client.get_current_location()
-        logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude} standard deviation_lat={loc.sd_latitude}, standard deviation_lng={loc.sd_longitude}, standard deviation_alt={loc.sd_altitude}")
-    
+        logger.info(f"Latitude {loc.latitude}")
+        logger.info(f"Longitude {loc.longitude}")
+        logger.info(f"Altitude {loc.altitude}")
+        logger.info(f"Standard deviation latitude {loc.sd_latitude}")
+        logger.info(f"Standard deviation longitude {loc.sd_longitude}")
+        logger.info(f"Standard deviation altitude {loc.sd_altitude}")
+        
     def handle_gnss_data(self, ctx):
         periodicity_in_ms = 2000    # Periodicity = 0 indicates one time GNSS EPH data. Max is 1 minute
         eph2_enable = 1
@@ -297,10 +303,12 @@ class Controller:
         hardware_id = 0   # 0:SESA , 1:SESB
         resp = ctx.client.ses_temp_req(hardware_id)
         if resp.status == 0:
+            logger.info("ses temp request success")
             logger.info(f"Current temperature = {resp.temperature}")
             logger.info(f"Hardware id = {resp.hardware_id}")
             logger.info(f"Heater Power Status = {resp.heater_pwr_status}") # 0:OFF, 1:ON
         else:
+            logger.info("ses temperature request failed")
             logger.info(f"Unable read temperature for = {resp.hardware_id}")
 
     def handle_get_ps_temp(self, ctx):
@@ -341,15 +349,25 @@ class Controller:
             logger.info("invlaid power state. power state can only be 0 or 1")
             return
         resp = ctx.client.payload_power_control(power_state, hw_id)
-        logger.info(f"Power control state = {power_state}. Call response is = {resp}")
+        logger.info(f"Power Control Call response is = {resp}")
         
     # The sample program assumes 2 GPIO pins are connected back-to-back. 
     # This sequence toggles level of 'Write Pin' and then reads level of 'Read Pin'
     def handle_test_gpio(self, ctx):
+        logger.info("Handling sequence: TestGPIO!")
         gpio_info = api_parser.api_pa_pc_get_gpio_info()
 
+        if gpio_info is None:
+            logger.error("Error: json file is not configured properly. Kindly check configurations done in ACP")
+            return
+
         logger.info("Total gpio pins = %d", int(gpio_info.pin_count))
-        api_gpio.api_pa_pc_init_gpio_lib()
+        ret = api_gpio.api_pa_pc_init_gpio_lib()
+
+        if ret is False:
+            logger.error("Error: Init GPIO lib failed")
+            return
+        
         i = 0
         # Read initial value of GPIO pins.
         # As GPIO pins are back-to-back connected, their value must be same.
@@ -463,6 +481,10 @@ class Controller:
         canInfo = api_can.api_pa_pc_get_can_dev()
         logger.info("Total CAN bus ports = %d", int(canInfo.can_port_count))
 
+        if canInfo.can_port_count == 0:
+            logger.info("No CAN devices available!")
+            return
+
         # Define the CAN channel to use (assuming the first device)
         channel = canInfo.can_dev[0]
         logger.info("Starting CAN receiver port %s", channel)
@@ -497,7 +519,7 @@ class Controller:
         return 
     
     def handle_test_i2c_bus(self, ctx):
-        logger.info("Test I2C bus")
+        logger.info("Handling sequence: TestI2CBus!")
 
         # Check number of i2c bus 
         i2cInfo = api_parser.api_pa_pc_get_i2c_dev()
