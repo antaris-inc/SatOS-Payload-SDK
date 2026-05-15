@@ -471,7 +471,9 @@ class ChannelClient:
         params = api_types.CmdSequenceDoneParams(sequence_id)
         resp = api_client.api_pa_pc_sequence_done(self._channel, params)
         if resp != api_types.AntarisReturnCode.An_SUCCESS:
-            logger.error("sequence_done request failed: resp=%d" % resp)
+            logger.error("api_pa_pc_sequence_done failed: resp=%d" % resp)
+        else:
+            logger.info("api_pa_pc_sequence_done returned success, ret=%d" % resp)
 
     def _handle_response(self, params):
         with self._cond:

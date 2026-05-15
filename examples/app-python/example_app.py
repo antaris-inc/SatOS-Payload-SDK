@@ -318,18 +318,18 @@ class Controller:
     def ses_thermal_status_ntf(self, ctx):
         if ctx.heater_pwr_status == 0:
             if ctx.hardware_id == 0:  #SESA:0
-                logger.info("SESA power ON/OFF success\n");
+                logger.info("SESA power ON/OFF success\n")
             elif ctx.hardware_id == 1:  #SESB:1
-                logger.info("SESB power ON/OFF success\n");
+                logger.info("SESB power ON/OFF success\n")
             else:
-                logger.info("Invalid HW ID\n");
+                logger.info("Invalid HW ID\n")
         else:
             if ctx.hardware_id == 0:  #SESA:0
-                logger.info("SESA power ON/OFF failure\n");
+                logger.info("SESA power ON/OFF failure\n")
             elif ctx.hardware_id == 1:  #SESB:1
-                logger.info("SESB power ON/OFF failure\n");
+                logger.info("SESB power ON/OFF failure\n")
             else:
-                logger.info("Invalid HW ID\n");
+                logger.info("Invalid HW ID\n")
         
         if ctx.heater_temp_status == 0:
             if ctx.hardware_id == 0:  #SESA:0
@@ -337,7 +337,7 @@ class Controller:
             elif ctx.hardware_id == 1:  #SESB:1
                 logger.info(f"SESB temperature = {ctx.temperature}")
         else:
-                logger.info("Invalid HW ID\n");
+                logger.info("Invalid HW ID\n")
         return True
 
     def handle_power_control(self, ctx):
@@ -373,9 +373,9 @@ class Controller:
         # As GPIO pins are back-to-back connected, their value must be same.
         while (i < int(gpio_info.pin_count)):
             if int(gpio_info.pins[i]) != -1:
-                readPin = gpio_info.pins[i];
+                readPin = gpio_info.pins[i]
                 i += 1
-                writePin = gpio_info.pins[i];
+                writePin = gpio_info.pins[i]
 
                 val = api_gpio.api_pa_pc_read_gpio(int(readPin))
                 if val != g_GPIO_ERROR:
@@ -515,7 +515,6 @@ class Controller:
                 logger.error("Error in receiving data")
         
         logger.info("Completed reading")
-
         return 
     
     def handle_test_i2c_bus(self, ctx):
@@ -551,7 +550,6 @@ class Controller:
 
 
         api_i2c.api_pa_pc_deinit_i2c_lib()
-        
         return 
 
     def handle_pa_satos_message(self, ctx):
@@ -560,7 +558,6 @@ class Controller:
 
         resp = ctx.client.pa_satos_message(command, payload_data)
         print(f"Command id = {resp.command_id} , status = {resp.req_status}")
-
         return
     
     def handle_ac_ip_read(self, ctx):
