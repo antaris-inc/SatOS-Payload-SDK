@@ -44,34 +44,46 @@
 
         "RETURN_VALUES": [
           {
-            "NAME": "Latitude",
-            "MIN": 23,
-            "MAX": 26
+            "KEYWORD": "Latitude:",
+            "VALIDATION": {
+              "MIN": 23,
+              "MAX": 26
+            }
           },
           {
-            "NAME": "Longitude",
-            "MIN": 23,
-            "MAX": 26
+            "KEYWORD": "Longitude:",
+            "VALIDATION": {
+              "MIN": 23,
+              "MAX": 26
+            }
           },
           {
-            "NAME": "Altitude",
-            "MIN": 23,
-            "MAX": 26
+            "KEYWORD": "Altitude:",
+            "VALIDATION": {
+              "MIN": 23,
+              "MAX": 26
+            }
           },
           {
-            "NAME": "Standard deviation latitude",
-            "MIN": 23,
-            "MAX": 26
+            "KEYWORD": "Standard deviation latitude:",
+            "VALIDATION": {
+              "MIN": 23,
+              "MAX": 26
+            }
           },
           {
-            "NAME": "Standard deviation longitude",
-            "MIN": 23,
-            "MAX": 26
+            "KEYWORD": "Standard deviation longitude:",
+            "VALIDATION": {
+              "MIN": 23,
+              "MAX": 26
+            }
           },
           {
-            "NAME": "Standard deviation altitude",
-            "MIN": 23,
-            "MAX": 26
+            "KEYWORD": "Standard deviation altitude:",
+            "VALIDATION": {
+              "MIN": 23,
+              "MAX": 26
+            }
           }
         ]
       },
@@ -91,7 +103,7 @@
 
       "PERIODIC_CALLBACK_RESPONSE": [
         {
-        "KEYWORD": "EPS voltage data received",
+        "KEYWORD": "EPS voltage data received:",
 
         "VALIDATION": {
           "MIN": 23,
@@ -118,315 +130,315 @@
         "flag_1": "gps timeout flag enabled",
         "flag_1_validations":[
             {
-                "KEYWORD": "gps fix time",
+                "KEYWORD": "gps fix time:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "gps sys time",
+                "KEYWORD": "gps sys time:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "obc time",
+                "KEYWORD": "obc time:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "gps fix time",
+                "KEYWORD": "gps fix time:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                     }
             },
             {
-                "KEYWORD": "gps sys time",
+                "KEYWORD": "gps sys time:",
+                "VALIDATION": {
+                  "MIN": 23,
+                  "MAX": 26
+                }
+            },
+            {
+                "KEYWORD": "obc time:",
                 "VALIDATION": {
                 "MIN": 23,
                 "MAX": 26
                 }
             },
             {
-                "KEYWORD": "obc time",
+                "KEYWORD": "gps_position_ecef_x:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
-                }
-            },
-            {
-                "KEYWORD": "gps_position_ecef_x",
-                "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                     }
             },
             {
-                "KEYWORD": "gps_position_ecef_y",
+                "KEYWORD": "gps_position_ecef_y:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "gps_position_ecef_z",
+                "KEYWORD": "gps_position_ecef_z:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "gps_velocity_ecef_x",
+                "KEYWORD": "gps_velocity_ecef_x:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "gps_velocity_ecef_y",
+                "KEYWORD": "gps_velocity_ecef_y:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "gps_velocity_ecef_z",
+                "KEYWORD": "gps_velocity_ecef_z:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "gps_validity_flag_pos",
+                "KEYWORD": "gps_validity_flag_pos:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "gps_validity_flag_vel",
+                "KEYWORD": "gps_validity_flag_vel:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             }
         ],
 
-        "flag_2": "adcs timeout flag enabled",
+        "flag_2": "ADCS timeout flag enabled:",
         "flag_2_validations":[
             {
-                "KEYWORD": "ADCS Orbit Propagator/System Time",
+                "KEYWORD": "ADCS Orbit Propagator/System Time:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "ECI Position X (km)",
+                "KEYWORD": "ECI Position X (km):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "ECI Position Y (km)",
+                "KEYWORD": "ECI Position Y (km):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "ECI Position Z (km)",
+                "KEYWORD": "ECI Position Z (km):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                     }
             },
             {
-                "KEYWORD": "ECI Velocity X (km/s)",
+                "KEYWORD": "ECI Velocity X (km/s):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "ECI Velocity Y (km/s)",
+                "KEYWORD": "ECI Velocity Y (km/s):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "ECI Velocity Z (km/s)",
+                "KEYWORD": "ECI Velocity Z (km/s):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                     }
             },
             {
-                "KEYWORD": "ECEF Position X (km)",
+                "KEYWORD": "ECEF Position X (km):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "ECEF Position Y (km)",
+                "KEYWORD": "ECEF Position Y (km):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "ECEF Position Z (km)",
+                "KEYWORD": "ECEF Position Z (km):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "ECEF Velocity X (km/s)",
+                "KEYWORD": "ECEF Velocity X (km/s):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "ECEF Velocity Y (km/s)",
+                "KEYWORD": "ECEF Velocity Y (km/s):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "ECEF Velocity Z (km/s)",
+                "KEYWORD": "ECEF Velocity Z (km/s):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "X axis Angular rate (deg/s)",
+                "KEYWORD": "X axis Angular rate (deg/s):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "Y axis Angular rate (deg/s)",
+                "KEYWORD": "Y axis Angular rate (deg/s):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "Z axis Angular rate (deg/s)",
+                "KEYWORD": "Z axis Angular rate (deg/s):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
              {
-                "KEYWORD": "Attitude Quaternion 1",
+                "KEYWORD": "Attitude Quaternion 1:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "Attitude Quaternion 2",
+                "KEYWORD": "Attitude Quaternion 2:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "Attitude Quaternion 3",
+                "KEYWORD": "Attitude Quaternion 3:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
              {
-                "KEYWORD": "Attitude Quaternion 4",
+                "KEYWORD": "Attitude Quaternion 4:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "Latitude (deg)",
+                "KEYWORD": "Latitude (deg):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "Longitude (deg)",
+                "KEYWORD": "Longitude (deg):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
              {
-                "KEYWORD": "Altitude (km)",
+                "KEYWORD": "Altitude (km):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "X Nadir Vector",
+                "KEYWORD": "X Nadir Vector:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "Y Nadir Vector",
+                "KEYWORD": "Y Nadir Vector:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "Z Nadir Vector",
+                "KEYWORD": "Z Nadir Vector:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "X Geodetic Nadir Vector",
+                "KEYWORD": "X Geodetic Nadir Vector:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "Y Geodetic Nadir Vector",
+                "KEYWORD": "Y Geodetic Nadir Vector:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "Z Geodetic Nadir Vector",
+                "KEYWORD": "Z Geodetic Nadir Vector:",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             },
             {
-                "KEYWORD": "Beta Angle (deg)",
+                "KEYWORD": "Beta Angle (deg):",
                 "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+                  "MIN": 23,
+                  "MAX": 26
                 }
             }
         ],
@@ -489,39 +501,39 @@
         "flag_1": "ses temperature request success",
         "flag_1_validations":[
         {
-            "KEYWORD": "Current temperature = ",
+            "KEYWORD": "Current temperature:",
 
             "VALIDATION": {
-            "MIN": 23,
-            "MAX": 26
+              "MIN": 23,
+              "MAX": 26
             }
         },
 
         {
-            "KEYWORD": "Hardware id =",
+            "KEYWORD": "Hardware id:",
 
             "VALIDATION": {
-            "MIN": 23,
-            "MAX": 26
+              "MIN": 23,
+              "MAX": 26
             }
         },
         {
-            "KEYWORD": "Heater Power status is =",
+            "KEYWORD": "Heater Power status is:",
 
             "VALIDATION": {
-            "MIN": 23,
-            "MAX": 26
+              "MIN": 23,
+              "MAX": 26
             }
         }
         ],
-        "flag_2": "ses temperature request failed",
+        "flag_2": "ses temperature request failed:",
         "flag_2_validations" :[
             {
-            "KEYWORD": "Unable to read temperature of",
+            "KEYWORD": "Unable to read temperature of:",
 
             "VALIDATION": {
-            "MIN": 23,
-            "MAX": 26
+              "MIN": 23,
+              "MAX": 26
             }
         }
         ]
@@ -541,17 +553,17 @@
         "HAS_RETURN_VALUES": true,
         "RETURN_VALUES": [
           {
-            "NAME": "Command id",
+            "KEYWORD": "Command id:",
             "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+              "MIN": 23,
+              "MAX": 26
             }
           },
           {
-            "NAME": "status",
+            "KEYWORD": "status:",
             "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+              "MIN": 23,
+              "MAX": 26
             }
           }
         ],
@@ -583,10 +595,10 @@
         "HAS_RETURN_VALUES": true,
         "RETURN_VALUES": [
           {
-            "NAME": "Current payload server temperature",
+            "KEYWORD": "Current payload server temperature:",
             "VALIDATION": {
-                "MIN": 23,
-                "MAX": 26
+              "MIN": 23,
+              "MAX": 26
             }
           }
         ],

@@ -62,7 +62,7 @@ class Controller:
         payload_data = bytes([0x12, 0x34, 0x56])  # Can be up to 1020 bytes
 
         resp = client.pa_satos_message(command, payload_data)
-        logger.info(f"Command id = {resp.command_id} , status = {resp.req_status}")
+        logger.info(f"Command id: {resp.command_id} , status: {resp.req_status}")
 
         return True
 
@@ -124,44 +124,44 @@ class Controller:
 
         if gnss_data.adcs_timeout_flag == 1:
             a = gnss_data.adcs_eph_data
-            logger.info("adcs timeout flag enabled")
-            logger.info(f"ADCS Orbit Propagator/System Time = {a.orbit_time}")
-            logger.info(f"ECI Position X (km) = {a.eci_position_x}")
-            logger.info(f"ECI Position Y (km) = {a.eci_position_y}")
-            logger.info(f"ECI Position Z (km) = {a.eci_position_z}")
-            logger.info(f"ECI Velocity X (km/s) = {a.eci_velocity_x}")
-            logger.info(f"ECI Velocity Y (km/s) = {a.eci_velocity_y}")
-            logger.info(f"ECI Velocity Z (km/s) = {a.eci_velocity_z}")
+            logger.info("ADCS timeout flag enabled")
+            logger.info(f"ADCS Orbit Propagator/System Time: {a.orbit_time}")
+            logger.info(f"ECI Position X (km): {a.eci_position_x}")
+            logger.info(f"ECI Position Y (km): {a.eci_position_y}")
+            logger.info(f"ECI Position Z (km): {a.eci_position_z}")
+            logger.info(f"ECI Velocity X (km/s): {a.eci_velocity_x}")
+            logger.info(f"ECI Velocity Y (km/s): {a.eci_velocity_y}")
+            logger.info(f"ECI Velocity Z (km/s): {a.eci_velocity_z}")
 
-            logger.info(f"ECEF Position X (km) = {a.ecef_position_x}")
-            logger.info(f"ECEF Position Y (km) = {a.ecef_position_y}")
-            logger.info(f"ECEF Position Z (km) = {a.ecef_position_z}")
-            logger.info(f"ECEF Velocity X (km/s) = {a.ecef_velocity_x}")
-            logger.info(f"ECEF Velocity Y (km/s) = {a.ecef_velocity_y}")
-            logger.info(f"ECEF Velocity Z (km/s) = {a.ecef_velocity_z}")
+            logger.info(f"ECEF Position X (km): {a.ecef_position_x}")
+            logger.info(f"ECEF Position Y (km): {a.ecef_position_y}")
+            logger.info(f"ECEF Position Z (km): {a.ecef_position_z}")
+            logger.info(f"ECEF Velocity X (km/s): {a.ecef_velocity_x}")
+            logger.info(f"ECEF Velocity Y (km/s): {a.ecef_velocity_y}")
+            logger.info(f"ECEF Velocity Z (km/s): {a.ecef_velocity_z}")
 
-            logger.info(f"X axis Angular rate (deg/s) = {a.ang_rate_x}")
-            logger.info(f"Y axis Angular rate (deg/s) = {a.ang_rate_y}")
-            logger.info(f"Z axis Angular rate (deg/s) = {a.ang_rate_z}")
+            logger.info(f"X axis Angular rate (deg/s): {a.ang_rate_x}")
+            logger.info(f"Y axis Angular rate (deg/s): {a.ang_rate_y}")
+            logger.info(f"Z axis Angular rate (deg/s): {a.ang_rate_z}")
 
-            logger.info(f"Attitude Quaternion 1 = {a.att_quat_1}")
-            logger.info(f"Attitude Quaternion 2 = {a.att_quat_2}")
-            logger.info(f"Attitude Quaternion 3 = {a.att_quat_3}")
-            logger.info(f"Attitude Quaternion 4 = {a.att_quat_4}")
+            logger.info(f"Attitude Quaternion 1: {a.att_quat_1}")
+            logger.info(f"Attitude Quaternion 2: {a.att_quat_2}")
+            logger.info(f"Attitude Quaternion 3: {a.att_quat_3}")
+            logger.info(f"Attitude Quaternion 4: {a.att_quat_4}")
 
-            logger.info(f"Latitude (deg) = {a.latitude}")
-            logger.info(f"Longitude (deg) = {a.longitude}")
-            logger.info(f"Altitude (km) = {a.altitude}")
+            logger.info(f"Latitude (deg): {a.latitude}")
+            logger.info(f"Longitude (deg): {a.longitude}")
+            logger.info(f"Altitude (km): {a.altitude}")
 
-            logger.info(f"X Nadir Vector = {a.nadir_vector_x}")
-            logger.info(f"Y Nadir Vector = {a.nadir_vector_y}")
-            logger.info(f"Z Nadir Vector = {a.nadir_vector_z}")
+            logger.info(f"X Nadir Vector: {a.nadir_vector_x}")
+            logger.info(f"Y Nadir Vector: {a.nadir_vector_y}")
+            logger.info(f"Z Nadir Vector: {a.nadir_vector_z}")
 
-            logger.info(f"X Geodetic Nadir Vector = {a.gd_nadir_vector_x}")
-            logger.info(f"Y Geodetic Nadir Vector = {a.gd_nadir_vector_y}")
-            logger.info(f"Z Geodetic Nadir Vector = {a.gd_nadir_vector_z}")
+            logger.info(f"X Geodetic Nadir Vector: {a.gd_nadir_vector_x}")
+            logger.info(f"Y Geodetic Nadir Vector: {a.gd_nadir_vector_y}")
+            logger.info(f"Z Geodetic Nadir Vector: {a.gd_nadir_vector_z}")
 
-            logger.info(f"Beta Angle (deg) = {a.beta_angle}")
+            logger.info(f"Beta Angle (deg): {a.beta_angle}")
 
             for i, name in enumerate(fields):
                 bit_value = (a.validity_flags >> i) & 1
@@ -218,12 +218,12 @@ class Controller:
 
     def handle_log_location(self, ctx):
         loc = ctx.client.get_current_location()
-        logger.info(f"Latitude {loc.latitude}")
-        logger.info(f"Longitude {loc.longitude}")
-        logger.info(f"Altitude {loc.altitude}")
-        logger.info(f"Standard deviation latitude {loc.sd_latitude}")
-        logger.info(f"Standard deviation longitude {loc.sd_longitude}")
-        logger.info(f"Standard deviation altitude {loc.sd_altitude}")
+        logger.info(f"Latitude: {loc.latitude}")
+        logger.info(f"Longitude: {loc.longitude}")
+        logger.info(f"Altitude: {loc.altitude}")
+        logger.info(f"Standard deviation latitude: {loc.sd_latitude}")
+        logger.info(f"Standard deviation longitude: {loc.sd_longitude}")
+        logger.info(f"Standard deviation altitude: {loc.sd_altitude}")
         
     def handle_gnss_data(self, ctx):
         periodicity_in_ms = 2000    # Periodicity = 0 indicates one time GNSS EPH data. Max is 1 minute
@@ -304,16 +304,16 @@ class Controller:
         resp = ctx.client.ses_temp_req(hardware_id)
         if resp.status == 0:
             logger.info("ses temp request success")
-            logger.info(f"Current temperature = {resp.temperature}")
-            logger.info(f"Hardware id = {resp.hardware_id}")
-            logger.info(f"Heater Power Status = {resp.heater_pwr_status}") # 0:OFF, 1:ON
+            logger.info(f"Current temperature: {resp.temperature}")
+            logger.info(f"Hardware id: {resp.hardware_id}")
+            logger.info(f"Heater Power Status: {resp.heater_pwr_status}") # 0:OFF, 1:ON
         else:
             logger.info("ses temperature request failed")
-            logger.info(f"Unable read temperature for = {resp.hardware_id}")
+            logger.info(f"Unable read temperature of: {resp.hardware_id}")
 
     def handle_get_ps_temp(self, ctx):
         resp = ctx.client.ps_temp_req()
-        logger.info(f"Current payload server temperature = {resp.temperature}")
+        logger.info(f"Current payload server temperature: {resp.temperature}")
         
     def ses_thermal_status_ntf(self, ctx):
         if ctx.heater_pwr_status == 0:

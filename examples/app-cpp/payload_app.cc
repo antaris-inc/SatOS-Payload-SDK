@@ -1331,12 +1331,12 @@ AntarisReturnCode process_response_ses_temp(RespSesTempReqParams *ses_temp_req_p
 {
     if (ses_temp_req_params->status == 0) {
         printf("ses temperature request success\n");
-        printf("Current temperature = %d\n",(unsigned int)ses_temp_req_params->temperature);
-        printf("Hardware id = %u\n",(unsigned int)ses_temp_req_params->hardware_id);  // 0:SESA, 1:SESB
-        printf("Heater Power status is %u\n",(unsigned int)ses_temp_req_params->heater_pwr_status);  // 0:OFF, 1:ON
+        printf("Current temperature: %d\n",(unsigned int)ses_temp_req_params->temperature);
+        printf("Hardware id: %u\n",(unsigned int)ses_temp_req_params->hardware_id);  // 0:SESA, 1:SESB
+        printf("Heater Power status: %u\n",(unsigned int)ses_temp_req_params->heater_pwr_status);  // 0:OFF, 1:ON
     } else {
         printf("ses temperature request failed\n");
-        printf("Unable to read temperature of %d \n", (unsigned int)ses_temp_req_params->hardware_id);
+        printf("Unable to read temperature of: %d \n", (unsigned int)ses_temp_req_params->hardware_id);
     }
     if (debug) {
         displayRespSesTempReqParams(ses_temp_req_params);
@@ -1349,7 +1349,7 @@ AntarisReturnCode process_response_ses_temp(RespSesTempReqParams *ses_temp_req_p
 
 AntarisReturnCode process_response_ps_temp(RespPsTemp *ps_temp_req_params)
 {
-    printf("Current payload server temperature = %d\n",(unsigned int)ps_temp_req_params->temperature);
+    printf("Current payload server temperature: %d\n",(unsigned int)ps_temp_req_params->temperature);
     if (debug) {
         displayRespSesTempReqParams(ps_temp_req_params);
         
@@ -1393,7 +1393,7 @@ AntarisReturnCode process_response_stop_ses_therm_mgmnt(RespStopSesThermMgmntReq
 
 AntarisReturnCode process_response_pa_satos_msg(RespPaSatOsMsg *resp_pa_satos_message)
 {
-    printf("Command id = %hu , status = %d\n", resp_pa_satos_message->command_id, resp_pa_satos_message->req_status);
+    printf("Command id: %hu , status: %d\n", resp_pa_satos_message->command_id, resp_pa_satos_message->req_status);
     if (debug) {
         displayPaSatOsMsg(resp_pa_satos_message);
         
@@ -1524,37 +1524,37 @@ AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
         printf("gps_validity_flag_vel: %d\n",gnss_eph_data->gps_eph_data.gps_validity_flag_vel);
     } 
     if(gnss_eph_data->adcs_timeout_flag == 1) {
-        printf("adcs timeout flag enabled\n");
-        printf("ADCS Orbit Propagator/System Time = %f\n",gnss_eph_data->adcs_eph_data.orbit_time);
-        printf("ECI Position X (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_x);
-        printf("ECI Position Y (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_y);
-        printf("ECI Position Z (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_z);
-        printf("ECI Velocity X (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_x);
-        printf("ECI Velocity Y (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_y);
-        printf("ECI Velocity Z (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_z);
-        printf("ECEF Position X (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_x);
-        printf("ECEF Position Y (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_y);
-        printf("ECEF Position Z (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_z);
-        printf("ECEF Velocity X (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_x);
-        printf("ECEF Velocity Y (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_y);
-        printf("ECEF Velocity Z (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_z);
-        printf("X axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_x);
-        printf("Y axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_y);
-        printf("Z axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_z);
-        printf("Attitude Quaternion 1 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_1);
-        printf("Attitude Quaternion 2 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_2);
-        printf("Attitude Quaternion 3 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_3);
-        printf("Attitude Quaternion 4 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_4);
-        printf("Latitude (deg) = %f\n",gnss_eph_data->adcs_eph_data.latitude);
-        printf("Longitude (deg) = %f\n",gnss_eph_data->adcs_eph_data.longitude);
-        printf("Altitude (km) %f\n",gnss_eph_data->adcs_eph_data.altitude);
-        printf("X Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_x);
-        printf("Y Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_y);
+        printf("ADCS timeout flag enabled\n");
+        printf("ADCS Orbit Propagator/System Time: %f\n",gnss_eph_data->adcs_eph_data.orbit_time);
+        printf("ECI Position X (km): %f\n",gnss_eph_data->adcs_eph_data.eci_position_x);
+        printf("ECI Position Y (km): %f\n",gnss_eph_data->adcs_eph_data.eci_position_y);
+        printf("ECI Position Z (km): %f\n",gnss_eph_data->adcs_eph_data.eci_position_z);
+        printf("ECI Velocity X (km/s): %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_x);
+        printf("ECI Velocity Y (km/s): %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_y);
+        printf("ECI Velocity Z (km/s): %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_z);
+        printf("ECEF Position X (km): %f\n",gnss_eph_data->adcs_eph_data.ecef_position_x);
+        printf("ECEF Position Y (km): %f\n",gnss_eph_data->adcs_eph_data.ecef_position_y);
+        printf("ECEF Position Z (km): %f\n",gnss_eph_data->adcs_eph_data.ecef_position_z);
+        printf("ECEF Velocity X (km/s): %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_x);
+        printf("ECEF Velocity Y (km/s): %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_y);
+        printf("ECEF Velocity Z (km/s): %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_z);
+        printf("X axis Angular rate (deg/s): %f\n",gnss_eph_data->adcs_eph_data.ang_rate_x);
+        printf("Y axis Angular rate (deg/s): %f\n",gnss_eph_data->adcs_eph_data.ang_rate_y);
+        printf("Z axis Angular rate (deg/s): %f\n",gnss_eph_data->adcs_eph_data.ang_rate_z);
+        printf("Attitude Quaternion 1: %f\n",gnss_eph_data->adcs_eph_data.att_quat_1);
+        printf("Attitude Quaternion 2: %f\n",gnss_eph_data->adcs_eph_data.att_quat_2);
+        printf("Attitude Quaternion 3: %f\n",gnss_eph_data->adcs_eph_data.att_quat_3);
+        printf("Attitude Quaternion 4: %f\n",gnss_eph_data->adcs_eph_data.att_quat_4);
+        printf("Latitude (deg): %f\n",gnss_eph_data->adcs_eph_data.latitude);
+        printf("Longitude (deg): %f\n",gnss_eph_data->adcs_eph_data.longitude);
+        printf("Altitude (km): %f\n",gnss_eph_data->adcs_eph_data.altitude);
+        printf("X Nadir Vector: %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_x);
+        printf("Y Nadir Vector: %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_y);
         printf("Z Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_z);
-        printf("X Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_x);
-        printf("Y Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_y);
-        printf("Z Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_z);
-        printf("Beta Angle (deg) %f\n",gnss_eph_data->adcs_eph_data.beta_angle);
+        printf("X Geodetic Nadir Vector: %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_x);
+        printf("Y Geodetic Nadir Vector: %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_y);
+        printf("Z Geodetic Nadir Vector: %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_z);
+        printf("Beta Angle (deg): %f\n",gnss_eph_data->adcs_eph_data.beta_angle);
         for (int i = 0; i < sizeof(fields)/sizeof(fields[0]); i++) {
             int bit_value = (gnss_eph_data->adcs_eph_data.validity_flags >> i) & 1;
             printf("%s: %d\n", fields[i], bit_value);
@@ -1582,12 +1582,12 @@ AntarisReturnCode process_response_get_current_location(RespGetCurrentLocationPa
     if (debug) {
         displayRespGetCurrentLocationParams(resp_get_curr_location_param);
     }
-    printf("Latitude %lf\n",resp_get_curr_location_param->latitude);
-    printf("Longitude %lf\n",resp_get_curr_location_param->longitude);
-    printf("Altitude %lf\n",resp_get_curr_location_param->altitude);
-    printf("Standard deviation latitude %f\n",resp_get_curr_location_param->sd_latitude);
-    printf("Standard deviation longitude %f\n",resp_get_curr_location_param->sd_longitude);
-    printf("Standard deviation altitude %f\n",resp_get_curr_location_param->sd_altitude);
+    printf("Latitude: %lf\n",resp_get_curr_location_param->latitude);
+    printf("Longitude: %lf\n",resp_get_curr_location_param->longitude);
+    printf("Altitude: %lf\n",resp_get_curr_location_param->altitude);
+    printf("Standard deviation latitude: %f\n",resp_get_curr_location_param->sd_latitude);
+    printf("Standard deviation longitude: %f\n",resp_get_curr_location_param->sd_longitude);
+    printf("Standard deviation altitude: %f\n",resp_get_curr_location_param->sd_altitude);
 
     // #<Payload Application Business Logic>
     wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
