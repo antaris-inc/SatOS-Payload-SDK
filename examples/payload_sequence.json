@@ -42,6 +42,7 @@
         "STATUS": "success",
         "HAS_RETURN_VALUES": true,
 
+        "NO_OF_KEYWORDS": 6,
         "RETURN_VALUES": [
           {
             "KEYWORD": "Latitude:",
@@ -94,8 +95,10 @@
     {
       "SEQ_NAME": "EpsVoltageTm",
       "SEQ_PARAMS": ["start","stop"],
+      "NO_OF_KEYWORDS": 1,
 
       "PERIODIC_CALLBACK": true,
+      "periodicity_in_ms": 2,
 
       "EXPECTED_RESPONSE": {
         "STATUS": "success"
@@ -121,6 +124,7 @@
       "SEQ_PARAMS": ["start","stop"],
 
       "PERIODIC_CALLBACK": true,
+      "periodicity_in_ms": 2,
 
       "EXPECTED_RESPONSE": {
         "STATUS": "success"
@@ -128,6 +132,7 @@
 
       "PERIODIC_CALLBACK_RESPONSE": {
         "flag_1": "gps timeout flag enabled",
+        "flag_1_NO_OF_KEYWORDS": 14,
         "flag_1_validations":[
             {
                 "KEYWORD": "gps fix time:",
@@ -230,6 +235,7 @@
         ],
 
         "flag_2": "ADCS timeout flag enabled:",
+        "flage_2_NO_OF_KEYWORDS": 30,
         "flag_2_validations":[
             {
                 "KEYWORD": "ADCS Orbit Propagator/System Time:",
@@ -492,11 +498,13 @@
       "SEQ_PARAMS": ["start","stop"],
 
       "PERIODIC_CALLBACK": true,
+      "periodicity_in_ms": 2,
 
       "EXPECTED_RESPONSE": {
         "STATUS": "success"
       },
 
+      "flag_1_NO_OF_KEYWORDS": 3,
       "PERIODIC_CALLBACK_RESPONSE": {
         "flag_1": "ses temperature request success",
         "flag_1_validations":[
@@ -527,6 +535,7 @@
         }
         ],
         "flag_2": "ses temperature request failed:",
+        "flag_2_NO_OF_KEYWORDS": 1,
         "flag_2_validations" :[
             {
             "KEYWORD": "Unable to read temperature of:",
@@ -551,6 +560,7 @@
 
         "PERIODIC_CALLBACK": false,
         "HAS_RETURN_VALUES": true,
+        "NO_OF_KEYWORDS": 2,
         "RETURN_VALUES": [
           {
             "KEYWORD": "Command id:",
@@ -593,6 +603,7 @@
 
         "PERIODIC_CALLBACK": false,
         "HAS_RETURN_VALUES": true,
+        "NO_OF_KEYWORDS": 1,
         "RETURN_VALUES": [
           {
             "KEYWORD": "Current payload server temperature:",
