@@ -123,10 +123,10 @@ void *post_registration_func(void *arg)
     memcpy(&pa_satos_msg.payload_data,Payload_data,sizeof(Payload_data));
     ret = api_pa_pc_pa_satos_message(channel, &pa_satos_msg);
     if(ret == An_SUCCESS){
-        printf("Pa SatOS message success, ret %d\n",ret);
+        printf("PA SatOS message success, ret %d\n",ret);
     }
     else{
-        fprintf(stderr, " Pa SatOS message failed, ret %d\n", ret);
+        fprintf(stderr, " PA SatOS message failed, ret %d\n", ret);
     }
     return NULL;
 }
@@ -624,7 +624,7 @@ void handle_PowerControl(mythreadState_t *mythread){
     errno = 0;
     long power_state = strtol(mythread->seq_params,&endptr,10);
     if (errno != 0 || endptr == mythread->seq_params || power_state != 0 && power_state != 1) {
-        printf("invlaid power state. power state can only be 0 or 1\n");
+        printf("invalid power state. power state can only be 0 or 1\n");
     }
      else {
             UINT16 hw_id = 0x4001;
@@ -636,7 +636,7 @@ void handle_PowerControl(mythreadState_t *mythread){
             if(ret == An_SUCCESS){
                     printf("Payload power control request success, ret %d\n",ret);
             } else{
-                fprintf(stderr, "payload power control request failed, ret %d\n", ret);
+                fprintf(stderr, "Payload power control request failed, ret %d\n", ret);
             }
     }
     // Tell PC that current sequence is done
@@ -834,7 +834,7 @@ void handle_fcm_start_operation(mythreadState_t *mythread){
     // Send request
     ret = api_pa_pc_host_to_peer_fcm_operation(channel, &pstoes_fcm_operation);
     if(ret == An_SUCCESS){
-        printf("Fcm start request success, ret %d\n",ret);
+        printf("FCM start request success, ret %d\n",ret);
     }
     else{
         fprintf(stderr, "FCM start request failed, ret %d\n", ret);

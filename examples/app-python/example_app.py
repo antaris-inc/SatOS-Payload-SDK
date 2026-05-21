@@ -346,7 +346,7 @@ class Controller:
         hw_id = 134                   # If hw_id = 0, then default payload hardware id is send
                                       # HW ID is 134 is for PS and 135 for Edge
         if(power_state != 0 and power_state != 1):
-            logger.info("invlaid power state. power state can only be 0 or 1")
+            logger.info("invalid power state. power state can only be 0 or 1")
             return
         resp = ctx.client.payload_power_control(power_state, hw_id)
         logger.info(f"Power Control Call response is = {resp}")

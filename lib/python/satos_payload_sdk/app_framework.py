@@ -429,8 +429,9 @@ class ChannelClient:
 
             resp = api_client.api_pa_pc_payload_power_control(self._channel, payload_power_control_params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
-                logger.error("payload power control request failed, ret %d" % resp)
-            logger.info("Payload power control request success, ret %d", resp)
+                logger.error("Payload power control request failed, ret %d" % resp)
+            else:
+                logger.info("Payload power control request success, ret %d", resp)
             return resp
             
     def pa_satos_message(self, command, payload_data):
@@ -438,9 +439,9 @@ class ChannelClient:
             params = api_types.PaSatOsMsg(self._get_next_cid(), command, payload_data)
             resp = api_client.api_pa_pc_pa_satos_message(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
-                logger.error(" Pa SatOS message failed, ret %d\n", resp)
+                logger.error(" PA SatOS message failed, ret %d\n", resp)
                 return None
-            logger.info("Pa SatOS message success, ret %d\n",resp)
+            logger.info("PA SatOS message success, ret %d\n",resp)
 
             resp_cond = threading.Condition()
             resp_cond.acquire()
@@ -463,7 +464,7 @@ class ChannelClient:
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
                 logger.error(" FCM start request failed, ret %d\n", resp)
                 return None
-            logger.info("Fcm start request success, ret %d\n",resp)
+            logger.info("FCM start request success, ret %d\n",resp)
 
         return resp
 
