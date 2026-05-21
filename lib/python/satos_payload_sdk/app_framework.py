@@ -196,10 +196,13 @@ class ChannelClient:
     def get_current_location(self):
         with self._cond:
             params = api_types.ReqGetCurrentLocationParams(self._get_next_cid())
+            logger.info("sent get-current-location request with correlation_id %u",params.correlation_id)
             resp = api_client.api_pa_pc_get_current_location(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
-                logger.error("get_current_location request failed")
+                logger.error("api_pa_pc_get_current_location failed")
                 return None
+            
+            logger.info("api_pa_pc_get_current_location returned success, ret %d", resp)
 
             resp_cond = threading.Condition()
             resp_cond.acquire()
@@ -374,9 +377,10 @@ class ChannelClient:
             params = api_types.PsTempReq(self._get_next_cid())
             resp = api_client.api_pa_pc_ps_temp_req(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
-                logger.error("api_pa_pc_ps_temp_req request failed")
+                logger.error("PS temperature request failed, ret %d\n", resp)
                 return None
-
+            
+            logger.info("PS temperature request success, ret %d", resp)
             resp_cond = threading.Condition()
             resp_cond.acquire()
 
@@ -425,7 +429,9 @@ class ChannelClient:
 
             resp = api_client.api_pa_pc_payload_power_control(self._channel, payload_power_control_params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
-                logger.error("sequence_done request failed: resp=%d" % resp)
+                logger.error("Payload power control request failed, ret %d" % resp)
+            else:
+                logger.info("Payload power control request success, ret %d", resp)
             return resp
             
     def pa_satos_message(self, command, payload_data):
@@ -433,8 +439,9 @@ class ChannelClient:
             params = api_types.PaSatOsMsg(self._get_next_cid(), command, payload_data)
             resp = api_client.api_pa_pc_pa_satos_message(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
-                logger.error("api_pa_pc_pa_satos_message request failed")
+                logger.error(" PA SatOS message failed, ret %d\n", resp)
                 return None
+            logger.info("PA SatOS message success, ret %d\n",resp)
 
             resp_cond = threading.Condition()
             resp_cond.acquire()
@@ -455,8 +462,9 @@ class ChannelClient:
             params = api_types.HostToPeerFcmOperation(self._get_next_cid(), peer_app_id, fcm_src, fcm_dest, no_of_files, file_input)
             resp = api_client.api_pa_pc_host_to_peer_fcm_operation(self._channel, params)
             if resp != api_types.AntarisReturnCode.An_SUCCESS:
-                logger.error("api_pa_pc_host_to_peer_fcm_operation request failed")
+                logger.error(" FCM start request failed, ret %d\n", resp)
                 return None
+            logger.info("FCM start request success, ret %d\n",resp)
 
         return resp
 
@@ -464,7 +472,9 @@ class ChannelClient:
         params = api_types.CmdSequenceDoneParams(sequence_id)
         resp = api_client.api_pa_pc_sequence_done(self._channel, params)
         if resp != api_types.AntarisReturnCode.An_SUCCESS:
-            logger.error("sequence_done request failed: resp=%d" % resp)
+            logger.error("api_pa_pc_sequence_done failed: resp=%d" % resp)
+        else:
+            logger.info("api_pa_pc_sequence_done returned success, ret=%d" % resp)
 
     def _handle_response(self, params):
         with self._cond:

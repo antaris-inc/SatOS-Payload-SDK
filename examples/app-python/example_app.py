@@ -62,7 +62,7 @@ class Controller:
         payload_data = bytes([0x12, 0x34, 0x56])  # Can be up to 1020 bytes
 
         resp = client.pa_satos_message(command, payload_data)
-        logger.info(f"Command id = {resp.command_id} , status = {resp.req_status}")
+        logger.info(f"Command id: {resp.command_id} , status: {resp.req_status}")
 
         return True
 
@@ -90,6 +90,7 @@ class Controller:
         if gnss_data.gps_timeout_flag == 1:
             gps_fix_time = gnss_data.gps_eph_data.gps_fix_time
             gps_sys_time = gnss_data.gps_eph_data.gps_sys_time
+            logger.info("gps timeout flag enabled")
 
             logger.info(
                 f"gps fix time: {gps_fix_time.hour:02d}:{gps_fix_time.minute:02d}."
@@ -123,44 +124,44 @@ class Controller:
 
         if gnss_data.adcs_timeout_flag == 1:
             a = gnss_data.adcs_eph_data
+            logger.info("ADCS timeout flag enabled")
+            logger.info(f"ADCS Orbit Propagator/System Time: {a.orbit_time}")
+            logger.info(f"ECI Position X (km): {a.eci_position_x}")
+            logger.info(f"ECI Position Y (km): {a.eci_position_y}")
+            logger.info(f"ECI Position Z (km): {a.eci_position_z}")
+            logger.info(f"ECI Velocity X (km/s): {a.eci_velocity_x}")
+            logger.info(f"ECI Velocity Y (km/s): {a.eci_velocity_y}")
+            logger.info(f"ECI Velocity Z (km/s): {a.eci_velocity_z}")
 
-            logger.info(f"ADCS Orbit Propagator/System Time = {a.orbit_time}")
-            logger.info(f"ECI Position X (km) = {a.eci_position_x}")
-            logger.info(f"ECI Position Y (km) = {a.eci_position_y}")
-            logger.info(f"ECI Position Z (km) = {a.eci_position_z}")
-            logger.info(f"ECI Velocity X (km/s) = {a.eci_velocity_x}")
-            logger.info(f"ECI Velocity Y (km/s) = {a.eci_velocity_y}")
-            logger.info(f"ECI Velocity Z (km/s) = {a.eci_velocity_z}")
+            logger.info(f"ECEF Position X (km): {a.ecef_position_x}")
+            logger.info(f"ECEF Position Y (km): {a.ecef_position_y}")
+            logger.info(f"ECEF Position Z (km): {a.ecef_position_z}")
+            logger.info(f"ECEF Velocity X (km/s): {a.ecef_velocity_x}")
+            logger.info(f"ECEF Velocity Y (km/s): {a.ecef_velocity_y}")
+            logger.info(f"ECEF Velocity Z (km/s): {a.ecef_velocity_z}")
 
-            logger.info(f"ECEF Position X (km) = {a.ecef_position_x}")
-            logger.info(f"ECEF Position Y (km) = {a.ecef_position_y}")
-            logger.info(f"ECEF Position Z (km) = {a.ecef_position_z}")
-            logger.info(f"ECEF Velocity X (km/s) = {a.ecef_velocity_x}")
-            logger.info(f"ECEF Velocity Y (km/s) = {a.ecef_velocity_y}")
-            logger.info(f"ECEF Velocity Z (km/s) = {a.ecef_velocity_z}")
+            logger.info(f"X axis Angular rate (deg/s): {a.ang_rate_x}")
+            logger.info(f"Y axis Angular rate (deg/s): {a.ang_rate_y}")
+            logger.info(f"Z axis Angular rate (deg/s): {a.ang_rate_z}")
 
-            logger.info(f"X axis Angular rate (deg/s) = {a.ang_rate_x}")
-            logger.info(f"Y axis Angular rate (deg/s) = {a.ang_rate_y}")
-            logger.info(f"Z axis Angular rate (deg/s) = {a.ang_rate_z}")
+            logger.info(f"Attitude Quaternion 1: {a.att_quat_1}")
+            logger.info(f"Attitude Quaternion 2: {a.att_quat_2}")
+            logger.info(f"Attitude Quaternion 3: {a.att_quat_3}")
+            logger.info(f"Attitude Quaternion 4: {a.att_quat_4}")
 
-            logger.info(f"Attitude Quaternion 1 = {a.att_quat_1}")
-            logger.info(f"Attitude Quaternion 2 = {a.att_quat_2}")
-            logger.info(f"Attitude Quaternion 3 = {a.att_quat_3}")
-            logger.info(f"Attitude Quaternion 4 = {a.att_quat_4}")
+            logger.info(f"Latitude (deg): {a.latitude}")
+            logger.info(f"Longitude (deg): {a.longitude}")
+            logger.info(f"Altitude (km): {a.altitude}")
 
-            logger.info(f"Latitude (deg) = {a.latitude}")
-            logger.info(f"Longitude (deg) = {a.longitude}")
-            logger.info(f"Altitude (km) = {a.altitude}")
+            logger.info(f"X Nadir Vector: {a.nadir_vector_x}")
+            logger.info(f"Y Nadir Vector: {a.nadir_vector_y}")
+            logger.info(f"Z Nadir Vector: {a.nadir_vector_z}")
 
-            logger.info(f"X Nadir Vector = {a.nadir_vector_x}")
-            logger.info(f"Y Nadir Vector = {a.nadir_vector_y}")
-            logger.info(f"Z Nadir Vector = {a.nadir_vector_z}")
+            logger.info(f"X Geodetic Nadir Vector: {a.gd_nadir_vector_x}")
+            logger.info(f"Y Geodetic Nadir Vector: {a.gd_nadir_vector_y}")
+            logger.info(f"Z Geodetic Nadir Vector: {a.gd_nadir_vector_z}")
 
-            logger.info(f"X Geodetic Nadir Vector = {a.gd_nadir_vector_x}")
-            logger.info(f"Y Geodetic Nadir Vector = {a.gd_nadir_vector_y}")
-            logger.info(f"Z Geodetic Nadir Vector = {a.gd_nadir_vector_z}")
-
-            logger.info(f"Beta Angle (deg) = {a.beta_angle}")
+            logger.info(f"Beta Angle (deg): {a.beta_angle}")
 
             for i, name in enumerate(fields):
                 bit_value = (a.validity_flags >> i) & 1
@@ -217,8 +218,13 @@ class Controller:
 
     def handle_log_location(self, ctx):
         loc = ctx.client.get_current_location()
-        logger.info(f"Handling sequence: lat={loc.latitude}, lng={loc.longitude}, alt={loc.altitude} standard deviation_lat={loc.sd_latitude}, standard deviation_lng={loc.sd_longitude}, standard deviation_alt={loc.sd_altitude}")
-    
+        logger.info(f"Latitude: {loc.latitude}")
+        logger.info(f"Longitude: {loc.longitude}")
+        logger.info(f"Altitude: {loc.altitude}")
+        logger.info(f"Standard deviation latitude: {loc.sd_latitude}")
+        logger.info(f"Standard deviation longitude: {loc.sd_longitude}")
+        logger.info(f"Standard deviation altitude: {loc.sd_altitude}")
+        
     def handle_gnss_data(self, ctx):
         periodicity_in_ms = 2000    # Periodicity = 0 indicates one time GNSS EPH data. Max is 1 minute
         eph2_enable = 1
@@ -297,31 +303,33 @@ class Controller:
         hardware_id = 0   # 0:SESA , 1:SESB
         resp = ctx.client.ses_temp_req(hardware_id)
         if resp.status == 0:
-            logger.info(f"Current temperature = {resp.temperature}")
-            logger.info(f"Hardware id = {resp.hardware_id}")
-            logger.info(f"Heater Power Status = {resp.heater_pwr_status}") # 0:OFF, 1:ON
+            logger.info("ses temp request success")
+            logger.info(f"Current temperature: {resp.temperature}")
+            logger.info(f"Hardware id: {resp.hardware_id}")
+            logger.info(f"Heater Power Status: {resp.heater_pwr_status}") # 0:OFF, 1:ON
         else:
-            logger.info(f"Unable read temperature for = {resp.hardware_id}")
+            logger.info("ses temperature request failed")
+            logger.info(f"Unable read temperature of: {resp.hardware_id}")
 
     def handle_get_ps_temp(self, ctx):
         resp = ctx.client.ps_temp_req()
-        logger.info(f"Current payload server temperature = {resp.temperature}")
+        logger.info(f"Current payload server temperature: {resp.temperature}")
         
     def ses_thermal_status_ntf(self, ctx):
         if ctx.heater_pwr_status == 0:
             if ctx.hardware_id == 0:  #SESA:0
-                logger.info("SESA power ON/OFF success\n");
+                logger.info("SESA power ON/OFF success\n")
             elif ctx.hardware_id == 1:  #SESB:1
-                logger.info("SESB power ON/OFF success\n");
+                logger.info("SESB power ON/OFF success\n")
             else:
-                logger.info("Invalid HW ID\n");
+                logger.info("Invalid HW ID\n")
         else:
             if ctx.hardware_id == 0:  #SESA:0
-                logger.info("SESA power ON/OFF failure\n");
+                logger.info("SESA power ON/OFF failure\n")
             elif ctx.hardware_id == 1:  #SESB:1
-                logger.info("SESB power ON/OFF failure\n");
+                logger.info("SESB power ON/OFF failure\n")
             else:
-                logger.info("Invalid HW ID\n");
+                logger.info("Invalid HW ID\n")
         
         if ctx.heater_temp_status == 0:
             if ctx.hardware_id == 0:  #SESA:0
@@ -329,7 +337,7 @@ class Controller:
             elif ctx.hardware_id == 1:  #SESB:1
                 logger.info(f"SESB temperature = {ctx.temperature}")
         else:
-                logger.info("Invalid HW ID\n");
+                logger.info("Invalid HW ID\n")
         return True
 
     def handle_power_control(self, ctx):
@@ -338,26 +346,36 @@ class Controller:
         hw_id = 134                   # If hw_id = 0, then default payload hardware id is send
                                       # HW ID is 134 is for PS and 135 for Edge
         if(power_state != 0 and power_state != 1):
-            logger.info("invlaid power state. power state can only be 0 or 1")
+            logger.info("invalid power state. power state can only be 0 or 1")
             return
         resp = ctx.client.payload_power_control(power_state, hw_id)
-        logger.info(f"Power control state = {power_state}. Call response is = {resp}")
+        logger.info(f"Power Control Call response is = {resp}")
         
     # The sample program assumes 2 GPIO pins are connected back-to-back. 
     # This sequence toggles level of 'Write Pin' and then reads level of 'Read Pin'
     def handle_test_gpio(self, ctx):
+        logger.info("Handling sequence: TestGPIO!")
         gpio_info = api_parser.api_pa_pc_get_gpio_info()
 
+        if gpio_info is None:
+            logger.error("Error: json file is not configured properly. Kindly check configurations done in ACP")
+            return
+
         logger.info("Total gpio pins = %d", int(gpio_info.pin_count))
-        api_gpio.api_pa_pc_init_gpio_lib()
+        ret = api_gpio.api_pa_pc_init_gpio_lib()
+
+        if ret is False:
+            logger.error("Error: Init GPIO lib failed")
+            return
+        
         i = 0
         # Read initial value of GPIO pins.
         # As GPIO pins are back-to-back connected, their value must be same.
         while (i < int(gpio_info.pin_count)):
             if int(gpio_info.pins[i]) != -1:
-                readPin = gpio_info.pins[i];
+                readPin = gpio_info.pins[i]
                 i += 1
-                writePin = gpio_info.pins[i];
+                writePin = gpio_info.pins[i]
 
                 val = api_gpio.api_pa_pc_read_gpio(int(readPin))
                 if val != g_GPIO_ERROR:
@@ -463,6 +481,10 @@ class Controller:
         canInfo = api_can.api_pa_pc_get_can_dev()
         logger.info("Total CAN bus ports = %d", int(canInfo.can_port_count))
 
+        if canInfo.can_port_count == 0:
+            logger.info("No CAN devices available!")
+            return
+
         # Define the CAN channel to use (assuming the first device)
         channel = canInfo.can_dev[0]
         logger.info("Starting CAN receiver port %s", channel)
@@ -493,11 +515,10 @@ class Controller:
                 logger.error("Error in receiving data")
         
         logger.info("Completed reading")
-
         return 
     
     def handle_test_i2c_bus(self, ctx):
-        logger.info("Test I2C bus")
+        logger.info("Handling sequence: TestI2CBus!")
 
         # Check number of i2c bus 
         i2cInfo = api_parser.api_pa_pc_get_i2c_dev()
@@ -529,7 +550,6 @@ class Controller:
 
 
         api_i2c.api_pa_pc_deinit_i2c_lib()
-        
         return 
 
     def handle_pa_satos_message(self, ctx):
@@ -538,7 +558,6 @@ class Controller:
 
         resp = ctx.client.pa_satos_message(command, payload_data)
         print(f"Command id = {resp.command_id} , status = {resp.req_status}")
-
         return
     
     def handle_ac_ip_read(self, ctx):

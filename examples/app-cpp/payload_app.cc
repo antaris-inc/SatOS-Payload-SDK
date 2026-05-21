@@ -123,10 +123,10 @@ void *post_registration_func(void *arg)
     memcpy(&pa_satos_msg.payload_data,Payload_data,sizeof(Payload_data));
     ret = api_pa_pc_pa_satos_message(channel, &pa_satos_msg);
     if(ret == An_SUCCESS){
-        printf("Pa SatOS message success, ret %d\n",ret);
+        printf("PA SatOS message success, ret %d\n",ret);
     }
     else{
-        fprintf(stderr, " Pa SatOS message failed, ret %d\n", ret);
+        fprintf(stderr, " PA SatOS message failed, ret %d\n", ret);
     }
     return NULL;
 }
@@ -157,7 +157,7 @@ void handle_HelloFriend(mythreadState_t *mythread)
     AntarisReturnCode ret;
     unsigned long current_time_in_ms;
 
-    printf("Handling sequence: hello, %s \n", mythread->seq_params);
+    printf("Handling sequence: hello, %s! \n", mythread->seq_params);
 
     // Tell PC that current sequence is done
     CmdSequenceDoneParams sequence_done_params = {0};
@@ -185,10 +185,10 @@ static void handle_LogLocation(mythreadState_t *mythread)
 
     printf("%s: sent get-current-location request with correlation_id %u\n", mythread->seq_id, mythread->correlation_id);
     if (An_SUCCESS != ret) {
-        fprintf(stderr, "%s: api_pa_pc_get_current_location failed, ret %d\n", __FUNCTION__, ret);
+        fprintf(stderr, "api_pa_pc_get_current_location failed, ret %d\n", ret);
         _exit(-1);
     } else {
-        printf("%s: api_pa_pc_get_current_location returned success, ret %d\n", __FUNCTION__, ret);
+        printf("api_pa_pc_get_current_location returned success, ret %d\n", ret);
     }
 
     // Tell PC that current sequence is done
@@ -276,10 +276,10 @@ void handle_gnss_data_Telemetry_Request(mythreadState_t *mythread){
         req_gnss_eph_stop_data_request.correlation_id = mythread->correlation_id;
         ret = api_pa_pc_gnss_eph_stop_req(channel,&req_gnss_eph_stop_data_request);
         if(ret == An_SUCCESS){
-            printf("Sending GNSS EPH data Telemetry stop request success, ret %d\n",ret);
+            printf("GNSS EPH data stop request success, ret %d\n",ret);
         }
         else{
-            fprintf(stderr, " Sending GNSS EPH data Telemety stop request failed, ret %d\n", ret);
+            fprintf(stderr, "GNSS EPH data Telemety request failed, ret %d\n", ret);
         }
     }
     else if(strcmp(seq_params_lower, "start") == 0){
@@ -290,10 +290,10 @@ void handle_gnss_data_Telemetry_Request(mythreadState_t *mythread){
         req_gnss_eph_start_data_request.eph2_enable = eph2_enable;
         ret = api_pa_pc_gnss_eph_start_req(channel,&req_gnss_eph_start_data_request);
         if(ret == An_SUCCESS){
-            printf("Sending GNSS EPH data Telemetry start request success, ret %d\n",ret);
+            printf("GNSS EPH data start request success, ret %d\n",ret);
         }
         else{
-            fprintf(stderr, " Sending GNSS EPH data Telemetry start request failed, ret %d\n", ret);
+            fprintf(stderr, "GNSS EPH data start request failed, ret %d\n", ret);
         }
     }
     else{
@@ -374,6 +374,8 @@ void handle_TestGPIO(mythreadState_t *mythread)
         /* As Read and Write pins are back-to-back connected, 
            Reading value of Read pin to confirm GPIO success/failure
          */
+
+        printf("Reading from pin no. %d", int(readPin));
         val = api_gpio.api_pa_pc_read_gpio(gpio_info.gpio_port, readPin);
         if (val == GPIO_ERROR) {
             printf("Error in pin no %d \n", int(readPin));
@@ -407,7 +409,7 @@ void handle_StageFile(mythreadState_t *mythread)
     ReqStageFileDownloadParams download_file_params = {0};
     char full_file_path[256];
 
-    printf("\n Handling sequence: StageFile! \n");
+    printf("\n Staging file for download \n");
 
     filename_size = strnlen(STAGE_FILE_NAME, MAX_FILE_OR_PROP_LEN_NAME);
 
@@ -440,7 +442,10 @@ void handle_StageFile(mythreadState_t *mythread)
     ret = api_pa_pc_stage_file_download(channel, &download_file_params);
 
     if (ret == An_GENERIC_FAILURE) {
-        printf("Error: Failed to stage file %s \n", download_file_params.file_path);
+        printf("Error in staging file");
+    }
+    else{
+        printf("File successfully staged");
     }
 exit_sequence:    
     // Tell PC that current sequence is done
@@ -477,6 +482,9 @@ void handle_TestCANBus(mythreadState_t *mythread)
     }
 
     if (parts[0] == NULL || parts[1] == NULL) {
+        printf("Input format is incorrect. The format is:\n");
+        printf("Arbitration ID data[0],data[1],data[2],data[3]..data[7]\n");
+        printf("Using default arbitration ID and data bytes.\n");
         printf("Input format is incorrect. Using default arbitration ID and data bytes.\n");
     }
 
@@ -612,12 +620,11 @@ void handle_PowerControl(mythreadState_t *mythread){
     printf("Handling payload power");
     AntarisReturnCode ret;
     // char* power_state = mythread->seq_params;
-    printf("parmas is %s\n",mythread->seq_params);
     char *endptr;
     errno = 0;
     long power_state = strtol(mythread->seq_params,&endptr,10);
     if (errno != 0 || endptr == mythread->seq_params || power_state != 0 && power_state != 1) {
-        printf("incorrect parameters. parameters can be only 0 or 1.\n");
+        printf("invalid power state. power state can only be 0 or 1\n");
     }
      else {
             UINT16 hw_id = 0x4001;
@@ -629,7 +636,7 @@ void handle_PowerControl(mythreadState_t *mythread){
             if(ret == An_SUCCESS){
                     printf("Payload power control request success, ret %d\n",ret);
             } else{
-                fprintf(stderr, " payload power control request failed, ret %d\n", ret);
+                fprintf(stderr, "Payload power control request failed, ret %d\n", ret);
             }
     }
     // Tell PC that current sequence is done
@@ -742,7 +749,6 @@ void handle_ses_temp_req(mythreadState_t *mythread){
 
 void handle_get_ps_temperature(mythreadState_t *mythread){
 
-    printf("Handling get PS Temperature request");
     AntarisReturnCode ret;
     PsTempReq ps_temp_req = {0};
     ps_temp_req.correlation_id = mythread->correlation_id;
@@ -771,8 +777,6 @@ void handle_get_ps_temperature(mythreadState_t *mythread){
 }
 
 void handle_pa_satos_message(mythreadState_t *mythread){
-
-    printf("Handling Pa-SatOS message");
     AntarisReturnCode ret;
     UINT16 command = 1;  // command ID
     INT8 Payload_data[MAX_PAYLOAD_DATA_SIZE] = { 0x12, 0x34, 0x56 };  // Can be up to 1020 bytes
@@ -830,10 +834,10 @@ void handle_fcm_start_operation(mythreadState_t *mythread){
     // Send request
     ret = api_pa_pc_host_to_peer_fcm_operation(channel, &pstoes_fcm_operation);
     if(ret == An_SUCCESS){
-        printf("Fcm start request success, ret %d\n",ret);
+        printf("FCM start request success, ret %d\n",ret);
     }
     else{
-        fprintf(stderr, " FCM start request failed, ret %d\n", ret);
+        fprintf(stderr, "FCM start request failed, ret %d\n", ret);
     }
 
      // Tell PC that current sequence is done
@@ -1274,7 +1278,7 @@ AntarisReturnCode process_health_check(HealthCheckParams *health_check_param)
 AntarisReturnCode process_response_get_eps_voltage(GetEpsVoltage *get_eps_voltage)
 {
     printf("process_response_get_eps_voltage\n");
-    printf("eps voltage is: %f\n",get_eps_voltage->eps_voltage);
+    printf("EPS voltage data received: %f\n",get_eps_voltage->eps_voltage);
     if (debug) {
         displayGetEpsVoltage(get_eps_voltage);
     }
@@ -1326,11 +1330,13 @@ AntarisReturnCode process_response_thrml_ntf(SesThermalStatusNtf *ses_thermal_st
 AntarisReturnCode process_response_ses_temp(RespSesTempReqParams *ses_temp_req_params)
 {
     if (ses_temp_req_params->status == 0) {
-        printf("Current temperature = %d\n",(unsigned int)ses_temp_req_params->temperature);
-        printf("Hardware id = %u\n",(unsigned int)ses_temp_req_params->hardware_id);  // 0:SESA, 1:SESB
-        printf("Heater Power status is %u\n",(unsigned int)ses_temp_req_params->heater_pwr_status);  // 0:OFF, 1:ON
+        printf("ses temperature request success\n");
+        printf("Current temperature: %d\n",(unsigned int)ses_temp_req_params->temperature);
+        printf("Hardware id: %u\n",(unsigned int)ses_temp_req_params->hardware_id);  // 0:SESA, 1:SESB
+        printf("Heater Power status: %u\n",(unsigned int)ses_temp_req_params->heater_pwr_status);  // 0:OFF, 1:ON
     } else {
-        printf("Unable to read temperature of %d \n", (unsigned int)ses_temp_req_params->hardware_id);
+        printf("ses temperature request failed\n");
+        printf("Unable to read temperature of: %d \n", (unsigned int)ses_temp_req_params->hardware_id);
     }
     if (debug) {
         displayRespSesTempReqParams(ses_temp_req_params);
@@ -1343,7 +1349,7 @@ AntarisReturnCode process_response_ses_temp(RespSesTempReqParams *ses_temp_req_p
 
 AntarisReturnCode process_response_ps_temp(RespPsTemp *ps_temp_req_params)
 {
-    printf("Current payload server temperature = %d\n",(unsigned int)ps_temp_req_params->temperature);
+    printf("Current payload server temperature: %d\n",(unsigned int)ps_temp_req_params->temperature);
     if (debug) {
         displayRespSesTempReqParams(ps_temp_req_params);
         
@@ -1387,7 +1393,7 @@ AntarisReturnCode process_response_stop_ses_therm_mgmnt(RespStopSesThermMgmntReq
 
 AntarisReturnCode process_response_pa_satos_msg(RespPaSatOsMsg *resp_pa_satos_message)
 {
-    printf("Command id = %hu , status = %d\n", resp_pa_satos_message->command_id, resp_pa_satos_message->req_status);
+    printf("Command id: %hu , status: %d\n", resp_pa_satos_message->command_id, resp_pa_satos_message->req_status);
     if (debug) {
         displayPaSatOsMsg(resp_pa_satos_message);
         
@@ -1499,6 +1505,7 @@ AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
     };
 
     if(gnss_eph_data->gps_timeout_flag == 1) {
+        printf("gps timeout flag enabled\n");
         OBC_time *gps_fix_time = &gnss_eph_data->gps_eph_data.gps_fix_time;
         OBC_time *gps_sys_time = &gnss_eph_data->gps_eph_data.gps_sys_time;
         printf("gps fix time: %02u:%02u.%03u  %02u/%02u/%04u\n", gps_fix_time->hour,gps_fix_time->minute, gps_fix_time->millisecond, gps_fix_time->date, gps_fix_time->month, gps_fix_time->year);
@@ -1517,36 +1524,37 @@ AntarisReturnCode process_response_gnss_eph_data(GnssEphData *gnss_eph_data)
         printf("gps_validity_flag_vel: %d\n",gnss_eph_data->gps_eph_data.gps_validity_flag_vel);
     } 
     if(gnss_eph_data->adcs_timeout_flag == 1) {
-        printf("ADCS Orbit Propagator/System Time = %f\n",gnss_eph_data->adcs_eph_data.orbit_time);
-        printf("ECI Position X (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_x);
-        printf("ECI Position Y (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_y);
-        printf("ECI Position Z (km) = %f\n",gnss_eph_data->adcs_eph_data.eci_position_z);
-        printf("ECI Velocity X (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_x);
-        printf("ECI Velocity Y (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_y);
-        printf("ECI Velocity Z (km/s) = %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_z);
-        printf("ECEF Position X (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_x);
-        printf("ECEF Position Y (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_y);
-        printf("ECEF Position Z (km) = %f\n",gnss_eph_data->adcs_eph_data.ecef_position_z);
-        printf("ECEF Velocity X (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_x);
-        printf("ECEF Velocity Y (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_y);
-        printf("ECEF Velocity Z (km/s) = %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_z);
-        printf("X axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_x);
-        printf("Y axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_y);
-        printf("Z axis Angular rate (deg/s) = %f\n",gnss_eph_data->adcs_eph_data.ang_rate_z);
-        printf("Attitude Quaternion 1 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_1);
-        printf("Attitude Quaternion 2 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_2);
-        printf("Attitude Quaternion 3 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_3);
-        printf("Attitude Quaternion 4 = %f\n",gnss_eph_data->adcs_eph_data.att_quat_4);
-        printf("Latitude (deg) = %f\n",gnss_eph_data->adcs_eph_data.latitude);
-        printf("Longitude (deg) = %f\n",gnss_eph_data->adcs_eph_data.longitude);
-        printf("Altitude (km) %f\n",gnss_eph_data->adcs_eph_data.altitude);
-        printf("X Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_x);
-        printf("Y Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_y);
+        printf("ADCS timeout flag enabled\n");
+        printf("ADCS Orbit Propagator/System Time: %f\n",gnss_eph_data->adcs_eph_data.orbit_time);
+        printf("ECI Position X (km): %f\n",gnss_eph_data->adcs_eph_data.eci_position_x);
+        printf("ECI Position Y (km): %f\n",gnss_eph_data->adcs_eph_data.eci_position_y);
+        printf("ECI Position Z (km): %f\n",gnss_eph_data->adcs_eph_data.eci_position_z);
+        printf("ECI Velocity X (km/s): %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_x);
+        printf("ECI Velocity Y (km/s): %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_y);
+        printf("ECI Velocity Z (km/s): %f\n",gnss_eph_data->adcs_eph_data.eci_velocity_z);
+        printf("ECEF Position X (km): %f\n",gnss_eph_data->adcs_eph_data.ecef_position_x);
+        printf("ECEF Position Y (km): %f\n",gnss_eph_data->adcs_eph_data.ecef_position_y);
+        printf("ECEF Position Z (km): %f\n",gnss_eph_data->adcs_eph_data.ecef_position_z);
+        printf("ECEF Velocity X (km/s): %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_x);
+        printf("ECEF Velocity Y (km/s): %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_y);
+        printf("ECEF Velocity Z (km/s): %f\n",gnss_eph_data->adcs_eph_data.ecef_velocity_z);
+        printf("X axis Angular rate (deg/s): %f\n",gnss_eph_data->adcs_eph_data.ang_rate_x);
+        printf("Y axis Angular rate (deg/s): %f\n",gnss_eph_data->adcs_eph_data.ang_rate_y);
+        printf("Z axis Angular rate (deg/s): %f\n",gnss_eph_data->adcs_eph_data.ang_rate_z);
+        printf("Attitude Quaternion 1: %f\n",gnss_eph_data->adcs_eph_data.att_quat_1);
+        printf("Attitude Quaternion 2: %f\n",gnss_eph_data->adcs_eph_data.att_quat_2);
+        printf("Attitude Quaternion 3: %f\n",gnss_eph_data->adcs_eph_data.att_quat_3);
+        printf("Attitude Quaternion 4: %f\n",gnss_eph_data->adcs_eph_data.att_quat_4);
+        printf("Latitude (deg): %f\n",gnss_eph_data->adcs_eph_data.latitude);
+        printf("Longitude (deg): %f\n",gnss_eph_data->adcs_eph_data.longitude);
+        printf("Altitude (km): %f\n",gnss_eph_data->adcs_eph_data.altitude);
+        printf("X Nadir Vector: %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_x);
+        printf("Y Nadir Vector: %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_y);
         printf("Z Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.nadir_vector_z);
-        printf("X Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_x);
-        printf("Y Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_y);
-        printf("Z Geodetic Nadir Vector %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_z);
-        printf("Beta Angle (deg) %f\n",gnss_eph_data->adcs_eph_data.beta_angle);
+        printf("X Geodetic Nadir Vector: %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_x);
+        printf("Y Geodetic Nadir Vector: %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_y);
+        printf("Z Geodetic Nadir Vector: %f\n",gnss_eph_data->adcs_eph_data.gd_nadir_vector_z);
+        printf("Beta Angle (deg): %f\n",gnss_eph_data->adcs_eph_data.beta_angle);
         for (int i = 0; i < sizeof(fields)/sizeof(fields[0]); i++) {
             int bit_value = (gnss_eph_data->adcs_eph_data.validity_flags >> i) & 1;
             printf("%s: %d\n", fields[i], bit_value);
@@ -1571,16 +1579,15 @@ AntarisReturnCode process_response_register(RespRegisterParams *resp_register_pa
 
 AntarisReturnCode process_response_get_current_location(RespGetCurrentLocationParams *resp_get_curr_location_param)
 {
-    printf("process_response_get_current_location\n");
     if (debug) {
         displayRespGetCurrentLocationParams(resp_get_curr_location_param);
     }
-    printf("Latitude %lf\n",resp_get_curr_location_param->latitude);
-    printf("Longitude %lf\n",resp_get_curr_location_param->longitude);
-    printf("altitude %lf\n",resp_get_curr_location_param->altitude);
-    printf("standard deviation latitude %f\n",resp_get_curr_location_param->sd_latitude);
-    printf("standard deviation longitude %f\n",resp_get_curr_location_param->sd_longitude);
-    printf("standard deviation altitude %f\n",resp_get_curr_location_param->sd_altitude);
+    printf("Latitude: %lf\n",resp_get_curr_location_param->latitude);
+    printf("Longitude: %lf\n",resp_get_curr_location_param->longitude);
+    printf("Altitude: %lf\n",resp_get_curr_location_param->altitude);
+    printf("Standard deviation latitude: %f\n",resp_get_curr_location_param->sd_latitude);
+    printf("Standard deviation longitude: %f\n",resp_get_curr_location_param->sd_longitude);
+    printf("Standard deviation altitude: %f\n",resp_get_curr_location_param->sd_altitude);
 
     // #<Payload Application Business Logic>
     wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
@@ -1601,11 +1608,10 @@ AntarisReturnCode process_response_stage_file_download(RespStageFileDownloadPara
 
 AntarisReturnCode process_response_payload_power_control(RespPayloadPowerControlParams *resp_payload_power_control)
 {
-    printf("process_response_payload_power_control\n");
     if (debug) {
         displayRespPayloadPowerControlParams(resp_payload_power_control);
     }
-
+     printf("Power Control Call response is = %d\n",resp_payload_power_control->req_status);
     // #<Payload Application Business Logic>
     wakeup_seq_fsm(payload_sequences_fsms[current_sequence_idx]);
     return An_SUCCESS;
